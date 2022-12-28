@@ -16,6 +16,12 @@ export function addToHistory(query: string): void {
   }
 }
 
+export function removeFromHistory(query: string): void {
+  if (query) {
+    query_shell_history.update((hist) => hist.filter((item) => item !== query));
+  }
+}
+
 export function clearHistory(): void {
   query_shell_history.set([]);
 }

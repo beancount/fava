@@ -13,6 +13,7 @@
     addToHistory,
     clearHistory,
     query_shell_history,
+    removeFromHistory,
   } from "../../stores/query";
 
   import QueryEditor from "./QueryEditor.svelte";
@@ -44,13 +45,17 @@
     resultElems[query]?.setAttribute("open", "true");
   }
 
-  async function clearResults() {
-    clearHistory();
-    await tick();
+  function clearQueryString() {
     const url = new URL(window.location.href);
     query_string = "";
     url.searchParams.set("query_string", query_string);
     window.history.replaceState(null, "", url.toString());
+  }
+
+  async function clearResults() {
+    clearHistory();
+    await tick();
+    clearQueryString();
   }
 
   function submit() {
@@ -91,6 +96,14 @@
     }
   }
 
+  async function deleteItem(query: string) {
+    removeFromHistory(query);
+    if (query_string === query) {
+      await tick();
+      clearQueryString();
+    }
+  }
+
   onMount(() =>
     router.on("page-loaded", () => {
       const url = new URL(window.location.href);
@@ -111,10 +124,14 @@
         on:click={() => click(history_item)}
       >
         <ReadonlyQueryEditor value={history_item} error={!!error} />
+        <span class="spacer" />
         {#if result}
-          <span class="spacer" />
           <QueryLinks query={history_item} />
         {/if}
+        <button
+          type="button"
+          on:click|stopPropagation={() => deleteItem(history_item)}>x</button
+        >
       </summary>
       <div>
         {#if result}
@@ -139,6 +156,10 @@
 
   .inactive {
     filter: opacity(0.5);
+  }
+
+  summary > button {
+    margin-left: 10px;
   }
 
   div :global(.query-error) {
