@@ -44,3 +44,27 @@ export function urlForSource(file_path: string, line: string): string {
 export function urlForAccount(account: string): string {
   return urlFor(`account/${account}/`);
 }
+
+/*
+ * Set the inner HTML of an element in a way that will execute the contents of any script tags.
+ *
+ * Adapted from https://stackoverflow.com/a/47614491
+ */
+export function setInnerHTML(elm: HTMLElement, html: string) {
+  elm.innerHTML = html;
+
+  Array.from(elm.querySelectorAll("script")).forEach((oldScriptEl) => {
+    const newScriptEl = document.createElement("script");
+
+    Array.from(oldScriptEl.attributes).forEach((attr) => {
+      newScriptEl.setAttribute(attr.name, attr.value);
+    });
+
+    const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+    newScriptEl.appendChild(scriptText);
+
+    if (oldScriptEl.parentNode !== null) {
+      oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+    }
+  });
+}
