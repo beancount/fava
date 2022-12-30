@@ -22,12 +22,6 @@ jobs:
                       toxenv: "old_deps"
                     - os: "windows-latest"
                       toxenv: "old_deps"
-                    - os: "windows-latest"
-                      py: "3.11"
-                include:
-                    - os: "windows-latest"
-                      py: "3.10"
-                      toxenv: "py"
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-python@v4
