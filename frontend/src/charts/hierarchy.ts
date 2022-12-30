@@ -33,7 +33,6 @@ function addInternalNodesAsLeaves(node: RawAccountHierarchy): void {
 export interface HierarchyChart {
   type: "hierarchy";
   data: Map<string, AccountHierarchyNode>;
-  tooltipText?: undefined;
 }
 
 const account_hierarchy_validator: Validator<RawAccountHierarchy> = object({

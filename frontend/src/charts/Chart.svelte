@@ -42,13 +42,6 @@
     // Reset the chart legend on chart change.
     legend.set([]);
   }
-
-  const components = {
-    barchart: BarChart,
-    hierarchy: HierarchyContainer,
-    linechart: LineChart,
-    scatterplot: ScatterPlot,
-  };
 </script>
 
 <div class="flex-row">
@@ -101,12 +94,15 @@
 </div>
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
-    <svelte:component
-      this={components[chart.type]}
-      data={chart.data}
-      tooltipText={chart.tooltipText}
-      {width}
-    />
+    {#if chart.type === "barchart"}
+      <BarChart data={chart.data} tooltipText={chart.tooltipText} {width} />
+    {:else if chart.type === "hierarchy"}
+      <HierarchyContainer data={chart.data} {width} />
+    {:else if chart.type === "linechart"}
+      <LineChart data={chart.data} tooltipText={chart.tooltipText} {width} />
+    {:else if chart.type === "scatterplot"}
+      <ScatterPlot data={chart.data} {width} />
+    {/if}
   {/if}
 </div>
 

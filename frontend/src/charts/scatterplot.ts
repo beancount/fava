@@ -11,7 +11,6 @@ export interface ScatterPlotDatum {
 export interface ScatterPlot {
   type: "scatterplot";
   data: ScatterPlotDatum[];
-  tooltipText?: undefined;
 }
 
 const scatterplot_validator = array(
