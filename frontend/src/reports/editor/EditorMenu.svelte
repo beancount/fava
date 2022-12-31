@@ -14,7 +14,10 @@
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
   import AppMenuSubItem from "./AppMenuSubItem.svelte";
+  import File from "./File.svelte";
+  import Folder from "./Folder.svelte";
   import Key from "./Key.svelte";
+  import { source_tree } from "./treeview";
 
   export let file_path: string;
   export let editor: EditorView;
@@ -33,18 +36,17 @@
       editor.focus();
     }
   }
+  $: [filenodes, foldernodes] = source_tree(sources, goToFileAndLine);
 </script>
 
 <div class="fieldset">
   <AppMenu>
     <AppMenuItem name={_("File")}>
-      {#each sources as source}
-        <AppMenuSubItem
-          action={() => goToFileAndLine(source)}
-          selected={source === file_path}
-        >
-          {source}
-        </AppMenuSubItem>
+      {#each filenodes as file}
+        <File {file} {file_path} />
+      {/each}
+      {#each foldernodes as folder}
+        <Folder {folder} {file_path} force_expand />
       {/each}
     </AppMenuItem>
     <AppMenuItem name={_("Edit")}>
