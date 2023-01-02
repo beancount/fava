@@ -71,6 +71,7 @@
       } else {
         dispatch("enter", input);
       }
+      dispatch("select");
     } else if (event.key === " " && event.ctrlKey) {
       hidden = false;
     } else if (event.key === "Escape") {
