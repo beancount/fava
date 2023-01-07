@@ -28,6 +28,7 @@ max-args = 7
 ignore-imports = true
 
 [tool.ruff]
+target-version = "py36"
 extend-select = [
     "B",
     "D",
@@ -39,6 +40,7 @@ extend-select = [
     "Q",
     "RUF",
     "TID",
+    "UP",
     "W",
     "YTT",
 ]

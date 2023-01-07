@@ -84,7 +84,7 @@ def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
     """
     left, right = tee(iterable)
     next(right, None)
-    return zip(left, right)  # noqa: B905
+    return zip(left, right)
 
 
 def next_key(basekey: str, keys: dict[str, Any]) -> str:
