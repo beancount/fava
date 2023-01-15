@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import chokidar from "chokidar";
-import { build } from "esbuild";
+import { context } from "esbuild";
 import svelte from "esbuild-svelte";
 import { typescript } from "svelte-preprocess-esbuild";
 
@@ -27,8 +27,7 @@ function debounce(func: () => void, wait: number): () => void {
  * @param dev - Whether to generate sourcemaps and watch for changes.
  */
 async function runBuild(dev: boolean) {
-  console.log("starting build");
-  const builder = await build({
+  const ctx = await context({
     entryPoints: ["src/main.ts"],
     format: "esm",
     bundle: true,
@@ -39,16 +38,18 @@ async function runBuild(dev: boolean) {
     },
     plugins: [svelte({ preprocess: typescript() })],
     sourcemap: dev,
-    incremental: dev,
   });
+  console.log("starting build");
+  await ctx.rebuild();
   console.log("finished build");
 
-  if (dev && builder.rebuild) {
-    const reb = builder.rebuild;
+  if (!dev) {
+    await ctx.dispose();
+  } else {
     console.log("watching for file changes");
     const rebuild = debounce(() => {
       console.log("starting rebuild");
-      reb().then(
+      ctx.rebuild().then(
         () => {
           console.log("finished rebuild");
         },

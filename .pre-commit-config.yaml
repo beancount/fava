@@ -18,7 +18,7 @@ repos:
           - id: pyupgrade
             args: ["--py36-plus"]
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.218
+      rev: v0.0.222
       hooks:
           - id: ruff
     - repo: local
@@ -29,7 +29,7 @@ repos:
             entry: prettier --write --list-different --ignore-unknown
             require_serial: true
             additional_dependencies:
-                - "prettier@2.8.2"
+                - "prettier@2.8.3"
                 - "prettier-plugin-svelte@2.9.0"
                 - "svelte@3.55.1"
           - id: stylelint

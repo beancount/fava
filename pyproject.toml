@@ -66,6 +66,7 @@ extend-ignore = [
     "D415",
     "D416",
     "D417",
+    "PLR2004",  # allow magic constants in comparisons
 ]
 
 [tool.ruff.per-file-ignores]
