@@ -1,4 +1,5 @@
 import { todayAsString } from "./format";
+import { ok } from "./lib/result";
 import type { Validator } from "./lib/validation";
 import {
   array,
@@ -83,12 +84,17 @@ export class Balance extends EntryBase {
     };
   }
 
-  static validator = object({
+  private static raw_validator = object({
     ...validatorBase,
     type: constant("Balance"),
     account: string,
     amount: object({ number: string, currency: string }),
   });
+
+  static validator: Validator<Balance> = (json) => {
+    const res = Balance.raw_validator(json);
+    return res.success ? ok(Object.assign(new Balance(), res.value)) : res;
+  };
 }
 
 export class Note extends EntryBase {
@@ -102,12 +108,17 @@ export class Note extends EntryBase {
     this.comment = "";
   }
 
-  static validator = object({
+  private static raw_validator = object({
     ...validatorBase,
     type: constant("Note"),
     account: string,
     comment: string,
   });
+
+  static validator: Validator<Note> = (json) => {
+    const res = Note.raw_validator(json);
+    return res.success ? ok(Object.assign(new Note(), res.value)) : res;
+  };
 }
 
 export class Transaction extends EntryBase {
@@ -141,7 +152,7 @@ export class Transaction extends EntryBase {
     );
   }
 
-  static validator = object({
+  static raw_validator = object({
     ...validatorBase,
     type: constant("Transaction"),
     flag: string,
@@ -152,13 +163,16 @@ export class Transaction extends EntryBase {
     postings: array(postingValidator),
   });
 
-  static fromJSON(json: unknown): Transaction {
-    return Object.assign(new Transaction(), Transaction.validator(json));
-  }
+  static validator: Validator<Transaction> = (json) => {
+    const res = Transaction.raw_validator(json);
+    return res.success ? ok(Object.assign(new Transaction(), res.value)) : res;
+  };
 }
 
+/** A Beancount entry, currently only support Balance, Note, and Transaction. */
 export type Entry = Balance | Note | Transaction;
 
+/** Validate an Entry. */
 export const entryValidator: Validator<Entry> = union(
   Balance.validator,
   Note.validator,
