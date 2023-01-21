@@ -138,7 +138,10 @@ def get_next_interval(
 
 
 def interval_ends(
-    first: datetime.date, last: datetime.date, interval: Interval
+    first: datetime.date,
+    last: datetime.date,
+    interval: Interval,
+    whole_interval: bool = False,
 ) -> Iterator[datetime.date]:
     """List intervals.
 
@@ -155,7 +158,10 @@ def interval_ends(
         yield first
         first = get_next_interval(first, interval)
 
-    yield last
+    if whole_interval:
+        yield get_next_interval(last, interval)
+    else:
+        yield last
 
 
 def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:

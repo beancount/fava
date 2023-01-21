@@ -64,7 +64,6 @@ from fava.util.date import Interval
 from fava.util.date import interval_ends
 from fava.util.typing import BeancountOptions
 
-
 if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
     from beancount.core.realization import RealAccount
@@ -180,7 +179,12 @@ class FilteredLedger:
         """Generator yielding dates corresponding to interval boundaries."""
         if not self._date_first or not self._date_last:
             return []
-        return interval_ends(self._date_first, self._date_last, interval)
+        return interval_ends(
+            self._date_first,
+            self._date_last,
+            interval,
+            self.ledger.fava_options.budget_whole_interval,
+        )
 
     def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""
