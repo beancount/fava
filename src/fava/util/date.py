@@ -338,7 +338,7 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 def get_fiscal_period(
     year: int, fye: FiscalYearEnd | None, quarter: int | None = None
 ) -> tuple[datetime.date | None, datetime.date | None]:
-    """Calculates fiscal periods.
+    """Calculate fiscal periods.
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
     Defaults to calendar year [12-31]
@@ -398,7 +398,7 @@ def days_in_daterange(
 
 
 def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
-    """Number of days in the surrounding interval.
+    """Get number of days in the surrounding interval.
 
     Args:
         interval: An interval.

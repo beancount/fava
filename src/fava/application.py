@@ -149,7 +149,7 @@ def get_locale() -> str | None:
     lang = g.ledger.fava_options.language
     if lang is not None:
         return lang
-    return request.accept_languages.best_match(["en"] + LANGUAGES)
+    return request.accept_languages.best_match(["en", *LANGUAGES])
 
 
 BABEL = Babel(app)
@@ -191,7 +191,7 @@ CACHED_URL_FOR = lru_cache(2048)(flask_url_for)
 
 
 def url_for(endpoint: str, **values: str) -> str:
-    """A wrapper around flask.url_for that uses a cache."""
+    """Wrap flask.url_for using a cache."""
     _inject_filters(endpoint, values)
     return CACHED_URL_FOR(endpoint, **values)
 
@@ -295,7 +295,7 @@ def index() -> WerkzeugResponse:
 @app.route("/<bfile>/account/<name>/")
 @app.route("/<bfile>/account/<name>/<subreport>/")
 def account(name: str, subreport: str = "journal") -> str:
-    """The account report."""
+    """Get the account report."""
     if subreport in ["journal", "balances", "changes"]:
         return render_template(
             "account.html", account_name=name, subreport=subreport
@@ -325,7 +325,7 @@ def statement() -> Response:
 
 @app.route("/<bfile>/holdings/by_<aggregation_key>/")
 def holdings_by(aggregation_key: str) -> str:
-    """The holdings report."""
+    """Get the holdings report."""
     if aggregation_key in ["account", "currency", "cost_currency"]:
         return render_template(
             "_layout.html",

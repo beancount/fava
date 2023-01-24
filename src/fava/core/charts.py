@@ -136,7 +136,7 @@ class ChartModule(FavaModule):
         begin: date | None = None,
         end: date | None = None,
     ) -> SerialisedTreeNode:
-        """An account tree."""
+        """Render an account tree."""
         if begin is not None and end is not None:
             tree = Tree(iter_entry_dates(filtered.entries, begin, end))
         else:
@@ -154,7 +154,7 @@ class ChartModule(FavaModule):
         conversion: str,
         invert: bool = False,
     ) -> Generator[DateAndBalanceWithBudget, None, None]:
-        """Renders totals for account (or accounts) in the intervals.
+        """Render totals for account (or accounts) in the intervals.
 
         Args:
             interval: An interval.
@@ -211,7 +211,7 @@ class ChartModule(FavaModule):
     def linechart(
         self, filtered: FilteredLedger, account_name: str, conversion: str
     ) -> Generator[DateAndBalance, None, None]:
-        """The balance of an account.
+        """Get the balance of an account as a line chart.
 
         Args:
             account_name: A string.

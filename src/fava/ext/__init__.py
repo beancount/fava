@@ -33,7 +33,7 @@ class FavaExtensionBase:
 
     def __init__(self, ledger: FavaLedger, config: str | None = None) -> None:
         """
-        Base init function.
+        Initialise extension.
 
         Args:
             ledger: Input ledger file.
@@ -48,18 +48,18 @@ class FavaExtensionBase:
         self.name = self.__class__.__qualname__
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
-        """Called after an `entry` has been modified."""
+        """Run after an `entry` has been modified."""
 
     def after_insert_entry(self, entry: Directive) -> None:
-        """Called after an `entry` has been inserted."""
+        """Run after an `entry` has been inserted."""
 
     def after_insert_metadata(
         self, entry: Directive, key: str, value: str
     ) -> None:
-        """Called after metadata (key: value) was added to an entry."""
+        """Run after metadata (key: value) was added to an entry."""
 
     def after_write_source(self, path: str, source: str) -> None:
-        """Called after `source` has been written to path."""
+        """Run after `source` has been written to path."""
 
 
 def find_extensions(

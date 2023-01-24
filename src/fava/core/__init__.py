@@ -177,7 +177,7 @@ class FilteredLedger:
         return tree
 
     def interval_ends(self, interval: Interval) -> Iterable[date]:
-        """Generator yielding dates corresponding to interval boundaries."""
+        """Yield dates corresponding to interval boundaries."""
         if not self._date_first or not self._date_last:
             return []
         return interval_ends(self._date_first, self._date_last, interval)
@@ -238,7 +238,8 @@ class FavaLedger:
         "options",
         "price_map",
         "_watcher",
-    ] + MODULES
+        *MODULES,
+    ]
 
     #: List of all (unfiltered) entries.
     all_entries: Entries
@@ -366,7 +367,7 @@ class FavaLedger:
         return normpath(join(include_path, *args))
 
     def paths_to_watch(self) -> tuple[list[str], list[str]]:
-        """The paths to included files and document directories.
+        """Get paths to included files and document directories.
 
         Returns:
             A tuple (files, directories).
@@ -568,7 +569,7 @@ class FavaLedger:
         return sorted(fw_pairs + bw_pairs)
 
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
-        """Returns the path for a statement found in the specified entry."""
+        """Get the path for a statement found in the specified entry."""
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
 

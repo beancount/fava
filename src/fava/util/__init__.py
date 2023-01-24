@@ -36,7 +36,7 @@ def filter_api_changed(record: Any) -> bool:
 
 
 def setup_logging() -> None:
-    """Setup logging for Fava."""
+    """Set up logging for Fava."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
@@ -52,7 +52,7 @@ Item = TypeVar("Item")
 def listify(
     func: Callable[..., Generator[Item, None, None]]
 ) -> Callable[..., list[Item]]:
-    """Decorator to make generator function return a list."""
+    """Make generator function return a list (decorator)."""
 
     @wraps(func)
     def _wrapper(*args: Any, **kwargs: Any) -> list[Item]:
@@ -64,7 +64,7 @@ def listify(
 def timefunc(
     func: Any,
 ) -> Any:  # pragma: no cover - only used for debugging so far
-    """Decorator to time function for debugging."""
+    """Time function for debugging (decorator)."""
 
     @wraps(func)
     def _wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -88,7 +88,7 @@ def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
 
 
 def next_key(basekey: str, keys: dict[str, Any]) -> str:
-    """Returns the next unused key for basekey in the supplied dictionary.
+    """Return the next unused key for basekey in the supplied dictionary.
 
     The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
     until a free one is found.
@@ -123,7 +123,7 @@ def slugify(string: str) -> str:
 def simple_wsgi(
     _: WSGIEnvironment, start_response: StartResponse
 ) -> list[bytes]:
-    """A simple wsgi app that always returns an empty response."""
+    """Return an empty response (a simple WSGI app)."""
     start_response("200 OK", [("Content-Type", "text/html")])
     return [b""]
 

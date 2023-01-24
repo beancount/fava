@@ -18,7 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def get_active_years(entries: Entries, fye: FiscalYearEnd) -> list[str]:
-    """Returns active years, with support for fiscal years.
+    """Return active years, with support for fiscal years.
 
     Args:
         entries: Beancount entries
@@ -97,7 +97,7 @@ class AttributesModule(FavaModule):
         return account_ranker.sort()
 
     def payee_transaction(self, payee: str) -> Transaction | None:
-        """The last transaction for the given payee."""
+        """Get the last transaction for a payee."""
         transactions = self.ledger.all_entries_by_type.Transaction
         for txn in reversed(transactions):
             if txn.payee == payee:

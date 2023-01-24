@@ -215,7 +215,7 @@ def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
 def insert_metadata_in_file(
     filename: str, lineno: int, indent: int, key: str, value: str
 ) -> None:
-    """Inserts the specified metadata in the file below lineno.
+    """Insert the specified metadata in the file below lineno.
 
     Takes the whitespace in front of the line that lineno into account.
     """
@@ -352,7 +352,7 @@ def insert_entry(
 
 
 def _format_entry(entry: Directive, currency_column: int, indent: int) -> str:
-    """Wrapper that strips unnecessary whitespace from format_entry."""
+    """Strip unnecessary whitespace from format_entry."""
     meta = {
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
     }

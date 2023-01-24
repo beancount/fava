@@ -12,13 +12,8 @@ repos:
             args:
                 - "--application-directories=.:src"
                 - "--add-import=from __future__ import annotations"
-    - repo: https://github.com/asottile/pyupgrade
-      rev: v3.3.1
-      hooks:
-          - id: pyupgrade
-            args: ["--py36-plus"]
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.222
+      rev: v0.0.231
       hooks:
           - id: ruff
     - repo: local

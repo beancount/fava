@@ -22,7 +22,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
     report_title = "Portfolio List"
 
     def portfolio_accounts(self):
-        """An account tree based on matching regex patterns."""
+        """Get an account tree based on matching regex patterns."""
         tree = g.filtered.root_tree
         portfolios = []
 
@@ -42,7 +42,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     def _account_name_pattern(self, tree, pattern):
         """
-        Returns portfolio info based on matching account name.
+        Return portfolio info based on matching account name.
 
         Args:
             tree: Ledger root tree node.
@@ -65,7 +65,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     def _account_metadata_pattern(self, tree, metadata_key, pattern):
         """
-        Returns portfolio info based on matching account open metadata.
+        Return portfolio info based on matching account open metadata.
 
         Args:
             tree: Ledger root tree node.

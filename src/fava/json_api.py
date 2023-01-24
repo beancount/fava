@@ -390,7 +390,7 @@ class CommodityPairWithPrices:
 
 @api_endpoint
 def get_commodities() -> list[CommodityPairWithPrices]:
-    """The prices for all commodity pairs.
+    """Get the prices for all commodity pairs.
 
     Returns:
         A list of CommodityPairWithPrices

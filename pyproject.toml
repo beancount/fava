@@ -28,7 +28,7 @@ max-args = 7
 ignore-imports = true
 
 [tool.ruff]
-target-version = "py36"
+target-version = "py37"
 extend-select = [
     "B",
     "D",
@@ -73,4 +73,5 @@ extend-ignore = [
 "contrib/**" = ["D"]
 "docs/**" = ["D"]
 "tests/**" = ["D"]
+"stubs/**" = ["D"]
 "src/fava/core/filters.py" = ["D"]
