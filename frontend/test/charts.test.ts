@@ -240,4 +240,48 @@ test("handle data for bar chart without stacked data", () => {
   ]);
 });
 
+test("only use currencies in records for bar chart", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { AUD: 10, USD: 10 },
+      budgets: { USD: 20 },
+      account_balances: {},
+    },
+    {
+      date: "2000-02-01",
+      balance: { AUD: 100 },
+      budgets: { AUD: 50 },
+      account_balances: {},
+    },
+  ];
+  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const chart_data = force_ok(bar(data, ctx2)).data;
+  assert.is(false, chart_data.hasStackedData);
+  assert.equal(chart_data.stacks, [
+    ["USD", []],
+    ["AUD", []],
+  ]);
+  assert.equal(chart_data.bar_groups, [
+    {
+      date: new Date("2000-01-01"),
+      label: "DATE",
+      values: [
+        { currency: "USD", value: 10, budget: 20 },
+        { currency: "AUD", value: 10, budget: 0 },
+      ],
+      account_balances: {},
+    },
+    {
+      date: new Date("2000-02-01"),
+      label: "DATE",
+      values: [
+        { currency: "USD", value: 0, budget: 0 },
+        { currency: "AUD", value: 100, budget: 50 },
+      ],
+      account_balances: {},
+    },
+  ]);
+});
+
 test.run();
