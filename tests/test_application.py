@@ -193,6 +193,20 @@ def test_incognito(
     assert "XXX" in result.get_data(True)
 
 
+@pytest.mark.parametrize("method_name", ["delete", "patch", "post", "put"])
+def test_read_only_mode(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: MonkeyPatch,
+    method_name: str,
+) -> None:
+    """Non GET requests returns 401 in read-only mode"""
+    monkeypatch.setitem(app.config, "READ_ONLY", True)
+    method = getattr(test_client, method_name)
+    result = method("/any/path/")
+    assert result.status_code == 401
+
+
 def test_download_journal(
     app: Flask, test_client: FlaskClient, snapshot: SnapshotFunc
 ) -> None:

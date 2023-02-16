@@ -22,7 +22,7 @@ disable = [
 
 [tool.pylint.design]
 # max args for a function / method
-max-args = 8
+max-args = 9
 
 [tool.pylint.similarities]
 ignore-imports = true
@@ -80,7 +80,7 @@ known-first-party = ["fava"]
 required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.pylint]
-max-args = 8
+max-args = 9
 
 [tool.ruff.per-file-ignores]
 "contrib/**" = ["D"]
