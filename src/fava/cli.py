@@ -44,6 +44,11 @@ from fava.util import simple_wsgi
     is_flag=True,
     help="Run in incognito mode and obscure all numbers.",
 )
+@click.option(
+    "--read-only",
+    is_flag=True,
+    help="Run in read-only mode, disabling any change through UI/API",
+)
 @click.option("-d", "--debug", is_flag=True, help="Turn on debugging.")
 @click.option(
     "--profile", is_flag=True, help="Turn on profiling. Implies --debug."
@@ -60,6 +65,7 @@ def main(
     host: str,
     prefix: str,
     incognito: bool,
+    read_only: bool,
     debug: bool,
     profile: bool,
     profile_dir: str,
@@ -86,6 +92,7 @@ def main(
 
     app.config["BEANCOUNT_FILES"] = all_filenames
     app.config["INCOGNITO"] = incognito
+    app.config["READ_ONLY"] = read_only
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(  # type: ignore

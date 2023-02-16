@@ -255,6 +255,13 @@ def _incognito(
     return response
 
 
+@app.before_request
+def _read_only_mode() -> None:
+    """Prevent any request that isn't a GET if read-only mode is active."""
+    if app.config.get("READ_ONLY") and request.method != "GET":
+        abort(401)
+
+
 @app.url_value_preprocessor
 def _pull_beancount_file(_: str | None, values: dict[str, str] | None) -> None:
     g.beancount_file_slug = values.pop("bfile", None) if values else None
