@@ -1,9 +1,5 @@
 const config = {
-  extends: [
-    "stylelint-config-standard",
-    "stylelint-config-recess-order",
-    "stylelint-config-prettier",
-  ],
+  extends: ["stylelint-config-standard", "stylelint-config-recess-order"],
   customSyntax: "postcss-html",
   rules: {
     "selector-pseudo-class-no-unknown": [

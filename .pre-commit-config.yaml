@@ -2,7 +2,7 @@ ci:
     skip: ["eslint"]
 repos:
     - repo: https://github.com/psf/black
-      rev: 22.12.0
+      rev: 23.1.0
       hooks:
           - id: black
     - repo: https://github.com/asottile/reorder_python_imports
@@ -13,7 +13,7 @@ repos:
                 - "--application-directories=.:src"
                 - "--add-import=from __future__ import annotations"
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.231
+      rev: v0.0.249
       hooks:
           - id: ruff
     - repo: local
@@ -24,7 +24,7 @@ repos:
             entry: prettier --write --list-different --ignore-unknown
             require_serial: true
             additional_dependencies:
-                - "prettier@2.8.3"
+                - "prettier@2.8.4"
                 - "prettier-plugin-svelte@2.9.0"
                 - "svelte@3.55.1"
           - id: stylelint
@@ -34,10 +34,9 @@ repos:
             files: \.(css|svelte)$
             require_serial: true
             additional_dependencies:
-                - "stylelint@14.16.1"
-                - "stylelint-config-prettier@9.0.4"
-                - "stylelint-config-recess-order@3.1.0"
-                - "stylelint-config-standard@29.0.0"
+                - "stylelint@15.2.0"
+                - "stylelint-config-recess-order@4.0.0"
+                - "stylelint-config-standard@30.0.1"
                 - "postcss-html@1.5.0"
           - id: eslint
             name: eslint

@@ -9,20 +9,23 @@ import type { Validator } from "../lib/validation";
 
 import type { ChartContext } from "./context";
 
-export interface AccountHierarchyDatum {
+/** The data for a single account in a d3-hierarchy. */
+export type AccountHierarchyDatum = TreeNode<{
   account: string;
   balance: Partial<Record<string, number>>;
   dummy?: boolean;
-}
-type RawAccountHierarchy = TreeNode<AccountHierarchyDatum>;
+}>;
+
+/** A d3-hierarchy node for an account. */
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
+
 /**
  * Add internal nodes as fake leaf nodes to their own children.
  *
  * In the treemap, we only render leaf nodes, so for accounts that have both
  * children and a balance, we want to duplicate them as leaf nodes.
  */
-function addInternalNodesAsLeaves(node: RawAccountHierarchy): void {
+function addInternalNodesAsLeaves(node: AccountHierarchyDatum): void {
   if (node.children.length) {
     node.children.forEach(addInternalNodesAsLeaves);
     node.children.push({ ...node, children: [], dummy: true });
@@ -35,7 +38,7 @@ export interface HierarchyChart {
   data: Map<string, AccountHierarchyNode>;
 }
 
-const account_hierarchy_validator: Validator<RawAccountHierarchy> = object({
+const account_hierarchy_validator: Validator<AccountHierarchyDatum> = object({
   account: string,
   balance: record(number),
   children: lazy(() => array(account_hierarchy_validator)),

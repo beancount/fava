@@ -14,7 +14,6 @@ from fava.application import app
 from fava.util import simple_wsgi
 
 
-# pylint: disable=too-many-arguments
 @click.command(context_settings={"auto_envvar_prefix": "FAVA"})
 @click.argument(
     "filenames",

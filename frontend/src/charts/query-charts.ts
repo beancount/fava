@@ -13,7 +13,11 @@ import {
 } from "../lib/validation";
 
 import type { ChartContext } from "./context";
-import type { AccountHierarchyNode, HierarchyChart } from "./hierarchy";
+import type {
+  AccountHierarchyDatum,
+  AccountHierarchyNode,
+  HierarchyChart,
+} from "./hierarchy";
 import { balances } from "./line";
 
 import type { FavaChart } from "./index";
@@ -29,7 +33,7 @@ export function parseGroupedQueryChart(
   if (!grouped.success) {
     return err("No grouped query data");
   }
-  const root = stratify(
+  const root: AccountHierarchyDatum = stratify(
     grouped.value,
     (d) => d.group,
     (account, d) => ({ account, balance: d?.balance ?? {} })
@@ -38,7 +42,7 @@ export function parseGroupedQueryChart(
 
   const data = new Map<string, AccountHierarchyNode>();
   currencies.forEach((currency) => {
-    const currencyHierarchy: AccountHierarchyNode = d3Hierarchy(root)
+    const currencyHierarchy = d3Hierarchy(root)
       .sum((d) => d.balance[currency] ?? 0)
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
     if (currencyHierarchy.value !== undefined) {
