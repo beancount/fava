@@ -137,7 +137,7 @@ class IngestModule(FavaModule):
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)
             files = list(identify.find_imports(self.config, full_path))
-            for (filename, importers) in files:
+            for filename, importers in files:
                 base = basename(filename)
                 infos = [
                     file_import_info(filename, importer)
