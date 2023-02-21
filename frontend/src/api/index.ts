@@ -13,6 +13,7 @@ import { getAPIValidators } from "./validators";
 /** Required arguments for the various PUT API endpoints. */
 interface PutAPIInputs {
   add_document: FormData;
+  upload_import_file: FormData;
   add_entries: { entries: Entry[] };
   attach_document: { filename: string; entry_hash: string };
   format_source: { source: string };
