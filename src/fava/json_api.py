@@ -32,6 +32,7 @@ from flask.wrappers import Response
 from fava.context import g
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIException
 from fava.internal_api import get_ledger_data
@@ -352,6 +353,30 @@ def put_add_entries(entries: list[Any]) -> str:
     g.ledger.file.insert_entries(entries)
 
     return f"Stored {len(entries)} entries."
+
+
+@api_endpoint
+def put_upload_import_file() -> str:
+    """Upload a file for importing."""
+    upload = request.files.get("file", None)
+
+    if not upload:
+        raise FavaAPIException("No file uploaded.")
+    if not upload.filename:
+        raise FavaAPIException("Uploaded file is missing filename.")
+    filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
+
+    directory = path.dirname(filepath)
+
+    if path.exists(filepath):
+        raise FavaAPIException(f"{filepath} already exists.")
+
+    if not path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    upload.save(filepath)
+
+    return f"Uploaded to {filepath}"
 
 
 ########################################################################

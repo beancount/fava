@@ -17,6 +17,7 @@ disable = [
     "too-many-instance-attributes",
     "not-callable",        # false positive for Beancount Entries
     "wrong-import-order",
+    "duplicate-code",
     "isinstance-second-argument-not-valid-type"
 ]
 

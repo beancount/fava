@@ -1,12 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
+  import {
+    deleteDocument,
+    get,
+    moveDocument,
+    put,
+    saveEntries,
+  } from "../../api";
   import type { Entry } from "../../entries";
   import { isDuplicate } from "../../entries";
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
-  import { notify } from "../../notifications";
+  import { notify, notify_err } from "../../notifications";
   import router from "../../router";
   import { fava_options } from "../../stores";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
@@ -39,9 +45,19 @@
       : null;
 
   onMount(() => router.addInteruptHandler(preventNavigation));
-  onMount(() => {
-    files = data;
-  });
+  $: {
+    const existingFiles = Object.fromEntries(
+      files.map((file) => [file.name, file])
+    );
+    files = data.map((file) => {
+      // Use existing importers if we found any, since the user might have changed these before a reload happens
+      const importers = existingFiles[file.name]?.importers ?? file.importers;
+      return {
+        ...file,
+        importers,
+      };
+    });
+  }
 
   /**
    * Move the given file to the new file name (and remove from the list).
@@ -49,7 +65,7 @@
   async function move(filename: string, account: string, newName: string) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
-      files = files.filter((item) => item.name !== filename);
+      router.reload();
     }
   }
 
@@ -63,7 +79,7 @@
     }
     const removed = await deleteDocument(filename);
     if (removed) {
-      files = files.filter((item) => item.name !== filename);
+      router.reload();
     }
   }
 
@@ -97,6 +113,25 @@
     }
     entries = [];
     await saveEntries(withoutDuplicates);
+  }
+
+  let fileUpload: HTMLInputElement;
+
+  async function uploadImports() {
+    if (fileUpload.files == null) {
+      return;
+    }
+    await Promise.all(
+      Array.from(fileUpload.files).map((file) => {
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+        return put("upload_import_file", formData).then(notify, (error) => {
+          notify_err(error, (err) => `Upload error: ${err.message}`);
+        });
+      })
+    );
+    fileUpload.value = "";
+    router.reload();
   }
 </script>
 
@@ -146,6 +181,13 @@
           />
         </details>
       {/if}
+      <div>
+        <form on:submit|preventDefault={uploadImports}>
+          <h2>{_("Upload files for import")}</h2>
+          <input bind:this={fileUpload} multiple type="file" />
+          <button type="submit">{_("Upload")}</button>
+        </form>
+      </div>
     </div>
     {#if selected}
       <div>

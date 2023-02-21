@@ -2,13 +2,18 @@
 from __future__ import annotations
 
 import datetime
+from os import path
 
+import pytest
 from beancount.core.amount import Amount
 from beancount.core.data import Note
 from beancount.core.data import Transaction
+from pytest import MonkeyPatch
 
 from fava.core import FavaLedger
 from fava.core.ingest import file_import_info
+from fava.core.ingest import filepath_in_primary_imports_folder
+from fava.helpers import FavaAPIException
 
 from .conftest import data_file
 
@@ -49,3 +54,26 @@ def test_ingest_examplefile() -> None:
     assert entries[1].postings[1].units.currency == "EUR"
     assert "__duplicate__" not in entries[1].meta
     assert "__duplicate__" in entries[2].meta
+
+
+def test_filepath_in_primary_imports_folder(
+    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+) -> None:
+    monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test"])
+
+    def _join(start: str, *args: str) -> str:
+        return path.abspath(path.join(start, *args))
+
+    assert filepath_in_primary_imports_folder(
+        "filename", example_ledger
+    ) == _join("/test", "filename")
+    assert filepath_in_primary_imports_folder(
+        "file/name", example_ledger
+    ) == _join("/test", "file name")
+    assert filepath_in_primary_imports_folder(
+        "/../file/name", example_ledger
+    ) == _join("/test", " .. file name")
+
+    monkeypatch.setattr(example_ledger.fava_options, "import_dirs", [])
+    with pytest.raises(FavaAPIException):
+        filepath_in_primary_imports_folder("filename", example_ledger)

@@ -4,10 +4,15 @@ from __future__ import annotations
 import datetime
 import sys
 import traceback
+from os import altsep
+from os import sep
 from os import stat
 from os.path import basename
+from os.path import dirname
 from os.path import exists
 from os.path import isdir
+from os.path import join
+from os.path import normpath
 from runpy import run_path
 from typing import Any
 from typing import NamedTuple
@@ -20,6 +25,7 @@ from beancount.ingest import identify
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+from fava.helpers import FavaAPIException
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -183,3 +189,32 @@ class IngestModule(FavaModule):
             )
 
         return new_entries_list[0][1]
+
+
+def filepath_in_primary_imports_folder(
+    filename: str, ledger: FavaLedger
+) -> str:
+    """File path for a document to upload to the primary import folder.
+
+    Args:
+        filename: The filename of the document.
+        ledger: The FavaLedger.
+
+    Returns:
+        The path that the document should be saved at.
+    """
+    primary_imports_folder = next(iter(ledger.fava_options.import_dirs), None)
+    if primary_imports_folder is None:
+        raise FavaAPIException("You need to set at least one imports-dir.")
+
+    for separator in sep, altsep:
+        if separator:
+            filename = filename.replace(separator, " ")
+
+    return normpath(
+        join(
+            dirname(ledger.beancount_file_path),
+            primary_imports_folder,
+            filename,
+        )
+    )
