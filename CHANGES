@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v1.24 (2023-02-21)
+------------------
+
+With this release, the rendering of some report like the documents report has
+been moved completely to the frontend, which should be slightly more perfomant
+and easier to maintain. This release also contains a couple of minor fixes and
+changes.
+
 v1.23 (2022-10-15)
 ------------------
 
