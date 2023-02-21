@@ -152,8 +152,13 @@ def get_locale() -> str | None:
     return request.accept_languages.best_match(["en", *LANGUAGES])
 
 
-BABEL = Babel(app)
-BABEL.localeselector(get_locale)
+try:
+    # Flask-Babel <3.0
+    BABEL = Babel(app)
+    BABEL.localeselector(get_locale)
+except AttributeError:
+    # Flask-Babel >=3.0
+    BABEL = Babel(app, locale_selector=get_locale)
 
 
 for function in template_filters.FILTERS:
