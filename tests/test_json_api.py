@@ -105,6 +105,38 @@ def test_api_add_document(
         assert_api_error(response, f"{filename} already exists.")
 
 
+def test_api_upload_import_file(
+    app: Flask,
+    test_client: FlaskClient,
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+
+        monkeypatch.setattr(
+            g.ledger.fava_options, "import_dirs", [str(tmp_path)]
+        )
+        request_data = {
+            "file": (BytesIO(b"asdfasdf"), "recipt.pdf"),
+        }
+        url = url_for("json_api.put_upload_import_file")
+
+        response = test_client.put(url)
+        assert_api_error(response, "No file uploaded.")
+
+        filename = tmp_path / "recipt.pdf"
+
+        response = test_client.put(url, data=request_data)
+        assert_api_success(response, f"Uploaded to {filename}")
+        assert Path(filename).is_file()
+
+        # Uploading the exact same file should fail due to path conflict
+        request_data["file"] = (BytesIO(b"asdfasdf"), "recipt.pdf")
+        response = test_client.put(url, data=request_data)
+        assert_api_error(response, f"{filename} already exists.")
+
+
 def test_api_errors(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/errors")
     assert_api_success(response, [])
