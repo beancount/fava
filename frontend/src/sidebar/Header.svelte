@@ -81,6 +81,7 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     box-shadow: 0 3px 6px var(--transparent-black);
+    z-index: 1;
   }
 
   .beancount-files a {
