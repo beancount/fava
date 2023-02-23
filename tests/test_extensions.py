@@ -1,8 +1,9 @@
 """Tests for the extension system."""
 from __future__ import annotations
 
-from .conftest import data_file
 from fava.core import FavaLedger
+
+from .conftest import data_file
 
 
 def test_report_page_globals() -> None:

@@ -7,13 +7,14 @@ from flask import Flask
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
-from .conftest import data_file
 from fava.util import listify
 from fava.util import next_key
 from fava.util import pairwise
 from fava.util import send_file_inline
 from fava.util import simple_wsgi
 from fava.util import slugify
+
+from .conftest import data_file
 
 
 def test_listify() -> None:

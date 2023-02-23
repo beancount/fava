@@ -36,7 +36,6 @@ from beancount.parser.parser import parse_string
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
 
-
 ENTRY_TYPES = (
     Open,
     Close,

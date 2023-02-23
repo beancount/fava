@@ -7,9 +7,10 @@ from beancount.core.amount import Amount
 from beancount.core.data import Note
 from beancount.core.data import Transaction
 
-from .conftest import data_file
 from fava.core import FavaLedger
 from fava.core.ingest import file_import_info
+
+from .conftest import data_file
 
 FILE_PATH = data_file("import.beancount")
 EXAMPLE = data_file("import.csv")

@@ -15,13 +15,14 @@ from flask import url_for
 from flask.testing import FlaskClient
 from pytest import MonkeyPatch
 
-from .conftest import SnapshotFunc
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
+
+from .conftest import SnapshotFunc
 
 if TYPE_CHECKING:
     from werkzeug.test import TestResponse

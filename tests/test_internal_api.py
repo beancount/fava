@@ -5,10 +5,10 @@ import copy
 
 from flask import Flask
 
-from .conftest import SnapshotFunc
 from fava.core.charts import PRETTY_ENCODER
 from fava.internal_api import get_ledger_data
 
+from .conftest import SnapshotFunc
 
 dumps = PRETTY_ENCODER.encode
 

@@ -2,7 +2,6 @@
 # pylint: disable=unused-import
 from __future__ import annotations
 
-
 FLAG_UNREALIZED = "U"
 FLAG_RETURNS = "R"
 

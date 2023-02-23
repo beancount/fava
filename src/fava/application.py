@@ -62,7 +62,6 @@ from fava.util import slugify
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
-
 if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse

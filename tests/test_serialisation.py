@@ -26,13 +26,14 @@ from beancount.core.number import MISSING
 from beancount.core.position import CostSpec
 from flask.json import loads
 
-from .conftest import SnapshotFunc
 from fava.core.charts import PRETTY_ENCODER
 from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import serialise
+
+from .conftest import SnapshotFunc
 
 dumps = PRETTY_ENCODER.encode
 

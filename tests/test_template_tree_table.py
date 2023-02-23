@@ -6,8 +6,9 @@ from decimal import Decimal
 from flask import Flask
 from flask import get_template_attribute
 
-from .conftest import SnapshotFunc
 from fava.core.inventory import CounterInventory
+
+from .conftest import SnapshotFunc
 
 TREE_TABLE_PATH = "_tree_table.html"
 

@@ -6,10 +6,11 @@ from typing import Any
 import pytest
 from beancount.query.query import run_query
 
-from .conftest import data_file
-from .conftest import SnapshotFunc
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
+
+from .conftest import data_file
+from .conftest import SnapshotFunc
 
 LEDGER = FavaLedger(data_file("query-example.beancount"))
 QUERY = LEDGER.query_shell

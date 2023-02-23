@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 from beancount.core.data import Entries
 from beancount.core.display_context import DisplayContext
 
-
 if TYPE_CHECKING:  # pragma: no cover
     from typing import TypedDict
 

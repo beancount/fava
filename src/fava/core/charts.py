@@ -41,6 +41,7 @@ except ImportError:
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
+
     from fava.core import FilteredLedger
 
 

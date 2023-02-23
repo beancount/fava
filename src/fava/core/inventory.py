@@ -13,7 +13,6 @@ from beancount.core.number import ZERO
 from beancount.core.position import Cost
 from beancount.core.position import Position
 
-
 InventoryKey = Tuple[str, Optional[Cost]]
 
 

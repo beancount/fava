@@ -21,7 +21,6 @@ from beancount.ingest import identify
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 
-
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 

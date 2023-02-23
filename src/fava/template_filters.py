@@ -20,8 +20,8 @@ from beancount.core.number import ZERO
 
 from fava.context import g
 from fava.core.conversion import cost
-from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
+from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.tree import TreeNode
 
 MappingValue = TypeVar("MappingValue")

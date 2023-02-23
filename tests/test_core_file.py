@@ -11,7 +11,6 @@ from beancount.core.amount import A
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
 
-from .conftest import SnapshotFunc
 from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import find_entry_lines
@@ -20,6 +19,8 @@ from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
 from fava.core.file import save_entry_slice
 from fava.helpers import FavaAPIException
+
+from .conftest import SnapshotFunc
 
 
 def _get_entry(ledger: FavaLedger, payee: str, date_: str) -> Transaction:

@@ -64,7 +64,6 @@ from fava.util.date import Interval
 from fava.util.date import interval_ends
 from fava.util.typing import BeancountOptions
 
-
 if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
     from beancount.core.realization import RealAccount

@@ -29,9 +29,7 @@ def _env_to_list(
     attributes: dict[str, str | tuple[str, str]]
 ) -> Generator[str, None, None]:
     for name in attributes.keys():
-        if isinstance(name, tuple):
-            name = name[0]
-        yield name
+        yield name[0] if isinstance(name, tuple) else name
 
 
 @cli.command()

@@ -5,13 +5,6 @@ repos:
       rev: 23.1.0
       hooks:
           - id: black
-    - repo: https://github.com/asottile/reorder_python_imports
-      rev: v3.9.0
-      hooks:
-          - id: reorder-python-imports
-            args:
-                - "--application-directories=.:src"
-                - "--add-import=from __future__ import annotations"
     - repo: https://github.com/charliermarsh/ruff-pre-commit
       rev: v0.0.249
       hooks:

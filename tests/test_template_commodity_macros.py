@@ -7,7 +7,6 @@ from flask import get_template_attribute
 
 from fava.core import FavaLedger
 
-
 COMMODITY_MACROS_PATH = "macros/_commodity_macros.html"
 
 
