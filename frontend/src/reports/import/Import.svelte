@@ -45,7 +45,14 @@
       : null;
 
   onMount(() => router.addInteruptHandler(preventNavigation));
-  $: files = data;
+  $: {
+    // Since the user can change e.g. account/name for imported files, we only add any new files here.
+    // This avoids overwriting the users changes
+    const existingFileNames = files.map((file) => file.name);
+    files = files.concat(data.filter(
+      (updated) => !existingFileNames.includes(updated.name)
+    ));
+  };
 
   /**
    * Move the given file to the new file name (and remove from the list).
