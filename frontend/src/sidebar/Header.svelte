@@ -73,7 +73,7 @@
     position: absolute;
     top: var(--header-height);
     left: 19px;
-    z-index: 1;
+    z-index: var(--z-index-floating-ui);
     display: none;
     width: 20em;
     color: var(--link-color);
