@@ -1,5 +1,11 @@
+<!--
+  @component
+  A component to show PDFs, text, images, and HTML files.
+-->
 <script lang="ts" context="module">
-  const plainTextExtensions = ["csv", "txt", "qfx"];
+  /** For these file extensions we show a plain-text read-only editor. */
+  const plainTextExtensions = ["csv", "json", "qfx", "txt", "xml"];
+  /** For these file extensions we try to show the file as an `<img>` */
   const imageExtensions = [
     "gif",
     "jpg",
