@@ -362,9 +362,11 @@ def put_upload_import_file() -> str:
 
     if not upload:
         raise FavaAPIException("No file uploaded.")
+    if not upload.filename:
+        raise FavaAPIException("Uploaded file is missing filename.")
     filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
 
-    directory, filename = path.split(filepath)
+    directory = path.dirname(filepath)
 
     if path.exists(filepath):
         raise FavaAPIException(f"{filepath} already exists.")
