@@ -15,8 +15,8 @@ copyright = "2016, Dominik Aumayr"
 author = "Dominik Aumayr"
 
 extlinks = {
-    "bug": ("https://github.com/beancount/fava/issues/%s", "#"),
-    "user": ("https://github.com/%s", "@"),
+    "bug": ("https://github.com/beancount/fava/issues/%s", "#%s"),
+    "user": ("https://github.com/%s", "@%s"),
 }
 
 autodoc_default_options = {

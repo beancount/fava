@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import datetime
 import re
-from dataclasses import asdict
 from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
@@ -71,8 +70,6 @@ class FavaOptions:
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
     use_external_editor: bool = False
-
-    asdict = asdict
 
 
 _fields = fields(FavaOptions)
