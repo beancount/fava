@@ -80,9 +80,11 @@ def find_extensions(
     sys.path.insert(0, base_path)
     try:
         module = importlib.import_module(name)
-    except ImportError:
+    except ImportError as err:
         error = FavaExtensionError(
-            None, f'Importing module "{name}" failed.', None
+            None,
+            f'Importing module "{name}" failed.\nError: "{err.msg}"',
+            None,
         )
         return (
             [],

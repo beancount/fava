@@ -10,7 +10,10 @@ def test_find_extensions() -> None:
     classes, errors = find_extensions(".", "NOMODULENAME")
     assert not classes
     assert len(errors) == 1
-    assert errors[0].message == 'Importing module "NOMODULENAME" failed.'
+    assert (
+        errors[0].message == 'Importing module "NOMODULENAME" failed.'
+        "\nError: \"No module named 'NOMODULENAME'\""
+    )
 
     classes, errors = find_extensions(".", "fava")
     assert not classes
