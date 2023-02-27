@@ -41,18 +41,21 @@
     </thead>
     <tbody>
       {#each data as { message, source }}
-        {@const url = urlForSource(source.filename, `${source.lineno}`)}
-        {@const title = format(_("Show source %(file)s:%(lineno)s"), {
-          file: source.filename,
-          lineno: `${source.lineno}`,
-        })}
         <tr>
-          <td>
-            {source.filename}
-          </td>
-          <td class="num">
-            <a class="source" href={url} {title}>{source.lineno}</a>
-          </td>
+          {#if source}
+            {@const url = urlForSource(source.filename, `${source.lineno}`)}
+            {@const title = format(_("Show source %(file)s:%(lineno)s"), {
+              file: source.filename,
+              lineno: `${source.lineno}`,
+            })}
+            <td>{source.filename}</td>
+            <td class="num">
+              <a class="source" href={url} {title}>{source.lineno}</a>
+            </td>
+          {:else}
+            <td />
+            <td class="num" />
+          {/if}
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           <td class="pre">{@html addAccountLinks(message)}</td>
         </tr>

@@ -1,3 +1,4 @@
+import type { EntryBaseAttributes } from "../entries";
 import { entryBaseValidator, entryValidator, Transaction } from "../entries";
 import type { Validator } from "../lib/validation";
 import {
@@ -30,6 +31,19 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
   })
 );
 
+/** A Beancount error that should be shown to the user in the list of errors. */
+interface BeancountError {
+  message: string;
+  source: { filename: string; lineno: number } | null;
+  entry: EntryBaseAttributes | null;
+}
+
+const error_validator = object({
+  message: string,
+  source: optional(object({ filename: string, lineno: number })),
+  entry: optional(entryBaseValidator),
+}) satisfies Validator<BeancountError>;
+
 export const getAPIValidators = {
   changed: boolean,
   context: object({
@@ -47,12 +61,7 @@ export const getAPIValidators = {
     })
   ),
   documents: array(object({ account: string, filename: string, date: string })),
-  errors: array(
-    object({
-      message: string,
-      source: object({ filename: string, lineno: number }),
-    })
-  ),
+  errors: array(error_validator),
   extract: array(entryValidator),
   events: array(object({ type: string, description: string, date })),
   imports: importable_files_validator,

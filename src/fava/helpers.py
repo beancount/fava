@@ -1,16 +1,16 @@
 """Exceptions and module base class."""
 from __future__ import annotations
 
-from typing import Any
 from typing import NamedTuple
 
 from beancount.core.data import Directive
+from beancount.core.data import Meta
 
 
 class BeancountError(NamedTuple):
     """NamedTuple base for a Beancount-style error."""
 
-    source: Any
+    source: Meta | None
     message: str
     entry: Directive | None
 

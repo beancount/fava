@@ -49,12 +49,15 @@ const validatorBase = {
   meta: entry_meta_validator,
 };
 
-export const entryBaseValidator = object(validatorBase);
 export interface EntryBaseAttributes {
   type: string;
   date: string;
   meta: EntryMetadata;
 }
+
+export const entryBaseValidator = object(
+  validatorBase
+) satisfies Validator<EntryBaseAttributes>;
 
 abstract class EntryBase {
   type: EntryTypeName;
