@@ -888,7 +888,6 @@
  "fava_options": {
   "account_journal_include_children": true,
   "auto_reload": false,
-  "budget_whole_interval": false,
   "collapse_pattern": [],
   "conversion_currencies": [],
   "currency_column": 61,

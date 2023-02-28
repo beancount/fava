@@ -65,7 +65,6 @@ class FavaOptions:
     locale: str | None = None
     show_accounts_with_zero_balance: bool = True
     show_accounts_with_zero_transactions: bool = True
-    budget_whole_interval: bool = False
     show_closed_accounts: bool = False
     sidebar_show_queries: int = 5
     unrealized: str = "Unrealized"
