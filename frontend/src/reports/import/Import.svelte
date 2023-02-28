@@ -46,12 +46,17 @@
 
   onMount(() => router.addInteruptHandler(preventNavigation));
   $: {
-    // Since the user can change e.g. account/name for imported files, we only add any new files here.
-    // This avoids overwriting the users changes
-    const existingFileNames = files.map((file) => file.name);
-    files = files.concat(
-      data.filter((updated) => !existingFileNames.includes(updated.name))
+    const existingFiles = Object.fromEntries(
+      files.map((file) => [file.name, file])
     );
+    files = data.map((file) => {
+      // Use existing importers if we found any, since the user might have changed these before a reload happens
+      const importers = existingFiles[file.name]?.importers ?? file.importers;
+      return {
+        ...file,
+        importers,
+      };
+    });
   }
 
   /**
@@ -60,7 +65,7 @@
   async function move(filename: string, account: string, newName: string) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
-      files = files.filter((item) => item.name !== filename);
+      router.reload();
     }
   }
 
@@ -74,7 +79,7 @@
     }
     const removed = await deleteDocument(filename);
     if (removed) {
-      files = files.filter((item) => item.name !== filename);
+      router.reload();
     }
   }
 
