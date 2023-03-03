@@ -19,7 +19,7 @@ import {
   indentUnit,
   syntaxHighlighting,
 } from "@codemirror/language";
-import { lintKeymap } from "@codemirror/lint";
+import { lintGutter, lintKeymap, setDiagnostics } from "@codemirror/lint";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
@@ -57,6 +57,7 @@ const baseExtensions = [
   rectangularSelection(),
   highlightActiveLine(),
   highlightSelectionMatches(),
+  lintGutter(),
   keymap.of([
     ...closeBracketsKeymap,
     ...defaultKeymap,
@@ -130,6 +131,23 @@ export function initBeancountEditor(
     }),
     baseExtensions,
   ]);
+}
+
+/**
+ * Set errors for in the editor, highlighting them
+ */
+export function setErrors(editor: EditorView, errors: []) {
+  const diagnostics = errors.map((error) => {
+    // Show errors without an attached line on first line
+    let line = editor.state.doc.line(error.source?.lineno ?? 1);
+    return {
+      from: line.from,
+      to: line.to,
+      severity: "error",
+      message: error.message,
+    }
+  });
+  editor.dispatch(setDiagnostics(editor.state, diagnostics));
 }
 
 /**
