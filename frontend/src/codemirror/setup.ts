@@ -145,7 +145,7 @@ export function setErrors(editor: EditorView, errors: []) {
       to: line.to,
       severity: "error",
       message: error.message,
-    }
+    };
   });
   editor.dispatch(setDiagnostics(editor.state, diagnostics));
 }

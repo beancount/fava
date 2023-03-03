@@ -98,11 +98,11 @@
   let errors = [];
   // Update diagnostics, showing errors in the editor
   $: {
-    const errorsForFile = errors
-      .filter((error) =>
+    const errorsForFile = errors.filter(
+      (error) =>
         // Only show errors for this file, or general errors (AKA no source)
         error.source === null || error.source.filename == file_path
-      );
+    );
     setErrors(editor, errorsForFile);
   }
 
@@ -113,7 +113,7 @@
 
   onMount(() => router.addInteruptHandler(checkEditorChanges));
 
-  onMount(() => get("errors").then((errs) => errors = errs));
+  onMount(() => get("errors").then((errs) => (errors = errs)));
 
   // keybindings when the focus is outside the editor
   onMount(() =>
