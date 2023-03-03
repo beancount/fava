@@ -20,6 +20,7 @@ import {
   syntaxHighlighting,
 } from "@codemirror/language";
 import { lintGutter, lintKeymap, setDiagnostics } from "@codemirror/lint";
+import type { Diagnostic } from "@codemirror/lint";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
@@ -36,6 +37,7 @@ import {
 } from "@codemirror/view";
 import { get } from "svelte/store";
 
+import type { BeancountError } from "../api/validators";
 import { fava_options } from "../stores";
 
 import { beancount } from "./beancount";
@@ -136,10 +138,10 @@ export function initBeancountEditor(
 /**
  * Set errors for in the editor, highlighting them
  */
-export function setErrors(editor: EditorView, errors: []) {
-  const diagnostics = errors.map((error) => {
+export function setErrors(editor: EditorView, errors: BeancountError[]) {
+  const diagnostics: Diagnostic[] = errors.map((error: BeancountError) => {
     // Show errors without an attached line on first line
-    let line = editor.state.doc.line(error.source?.lineno ?? 1);
+    const line = editor.state.doc.line(error.source?.lineno ?? 1);
     return {
       from: line.from,
       to: line.to,

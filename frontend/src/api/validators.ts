@@ -32,7 +32,7 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
 );
 
 /** A Beancount error that should be shown to the user in the list of errors. */
-interface BeancountError {
+export interface BeancountError {
   message: string;
   source: { filename: string; lineno: number } | null;
   entry: EntryBaseAttributes | null;

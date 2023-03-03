@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   import { get, put } from "../../api";
+  import type { BeancountError } from "../../api/validators";
   import { beancountFormat } from "../../codemirror/beancount-format";
   import { scrollToLine } from "../../codemirror/scroll-to-line";
   import { initBeancountEditor, setErrors } from "../../codemirror/setup";
@@ -28,6 +29,7 @@
 
   let sha256sum = "";
   let saving = false;
+  let errors: BeancountError[] = [];
 
   /**
    * Save the contents of the ediftor.
@@ -45,8 +47,7 @@
       get("errors").then((errs) => {
         errors = errs;
         errorCount.set(errs.length);
-        log_error(errs);
-      });
+      }, log_error);
     } catch (error) {
       notify_err(error, (e) => e.message);
     } finally {
@@ -95,13 +96,12 @@
     }
   }
 
-  let errors = [];
   // Update diagnostics, showing errors in the editor
   $: {
     const errorsForFile = errors.filter(
       (error) =>
         // Only show errors for this file, or general errors (AKA no source)
-        error.source === null || error.source.filename == file_path
+        error.source === null || error.source.filename === file_path
     );
     setErrors(editor, errorsForFile);
   }
@@ -113,7 +113,11 @@
 
   onMount(() => router.addInteruptHandler(checkEditorChanges));
 
-  onMount(() => get("errors").then((errs) => (errors = errs)));
+  onMount(() => {
+    get("errors").then((errs) => {
+      errors = errs;
+    }, log_error);
+  });
 
   // keybindings when the focus is outside the editor
   onMount(() =>
