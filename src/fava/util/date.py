@@ -102,6 +102,39 @@ class Interval(enum.Enum):
         return date.strftime("%Y-%m")
 
 
+def get_prev_interval(
+    date: datetime.date, interval: Interval
+) -> datetime.date:
+    """Get the start date of the interval in which the date falls.
+
+    Args:
+        date: A date.
+        intereval: An interval.
+
+    Returns:
+        The start date of the `interval` before `date`.
+
+    """
+    # pylint: disable=too-many-return-statements
+    try:
+        if interval is Interval.YEAR:
+            return datetime.date(date.year, 1, 1)
+        if interval is Interval.QUARTER:
+            for i in [10, 7, 4]:
+                if date.month > i:
+                    return datetime.date(date.year, i, 1)
+            return datetime.date(date.year, 1, 1)
+        if interval is Interval.MONTH:
+            return datetime.date(date.year, date.month, 1)
+        if interval is Interval.WEEK:
+            return date - datetime.timedelta(date.weekday())
+        if interval is Interval.DAY:
+            return date
+    except (ValueError, OverflowError):
+        return datetime.date.max
+    raise NotImplementedError
+
+
 def get_next_interval(
     date: datetime.date, interval: Interval
 ) -> datetime.date:
@@ -151,11 +184,10 @@ def interval_ends(
         Dates corresponding to the starts/ends of intervals between `first` and
         `last`.
     """
+    yield get_prev_interval(first, interval)
     while first < last:
-        yield first
         first = get_next_interval(first, interval)
-
-    yield get_next_interval(last, interval)
+        yield first
 
 
 def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:

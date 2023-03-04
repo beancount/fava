@@ -10,6 +10,7 @@ import pytest
 from fava.util.date import FiscalYearEnd
 from fava.util.date import get_fiscal_period
 from fava.util.date import get_next_interval
+from fava.util.date import get_prev_interval
 from fava.util.date import Interval
 from fava.util.date import interval_ends
 from fava.util.date import month_offset
@@ -80,14 +81,43 @@ def test_get_next_intervalfail2() -> None:
         get_next_interval(date(2016, 4, 18), "decade")  # type: ignore
 
 
+@pytest.mark.parametrize(
+    "input_date_string,interval,expect",
+    [
+        ("2016-01-01", Interval.DAY, "2016-01-01"),
+        ("2016-01-01", Interval.WEEK, "2015-12-28"),
+        ("2016-01-01", Interval.MONTH, "2016-01-01"),
+        ("2016-01-01", Interval.QUARTER, "2016-01-01"),
+        ("2016-01-01", Interval.YEAR, "2016-01-01"),
+        ("2016-12-31", Interval.DAY, "2016-12-31"),
+        ("2016-12-31", Interval.WEEK, "2016-12-26"),
+        ("2016-12-31", Interval.MONTH, "2016-12-01"),
+        ("2016-12-31", Interval.QUARTER, "2016-10-01"),
+        ("2016-12-31", Interval.YEAR, "2016-01-01"),
+        ("9999-12-31", Interval.QUARTER, "9999-10-01"),
+        ("9999-12-31", Interval.YEAR, "9999-01-01"),
+    ],
+)
+def test_get_prev_interval(
+    input_date_string: str, interval: Interval, expect: str
+) -> None:
+    get = get_prev_interval(_to_date(input_date_string), interval)
+    assert get == _to_date(expect)
+
+
+def test_get_prev_intervalfail2() -> None:
+    with pytest.raises(NotImplementedError):
+        get_prev_interval(date(2016, 4, 18), "decade")  # type: ignore
+
+
 def test_interval_tuples() -> None:
     assert list(
         interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH)
     ) == [
-        date(2014, 3, 5),
+        date(2014, 3, 1),
         date(2014, 4, 1),
         date(2014, 5, 1),
-        date(2014, 5, 5),
+        date(2014, 6, 1),
     ]
     assert list(
         interval_ends(date(2014, 1, 1), date(2014, 5, 1), Interval.MONTH)
@@ -100,7 +130,7 @@ def test_interval_tuples() -> None:
     ]
     assert list(
         interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.YEAR)
-    ) == [date(2014, 3, 5), date(2014, 5, 5)]
+    ) == [date(2014, 1, 1), date(2015, 1, 1)]
     assert list(
         interval_ends(date(2014, 1, 1), date(2015, 1, 1), Interval.YEAR)
     ) == [date(2014, 1, 1), date(2015, 1, 1)]
