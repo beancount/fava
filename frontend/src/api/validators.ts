@@ -1,4 +1,3 @@
-import type { EntryBaseAttributes } from "../entries";
 import { entryBaseValidator, entryValidator, Transaction } from "../entries";
 import type { Validator } from "../lib/validation";
 import {
@@ -35,7 +34,6 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
 interface BeancountError {
   message: string;
   source: { filename: string; lineno: number } | null;
-  entry: EntryBaseAttributes | null;
 }
 
 const error_validator = object({
