@@ -883,7 +883,7 @@
   "ABC",
   "XYZ"
  ],
- "errors": 0,
+ "errors": [],
  "extension_reports": [],
  "fava_options": {
   "account_journal_include_children": true,

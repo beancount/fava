@@ -2,11 +2,7 @@
   import { urlForAccount, urlForSource } from "../../helpers";
   import { _, format } from "../../i18n";
   import { sortableTable } from "../../sort";
-  import { accounts } from "../../stores";
-
-  import type { PageData } from "./load";
-
-  export let data: PageData;
+  import { accounts, errors } from "../../stores";
 
   $: account_re = new RegExp(`(${$accounts.join("|")})`);
 
@@ -30,7 +26,7 @@
   }
 </script>
 
-{#if data.length}
+{#if $errors.length}
   <table use:sortableTable class="errors">
     <thead>
       <tr>
@@ -40,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each data as { message, source }}
+      {#each $errors as { message, source }}
         <tr>
           {#if source}
             {@const url = urlForSource(source.filename, `${source.lineno}`)}

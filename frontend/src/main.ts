@@ -27,6 +27,7 @@ import "@ungap/custom-elements";
 import { get as store_get } from "svelte/store";
 
 import { get } from "./api";
+import { ledgerDataValidator } from "./api/validators";
 import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./codemirror/setup";
 import { _ } from "./i18n";
@@ -40,12 +41,7 @@ import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar } from "./sidebar";
 import { has_changes, updatePageTitle } from "./sidebar/page-title";
 import { SortableTable } from "./sort";
-import {
-  errorCount,
-  fava_options,
-  ledgerData,
-  ledgerDataValidator,
-} from "./stores";
+import { errors, fava_options, ledgerData } from "./stores";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
@@ -83,10 +79,7 @@ function pollForChanges(): void {
       if (store_get(fava_options).auto_reload) {
         router.reload();
       } else {
-        get("errors").then(
-          (errors) => errorCount.set(errors.length),
-          log_error
-        );
+        get("errors").then((v) => errors.set(v), log_error);
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
         });
@@ -128,7 +121,7 @@ function init(): void {
   setInterval(pollForChanges, 5000);
 
   ledgerData.subscribe((val) => {
-    errorCount.set(val.errors);
+    errors.set(val.errors);
   });
 
   router.trigger("page-loaded");

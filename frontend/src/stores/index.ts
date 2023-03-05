@@ -1,77 +1,15 @@
 import type { Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
+import type { BeancountError, LedgerData } from "../api/validators";
 import type { Interval } from "../lib/interval";
 import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
-import type { ValidationT } from "../lib/validation";
-import {
-  array,
-  boolean,
-  constant,
-  date,
-  number,
-  object,
-  optional,
-  record,
-  string,
-  tuple,
-  union,
-} from "../lib/validation";
 
 export const urlHash = writable("");
 
 export const conversion = writable("");
 export const interval: Writable<Interval> = writable(DEFAULT_INTERVAL);
-
-export const ledgerDataValidator = object({
-  accounts: array(string),
-  account_details: record(
-    object({
-      close_date: date,
-      uptodate_status: optional(string),
-      last_entry: optional(object({ date, entry_hash: string })),
-      balance_string: optional(string),
-    })
-  ),
-  base_url: string,
-  currencies: array(string),
-  errors: number,
-  fava_options: object({
-    auto_reload: boolean,
-    currency_column: number,
-    conversion_currencies: array(string),
-    import_config: optional(string),
-    indent: number,
-    locale: union(string, constant(null)),
-    uptodate_indicator_grey_lookback_days: number,
-    insert_entry: array(
-      object({ date: string, filename: string, lineno: number, re: string })
-    ),
-    use_external_editor: boolean,
-  }),
-  have_excel: boolean,
-  incognito: boolean,
-  links: array(string),
-  options: object({
-    documents: array(string),
-    filename: string,
-    include: array(string),
-    operating_currency: array(string),
-    title: string,
-  }),
-  payees: array(string),
-  precisions: record(number),
-  tags: array(string),
-  years: array(string),
-  user_queries: array(object({ name: string, query_string: string })),
-  upcoming_events_count: number,
-  extension_reports: array(tuple([string, string])),
-  sidebar_links: array(tuple([string, string])),
-  other_ledgers: array(tuple([string, string])),
-});
-
-type LedgerData = ValidationT<typeof ledgerDataValidator>;
 
 export const ledgerData = writable<LedgerData>();
 
@@ -123,8 +61,8 @@ export const currencies_sorted = derived_array(currencies, (val) =>
   [...val].sort()
 );
 
-/** The number of Beancount errors. */
-export const errorCount = writable(0);
+/** The Beancount errors. */
+export const errors = writable<BeancountError[]>([]);
 
 export function closeOverlay(): void {
   if (window.location.hash) {

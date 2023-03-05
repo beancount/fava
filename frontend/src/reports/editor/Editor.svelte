@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
 
   import { get, put } from "../../api";
-  import type { BeancountError } from "../../api/validators";
   import { beancountFormat } from "../../codemirror/beancount-format";
   import { scrollToLine } from "../../codemirror/scroll-to-line";
   import { initBeancountEditor, setErrors } from "../../codemirror/setup";
@@ -12,7 +11,7 @@
   import { log_error } from "../../log";
   import { notify_err } from "../../notifications";
   import router from "../../router";
-  import { errorCount, fava_options } from "../../stores";
+  import { errors, fava_options } from "../../stores";
   import { searchParams } from "../../stores/url";
 
   import EditorMenu from "./EditorMenu.svelte";
@@ -29,7 +28,6 @@
 
   let sha256sum = "";
   let saving = false;
-  let errors: BeancountError[] = [];
 
   /**
    * Save the contents of the ediftor.
@@ -44,10 +42,7 @@
       });
       changed = false;
       cm.focus();
-      get("errors").then((errs) => {
-        errors = errs;
-        errorCount.set(errs.length);
-      }, log_error);
+      get("errors").then((v) => errors.set(v), log_error);
     } catch (error) {
       notify_err(error, (e) => e.message);
     } finally {
@@ -98,7 +93,7 @@
 
   // Update diagnostics, showing errors in the editor
   $: {
-    const errorsForFile = errors.filter(
+    const errorsForFile = $errors.filter(
       (error) =>
         // Only show errors for this file, or general errors (AKA no source)
         error.source === null || error.source.filename === file_path
@@ -112,12 +107,6 @@
       : null;
 
   onMount(() => router.addInteruptHandler(checkEditorChanges));
-
-  onMount(() => {
-    get("errors").then((errs) => {
-      errors = errs;
-    }, log_error);
-  });
 
   // keybindings when the focus is outside the editor
   onMount(() =>

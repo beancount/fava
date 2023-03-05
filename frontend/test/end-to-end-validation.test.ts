@@ -4,8 +4,7 @@ import { join } from "path";
 import { test } from "uvu";
 import assert from "uvu/assert";
 
-import { getAPIValidators } from "../src/api/validators";
-import { ledgerDataValidator } from "../src/stores";
+import { getAPIValidators, ledgerDataValidator } from "../src/api/validators";
 
 function loadSnapshot(name: string): Promise<string> {
   const path = join(__dirname, "..", "..", "tests", "__snapshots__", name);

@@ -17,6 +17,7 @@ from flask_babel import gettext  # type: ignore
 from fava.context import g
 from fava.core.accounts import AccountDict
 from fava.core.fava_options import FavaOptions
+from fava.helpers import BeancountError
 from fava.util.excel import HAVE_EXCEL
 
 
@@ -28,7 +29,7 @@ class LedgerData:
     account_details: AccountDict
     base_url: str
     currencies: list[str]
-    errors: int
+    errors: list[BeancountError]
     fava_options: FavaOptions
     incognito: bool
     have_excel: bool
@@ -57,7 +58,7 @@ def get_ledger_data() -> LedgerData:
         ledger.accounts,
         url_for("index"),
         ledger.attributes.currencies,
-        len(ledger.errors),
+        ledger.errors,
         ledger.fava_options,
         current_app.config.get("INCOGNITO", False),
         HAVE_EXCEL,

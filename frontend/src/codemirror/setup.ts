@@ -139,7 +139,7 @@ export function initBeancountEditor(
  * Set errors for in the editor, highlighting them
  */
 export function setErrors(editor: EditorView, errors: BeancountError[]) {
-  const diagnostics: Diagnostic[] = errors.map((error: BeancountError) => {
+  const diagnostics = errors.map((error): Diagnostic => {
     // Show errors without an attached line on first line
     const line = editor.state.doc.line(error.source?.lineno ?? 1);
     return {

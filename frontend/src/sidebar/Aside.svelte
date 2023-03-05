@@ -2,7 +2,7 @@
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { errorCount, ledgerData } from "../stores";
+  import { errors, ledgerData } from "../stores";
 
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
@@ -60,11 +60,11 @@
       use:keyboardShortcut={"n"}>+</a
     >
   </Link>
-  {#if $errorCount > 0}
+  {#if $errors.length > 0}
     <Link
       report={"errors"}
       name={_("Errors")}
-      bubble={[$errorCount, "error"]}
+      bubble={[$errors.length, "error"]}
     />
   {/if}
   <Link report={"import"} name={_("Import")} key={"g n"}>
