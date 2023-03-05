@@ -15,7 +15,7 @@ from dataclasses import fields
 from typing import NamedTuple
 from typing import Pattern
 
-from babel.core import Locale  # type: ignore
+from babel.core import Locale
 from babel.core import UnknownLocaleError
 from beancount.core.data import Custom
 
