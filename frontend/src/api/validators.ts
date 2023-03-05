@@ -39,7 +39,6 @@ interface BeancountError {
 const error_validator = object({
   message: string,
   source: optional(object({ filename: string, lineno: number })),
-  entry: optional(entryBaseValidator),
 }) satisfies Validator<BeancountError>;
 
 export const getAPIValidators = {
