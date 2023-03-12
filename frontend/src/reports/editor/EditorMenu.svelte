@@ -4,7 +4,7 @@
   import type { EditorView } from "@codemirror/view";
 
   import { beancountFormat } from "../../codemirror/beancount-format";
-  import { scrollToLine } from "../../codemirror/scroll-to-line";
+  import { scrollToLine } from "../../codemirror/editor-transactions";
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { modKey } from "../../keyboard-shortcuts";
@@ -29,7 +29,7 @@
     const url = urlFor("editor/", { file_path: filename, line });
     router.navigate(url);
     if (filename === file_path && line) {
-      scrollToLine(editor, line);
+      editor.dispatch(scrollToLine(editor.state, line));
       editor.focus();
     }
   }

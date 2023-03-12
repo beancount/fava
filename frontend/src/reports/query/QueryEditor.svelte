@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { replaceContents } from "../../codemirror/editor-transactions";
   import { initQueryEditor } from "../../codemirror/setup";
   import { _ } from "../../i18n";
   import { keyboardShortcut } from "../../keyboard-shortcuts";
@@ -16,9 +17,7 @@
   );
 
   $: if (value !== editor.state.sliceDoc()) {
-    editor.dispatch({
-      changes: { from: 0, to: editor.state.doc.length, insert: value },
-    });
+    editor.dispatch(replaceContents(editor.state, value));
   }
 </script>
 

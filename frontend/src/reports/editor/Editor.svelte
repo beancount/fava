@@ -4,8 +4,12 @@
 
   import { get, put } from "../../api";
   import { beancountFormat } from "../../codemirror/beancount-format";
-  import { scrollToLine } from "../../codemirror/scroll-to-line";
-  import { initBeancountEditor, setErrors } from "../../codemirror/setup";
+  import {
+    replaceContents,
+    scrollToLine,
+    setErrors,
+  } from "../../codemirror/editor-transactions";
+  import { initBeancountEditor } from "../../codemirror/setup";
   import SaveButton from "../../editor/SaveButton.svelte";
   import { bindKey } from "../../keyboard-shortcuts";
   import { log_error } from "../../log";
@@ -65,9 +69,7 @@
 
   // update editor contents
   $: if (data) {
-    editor.dispatch({
-      changes: { from: 0, to: editor.state.doc.length, insert: data.source },
-    });
+    editor.dispatch(replaceContents(editor.state, data.source));
     sha256sum = data.sha256sum;
     editor.focus();
     changed = false;
@@ -79,26 +81,26 @@
       (f) => f.filename === file_path
     );
     const line = parseInt($searchParams.get("line") ?? "0", 10);
-    if (line > 0) {
-      scrollToLine(editor, line);
-    } else if (opts.length > 0) {
-      const last = opts[opts.length - 1];
-      if (last) {
-        scrollToLine(editor, last.lineno - 1);
+    const last_insert_opt = opts[opts.length - 1];
+    const lineToScrollTo = (() => {
+      if (line > 0) {
+        return line;
       }
-    } else {
-      scrollToLine(editor, editor.state.doc.lines);
-    }
+      if (last_insert_opt) {
+        return last_insert_opt.lineno - 1;
+      }
+      return editor.state.doc.lines;
+    })();
+    editor.dispatch(scrollToLine(editor.state, lineToScrollTo));
   }
 
   // Update diagnostics, showing errors in the editor
   $: {
+    // Only show errors for this file, or general errors (AKA no source)
     const errorsForFile = $errors.filter(
-      (error) =>
-        // Only show errors for this file, or general errors (AKA no source)
-        error.source === null || error.source.filename === file_path
+      ({ source }) => source === null || source.filename === file_path
     );
-    setErrors(editor, errorsForFile);
+    editor.dispatch(setErrors(editor.state, errorsForFile));
   }
 
   const checkEditorChanges = () =>

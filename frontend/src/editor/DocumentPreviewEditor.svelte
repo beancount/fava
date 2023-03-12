@@ -4,6 +4,7 @@
   at the given URL.
 -->
 <script lang="ts">
+  import { replaceContents } from "../codemirror/editor-transactions";
   import { initDocumentPreviewEditor } from "../codemirror/setup";
   import { fetch, handleText } from "../lib/fetch";
 
@@ -23,9 +24,7 @@
     });
 
   $: if (value !== editor.state.sliceDoc()) {
-    editor.dispatch({
-      changes: { from: 0, to: editor.state.doc.length, insert: value },
-    });
+    editor.dispatch(replaceContents(editor.state, value));
   }
 </script>
 
