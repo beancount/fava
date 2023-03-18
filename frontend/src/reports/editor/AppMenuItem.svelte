@@ -22,7 +22,7 @@
   }}
 >
   {name}
-  <ul role="menu">
+  <ul>
     <slot />
   </ul>
 </span>

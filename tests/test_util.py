@@ -53,7 +53,7 @@ def test_slugify() -> None:
     assert slugify("test") == "test"
     assert slugify("烫烫烫") == "烫烫烫"
     assert slugify("nonun烫icode 烫烫") == "nonun烫icode-烫烫"
-    assert slugify("%✓") == ""
+    assert not slugify("%✓")
     assert slugify("söße") == "söße"
     assert slugify("ASDF") == "asdf"
     assert slugify("ASDF test test") == "asdf-test-test"

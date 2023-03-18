@@ -32,7 +32,7 @@ target-version = "py37"
 extend-select = [
     "B",
     "D",
-    "C4",
+    "C40",
     "I",
     "PLC",
     "PLE",

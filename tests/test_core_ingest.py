@@ -39,7 +39,7 @@ def test_ingest_examplefile() -> None:
         entries[1].narration
         == "Payment to Company XYZ REF: 31000161205-6944556-0000463"
     )
-    assert entries[1].postings[0].account == ""
+    assert not entries[1].postings[0].account
     assert isinstance(entries[1].postings[0].units, Amount)
     assert entries[1].postings[0].units.number == 50.00
     assert entries[1].postings[0].units.currency == "EUR"
