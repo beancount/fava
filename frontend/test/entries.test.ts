@@ -10,9 +10,9 @@ import {
 } from "../src/entries";
 
 test("create entries from scratch", () => {
-  assert.instance(create("Balance"), Balance);
-  assert.instance(create("Note"), Note);
-  assert.instance(create("Transaction"), Transaction);
+  assert.instance(create("Balance", "2012-12-12"), Balance);
+  assert.instance(create("Note", "2012-12-12"), Note);
+  assert.instance(create("Transaction", "2012-12-12"), Transaction);
 });
 
 test("create entries from JSON data", () => {

@@ -3,6 +3,7 @@
   import { create } from "../entries";
   import type { EntryTypeName } from "../entries";
   import Entry from "../entry-forms/Entry.svelte";
+  import { todayAsString } from "../format";
   import { _ } from "../i18n";
   import { closeOverlay, urlHash } from "../stores";
   import { addEntryContinue } from "../stores/editor";
@@ -15,11 +16,14 @@
     ["Note", _("Note")],
   ];
 
-  let entry = create("Transaction");
+  // For the first entry to be added, use today as the default date.
+  let entry = create("Transaction", todayAsString());
 
   async function submit() {
     await saveEntries([entry]);
-    entry = create(entry.type);
+    const added_entry_date = entry.date;
+    // Reuse the date of the entry that was just added.
+    entry = create(entry.type, added_entry_date);
     if (!$addEntryContinue) {
       closeOverlay();
     }
@@ -37,7 +41,8 @@
           type="button"
           class:muted={entry.type !== type}
           on:click={() => {
-            entry = create(type);
+            // when switching between entry types, keep the date.
+            entry = create(type, entry.date);
           }}
         >
           {displayName}

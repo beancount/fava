@@ -6,8 +6,8 @@
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { emptyPosting, Transaction } from "../entries";
-  import type { Posting } from "../entries";
+  import { emptyPosting } from "../entries";
+  import type { Posting, Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { payees } from "../stores";
@@ -79,7 +79,8 @@
       return;
     }
     const data = await get("payee_transaction", { payee: entry.payee });
-    entry = Object.assign(new Transaction(), data, { date: entry.date });
+    data.date = entry.date;
+    entry = data;
   }
 
   function movePosting({ from, to }: { from: number; to: number }) {

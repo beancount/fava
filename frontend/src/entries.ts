@@ -1,4 +1,3 @@
-import { todayAsString } from "./format";
 import { ok } from "./lib/result";
 import type { Validator } from "./lib/validation";
 import {
@@ -66,10 +65,10 @@ abstract class EntryBase {
 
   meta: EntryMetadata;
 
-  constructor(type: EntryTypeName) {
+  constructor(type: EntryTypeName, date: string) {
     this.type = type;
     this.meta = {};
-    this.date = todayAsString();
+    this.date = date;
   }
 }
 
@@ -78,8 +77,8 @@ export class Balance extends EntryBase {
 
   amount: Amount;
 
-  constructor() {
-    super("Balance");
+  constructor(date: string) {
+    super("Balance", date);
     this.account = "";
     this.amount = {
       number: "",
@@ -96,7 +95,9 @@ export class Balance extends EntryBase {
 
   static validator: Validator<Balance> = (json) => {
     const res = Balance.raw_validator(json);
-    return res.success ? ok(Object.assign(new Balance(), res.value)) : res;
+    return res.success
+      ? ok(Object.assign(new Balance(res.value.date), res.value))
+      : res;
   };
 }
 
@@ -105,8 +106,8 @@ export class Note extends EntryBase {
 
   comment: string;
 
-  constructor() {
-    super("Note");
+  constructor(date: string) {
+    super("Note", date);
     this.account = "";
     this.comment = "";
   }
@@ -120,7 +121,9 @@ export class Note extends EntryBase {
 
   static validator: Validator<Note> = (json) => {
     const res = Note.raw_validator(json);
-    return res.success ? ok(Object.assign(new Note(), res.value)) : res;
+    return res.success
+      ? ok(Object.assign(new Note(res.value.date), res.value))
+      : res;
   };
 }
 
@@ -137,8 +140,8 @@ export class Transaction extends EntryBase {
 
   postings: Posting[];
 
-  constructor() {
-    super("Transaction");
+  constructor(date: string) {
+    super("Transaction", date);
     this.flag = "*";
     this.payee = "";
     this.narration = "";
@@ -168,7 +171,9 @@ export class Transaction extends EntryBase {
 
   static validator: Validator<Transaction> = (json) => {
     const res = Transaction.raw_validator(json);
-    return res.success ? ok(Object.assign(new Transaction(), res.value)) : res;
+    return res.success
+      ? ok(Object.assign(new Transaction(res.value.date), res.value))
+      : res;
   };
 }
 
@@ -188,8 +193,11 @@ const constructors = {
   Transaction,
 };
 
-export function create(type: EntryTypeName): Entry {
-  return new constructors[type]();
+/**
+ * Create an empty entry of given type on the given day.
+ */
+export function create(type: EntryTypeName, date: string): Entry {
+  return new constructors[type](date);
 }
 
 /**
