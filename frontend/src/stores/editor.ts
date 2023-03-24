@@ -1,5 +1,6 @@
+import { todayAsString } from "../format";
 import { localStorageSyncedStore } from "../lib/store";
-import { boolean } from "../lib/validation";
+import { boolean, string } from "../lib/validation";
 
 /** Whether to reload after saving an entry in the slice editor. */
 export const reloadAfterSavingEntrySlice = localStorageSyncedStore(
@@ -13,4 +14,11 @@ export const addEntryContinue = localStorageSyncedStore(
   "add-entry-continue",
   boolean,
   () => false
+);
+
+/** Date of last item added in the AddEntry dialog. */
+export const addEntryLastDate = localStorageSyncedStore(
+  "add-entry-last-date",
+  string,
+  () => todayAsString()
 );

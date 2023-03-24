@@ -11,12 +11,14 @@
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { payees } from "../stores";
+  import { addEntryLastDate } from "../stores/editor";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
 
   export let entry: Transaction;
+  entry.date = $addEntryLastDate;
   let suggestions: string[] | undefined;
 
   function removePosting(posting: Posting) {

@@ -5,7 +5,7 @@
   import Entry from "../entry-forms/Entry.svelte";
   import { _ } from "../i18n";
   import { closeOverlay, urlHash } from "../stores";
-  import { addEntryContinue } from "../stores/editor";
+  import { addEntryContinue, addEntryLastDate } from "../stores/editor";
 
   import ModalBase from "./ModalBase.svelte";
 
@@ -19,7 +19,9 @@
 
   async function submit() {
     await saveEntries([entry]);
+    $addEntryLastDate = entry.date;
     entry = create(entry.type);
+    entry.date = $addEntryLastDate;
     if (!$addEntryContinue) {
       closeOverlay();
     }
