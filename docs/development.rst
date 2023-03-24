@@ -45,7 +45,7 @@ install from source like so (more details `here
 
 .. code:: bash
 
-    pip install hg+https://bitbucket.org/blais/beancount#egg=beancount
+    pip install -e git+https://github.com/beancount/fava#egg=beancount
 
 Contributions are very welcome, just open a PR on `GitHub`_.
 
