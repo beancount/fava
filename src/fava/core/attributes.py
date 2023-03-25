@@ -3,12 +3,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Entries
-from beancount.core.data import Transaction
-from beancount.core.getters import get_active_years as getters_get_active_years
-from beancount.core.getters import get_all_links
-from beancount.core.getters import get_all_tags
-
+from fava.beans.abc import Directive
+from fava.beans.abc import Transaction
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
@@ -17,7 +13,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 
-def get_active_years(entries: Entries, fye: FiscalYearEnd) -> list[str]:
+def get_active_years(
+    entries: list[Directive], fye: FiscalYearEnd
+) -> list[str]:
     """Return active years, with support for fiscal years.
 
     Args:
@@ -28,20 +26,29 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> list[str]:
         A reverse sorted list of years or fiscal years that occur in the
         entries.
     """
+    years = []
     if fye == (12, 31):
-        return sorted(
-            map(str, getters_get_active_years(entries)), reverse=True
-        )
-    seen = set()
+        prev_year = None
+        for entry in entries:
+            year = entry.date.year
+            if year != prev_year:
+                prev_year = year
+                years.append(year)
+        return [f"{year}" for year in reversed(years)]
     month = fye.month
     day = fye.day
+    prev_year = None
     for entry in entries:
         date = entry.date
-        if date.month > month or date.month == month and date.day > day:
-            seen.add(entry.date.year + 1)
-        else:
-            seen.add(entry.date.year)
-    return [f"FY{year}" for year in sorted(seen, reverse=True)]
+        year = (
+            entry.date.year + 1
+            if date.month > month or date.month == month and date.day > day
+            else entry.date.year
+        )
+        if year != prev_year:
+            prev_year = year
+            years.append(year)
+    return [f"FY{year}" for year in reversed(years)]
 
 
 class AttributesModule(FavaModule):
@@ -58,8 +65,19 @@ class AttributesModule(FavaModule):
 
     def load_file(self) -> None:
         all_entries = self.ledger.all_entries
-        self.links = get_all_links(all_entries)
-        self.tags = get_all_tags(all_entries)
+
+        all_links = set()
+        all_tags = set()
+        for entry in all_entries:
+            links = getattr(entry, "links", None)
+            if links is not None:
+                all_links.update(links)
+            tags = getattr(entry, "tags", None)
+            if tags is not None:
+                all_tags.update(tags)
+        self.links = sorted(all_links)
+        self.tags = sorted(all_tags)
+
         self.years = get_active_years(
             all_entries, self.ledger.fava_options.fiscal_year_end
         )
@@ -70,15 +88,12 @@ class AttributesModule(FavaModule):
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()
 
-        transactions = self.ledger.all_entries_by_type.Transaction
-        for txn in transactions:
+        for txn in self.ledger.all_entries_by_type.Transaction:
             if txn.payee:
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
-                currency_ranker.update(
-                    posting.units.currency, txn.date  # type: ignore
-                )
+                currency_ranker.update(posting.units.currency, txn.date)
                 if posting.cost and posting.cost.currency is not None:
                     currency_ranker.update(posting.cost.currency, txn.date)
 

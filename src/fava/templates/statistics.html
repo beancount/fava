@@ -43,8 +43,8 @@
         {% endif %}
         <td><a href="#context-{{ last_entry.entry_hash }}">{{ last_entry.date }}</a></td>
         <td class="num">
-          {%- for position in (g.filtered.root_account|get_or_create(account)).balance|units -%}
-          {{ commodity_macros.render_amount(ledger, position.units) }}<br>
+          {%- for amt in ((g.filtered.root_tree.get(account)).balance|units).amounts() -%}
+          {{ commodity_macros.render_amount(ledger, amt) }}<br>
           {% endfor -%}
         </td>
       </tr>
@@ -65,7 +65,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for type, entries in ledger.group_entries_by_type(g.filtered.entries) %}
+      {% for type, entries in ledger.group_entries_by_type(g.filtered.entries)._asdict().items() %}
       <tr>
         <td>{{ type }}</td>
         <td class="num">{{ entries|length }}</td>

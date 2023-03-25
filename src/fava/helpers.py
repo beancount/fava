@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from typing import NamedTuple
 
-from beancount.core.data import Directive
-from beancount.core.data import Meta
+from fava.beans.abc import Directive
+from fava.beans.abc import Meta
 
 
 class BeancountError(NamedTuple):

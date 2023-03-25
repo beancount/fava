@@ -11,24 +11,24 @@ from operator import attrgetter
 from typing import Generator
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Balance
-from beancount.core.data import Directive
-from beancount.core.data import Entries
-from beancount.core.data import SORT_ORDER
-from beancount.core.data import Transaction
-from beancount.core.flags import FLAG_CONVERSIONS
-from beancount.core.flags import FLAG_MERGING
-from beancount.core.flags import FLAG_PADDING
-from beancount.core.flags import FLAG_SUMMARIZE
-from beancount.core.flags import FLAG_TRANSFER
-from beancount.parser.printer import format_entry  # type: ignore
 from markupsafe import Markup
 
-from fava.core._compat import FLAG_RETURNS
-from fava.core._compat import FLAG_UNREALIZED
+from fava.beans.abc import Balance
+from fava.beans.abc import Close
+from fava.beans.abc import Directive
+from fava.beans.abc import Document
+from fava.beans.abc import Open
+from fava.beans.abc import Transaction
+from fava.beans.flags import FLAG_CONVERSIONS
+from fava.beans.flags import FLAG_MERGING
+from fava.beans.flags import FLAG_PADDING
+from fava.beans.flags import FLAG_RETURNS
+from fava.beans.flags import FLAG_SUMMARIZE
+from fava.beans.flags import FLAG_TRANSFER
+from fava.beans.flags import FLAG_UNREALIZED
+from fava.beans.str import to_string
 from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import InsertEntryOption
-from fava.core.misc import align
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
 from fava.util import next_key
@@ -155,7 +155,7 @@ class FileModule(FavaModule):
             self.ledger.extensions.after_entry_modified(entry, source_slice)
             return ret
 
-    def insert_entries(self, entries: Entries) -> None:
+    def insert_entries(self, entries: list[Directive]) -> None:
         """Insert entries.
 
         Args:
@@ -178,7 +178,7 @@ class FileModule(FavaModule):
                 self.ledger.extensions.after_insert_entry(entry)
 
     def render_entries(
-        self, entries: Entries
+        self, entries: list[Directive]
     ) -> Generator[Markup, None, None]:
         """Return entries in Beancount format.
 
@@ -199,7 +199,7 @@ class FileModule(FavaModule):
                     yield Markup(get_entry_slice(entry)[0] + "\n")
                 except (KeyError, FileNotFoundError):
                     yield Markup(
-                        _format_entry(
+                        to_string(
                             entry,
                             self.ledger.fava_options.currency_column,
                             indent,
@@ -209,7 +209,15 @@ class FileModule(FavaModule):
 
 def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
-    return (entry.date, SORT_ORDER.get(type(entry), 0))
+    if isinstance(entry, Open):
+        return (entry.date, -2)
+    if isinstance(entry, Balance):
+        return (entry.date, -1)
+    if isinstance(entry, Document):
+        return (entry.date, 1)
+    if isinstance(entry, Close):
+        return (entry.date, 2)
+    return (entry.date, 0)
 
 
 def insert_metadata_in_file(
@@ -325,7 +333,7 @@ def insert_entry(
     filename, lineno = find_insert_position(
         entry, insert_options, default_filename
     )
-    content = _format_entry(entry, currency_column, indent)
+    content = to_string(entry, currency_column, indent)
 
     with open(filename, encoding="utf-8") as file:
         contents = file.readlines()
@@ -349,17 +357,6 @@ def insert_entry(
         else option
         for option in insert_options
     ]
-
-
-def _format_entry(entry: Directive, currency_column: int, indent: int) -> str:
-    """Strip unnecessary whitespace from format_entry."""
-    meta = {
-        key: entry.meta[key] for key in entry.meta if not key.startswith("_")
-    }
-    entry = entry._replace(meta=meta)
-    string = align(format_entry(entry, prefix=" " * indent), currency_column)
-    string = string.replace("<class 'beancount.core.number.MISSING'>", "")
-    return "\n".join(line.rstrip() for line in string.split("\n"))
 
 
 def find_insert_position(

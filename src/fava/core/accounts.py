@@ -7,23 +7,26 @@ from dataclasses import field
 from typing import Dict
 
 from beancount.core.account import TYPE as ACCOUNT_TYPE
-from beancount.core.compare import hash_entry
-from beancount.core.data import Balance
-from beancount.core.data import Close
-from beancount.core.data import Custom
-from beancount.core.data import Directive
 from beancount.core.data import get_entry
-from beancount.core.data import Meta
-from beancount.core.data import Pad
-from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
 from beancount.core.realization import find_last_active_posting
 from beancount.core.realization import get
 from beancount.core.realization import RealAccount
+from beancount.core.realization import realize
 
-from fava.core._compat import FLAG_UNREALIZED
+from fava.beans.abc import Balance
+from fava.beans.abc import Close
+from fava.beans.abc import Custom
+from fava.beans.abc import Directive
+from fava.beans.abc import Meta
+from fava.beans.abc import Pad
+from fava.beans.abc import Transaction
+from fava.beans.flags import FLAG_UNREALIZED
+from fava.beans.funcs import hash_entry
 from fava.core.conversion import units
 from fava.core.module_base import FavaModule
+from fava.core.tree import Tree
+from fava.core.tree import TreeNode
 
 
 def uptodate_status(real_account: RealAccount) -> str | None:
@@ -52,15 +55,14 @@ def uptodate_status(real_account: RealAccount) -> str | None:
     return None
 
 
-def balance_string(real_account: RealAccount) -> str:
+def balance_string(tree_node: TreeNode) -> str:
     """Balance directive for the given account for today."""
-    account = real_account.account
+    account = tree_node.name
     today = str(datetime.date.today())
     res = ""
-    for pos in units(real_account.balance):
+    for pos in units(tree_node.balance).amounts():
         res += (
-            f"{today} balance {account:<28}"
-            + f" {pos.units.number:>15} {pos.units.currency}\n"
+            f"{today} balance {account:<28} {pos.number:>15} {pos.currency}\n"
         )
     return res
 
@@ -114,7 +116,10 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
 
     def load_file(self) -> None:
         self.clear()
-        all_root_account = self.ledger.all_root_account
+        all_root_account = realize(
+            self.ledger.all_entries, [], compute_balance=False  # type: ignore
+        )
+        tree = Tree(self.ledger.all_entries)
         for open_entry in self.ledger.all_entries_by_type.Open:
             meta = open_entry.meta
             account_data = self.setdefault(open_entry.account)
@@ -122,7 +127,7 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
 
             real_account = get(all_root_account, open_entry.account)
             assert real_account is not None
-            last = find_last_active_posting(real_account.txn_postings)
+            last = find_last_active_posting(real_account.txn_postings)  # type: ignore
             if last is not None and not isinstance(last, Close):
                 entry = get_entry(last)
                 account_data.last_entry = LastEntry(
@@ -131,7 +136,9 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
             if meta.get("fava-uptodate-indication"):
                 account_data.uptodate_status = uptodate_status(real_account)
                 if account_data.uptodate_status != "green":
-                    account_data.balance_string = balance_string(real_account)
+                    account_data.balance_string = balance_string(
+                        tree.get(open_entry.account)
+                    )
         for close in self.ledger.all_entries_by_type.Close:
             self.setdefault(close.account).close_date = close.date
 

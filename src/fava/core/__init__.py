@@ -1,48 +1,43 @@
 """This module provides the data required by Fava's reports."""
 from __future__ import annotations
 
-import copy
 import datetime
 from datetime import date
+from decimal import Decimal
 from functools import lru_cache
-from operator import itemgetter
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
+from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
+from typing import TypeVar
 
 from beancount.core import realization
-from beancount.core.account_types import AccountTypes
-from beancount.core.account_types import get_account_sign
-from beancount.core.compare import hash_entry
-from beancount.core.data import Balance
-from beancount.core.data import Directive
-from beancount.core.data import Entries
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Posting
-from beancount.core.data import Price
-from beancount.core.data import Transaction
 from beancount.core.getters import get_min_max_dates
-from beancount.core.interpolate import compute_entry_context
 from beancount.core.inventory import Inventory
-from beancount.core.number import Decimal
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
+from beancount.core.realization import RealAccount
 from beancount.loader import _load  # type: ignore
 from beancount.loader import load_file
-from beancount.parser.options import get_account_types
-from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.utils.encryption import is_encrypted_file
 
+from fava.beans.abc import Balance
+from fava.beans.abc import Directive
+from fava.beans.abc import Price
+from fava.beans.abc import Transaction
+from fava.beans.funcs import hash_entry
+from fava.beans.str import to_string
+from fava.beans.types import BeancountOptions
 from fava.core.accounts import AccountDict
 from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.commodities import CommoditiesModule
-from fava.core.entries_by_type import group_entries_by_type
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import parse_options
@@ -51,6 +46,8 @@ from fava.core.file import get_entry_slice
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import TimeFilter
+from fava.core.group_entries import EntriesByType
+from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
@@ -62,11 +59,9 @@ from fava.helpers import FavaAPIException
 from fava.util import pairwise
 from fava.util.date import Interval
 from fava.util.date import interval_ends
-from fava.util.typing import BeancountOptions
 
 if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
-    from beancount.core.realization import RealAccount
 
 
 class Filters:
@@ -75,28 +70,21 @@ class Filters:
     __slots__ = ("account", "filter", "time")
 
     def __init__(
-        self, options: BeancountOptions, fava_options: FavaOptions
+        self,
+        options: BeancountOptions,
+        fava_options: FavaOptions,
+        account: str | None = None,
+        filter: str | None = None,  # pylint: disable=redefined-builtin
+        time: str | None = None,
     ) -> None:
         self.account = AccountFilter(options, fava_options)
         self.filter = AdvancedFilter(options, fava_options)
         self.time = TimeFilter(options, fava_options)
+        self.account.set(account)
+        self.filter.set(filter)
+        self.time.set(time)
 
-    def set(
-        self,
-        account: str | None = None,
-        filter: str | None = None,  # pylint: disable=redefined-builtin
-        time: str | None = None,
-    ) -> bool:
-        """Set the filters and check if one of them changed."""
-        return any(
-            [
-                self.account.set(account),
-                self.filter.set(filter),
-                self.time.set(time),
-            ]
-        )
-
-    def apply(self, entries: Entries) -> Entries:
+    def apply(self, entries: list[Directive]) -> list[Directive]:
         """Apply the filters to the entries."""
         entries = self.account.apply(entries)
         entries = self.filter.apply(entries)
@@ -118,6 +106,14 @@ MODULES = [
     "ingest",
 ]
 
+T = TypeVar("T")
+
+
+def _cache(func: Callable[..., T]) -> T:
+    """Wrap lru_cache to avoid type errors."""
+    # With Python 3.8 the calls below could be replaced with cached_property
+    return lru_cache()(func)  # type: ignore
+
 
 class FilteredLedger:
     """Filtered Beancount ledger."""
@@ -126,8 +122,6 @@ class FilteredLedger:
         "ledger",
         "entries",
         "filters",
-        "root_account",
-        "root_tree",
         "_date_first",
         "_date_last",
     ]
@@ -142,14 +136,14 @@ class FilteredLedger:
         time: str | None = None,
     ):
         self.ledger = ledger
-        self.filters = Filters(ledger.options, ledger.fava_options)
-        self.filters.set(account=account, filter=filter, time=time)
-        self.entries = self.filters.apply(ledger.all_entries)
-
-        self.root_account = realization.realize(
-            self.entries, ledger.account_types
+        self.filters = Filters(
+            ledger.options,
+            ledger.fava_options,
+            account=account,
+            filter=filter,
+            time=time,
         )
-        self.root_tree = Tree(self.entries)
+        self.entries = self.filters.apply(ledger.all_entries)
 
         self._date_first, self._date_last = get_min_max_dates(
             self.entries, (Transaction, Price)
@@ -162,6 +156,14 @@ class FilteredLedger:
             self._date_last = self.filters.time.end_date
 
     @property
+    @_cache
+    def root_account(self) -> RealAccount:
+        """A realized account for the filtered entries."""
+        return realization.realize(
+            self.entries, self.ledger.root_accounts  # type: ignore
+        )
+
+    @property
     def end_date(self) -> date | None:
         """The date to use for prices."""
         if self.filters.time:
@@ -169,6 +171,13 @@ class FilteredLedger:
         return None
 
     @property
+    @_cache
+    def root_tree(self) -> Tree:
+        """A root tree."""
+        return Tree(self.entries)
+
+    @property
+    @_cache
     def root_tree_closed(self) -> Tree:
         """A root tree for the balance sheet."""
         tree = Tree(self.entries)
@@ -225,11 +234,9 @@ class FavaLedger:
     """
 
     __slots__ = [
-        "account_types",
         "accounts",
         "all_entries",
         "all_entries_by_type",
-        "all_root_account",
         "beancount_file_path",
         "errors",
         "fava_options",
@@ -241,16 +248,22 @@ class FavaLedger:
     ]
 
     #: List of all (unfiltered) entries.
-    all_entries: Entries
+    all_entries: list[Directive]
 
-    #: A NamedTuple containing the names of the five base accounts.
-    account_types: AccountTypes
+    #: A list of all errors reported by Beancount.
+    errors: list[BeancountError]
+
+    #: The Beancount options map.
+    options: BeancountOptions
+
+    #: A dict with all of Fava's option values.
+    fava_options: FavaOptions
 
     #: The price map.
     price_map: PriceMap
 
-    #: The realized root account for all entries.
-    all_root_account: RealAccount
+    #: Dict of list of all (unfiltered) entries by type.
+    all_entries_by_type: EntriesByType
 
     def __init__(self, path: str) -> None:
         #: The path to the main Beancount file.
@@ -287,25 +300,10 @@ class FavaLedger:
         #: A :class:`.QueryShell` instance.
         self.query_shell = QueryShell(self)
 
-        self._watcher = Watcher()
-
-        #: List of all (unfiltered) entries.
-        self.all_entries = []
-
-        #: Dict of list of all (unfiltered) entries by type.
-        self.all_entries_by_type = group_entries_by_type([])
-
-        #: A list of all errors reported by Beancount.
-        self.errors: list[BeancountError] = []
-
-        #: A Beancount options map.
-        self.options: BeancountOptions = OPTIONS_DEFAULTS
-
-        #: A dict containing information about the accounts.
+        #: A :class:`.AccountDict` module - a dict with information about the accounts.
         self.accounts = AccountDict(self)
 
-        #: A dict with all of Fava's option values.
-        self.fava_options: FavaOptions = FavaOptions()
+        self._watcher = Watcher()
 
         self.load_file()
 
@@ -324,13 +322,8 @@ class FavaLedger:
 
         self.get_filtered.cache_clear()
 
-        self.account_types = get_account_types(self.options)
-        self.price_map = build_price_map(self.all_entries)
-        self.all_root_account = realization.realize(
-            self.all_entries, self.account_types
-        )
-
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
+        self.price_map = build_price_map(self.all_entries_by_type.Price)  # type: ignore
 
         self.fava_options, errors = parse_options(
             self.all_entries_by_type.Custom
@@ -360,6 +353,18 @@ class FavaLedger:
         """The timestamp to the latest change of the underlying files."""
         return self._watcher.last_checked
 
+    @property
+    def root_accounts(self) -> tuple[str, str, str, str, str]:
+        """The five root accounts."""
+        options = self.options
+        return (
+            options["name_assets"],
+            options["name_liabilities"],
+            options["name_equity"],
+            options["name_income"],
+            options["name_expenses"],
+        )
+
     def join_path(self, *args: str) -> str:
         """Path relative to the directory of the ledger."""
         include_path = dirname(self.beancount_file_path)
@@ -378,7 +383,7 @@ class FavaLedger:
             files,
             [
                 self.join_path(path, account)
-                for account in self.account_types
+                for account in self.root_accounts
                 for path in self.options["documents"]
             ],
         )
@@ -398,25 +403,13 @@ class FavaLedger:
             self.load_file()
         return changed
 
-    def get_account_sign(self, account_name: str) -> int:
-        """Get account sign.
-
-        Arguments:
-            account_name: An account name.
-
-        Returns:
-            The sign of the given account, +1 for an assets or expenses
-            account, -1 otherwise.
-        """
-        return get_account_sign(account_name, self.account_types)
-
     def interval_balances(
         self,
         filtered: FilteredLedger,
         interval: Interval,
         account_name: str,
         accumulate: bool = False,
-    ) -> tuple[list[realization.RealAccount], list[tuple[date, date]]]:
+    ) -> tuple[list[Tree], list[tuple[date, date]]]:
         """Balances by interval.
 
         Arguments:
@@ -427,7 +420,7 @@ class FavaLedger:
                 should include all entries up to the end of the interval.
 
         Returns:
-            A list of RealAccount instances for all the intervals.
+            A pair of a list of Tree instances and the intervals.
         """
         min_accounts = [
             account
@@ -440,13 +433,11 @@ class FavaLedger:
         )
 
         interval_balances = [
-            realization.realize(
-                list(
-                    iter_entry_dates(
-                        filtered.entries,
-                        date.min if accumulate else begin_date,
-                        end_date,
-                    )
+            Tree(
+                iter_entry_dates(
+                    filtered.entries,
+                    date.min if accumulate else begin_date,
+                    end_date,
                 ),
                 min_accounts,
             )
@@ -460,7 +451,7 @@ class FavaLedger:
         filtered: FilteredLedger,
         account_name: str,
         with_journal_children: bool = False,
-    ) -> list[tuple[Directive, list[Posting], Inventory, Inventory]]:
+    ) -> Iterable[tuple[Directive, Inventory, Inventory]]:
         """Journal for an account.
 
         Args:
@@ -470,27 +461,29 @@ class FavaLedger:
                 of the given account.
 
         Returns:
-            A list of tuples ``(entry, postings, change, balance)``.
+            A generator of ``(entry, change, balance)`` tuples.
             change and balance have already been reduced to units.
         """
         real_account = realization.get_or_create(
             filtered.root_account, account_name
         )
+        txn_postings = (
+            realization.get_postings(real_account)
+            if with_journal_children
+            else real_account.txn_postings
+        )
 
-        if with_journal_children:
-            postings = realization.get_postings(real_account)
-        else:
-            postings = real_account.txn_postings
-
-        return [
-            (entry, postings_, copy.copy(change), copy.copy(balance))
+        return (
+            (entry, change, balance)
             for (
                 entry,
-                postings_,
+                _postings,
                 change,
                 balance,
-            ) in realization.iterate_with_balance(postings)
-        ]
+            ) in realization.iterate_with_balance(
+                txn_postings  # type: ignore
+            )
+        )
 
     def get_entry(self, entry_hash: str) -> Directive:
         """Find an entry.
@@ -536,18 +529,32 @@ class FavaLedger:
         """
         entry = self.get_entry(entry_hash)
         source_slice, sha256sum = get_entry_slice(entry)
+
         if not isinstance(entry, (Balance, Transaction)):
             return entry, None, None, source_slice, sha256sum
 
-        balances = compute_entry_context(self.all_entries, entry)
-        before = {
-            acc: [pos.to_string() for pos in sorted(inv)]
-            for acc, inv in balances[0].items()
-        }
-        after = {
-            acc: [pos.to_string() for pos in sorted(inv)]
-            for acc, inv in balances[1].items()
-        }
+        entry_accounts = get_entry_accounts(entry)
+        balances = {account: Inventory() for account in entry_accounts}
+        for entry_ in self.all_entries:
+            if entry_ is entry:
+                break
+            if isinstance(entry_, Transaction):
+                for posting in entry_.postings:
+                    balance = balances.get(posting.account, None)
+                    if balance is not None:
+                        balance.add_position(posting)
+
+        def visualise(inv: Inventory) -> list[str]:
+            return [to_string(pos) for pos in sorted(inv)]
+
+        before = {acc: visualise(inv) for acc, inv in balances.items()}
+
+        if isinstance(entry, Balance):
+            return entry, before, None, source_slice, sha256sum
+
+        for posting in entry.postings:
+            balances[posting.account].add_position(posting)
+        after = {acc: visualise(inv) for acc, inv in balances.items()}
         return entry, before, after, source_slice, sha256sum
 
     def commodity_pairs(self) -> list[tuple[str, str]]:
@@ -583,19 +590,4 @@ class FavaLedger:
 
         raise FavaAPIException("Statement not found.")
 
-    @staticmethod
-    def group_entries_by_type(entries: Entries) -> list[tuple[str, Entries]]:
-        """Group the given entries by type.
-
-        Args:
-            entries: The entries to group.
-
-        Returns:
-            A list of tuples (type, entries) consisting of the directive type
-            as a string and the list of corresponding entries.
-        """
-        groups: dict[str, Entries] = {}
-        for entry in entries:
-            groups.setdefault(entry.__class__.__name__, []).append(entry)
-
-        return sorted(groups.items(), key=itemgetter(0))
+    group_entries_by_type = staticmethod(group_entries_by_type)

@@ -1,31 +1,35 @@
 """Provide data suitable for Fava's charts."""
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
+from decimal import Decimal
 from typing import Any
 from typing import Generator
+from typing import Iterable
 from typing import Pattern
 from typing import TYPE_CHECKING
 
 from beancount.core import realization
-from beancount.core.amount import Amount
 from beancount.core.data import Booking
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Transaction
 from beancount.core.inventory import Inventory
-from beancount.core.number import Decimal
 from beancount.core.number import MISSING
-from beancount.core.position import Position
 from simplejson import JSONEncoder
 from simplejson import loads
 
-from fava.core._compat import FLAG_UNREALIZED
+from fava.beans.abc import Amount
+from fava.beans.abc import Position
+from fava.beans.abc import Transaction
+from fava.beans.flags import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
+from fava.core.inventory import CounterInventory
+from fava.core.inventory import SimpleCounterInventory
 from fava.core.module_base import FavaModule
 from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
@@ -115,7 +119,7 @@ class DateAndBalance:
     """Balance at a date."""
 
     date: date
-    balance: dict[str, Decimal] | Inventory
+    balance: dict[str, Decimal]
 
 
 @dataclass
@@ -123,8 +127,8 @@ class DateAndBalanceWithBudget:
     """Balance at a date with a budget."""
 
     date: date
-    balance: Inventory
-    account_balances: dict[str, Inventory]
+    balance: SimpleCounterInventory
+    account_balances: dict[str, SimpleCounterInventory]
     budgets: dict[str, Decimal]
 
 
@@ -156,7 +160,7 @@ class ChartModule(FavaModule):
         accounts: str | tuple[str],
         conversion: str,
         invert: bool = False,
-    ) -> Generator[DateAndBalanceWithBudget, None, None]:
+    ) -> Iterable[DateAndBalanceWithBudget]:
         """Render totals for account (or accounts) in the intervals.
 
         Args:
@@ -166,20 +170,21 @@ class ChartModule(FavaModule):
             invert: invert all numbers.
         """
         # pylint: disable=too-many-locals
+        # pylint: disable=too-many-nested-blocks
         price_map = self.ledger.price_map
 
         # limit the bar charts to 100 intervals
         intervals = list(pairwise(filtered.interval_ends(interval)))[-100:]
 
         for begin, end in intervals:
-            inventory = Inventory()
+            inventory = CounterInventory()
             entries = iter_entry_dates(filtered.entries, begin, end)
-            account_inventories = {}
-            for entry in (e for e in entries if isinstance(e, Transaction)):
-                for posting in entry.postings:
+            account_inventories: dict[str, CounterInventory] = defaultdict(
+                CounterInventory
+            )
+            for entry in entries:
+                for posting in getattr(entry, "postings", []):
                     if posting.account.startswith(accounts):
-                        if posting.account not in account_inventories:
-                            account_inventories[posting.account] = Inventory()
                         account_inventories[posting.account].add_position(
                             posting
                         )
@@ -187,19 +192,20 @@ class ChartModule(FavaModule):
             balance = cost_or_value(
                 inventory, conversion, price_map, end - ONE_DAY
             )
-            account_balances = {}
-            for account, acct_value in account_inventories.items():
-                account_balances[account] = cost_or_value(
+            account_balances = {
+                account: cost_or_value(
                     acct_value,
                     conversion,
                     price_map,
                     end - ONE_DAY,
                 )
-            budgets = {}
-            if isinstance(accounts, str):
-                budgets = self.ledger.budgets.calculate_children(
-                    accounts, begin, end
-                )
+                for account, acct_value in account_inventories.items()
+            }
+            budgets = (
+                self.ledger.budgets.calculate_children(accounts, begin, end)
+                if isinstance(accounts, str)
+                else {}
+            )
 
             if invert:
                 # pylint: disable=invalid-unary-operand-type
@@ -217,7 +223,7 @@ class ChartModule(FavaModule):
     @listify
     def linechart(
         self, filtered: FilteredLedger, account_name: str, conversion: str
-    ) -> Generator[DateAndBalance, None, None]:
+    ) -> Iterable[DateAndBalance]:
         """Get the balance of an account as a line chart.
 
         Args:
@@ -233,7 +239,7 @@ class ChartModule(FavaModule):
             filtered.root_account, account_name
         )
         postings = realization.get_postings(real_account)
-        journal = realization.iterate_with_balance(postings)
+        journal = realization.iterate_with_balance(postings)  # type: ignore
 
         # When the balance for a commodity just went to zero, it will be
         # missing from the 'balance' so keep track of currencies that last had
@@ -289,7 +295,7 @@ class ChartModule(FavaModule):
         )
 
         txn = next(transactions, None)
-        inventory = Inventory()
+        inventory = CounterInventory()
 
         price_map = self.ledger.price_map
         for end_date in filtered.interval_ends(interval):

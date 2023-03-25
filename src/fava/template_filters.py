@@ -5,26 +5,23 @@ All functions in this module will be automatically added as template filters.
 from __future__ import annotations
 
 import datetime
+from decimal import Decimal
 from os.path import basename as path_basename
-from typing import Any
 from typing import MutableMapping
 from typing import TypeVar
 from unicodedata import normalize
 
-from beancount.core import compare
-from beancount.core import realization
-from beancount.core.data import Directive
-from beancount.core.inventory import Inventory
-from beancount.core.number import Decimal
-from beancount.core.number import ZERO
-
+from fava.beans import funcs
 from fava.context import g
 from fava.core.conversion import cost
 from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
+from fava.core.inventory import CounterInventory
+from fava.core.inventory import SimpleCounterInventory
 from fava.core.tree import TreeNode
 
 MappingValue = TypeVar("MappingValue")
+ZERO = Decimal()
 
 
 def remove_keys(
@@ -43,8 +40,8 @@ def remove_keys(
 
 
 def cost_or_value(
-    inventory: Inventory, date: datetime.date | None = None
-) -> Any:
+    inventory: CounterInventory, date: datetime.date | None = None
+) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
     return cost_or_value_without_context(
         inventory, g.conversion, g.ledger.price_map, date
@@ -75,25 +72,6 @@ def format_date(date: datetime.date) -> str:
 def format_date_filter(date: datetime.date) -> str:
     """Format a date according to the current interval for the time filter."""
     return g.interval.format_date_filter(date)
-
-
-def hash_entry(entry: Directive) -> str:
-    """Hash an entry."""
-    return compare.hash_entry(entry)
-
-
-def balance_children(account: realization.RealAccount) -> Inventory:
-    """Compute the total balance of an account."""
-    return realization.compute_balance(account)
-
-
-def get_or_create(
-    account: realization.RealAccount, account_name: str
-) -> realization.RealAccount:
-    """Get or create a child account."""
-    if account.account == account_name:
-        return account
-    return realization.get_or_create(account, account_name)
 
 
 FLAGS_TO_TYPES = {"*": "cleared", "!": "pending"}
@@ -144,7 +122,6 @@ def collapse_account(account_name: str) -> bool:
 
 
 FILTERS = [
-    balance_children,
     basename,
     collapse_account,
     cost,
@@ -154,8 +131,7 @@ FILTERS = [
     format_currency,
     format_date,
     format_date_filter,
-    get_or_create,
-    hash_entry,
+    funcs.hash_entry,
     remove_keys,
     should_show,
     units,

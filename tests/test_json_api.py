@@ -9,12 +9,12 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.core.compare import hash_entry
 from flask import Flask
 from flask import url_for
 from flask.testing import FlaskClient
 from pytest import MonkeyPatch
 
+from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import PRETTY_ENCODER

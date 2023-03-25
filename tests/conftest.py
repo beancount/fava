@@ -1,29 +1,35 @@
 # pylint: disable=missing-docstring
+# pylint: disable=redefined-outer-name
 from __future__ import annotations
 
 import datetime
 import os
 from pathlib import Path
 from pprint import pformat
+from textwrap import dedent
 from typing import Any
 from typing import Callable
 from typing import Counter
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.loader import load_string
 from flask.app import Flask
 from flask.testing import FlaskClient
 from pytest import FixtureRequest
 
 from fava.application import _load_file
 from fava.application import app as fava_app
+from fava.beans.abc import Custom
+from fava.beans.abc import Directive
+from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
+    from typing import TypeGuard
+
+    from fava.beans.types import LoaderResult
 
 TESTS_DIR = Path(__file__).parent
 
@@ -115,7 +121,21 @@ def test_client() -> FlaskClient:
 
 @pytest.fixture
 def load_doc(request: FixtureRequest) -> LoaderResult:
-    return load_string(request.function.__doc__, dedent=True)
+    contents = dedent(request.function.__doc__)
+    return load_string(contents)
+
+
+def is_custom_entries_list(
+    entries: list[Directive],
+) -> TypeGuard[list[Custom]]:
+    return all(isinstance(e, Custom) for e in entries)
+
+
+@pytest.fixture
+def load_doc_custom_entries(load_doc: LoaderResult) -> list[Custom]:
+    entries, _errors, _options = load_doc
+    assert is_custom_entries_list(entries)
+    return entries
 
 
 @pytest.fixture
@@ -129,7 +149,8 @@ def example_ledger() -> FavaLedger:
 
 
 @pytest.fixture
-def budgets_doc(request: FixtureRequest) -> BudgetDict:
-    entries, _, _ = load_string(request.function.__doc__, dedent=True)
-    budgets, _ = parse_budgets(entries)  # type: ignore
+def budgets_doc(load_doc: LoaderResult) -> BudgetDict:
+    entries, _, _ = load_doc
+    assert is_custom_entries_list(entries)
+    budgets, _ = parse_budgets(entries)
     return budgets

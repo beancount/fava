@@ -6,13 +6,11 @@ from datetime import date
 from decimal import Decimal
 
 import pytest
-from beancount.core import realization
-from beancount.core.number import D
 from flask import Flask
 from pytest import MonkeyPatch
 
+from fava.beans import create
 from fava.context import g
-from fava.core import FavaLedger
 from fava.core.accounts import AccountData
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
@@ -21,9 +19,10 @@ from fava.template_filters import collapse_account
 from fava.template_filters import format_currency
 from fava.template_filters import format_date
 from fava.template_filters import format_date_filter
-from fava.template_filters import get_or_create
 from fava.template_filters import remove_keys
 from fava.template_filters import should_show
+
+D = create.decimal
 
 
 def test_remove_keys() -> None:
@@ -65,16 +64,6 @@ def test_format_currency(app: Flask) -> None:
 def test_basename() -> None:
     """Get the basename of a file path."""
     assert basename(__file__) == "test_template_filters.py"
-
-
-def test_get_or_create(example_ledger: FavaLedger) -> None:
-    assert (
-        get_or_create(example_ledger.all_root_account, "")
-        == example_ledger.all_root_account
-    )
-    assert get_or_create(
-        example_ledger.all_root_account, "Expenses"
-    ) == realization.get(example_ledger.all_root_account, "Expenses")
 
 
 def test_should_show(app: Flask) -> None:

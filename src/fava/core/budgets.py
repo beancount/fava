@@ -4,14 +4,13 @@ from __future__ import annotations
 import datetime
 from collections import Counter
 from collections import defaultdict
+from decimal import Decimal
 from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Custom
-from beancount.core.number import Decimal
-
+from fava.beans.abc import Custom
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import days_in_daterange

@@ -5,15 +5,15 @@ from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Document
-from beancount.core.data import Transaction
 from beancount.loader import load_file
-from beancount.loader import load_string
 
+from fava.beans.abc import Document
+from fava.beans.abc import Transaction
+from fava.beans.load import load_string
 from fava.plugins.link_documents import DocumentError
 
 if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
+    from fava.beans.types import LoaderResult
 
 
 def test_plugins(tmp_path: Path) -> None:

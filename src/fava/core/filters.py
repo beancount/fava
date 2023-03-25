@@ -9,15 +9,14 @@ from typing import Generator
 
 import ply.yacc  # type: ignore
 from beancount.core import account
-from beancount.core.data import Directive
-from beancount.core.data import Entries
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
+from fava.beans.abc import Directive
+from fava.beans.types import BeancountOptions
 from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
-from fava.util.typing import BeancountOptions
 
 
 class FilterException(FavaAPIException):
@@ -310,10 +309,10 @@ class EntryFilter:
     def _include_entry(self, entry: Directive) -> bool:
         raise NotImplementedError
 
-    def _filter(self, entries: Entries) -> Entries:
+    def _filter(self, entries: list[Directive]) -> list[Directive]:
         return [entry for entry in entries if self._include_entry(entry)]
 
-    def apply(self, entries: Entries) -> Entries:
+    def apply(self, entries: list[Directive]) -> list[Directive]:
         """Apply filter.
 
         Args:
@@ -356,7 +355,7 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
             raise FilterException("time", f"Failed to parse date: {value}")
         return True
 
-    def _filter(self, entries: Entries) -> Entries:
+    def _filter(self, entries: list[Directive]) -> list[Directive]:
         entries, _ = clamp_opt(
             entries, self.begin_date, self.end_date, self.options
         )

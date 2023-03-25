@@ -2,32 +2,17 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 
 import pytest
-from beancount.core.amount import A
-from beancount.core.amount import Amount
-from beancount.core.data import Balance
-from beancount.core.data import Booking
-from beancount.core.data import Close
-from beancount.core.data import Commodity
-from beancount.core.data import create_simple_posting
-from beancount.core.data import Document
-from beancount.core.data import Entries
-from beancount.core.data import Event
-from beancount.core.data import Note
-from beancount.core.data import Open
-from beancount.core.data import Pad
-from beancount.core.data import Posting
-from beancount.core.data import Price
-from beancount.core.data import Query
-from beancount.core.data import Transaction
-from beancount.core.number import D
 from beancount.core.number import MISSING
 from beancount.core.position import CostSpec
 from flask.json import loads
 
+from fava.beans import create
+from fava.beans.helpers import replace
+from fava.beans.str import to_string
 from fava.core.charts import PRETTY_ENCODER
-from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
@@ -35,11 +20,16 @@ from fava.serialisation import serialise
 
 from .conftest import SnapshotFunc
 
+if TYPE_CHECKING:
+    from fava.beans.types import LoaderResult
+
+A = create.amount
+D = create.decimal
 dumps = PRETTY_ENCODER.encode
 
 
 def test_serialise_txn() -> None:
-    txn = Transaction(
+    txn = create.transaction(
         {},
         datetime.date(2017, 12, 12),
         "*",
@@ -47,10 +37,11 @@ def test_serialise_txn() -> None:
         "asdfasd",
         frozenset(["tag"]),
         frozenset(["link"]),
-        [],
+        [
+            create.posting("Assets:ETrade:Cash", "100 USD"),
+            create.posting("Assets:ETrade:GLD", "0 USD"),
+        ],
     )
-    create_simple_posting(txn, "Assets:ETrade:Cash", D("100"), "USD")
-    create_simple_posting(txn, "Assets:ETrade:GLD", None, None)
 
     json_txn = {
         "date": "2017-12-12",
@@ -63,49 +54,57 @@ def test_serialise_txn() -> None:
         "type": "Transaction",
         "postings": [
             {"account": "Assets:ETrade:Cash", "amount": "100 USD"},
-            {"account": "Assets:ETrade:GLD", "amount": ""},
+            {"account": "Assets:ETrade:GLD", "amount": "0 USD"},
         ],
     }
 
     serialised = loads(dumps(serialise(txn)))
     assert serialised == json_txn
 
-    txn = txn._replace(payee="")
     json_txn["payee"] = ""
-    serialised = loads(dumps(serialise(txn)))
+    serialised = loads(dumps(serialise(replace(txn, payee=""))))
     assert serialised == json_txn
 
-    txn = txn._replace(payee=None)
-    serialised = loads(dumps(serialise(txn)))
+    serialised = loads(dumps(serialise(replace(txn, payee=None))))
     assert serialised == json_txn
 
 
-def test_serialise_entry_types(snapshot: SnapshotFunc) -> None:
-    date_ = datetime.date(2017, 12, 12)
-    entries: Entries = [
-        Open({}, date_, "Assets:Cash", ["USD"], Booking.STRICT),
-        Close({}, date_, "Assets:Cash"),
-        Balance({}, date_, "Assets:Cash", A("1 USD"), None, None),
-        Balance({}, date_, "Assets:Cash", A("1 USD"), D("1.0"), A("1 USD")),
-        Commodity({}, date_, "USD"),
-        Document({}, date_, "Assets:Cash", "filename", {"tag"}, {"link"}),
-        Event({}, date_, "event name", "event description"),
-        Note({}, date_, "Assets:Cash", "This is some comment or note"),
-        Pad({}, date_, "Assets:Cash", "Assets:OtherCash"),
-        Price({}, date_, "USD", A("1 EUR")),
-        Query({}, date_, "query name", "journal"),
-    ]
+def test_serialise_entry_types(
+    snapshot: SnapshotFunc, load_doc: LoaderResult
+) -> None:
+    """
+    2017-12-11 open Assets:Cash USD "STRICT"
+    2017-12-13 balance Assets:Cash 1 USD
+    2017-12-14 balance Assets:Cash 1 ~ 1.0 USD
+    2017-12-16 document Assets:Cash "/absolute/filename" #tag ^link
+    2017-12-12 event "event name" "event description"
+        bool-value: TRUE
+        string-value: "value"
+        account-value: Assets:Cash
+        amount-value: 10 USD
+        currency-value: USD
+        number-value: 10 + 10
+        date-value: 2022-12-12
+    2017-12-20 note Assets:Cash "This is some comment or note"
+    2017-12-21 pad Assets:Cash Assets:OtherCash
+    2017-12-22 close Assets:Cash
 
+    2018-12-15 commodity USD
+    2018-12-16 price USD 1 EUR
+
+    2019-12-12 query "query name" "journal"
+    """
+    entries, _, _ = load_doc
     snapshot(dumps([serialise(entry) for entry in entries]))
 
 
 @pytest.mark.parametrize(
     "amount_cost_price,amount_string",
     [
-        ((A("100 USD"), None, None), "100 USD"),
+        (("100 USD", None, None), "100 USD"),
         (
             (
-                A("100 USD"),
+                "100 USD",
                 CostSpec(D("10"), None, "EUR", None, None, False),
                 None,
             ),
@@ -113,16 +112,16 @@ def test_serialise_entry_types(snapshot: SnapshotFunc) -> None:
         ),
         (
             (
-                A("100 USD"),
+                "100 USD",
                 CostSpec(D("10"), None, "EUR", None, None, False),
-                A("11 EUR"),
+                "11 EUR",
             ),
             "100 USD {10 EUR} @ 11 EUR",
         ),
-        ((A("100 USD"), None, A("11 EUR")), "100 USD @ 11 EUR"),
+        (("100 USD", None, "11 EUR"), "100 USD @ 11 EUR"),
         (
             (
-                A("100 USD"),
+                "100 USD",
                 CostSpec(
                     MISSING, None, MISSING, None, None, False  # type: ignore
                 ),
@@ -133,10 +132,11 @@ def test_serialise_entry_types(snapshot: SnapshotFunc) -> None:
     ],
 )
 def test_serialise_posting(
-    amount_cost_price: tuple[Amount, CostSpec | None, Amount],
+    amount_cost_price: tuple[str, CostSpec | None, str],
     amount_string: str,
 ) -> None:
-    pos = Posting("Assets", *amount_cost_price, None, None)
+    amount, cost, price = amount_cost_price
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore
     json = {"account": "Assets", "amount": amount_string}
     assert loads(dumps(serialise(pos))) == json
     assert deserialise_posting(json) == pos
@@ -145,29 +145,30 @@ def test_serialise_posting(
 @pytest.mark.parametrize(
     "amount_cost_price,amount_string",
     [
-        ((A("100 USD"), None, None), "10*10 USD"),
-        ((A("130 USD"), None, None), "100+50 - 20 USD"),
-        ((A("-140 USD"), None, None), "-1400 / 10 USD"),
-        ((A("10 USD"), None, A("1 EUR")), "10 USD @@ 10 EUR"),
+        (("100 USD", None, None), "10*10 USD"),
+        (("130 USD", None, None), "100+50 - 20 USD"),
+        (("-140 USD", None, None), "-1400 / 10 USD"),
+        (("10 USD", None, "1 EUR"), "10 USD @@ 10 EUR"),
         (
-            (A("7 USD"), None, A("1.428571428571428571428571429 EUR")),
+            ("7 USD", None, "1.428571428571428571428571429 EUR"),
             "7 USD @@ 10 EUR",
         ),
-        ((A("0 USD"), None, A("0 EUR")), "0 USD @@ 0 EUR"),
+        (("0 USD", None, "0 EUR"), "0 USD @@ 0 EUR"),
     ],
 )
 def test_deserialise_posting(
-    amount_cost_price: tuple[Amount, CostSpec | None, Amount],
+    amount_cost_price: tuple[str, CostSpec | None, str | None],
     amount_string: str,
 ) -> None:
     """Roundtrip is not possible here due to total price or calculation."""
-    pos = Posting("Assets", *amount_cost_price, None, None)
+    amount, cost, price = amount_cost_price
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore
     json = {"account": "Assets", "amount": amount_string}
     assert deserialise_posting(json) == pos
 
 
 def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
-    txn = Transaction(
+    txn = create.transaction(
         {},
         datetime.date(2017, 12, 12),
         "*",
@@ -180,11 +181,11 @@ def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
             deserialise_posting({"account": "Assets", "amount": "10 EUR @"}),
         ],
     )
-    snapshot(_format_entry(txn, 61, 2))
+    snapshot(to_string(txn))
 
 
 def test_serialise_balance() -> None:
-    bal = Balance(
+    bal = create.balance(
         {},
         datetime.date(2019, 9, 17),
         "Assets:ETrade:Cash",
@@ -225,7 +226,7 @@ def test_deserialise() -> None:
         "postings": postings,
     }
 
-    txn = Transaction(
+    txn = create.transaction(
         {},
         datetime.date(2017, 12, 12),
         "*",
@@ -233,11 +234,12 @@ def test_deserialise() -> None:
         "asdfasd",
         frozenset(["tag"]),
         frozenset(["link"]),
-        [],
-    )
-    create_simple_posting(txn, "Assets:ETrade:Cash", D("100"), "USD")
-    txn.postings.append(
-        Posting("Assets:ETrade:GLD", MISSING, None, None, None, None)
+        [
+            create.posting("Assets:ETrade:Cash", "100 USD"),
+            replace(
+                create.posting("Assets:ETrade:GLD", "100 USD"), units=MISSING
+            ),
+        ],
     )
     assert deserialise(json_txn) == txn
 
@@ -256,13 +258,11 @@ def test_deserialise_balance() -> None:
         "amount": {"number": "100", "currency": "USD"},
         "meta": {},
     }
-    bal = Balance(
+    bal = create.balance(
         {},
         datetime.date(2017, 12, 12),
         "Assets:ETrade:Cash",
-        A("100 USD"),
-        None,
-        None,
+        "100 USD",
     )
     assert deserialise(json_bal) == bal
 
@@ -275,7 +275,7 @@ def test_deserialise_note() -> None:
         "comment": 'This is some comment or note""',
         "meta": {},
     }
-    note = Note(
+    note = create.note(
         {},
         datetime.date(2017, 12, 12),
         "Assets:ETrade:Cash",

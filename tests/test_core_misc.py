@@ -2,24 +2,19 @@
 from __future__ import annotations
 
 import datetime
-from typing import TYPE_CHECKING
 
-from beancount.loader import load_string
-
+from fava.beans.abc import Custom
+from fava.beans.load import load_string
 from fava.core.misc import sidebar_links
 from fava.core.misc import upcoming_events
 
-if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
 
-
-def test_sidebar_links(load_doc: LoaderResult) -> None:
+def test_sidebar_links(load_doc_custom_entries: list[Custom]) -> None:
     """
     2016-01-01 custom "fava-sidebar-link" "title" "link"
     2016-01-02 custom "fava-sidebar-link" "titl1" "lin1"
     """
-    entries, _, _ = load_doc
-    links = sidebar_links(entries)  # type: ignore
+    links = sidebar_links(load_doc_custom_entries)
     assert links == [("title", "link"), ("titl1", "lin1")]
 
 

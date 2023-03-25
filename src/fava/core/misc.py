@@ -7,9 +7,9 @@ import re
 from typing import TYPE_CHECKING
 
 from beancount.core.amount import CURRENCY_RE
-from beancount.core.data import Custom
-from beancount.core.data import Event
 
+from fava.beans.abc import Custom
+from fava.beans.abc import Event
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 

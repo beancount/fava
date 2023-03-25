@@ -6,12 +6,12 @@ from os import path
 from typing import Any
 
 import pytest
-from beancount.core.amount import Amount
-from beancount.core.data import Note
-from beancount.core.data import Transaction
 from beancount.ingest.importer import ImporterProtocol  # type: ignore
 from pytest import MonkeyPatch
 
+from fava.beans.abc import Amount
+from fava.beans.abc import Note
+from fava.beans.abc import Transaction
 from fava.core import FavaLedger
 from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo

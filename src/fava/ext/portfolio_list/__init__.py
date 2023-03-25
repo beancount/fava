@@ -6,9 +6,7 @@ This is a simple example of Fava's extension reports system.
 from __future__ import annotations
 
 import re
-
-from beancount.core.number import Decimal
-from beancount.core.number import ZERO
+from decimal import Decimal
 
 from fava.context import g
 from fava.ext import FavaExtensionBase
@@ -110,7 +108,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         types = [acct_type, bal_type, alloc_type]
 
         rows = []
-        portfolio_total = ZERO
+        portfolio_total = Decimal()
         for node in nodes:
             row = {}
             row["account"] = node.name

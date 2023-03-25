@@ -44,7 +44,7 @@ def _compare_inv_and_counter(
 
 def test_tree_from_entries(example_ledger: FavaLedger) -> None:
     tree = Tree(example_ledger.all_entries)
-    real_account = realization.realize(example_ledger.all_entries)
+    real_account = realization.realize(example_ledger.all_entries)  # type: ignore
 
     for account in realization.iter_children(real_account):
         name = account.account

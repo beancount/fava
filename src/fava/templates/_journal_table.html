@@ -41,7 +41,7 @@
 <ol class="flex-table journal">
     <li class="head">
         <p>
-        <span class="datecell" data-sort="num" data-sort-name="date" data-order="desc">{{ _('Date') }}</span>
+        <span class="datecell" data-sort="num" data-sort-name="date" data-order="asc">{{ _('Date') }}</span>
         <span class="flag" data-sort="string" data-sort-name="flag">{{ _('F') }}</span>
         <span class="description" data-sort="string" data-sort-name="narration">{{ _('Payee/Narration') }}</span>
         <span class="num">{{ _('Position') }}</span>
@@ -53,9 +53,9 @@
         {% endif %}
         </p>
     </li>
-{% for entry in entries|reverse %}
+{% for entry in entries %}
     {% if show_change_and_balance %}
-        {% set entry, _, change, balance = entry %}
+        {% set entry, change, balance = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
     {% if type == 'price' %}{% continue %}{% endif %}
@@ -63,7 +63,7 @@
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
-        <span class="datecell" data-sort-value=-{{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
+        <span class="datecell" data-sort-value={{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
         <span class="description{% if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-entry-date="{{ entry.date }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif %}>
         {% if type == 'open' or type == 'close' %}

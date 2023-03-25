@@ -1,19 +1,28 @@
 """Alternative implementation of Beancount's Inventory."""
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any
 from typing import Callable
 from typing import Dict
+from typing import Iterable
+from typing import Iterator
+from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 
-from beancount.core.amount import Amount
-from beancount.core.number import Decimal
-from beancount.core.number import ZERO
-from beancount.core.position import Cost
-from beancount.core.position import Position
+from fava.beans import create
+from fava.beans.abc import Amount
+from fava.beans.abc import Cost
+from fava.beans.abc import Position
 
+ZERO = Decimal()
 InventoryKey = Tuple[str, Optional[Cost]]
+
+
+class _Amount(NamedTuple):
+    currency: str
+    number: Decimal
 
 
 class SimpleCounterInventory(Dict[str, Decimal]):
@@ -30,6 +39,16 @@ class SimpleCounterInventory(Dict[str, Decimal]):
             self.pop(key, None)
         else:
             self[key] = new_num
+
+    def amounts(self) -> Iterable[_Amount]:
+        """Get the amounts in this inventory."""
+        return (_Amount(currency, number) for currency, number in self.items())
+
+    def __iter__(self) -> Iterator[str]:
+        raise NotImplementedError
+
+    def __neg__(self) -> SimpleCounterInventory:
+        return SimpleCounterInventory({key: -num for key, num in self.items()})
 
 
 class CounterInventory(Dict[InventoryKey, Decimal]):
@@ -64,7 +83,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         """
         counter = SimpleCounterInventory()
         for (currency, cost), number in self.items():
-            pos = Position(Amount(number, currency), cost)
+            pos = create.position(create.amount((number, currency)), cost)
             amount = reducer(pos, *args)
             assert amount.number is not None
             counter.add(amount.currency, amount.number)

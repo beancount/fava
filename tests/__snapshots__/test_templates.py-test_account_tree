@@ -1,0 +1,1981 @@
+<tree-table>
+<ol class="fullwidth flex-table tree-table">
+    <li class="head">
+        <p>
+        <span class="account-cell"><button type="button" class="link expand-all hidden" title="Expand all accounts">Expand all</button></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-12">Dec 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-11">Nov 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-10">Oct 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-09">Sep 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-08">Aug 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-07">Jul 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-06">Jun 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-05">May 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-04">Apr 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-03">Mar 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-02">Feb 2015</a></span>
+
+            <span class="num other"><a href="/long-example/account/Assets/?time=2015-01">Jan 2015</a></span>
+        </p>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-0 droptarget has-children" data-account-name="Assets">
+<span class="expander"></span>        <a href="/long-example/account/Assets/?time=2015" class="account">Assets</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-12">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">5102.59 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-11">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2058.12 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-10">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1614.81 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-09">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1801.22 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-08">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2135.84 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-137 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">5874.85 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2903.72 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2952.58 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2997.06 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2491.68 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-110 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3438.16 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">6190.47 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">14400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-1 droptarget has-children" data-account-name="Assets:Testing">
+<span class="expander"></span>        <a href="/long-example/account/Assets:Testing/?time=2015" class="account">Testing</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-06">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-2 droptarget" data-account-name="Assets:Testing:MultipleCommodities">
+        <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015" class="account">MultipleCommodities</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-06">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-1 droptarget has-children" data-account-name="Assets:US">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US/?time=2015" class="account">US</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-12">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">5102.59 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-11">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2058.12 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-10">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1614.81 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-09">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1801.22 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-08">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2135.84 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-137 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">5874.85 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2903.72 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2952.58 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2997.06 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2491.68 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-110 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3438.16 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">6190.47 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">14400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:BayBook">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:BayBook/?time=2015" class="account">BayBook</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-12">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-11">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-10">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-09">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-08">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-137 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-110 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BayBook/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:BayBook:Vacation">
+        <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015" class="account">Vacation</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-08">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">-137 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-137 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-04">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">10 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">-110 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">-110 VACHR</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="Employer Vacation Hours">15 VACHR</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:BofA">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:BofA/?time=2015" class="account">BofA</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-12">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">4866.80 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-11">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1998.24 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-10">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-2248.48 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-09">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1769.72 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-08">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1364.16 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2274.86 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-705.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-647.42 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-602.94 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1160.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-161.85 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:BofA/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">790.48 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:BofA:Checking">
+        <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015" class="account">Checking</a>
+
+<copyable-text class="status-indicator status-yellow" title="The last entry is not a balance check.
+
+Click to copy the balance directives to the clipboard:
+
+TODAY balance Assets:US:BofA:Checking              1632.79 USD
+" data-clipboard-text="TODAY balance Assets:US:BofA:Checking              1632.79 USD
+"></copyable-text>
+
+    <span class="status-indicator status-gray" title="This account has not been updated in a while. (X days ago)"></span>
+
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="US Dollar">4866.80 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">4866.80 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-1998.24 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1998.24 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-2248.48 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-2248.48 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1769.72 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1769.72 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-08">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-1364.16 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1364.16 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2274.86 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2274.86 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-705.01 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-705.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-647.42 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-647.42 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-04">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-602.94 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-602.94 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-1160.00 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1160.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-161.85 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-161.85 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="US Dollar">790.48 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">790.48 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:ETrade">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:ETrade/?time=2015" class="account">ETrade</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-12">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">235.79 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-11">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">4056.36 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-10">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3863.29 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-09">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">31.50 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-08">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3500.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">8.73 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">51.68 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:Cash">
+        <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015" class="account">Cash</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-27.31 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-27.31 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-1181.06 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1181.06 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">925.93 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">925.93 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-3323.33 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-3323.33 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-08">
+                <span class="balance">
+                    <span class="number" title="US Dollar">3500.00 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3500.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">220.38 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">220.38 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US Dollar">51.68 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">51.68 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:GLD">
+        <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015" class="account">GLD</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1104.95 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1104.95 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-167.83 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-167.83 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">851.12 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">851.12 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">115.84 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">115.84 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:ITOT">
+        <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015" class="account">ITOT</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="US Dollar">882.14 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">882.14 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1016.04 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1016.04 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">867.10 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">867.10 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">167.44 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">167.44 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:VEA">
+        <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015" class="account">VEA</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-54.97 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-54.97 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2174.48 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2174.48 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1086.82 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1086.82 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">845.68 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">845.68 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-607.92 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-607.92 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:VHT">
+        <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015" class="account">VHT</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-12">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-786.88 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-786.88 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-11">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2180.80 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2180.80 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-10">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1002.33 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1002.33 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-09">
+                <span class="balance">
+                    <span class="number" title="US Dollar">790.93 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">790.93 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-07">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">112.99 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">112.99 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-05">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-03">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-02">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-01">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:Federal">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:Federal/?time=2015" class="account">Federal</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">14400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Federal:PreTax401k">
+        <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015" class="account">PreTax401k</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-04">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">-2400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="US 401k and IRA Contributions">14400.00 IRAUSD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US 401k and IRA Contributions">14400.00 IRAUSD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:Vanguard">
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:Vanguard/?time=2015" class="account">Vanguard</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-07">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3599.99 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-06">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3600.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-05">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3600.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-04">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3600.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-03">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3600.00 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-02">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3600.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard/?time=2015-01">
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">5399.99 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:Cash">
+        <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015" class="account">Cash</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-0.08 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-0.08 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-0.01 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-0.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="US Dollar">0.01 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">0.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-04">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-1799.93 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-1799.93 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="US Dollar">-0.09 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">-0.09 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1800.01 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1800.01 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:RGAGX">
+        <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015" class="account">RGAGX</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2160.02 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2160.02 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2159.98 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2159.98 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2160.01 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2160.01 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-04">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2160.04 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2160.04 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US Dollar">3239.95 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">3239.95 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2160.05 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2160.05 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2159.99 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2159.99 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:VBMPX">
+        <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015" class="account">VBMPX</a>
+</span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-12">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-11">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-10">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-09">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-08">
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-07">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1440.05 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1440.05 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-06">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1440.02 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1440.02 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-05">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1439.98 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1439.98 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-04">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1439.96 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1439.96 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-03">
+                <span class="balance">
+                    <span class="number" title="US Dollar">2159.98 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">2159.98 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-02">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1440.04 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1440.04 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-01">
+                <span class="balance">
+                    <span class="number" title="US Dollar">1440.00 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="US Dollar">1440.00 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+</ol>
+</tree-table>

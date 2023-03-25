@@ -4,8 +4,9 @@ from __future__ import annotations
 from pathlib import Path
 from textwrap import dedent
 
-from beancount.core.data import Document
 from beancount.loader import load_file
+
+from fava.beans.abc import Document
 
 
 def test_tag_discovered_plugin(tmp_path: Path) -> None:

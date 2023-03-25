@@ -17,6 +17,7 @@ from flask import current_app
 from flask import url_for
 from flask_babel import gettext  # type: ignore
 
+from fava.beans.account import root
 from fava.context import g
 from fava.core.accounts import AccountDict
 from fava.core.fava_options import FavaOptions
@@ -137,11 +138,20 @@ def _chart_hierarchy(
     end_date: date | None = None,
     label: str | None = None,
 ) -> ChartData:
+    modifier = (
+        +1
+        if root(account_name)
+        in (
+            g.ledger.options["name_assets"],
+            g.ledger.options["name_expenses"],
+        )
+        else -1
+    )
     return ChartData(
         "hierarchy",
         label or account_name,
         {
-            "modifier": g.ledger.get_account_sign(account_name),
+            "modifier": modifier,
             "root": g.ledger.charts.hierarchy(
                 g.filtered,
                 account_name,

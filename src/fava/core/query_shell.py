@@ -4,28 +4,28 @@ from __future__ import annotations
 import contextlib
 import io
 import textwrap
+from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Entries
-from beancount.core.data import Query
 from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.query import query_compile
-from beancount.query.query import run_query
 from beancount.query.query_compile import CompilationError
-from beancount.query.query_execute import execute_query
 from beancount.query.query_parser import ParseError
 from beancount.query.query_parser import RunCustom
 from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
+from fava.beans.abc import Directive
+from fava.beans.abc import Query
+from fava.beans.funcs import execute_query
+from fava.beans.funcs import QueryResult
+from fava.beans.funcs import run_query
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
-
-# mypy: ignore-errors
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -40,7 +40,7 @@ except ImportError:
     pass
 
 
-class QueryShell(BQLShell, FavaModule):
+class QueryShell(BQLShell, FavaModule):  # type: ignore
     """A light wrapper around Beancount's shell."""
 
     # pylint: disable=too-many-instance-attributes
@@ -49,9 +49,9 @@ class QueryShell(BQLShell, FavaModule):
         self.buffer = io.StringIO()
         BQLShell.__init__(self, True, None, self.buffer)
         FavaModule.__init__(self, ledger)
-        self.result = None
+        self.result: QueryResult | None = None
         self.stdout = self.buffer
-        self.entries: Entries = []
+        self.entries: list[Directive] = []
         self.errors: list[BeancountError] = []
         self.options_map = OPTIONS_DEFAULTS
         self.queries: list[Query] = []
@@ -69,7 +69,7 @@ class QueryShell(BQLShell, FavaModule):
                 self.__class__,
                 f"help_{command_name.lower()}",
                 lambda _, fun=func: print(
-                    textwrap.dedent(fun.__doc__).strip(), file=self.outfile
+                    textwrap.dedent(fun.__doc__).strip(), file=self.buffer
                 ),
             )
 
@@ -78,39 +78,39 @@ class QueryShell(BQLShell, FavaModule):
         self.errors = self.ledger.errors
         self.options_map = self.ledger.options
 
-    def get_pager(self):
+    def get_pager(self) -> Any:
         """No real pager, just a wrapper that doesn't close self.buffer."""
         return pager.flush_only(self.buffer)
 
-    def noop(self, _) -> None:
+    def noop(self, _: Any) -> None:
         """Doesn't do anything in Fava's query shell."""
-        print(self.noop.__doc__, file=self.outfile)
+        print(self.noop.__doc__, file=self.buffer)
 
     on_Reload = noop
     do_exit = noop
     do_quit = noop
     do_EOF = noop
 
-    def on_Select(self, statement):
+    def on_Select(self, statement: str) -> None:
         # pylint: disable=invalid-name
         try:
-            c_query = query_compile.compile(
+            c_query = query_compile.compile(  # type: ignore
                 statement,
                 self.env_targets,
                 self.env_postings,
                 self.env_entries,
             )
         except CompilationError as exc:
-            print(f"ERROR: {str(exc).rstrip('.')}.", file=self.outfile)
+            print(f"ERROR: {str(exc).rstrip('.')}.", file=self.buffer)
             return
         rtypes, rrows = execute_query(c_query, self.entries, self.options_map)
 
         if not rrows:
-            print("(empty)", file=self.outfile)
+            print("(empty)", file=self.buffer)
 
         self.result = rtypes, rrows
 
-    def execute_query(self, entries: Entries, query: str):
+    def execute_query(self, entries: list[Directive], query: str) -> Any:
         """Run a query.
 
         Arguments:
@@ -135,7 +135,7 @@ class QueryShell(BQLShell, FavaModule):
         self.result = None
         return (None, types, rows)
 
-    def on_RunCustom(self, run_stmt):
+    def on_RunCustom(self, run_stmt: RunCustom) -> Any:
         """Run a custom query."""
         name = run_stmt.query_name
         if name is None:
@@ -154,8 +154,8 @@ class QueryShell(BQLShell, FavaModule):
                 self.dispatch(statement)
 
     def query_to_file(
-        self, entries: Entries, query_string: str, result_format: str
-    ):
+        self, entries: list[Directive], query_string: str, result_format: str
+    ) -> Any:
         """Get query result as file.
 
         Arguments:

@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 import copy
+from decimal import Decimal
 from typing import Callable
 from typing import TYPE_CHECKING
 
 from babel.core import Locale
 from beancount.core.display_context import Precision
-from beancount.core.number import Decimal
 
 from fava.core.module_base import FavaModule
 

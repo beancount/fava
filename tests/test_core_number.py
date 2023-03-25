@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 from babel.core import Locale
-from beancount.core.number import D
 from pytest import MonkeyPatch
 
+from fava.beans import create
 from fava.core import FavaLedger
 from fava.core.number import get_locale_format
+
+D = create.decimal
 
 
 def test_get_locale_format() -> None:

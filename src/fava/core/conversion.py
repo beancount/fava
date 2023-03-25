@@ -8,17 +8,30 @@ import datetime
 from typing import Any
 from typing import overload
 
-from beancount.core.amount import Amount
-from beancount.core.convert import convert_position
-from beancount.core.convert import get_cost
-from beancount.core.convert import get_units
 from beancount.core.inventory import Inventory
-from beancount.core.position import Position
 from beancount.core.prices import get_price
 from beancount.core.prices import PriceMap
 
+from fava.beans import create
+from fava.beans.abc import Amount
+from fava.beans.abc import Position
 from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
+
+
+def get_units(pos: Position) -> Amount:
+    """Return the units of a Position."""
+    return pos.units
+
+
+def get_cost(pos: Position) -> Amount:
+    """Return the total cost of a Position."""
+    cost_ = pos.cost
+    return (
+        create.amount((cost_.number * pos.units.number, cost_.currency))
+        if cost_ is not None and cost_.number is not None
+        else pos.units
+    )
 
 
 def get_market_value(
@@ -40,15 +53,59 @@ def get_market_value(
     """
     units_ = pos.units
     cost_ = pos.cost
-    value_currency = cost_.currency if cost_ else None
 
-    if value_currency:
+    if cost_:
+        value_currency = cost_.currency
         base_quote = (units_.currency, value_currency)
         _, price_number = get_price(price_map, base_quote, date)
         assert units_.number is not None
         if price_number is not None:
-            return Amount(units_.number * price_number, value_currency)
-        return Amount(units_.number * cost_.number, value_currency)
+            return create.amount(
+                (units_.number * price_number, value_currency)
+            )
+        return create.amount((units_.number * cost_.number, value_currency))
+    return units_
+
+
+def convert_position(
+    pos: Position,
+    target_currency: str,
+    price_map: PriceMap,
+    date: datetime.date | None = None,
+) -> Amount:
+    """Get the value of a Position in a particular currency.
+
+    Args:
+        pos: A Position.
+        target_currency: The target currency to convert to.
+        price_map: A dict of prices, as built by prices.build_price_map().
+        date: A datetime.date instance to evaluate the value at, or None.
+
+    Returns:
+        An Amount, with value converted or if the conversion failed just the
+        cost value (or the units if the position has no cost).
+    """
+    units_ = pos.units
+
+    # try the direct conversion
+    base_quote = (units_.currency, target_currency)
+    _, price_number = get_price(price_map, base_quote, date)
+    if price_number is not None:
+        return create.amount((units_.number * price_number, target_currency))
+
+    cost_ = pos.cost
+    if cost_:
+        cost_currency = cost_.currency
+        if cost_currency != target_currency:
+            base_quote1 = (units_.currency, cost_currency)
+            _, rate1 = get_price(price_map, base_quote1, date)
+            if rate1 is not None:
+                base_quote2 = (cost_currency, target_currency)
+                _, rate2 = get_price(price_map, base_quote2, date)
+                if rate2 is not None:
+                    return create.amount(
+                        (units_.number * rate1 * rate2, target_currency)
+                    )
     return units_
 
 

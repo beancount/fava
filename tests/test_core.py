@@ -12,7 +12,7 @@ from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
 if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
+    from fava.beans.types import LoaderResult
 
 
 def test_apiexception() -> None:
@@ -77,7 +77,8 @@ def test_group_entries(
     entries, _, __ = load_doc
     assert len(entries) == 3
     data = example_ledger.group_entries_by_type(entries)
-    assert data == [("Note", [entries[2]]), ("Transaction", entries[0:2])]
+    assert data.Note == [entries[2]]
+    assert data.Transaction == entries[0:2]
 
 
 def test_account_uptodate_status(example_ledger: FavaLedger) -> None:

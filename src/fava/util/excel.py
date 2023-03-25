@@ -5,9 +5,8 @@ import csv
 import datetime
 import io
 from collections import OrderedDict
+from decimal import Decimal
 from typing import Any
-
-from beancount.core.number import Decimal
 
 try:
     import pyexcel  # type: ignore

@@ -4,26 +4,26 @@ from __future__ import annotations
 from datetime import date
 from typing import TYPE_CHECKING
 
-from beancount.core.number import D
-
+from fava.beans import create
 from fava.core.budgets import BudgetDict
 from fava.core.budgets import calculate_budget
 from fava.core.budgets import calculate_budget_children
 from fava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
+    from fava.beans.abc import Custom
+
+D = create.decimal
 
 
-def test_budgets(load_doc: LoaderResult) -> None:
+def test_budgets(load_doc_custom_entries: list[Custom]) -> None:
     """
     2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
     2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR
     2016-06-01 custom "budget" Expenses:Groceries "asdfasdf"  10.00 EUR
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
-    entries, _, _ = load_doc
-    budgets, errors = parse_budgets(entries)  # type: ignore
+    budgets, errors = parse_budgets(load_doc_custom_entries)
 
     assert len(errors) == 2
 

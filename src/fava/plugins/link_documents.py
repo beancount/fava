@@ -13,11 +13,11 @@ from os.path import join
 from os.path import normpath
 from typing import Any
 
-from beancount.core.compare import hash_entry
-from beancount.core.data import Document
-from beancount.core.data import Entries
-from beancount.core.data import Transaction
-
+from fava.beans.abc import Directive
+from fava.beans.abc import Document
+from fava.beans.abc import Transaction
+from fava.beans.funcs import hash_entry
+from fava.beans.helpers import replace
 from fava.core.accounts import get_entry_accounts
 from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
@@ -31,8 +31,8 @@ __plugins__ = ["link_documents"]
 
 
 def link_documents(
-    entries: Entries, _: Any
-) -> tuple[Entries, list[DocumentError]]:
+    entries: list[Directive], _: Any
+) -> tuple[list[Directive], list[DocumentError]]:
     """Link entries to documents."""
     errors = []
 
@@ -84,7 +84,8 @@ def link_documents(
                 # Since we might link a document multiple times, we have to use
                 # the index for the replacement here.
                 doc: Document = entries[j]  # type: ignore
-                entries[j] = doc._replace(
+                entries[j] = replace(
+                    doc,
                     links=add_to_set(doc.links, hash_),
                     tags=add_to_set(doc.tags, "linked"),
                 )
@@ -92,8 +93,8 @@ def link_documents(
             # The other entry types do not support links, so only add links for
             # txns.
             if isinstance(entry, Transaction):
-                entries[index] = entry._replace(
-                    links=add_to_set(entry.links, hash_)
+                entries[index] = replace(
+                    entry, links=add_to_set(entry.links, hash_)
                 )
 
     return entries, errors

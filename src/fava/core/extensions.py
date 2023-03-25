@@ -6,9 +6,8 @@ from os.path import dirname
 from os.path import join
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Custom
-from beancount.core.data import Directive
-
+from fava.beans.abc import Custom
+from fava.beans.abc import Directive
 from fava.core.module_base import FavaModule
 from fava.ext import FavaExtensionBase
 from fava.ext import find_extensions

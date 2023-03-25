@@ -10,6 +10,7 @@ import os
 import shutil
 from dataclasses import dataclass
 from datetime import date
+from decimal import Decimal
 from functools import wraps
 from inspect import Parameter
 from inspect import signature
@@ -20,15 +21,14 @@ from typing import Callable
 from typing import Mapping
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Document
-from beancount.core.data import Event
-from beancount.core.number import Decimal
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 from flask.wrappers import Response
 
+from fava.beans.abc import Document
+from fava.beans.abc import Event
 from fava.context import g
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
@@ -40,7 +40,7 @@ from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core.ingest import FileImporters
 
 

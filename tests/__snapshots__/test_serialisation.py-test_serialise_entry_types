@@ -5,15 +5,31 @@
   "currencies": [
    "USD"
   ],
-  "date": "2017-12-12",
-  "meta": {},
+  "date": "2017-12-11",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 2
+  },
   "type": "Open"
  },
  {
-  "account": "Assets:Cash",
   "date": "2017-12-12",
-  "meta": {},
-  "type": "Close"
+  "description": "event description",
+  "meta": {
+   "account-value": "Assets:Cash",
+   "amount-value": {
+    "currency": "USD",
+    "number": 10
+   },
+   "bool-value": true,
+   "currency-value": "USD",
+   "date-value": "2022-12-12",
+   "filename": "<string>",
+   "lineno": 6,
+   "number-value": 20,
+   "string-value": "value"
+  },
+  "type": "Event"
  },
  {
   "account": "Assets:Cash",
@@ -21,9 +37,15 @@
    "currency": "USD",
    "number": "1"
   },
-  "date": "2017-12-12",
-  "diff_amount": null,
-  "meta": {},
+  "date": "2017-12-13",
+  "diff_amount": {
+   "currency": "USD",
+   "number": -1
+  },
+  "meta": {
+   "filename": "<string>",
+   "lineno": 3
+  },
   "tolerance": null,
   "type": "Balance"
  },
@@ -33,53 +55,68 @@
    "currency": "USD",
    "number": "1"
   },
-  "date": "2017-12-12",
-  "diff_amount": {
-   "currency": "USD",
-   "number": 1
+  "date": "2017-12-14",
+  "diff_amount": null,
+  "meta": {
+   "filename": "<string>",
+   "lineno": 4
   },
-  "meta": {},
   "tolerance": 1.0,
   "type": "Balance"
  },
  {
-  "currency": "USD",
-  "date": "2017-12-12",
-  "meta": {},
-  "type": "Commodity"
- },
- {
   "account": "Assets:Cash",
-  "date": "2017-12-12",
-  "filename": "filename",
+  "date": "2017-12-16",
+  "filename": "/absolute/filename",
   "links": [
    "link"
   ],
-  "meta": {},
+  "meta": {
+   "filename": "<string>",
+   "lineno": 5
+  },
   "tags": [
    "tag"
   ],
   "type": "Document"
  },
  {
-  "date": "2017-12-12",
-  "description": "event description",
-  "meta": {},
-  "type": "Event"
- },
- {
   "account": "Assets:Cash",
   "comment": "This is some comment or note",
-  "date": "2017-12-12",
-  "meta": {},
+  "date": "2017-12-20",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 14
+  },
   "type": "Note"
  },
  {
   "account": "Assets:Cash",
-  "date": "2017-12-12",
-  "meta": {},
+  "date": "2017-12-21",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 15
+  },
   "source_account": "Assets:OtherCash",
   "type": "Pad"
+ },
+ {
+  "account": "Assets:Cash",
+  "date": "2017-12-22",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 16
+  },
+  "type": "Close"
+ },
+ {
+  "currency": "USD",
+  "date": "2018-12-15",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 18
+  },
+  "type": "Commodity"
  },
  {
   "amount": {
@@ -87,13 +124,19 @@
    "number": 1
   },
   "currency": "USD",
-  "date": "2017-12-12",
-  "meta": {},
+  "date": "2018-12-16",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 19
+  },
   "type": "Price"
  },
  {
-  "date": "2017-12-12",
-  "meta": {},
+  "date": "2019-12-12",
+  "meta": {
+   "filename": "<string>",
+   "lineno": 21
+  },
   "name": "query name",
   "query_string": "journal",
   "type": "Query"

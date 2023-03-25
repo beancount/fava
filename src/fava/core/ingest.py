@@ -18,11 +18,11 @@ from typing import Any
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Entries
 from beancount.ingest import cache  # type: ignore
 from beancount.ingest import extract
 from beancount.ingest import identify
 
+from fava.beans.abc import Directive
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
@@ -152,7 +152,7 @@ class IngestModule(FavaModule):
 
         return ret
 
-    def extract(self, filename: str, importer_name: str) -> Entries:
+    def extract(self, filename: str, importer_name: str) -> list[Directive]:
         """Extract entries from filename with the specified importer.
 
         Args:
@@ -182,7 +182,9 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        new_entries_list: list[tuple[str, Entries]] = [(filename, new_entries)]
+        new_entries_list: list[tuple[str, list[Directive]]] = [
+            (filename, new_entries)
+        ]
         for hook_fn in self.hooks:
             new_entries_list = hook_fn(
                 new_entries_list, self.ledger.all_entries

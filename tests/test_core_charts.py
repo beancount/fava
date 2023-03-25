@@ -2,14 +2,15 @@
 from __future__ import annotations
 
 import pytest
-from beancount.core.number import D
 
+from fava.beans import create
 from fava.core import FavaLedger
 from fava.core.charts import PRETTY_ENCODER
 from fava.util.date import Interval
 
 from .conftest import SnapshotFunc
 
+D = create.decimal
 dumps = PRETTY_ENCODER.encode
 
 

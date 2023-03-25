@@ -10,7 +10,6 @@ from os.path import basename
 from pathlib import Path
 from typing import Any
 from typing import Callable
-from typing import Generator
 from typing import Iterable
 from typing import Iterator
 from typing import TYPE_CHECKING
@@ -49,9 +48,7 @@ def resource_path(relative_path: str) -> Path:
 Item = TypeVar("Item")
 
 
-def listify(
-    func: Callable[..., Generator[Item, None, None]]
-) -> Callable[..., list[Item]]:
+def listify(func: Callable[..., Iterable[Item]]) -> Callable[..., list[Item]]:
     """Make generator function return a list (decorator)."""
 
     @wraps(func)

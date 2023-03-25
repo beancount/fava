@@ -4,8 +4,8 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from beancount.query.query import run_query
 
+from fava.beans.funcs import run_query
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
@@ -29,11 +29,12 @@ def run_text(query_string: str) -> str:
     return contents
 
 
-def test_query() -> None:
+def test_query(snapshot: SnapshotFunc) -> None:
     assert run_text("help")
     assert (
         run_text("help exit") == "Doesn't do anything in Fava's query shell."
     )
+    snapshot(run_text("explain select date, balance"))
     assert run("lex select date, balance")[0] == "\n".join(
         [
             "LexToken(SELECT,'SELECT',1,0)",
@@ -45,6 +46,7 @@ def test_query() -> None:
 
     assert run_text("run") == "custom_query\ncustom query with space"
     bal = run("balances")
+    snapshot(bal)
     assert run("run custom_query") == bal
     assert run("run 'custom query with space'") == bal
     assert run("balances")[1:] == run_query(

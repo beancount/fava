@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.core.data import Entries
 from beancount.core.display_context import DisplayContext
+
+from fava.beans.abc import Directive
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import TypedDict
@@ -29,7 +30,9 @@ if TYPE_CHECKING:  # pragma: no cover
         include: list[str]
         dcontext: DisplayContext
 
-    LoaderResult = tuple[Entries, list[BeancountError], BeancountOptions]
+    LoaderResult = tuple[
+        list[Directive], list[BeancountError], BeancountOptions
+    ]
 
 else:
     TypedDict = dict

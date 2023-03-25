@@ -2,22 +2,24 @@
 import datetime
 import enum
 from collections.abc import Generator
+from decimal import Decimal
 from typing import Any
 from typing import NamedTuple
 from typing import TypeAlias
 
 from beancount.core.amount import Amount
-from beancount.core.number import Decimal
 from beancount.core.number import MISSING
 from beancount.core.position import Cost
 from beancount.core.position import CostSpec
 
-Account = str
-Currency = str
-Flag = str
+from fava.beans import abc
+
+Account: TypeAlias = str
+Currency: TypeAlias = str
+Flag: TypeAlias = str
 Meta: TypeAlias = dict[str, Any]
 Tags: TypeAlias = set[str] | frozenset[str]
-Links = Tags
+Links: TypeAlias = Tags
 
 EMPTY_SET: Any
 
@@ -119,7 +121,6 @@ class Custom(NamedTuple):
     type: str
     values: list[Any]
 
-# ALL_DIRECTIVES: Any
 Directive: TypeAlias = (
     Open
     | Close
@@ -135,47 +136,9 @@ Directive: TypeAlias = (
     | Custom
 )
 
-Entries: TypeAlias = list[Directive]
-
-def new_metadata(
-    filename: Any, lineno: Any, kvlist: Any | None = ...
-) -> Meta: ...
-def create_simple_posting(
-    entry: Transaction,
-    account: str,
-    number: Decimal | None,
-    currency: str | None,
-) -> None: ...
-
-# def create_simple_posting_with_cost(
-#     entry: Any,
-#     account: Any,
-#     number: Any,
-#     currency: Any,
-#     cost_number: Any,
-#     cost_currency: Any,
-# ): ...
-
-NoneType: Any
-
-# def sanity_check_types(
-#     entry: Any, allow_none_for_tags_and_links: bool = ...
-# ) -> None: ...
-# def posting_has_conversion(posting: Any): ...
-# def transaction_has_conversion(transaction: Any): ...
-def get_entry(posting_or_entry: Directive | TxnPosting) -> Directive: ...
-
-SORT_ORDER: Any
-
-# def entry_sortkey(entry: Any): ...
-# pylint: disable=redefined-builtin
-def sorted(entries: Entries) -> Entries: ...
-
-# def posting_sortkey(entry: Any): ...
-# def filter_txns(entries: Any) -> None: ...
-# def has_entry_account_component(entry: Any, component: Any): ...
-# def find_closest(entries: Any, filename: Any, lineno: Any): ...
-# def remove_account_postings(account: Any, entries: Any): ...
+def get_entry(posting_or_entry: Directive | TxnPosting) -> abc.Directive: ...
 def iter_entry_dates(
-    entries: Entries, date_begin: datetime.date, date_end: datetime.date
-) -> Generator[Directive, None, None]: ...
+    entries: list[abc.Directive],
+    date_begin: datetime.date,
+    date_end: datetime.date,
+) -> Generator[abc.Directive, None, None]: ...

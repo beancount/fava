@@ -17,8 +17,8 @@ from typing import Pattern
 
 from babel.core import Locale
 from babel.core import UnknownLocaleError
-from beancount.core.data import Custom
 
+from fava.beans.abc import Custom
 from fava.helpers import BeancountError
 from fava.util.date import FiscalYearEnd
 from fava.util.date import parse_fye_string

@@ -5,27 +5,27 @@ automatically through file discovery and adds the tag "#discovered".
 """
 from __future__ import annotations
 
-from beancount.core.data import Document
-from beancount.core.data import Entries
-
+from fava.beans.abc import Directive
+from fava.beans.abc import Document
+from fava.beans.helpers import replace
+from fava.beans.types import BeancountOptions
 from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
-from fava.util.typing import BeancountOptions
 
 __plugins__ = ["tag_discovered_documents"]
 
 
 def tag_discovered_documents(
-    entries: Entries, options_map: BeancountOptions
-) -> tuple[Entries, list[BeancountError]]:
+    entries: list[Directive], options_map: BeancountOptions
+) -> tuple[list[Directive], list[BeancountError]]:
     """Tag automatically added documents."""
     if not options_map["documents"]:  # pragma: no cover
         return entries, []
 
     for index, entry in enumerate(entries):
         if isinstance(entry, Document) and entry.meta["lineno"] == 0:
-            entries[index] = entry._replace(
-                tags=add_to_set(entry.tags, "discovered")
+            entries[index] = replace(
+                entry, tags=add_to_set(entry.tags, "discovered")
             )
 
     return entries, []

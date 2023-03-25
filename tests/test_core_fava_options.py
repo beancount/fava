@@ -11,7 +11,7 @@ from fava.core.fava_options import parse_options
 from fava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:
-    from fava.util.typing import LoaderResult
+    from fava.beans.types import LoaderResult
 
 
 def test_fava_options(load_doc: LoaderResult) -> None:

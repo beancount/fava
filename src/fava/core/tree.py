@@ -9,18 +9,18 @@ from typing import Generator
 from typing import Iterable
 from typing import TYPE_CHECKING
 
-from beancount.core import account
-from beancount.core import convert
-from beancount.core.data import Directive
-from beancount.core.data import Open
 from beancount.core.prices import PriceMap
 
+from fava.beans.abc import Directive
+from fava.beans.abc import Open
+from fava.beans.account import parent as account_parent
 from fava.core.conversion import cost_or_value
+from fava.core.conversion import get_cost
 from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.util.typing import BeancountOptions
+    from fava.beans.types import BeancountOptions
 
 
 @dataclass
@@ -80,9 +80,16 @@ class Tree(Dict[str, TreeNode]):
         entries: A list of entries to compute balances from.
     """
 
-    def __init__(self, entries: Iterable[Directive] | None = None):
+    def __init__(
+        self,
+        entries: Iterable[Directive] | None = None,
+        create_accounts: list[str] | None = None,
+    ):
         super().__init__(self)
         self.get("", insert=True)
+        if create_accounts:
+            for account in create_accounts:
+                self.get(account, insert=True)
         if entries:
             account_balances: dict[
                 str, CounterInventory
@@ -105,7 +112,7 @@ class Tree(Dict[str, TreeNode]):
             The ancestors of the given account from the bottom up.
         """
         while name:
-            name = account.parent(name)
+            name = account_parent(name) or ""
             yield self.get(name)
 
     def insert(self, name: str, balance: CounterInventory) -> None:
@@ -142,7 +149,7 @@ class Tree(Dict[str, TreeNode]):
             node = TreeNode(name)
             if insert:
                 if name:
-                    parent = self.get(account.parent(name), insert=True)
+                    parent = self.get(account_parent(name) or "", insert=True)
                     parent.children.append(node)
                 self[name] = node
             return node
@@ -180,7 +187,7 @@ class Tree(Dict[str, TreeNode]):
             {
                 (currency, None): -number
                 for currency, number in self.get("")
-                .balance_children.reduce(convert.get_cost)
+                .balance_children.reduce(get_cost)
                 .items()
             }
         )

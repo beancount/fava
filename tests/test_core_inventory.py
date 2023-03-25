@@ -1,18 +1,19 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from beancount.core.amount import A
-from beancount.core.number import D
-
+from fava.beans import create
 from fava.core.inventory import CounterInventory
+
+A = create.amount
+D = create.decimal
 
 
 def test_add() -> None:
     inv = CounterInventory()
     key = ("KEY", None)
-    inv.add(key, D(10))
+    inv.add(key, D("10"))
     assert len(inv) == 1
-    inv.add(key, D(-10))
+    inv.add(key, D("-10"))
     assert inv.is_empty()
 
 

@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import pytest
-from beancount.query.query import run_query
 
+from fava.beans.funcs import run_query
 from fava.core import FavaLedger
 from fava.util import excel
 
