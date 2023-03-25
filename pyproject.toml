@@ -27,6 +27,9 @@ max-args = 9
 [tool.pylint.similarities]
 ignore-imports = true
 
+[tool.pytest.ini_options]
+filterwarnings = "ignore:.*pkg_resources.declare_namespace.*:DeprecationWarning"
+
 [tool.ruff]
 target-version = "py37"
 extend-select = [

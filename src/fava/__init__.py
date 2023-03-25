@@ -1,12 +1,16 @@
 """Fava - A web interface for Beancount."""
 from __future__ import annotations
 
-from pkg_resources import DistributionNotFound
-from pkg_resources import get_distribution
+try:
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version
+except ImportError:
+    from importlib_metadata import PackageNotFoundError  # type: ignore
+    from importlib_metadata import version  # type: ignore
 
 try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:  # pragma: no cover
+    __version__ = version(__name__)
+except PackageNotFoundError:  # pragma: no cover
     # package is not installed
     pass
 
