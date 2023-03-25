@@ -6,7 +6,7 @@ repos:
       hooks:
           - id: black
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.257
+      rev: v0.0.259
       hooks:
           - id: ruff
     - repo: local
@@ -17,8 +17,8 @@ repos:
             entry: prettier --write --list-different --ignore-unknown
             require_serial: true
             additional_dependencies:
-                - "prettier@2.8.4"
-                - "prettier-plugin-svelte@2.9.0"
+                - "prettier@2.8.7"
+                - "prettier-plugin-svelte@2.10.0"
                 - "svelte@3.57.0"
           - id: stylelint
             name: stylelint
