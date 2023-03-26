@@ -970,6 +970,10 @@
   [
    "Query Example",
    "/query-example/"
+  ],
+  [
+   "errors",
+   "/errors/"
   ]
  ],
  "payees": [

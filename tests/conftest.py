@@ -46,6 +46,7 @@ fava_app.config["BEANCOUNT_FILES"] = [
     data_file("extension-report-example.beancount"),
     data_file("import.beancount"),
     data_file("query-example.beancount"),
+    data_file("errors.beancount"),
 ]
 _load_file()
 

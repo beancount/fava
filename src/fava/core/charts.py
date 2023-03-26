@@ -19,6 +19,7 @@ from beancount.core.data import Transaction
 from beancount.core.display_context import DisplayContext
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
+from beancount.core.number import MISSING
 from beancount.core.position import Position
 from simplejson import JSONEncoder
 from simplejson import loads
@@ -80,6 +81,8 @@ class FavaJSONEncoder(JSONEncoder):
             return o.pattern
         if is_dataclass(o):
             return {field.name: getattr(o, field.name) for field in fields(o)}
+        if o is MISSING:
+            return None
         return JSONEncoder.default(self, o)
 
 

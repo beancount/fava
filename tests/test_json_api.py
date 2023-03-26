@@ -109,6 +109,8 @@ def test_api_add_document(
 def test_api_errors(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/errors")
     assert_api_success(response, [])
+    response = test_client.get("/errors/api/errors")
+    assert_api_success(response)
 
 
 def test_api_context(
