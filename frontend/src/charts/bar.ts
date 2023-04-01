@@ -1,3 +1,4 @@
+import { rollup } from "d3-array";
 import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
@@ -56,18 +57,57 @@ const bar_validator = array(
   })
 );
 
+/** Calculate the currencies to use for the chart. */
+function calculateCurrenciesToShow(
+  data: {
+    budgets: Record<string, number>;
+    balance: Record<string, number>;
+  }[],
+  operatingCurrencies: string[]
+): string[] {
+  // Count the usage of each currency in the data.
+  const inData = rollup(
+    data.flatMap((interval) => [
+      ...Object.entries(interval.budgets),
+      ...Object.entries(interval.balance),
+    ]),
+    (v) => v.length,
+    (r) => r[0]
+  );
+
+  const toShow = [];
+  // Always take operating currencies if they are used in the data.
+  for (const currency of operatingCurrencies) {
+    if (inData.has(currency)) {
+      toShow.push(currency);
+      inData.delete(currency);
+    }
+  }
+  // Decide the number of currencies we want to pick
+  const maxPick = Math.max(operatingCurrencies.length, 5);
+  // Find the most used ones.
+  const sorted = [...inData].sort((a, b) => b[1] - a[1]);
+  for (const item of sorted.slice(0, maxPick - toShow.length)) {
+    toShow.push(item[0]);
+  }
+
+  return toShow;
+}
+
 /**
  * Try to parse a bar chart.
  */
 export function bar(
   json: unknown,
-  { currencies, dateFormat }: ChartContext
+  ctx: ChartContext
 ): Result<BarChart, string> {
   const res = bar_validator(json);
   if (!res.success) {
     return res;
   }
   const parsedData = res.value;
+  const currencies = calculateCurrenciesToShow(parsedData, ctx.currencies);
+
   const bar_groups = parsedData.map((interval) => ({
     values: currencies.map((currency) => ({
       currency,
@@ -75,7 +115,7 @@ export function bar(
       budget: interval.budgets[currency] ?? 0,
     })),
     date: interval.date,
-    label: dateFormat(interval.date),
+    label: ctx.dateFormat(interval.date),
     account_balances: interval.account_balances,
   }));
   const accounts = Array.from(
