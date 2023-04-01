@@ -129,7 +129,8 @@ export function bar(
       stack<BarChartDatum>()
         .keys(accounts)
         .value((obj, key) => obj.account_balances[key]?.[currency] ?? 0)
-        .offset(stackOffsetDiverging)(bar_groups),
+        .offset(stackOffsetDiverging)(bar_groups)
+        .filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
     ]
   );
 

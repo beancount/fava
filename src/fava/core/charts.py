@@ -168,7 +168,11 @@ class ChartModule(FavaModule):
         """
         # pylint: disable=too-many-locals
         price_map = self.ledger.price_map
-        for begin, end in pairwise(filtered.interval_ends(interval)):
+
+        # limit the bar charts to 100 intervals
+        intervals = list(pairwise(filtered.interval_ends(interval)))[-100:]
+
+        for begin, end in intervals:
             inventory = Inventory()
             entries = iter_entry_dates(filtered.entries, begin, end)
             account_inventories = {}

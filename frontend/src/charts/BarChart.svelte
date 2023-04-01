@@ -137,8 +137,20 @@
             <g
               class="category"
               class:faded={highlighted && account !== highlighted}
+              on:mouseover={() => {
+                highlighted = account;
+              }}
+              on:focus={() => {
+                highlighted = account;
+              }}
+              on:mouseout={() => {
+                highlighted = null;
+              }}
+              on:blur={() => {
+                highlighted = null;
+              }}
             >
-              {#each stack.filter((b) => !Number.isNaN(b[1])) as bar}
+              {#each stack as bar}
                 <rect
                   class:desaturate={bar.data.date > today}
                   width={x1.bandwidth()}
@@ -146,18 +158,6 @@
                   y={y(Math.max(bar[0], bar[1]))}
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={colorScale(account)}
-                  on:mouseover={() => {
-                    highlighted = account;
-                  }}
-                  on:focus={() => {
-                    highlighted = account;
-                  }}
-                  on:mouseout={() => {
-                    highlighted = null;
-                  }}
-                  on:blur={() => {
-                    highlighted = null;
-                  }}
                   use:followingTooltip={() =>
                     tooltipText($ctx, bar.data, account)}
                 />
