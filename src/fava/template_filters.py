@@ -48,7 +48,7 @@ def cost_or_value(
 ) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
     return cost_or_value_without_context(
-        inventory, g.conversion, g.ledger.price_map, date
+        inventory, g.conversion, g.ledger.prices, date
     )
 
 

@@ -17,8 +17,6 @@ from beancount.core import realization
 from beancount.core.data import iter_entry_dates
 from beancount.core.getters import get_min_max_dates
 from beancount.core.inventory import Inventory
-from beancount.core.prices import build_price_map
-from beancount.core.prices import get_all_prices
 from beancount.loader import _load  # type: ignore
 from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
@@ -29,6 +27,7 @@ from fava.beans.abc import Price
 from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import hash_entry
+from fava.beans.prices import FavaPriceMap
 from fava.beans.str import to_string
 from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
@@ -60,7 +59,6 @@ from fava.util.date import interval_ends
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
-    from beancount.core.prices import PriceMap
     from beancount.core.realization import RealAccount
 
     from fava.beans.types import BeancountOptions
@@ -194,7 +192,9 @@ class FilteredLedger:
 
     def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""
-        all_prices = get_all_prices(self.ledger.price_map, (base, quote))
+        all_prices = self.ledger.prices.get_all_prices((base, quote))
+        if all_prices is None:
+            return []
 
         if (
             self.filters.time
@@ -244,7 +244,7 @@ class FavaLedger:
         "fava_options",
         "_is_encrypted",
         "options",
-        "price_map",
+        "prices",
         "_watcher",
         *MODULES,
     ]
@@ -262,7 +262,7 @@ class FavaLedger:
     fava_options: FavaOptions
 
     #: The price map.
-    price_map: PriceMap
+    prices: FavaPriceMap
 
     #: Dict of list of all (unfiltered) entries by type.
     all_entries_by_type: EntriesByType
@@ -325,7 +325,7 @@ class FavaLedger:
         self.get_filtered.cache_clear()
 
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
-        self.price_map = build_price_map(self.all_entries_by_type.Price)  # type: ignore
+        self.prices = FavaPriceMap(self.all_entries_by_type.Price)
 
         self.fava_options, errors = parse_options(
             self.all_entries_by_type.Custom
@@ -566,15 +566,7 @@ class FavaLedger:
             A list of pairs of commodities. Pairs of operating currencies will
             be given in both directions not just in the one found in file.
         """
-        fw_pairs = self.price_map.forward_pairs
-        bw_pairs = []
-        for currency_a, currency_b in fw_pairs:
-            if (
-                currency_a in self.options["operating_currency"]
-                and currency_b in self.options["operating_currency"]
-            ):
-                bw_pairs.append((currency_b, currency_a))
-        return sorted(fw_pairs + bw_pairs)
+        return self.prices.commodity_pairs(self.options["operating_currency"])
 
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
         """Get the path for a statement found in the specified entry."""

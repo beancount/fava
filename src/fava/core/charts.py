@@ -149,7 +149,9 @@ class ChartModule(FavaModule):
         else:
             tree = filtered.root_tree
         return tree.get(account_name).serialise(
-            conversion, self.ledger.price_map, end - ONE_DAY if end else None
+            conversion,
+            self.ledger.prices,
+            end - ONE_DAY if end else None,
         )
 
     @listify
@@ -171,7 +173,7 @@ class ChartModule(FavaModule):
         """
         # pylint: disable=too-many-locals
         # pylint: disable=too-many-nested-blocks
-        price_map = self.ledger.price_map
+        prices = self.ledger.prices
 
         # limit the bar charts to 100 intervals
         intervals = list(pairwise(filtered.interval_ends(interval)))[-100:]
@@ -190,13 +192,13 @@ class ChartModule(FavaModule):
                         )
                         inventory.add_position(posting)
             balance = cost_or_value(
-                inventory, conversion, price_map, end - ONE_DAY
+                inventory, conversion, prices, end - ONE_DAY
             )
             account_balances = {
                 account: cost_or_value(
                     acct_value,
                     conversion,
-                    price_map,
+                    prices,
                     end - ONE_DAY,
                 )
                 for account, acct_value in account_inventories.items()
@@ -246,14 +248,14 @@ class ChartModule(FavaModule):
         # a balance.
         last_currencies = None
 
-        price_map = self.ledger.price_map
+        prices = self.ledger.prices
         for entry, _, change, balance_inventory in journal:
             if change.is_empty():
                 continue
 
             balance = inv_to_dict(
                 cost_or_value(
-                    balance_inventory, conversion, price_map, entry.date
+                    balance_inventory, conversion, prices, entry.date
                 )
             )
 
@@ -297,7 +299,7 @@ class ChartModule(FavaModule):
         txn = next(transactions, None)
         inventory = CounterInventory()
 
-        price_map = self.ledger.price_map
+        prices = self.ledger.prices
         for end_date in filtered.interval_ends(interval):
             while txn and txn.date < end_date:
                 for posting in txn.postings:
@@ -307,7 +309,7 @@ class ChartModule(FavaModule):
             yield DateAndBalance(
                 end_date,
                 cost_or_value(
-                    inventory, conversion, price_map, end_date - ONE_DAY
+                    inventory, conversion, prices, end_date - ONE_DAY
                 ),
             )
 

@@ -19,8 +19,7 @@ from fava.core.inventory import SimpleCounterInventory
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
-    from beancount.core.prices import PriceMap
-
+    from fava.beans.prices import FavaPriceMap
     from fava.beans.types import BeancountOptions
 
 
@@ -54,7 +53,7 @@ class TreeNode:
     def serialise(
         self,
         conversion: str,
-        price_map: PriceMap,
+        prices: FavaPriceMap,
         end: datetime.date | None,
     ) -> SerialisedTreeNode:
         """Serialise the account.
@@ -63,13 +62,12 @@ class TreeNode:
             end: A date to use for cost conversions.
         """
         children = [
-            child.serialise(conversion, price_map, end)
-            for child in self.children
+            child.serialise(conversion, prices, end) for child in self.children
         ]
         return SerialisedTreeNode(
             self.name,
-            cost_or_value(self.balance, conversion, price_map, end),
-            cost_or_value(self.balance_children, conversion, price_map, end),
+            cost_or_value(self.balance, conversion, prices, end),
+            cost_or_value(self.balance_children, conversion, prices, end),
             children,
         )
 

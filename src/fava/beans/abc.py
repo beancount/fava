@@ -284,6 +284,16 @@ class Pad(Directive):
 class Price(Directive):
     """A Beancount Price directive."""
 
+    @property
+    @abstractmethod
+    def currency(self) -> str:
+        """Currency for which this is a price."""
+
+    @property
+    @abstractmethod
+    def amount(self) -> Amount:
+        """Price amount."""
+
 
 class Query(Directive):
     """A Beancount Query directive."""

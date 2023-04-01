@@ -8,9 +8,6 @@ from typing import Any
 from typing import overload
 from typing import TYPE_CHECKING
 
-from beancount.core.prices import get_price
-from beancount.core.prices import PriceMap
-
 from fava.beans import create
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -20,6 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Amount
     from fava.beans.abc import Position
+    from fava.beans.prices import FavaPriceMap
     from fava.core.inventory import CounterInventory
     from fava.core.inventory import SimpleCounterInventory
 
@@ -40,7 +38,7 @@ def get_cost(pos: Position) -> Amount:
 
 
 def get_market_value(
-    pos: Position, price_map: PriceMap, date: datetime.date | None = None
+    pos: Position, prices: FavaPriceMap, date: datetime.date | None = None
 ) -> Amount:
     """Get the market value of a Position.
 
@@ -49,7 +47,7 @@ def get_market_value(
 
     Args:
         pos: A Position.
-        price_map: A dict of prices, as built by prices.build_price_map().
+        prices: A FavaPriceMap
         date: A datetime.date instance to evaluate the value at, or None.
 
     Returns:
@@ -62,7 +60,7 @@ def get_market_value(
     if cost_:
         value_currency = cost_.currency
         base_quote = (units_.currency, value_currency)
-        _, price_number = get_price(price_map, base_quote, date)
+        price_number = prices.get_price(base_quote, date)
         assert units_.number is not None
         if price_number is not None:
             return create.amount(
@@ -75,7 +73,7 @@ def get_market_value(
 def convert_position(
     pos: Position,
     target_currency: str,
-    price_map: PriceMap,
+    prices: FavaPriceMap,
     date: datetime.date | None = None,
 ) -> Amount:
     """Get the value of a Position in a particular currency.
@@ -83,7 +81,7 @@ def convert_position(
     Args:
         pos: A Position.
         target_currency: The target currency to convert to.
-        price_map: A dict of prices, as built by prices.build_price_map().
+        prices: A FavaPriceMap
         date: A datetime.date instance to evaluate the value at, or None.
 
     Returns:
@@ -94,7 +92,7 @@ def convert_position(
 
     # try the direct conversion
     base_quote = (units_.currency, target_currency)
-    _, price_number = get_price(price_map, base_quote, date)
+    price_number = prices.get_price(base_quote, date)
     if price_number is not None:
         return create.amount((units_.number * price_number, target_currency))
 
@@ -103,10 +101,10 @@ def convert_position(
         cost_currency = cost_.currency
         if cost_currency != target_currency:
             base_quote1 = (units_.currency, cost_currency)
-            _, rate1 = get_price(price_map, base_quote1, date)
+            rate1 = prices.get_price(base_quote1, date)
             if rate1 is not None:
                 base_quote2 = (cost_currency, target_currency)
-                _, rate2 = get_price(price_map, base_quote2, date)
+                rate2 = prices.get_price(base_quote2, date)
                 if rate2 is not None:
                     return create.amount(
                         (units_.number * rate1 * rate2, target_currency)
@@ -148,7 +146,7 @@ def cost(inventory: Inventory | CounterInventory) -> Any:
 def cost_or_value(
     inventory: Inventory,
     conversion: str,
-    price_map: PriceMap,
+    prices: FavaPriceMap,
     date: datetime.date | None,
 ) -> Inventory:
     ...
@@ -158,7 +156,7 @@ def cost_or_value(
 def cost_or_value(
     inventory: CounterInventory,
     conversion: str,
-    price_map: PriceMap,
+    prices: FavaPriceMap,
     date: datetime.date | None,
 ) -> SimpleCounterInventory:
     ...
@@ -167,16 +165,16 @@ def cost_or_value(
 def cost_or_value(
     inventory: Inventory | CounterInventory,
     conversion: str,
-    price_map: PriceMap,
+    prices: FavaPriceMap,
     date: datetime.date | None = None,
 ) -> Any:
     """Get the cost or value of an inventory."""
     if conversion == "at_cost":
         return inventory.reduce(get_cost)
     if conversion == "at_value":
-        return inventory.reduce(get_market_value, price_map, date)
+        return inventory.reduce(get_market_value, prices, date)
     if conversion == "units":
         return inventory.reduce(get_units)
     if conversion:
-        return inventory.reduce(convert_position, conversion, price_map, date)
+        return inventory.reduce(convert_position, conversion, prices, date)
     return inventory.reduce(get_cost)
