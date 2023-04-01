@@ -54,22 +54,22 @@ class FileImporters(NamedTuple):
 
 def file_import_info(filename: str, importer: Any) -> FileImportInfo:
     """Generate info about a file with an importer."""
-    # pylint: disable=broad-except
     file = cache.get_file(filename)
     try:
         account = importer.file_account(file)
-    except Exception:
-        account = ""
-    try:
         date = importer.file_date(file)
-    except Exception:
-        date = datetime.date.today()
-    try:
         name = importer.file_name(file)
-    except Exception:
-        name = basename(filename)
+    except Exception as err:  # pylint: disable=broad-except
+        raise FavaAPIException(
+            f"Error calling importer method: {err}"
+        ) from err
 
-    return FileImportInfo(importer.name(), account, date, name)
+    return FileImportInfo(
+        importer.name(),
+        account or "",
+        date or datetime.date.today(),
+        name or basename(filename),
+    )
 
 
 class IngestModule(FavaModule):

@@ -3,15 +3,18 @@ from __future__ import annotations
 
 import datetime
 from os import path
+from typing import Any
 
 import pytest
 from beancount.core.amount import Amount
 from beancount.core.data import Note
 from beancount.core.data import Transaction
+from beancount.ingest.importer import ImporterProtocol  # type: ignore
 from pytest import MonkeyPatch
 
 from fava.core import FavaLedger
 from fava.core.ingest import file_import_info
+from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIException
 
@@ -21,6 +24,31 @@ FILE_PATH = data_file("import.beancount")
 EXAMPLE = data_file("import.csv")
 
 
+class Imp(ImporterProtocol):  # type: ignore
+    def __init__(self, acc: str) -> None:
+        self.acc = acc
+
+    def name(self) -> str:
+        return self.acc
+
+    def identify(self, file: Any) -> bool:
+        return self.acc in file.name
+
+
+class Invalid(ImporterProtocol):  # type: ignore
+    def __init__(self, acc: str) -> None:
+        self.acc = acc
+
+    def name(self) -> str:
+        return self.acc
+
+    def identify(self, file: Any) -> bool:
+        return self.acc in file.name
+
+    def file_account(self, file: Any) -> bool:
+        raise ValueError("Some error reason...")
+
+
 def test_ingest_file_import_info() -> None:
     ingest_ledger = FavaLedger(FILE_PATH)
     importer = next(iter(ingest_ledger.ingest.importers.values()))
@@ -28,6 +56,16 @@ def test_ingest_file_import_info() -> None:
 
     info = file_import_info(EXAMPLE, importer)
     assert info.account == "Assets:Checking"
+
+    info2 = file_import_info("/asdf/basename", Imp("rawfile"))
+    assert isinstance(info2.account, str)
+    assert info2 == FileImportInfo(
+        "rawfile", "", datetime.date.today(), "basename"
+    )
+
+    with pytest.raises(FavaAPIException) as err:
+        file_import_info("/asdf/basename", Invalid("rawfile"))
+    assert "Some error reason..." in err.value.message
 
 
 def test_ingest_examplefile() -> None:
