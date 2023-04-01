@@ -136,7 +136,6 @@ Directive: TypeAlias = (
     | Custom
 )
 
-def get_entry(posting_or_entry: Directive | TxnPosting) -> abc.Directive: ...
 def iter_entry_dates(
     entries: list[abc.Directive],
     date_begin: datetime.date,

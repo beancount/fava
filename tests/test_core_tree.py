@@ -1,13 +1,13 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from beancount.core import realization
 from beancount.core.inventory import Inventory
-from beancount.ops import summarize  # type: ignore[import]
 
 from fava.core import FavaLedger
 from fava.core.inventory import CounterInventory
 from fava.core.tree import Tree
+
+from .conftest import SnapshotFunc
 
 
 def test_tree() -> None:
@@ -42,33 +42,17 @@ def _compare_inv_and_counter(
         assert len(inv) == len(counter)
 
 
-def test_tree_from_entries(example_ledger: FavaLedger) -> None:
+def test_tree_from_entries(
+    example_ledger: FavaLedger, snapshot: SnapshotFunc
+) -> None:
     tree = Tree(example_ledger.all_entries)
-    real_account = realization.realize(example_ledger.all_entries)  # type: ignore
 
-    for account in realization.iter_children(real_account):
-        name = account.account
-        node = tree[name]
-        _compare_inv_and_counter(account.balance, node.balance)
-        _compare_inv_and_counter(
-            realization.compute_balance(account), node.balance_children
-        )
+    snapshot({n.name: n.balance for n in tree.values()})
+    snapshot(tree["Assets"].balance_children)
 
 
-def test_tree_cap(example_ledger: FavaLedger) -> None:
-    closing_entries = summarize.cap_opt(
-        example_ledger.all_entries, example_ledger.options
-    )
-    real_account = realization.realize(closing_entries)
-
+def test_tree_cap(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     tree = Tree(example_ledger.all_entries)
     tree.cap(example_ledger.options, "Unrealized")
 
-    for account in realization.iter_children(real_account):
-        name = account.account
-        node = tree[name]
-        if not name:
-            continue
-        if name.startswith("Expenses") or name.startswith("Income"):
-            continue
-        _compare_inv_and_counter(account.balance, node.balance)
+    snapshot({n.name: n.balance for n in tree.values()})

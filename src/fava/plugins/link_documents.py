@@ -16,9 +16,9 @@ from typing import Any
 from fava.beans.abc import Directive
 from fava.beans.abc import Document
 from fava.beans.abc import Transaction
+from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
-from fava.core.accounts import get_entry_accounts
 from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
 

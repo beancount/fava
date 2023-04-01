@@ -29,11 +29,11 @@ from fava.beans.abc import Balance
 from fava.beans.abc import Directive
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
+from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import hash_entry
 from fava.beans.str import to_string
 from fava.beans.types import BeancountOptions
 from fava.core.accounts import AccountDict
-from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule

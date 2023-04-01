@@ -6,30 +6,40 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Dict
 
-from beancount.core.account import TYPE as ACCOUNT_TYPE
-from beancount.core.data import get_entry
-from beancount.core.data import TxnPosting
-from beancount.core.realization import find_last_active_posting
-from beancount.core.realization import get
-from beancount.core.realization import RealAccount
-from beancount.core.realization import realize
-
 from fava.beans.abc import Balance
 from fava.beans.abc import Close
-from fava.beans.abc import Custom
 from fava.beans.abc import Directive
 from fava.beans.abc import Meta
-from fava.beans.abc import Pad
-from fava.beans.abc import Transaction
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.funcs import hash_entry
 from fava.core.conversion import units
+from fava.core.group_entries import group_entries_by_account
+from fava.core.group_entries import TransactionPosting
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
 from fava.core.tree import TreeNode
 
 
-def uptodate_status(real_account: RealAccount) -> str | None:
+def get_last_entry(
+    txn_postings: list[Directive | TransactionPosting],
+) -> Directive | None:
+    """Last entry."""
+    for txn_posting in reversed(txn_postings):
+        if (
+            isinstance(txn_posting, TransactionPosting)
+            and txn_posting.transaction.flag == FLAG_UNREALIZED
+        ):
+            continue
+
+        if isinstance(txn_posting, TransactionPosting):
+            return txn_posting.transaction
+        return txn_posting
+    return None
+
+
+def uptodate_status(
+    txn_postings: list[Directive | TransactionPosting],
+) -> str | None:
     """Status of the last balance or transaction.
 
     Args:
@@ -42,14 +52,14 @@ def uptodate_status(real_account: RealAccount) -> str | None:
         - 'red':    A balance check that failed.
         - 'yellow': Not a balance check.
     """
-    for txn_posting in reversed(real_account.txn_postings):
+    for txn_posting in reversed(txn_postings):
         if isinstance(txn_posting, Balance):
             if txn_posting.diff_amount:
                 return "red"
             return "green"
         if (
-            isinstance(txn_posting, TxnPosting)
-            and txn_posting.txn.flag != FLAG_UNREALIZED
+            isinstance(txn_posting, TransactionPosting)
+            and txn_posting.transaction.flag != FLAG_UNREALIZED
         ):
             return "yellow"
     return None
@@ -116,25 +126,21 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
 
     def load_file(self) -> None:
         self.clear()
-        all_root_account = realize(
-            self.ledger.all_entries, [], compute_balance=False  # type: ignore
-        )
+        entries_by_account = group_entries_by_account(self.ledger.all_entries)
         tree = Tree(self.ledger.all_entries)
         for open_entry in self.ledger.all_entries_by_type.Open:
             meta = open_entry.meta
             account_data = self.setdefault(open_entry.account)
             account_data.meta = meta
 
-            real_account = get(all_root_account, open_entry.account)
-            assert real_account is not None
-            last = find_last_active_posting(real_account.txn_postings)  # type: ignore
+            txn_postings = entries_by_account[open_entry.account]
+            last = get_last_entry(txn_postings)
             if last is not None and not isinstance(last, Close):
-                entry = get_entry(last)
                 account_data.last_entry = LastEntry(
-                    date=entry.date, entry_hash=hash_entry(entry)
+                    date=last.date, entry_hash=hash_entry(last)
                 )
             if meta.get("fava-uptodate-indication"):
-                account_data.uptodate_status = uptodate_status(real_account)
+                account_data.uptodate_status = uptodate_status(txn_postings)
                 if account_data.uptodate_status != "green":
                     account_data.balance_string = balance_string(
                         tree.get(open_entry.account)
@@ -149,25 +155,3 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
             for account_details in self.values()
             if account_details.balance_string
         )
-
-
-def get_entry_accounts(entry: Directive) -> list[str]:
-    """Accounts for an entry.
-
-    Args:
-        entry: An entry.
-
-    Returns:
-        A list with the entry's accounts ordered by priority: For
-        transactions the posting accounts are listed in reverse order.
-    """
-    if isinstance(entry, Transaction):
-        return list(reversed([p.account for p in entry.postings]))
-    if isinstance(entry, Custom):
-        return [val.value for val in entry.values if val.dtype == ACCOUNT_TYPE]
-    if isinstance(entry, Pad):
-        return [entry.account, entry.source_account]
-    account_ = getattr(entry, "account", None)
-    if account_ is not None:
-        return [account_]
-    return []

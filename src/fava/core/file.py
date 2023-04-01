@@ -19,6 +19,7 @@ from fava.beans.abc import Directive
 from fava.beans.abc import Document
 from fava.beans.abc import Open
 from fava.beans.abc import Transaction
+from fava.beans.account import get_entry_accounts
 from fava.beans.flags import FLAG_CONVERSIONS
 from fava.beans.flags import FLAG_MERGING
 from fava.beans.flags import FLAG_PADDING
@@ -27,7 +28,6 @@ from fava.beans.flags import FLAG_SUMMARIZE
 from fava.beans.flags import FLAG_TRANSFER
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.str import to_string
-from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import InsertEntryOption
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException

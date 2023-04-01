@@ -8,8 +8,8 @@ from beancount.core.account import has_component
 from beancount.parser.options import OPTIONS_DEFAULTS
 
 from fava.beans import create
+from fava.beans.account import get_entry_accounts
 from fava.core import FavaLedger
-from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter

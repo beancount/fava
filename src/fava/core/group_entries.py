@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import NamedTuple
 
 from fava.beans import abc
-from fava.core.accounts import get_entry_accounts
+from fava.beans.account import get_entry_accounts
 
 
 class EntriesByType(NamedTuple):
@@ -42,9 +42,16 @@ def group_entries_by_type(entries: list[abc.Directive]) -> EntriesByType:
     return entries_by_type
 
 
+class TransactionPosting(NamedTuple):
+    """Pair of a transaction and a posting."""
+
+    transaction: abc.Transaction
+    posting: abc.Posting
+
+
 def group_entries_by_account(
     entries: list[abc.Directive],
-) -> dict[str, list[abc.Directive]]:
+) -> dict[str, list[abc.Directive | TransactionPosting]]:
     """Group entries by account.
 
     Arguments:
@@ -53,12 +60,14 @@ def group_entries_by_account(
     Returns:
         A dict mapping account names to their entries.
     """
-    res: dict[str, list[abc.Directive]] = defaultdict(list)
+    res: dict[str, list[abc.Directive | TransactionPosting]] = defaultdict(
+        list
+    )
 
     for entry in entries:
         if isinstance(entry, abc.Transaction):
             for posting in entry.postings:
-                res[posting.account].append(entry)
+                res[posting.account].append(TransactionPosting(entry, posting))
         else:
             for account in get_entry_accounts(entry):
                 res[account].append(entry)

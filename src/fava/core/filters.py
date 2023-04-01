@@ -12,8 +12,8 @@ from beancount.core import account
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
 from fava.beans.abc import Directive
+from fava.beans.account import get_entry_accounts
 from fava.beans.types import BeancountOptions
-from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
