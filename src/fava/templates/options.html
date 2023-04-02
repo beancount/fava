@@ -7,10 +7,10 @@
     </tr>
   </thead>
   <tbody>
-    {% for key, value in ledger.fava_options|dataclass_asdict|dictsort %}
+    {% for field in ledger.fava_options|dataclass_fields %}
     <tr>
-      <td>{{ key|replace('_', '-') }}</td>
-      <td><pre>{{ value|pprint }}</pre></td>
+      <td>{{ field.name|replace('_', '-') }}</td>
+      <td><pre>{{ ledger.fava_options|attr(field.name)|pprint }}</pre></td>
     </tr>
     {% endfor %}
   </tbody>
