@@ -13,7 +13,7 @@ Attributes:
 """
 from __future__ import annotations
 
-from dataclasses import asdict
+from dataclasses import fields
 from datetime import date
 from datetime import datetime
 from functools import lru_cache
@@ -164,7 +164,7 @@ except AttributeError:
 for function in template_filters.FILTERS:
     app.add_template_filter(function)  # type: ignore
 app.add_template_filter(serialise)
-app.add_template_filter(asdict, "dataclass_asdict")
+app.add_template_filter(fields, "dataclass_fields")
 
 
 @app.url_defaults
