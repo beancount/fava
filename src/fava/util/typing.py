@@ -15,6 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
         """Beancount options."""
 
         title: str
+        filename: str
         name_assets: str
         name_liabilities: str
         name_equity: str

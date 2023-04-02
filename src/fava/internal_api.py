@@ -34,7 +34,7 @@ class LedgerData:
     incognito: bool
     have_excel: bool
     links: list[str]
-    options: dict[str, Any]
+    options: dict[str, str | list[str]]
     payees: list[str]
     precisions: dict[str, int]
     tags: list[str]
@@ -48,9 +48,6 @@ class LedgerData:
 
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
-    options = dict(g.ledger.options)
-    del options["input_hash"]
-
     ledger = g.ledger
 
     return LedgerData(
@@ -63,7 +60,13 @@ def get_ledger_data() -> LedgerData:
         current_app.config.get("INCOGNITO", False),
         HAVE_EXCEL,
         ledger.attributes.links,
-        options,
+        {
+            "documents": ledger.options["documents"],
+            "filename": ledger.options["filename"],
+            "include": ledger.options["include"],
+            "operating_currency": ledger.options["operating_currency"],
+            "title": ledger.options["title"],
+        },
         ledger.attributes.payees,
         ledger.format_decimal.precisions,
         ledger.attributes.tags,

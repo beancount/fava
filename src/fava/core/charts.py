@@ -16,7 +16,6 @@ from beancount.core.amount import Amount
 from beancount.core.data import Booking
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Transaction
-from beancount.core.display_context import DisplayContext
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.number import MISSING
@@ -73,7 +72,7 @@ class FavaJSONEncoder(JSONEncoder):
 
     def default(self, o: Any) -> Any:
         # pylint: disable=too-many-return-statements
-        if isinstance(o, (date, Amount, Booking, DisplayContext, Position)):
+        if isinstance(o, (date, Amount, Booking, Position)):
             return str(o)
         if isinstance(o, (set, frozenset)):
             return list(o)
