@@ -6,6 +6,7 @@
   body {
     padding: 0;
     transition: var(--transitions);
+    font-size: 16px;
   }
 
   header {
