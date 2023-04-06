@@ -12,6 +12,20 @@
   export let closeHandler = closeOverlay;
 
   /**
+   * Prevent scrolling of the main body while the dialog is open.
+   */
+  function setBodyScrollLock(state: boolean) {
+    const body = document.getElementsByTagName("body")[0];
+    if (body) {
+      body.style.overflow = state ? "hidden" : "auto";
+    }
+    const dialog = document.getElementById("modal-dialog");
+    if (dialog) {
+      dialog.style.overflow = "auto";
+    }
+  }
+
+  /**
    * A Svelte action to handle focus within a modal.
    */
   function handleFocus(el: HTMLElement) {
@@ -40,8 +54,13 @@
       attemptFocus(focusEl);
     }
 
+    setBodyScrollLock(true);
+
     return {
-      destroy: () => document.removeEventListener("keydown", keydown),
+      destroy: () => {
+        document.removeEventListener("keydown", keydown);
+        setBodyScrollLock(false);
+      },
     };
   }
 </script>
@@ -49,7 +68,13 @@
 {#if shown}
   <div class="overlay">
     <div class="background" on:click={closeHandler} aria-hidden="true" />
-    <div class="content" use:handleFocus role="dialog" aria-modal="true">
+    <div
+      class="content"
+      id="modal-dialog"
+      use:handleFocus
+      role="dialog"
+      aria-modal="true"
+    >
       <slot />
       <button type="button" class="muted close" on:click={closeHandler}
         >x</button
