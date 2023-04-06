@@ -112,4 +112,15 @@
   .content :global(.fieldset) {
     margin-bottom: 6px;
   }
+
+  @media (max-width: 767px) {
+    .overlay {
+      height: 100%;
+    }
+
+    .content {
+      height: 100%;
+      margin: 0;
+    }
+  }
 </style>
