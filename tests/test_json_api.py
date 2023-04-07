@@ -138,11 +138,16 @@ def test_api_upload_import_file(
         assert_api_error(response, f"{filename} already exists.")
 
 
-def test_api_errors(test_client: FlaskClient) -> None:
+def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
     response = test_client.get("/long-example/api/errors")
     assert_api_success(response, [])
     response = test_client.get("/errors/api/errors")
-    assert_api_success(response)
+    data = assert_api_success(response)
+
+    def get_message(err: Any) -> str:
+        return str(err["message"])
+
+    snapshot(sorted(data, key=get_message))
 
 
 def test_api_context(

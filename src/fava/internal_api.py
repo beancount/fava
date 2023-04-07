@@ -6,10 +6,13 @@ for the frontend data validation.
 """
 from __future__ import annotations
 
+from copy import copy
 from dataclasses import dataclass
 from datetime import date
 from typing import Any
+from typing import NamedTuple
 
+from beancount.core.data import Meta
 from flask import current_app
 from flask import url_for
 from flask_babel import gettext  # type: ignore
@@ -21,6 +24,22 @@ from fava.helpers import BeancountError
 from fava.util.excel import HAVE_EXCEL
 
 
+class SerialisedError(NamedTuple):
+    """A Beancount error, as passed to the frontend."""
+
+    type: str
+    source: Meta | None
+    message: str
+
+    @staticmethod
+    def from_beancount_error(err: BeancountError) -> SerialisedError:
+        """Get a serialisable error from a Beancount error."""
+        source = copy(err.source)
+        if source is not None:
+            source.pop("__tolerances__", None)
+        return SerialisedError(err.__class__.__name__, source, err.message)
+
+
 @dataclass
 class LedgerData:
     """This is used as report-independent data in the frontend."""
@@ -29,7 +48,7 @@ class LedgerData:
     account_details: AccountDict
     base_url: str
     currencies: list[str]
-    errors: list[BeancountError]
+    errors: list[SerialisedError]
     fava_options: FavaOptions
     incognito: bool
     have_excel: bool
@@ -46,6 +65,11 @@ class LedgerData:
     other_ledgers: list[tuple[str, str]]
 
 
+def get_errors() -> list[SerialisedError]:
+    """Serialise errors (do not pass the entry as that might fail serialisation."""
+    return [SerialisedError.from_beancount_error(e) for e in g.ledger.errors]
+
+
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
     ledger = g.ledger
@@ -55,7 +79,7 @@ def get_ledger_data() -> LedgerData:
         ledger.accounts,
         url_for("index"),
         ledger.attributes.currencies,
-        ledger.errors,
+        get_errors(),
         ledger.fava_options,
         current_app.config.get("INCOGNITO", False),
         HAVE_EXCEL,

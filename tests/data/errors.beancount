@@ -2,6 +2,7 @@ option "title" "errors"
 
 2019-01-01 open Assets:Cash
 2019-01-01 open Assets:Stock
+2019-01-01 open Expenses:Stuff
 
 2019-01-01 * "buy"
   Assets:Stock  0.1 ACME {80.00 USD}
@@ -11,3 +12,8 @@ option "title" "errors"
   Assets:Stock  -1.0 ACME {}
   Assets:Cash
 
+
+2018-07-07 * "a" "b"
+  Assets:Cash                               -14.00 USD
+  Expenses:Stuff                 4.14
+  Expenses:Stuff

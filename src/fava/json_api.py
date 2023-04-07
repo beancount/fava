@@ -35,6 +35,7 @@ from fava.core.documents import is_document_or_import_file
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIException
+from fava.internal_api import get_errors
 from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
@@ -162,12 +163,7 @@ def get_changed() -> bool:
     return g.ledger.changed()
 
 
-@api_endpoint
-def get_errors() -> list[Any]:
-    """Errors of the ledger."""
-    return g.ledger.errors
-
-
+api_endpoint(get_errors)
 api_endpoint(get_ledger_data)
 
 

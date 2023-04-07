@@ -1,0 +1,17 @@
+[{'message': "Invalid reference to inactive account 'Assets:Cash'",
+  'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
+             'lineno': 16},
+  'type': 'ValidationError'},
+ {'message': "Invalid reference to inactive account 'Expenses:Stuff'",
+  'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
+             'lineno': 16},
+  'type': 'ValidationError'},
+ {'message': 'No operating currency specified. Please add one to your '
+             'beancount file.',
+  'source': None,
+  'type': 'FavaError'},
+ {'message': 'Not enough lots to reduce "-1.0 ACME {}": 0.1 ACME {80.00 USD, '
+             '2019-01-01}',
+  'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
+             'lineno': 11},
+  'type': 'AmbiguousMatchError'}]

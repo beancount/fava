@@ -18,11 +18,13 @@ import type { ImportableFile } from "../reports/import/load";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {
+  type: string;
   message: string;
   source: { filename: string; lineno: number } | null;
 }
 
 const error_validator = object({
+  type: string,
   message: string,
   source: optional(object({ filename: string, lineno: number })),
 }) satisfies Validator<BeancountError>;
