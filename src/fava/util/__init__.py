@@ -18,12 +18,12 @@ from unicodedata import normalize
 
 from flask import abort
 from flask import send_file
-from flask.wrappers import Response
 from werkzeug.urls import url_quote
 
 if TYPE_CHECKING:  # pragma: no cover
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
+    from flask.wrappers import Response
 
 
 BASEPATH = Path(__file__).parent.parent

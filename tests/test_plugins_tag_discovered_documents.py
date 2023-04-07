@@ -46,7 +46,8 @@ def test_tag_discovered_plugin(tmp_path: Path) -> None:
 
     assert isinstance(entries[1], Document)
     assert discovered in entries[1].filename
-    assert entries[1].tags and "discovered" in entries[1].tags
+    assert entries[1].tags
+    assert "discovered" in entries[1].tags
 
     assert isinstance(entries[2], Document)
     assert non_discovered in entries[2].filename

@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 import time
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from fava.core.watcher import Watcher
+
+if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
 
 
 def test_watcher_file(tmp_path: Path) -> None:

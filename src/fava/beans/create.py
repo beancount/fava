@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-import datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from beancount.core import data
 from beancount.core.amount import A as BeancountA  # type: ignore
@@ -12,14 +12,18 @@ from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Position as BeancountPosition
 
 from fava.beans.abc import Amount
-from fava.beans.abc import Balance
-from fava.beans.abc import Cost
-from fava.beans.abc import Meta
-from fava.beans.abc import Position
-from fava.beans.abc import Posting
-from fava.beans.abc import TagsOrLinks
-from fava.beans.abc import Transaction
-from fava.beans.flags import Flag
+
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from fava.beans.abc import Balance
+    from fava.beans.abc import Cost
+    from fava.beans.abc import Meta
+    from fava.beans.abc import Position
+    from fava.beans.abc import Posting
+    from fava.beans.abc import TagsOrLinks
+    from fava.beans.abc import Transaction
+    from fava.beans.flags import Flag
 
 
 def decimal(num: Decimal | str) -> Decimal:

@@ -5,12 +5,16 @@ automatically through file discovery and adds the tag "#discovered".
 """
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from fava.beans.abc import Directive
 from fava.beans.abc import Document
 from fava.beans.helpers import replace
-from fava.beans.types import BeancountOptions
-from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.types import BeancountOptions
+    from fava.helpers import BeancountError
 
 __plugins__ = ["tag_discovered_documents"]
 

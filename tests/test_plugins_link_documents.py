@@ -12,7 +12,7 @@ from fava.beans.abc import Transaction
 from fava.beans.load import load_string
 from fava.plugins.link_documents import DocumentError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.types import LoaderResult
 
 
@@ -71,13 +71,16 @@ def test_plugins(tmp_path: Path) -> None:
     assert len(entries) == 10
 
     assert isinstance(entries[3], Document)
-    assert entries[3].tags and "linked" in entries[3].tags
+    assert entries[3].tags
+    assert "linked" in entries[3].tags
     assert isinstance(entries[4], Document)
-    assert entries[4].tags and "linked" in entries[4].tags
+    assert entries[4].tags
+    assert "linked" in entries[4].tags
 
     # Document can be linked twice
     assert isinstance(entries[6], Document)
-    assert entries[6].links and len(entries[6].links) == 2
+    assert entries[6].links
+    assert len(entries[6].links) == 2
     assert isinstance(entries[2], Transaction)
     assert isinstance(entries[8], Transaction)
     assert entries[2].links == entries[4].links

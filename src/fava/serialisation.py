@@ -31,15 +31,13 @@ from fava.util.date import parse_date
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
-    assert isinstance(
-        entry, (Directive, Posting)
-    ), f"Unsupported object {entry}"
+    assert isinstance(entry, Directive), f"Unsupported object {entry}"
     ret = entry._asdict()  # type: ignore
     ret["type"] = entry.__class__.__name__
     return ret
 
 
-@serialise.register
+@serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
     """Serialise an entry."""
     ret = entry._asdict()  # type: ignore
@@ -51,7 +49,7 @@ def _(entry: Transaction) -> Any:
     return ret
 
 
-@serialise.register
+@serialise.register(Balance)
 def _(entry: Balance) -> Any:
     """Serialise an entry."""
     ret = entry._asdict()  # type: ignore
@@ -61,13 +59,12 @@ def _(entry: Balance) -> Any:
     return ret
 
 
-@serialise.register
+@serialise.register(Posting)
 def _(posting: Posting) -> Any:
     """Serialise a posting."""
-    if isinstance(posting.units, Amount):
-        position_str = to_string(posting)
-    else:
-        position_str = ""
+    position_str = (
+        to_string(posting) if isinstance(posting.units, Amount) else ""
+    )
 
     if posting.price is not None:
         position_str += f" @ {to_string(posting.price)}"

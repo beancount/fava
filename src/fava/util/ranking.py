@@ -1,8 +1,11 @@
 """Ranking utilities."""
 from __future__ import annotations
 
-import datetime
 import math
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
 
 ZERO = float()
 DEFAULT_RATE = math.log(2) * 1 / 365

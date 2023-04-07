@@ -1,7 +1,10 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from fava.core import FavaLedger
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
 
 
 def test_commodity_names(example_ledger: FavaLedger) -> None:

@@ -2,14 +2,11 @@
 from __future__ import annotations
 
 import collections
-import datetime
 from dataclasses import dataclass
 from typing import Dict
 from typing import Generator
 from typing import Iterable
 from typing import TYPE_CHECKING
-
-from beancount.core.prices import PriceMap
 
 from fava.beans.abc import Directive
 from fava.beans.abc import Open
@@ -20,6 +17,10 @@ from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from beancount.core.prices import PriceMap
+
     from fava.beans.types import BeancountOptions
 
 

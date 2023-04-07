@@ -19,10 +19,10 @@ from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import serialise
 
-from .conftest import SnapshotFunc
-
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
+
+    from .conftest import SnapshotFunc
 
 
 def test_serialise_txn() -> None:
@@ -95,7 +95,7 @@ def test_serialise_entry_types(
 
 
 @pytest.mark.parametrize(
-    "amount_cost_price,amount_string",
+    ("amount_cost_price", "amount_string"),
     [
         (("100 USD", None, None), "100 USD"),
         (
@@ -139,7 +139,7 @@ def test_serialise_posting(
 
 
 @pytest.mark.parametrize(
-    "amount_cost_price,amount_string",
+    ("amount_cost_price", "amount_string"),
     [
         (("100 USD", None, None), "10*10 USD"),
         (("130 USD", None, None), "100+50 - 20 USD"),

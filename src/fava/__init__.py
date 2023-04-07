@@ -1,6 +1,8 @@
 """Fava - A web interface for Beancount."""
 from __future__ import annotations
 
+from contextlib import suppress
+
 try:
     from importlib.metadata import PackageNotFoundError
     from importlib.metadata import version
@@ -8,11 +10,8 @@ except ImportError:
     from importlib_metadata import PackageNotFoundError  # type: ignore
     from importlib_metadata import version  # type: ignore
 
-try:
+with suppress(PackageNotFoundError):
     __version__ = version(__name__)
-except PackageNotFoundError:  # pragma: no cover
-    # package is not installed
-    pass
 
 LOCALES = [
     "bg",

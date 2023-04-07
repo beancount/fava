@@ -1,7 +1,6 @@
 """Reading/writing Beancount files."""
 from __future__ import annotations
 
-import datetime
 import re
 import threading
 from codecs import decode
@@ -28,13 +27,15 @@ from fava.beans.flags import FLAG_SUMMARIZE
 from fava.beans.flags import FLAG_TRANSFER
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.str import to_string
-from fava.core.fava_options import InsertEntryOption
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
 from fava.util import next_key
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
     from fava.core import FavaLedger
+    from fava.core.fava_options import InsertEntryOption
 
 #: The flags to exclude when rendering entries.
 EXCL_FLAGS = {

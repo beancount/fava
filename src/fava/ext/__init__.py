@@ -8,10 +8,10 @@ import sys
 from typing import Any
 from typing import TYPE_CHECKING
 
-from fava.beans.abc import Directive
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
 

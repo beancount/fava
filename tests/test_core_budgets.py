@@ -10,7 +10,7 @@ from fava.core.budgets import calculate_budget
 from fava.core.budgets import calculate_budget_children
 from fava.core.budgets import parse_budgets
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
 
 

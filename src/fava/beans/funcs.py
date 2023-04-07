@@ -2,25 +2,21 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import List
-from typing import Tuple
-from typing import Type
 from typing import TYPE_CHECKING
 
 from beancount.core import compare  # type: ignore
 from beancount.query import query  # type: ignore
 from beancount.query import query_execute  # type: ignore
 
-from fava.beans.abc import Directive
-from fava.beans.types import BeancountOptions
-
 if TYPE_CHECKING:  # pragma: no cover
     from typing import TypeAlias
 
+    from fava.beans.abc import Directive
+    from fava.beans.types import BeancountOptions
 
-ResultType: TypeAlias = Tuple[str, Type[Any]]
-ResultRow: TypeAlias = Tuple[Any, ...]
-QueryResult: TypeAlias = Tuple[List[ResultType], List[ResultRow]]
+    ResultType: TypeAlias = tuple[str, type[Any]]
+    ResultRow: TypeAlias = tuple[Any, ...]
+    QueryResult: TypeAlias = tuple[list[ResultType], list[ResultRow]]
 
 
 def hash_entry(entry: Directive) -> str:

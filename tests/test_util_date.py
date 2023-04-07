@@ -33,7 +33,7 @@ def _to_date(string: str) -> date:
 
 
 @pytest.mark.parametrize(
-    "input_date_string,interval,expect,expect_filter",
+    ("input_date_string", "interval", "expect", "expect_filter"),
     [
         ("2016-01-01", Interval.DAY, "2016-01-01", "2016-01-01"),
         ("2016-01-04", Interval.WEEK, "2016W01", "2016-W01"),
@@ -53,7 +53,7 @@ def test_interval_format(
 
 
 @pytest.mark.parametrize(
-    "input_date_string,interval,expect",
+    ("input_date_string", "interval", "expect"),
     [
         ("2016-01-01", Interval.DAY, "2016-01-02"),
         ("2016-01-01", Interval.WEEK, "2016-01-04"),
@@ -82,7 +82,7 @@ def test_get_next_intervalfail2() -> None:
 
 
 @pytest.mark.parametrize(
-    "input_date_string,interval,expect",
+    ("input_date_string", "interval", "expect"),
     [
         ("2016-01-01", Interval.DAY, "2016-01-01"),
         ("2016-01-01", Interval.WEEK, "2015-12-28"),
@@ -137,7 +137,7 @@ def test_interval_tuples() -> None:
 
 
 @pytest.mark.parametrize(
-    "string,output",
+    ("string", "output"),
     [
         ("year", "2016"),
         ("(year-1)", "2015"),
@@ -170,7 +170,7 @@ def test_substitute(string: str, output: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "fye_str,test_date,string,output",
+    ("fye_str", "test_date", "string", "output"),
     [
         ("06-30", "2018-02-02", "fiscal_year", "FY2018"),
         ("06-30", "2018-08-02", "fiscal_year", "FY2019"),
@@ -195,14 +195,16 @@ def test_fiscal_substitute(
         mock_date.today.return_value = _to_date(test_date)
         mock_date.side_effect = date
         if output is None:
-            with pytest.raises(ValueError):
+            with pytest.raises(
+                ValueError, match="Cannot use fiscal_quarter if fiscal year"
+            ):
                 substitute(string, fye)
         else:
             assert substitute(string, fye) == output
 
 
 @pytest.mark.parametrize(
-    "expect_start,expect_end,text",
+    ("expect_start", "expect_end", "text"),
     [
         ("2000-01-01", "2001-01-01", "   2000   "),
         ("2010-10-01", "2010-11-01", "2010-10"),
@@ -231,7 +233,7 @@ def test_parse_date_empty() -> None:
 
 
 @pytest.mark.parametrize(
-    "expect_start,expect_end,text",
+    ("expect_start", "expect_end", "text"),
     [
         ("2014-01-01", "2016-06-27", "year-2-day+2"),
         ("2016-01-01", "2016-06-25", "year-day"),
@@ -252,7 +254,7 @@ def test_parse_date_relative(
 
 
 @pytest.mark.parametrize(
-    "interval,date_str,expect",
+    ("interval", "date_str", "expect"),
     [
         (Interval.DAY, "2016-05-01", 1),
         (Interval.DAY, "2016-05-31", 1),
@@ -285,7 +287,7 @@ def test_number_of_days_in_period2() -> None:
 
 
 @pytest.mark.parametrize(
-    "date_input,offset,expected",
+    ("date_input", "offset", "expected"),
     [
         ("2018-01-12", 0, "2018-01-12"),
         ("2018-01-01", -3, "2017-10-01"),
@@ -299,14 +301,14 @@ def test_month_offset(
 ) -> None:
     start_date = _to_date(date_input)
     if expected is None:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="day is out of range"):
             month_offset(start_date, offset)
     else:
         assert str(month_offset(start_date, offset)) == expected
 
 
 @pytest.mark.parametrize(
-    "year,quarter,fye_str,expect_start,expect_end",
+    ("year", "quarter", "fye_str", "expect_start", "expect_end"),
     [
         # standard calendar year [FYE=12-31]
         (2018, None, "12-31", "2018-01-01", "2019-01-01"),
@@ -348,7 +350,7 @@ def test_get_fiscal_period(
 
 
 @pytest.mark.parametrize(
-    "fye,expected",
+    ("fye", "expected"),
     [
         ("12-31", (12, 31)),
         ("06-30", (6, 30)),

@@ -9,8 +9,6 @@ from __future__ import annotations
 import os
 import shutil
 from dataclasses import dataclass
-from datetime import date
-from decimal import Decimal
 from functools import wraps
 from inspect import Parameter
 from inspect import signature
@@ -25,7 +23,6 @@ from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
-from flask.wrappers import Response
 
 from fava.beans.abc import Document
 from fava.beans.abc import Event
@@ -41,6 +38,11 @@ from fava.serialisation import deserialise
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
+    from datetime import date
+    from decimal import Decimal
+
+    from flask.wrappers import Response
+
     from fava.core.ingest import FileImporters
 
 
@@ -188,9 +190,8 @@ def get_query_result(query_string: str) -> Any:
     contents, types, rows = g.ledger.query_shell.execute_query(
         g.filtered.entries, query_string
     )
-    if contents:
-        if "ERROR" in contents:
-            raise FavaAPIException(contents)
+    if contents and "ERROR" in contents:
+        raise FavaAPIException(contents)
     table = table(g.ledger, contents, types, rows)
 
     if types and g.ledger.charts.can_plot_query(types):

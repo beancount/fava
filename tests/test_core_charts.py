@@ -2,14 +2,17 @@
 from __future__ import annotations
 
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core import FavaLedger
 from fava.core.charts import pretty_dumps
 from fava.util.date import Interval
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def test_interval_totals(

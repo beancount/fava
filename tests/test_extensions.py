@@ -1,9 +1,12 @@
 """Tests for the extension system."""
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from fava.core import FavaLedger
+
+if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
 
 
 def test_report_page_globals(test_data_dir: Path) -> None:

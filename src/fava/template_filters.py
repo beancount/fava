@@ -4,10 +4,11 @@ All functions in this module will be automatically added as template filters.
 """
 from __future__ import annotations
 
-import datetime
+from contextlib import suppress
 from decimal import Decimal
 from os.path import basename as path_basename
 from typing import MutableMapping
+from typing import TYPE_CHECKING
 from typing import TypeVar
 from unicodedata import normalize
 
@@ -16,9 +17,14 @@ from fava.context import g
 from fava.core.conversion import cost
 from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
-from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
-from fava.core.tree import TreeNode
+
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from fava.core.inventory import CounterInventory
+    from fava.core.inventory import SimpleCounterInventory
+    from fava.core.tree import TreeNode
+
 
 MappingValue = TypeVar("MappingValue")
 ZERO = Decimal()
@@ -32,10 +38,8 @@ def remove_keys(
         return {}
     new = dict(_dict)
     for key in keys:
-        try:
+        with suppress(KeyError):
             del new[key]
-        except KeyError:
-            pass
     return new
 
 

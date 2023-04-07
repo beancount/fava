@@ -2,12 +2,16 @@
 from __future__ import annotations
 
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from babel.core import Locale
-from pytest import MonkeyPatch
 
-from fava.core import FavaLedger
 from fava.core.number import get_locale_format
+
+if TYPE_CHECKING:  # pragma: no cover
+    import pytest
+
+    from fava.core import FavaLedger
 
 
 def test_get_locale_format() -> None:
@@ -46,7 +50,7 @@ def test_format_decimal(example_ledger: FavaLedger) -> None:
 
 
 def test_format_decimal_locale(
-    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     fmt = example_ledger.format_decimal
 

@@ -3,12 +3,11 @@ from __future__ import annotations
 
 import datetime
 from os import path
-from pathlib import Path
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
 from beancount.ingest.importer import ImporterProtocol  # type: ignore
-from pytest import MonkeyPatch
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Note
@@ -18,6 +17,9 @@ from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIException
+
+if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
 
 
 def test_ingest_file_import_info(test_data_dir: Path) -> None:
@@ -41,7 +43,7 @@ def test_ingest_file_import_info(test_data_dir: Path) -> None:
         def identify(self, file: Any) -> bool:
             return self.acc in file.name
 
-        def file_account(self, file: Any) -> bool:
+        def file_account(self, _file: Any) -> bool:
             raise ValueError("Some error reason...")
 
     ingest_ledger = FavaLedger(str(test_data_dir / "import.beancount"))
@@ -91,7 +93,7 @@ def test_ingest_examplefile(test_data_dir: Path) -> None:
 
 
 def test_filepath_in_primary_imports_folder(
-    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test"])
 

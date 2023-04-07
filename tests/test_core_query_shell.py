@@ -2,14 +2,17 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
 
 from fava.beans.funcs import run_query
-from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def test_query(snapshot: SnapshotFunc, query_ledger: FavaLedger) -> None:

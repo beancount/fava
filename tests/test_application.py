@@ -1,11 +1,10 @@
 """Tests for Fava's main Flask app."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 from beancount import __version__ as beancount_version
-from flask import Flask
-from flask.testing import FlaskClient
-from pytest import MonkeyPatch
 from werkzeug.urls import url_join
 
 from fava import __version__ as fava_version
@@ -14,7 +13,11 @@ from fava.application import static_url
 from fava.application import url_for
 from fava.context import g
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from flask import Flask
+    from flask.testing import FlaskClient
+
+    from .conftest import SnapshotFunc
 
 FILTER_COMBINATIONS = [
     {"account": "Assets"},
@@ -24,7 +27,7 @@ FILTER_COMBINATIONS = [
 
 
 @pytest.mark.parametrize(
-    "report,filters",
+    ("report", "filters"),
     [
         (report, filters)
         for report in SERVER_SIDE_REPORTS
@@ -63,7 +66,7 @@ def test_account_page(
 
 
 @pytest.mark.parametrize(
-    "url,return_code",
+    ("url", "return_code"),
     [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )
 def test_urls(test_client: FlaskClient, url: str, return_code: int) -> None:
@@ -73,7 +76,7 @@ def test_urls(test_client: FlaskClient, url: str, return_code: int) -> None:
 
 
 @pytest.mark.parametrize(
-    "url,option,expect",
+    ("url", "option", "expect"),
     [
         ("/", None, "/long-example/income_statement/"),
         ("/long-example/", None, "/long-example/income_statement/"),
@@ -116,7 +119,7 @@ def test_default_path_redirection(
     url: str,
     option: str | None,
     expect: str,
-    monkeypatch: MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test that default-page option redirects as expected."""
     with app.test_request_context("/long-example/"):
@@ -132,7 +135,7 @@ def test_default_path_redirection(
 
 
 @pytest.mark.parametrize(
-    "referer,jump_link,expect",
+    ("referer", "jump_link", "expect"),
     [
         ("/?foo=bar", "/jump?foo=baz", "/?foo=baz"),
         ("/?foo=bar", "/jump?baz=qux", "/?baz=qux&foo=bar"),
@@ -184,7 +187,7 @@ def test_query_download(test_client: FlaskClient) -> None:
 
 
 def test_incognito(
-    app: Flask, test_client: FlaskClient, monkeypatch: MonkeyPatch
+    app: Flask, test_client: FlaskClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Numbers get obfuscated in incognito mode."""
     monkeypatch.setitem(app.config, "INCOGNITO", True)
@@ -197,7 +200,7 @@ def test_incognito(
 def test_read_only_mode(
     app: Flask,
     test_client: FlaskClient,
-    monkeypatch: MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch,
     method_name: str,
 ) -> None:
     """Non GET requests returns 401 in read-only mode"""

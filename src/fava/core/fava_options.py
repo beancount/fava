@@ -7,21 +7,25 @@ parsing the options.
 """
 from __future__ import annotations
 
-import datetime
 import re
 from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
 from typing import NamedTuple
 from typing import Pattern
+from typing import TYPE_CHECKING
 
 from babel.core import Locale
 from babel.core import UnknownLocaleError
 
-from fava.beans.abc import Custom
 from fava.helpers import BeancountError
 from fava.util.date import FiscalYearEnd
 from fava.util.date import parse_fye_string
+
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from fava.beans.abc import Custom
 
 
 class OptionError(BeancountError):

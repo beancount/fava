@@ -11,21 +11,21 @@ from typing import TYPE_CHECKING
 import pytest
 from flask import Flask
 from flask import url_for
-from flask.testing import FlaskClient
-from pytest import MonkeyPatch
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
-from fava.core import FavaLedger
 from fava.core.charts import pretty_dumps
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
 
-from .conftest import SnapshotFunc
-
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
+    from flask.testing import FlaskClient
     from werkzeug.test import TestResponse
+
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def test_validate_get_args() -> None:
@@ -35,7 +35,8 @@ def test_validate_get_args() -> None:
     assert validate_func_arguments(noparams) is None
 
     def func(test: str) -> None:
-        assert test and isinstance(test, str)
+        assert test
+        assert isinstance(test, str)
 
     validator = validate_func_arguments(func)
     assert validator
@@ -72,7 +73,7 @@ def test_api_add_document(
     app: Flask,
     test_client: FlaskClient,
     tmp_path: Path,
-    monkeypatch: MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -107,7 +108,7 @@ def test_api_upload_import_file(
     app: Flask,
     test_client: FlaskClient,
     tmp_path: Path,
-    monkeypatch: MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -251,7 +252,7 @@ def test_api_format_source(
 
 
 def test_api_format_source_options(
-    app: Flask, test_client: FlaskClient, monkeypatch: MonkeyPatch
+    app: Flask, test_client: FlaskClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -270,7 +271,7 @@ def test_api_add_entries(
     app: Flask,
     test_client: FlaskClient,
     tmp_path: Path,
-    monkeypatch: MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -347,7 +348,7 @@ def test_api_add_entries(
 
 
 @pytest.mark.parametrize(
-    "query_string,result_str",
+    ("query_string", "result_str"),
     [
         ("balances from year = 2014", "5086.65 USD"),
         ("select sum(day)", "43558"),
@@ -385,7 +386,7 @@ def test_api_query_result_charts(
 ) -> None:
     query_string = (
         "SELECT payee, SUM(COST(position)) AS balance "
-        + "WHERE account ~ 'Assets' GROUP BY payee, account"
+        "WHERE account ~ 'Assets' GROUP BY payee, account"
     )
     response = test_client.get(
         f"/long-example/api/query_result?query_string={query_string}"

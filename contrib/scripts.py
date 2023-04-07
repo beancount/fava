@@ -28,7 +28,7 @@ def cli() -> None:
 def _env_to_list(
     attributes: dict[str, str | tuple[str, str]]
 ) -> Iterable[str]:
-    for name in attributes.keys():
+    for name in attributes:
         yield name[0] if isinstance(name, tuple) else name
 
 

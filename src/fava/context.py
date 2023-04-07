@@ -1,11 +1,14 @@
 """Specify types for the flask application context."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flask import g as flask_g
 
-from fava.core import FavaLedger
-from fava.core import FilteredLedger
-from fava.util.date import Interval
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+    from fava.core import FilteredLedger
+    from fava.util.date import Interval
 
 
 class Context:

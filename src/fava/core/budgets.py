@@ -1,7 +1,6 @@
 """Parsing and computing budgets."""
 from __future__ import annotations
 
-import datetime
 from collections import Counter
 from collections import defaultdict
 from decimal import Decimal
@@ -10,7 +9,6 @@ from typing import List
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
-from fava.beans.abc import Custom
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import days_in_daterange
@@ -18,6 +16,9 @@ from fava.util.date import Interval
 from fava.util.date import number_of_days_in_period
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from fava.beans.abc import Custom
     from fava.core import FavaLedger
 
 
@@ -202,7 +203,7 @@ def calculate_budget_children(
     """
     currency_dict: dict[str, Decimal] = Counter()  # type: ignore
 
-    for child in budgets.keys():
+    for child in budgets:
         if child.startswith(account):
             currency_dict.update(
                 calculate_budget(budgets, child, date_from, date_to)

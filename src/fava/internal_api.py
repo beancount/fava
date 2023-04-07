@@ -8,21 +8,25 @@ from __future__ import annotations
 
 from copy import copy
 from dataclasses import dataclass
-from datetime import date
 from typing import Any
 from typing import NamedTuple
+from typing import TYPE_CHECKING
 
-from beancount.core.data import Meta
 from flask import current_app
 from flask import url_for
 from flask_babel import gettext  # type: ignore
 
 from fava.beans.account import root
 from fava.context import g
-from fava.core.accounts import AccountDict
-from fava.core.fava_options import FavaOptions
-from fava.helpers import BeancountError
 from fava.util.excel import HAVE_EXCEL
+
+if TYPE_CHECKING:  # pragma: no cover
+    from datetime import date
+
+    from fava.beans.abc import Meta
+    from fava.core.accounts import AccountDict
+    from fava.core.fava_options import FavaOptions
+    from fava.helpers import BeancountError
 
 
 class SerialisedError(NamedTuple):

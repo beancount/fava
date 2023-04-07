@@ -2,16 +2,18 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 from socket import socket
 from subprocess import PIPE
 from subprocess import Popen
 from subprocess import STDOUT
 from time import sleep
 from time import time
+from typing import TYPE_CHECKING
 
 import pytest
-from pytest import MonkeyPatch
+
+if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
 
 
 def get_port() -> int:
@@ -34,7 +36,7 @@ def output_contains(process: Popen[str], output: str, timeout: int) -> bool:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
-def test_cli(monkeypatch: MonkeyPatch, test_data_dir: Path) -> None:
+def test_cli(monkeypatch: pytest.MonkeyPatch, test_data_dir: Path) -> None:
     port = str(get_port())
     monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
     args = ("fava", str(test_data_dir / "example.beancount"), "-p", port)

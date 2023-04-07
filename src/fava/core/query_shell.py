@@ -15,10 +15,7 @@ from beancount.query.query_parser import RunCustom
 from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
-from fava.beans.abc import Directive
-from fava.beans.abc import Query
 from fava.beans.funcs import execute_query
-from fava.beans.funcs import QueryResult
 from fava.beans.funcs import run_query
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
@@ -28,6 +25,9 @@ from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
+    from fava.beans.abc import Query
+    from fava.beans.funcs import QueryResult
     from fava.core import FavaLedger
 
 # This is to limit the size of the history file. Fava is not using readline at

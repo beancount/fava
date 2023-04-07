@@ -5,11 +5,11 @@ import datetime
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Dict
+from typing import TYPE_CHECKING
 
 from fava.beans.abc import Balance
 from fava.beans.abc import Close
 from fava.beans.abc import Directive
-from fava.beans.abc import Meta
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.funcs import hash_entry
 from fava.core.conversion import units
@@ -18,6 +18,9 @@ from fava.core.group_entries import TransactionPosting
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
 from fava.core.tree import TreeNode
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Meta
 
 
 def get_last_entry(

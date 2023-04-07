@@ -18,18 +18,18 @@ from fava.core.misc import align
 
 @singledispatch
 def to_string(
-    obj: Any, currency_column: int | None = None, indent: int | None = None
+    obj: Any, _currency_column: int | None = None, _indent: int | None = None
 ) -> str:
     """Convert to a string."""
     raise TypeError(f"Unsupported object of type {type(obj)}")
 
 
-@to_string.register
+@to_string.register(Amount)
 def _(obj: Amount) -> str:
     return f"{obj.number} {obj.currency}"
 
 
-@to_string.register
+@to_string.register(Cost)
 def _(cost: Cost) -> str:
     strs = [f"{cost.number} {cost.currency}"]
     if cost.date:
@@ -39,7 +39,7 @@ def _(cost: Cost) -> str:
     return ", ".join(strs)
 
 
-@to_string.register
+@to_string.register(CostSpec)
 def _(cost: CostSpec) -> str:
     strs = []
     if isinstance(cost.number_per, Decimal) or isinstance(
@@ -63,7 +63,7 @@ def _(cost: CostSpec) -> str:
     return ", ".join(strs)
 
 
-@to_string.register
+@to_string.register(Position)
 def _(obj: Position) -> str:
     units_str = to_string(obj.units)
     if obj.cost is None:
@@ -72,7 +72,7 @@ def _(obj: Position) -> str:
     return f"{units_str} {{{cost_str}}}"
 
 
-@to_string.register
+@to_string.register(Directive)
 def _format_entry(
     entry: Directive, currency_column: int = 61, indent: int = 2
 ) -> str:

@@ -5,13 +5,12 @@ import re
 from datetime import date
 from pathlib import Path
 from textwrap import dedent
+from typing import TYPE_CHECKING
 
 import pytest
 
 from fava.beans import create
-from fava.beans.abc import Transaction
 from fava.beans.helpers import replace
-from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
@@ -20,7 +19,11 @@ from fava.core.file import insert_metadata_in_file
 from fava.core.file import save_entry_slice
 from fava.helpers import FavaAPIException
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Transaction
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def _get_entry(ledger: FavaLedger, payee: str, date_: str) -> Transaction:
@@ -54,7 +57,7 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert filename.read_text("utf-8") == contents
+    assert filename.read_text("utf-8") == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
     assert filename.read_text("utf-8") != contents

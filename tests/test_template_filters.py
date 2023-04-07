@@ -4,10 +4,9 @@ from __future__ import annotations
 import re
 from datetime import date
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 import pytest
-from flask import Flask
-from pytest import MonkeyPatch
 
 from fava.context import g
 from fava.core.accounts import AccountData
@@ -21,6 +20,9 @@ from fava.template_filters import format_date_filter
 from fava.template_filters import remove_keys
 from fava.template_filters import should_show
 
+if TYPE_CHECKING:  # pragma: no cover
+    from flask import Flask
+
 
 def test_remove_keys() -> None:
     """Dict keys get remove or return empty dict if None is given."""
@@ -29,7 +31,7 @@ def test_remove_keys() -> None:
 
 
 @pytest.mark.parametrize(
-    "interval,output,output_filter",
+    ("interval", "output", "output_filter"),
     [
         ("year", "2012", "2012"),
         ("quarter", "2012Q4", "2012-Q4"),
@@ -82,7 +84,7 @@ def test_should_show(app: Flask) -> None:
         assert should_show(g.filtered.root_tree.get("Expenses")) is False
 
 
-def test_collapse_account(app: Flask, monkeypatch: MonkeyPatch) -> None:
+def test_collapse_account(app: Flask, monkeypatch: pytest.MonkeyPatch) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 

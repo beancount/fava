@@ -1,6 +1,7 @@
 """Attributes for auto-completion."""
 from __future__ import annotations
 
+from contextlib import suppress
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
@@ -26,10 +27,8 @@ class CommoditiesModule(FavaModule):
                 self._names[commodity.currency] = name
             precision = commodity.meta.get("precision")
             if precision is not None:
-                try:
+                with suppress(ValueError):
                     self.precisions[commodity.currency] = int(precision)
-                except ValueError:
-                    pass
 
     def name(self, commodity: str) -> str:
         """Get the name of a commodity (or the commodity itself if not set)."""

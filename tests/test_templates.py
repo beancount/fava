@@ -3,16 +3,19 @@ from __future__ import annotations
 
 import re
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from flask import Flask
 from flask import get_template_attribute
 
 from fava.beans import create
 from fava.context import g
-from fava.core import FavaLedger
 from fava.core.inventory import CounterInventory
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def test_render_diff_and_number(app: Flask, snapshot: SnapshotFunc) -> None:

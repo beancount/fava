@@ -1,11 +1,15 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 
 from fava.beans.funcs import run_query
-from fava.core import FavaLedger
 from fava.util import excel
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
 
 
 def test_to_csv(example_ledger: FavaLedger) -> None:

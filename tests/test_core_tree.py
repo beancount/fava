@@ -1,10 +1,14 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from fava.core import FavaLedger
+from typing import TYPE_CHECKING
+
 from fava.core.tree import Tree
 
-from .conftest import SnapshotFunc
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+
+    from .conftest import SnapshotFunc
 
 
 def test_tree() -> None:

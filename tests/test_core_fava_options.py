@@ -11,7 +11,7 @@ from fava.core.fava_options import InsertEntryOption
 from fava.core.fava_options import parse_options
 from fava.util.date import FiscalYearEnd
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
 
 

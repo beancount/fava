@@ -1,26 +1,22 @@
 """Abstract base classes for Beancount types."""
 from __future__ import annotations
 
-import datetime
 from abc import ABC
 from abc import abstractmethod
-from decimal import Decimal
 from typing import Any
-from typing import Dict
-from typing import FrozenSet
-from typing import Set
 from typing import TYPE_CHECKING
-from typing import Union
 
 from beancount.core import amount
 from beancount.core import data
 from beancount.core import position
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+    from decimal import Decimal
     from typing import TypeAlias
 
-Meta: TypeAlias = Dict[str, Any]
-TagsOrLinks: TypeAlias = Union[Set[str], FrozenSet[str]]
+    Meta: TypeAlias = dict[str, Any]
+    TagsOrLinks: TypeAlias = set[str] | frozenset[str]
 
 
 class Amount(ABC):

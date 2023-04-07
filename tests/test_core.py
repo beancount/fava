@@ -6,13 +6,12 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
-from pytest import MonkeyPatch
 
-from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
+    from fava.core import FavaLedger
 
 
 def test_apiexception() -> None:
@@ -27,7 +26,7 @@ def test_attributes(example_ledger: FavaLedger) -> None:
 
 
 def test_paths_to_watch(
-    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],

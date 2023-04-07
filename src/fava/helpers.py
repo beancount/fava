@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 from typing import NamedTuple
+from typing import TYPE_CHECKING
 
-from fava.beans.abc import Directive
-from fava.beans.abc import Meta
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
+    from fava.beans.abc import Meta
 
 
 class BeancountError(NamedTuple):

@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from contextlib import suppress
 from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
-from decimal import Decimal
 from typing import Any
 from typing import Iterable
 from typing import Pattern
@@ -35,17 +35,17 @@ from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
-from fava.util.date import Interval
 
-try:
+with suppress(ImportError):
     from flask.json.provider import JSONProvider
-except ImportError:
-    pass
 
 if TYPE_CHECKING:  # pragma: no cover
+    from decimal import Decimal
+
     from flask import Flask
 
     from fava.core import FilteredLedger
+    from fava.util.date import Interval
 
 
 ONE_DAY = timedelta(days=1)

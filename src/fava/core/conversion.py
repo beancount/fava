@@ -4,19 +4,24 @@ All functions in this module will be automatically added as template filters.
 """
 from __future__ import annotations
 
-import datetime
 from typing import Any
 from typing import overload
+from typing import TYPE_CHECKING
 
-from beancount.core.inventory import Inventory
 from beancount.core.prices import get_price
 from beancount.core.prices import PriceMap
 
 from fava.beans import create
-from fava.beans.abc import Amount
-from fava.beans.abc import Position
-from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
+
+if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
+    from beancount.core.inventory import Inventory
+
+    from fava.beans.abc import Amount
+    from fava.beans.abc import Position
+    from fava.core.inventory import CounterInventory
+    from fava.core.inventory import SimpleCounterInventory
 
 
 def get_units(pos: Position) -> Amount:

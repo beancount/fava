@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import datetime
 from datetime import date
-from decimal import Decimal
 from functools import lru_cache
 from os.path import basename
 from os.path import dirname
@@ -20,7 +19,6 @@ from beancount.core.getters import get_min_max_dates
 from beancount.core.inventory import Inventory
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
-from beancount.core.realization import RealAccount
 from beancount.loader import _load  # type: ignore
 from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
@@ -32,7 +30,6 @@ from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import hash_entry
 from fava.beans.str import to_string
-from fava.beans.types import BeancountOptions
 from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
@@ -61,7 +58,12 @@ from fava.util.date import Interval
 from fava.util.date import interval_ends
 
 if TYPE_CHECKING:  # pragma: no cover
+    from decimal import Decimal
+
     from beancount.core.prices import PriceMap
+    from beancount.core.realization import RealAccount
+
+    from fava.beans.types import BeancountOptions
 
 
 class Filters:
@@ -424,7 +426,7 @@ class FavaLedger:
         """
         min_accounts = [
             account
-            for account in self.accounts.keys()
+            for account in self.accounts
             if account.startswith(account_name)
         ]
 
@@ -584,9 +586,11 @@ class FavaLedger:
         for document in self.all_entries_by_type.Document:
             if document.filename == full_path:
                 return document.filename
-            if document.account in accounts:
-                if basename(document.filename) == value:
-                    return document.filename
+            if (
+                document.account in accounts
+                and basename(document.filename) == value
+            ):
+                return document.filename
 
         raise FavaAPIException("Statement not found.")
 

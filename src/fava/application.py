@@ -13,6 +13,7 @@ Attributes:
 """
 from __future__ import annotations
 
+from contextlib import suppress
 from dataclasses import fields
 from datetime import date
 from datetime import datetime
@@ -169,11 +170,12 @@ app.add_template_filter(fields, "dataclass_fields")
 
 @app.url_defaults
 def _inject_filters(endpoint: str, values: dict[str, str]) -> None:
-    if "bfile" not in values and app.url_map.is_endpoint_expecting(
-        endpoint, "bfile"
+    if (
+        "bfile" not in values
+        and app.url_map.is_endpoint_expecting(endpoint, "bfile")
+        and g.beancount_file_slug is not None
     ):
-        if g.beancount_file_slug is not None:
-            values["bfile"] = g.beancount_file_slug
+        values["bfile"] = g.beancount_file_slug
     if endpoint in ["static", "index"]:
         return
     for name in ["conversion", "interval", "account", "filter", "time"]:
@@ -436,10 +438,8 @@ def jump() -> WerkzeugResponse:
     qs_dict = url.decode_query()
     for key, values in request.args.lists():
         if values == [""]:
-            try:
+            with suppress(KeyError):
                 del qs_dict[key]
-            except KeyError:
-                pass
         else:
             qs_dict.setlist(key, values)
 

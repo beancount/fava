@@ -1,10 +1,9 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Iterable
+from typing import TYPE_CHECKING
 
-from flask import Flask
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -14,6 +13,11 @@ from fava.util import pairwise
 from fava.util import send_file_inline
 from fava.util import simple_wsgi
 from fava.util import slugify
+
+if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
+
+    from flask import Flask
 
 
 def test_listify() -> None:

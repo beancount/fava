@@ -2,21 +2,25 @@
 from __future__ import annotations
 
 import re
-from datetime import date
 from typing import Any
 from typing import Callable
 from typing import Iterable
+from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore
 from beancount.core import account
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
-from fava.beans.abc import Directive
 from fava.beans.account import get_entry_accounts
-from fava.beans.types import BeancountOptions
-from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
+
+if TYPE_CHECKING:  # pragma: no cover
+    from datetime import date
+
+    from fava.beans.abc import Directive
+    from fava.beans.types import BeancountOptions
+    from fava.core.fava_options import FavaOptions
 
 
 class FilterException(FavaAPIException):

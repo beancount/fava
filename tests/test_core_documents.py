@@ -2,18 +2,20 @@
 from __future__ import annotations
 
 from os import path
+from typing import TYPE_CHECKING
 
 import pytest
-from pytest import MonkeyPatch
 
-from fava.core import FavaLedger
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.helpers import FavaAPIException
 
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
+
 
 def test_is_document_or_import_file(
-    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test/"])
     assert not is_document_or_import_file("/asdfasdf", example_ledger)
@@ -23,7 +25,7 @@ def test_is_document_or_import_file(
 
 
 def test_filepath_in_documents_folder(
-    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setitem(
         example_ledger.options, "documents", ["/test"]  # type: ignore

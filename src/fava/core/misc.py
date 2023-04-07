@@ -8,12 +8,12 @@ from typing import TYPE_CHECKING
 
 from beancount.core.amount import CURRENCY_RE
 
-from fava.beans.abc import Custom
-from fava.beans.abc import Event
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Custom
+    from fava.beans.abc import Event
     from fava.core import FavaLedger
 
     SidebarLinks = list[tuple[str, str]]

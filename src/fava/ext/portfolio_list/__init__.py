@@ -51,7 +51,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         title = "Account names matching: '" + pattern + "'"
         selected_accounts = []
         regexer = re.compile(pattern)
-        for acct in tree.keys():
+        for acct in tree:
             if (regexer.match(acct) is not None) and (
                 acct not in selected_accounts
             ):

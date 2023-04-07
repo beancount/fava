@@ -3,13 +3,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.core.display_context import DisplayContext
-
-from fava.beans.abc import Directive
-
 if TYPE_CHECKING:  # pragma: no cover
     from typing import TypedDict
 
+    from beancount.core.display_context import DisplayContext
+
+    from fava.beans.abc import Directive
     from fava.helpers import BeancountError
 
     class BeancountOptions(TypedDict):

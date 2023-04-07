@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 
 import pytest
 from beancount.core.account import has_component
@@ -9,7 +10,6 @@ from beancount.parser.options import OPTIONS_DEFAULTS
 
 from fava.beans import create
 from fava.beans.account import get_entry_accounts
-from fava.core import FavaLedger
 from fava.core.fava_options import FavaOptions
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
@@ -17,6 +17,9 @@ from fava.core.filters import FilterException
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.core import FavaLedger
 
 
 def test_match() -> None:
@@ -87,17 +90,17 @@ def test_lexer_parentheses() -> None:
 
 def test_filterexception() -> None:
     filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
-    with pytest.raises(FilterException) as exception:
+    with pytest.raises(
+        FilterException, match='Illegal character """ in filter'
+    ):
         filter_.set('who:"fff')
-        assert str(exception) == 'Illegal character """ in filter: who:"fff'
 
-    with pytest.raises(FilterException) as exception:
+    with pytest.raises(FilterException, match="Failed to parse filter"):
         filter_.set('any(who:"Martin"')
-        assert str(exception) == 'Failed to parse filter: any(who:"Martin"'
 
 
 @pytest.mark.parametrize(
-    "string,number",
+    ("string", "number"),
     [
         ('any(account:"Assets:US:ETrade")', 48),
         ('all(-account:"Assets:US:ETrade")', 1826 - 48),

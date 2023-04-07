@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 
-from fava.beans.abc import Custom
 from fava.beans.load import load_string
 from fava.core.misc import sidebar_links
 from fava.core.misc import upcoming_events
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Custom
 
 
 def test_sidebar_links(load_doc_custom_entries: list[Custom]) -> None:

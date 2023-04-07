@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from fava.core.attributes import get_active_years
 from fava.util.date import FiscalYearEnd
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
@@ -54,4 +54,5 @@ def test_payee_transaction(example_ledger: FavaLedger) -> None:
     assert attr.payee_transaction("NOTAPAYEE") is None
 
     txn = attr.payee_transaction("BayBook")
-    assert txn and str(txn.date) == "2016-05-05"
+    assert txn
+    assert str(txn.date) == "2016-05-05"

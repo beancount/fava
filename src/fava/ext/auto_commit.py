@@ -9,9 +9,12 @@ from os.path import dirname
 from subprocess import call
 from subprocess import DEVNULL
 from typing import Any
+from typing import TYPE_CHECKING
 
-from fava.beans.abc import Directive
 from fava.ext import FavaExtensionBase
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
 
 
 class AutoCommit(FavaExtensionBase):
