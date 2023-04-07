@@ -82,19 +82,14 @@ def snapshot(request: FixtureRequest) -> SnapshotFunc:
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         out = out.replace(str(datetime.date.today()), "TODAY")
-        for path, replacement in [
-            (LONG_EXAMPLE_FILE, "FAVA_LONG_EXAMPLE_PATH.beancount"),
+        for dir_path, replacement in [
             (str(TESTS_DIR / "data"), "TEST_DATA_DIR"),
         ]:
-            out = out.replace(
-                path,
-                replacement,
-            )
             if os.name == "nt":
-                out = out.replace(
-                    path.replace("\\", "\\\\") + "\\\\", replacement + "/"
-                )
-                out = out.replace(path.replace("\\", "\\\\"), replacement)
+                search = dir_path.replace("\\", "\\\\") + "\\\\"
+                out = out.replace(search, replacement + "/")
+            else:
+                out = out.replace(dir_path, replacement)
         if not snap_file.exists():
             contents = ""
         else:

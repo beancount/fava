@@ -8,7 +8,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5809
    },
    "uptodate_status": null
@@ -21,7 +21,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3760
    },
    "uptodate_status": null
@@ -35,7 +35,7 @@
    },
    "meta": {
     "address": "123 America Street, LargeTown, USA",
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "institution": "Bank of America",
     "lineno": 78,
     "phone": "+1.012.345.6789"
@@ -52,7 +52,7 @@
    "meta": {
     "account": "00234-48574897",
     "fava-uptodate-indication": true,
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 82
    },
    "uptodate_status": "yellow"
@@ -65,7 +65,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2739
    },
    "uptodate_status": null
@@ -78,7 +78,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2743
    },
    "uptodate_status": null
@@ -91,7 +91,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2740
    },
    "uptodate_status": null
@@ -104,7 +104,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2741
    },
    "uptodate_status": null
@@ -117,7 +117,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2742
    },
    "uptodate_status": null
@@ -130,7 +130,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4968
    },
    "uptodate_status": null
@@ -144,7 +144,7 @@
    },
    "meta": {
     "address": "P.O. Box 1110, Valley Forge, PA 19482-1110",
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "institution": "Vanguard Group",
     "lineno": 2965,
     "phone": "+1.800.523.1188"
@@ -159,7 +159,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2970,
     "number": "882882"
    },
@@ -173,7 +173,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2963,
     "number": "882882"
    },
@@ -187,7 +187,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2961,
     "number": "882882"
    },
@@ -201,7 +201,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 71
    },
    "uptodate_status": null
@@ -214,7 +214,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5064
    },
    "uptodate_status": null
@@ -227,7 +227,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5063
    },
    "uptodate_status": null
@@ -240,7 +240,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5057
    },
    "uptodate_status": null
@@ -253,7 +253,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5056
    },
    "uptodate_status": null
@@ -266,7 +266,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5054
    },
    "uptodate_status": null
@@ -279,7 +279,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5055
    },
    "uptodate_status": null
@@ -292,7 +292,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3764
    },
    "uptodate_status": null
@@ -305,7 +305,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3762
    },
    "uptodate_status": null
@@ -318,7 +318,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3763
    },
    "uptodate_status": null
@@ -331,7 +331,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3765
    },
    "uptodate_status": null
@@ -344,7 +344,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5060
    },
    "uptodate_status": null
@@ -357,7 +357,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5061
    },
    "uptodate_status": null
@@ -370,7 +370,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5062
    },
    "uptodate_status": null
@@ -383,7 +383,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5059
    },
    "uptodate_status": null
@@ -396,7 +396,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4977
    },
    "uptodate_status": null
@@ -409,7 +409,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4976
    },
    "uptodate_status": null
@@ -422,7 +422,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4974
    },
    "uptodate_status": null
@@ -435,7 +435,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4975
    },
    "uptodate_status": null
@@ -448,7 +448,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4978
    },
    "uptodate_status": null
@@ -461,7 +461,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4980
    },
    "uptodate_status": null
@@ -474,7 +474,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4979
    },
    "uptodate_status": null
@@ -487,7 +487,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5008
    },
    "uptodate_status": null
@@ -500,7 +500,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5007
    },
    "uptodate_status": null
@@ -513,7 +513,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5005
    },
    "uptodate_status": null
@@ -526,7 +526,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5006
    },
    "uptodate_status": null
@@ -539,7 +539,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5009
    },
    "uptodate_status": null
@@ -552,7 +552,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5011
    },
    "uptodate_status": null
@@ -565,7 +565,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5010
    },
    "uptodate_status": null
@@ -578,7 +578,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5039
    },
    "uptodate_status": null
@@ -591,7 +591,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5038
    },
    "uptodate_status": null
@@ -604,7 +604,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5036
    },
    "uptodate_status": null
@@ -617,7 +617,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5037
    },
    "uptodate_status": null
@@ -630,7 +630,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5040
    },
    "uptodate_status": null
@@ -643,7 +643,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5042
    },
    "uptodate_status": null
@@ -656,7 +656,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5041
    },
    "uptodate_status": null
@@ -669,7 +669,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 5058
    },
    "uptodate_status": null
@@ -682,7 +682,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3761
    },
    "uptodate_status": null
@@ -695,7 +695,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3758
    },
    "uptodate_status": null
@@ -708,7 +708,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2969
    },
    "uptodate_status": null
@@ -721,7 +721,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3757
    },
    "uptodate_status": null
@@ -734,7 +734,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 3759
    },
    "uptodate_status": null
@@ -747,7 +747,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2745
    },
    "uptodate_status": null
@@ -760,7 +760,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 2744
    },
    "uptodate_status": null
@@ -773,7 +773,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 4967
    },
    "uptodate_status": null
@@ -786,7 +786,7 @@
     "entry_hash": "ENTRY_HASH"
    },
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 72
    },
    "uptodate_status": null
@@ -800,7 +800,7 @@
    },
    "meta": {
     "fava-uptodate-indication": true,
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 755
    },
    "uptodate_status": "green"
@@ -920,9 +920,9 @@
  ],
  "options": {
   "documents": [],
-  "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+  "filename": "TEST_DATA_DIR/long-example.beancount",
   "include": [
-   "FAVA_LONG_EXAMPLE_PATH.beancount"
+   "TEST_DATA_DIR/long-example.beancount"
   ],
   "operating_currency": [
    "USD"
@@ -1016,7 +1016,7 @@
   {
    "date": "2016-01-01",
    "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "filename": "TEST_DATA_DIR/long-example.beancount",
     "lineno": 11
    },
    "name": "fava",

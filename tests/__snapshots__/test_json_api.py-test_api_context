@@ -157,7 +157,7 @@
  'entry': {'date': '2016-05-09',
            'flag': '*',
            'links': [],
-           'meta': {'filename': 'FAVA_LONG_EXAMPLE_PATH.beancount',
+           'meta': {'filename': 'TEST_DATA_DIR/long-example.beancount',
                     'lineno': 3737},
            'narration': 'Investing 40% of cash in VBMPX',
            'payee': '',

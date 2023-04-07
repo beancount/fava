@@ -4,7 +4,7 @@
            'booking': None,
            'currencies': None,
            'date': '1980-05-12',
-           'meta': {'filename': 'FAVA_LONG_EXAMPLE_PATH.beancount',
+           'meta': {'filename': 'TEST_DATA_DIR/long-example.beancount',
                     'lineno': 5057},
            'type': 'Open'},
  'sha256sum': '7198a732bba60e03bfebbf4368637a66260d384e80c9af182390e419d4a0bbc8',

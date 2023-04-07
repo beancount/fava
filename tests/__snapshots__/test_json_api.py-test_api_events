@@ -3,7 +3,7 @@
   "date": "2014-01-01",
   "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 3767
   },
   "type": "employer"
@@ -12,7 +12,7 @@
   "date": "2015-01-21",
   "description": "Chicago",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 1548
   },
   "type": "location"
@@ -21,7 +21,7 @@
   "date": "2015-02-05",
   "description": "New Metropolis",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 1628
   },
   "type": "location"
@@ -30,7 +30,7 @@
   "date": "2015-07-07",
   "description": "San Francisco",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 1914
   },
   "type": "location"
@@ -39,7 +39,7 @@
   "date": "2015-07-26",
   "description": "New Metropolis",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 2078
   },
   "type": "location"
@@ -48,7 +48,7 @@
   "date": "2016-03-31",
   "description": "New York",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 2560
   },
   "type": "location"
@@ -57,7 +57,7 @@
   "date": "2016-04-15",
   "description": "New Metropolis",
   "meta": {
-   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "filename": "TEST_DATA_DIR/long-example.beancount",
    "lineno": 2686
   },
   "type": "location"
