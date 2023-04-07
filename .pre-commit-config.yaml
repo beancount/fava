@@ -2,11 +2,11 @@ ci:
     skip: ["eslint"]
 repos:
     - repo: https://github.com/psf/black
-      rev: 23.1.0
+      rev: 23.3.0
       hooks:
           - id: black
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.259
+      rev: v0.0.261
       hooks:
           - id: ruff
     - repo: local
@@ -19,7 +19,7 @@ repos:
             additional_dependencies:
                 - "prettier@2.8.7"
                 - "prettier-plugin-svelte@2.10.0"
-                - "svelte@3.57.0"
+                - "svelte@3.58.0"
           - id: stylelint
             name: stylelint
             language: node
@@ -27,7 +27,7 @@ repos:
             files: \.(css|svelte)$
             require_serial: true
             additional_dependencies:
-                - "stylelint@15.3.0"
+                - "stylelint@15.4.0"
                 - "stylelint-config-recess-order@4.0.0"
                 - "stylelint-config-standard@31.0.0"
                 - "postcss-html@1.5.0"
