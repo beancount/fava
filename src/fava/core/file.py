@@ -8,7 +8,7 @@ from codecs import decode
 from codecs import encode
 from hashlib import sha256
 from operator import attrgetter
-from typing import Generator
+from typing import Iterable
 from typing import TYPE_CHECKING
 
 from markupsafe import Markup
@@ -177,9 +177,7 @@ class FileModule(FavaModule):
                 )
                 self.ledger.extensions.after_insert_entry(entry)
 
-    def render_entries(
-        self, entries: list[Directive]
-    ) -> Generator[Markup, None, None]:
+    def render_entries(self, entries: list[Directive]) -> Iterable[Markup]:
         """Return entries in Beancount format.
 
         Only renders :class:`.Balance` and :class:`.Transaction`.

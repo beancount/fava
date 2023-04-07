@@ -7,11 +7,11 @@ from fava.core.attributes import get_active_years
 from fava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:
-    from fava.beans.types import LoaderResult
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
 
-def test_get_active_years(load_doc: LoaderResult) -> None:
+def test_get_active_years(load_doc_entries: list[Directive]) -> None:
     """
     2010-11-12 * "test"
         Assets:T   4.00 USD
@@ -23,19 +23,17 @@ def test_get_active_years(load_doc: LoaderResult) -> None:
         Assets:T   4.00 USD
         Expenses:T
     """
-
-    entries, _, __ = load_doc
-    assert get_active_years(entries, FiscalYearEnd(12, 31)) == [
+    assert get_active_years(load_doc_entries, FiscalYearEnd(12, 31)) == [
         "2012",
         "2011",
         "2010",
     ]
-    assert get_active_years(entries, FiscalYearEnd(12, 1)) == [
+    assert get_active_years(load_doc_entries, FiscalYearEnd(12, 1)) == [
         "FY2013",
         "FY2011",
         "FY2010",
     ]
-    assert get_active_years(entries, FiscalYearEnd(11, 1)) == [
+    assert get_active_years(load_doc_entries, FiscalYearEnd(11, 1)) == [
         "FY2013",
         "FY2012",
         "FY2011",

@@ -5,12 +5,10 @@ import copy
 
 from flask import Flask
 
-from fava.core.charts import PRETTY_ENCODER
+from fava.core.charts import pretty_dumps
 from fava.internal_api import get_ledger_data
 
 from .conftest import SnapshotFunc
-
-dumps = PRETTY_ENCODER.encode
 
 
 def test_get_ledger_data(app: Flask, snapshot: SnapshotFunc) -> None:
@@ -23,4 +21,4 @@ def test_get_ledger_data(app: Flask, snapshot: SnapshotFunc) -> None:
         for details in ledger_data.account_details.values():
             if details.last_entry:
                 details.last_entry.entry_hash = "ENTRY_HASH"
-        snapshot(dumps(ledger_data))
+        snapshot(pretty_dumps(ledger_data))

@@ -1,10 +1,7 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from beancount.core.inventory import Inventory
-
 from fava.core import FavaLedger
-from fava.core.inventory import CounterInventory
 from fava.core.tree import Tree
 
 from .conftest import SnapshotFunc
@@ -30,16 +27,6 @@ def test_tree() -> None:
     ]
 
     assert len(list(tree.ancestors("not:account:name:a:b:c"))) == 6
-
-
-def _compare_inv_and_counter(
-    inv: Inventory | None, counter: CounterInventory
-) -> None:
-    assert inv is not None
-    for pos in inv:
-        assert pos.units.number == counter[(pos.units.currency, pos.cost)]
-    if counter:
-        assert len(inv) == len(counter)
 
 
 def test_tree_from_entries(

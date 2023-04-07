@@ -1,7 +1,8 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-from typing import Generator
+from pathlib import Path
+from typing import Iterable
 
 from flask import Flask
 from werkzeug.test import Client
@@ -14,12 +15,10 @@ from fava.util import send_file_inline
 from fava.util import simple_wsgi
 from fava.util import slugify
 
-from .conftest import data_file
-
 
 def test_listify() -> None:
     @listify
-    def fun() -> Generator[int, None, None]:
+    def fun() -> Iterable[int]:
         yield from [1, 2, 3]
 
     assert fun() == [1, 2, 3]
@@ -59,14 +58,14 @@ def test_slugify() -> None:
     assert slugify("ASDF test test") == "asdf-test-test"
 
 
-def test_send_file_inline(app: Flask) -> None:
+def test_send_file_inline(app: Flask, test_data_dir: Path) -> None:
     with app.test_request_context():
-        resp = send_file_inline(data_file("example-balances.csv"))
+        resp = send_file_inline(str(test_data_dir / "example-balances.csv"))
         assert (
             resp.headers["Content-Disposition"]
             == "inline; filename*=UTF-8''example-balances.csv"
         )
-        resp = send_file_inline(data_file("example-utf8-🦁.txt"))
+        resp = send_file_inline(str(test_data_dir / "example-utf8-🦁.txt"))
         # pylint: disable=line-too-long
         assert (
             resp.headers["Content-Disposition"]

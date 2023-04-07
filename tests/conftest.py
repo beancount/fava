@@ -31,28 +31,20 @@ if TYPE_CHECKING:
 
     from fava.beans.types import LoaderResult
 
-TESTS_DIR = Path(__file__).parent
+TEST_DATA_DIR = Path(__file__).parent / "data"
 
-
-def data_file(filename: str) -> str:
-    return str(TESTS_DIR / "data" / filename)
-
-
-LONG_EXAMPLE_FILE = data_file("long-example.beancount")
-EXAMPLE_FILE = data_file("example.beancount")
-
-EXAMPLE_LEDGER = FavaLedger(LONG_EXAMPLE_FILE)
 
 fava_app.testing = True
-TEST_CLIENT = fava_app.test_client()
-
 fava_app.config["BEANCOUNT_FILES"] = [
-    LONG_EXAMPLE_FILE,
-    EXAMPLE_FILE,
-    data_file("extension-report-example.beancount"),
-    data_file("import.beancount"),
-    data_file("query-example.beancount"),
-    data_file("errors.beancount"),
+    str(TEST_DATA_DIR / filename)
+    for filename in [
+        "long-example.beancount",
+        "example.beancount",
+        "extension-report-example.beancount",
+        "import.beancount",
+        "query-example.beancount",
+        "errors.beancount",
+    ]
 ]
 _load_file()
 
@@ -89,7 +81,7 @@ def snapshot(request: FixtureRequest) -> SnapshotFunc:
         out = data if isinstance(data, str) else pformat(data)
         out = out.replace(str(datetime.date.today()), "TODAY")
         for dir_path, replacement in [
-            (str(TESTS_DIR / "data"), "TEST_DATA_DIR"),
+            (str(TEST_DATA_DIR), "TEST_DATA_DIR"),
         ]:
             if os.name == "nt":
                 search = dir_path.replace("\\", "\\\\") + "\\\\"
@@ -110,19 +102,32 @@ def snapshot(request: FixtureRequest) -> SnapshotFunc:
 
 
 @pytest.fixture
+def test_data_dir() -> Path:
+    return TEST_DATA_DIR
+
+
+@pytest.fixture
 def app() -> Flask:
     return fava_app
 
 
 @pytest.fixture
 def test_client() -> FlaskClient:
-    return TEST_CLIENT
+    return fava_app.test_client()
 
 
 @pytest.fixture
 def load_doc(request: FixtureRequest) -> LoaderResult:
+    """Load the docstring as a Beancount file."""
     contents = dedent(request.function.__doc__)
     return load_string(contents)
+
+
+@pytest.fixture
+def load_doc_entries(load_doc: LoaderResult) -> list[Directive]:
+    """Load the docstring as Beancount entries."""
+    entries, _errors, _options = load_doc
+    return entries
 
 
 def is_custom_entries_list(
@@ -132,25 +137,28 @@ def is_custom_entries_list(
 
 
 @pytest.fixture
-def load_doc_custom_entries(load_doc: LoaderResult) -> list[Custom]:
-    entries, _errors, _options = load_doc
-    assert is_custom_entries_list(entries)
-    return entries
+def load_doc_custom_entries(load_doc_entries: list[Directive]) -> list[Custom]:
+    """Load the docstring as Beancount custom entries."""
+    assert is_custom_entries_list(load_doc_entries)
+    return load_doc_entries
+
+
+@pytest.fixture
+def budgets_doc(load_doc_custom_entries: list[Custom]) -> BudgetDict:
+    budgets, _ = parse_budgets(load_doc_custom_entries)
+    return budgets
 
 
 @pytest.fixture
 def small_example_ledger() -> FavaLedger:
-    return FavaLedger(data_file("example.beancount"))
+    return fava_app.config["LEDGERS"]["example"]  # type: ignore
+
+
+@pytest.fixture
+def query_ledger() -> FavaLedger:
+    return fava_app.config["LEDGERS"]["query-example"]  # type: ignore
 
 
 @pytest.fixture
 def example_ledger() -> FavaLedger:
-    return EXAMPLE_LEDGER
-
-
-@pytest.fixture
-def budgets_doc(load_doc: LoaderResult) -> BudgetDict:
-    entries, _, _ = load_doc
-    assert is_custom_entries_list(entries)
-    budgets, _ = parse_budgets(entries)
-    return budgets
+    return fava_app.config["LEDGERS"]["long-example"]  # type: ignore

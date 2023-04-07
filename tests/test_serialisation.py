@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import pytest
@@ -12,7 +13,7 @@ from flask.json import loads
 from fava.beans import create
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
-from fava.core.charts import PRETTY_ENCODER
+from fava.core.charts import pretty_dumps
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
@@ -21,11 +22,7 @@ from fava.serialisation import serialise
 from .conftest import SnapshotFunc
 
 if TYPE_CHECKING:
-    from fava.beans.types import LoaderResult
-
-A = create.amount
-D = create.decimal
-dumps = PRETTY_ENCODER.encode
+    from fava.beans.abc import Directive
 
 
 def test_serialise_txn() -> None:
@@ -58,19 +55,19 @@ def test_serialise_txn() -> None:
         ],
     }
 
-    serialised = loads(dumps(serialise(txn)))
+    serialised = loads(pretty_dumps(serialise(txn)))
     assert serialised == json_txn
 
     json_txn["payee"] = ""
-    serialised = loads(dumps(serialise(replace(txn, payee=""))))
+    serialised = loads(pretty_dumps(serialise(replace(txn, payee=""))))
     assert serialised == json_txn
 
-    serialised = loads(dumps(serialise(replace(txn, payee=None))))
+    serialised = loads(pretty_dumps(serialise(replace(txn, payee=None))))
     assert serialised == json_txn
 
 
 def test_serialise_entry_types(
-    snapshot: SnapshotFunc, load_doc: LoaderResult
+    snapshot: SnapshotFunc, load_doc_entries: list[Directive]
 ) -> None:
     """
     2017-12-11 open Assets:Cash USD "STRICT"
@@ -94,8 +91,7 @@ def test_serialise_entry_types(
 
     2019-12-12 query "query name" "journal"
     """
-    entries, _, _ = load_doc
-    snapshot(dumps([serialise(entry) for entry in entries]))
+    snapshot(pretty_dumps([serialise(entry) for entry in load_doc_entries]))
 
 
 @pytest.mark.parametrize(
@@ -105,7 +101,7 @@ def test_serialise_entry_types(
         (
             (
                 "100 USD",
-                CostSpec(D("10"), None, "EUR", None, None, False),
+                CostSpec(Decimal("10"), None, "EUR", None, None, False),
                 None,
             ),
             "100 USD {10 EUR}",
@@ -113,7 +109,7 @@ def test_serialise_entry_types(
         (
             (
                 "100 USD",
-                CostSpec(D("10"), None, "EUR", None, None, False),
+                CostSpec(Decimal("10"), None, "EUR", None, None, False),
                 "11 EUR",
             ),
             "100 USD {10 EUR} @ 11 EUR",
@@ -138,7 +134,7 @@ def test_serialise_posting(
     amount, cost, price = amount_cost_price
     pos = create.posting("Assets", amount, cost, price)  # type: ignore
     json = {"account": "Assets", "amount": amount_string}
-    assert loads(dumps(serialise(pos))) == json
+    assert loads(pretty_dumps(serialise(pos))) == json
     assert deserialise_posting(json) == pos
 
 
@@ -189,7 +185,7 @@ def test_serialise_balance() -> None:
         {},
         datetime.date(2019, 9, 17),
         "Assets:ETrade:Cash",
-        A("0.1234567891011121314151617 CHF"),
+        create.amount("0.1234567891011121314151617 CHF"),
         None,
         None,
     )
@@ -204,7 +200,7 @@ def test_serialise_balance() -> None:
         "type": "Balance",
     }
 
-    serialised = loads(dumps(serialise(bal)))
+    serialised = loads(pretty_dumps(serialise(bal)))
 
     assert serialised == json
 

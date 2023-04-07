@@ -1,17 +1,15 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+from decimal import Decimal
+
 import pytest
 
-from fava.beans import create
 from fava.core import FavaLedger
-from fava.core.charts import PRETTY_ENCODER
+from fava.core.charts import pretty_dumps
 from fava.util.date import Interval
 
 from .conftest import SnapshotFunc
-
-D = create.decimal
-dumps = PRETTY_ENCODER.encode
 
 
 def test_interval_totals(
@@ -22,7 +20,7 @@ def test_interval_totals(
         data = small_example_ledger.charts.interval_totals(
             filtered, Interval.MONTH, "Expenses", conversion
         )
-        snapshot(dumps(data))
+        snapshot(pretty_dumps(data))
 
 
 def test_interval_totals_inverted(
@@ -33,7 +31,7 @@ def test_interval_totals_inverted(
         data = small_example_ledger.charts.interval_totals(
             filtered, Interval.MONTH, "Expenses", conversion, invert=True
         )
-        snapshot(dumps(data))
+        snapshot(pretty_dumps(data))
 
 
 def test_linechart_data(
@@ -44,28 +42,28 @@ def test_linechart_data(
         data = example_ledger.charts.linechart(
             filtered, "Assets:Testing:MultipleCommodities", conversion
         )
-        snapshot(dumps(data))
+        snapshot(pretty_dumps(data))
 
 
 def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.net_worth(filtered, Interval.MONTH, "USD")
-    snapshot(dumps(data))
+    snapshot(pretty_dumps(data))
 
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.hierarchy(filtered, "Assets", "at_cost")
     assert data.balance_children == {
-        "IRAUSD": D("7200.00"),
-        "USD": D("94320.27840"),
-        "VACHR": D("-82"),
+        "IRAUSD": Decimal("7200.00"),
+        "USD": Decimal("94320.27840"),
+        "VACHR": Decimal("-82"),
     }
     assert data.balance == {}
     # Assets:US:ETrade
     etrade = data.children[0].children[2]
-    assert etrade.children[4].balance == {"USD": D("4899.98")}
-    assert etrade.balance_children == {"USD": D("23137.54")}
+    assert etrade.children[4].balance == {"USD": Decimal("4899.98")}
+    assert etrade.balance_children == {"USD": Decimal("23137.54")}
 
 
 @pytest.mark.parametrize(
@@ -83,4 +81,4 @@ def test_query(
         example_ledger.all_entries, query
     )
     data = example_ledger.charts.query(types, rows)
-    snapshot(dumps(data))
+    snapshot(pretty_dumps(data))

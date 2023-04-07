@@ -222,11 +222,9 @@ def test_download_journal(
     assert result.headers["Content-Type"] == "application/octet-stream"
 
 
-def test_static_url(app: Flask) -> None:
+def test_static_url() -> None:
     """Static URLs have the mtime appended."""
-    with app.test_request_context():
-        app.preprocess_request()
-        url = static_url("app.js")
+    url = static_url("app.js")
     assert url.startswith("/static/app.js?mtime=")
 
 

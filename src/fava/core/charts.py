@@ -9,7 +9,6 @@ from datetime import date
 from datetime import timedelta
 from decimal import Decimal
 from typing import Any
-from typing import Generator
 from typing import Iterable
 from typing import Pattern
 from typing import TYPE_CHECKING
@@ -89,8 +88,9 @@ class FavaJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, o)
 
 
-ENCODER = FavaJSONEncoder()
-PRETTY_ENCODER = FavaJSONEncoder(indent=True)
+_ENCODER = FavaJSONEncoder()
+_PRETTY_ENCODER = FavaJSONEncoder(indent=True)
+pretty_dumps = _PRETTY_ENCODER.encode
 
 
 def setup_json_for_app(app: Flask) -> None:
@@ -103,7 +103,7 @@ def setup_json_for_app(app: Flask) -> None:
             def dumps(
                 self, obj: Any, *, _option: Any = None, **_kwargs: Any
             ) -> Any:
-                return ENCODER.encode(obj)
+                return _ENCODER.encode(obj)
 
             def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
                 return loads(s)
@@ -268,7 +268,7 @@ class ChartModule(FavaModule):
     @listify
     def net_worth(
         self, filtered: FilteredLedger, interval: Interval, conversion: str
-    ) -> Generator[DateAndBalance, None, None]:
+    ) -> Iterable[DateAndBalance]:
         """Compute net worth.
 
         Args:

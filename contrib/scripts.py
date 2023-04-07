@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from os import environ
 from pathlib import Path
-from typing import Generator
+from typing import Iterable
 
 import requests
 from beancount.query import query_env
@@ -27,7 +27,7 @@ def cli() -> None:
 
 def _env_to_list(
     attributes: dict[str, str | tuple[str, str]]
-) -> Generator[str, None, None]:
+) -> Iterable[str]:
     for name in attributes.keys():
         yield name[0] if isinstance(name, tuple) else name
 

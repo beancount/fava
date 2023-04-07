@@ -1,20 +1,21 @@
 # pylint: disable=missing-docstring
+
 from __future__ import annotations
 
 import datetime
 import re
 from typing import TYPE_CHECKING
 
-from fava.core.charts import ENCODER
+from fava.core.charts import pretty_dumps
 from fava.core.fava_options import InsertEntryOption
 from fava.core.fava_options import parse_options
 from fava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:
-    from fava.beans.types import LoaderResult
+    from fava.beans.abc import Custom
 
 
-def test_fava_options(load_doc: LoaderResult) -> None:
+def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     """
     2016-06-14 custom "fava-option" "default-file"
     2016-04-14 custom "fava-option" "show-closed-accounts" "true"
@@ -30,11 +31,10 @@ def test_fava_options(load_doc: LoaderResult) -> None:
     2016-04-14 custom "fava-option" "conversion-currencies" "USD EUR HOOLI"
     """
 
-    entries, _, _ = load_doc
-    options, errors = parse_options(entries)  # type: ignore
+    options, errors = parse_options(load_doc_custom_entries)
 
     # The options can be encoded to JSON.
-    ENCODER.encode(options)
+    pretty_dumps(options)
 
     assert len(errors) == 3
 

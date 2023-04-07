@@ -9,27 +9,23 @@ from fava.beans.funcs import run_query
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
-from .conftest import data_file
 from .conftest import SnapshotFunc
 
-LEDGER = FavaLedger(data_file("query-example.beancount"))
-QUERY = LEDGER.query_shell
 
+def test_query(snapshot: SnapshotFunc, query_ledger: FavaLedger) -> None:
+    def run(query_string: str) -> Any:
+        return query_ledger.query_shell.execute_query(
+            query_ledger.all_entries, query_string
+        )
 
-def run(query_string: str) -> Any:
-    return QUERY.execute_query(LEDGER.all_entries, query_string)
+    def run_text(query_string: str) -> str:
+        """Run a query that should only return string contents."""
+        contents, types, result = run(query_string)
+        assert types is None
+        assert result is None
+        assert isinstance(contents, str)
+        return contents
 
-
-def run_text(query_string: str) -> str:
-    """Run a query that should only return string contents."""
-    contents, types, result = run(query_string)
-    assert types is None
-    assert result is None
-    assert isinstance(contents, str)
-    return contents
-
-
-def test_query(snapshot: SnapshotFunc) -> None:
     assert run_text("help")
     assert (
         run_text("help exit") == "Doesn't do anything in Fava's query shell."
@@ -50,7 +46,7 @@ def test_query(snapshot: SnapshotFunc) -> None:
     assert run("run custom_query") == bal
     assert run("run 'custom query with space'") == bal
     assert run("balances")[1:] == run_query(
-        LEDGER.all_entries, LEDGER.options, "balances"
+        query_ledger.all_entries, query_ledger.options, "balances"
     )
     assert (
         run_text("asdf")
@@ -58,16 +54,19 @@ def test_query(snapshot: SnapshotFunc) -> None:
     )
 
 
-def test_query_to_file(snapshot: SnapshotFunc) -> None:
-    entries = LEDGER.all_entries
-    name, data = QUERY.query_to_file(entries, "run custom_query", "csv")
+def test_query_to_file(
+    snapshot: SnapshotFunc, query_ledger: FavaLedger
+) -> None:
+    entries = query_ledger.all_entries
+    query_shell = query_ledger.query_shell
+    name, data = query_shell.query_to_file(entries, "run custom_query", "csv")
     assert name == "custom_query"
-    name, data = QUERY.query_to_file(entries, "balances", "csv")
+    name, data = query_shell.query_to_file(entries, "balances", "csv")
     assert name == "query_result"
     snapshot(data.getvalue())
 
     with pytest.raises(FavaAPIException):
-        QUERY.query_to_file(entries, "select sdf", "csv")
+        query_shell.query_to_file(entries, "select sdf", "csv")
 
     with pytest.raises(FavaAPIException):
-        QUERY.query_to_file(entries, "run testsetest", "csv")
+        query_shell.query_to_file(entries, "run testsetest", "csv")

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import datetime
 from os import path
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -18,43 +19,36 @@ from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIException
 
-from .conftest import data_file
 
-FILE_PATH = data_file("import.beancount")
-EXAMPLE = data_file("import.csv")
+def test_ingest_file_import_info(test_data_dir: Path) -> None:
+    class Imp(ImporterProtocol):  # type: ignore
+        def __init__(self, acc: str) -> None:
+            self.acc = acc
 
+        def name(self) -> str:
+            return self.acc
 
-class Imp(ImporterProtocol):  # type: ignore
-    def __init__(self, acc: str) -> None:
-        self.acc = acc
+        def identify(self, file: Any) -> bool:
+            return self.acc in file.name
 
-    def name(self) -> str:
-        return self.acc
+    class Invalid(ImporterProtocol):  # type: ignore
+        def __init__(self, acc: str) -> None:
+            self.acc = acc
 
-    def identify(self, file: Any) -> bool:
-        return self.acc in file.name
+        def name(self) -> str:
+            return self.acc
 
+        def identify(self, file: Any) -> bool:
+            return self.acc in file.name
 
-class Invalid(ImporterProtocol):  # type: ignore
-    def __init__(self, acc: str) -> None:
-        self.acc = acc
+        def file_account(self, file: Any) -> bool:
+            raise ValueError("Some error reason...")
 
-    def name(self) -> str:
-        return self.acc
-
-    def identify(self, file: Any) -> bool:
-        return self.acc in file.name
-
-    def file_account(self, file: Any) -> bool:
-        raise ValueError("Some error reason...")
-
-
-def test_ingest_file_import_info() -> None:
-    ingest_ledger = FavaLedger(FILE_PATH)
+    ingest_ledger = FavaLedger(str(test_data_dir / "import.beancount"))
     importer = next(iter(ingest_ledger.ingest.importers.values()))
     assert importer
 
-    info = file_import_info(EXAMPLE, importer)
+    info = file_import_info(str(test_data_dir / "import.csv"), importer)
     assert info.account == "Assets:Checking"
 
     info2 = file_import_info("/asdf/basename", Imp("rawfile"))
@@ -68,10 +62,12 @@ def test_ingest_file_import_info() -> None:
     assert "Some error reason..." in err.value.message
 
 
-def test_ingest_examplefile() -> None:
-    ingest_ledger = FavaLedger(FILE_PATH)
+def test_ingest_examplefile(test_data_dir: Path) -> None:
+    ingest_ledger = FavaLedger(str(test_data_dir / "import.beancount"))
 
-    entries = ingest_ledger.ingest.extract(EXAMPLE, "<run_path>.TestImporter")
+    entries = ingest_ledger.ingest.extract(
+        str(test_data_dir / "import.csv"), "<run_path>.TestImporter"
+    )
     assert len(entries) == 4
     assert entries[0].date == datetime.date(2017, 2, 12)
     assert isinstance(entries[0], Note)

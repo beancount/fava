@@ -27,8 +27,6 @@ from fava.beans.str import to_string
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
 
-D = create.decimal
-
 
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:

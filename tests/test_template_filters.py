@@ -9,7 +9,6 @@ import pytest
 from flask import Flask
 from pytest import MonkeyPatch
 
-from fava.beans import create
 from fava.context import g
 from fava.core.accounts import AccountData
 from fava.core.inventory import CounterInventory
@@ -21,8 +20,6 @@ from fava.template_filters import format_date
 from fava.template_filters import format_date_filter
 from fava.template_filters import remove_keys
 from fava.template_filters import should_show
-
-D = create.decimal
 
 
 def test_remove_keys() -> None:
@@ -74,7 +71,9 @@ def test_should_show(app: Flask) -> None:
 
         account = TreeNode("name")
         assert should_show(account) is False
-        account.balance_children = CounterInventory({("USD", None): D("9")})
+        account.balance_children = CounterInventory(
+            {("USD", None): Decimal("9")}
+        )
         assert should_show(account) is True
     with app.test_request_context("/long-example/income_statement/?time=2100"):
         app.preprocess_request()

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 from socket import socket
 from subprocess import PIPE
 from subprocess import Popen
@@ -12,14 +13,10 @@ from time import time
 import pytest
 from pytest import MonkeyPatch
 
-from .conftest import EXAMPLE_FILE
-
-HOST = "0.0.0.0"
-
 
 def get_port() -> int:
     sock = socket()
-    sock.bind((HOST, 0))
+    sock.bind(("0.0.0.0", 0))
     port = sock.getsockname()[1]
     sock.close()
     assert isinstance(port, int)
@@ -37,10 +34,10 @@ def output_contains(process: Popen[str], output: str, timeout: int) -> bool:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
-def test_cli(monkeypatch: MonkeyPatch) -> None:
+def test_cli(monkeypatch: MonkeyPatch, test_data_dir: Path) -> None:
     port = str(get_port())
     monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
-    args = ("fava", EXAMPLE_FILE, "-p", port)
+    args = ("fava", str(test_data_dir / "example.beancount"), "-p", port)
     with Popen(
         args,
         stdout=PIPE,

@@ -12,7 +12,7 @@ from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
 if TYPE_CHECKING:
-    from fava.beans.types import LoaderResult
+    from fava.beans.abc import Directive
 
 
 def test_apiexception() -> None:
@@ -62,7 +62,7 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
 
 
 def test_group_entries(
-    example_ledger: FavaLedger, load_doc: LoaderResult
+    example_ledger: FavaLedger, load_doc_entries: list[Directive]
 ) -> None:
     """
     2010-11-12 * "test"
@@ -74,11 +74,10 @@ def test_group_entries(
     2012-12-12 note Expenses:T "test"
     """
 
-    entries, _, __ = load_doc
-    assert len(entries) == 3
-    data = example_ledger.group_entries_by_type(entries)
-    assert data.Note == [entries[2]]
-    assert data.Transaction == entries[0:2]
+    assert len(load_doc_entries) == 3
+    data = example_ledger.group_entries_by_type(load_doc_entries)
+    assert data.Note == [load_doc_entries[2]]
+    assert data.Transaction == load_doc_entries[0:2]
 
 
 def test_account_uptodate_status(example_ledger: FavaLedger) -> None:

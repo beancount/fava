@@ -5,7 +5,7 @@ import re
 from datetime import date
 from typing import Any
 from typing import Callable
-from typing import Generator
+from typing import Iterable
 
 import ply.yacc  # type: ignore
 from beancount.core import account
@@ -87,7 +87,7 @@ class FilterSyntaxLexer:
             return token, value[1:-1]
         return token, value
 
-    def lex(self, data: str) -> Generator[Token, None, None]:
+    def lex(self, data: str) -> Iterable[Token]:
         """A generator yielding all tokens in a given line.
 
         Arguments:

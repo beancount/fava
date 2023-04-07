@@ -18,9 +18,6 @@ from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
 
-D = create.decimal
-LEX = FilterSyntaxLexer().lex
-
 
 def test_match() -> None:
     assert Match("asdf")("asdf")
@@ -33,34 +30,37 @@ def test_match() -> None:
 
 
 def test_lexer_basic() -> None:
+    lex = FilterSyntaxLexer().lex
     data = "#some_tag ^some_link -^some_link"
-    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("TAG", "some_tag"),
         ("LINK", "some_link"),
         ("-", "-"),
         ("LINK", "some_link"),
     ]
     data = "'string' string \"string\""
-    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("STRING", "string"),
         ("STRING", "string"),
         ("STRING", "string"),
     ]
     with pytest.raises(FilterException):
-        list(LEX("|"))
+        list(lex("|"))
 
 
 def test_lexer_literals_in_string() -> None:
+    lex = FilterSyntaxLexer().lex
     data = "string-2-2 string"
-    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("STRING", "string-2-2"),
         ("STRING", "string"),
     ]
 
 
 def test_lexer_key() -> None:
+    lex = FilterSyntaxLexer().lex
     data = 'payee:asdfasdf ^some_link somekey:"testtest" '
-    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("KEY", "payee"),
         ("STRING", "asdfasdf"),
         ("LINK", "some_link"),
@@ -70,8 +70,9 @@ def test_lexer_key() -> None:
 
 
 def test_lexer_parentheses() -> None:
+    lex = FilterSyntaxLexer().lex
     data = "(payee:asdfasdf ^some_link) (somekey:'testtest')"
-    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("(", "("),
         ("KEY", "payee"),
         ("STRING", "asdfasdf"),
@@ -84,16 +85,14 @@ def test_lexer_parentheses() -> None:
     ]
 
 
-FILTER = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
-
-
 def test_filterexception() -> None:
+    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
     with pytest.raises(FilterException) as exception:
-        FILTER.set('who:"fff')
+        filter_.set('who:"fff')
         assert str(exception) == 'Illegal character """ in filter: who:"fff'
 
     with pytest.raises(FilterException) as exception:
-        FILTER.set('any(who:"Martin"')
+        filter_.set('any(who:"Martin"')
         assert str(exception) == 'Failed to parse filter: any(who:"Martin"'
 
 
@@ -128,13 +127,15 @@ def test_filterexception() -> None:
 def test_advanced_filter(
     example_ledger: FavaLedger, string: str, number: int
 ) -> None:
-    FILTER.set(string)
-    filtered_entries = FILTER.apply(example_ledger.all_entries)
+    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
+    filter_.set(string)
+    filtered_entries = filter_.apply(example_ledger.all_entries)
     assert len(filtered_entries) == number
 
 
 def test_null_meta_posting() -> None:
-    FILTER.set('any(some_meta:"1")')
+    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
+    filter_.set('any(some_meta:"1")')
 
     txn = create.transaction(
         {},
@@ -147,7 +148,7 @@ def test_null_meta_posting() -> None:
         [create.posting("Assets:ETrade:Cash", "100 USD")],
     )
     assert txn.postings[0].meta is None
-    assert len(FILTER.apply([txn])) == 0
+    assert len(filter_.apply([txn])) == 0
 
 
 def test_account_filter(example_ledger: FavaLedger) -> None:

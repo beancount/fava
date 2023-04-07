@@ -17,7 +17,7 @@ from pytest import MonkeyPatch
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core import FavaLedger
-from fava.core.charts import PRETTY_ENCODER
+from fava.core.charts import pretty_dumps
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
@@ -26,9 +26,6 @@ from .conftest import SnapshotFunc
 
 if TYPE_CHECKING:
     from werkzeug.test import TestResponse
-
-
-pretty_dumps = PRETTY_ENCODER.encode
 
 
 def test_validate_get_args() -> None:
@@ -178,7 +175,6 @@ def test_api_context(
     response = test_client.get(
         f"/long-example/api/context?entry_hash={entry_hash}"
     )
-    assert_api_success(response)
     data = assert_api_success(response)
     snapshot(data)
     assert not data.get("balances_before")
