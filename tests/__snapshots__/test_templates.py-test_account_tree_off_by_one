@@ -1,0 +1,127 @@
+<tree-table>
+<ol class="fullwidth flex-table tree-table">
+    <li class="head">
+        <p>
+        <span class="account-cell"><button type="button" class="link expand-all hidden" title="Expand all accounts">Expand all</button></span>
+            <span class="num other"><a href="/off-by-one/account/Assets/?time=2022-01-01+-+2022-01-04&amp;conversion=at_value&amp;interval=day">2022-01-04</a></span>
+            <span class="num other"><a href="/off-by-one/account/Assets/?time=2022-01-01+-+2022-01-03&amp;conversion=at_value&amp;interval=day">2022-01-03</a></span>
+            <span class="num other"><a href="/off-by-one/account/Assets/?time=2022-01-01+-+2022-01-02&amp;conversion=at_value&amp;interval=day">2022-01-02</a></span>
+            <span class="num other"><a href="/off-by-one/account/Assets/?time=2022-01-01+-+2022-01-01&amp;conversion=at_value&amp;interval=day">2022-01-01</a></span>
+        </p>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-0 droptarget has-children" data-account-name="Assets">
+<span class="expander"></span>        <a href="/off-by-one/account/Assets/?conversion=at_value&amp;interval=day" class="account">Assets</a>
+</span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets/?time=2022-01-04&amp;conversion=at_value&amp;interval=day">
+                <span class="balance-children">
+                    <span class="number" title="USD">104 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets/?time=2022-01-03&amp;conversion=at_value&amp;interval=day">
+                <span class="balance-children">
+                    <span class="number" title="USD">103 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets/?time=2022-01-02&amp;conversion=at_value&amp;interval=day">
+                <span class="balance-children">
+                    <span class="number" title="USD">102 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets/?time=2022-01-01&amp;conversion=at_value&amp;interval=day">
+                <span class="balance-children">
+                    <span class="number" title="USD">101 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+        <li>
+        <p>
+        <span class="account-cell depth-1 droptarget" data-account-name="Assets:Cash">
+        <a href="/off-by-one/account/Assets:Cash/?conversion=at_value&amp;interval=day" class="account">Cash</a>
+</span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets:Cash/?time=2022-01-04&amp;conversion=at_value&amp;interval=day">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets:Cash/?time=2022-01-03&amp;conversion=at_value&amp;interval=day">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets:Cash/?time=2022-01-02&amp;conversion=at_value&amp;interval=day">
+            </a>
+        </span>
+        <span class="num other">
+            <a href="/off-by-one/account/Assets:Cash/?time=2022-01-01&amp;conversion=at_value&amp;interval=day">
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+    <li>
+        <p>
+        <span class="account-cell depth-1 droptarget" data-account-name="Assets:Commodity">
+        <a href="/off-by-one/account/Assets:Commodity/?conversion=at_value&amp;interval=day" class="account">Commodity</a>
+</span>
+        <span class="num other has-balance">
+            <a href="/off-by-one/account/Assets:Commodity/?time=2022-01-04&amp;conversion=at_value&amp;interval=day">
+                <span class="balance">
+                    <span class="number" title="USD">104 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="USD">104 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/off-by-one/account/Assets:Commodity/?time=2022-01-03&amp;conversion=at_value&amp;interval=day">
+                <span class="balance">
+                    <span class="number" title="USD">103 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="USD">103 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/off-by-one/account/Assets:Commodity/?time=2022-01-02&amp;conversion=at_value&amp;interval=day">
+                <span class="balance">
+                    <span class="number" title="USD">102 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="USD">102 USD</span>
+                </span>
+            </a>
+        </span>
+        <span class="num other has-balance">
+            <a href="/off-by-one/account/Assets:Commodity/?time=2022-01-01&amp;conversion=at_value&amp;interval=day">
+                <span class="balance">
+                    <span class="number" title="USD">101 USD</span>
+                </span>
+                <span class="balance-children">
+                    <span class="number" title="USD">101 USD</span>
+                </span>
+            </a>
+        </span>
+    </p>
+    <ol>
+    
+    </ol>
+    </li>
+
+    </ol>
+    </li>
+</ol>
+</tree-table>

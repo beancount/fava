@@ -233,7 +233,7 @@ def test_static_url() -> None:
 
 def test_load_extension_reports(app: Flask, test_client: FlaskClient) -> None:
     """Extension can register reports."""
-    with app.test_request_context("/extension-report-beancount-file/"):
+    with app.test_request_context("/extension-report/"):
         app.preprocess_request()
         assert g.ledger.extensions.reports == [
             ("PortfolioList", "Portfolio List")

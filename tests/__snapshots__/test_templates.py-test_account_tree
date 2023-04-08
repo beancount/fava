@@ -3,29 +3,17 @@
     <li class="head">
         <p>
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="Expand all accounts">Expand all</button></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-12">Dec 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-11">Nov 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-10">Oct 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-09">Sep 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-08">Aug 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-07">Jul 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-06">Jun 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-05">May 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-04">Apr 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-03">Mar 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-02">Feb 2015</a></span>
-
             <span class="num other"><a href="/long-example/account/Assets/?time=2015-01">Jan 2015</a></span>
         </p>
     </li>

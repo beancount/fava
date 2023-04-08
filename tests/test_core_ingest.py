@@ -12,7 +12,6 @@ from beancount.ingest.importer import ImporterProtocol  # type: ignore
 from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
-from fava.core import FavaLedger
 from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
@@ -21,8 +20,14 @@ from fava.helpers import FavaAPIException
 if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path
 
+    from fava.core import FavaLedger
 
-def test_ingest_file_import_info(test_data_dir: Path) -> None:
+    from .conftest import GetFavaLedger
+
+
+def test_ingest_file_import_info(
+    test_data_dir: Path, get_ledger: GetFavaLedger
+) -> None:
     class Imp(ImporterProtocol):  # type: ignore
         def __init__(self, acc: str) -> None:
             self.acc = acc
@@ -46,7 +51,7 @@ def test_ingest_file_import_info(test_data_dir: Path) -> None:
         def file_account(self, _file: Any) -> bool:
             raise ValueError("Some error reason...")
 
-    ingest_ledger = FavaLedger(str(test_data_dir / "import.beancount"))
+    ingest_ledger = get_ledger("import")
     importer = next(iter(ingest_ledger.ingest.importers.values()))
     assert importer
 
@@ -64,8 +69,10 @@ def test_ingest_file_import_info(test_data_dir: Path) -> None:
     assert "Some error reason..." in err.value.message
 
 
-def test_ingest_examplefile(test_data_dir: Path) -> None:
-    ingest_ledger = FavaLedger(str(test_data_dir / "import.beancount"))
+def test_ingest_examplefile(
+    test_data_dir: Path, get_ledger: GetFavaLedger
+) -> None:
+    ingest_ledger = get_ledger("import")
 
     entries = ingest_ledger.ingest.extract(
         str(test_data_dir / "import.csv"), "<run_path>.TestImporter"

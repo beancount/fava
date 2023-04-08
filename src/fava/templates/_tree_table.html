@@ -94,7 +94,6 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
             {% else %}
                 {% set time_filter = date_range.end_inclusive|format_date_filter %}
             {% endif %}
-
             <span class="num other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ date_range.end_inclusive|format_date }}</a></span>
         {% endfor %}
         </p>

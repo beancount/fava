@@ -12,6 +12,7 @@ from fava.util.date import Interval
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
+    from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
 
 
@@ -52,6 +53,19 @@ def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.net_worth(filtered, Interval.MONTH, "USD")
     snapshot(pretty_dumps(data))
+
+
+def test_net_worth_off_by_one(
+    snapshot: SnapshotFunc, get_ledger: GetFavaLedger
+) -> None:
+    off_by_one = get_ledger("off-by-one")
+    off_by_one_filtered = off_by_one.get_filtered()
+
+    for interval in [Interval.DAY, Interval.MONTH]:
+        data = off_by_one.charts.net_worth(
+            off_by_one_filtered, interval, "at_value"
+        )
+        snapshot(pretty_dumps(data))
 
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
