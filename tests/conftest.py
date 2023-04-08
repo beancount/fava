@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 import os
+import re
 from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
@@ -80,6 +81,7 @@ def snapshot(request: pytest.FixtureRequest) -> SnapshotFunc:
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         out = out.replace(str(datetime.date.today()), "TODAY")
+        out = re.sub(r"\d+ days ago", "X days ago", out)
         for dir_path, replacement in [
             (str(TEST_DATA_DIR), "TEST_DATA_DIR"),
         ]:

@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-import re
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -44,17 +43,13 @@ def test_account_tree(app: Flask, snapshot: SnapshotFunc) -> None:
             g.filtered, g.interval, "Assets"
         )
         snapshot(
-            re.sub(
-                r"\d+ days ago",
-                "X days ago",
-                macro(
-                    "Assets",
-                    interval_balances,
-                    interval_ends,
-                    False,
-                    ledger=g.ledger,
-                ),
-            )
+            macro(
+                "Assets",
+                interval_balances,
+                interval_ends,
+                False,
+                ledger=g.ledger,
+            ),
         )
 
 

@@ -7,8 +7,12 @@ Note:
 from __future__ import annotations
 
 import datetime
-import enum
 import re
+from dataclasses import dataclass
+from datetime import timedelta
+from enum import Enum
+from itertools import tee
+from typing import Iterable
 from typing import Iterator
 from typing import NamedTuple
 
@@ -47,7 +51,7 @@ class FiscalYearEnd(NamedTuple):
     day: int
 
 
-class Interval(enum.Enum):
+class Interval(Enum):
     """The possible intervals."""
 
     YEAR = "year"
@@ -109,29 +113,24 @@ def get_prev_interval(
 
     Args:
         date: A date.
-        intereval: An interval.
+        interval: An interval.
 
     Returns:
         The start date of the `interval` before `date`.
-
     """
-    # pylint: disable=too-many-return-statements
-    try:
-        if interval is Interval.YEAR:
-            return datetime.date(date.year, 1, 1)
-        if interval is Interval.QUARTER:
-            for i in [10, 7, 4]:
-                if date.month > i:
-                    return datetime.date(date.year, i, 1)
-            return datetime.date(date.year, 1, 1)
-        if interval is Interval.MONTH:
-            return datetime.date(date.year, date.month, 1)
-        if interval is Interval.WEEK:
-            return date - datetime.timedelta(date.weekday())
-        if interval is Interval.DAY:
-            return date
-    except (ValueError, OverflowError):
-        return datetime.date.max
+    if interval is Interval.YEAR:
+        return datetime.date(date.year, 1, 1)
+    if interval is Interval.QUARTER:
+        for i in [10, 7, 4]:
+            if date.month > i:
+                return datetime.date(date.year, i, 1)
+        return datetime.date(date.year, 1, 1)
+    if interval is Interval.MONTH:
+        return datetime.date(date.year, date.month, 1)
+    if interval is Interval.WEEK:
+        return date - timedelta(date.weekday())
+    if interval is Interval.DAY:
+        return date
     raise NotImplementedError
 
 
@@ -146,7 +145,6 @@ def get_next_interval(
 
     Returns:
         The start date of the next `interval` after `date`.
-
     """
     # pylint: disable=too-many-return-statements
     try:
@@ -162,9 +160,9 @@ def get_next_interval(
             year = date.year + (date.month + 1 > 12)
             return datetime.date(year, month, 1)
         if interval is Interval.WEEK:
-            return date + datetime.timedelta(7 - date.weekday())
+            return date + timedelta(7 - date.weekday())
         if interval is Interval.DAY:
-            return date + datetime.timedelta(1)
+            return date + timedelta(1)
     except (ValueError, OverflowError):
         return datetime.date.max
     raise NotImplementedError
@@ -173,21 +171,51 @@ def get_next_interval(
 def interval_ends(
     first: datetime.date, last: datetime.date, interval: Interval
 ) -> Iterator[datetime.date]:
-    """List intervals.
-
-    Args:
-        first: A date.
-        last: A date.
-        interval: An interval.
-
-    Yields:
-        Dates corresponding to the starts/ends of intervals between `first` and
-        `last`.
-    """
+    """Get interval ends."""
     yield get_prev_interval(first, interval)
     while first < last:
         first = get_next_interval(first, interval)
         yield first
+
+
+ONE_DAY = timedelta(days=1)
+
+
+@dataclass
+class DateRange:
+    """A range of dates, usually matching an interval."""
+
+    #: The inclusive start date of this range of dates.
+    begin: datetime.date
+    #: The exclusive end date of this range of dates.
+    end: datetime.date
+
+    @property
+    def end_inclusive(self) -> datetime.date:
+        """The last day of this interval."""
+        return self.end - ONE_DAY
+
+
+def dateranges(
+    begin: datetime.date, end: datetime.date, interval: Interval
+) -> Iterable[DateRange]:
+    """Get date ranges for the given begin and end date.
+
+    Args:
+        begin: The begin date - the first interval date range will
+               include this date
+        end: The end date - the last interval will end on or after
+             date
+        interval: The type of interval to generate ranges for.
+
+    Yields:
+        Date ranges for all intervals of the given in the
+    """
+    ends = interval_ends(begin, end, interval)
+    left, right = tee(ends)
+    next(right, None)
+    for interval_begin, interval_end in zip(left, right):
+        yield DateRange(interval_begin, interval_end)
 
 
 def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
@@ -245,12 +273,12 @@ def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
             month = (today.month + plusminus * mod - 1) % 12 + 1
             string = string.replace(complete_match, f"{year}-{month:02}")
         if interval == "week":
-            delta = datetime.timedelta(plusminus * mod * 7)
+            delta = timedelta(plusminus * mod * 7)
             string = string.replace(
                 complete_match, (today + delta).strftime("%Y-W%W")
             )
         if interval == "day":
-            delta = datetime.timedelta(plusminus * mod)
+            delta = timedelta(plusminus * mod)
             string = string.replace(
                 complete_match, (today + delta).isoformat()
             )
@@ -389,7 +417,7 @@ def get_fiscal_period(
     else:
         start_date = datetime.date(
             year=year - 1, month=fye.month, day=fye.day
-        ) + datetime.timedelta(days=1)
+        ) + timedelta(days=1)
         # Special case 02-28 because of leap years
         if fye == (2, 28):
             start_date = start_date.replace(month=3, day=1)
@@ -426,7 +454,7 @@ def days_in_daterange(
 
     """
     for diff in range((end_date - start_date).days):
-        yield start_date + datetime.timedelta(diff)
+        yield start_date + timedelta(diff)
 
 
 def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:

@@ -18,8 +18,8 @@
   {% set accumulate = subreport == 'balances' %}
   {% set interval_balances, dates = ledger.interval_balances(g.filtered, g.interval, account_name, accumulate) %}
 
-  {% for begin_date, end_date in dates[:3] %}
-    {% do chart_list.append(chart_api.hierarchy(account_name, begin_date, end_date, label=begin_date|format_date)) %}
+  {% for date_range in dates[:3] %}
+    {% do chart_list.append(chart_api.hierarchy(account_name, date_range.begin, date_range.end, label=date_range.begin|format_date)) %}
   {% endfor %}
 {% endif %}
 

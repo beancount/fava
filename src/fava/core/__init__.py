@@ -1,8 +1,8 @@
 """This module provides the data required by Fava's reports."""
 from __future__ import annotations
 
-import datetime
 from datetime import date
+from datetime import timedelta
 from functools import lru_cache
 from os.path import basename
 from os.path import dirname
@@ -52,9 +52,10 @@ from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
-from fava.util import pairwise
+from fava.util import listify
+from fava.util.date import DateRange
+from fava.util.date import dateranges
 from fava.util.date import Interval
-from fava.util.date import interval_ends
 
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
@@ -149,7 +150,7 @@ class FilteredLedger:
             self.entries, (Transaction, Price)
         )
         if self._date_last:
-            self._date_last = self._date_last + datetime.timedelta(1)
+            self._date_last = self._date_last + timedelta(1)
 
         if self.filters.time:
             self._date_first = self.filters.time.begin_date
@@ -184,11 +185,12 @@ class FilteredLedger:
         tree.cap(self.ledger.options, self.ledger.fava_options.unrealized)
         return tree
 
-    def interval_ends(self, interval: Interval) -> Iterable[date]:
-        """Yield dates corresponding to interval boundaries."""
+    @listify
+    def interval_ranges(self, interval: Interval) -> Iterable[DateRange]:
+        """Yield date ranges corresponding to interval boundaries."""
         if not self._date_first or not self._date_last:
             return []
-        return interval_ends(self._date_first, self._date_last, interval)
+        return dateranges(self._date_first, self._date_last, interval)
 
     def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""
@@ -411,7 +413,7 @@ class FavaLedger:
         interval: Interval,
         account_name: str,
         accumulate: bool = False,
-    ) -> tuple[list[Tree], list[tuple[date, date]]]:
+    ) -> tuple[list[Tree], list[DateRange]]:
         """Balances by interval.
 
         Arguments:
@@ -430,23 +432,20 @@ class FavaLedger:
             if account.startswith(account_name)
         ]
 
-        interval_tuples = list(
-            reversed(list(pairwise(filtered.interval_ends(interval))))
-        )
-
+        interval_ranges = list(reversed(filtered.interval_ranges(interval)))
         interval_balances = [
             Tree(
                 iter_entry_dates(
                     filtered.entries,
-                    date.min if accumulate else begin_date,
-                    end_date,
+                    date.min if accumulate else date_range.begin,
+                    date_range.end,
                 ),
                 min_accounts,
             )
-            for begin_date, end_date in interval_tuples
+            for date_range in interval_ranges
         ]
 
-        return interval_balances, interval_tuples
+        return interval_balances, interval_ranges
 
     def account_journal(
         self,

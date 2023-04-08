@@ -88,14 +88,14 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
     <li class="head">
         <p>
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
-        {% for begin_date, end_date in dates %}
+        {% for date_range in dates %}
             {% if accumulate %}
-                {% set time_filter = dates[-1][0]|format_date_filter + ' - ' + begin_date|format_date_filter %}
+                {% set time_filter = dates[-1].begin|format_date_filter + ' - ' + date_range.end_inclusive|format_date_filter %}
             {% else %}
-                {% set time_filter = begin_date|format_date_filter %}
+                {% set time_filter = date_range.end_inclusive|format_date_filter %}
             {% endif %}
 
-            <span class="num other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ begin_date|format_date }}</a></span>
+            <span class="num other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ date_range.end_inclusive|format_date }}</a></span>
         {% endfor %}
         </p>
     </li>
@@ -107,15 +107,15 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
         " data-account-name="{{ account.name }}">
             {% if account.children %}<span class="expander"></span>{% endif %}
         {{ account_macros.account_name(ledger, account.name, last_segment=True) }}</span>
-    {% for begin_date, end_date in dates %}
-        {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
-        {% set budget = ledger.budgets.calculate(account.name, begin_date, end_date) %}
-        {% set budget_children = ledger.budgets.calculate_children(account.name, begin_date, end_date) %}
+    {% for date_range in dates %}
+        {% set begin_date = dates[-1].begin if accumulate else date_range.begin %}
+        {% set budget = ledger.budgets.calculate(account.name, begin_date, date_range.end) %}
+        {% set budget_children = ledger.budgets.calculate_children(account.name, begin_date, date_range.end) %}
         {% set current_account = interval_balances[loop.index0].get(account.name) %}
-        {% set balance = current_account.balance|cost_or_value(end_date) %}
-        {% set balance_children = current_account.balance_children|cost_or_value(end_date) %}
+        {% set balance = current_account.balance|cost_or_value(date_range.end_inclusive) %}
+        {% set balance_children = current_account.balance_children|cost_or_value(date_range.end_inclusive) %}
         <span class="num other{{ ' has-balance' if (budget or not balance.is_empty()) else '' }}">
-            <a href="{{ url_for('account', name=account.name, time=begin_date|format_date_filter) }}">
+            <a href="{{ url_for('account', name=account.name, time=date_range.end_inclusive|format_date_filter) }}">
             {% for amt in balance.amounts() %}
                 <span class="balance">
                     {{ render_budget(budget, amt.currency, amt.number) -}}

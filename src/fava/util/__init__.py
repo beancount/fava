@@ -5,13 +5,11 @@ import logging
 import re
 import time
 from functools import wraps
-from itertools import tee
 from os.path import basename
 from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Iterable
-from typing import Iterator
 from typing import TYPE_CHECKING
 from typing import TypeVar
 from unicodedata import normalize
@@ -72,16 +70,6 @@ def timefunc(
         return result
 
     return _wrapper
-
-
-def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
-    """Iterate over consecutive pairs of the given iterable.
-
-    s -> (s0,s1), (s1,s2), (s2, s3), ...
-    """
-    left, right = tee(iterable)
-    next(right, None)
-    return zip(left, right)
 
 
 def next_key(basekey: str, keys: dict[str, Any]) -> str:

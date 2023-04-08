@@ -4,7 +4,6 @@ from __future__ import annotations
 import collections
 from dataclasses import dataclass
 from typing import Dict
-from typing import Generator
 from typing import Iterable
 from typing import TYPE_CHECKING
 
@@ -102,7 +101,7 @@ class Tree(Dict[str, TreeNode]):
             for name, balance in sorted(account_balances.items()):
                 self.insert(name, balance)
 
-    def ancestors(self, name: str) -> Generator[TreeNode, None, None]:
+    def ancestors(self, name: str) -> Iterable[TreeNode]:
         """Ancestors of an account.
 
         Args:
