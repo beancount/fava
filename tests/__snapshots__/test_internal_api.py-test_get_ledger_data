@@ -935,8 +935,8 @@
    "/example/"
   ],
   [
-   "Extension Report Beancount File",
-   "/extension-report-beancount-file/"
+   "Extension Report",
+   "/extension-report/"
   ],
   [
    "import",
@@ -949,6 +949,10 @@
   [
    "errors",
    "/errors/"
+  ],
+  [
+   "off-by-one",
+   "/off-by-one/"
   ]
  ],
  "payees": [

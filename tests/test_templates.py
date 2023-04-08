@@ -53,6 +53,26 @@ def test_account_tree(app: Flask, snapshot: SnapshotFunc) -> None:
         )
 
 
+def test_account_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
+    with app.test_request_context(
+        "/off-by-one/?interval=day&conversion=at_value"
+    ):
+        app.preprocess_request()
+        macro = get_template_attribute("_tree_table.html", "account_tree")
+        interval_balances, interval_ends = g.ledger.interval_balances(
+            g.filtered, g.interval, "Assets", True
+        )
+        snapshot(
+            macro(
+                "Assets",
+                interval_balances,
+                interval_ends,
+                True,
+                ledger=g.ledger,
+            ),
+        )
+
+
 def test_render_currency(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context(""):
         macro = get_template_attribute(

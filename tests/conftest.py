@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring
+"""Test fixtures."""
 # pylint: disable=redefined-outer-name
 from __future__ import annotations
 
@@ -20,17 +20,19 @@ from fava.application import app as fava_app
 from fava.beans.abc import Custom
 from fava.beans.abc import Directive
 from fava.beans.load import load_string
+from fava.core import FavaLedger
 from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Literal
+    from typing import TypeAlias
     from typing import TypeGuard
 
     from flask.app import Flask
     from flask.testing import FlaskClient
 
     from fava.beans.types import LoaderResult
-    from fava.core import FavaLedger
 
 TEST_DATA_DIR = Path(__file__).parent / "data"
 
@@ -45,6 +47,7 @@ fava_app.config["BEANCOUNT_FILES"] = [
         "import.beancount",
         "query-example.beancount",
         "errors.beancount",
+        "off-by-one.beancount",
     ]
 ]
 _load_file()
@@ -63,6 +66,7 @@ SnapshotFunc = Callable[[Any], None]
 
 @pytest.fixture()
 def snapshot(request: pytest.FixtureRequest) -> SnapshotFunc:
+    """Create a snaphot for some given data."""
     fspath = getattr(request, "fspath")  # noqa: B009
     file_path = Path(getattr(request, "path", fspath))
     fn_name = request.function.__name__
@@ -104,16 +108,19 @@ def snapshot(request: pytest.FixtureRequest) -> SnapshotFunc:
 
 @pytest.fixture()
 def test_data_dir() -> Path:
+    """Get the path to the test data files."""
     return TEST_DATA_DIR
 
 
 @pytest.fixture()
 def app() -> Flask:
+    """Get the Fava Flask app."""
     return fava_app
 
 
 @pytest.fixture()
 def test_client() -> FlaskClient:
+    """Get the test client for the Fava Flask app."""
     return fava_app.test_client()
 
 
@@ -131,7 +138,7 @@ def load_doc_entries(load_doc: LoaderResult) -> list[Directive]:
     return entries
 
 
-def is_custom_entries_list(
+def _is_custom_entries_list(
     entries: list[Directive],
 ) -> TypeGuard[list[Custom]]:
     return all(isinstance(e, Custom) for e in entries)
@@ -140,26 +147,51 @@ def is_custom_entries_list(
 @pytest.fixture()
 def load_doc_custom_entries(load_doc_entries: list[Directive]) -> list[Custom]:
     """Load the docstring as Beancount custom entries."""
-    assert is_custom_entries_list(load_doc_entries)
+    assert _is_custom_entries_list(load_doc_entries)
     return load_doc_entries
 
 
 @pytest.fixture()
 def budgets_doc(load_doc_custom_entries: list[Custom]) -> BudgetDict:
+    """Load the budgets from the custom entries in the docstring."""
     budgets, _ = parse_budgets(load_doc_custom_entries)
     return budgets
 
 
-@pytest.fixture()
-def small_example_ledger() -> FavaLedger:
-    return fava_app.config["LEDGERS"]["example"]  # type: ignore
+if TYPE_CHECKING:
+    #: Slugs of the ledgers that are loaded for the test cases.
+    LedgerSlug: TypeAlias = Literal[
+        "example",
+        "query-example",
+        "long-example",
+        "extension-report",
+        "import",
+        "off-by-one",
+    ]
+    GetFavaLedger: TypeAlias = Callable[[LedgerSlug], FavaLedger]
 
 
 @pytest.fixture()
-def query_ledger() -> FavaLedger:
-    return fava_app.config["LEDGERS"]["query-example"]  # type: ignore
+def get_ledger() -> GetFavaLedger:
+    """Getter for one of the loaded ledgers."""
+
+    def _get_ledger(name: LedgerSlug) -> FavaLedger:
+        loaded_ledgers = fava_app.config["LEDGERS"]
+        assert name in loaded_ledgers, loaded_ledgers.keys()
+        ledger = fava_app.config["LEDGERS"][name]
+        assert isinstance(ledger, FavaLedger)
+        return ledger
+
+    return _get_ledger
 
 
 @pytest.fixture()
-def example_ledger() -> FavaLedger:
-    return fava_app.config["LEDGERS"]["long-example"]  # type: ignore
+def small_example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
+    """Get the small example ledger."""
+    return get_ledger("example")
+
+
+@pytest.fixture()
+def example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
+    """Get the long example ledger."""
+    return get_ledger("long-example")

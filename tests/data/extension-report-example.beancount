@@ -5,4 +5,4 @@
         ('account_open_metadata_pattern', ('number', '882882'))
     ]"
 include "long-example.beancount"
-option "title" "Extension Report Beancount File"
+option "title" "Extension Report"

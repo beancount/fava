@@ -3,17 +3,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from fava.core import FavaLedger
-
 if TYPE_CHECKING:  # pragma: no cover
-    from pathlib import Path
+    from .conftest import GetFavaLedger
 
 
-def test_report_page_globals(test_data_dir: Path) -> None:
+def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
     """Extensions can register reports."""
-    extension_report_ledger = FavaLedger(
-        str(test_data_dir / "extension-report-example.beancount")
-    )
+    extension_report_ledger = get_ledger("extension-report")
     result = extension_report_ledger.extensions.reports
     assert result == [("PortfolioList", "Portfolio List")]
 

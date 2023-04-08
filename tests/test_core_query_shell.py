@@ -10,12 +10,13 @@ from fava.beans.funcs import run_query
 from fava.helpers import FavaAPIException
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
-
+    from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
 
 
-def test_query(snapshot: SnapshotFunc, query_ledger: FavaLedger) -> None:
+def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
+    query_ledger = get_ledger("query-example")
+
     def run(query_string: str) -> Any:
         return query_ledger.query_shell.execute_query(
             query_ledger.all_entries, query_string
@@ -58,8 +59,9 @@ def test_query(snapshot: SnapshotFunc, query_ledger: FavaLedger) -> None:
 
 
 def test_query_to_file(
-    snapshot: SnapshotFunc, query_ledger: FavaLedger
+    snapshot: SnapshotFunc, get_ledger: GetFavaLedger
 ) -> None:
+    query_ledger = get_ledger("query-example")
     entries = query_ledger.all_entries
     query_shell = query_ledger.query_shell
     name, data = query_shell.query_to_file(entries, "run custom_query", "csv")

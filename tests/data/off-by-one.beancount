@@ -1,0 +1,19 @@
+option "title" "off-by-one"
+option "operating_currency" "USD"
+
+2022-01-01 open Assets:Commodity COM
+2022-01-01 open Assets:Cash USD
+2022-01-01 open Income:All USD
+
+2022-01-01 * "Transfer"
+  Assets:Cash                                           100 USD
+  Income:All                                           -100 USD
+
+2022-01-01 * "Buy"
+  Assets:Cash                                          -100 USD
+  Assets:Commodity                                        1 COM {{100 USD}}
+
+2022-01-01 price COM                                    101 USD
+2022-01-02 price COM                                    102 USD
+2022-01-03 price COM                                    103 USD
+2022-01-04 price COM                                    104 USD
