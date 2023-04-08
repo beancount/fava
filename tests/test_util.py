@@ -9,7 +9,6 @@ from werkzeug.wrappers import Response
 
 from fava.util import listify
 from fava.util import next_key
-from fava.util import pairwise
 from fava.util import send_file_inline
 from fava.util import simple_wsgi
 from fava.util import slugify
@@ -26,11 +25,6 @@ def test_listify() -> None:
         yield from [1, 2, 3]
 
     assert fun() == [1, 2, 3]
-
-
-def test_pairwise() -> None:
-    assert list(pairwise([1, 2, 3])) == [(1, 2), (2, 3)]
-    assert not list(pairwise([]))
 
 
 def test_simple_wsgi() -> None:

@@ -34,7 +34,6 @@ from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
 from fava.util import listify
-from fava.util import pairwise
 
 with suppress(ImportError):
     from flask.json.provider import JSONProvider
@@ -151,7 +150,7 @@ class ChartModule(FavaModule):
         return tree.get(account_name).serialise(
             conversion,
             self.ledger.prices,
-            end - ONE_DAY if end else None,
+            end - ONE_DAY if end is not None else None,
         )
 
     @listify
@@ -176,11 +175,13 @@ class ChartModule(FavaModule):
         prices = self.ledger.prices
 
         # limit the bar charts to 100 intervals
-        intervals = list(pairwise(filtered.interval_ends(interval)))[-100:]
+        intervals = filtered.interval_ranges(interval)[-100:]
 
-        for begin, end in intervals:
+        for date_range in intervals:
             inventory = CounterInventory()
-            entries = iter_entry_dates(filtered.entries, begin, end)
+            entries = iter_entry_dates(
+                filtered.entries, date_range.begin, date_range.end
+            )
             account_inventories: dict[str, CounterInventory] = defaultdict(
                 CounterInventory
             )
@@ -192,19 +193,21 @@ class ChartModule(FavaModule):
                         )
                         inventory.add_position(posting)
             balance = cost_or_value(
-                inventory, conversion, prices, end - ONE_DAY
+                inventory, conversion, prices, date_range.end_inclusive
             )
             account_balances = {
                 account: cost_or_value(
                     acct_value,
                     conversion,
                     prices,
-                    end - ONE_DAY,
+                    date_range.end_inclusive,
                 )
                 for account, acct_value in account_inventories.items()
             }
             budgets = (
-                self.ledger.budgets.calculate_children(accounts, begin, end)
+                self.ledger.budgets.calculate_children(
+                    accounts, date_range.begin, date_range.end
+                )
                 if isinstance(accounts, str)
                 else {}
             )
@@ -216,7 +219,7 @@ class ChartModule(FavaModule):
                 account_balances = {k: -v for k, v in account_balances.items()}
 
             yield DateAndBalanceWithBudget(
-                begin,
+                date_range.end_inclusive,
                 balance,
                 account_balances,
                 budgets,
@@ -300,16 +303,16 @@ class ChartModule(FavaModule):
         inventory = CounterInventory()
 
         prices = self.ledger.prices
-        for end_date in filtered.interval_ends(interval):
-            while txn and txn.date < end_date:
+        for date_range in filtered.interval_ranges(interval):
+            while txn and txn.date < date_range.end:
                 for posting in txn.postings:
                     if posting.account.startswith(types):
                         inventory.add_position(posting)
                 txn = next(transactions, None)
             yield DateAndBalance(
-                end_date,
+                date_range.end_inclusive,
                 cost_or_value(
-                    inventory, conversion, prices, end_date - ONE_DAY
+                    inventory, conversion, prices, date_range.end_inclusive
                 ),
             )
 

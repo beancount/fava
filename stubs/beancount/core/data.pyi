@@ -1,7 +1,7 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
 import datetime
 import enum
-from collections.abc import Generator
+from collections.abc import Iterable
 from decimal import Decimal
 from typing import Any
 from typing import NamedTuple
@@ -140,4 +140,4 @@ def iter_entry_dates(
     entries: list[abc.Directive],
     date_begin: datetime.date,
     date_end: datetime.date,
-) -> Generator[abc.Directive, None, None]: ...
+) -> Iterable[abc.Directive]: ...
