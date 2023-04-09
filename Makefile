@@ -41,8 +41,7 @@ lint: frontend/node_modules
 	tox -e lint
 
 .PHONY: test
-test:
-	cd frontend; npm run build
+test: all
 	cd frontend; npm run test
 	tox -e py
 
