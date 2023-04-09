@@ -52,8 +52,14 @@ update-snapshots:
 	-SNAPSHOT_UPDATE=1 tox -e py
 	tox -e py
 
-.PHONY: update-deps
-update-deps:
+# Update the constraints file for Python dependencies
+.PHONY: update-constraints
+update-constraints:
+	pip-compile --quiet --all-extras --strip-extras --upgrade --output-file constraints.txt pyproject.toml
+
+# Update the frontend dependencies.
+.PHONY: update-frontend-deps
+update-frontend-deps:
 	-cd frontend; npm outdated
 	cd frontend; npm update
 	cd frontend; npm run sync-pre-commit
@@ -62,6 +68,9 @@ update-deps:
 .PHONY: update-precommit
 update-precommit:
 	pre-commit autoupdate
+
+.PHONY: update-deps
+update-deps: update-constraints update-frontend-deps update-precommit
 
 .PHONY: docs
 docs:
