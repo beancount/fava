@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import re
+from abc import ABC
+from abc import abstractmethod
 from typing import Any
 from typing import Callable
 from typing import Iterable
@@ -13,11 +15,10 @@ from beancount.ops.summarize import clamp_opt  # type: ignore
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
+from fava.util.date import DateRange
 from fava.util.date import parse_date
 
 if TYPE_CHECKING:  # pragma: no cover
-    from datetime import date
-
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.core.fava_options import FavaOptions
@@ -286,78 +287,34 @@ class FilterSyntaxParser:
         p[0] = _key
 
 
-class EntryFilter:
+class EntryFilter(ABC):
     """Filters a list of entries."""
 
-    def __init__(
-        self, options: BeancountOptions, fava_options: FavaOptions
-    ) -> None:
-        self.options = options
-        self.fava_options = fava_options
-        self.value: str | None = None
-
-    def set(self, value: str | None) -> bool:
-        """Set the filter.
-
-        Subclasses should check for validity of the value in this method.
-        """
-        if value == self.value:
-            return False
-        self.value = value
-        return True
-
-    def _include_entry(self, entry: Directive) -> bool:
-        raise NotImplementedError
-
-    def _filter(self, entries: list[Directive]) -> list[Directive]:
-        return [entry for entry in entries if self._include_entry(entry)]
-
+    @abstractmethod
     def apply(self, entries: list[Directive]) -> list[Directive]:
-        """Apply filter.
-
-        Args:
-            entries: a list of entries.
-            options: an options_map.
-
-        Returns:
-            A list of filtered entries.
-        """
-        if self.value:
-            return self._filter(entries)
-        return entries
-
-    def __bool__(self) -> bool:
-        return bool(self.value)
+        """Filter a list of directives."""
 
 
-class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
+class TimeFilter(EntryFilter):
     """Filter by dates."""
 
+    __slots__ = ("date_range", "_options")
+
     def __init__(
-        self, options: BeancountOptions, fava_options: FavaOptions
+        self,
+        options: BeancountOptions,
+        fava_options: FavaOptions,
+        value: str,
     ) -> None:
-        super().__init__(options, fava_options)
-        self.begin_date: date | None = None
-        self.end_date: date | None = None
-
-    def set(self, value: str | None) -> bool:
-        if value == self.value:
-            return False
-        self.value = value
-        if not self.value:
-            return True
-
-        self.begin_date, self.end_date = parse_date(
-            self.value, self.fava_options.fiscal_year_end
-        )
-        if not self.begin_date:
-            self.value = None
+        self._options = options
+        begin, end = parse_date(value, fava_options.fiscal_year_end)
+        if not begin or not end:
             raise FilterError("time", f"Failed to parse date: {value}")
-        return True
+        self.date_range = DateRange(begin, end)
 
-    def _filter(self, entries: list[Directive]) -> list[Directive]:
+    def apply(self, entries: list[Directive]) -> list[Directive]:
         entries, _ = clamp_opt(
-            entries, self.begin_date, self.end_date, self.options
+            entries, self.date_range.begin, self.date_range.end, self._options
         )
         return entries
 
@@ -374,60 +331,46 @@ PARSE = ply.yacc.yacc(
 class AdvancedFilter(EntryFilter):
     """Filter by tags and links and keys."""
 
-    def __init__(
-        self, options: BeancountOptions, fava_options: FavaOptions
-    ) -> None:
-        super().__init__(options, fava_options)
-        self._include = None
+    __slots__ = ("_include",)
 
-    def set(self, value: str | None) -> bool:
-        if value == self.value:
-            return False
-        self.value = value
-        if value and value.strip():
-            try:
-                tokens = LEXER.lex(value.strip())
-                self._include = PARSE(
-                    lexer="NONE",
-                    tokenfunc=lambda toks=tokens: next(toks, None),
-                )
-            except FilterError as exception:
-                exception.message = exception.message + value
-                self.value = None
-                raise
-        else:
-            self._include = None
-        return True
+    def __init__(self, value: str) -> None:
+        try:
+            tokens = LEXER.lex(value)
+            self._include = PARSE(
+                lexer="NONE",
+                tokenfunc=lambda toks=tokens: next(toks, None),
+            )
+        except FilterError as exception:
+            exception.message = exception.message + value
+            raise
 
-    def _include_entry(self, entry: Directive) -> bool:
-        if self._include:
-            return self._include(entry)
-        return True
+    def apply(self, entries: list[Directive]) -> list[Directive]:
+        _include = self._include
+        return [entry for entry in entries if _include(entry)]
 
 
 class AccountFilter(EntryFilter):
     """Filter by account.
 
-    The filter string can either a regular expression or a parent account.
+    The filter string can either be a regular expression or a parent account.
     """
 
-    def __init__(
-        self, options: BeancountOptions, fava_options: FavaOptions
-    ) -> None:
-        super().__init__(options, fava_options)
-        self.match: Match | None = None
+    __slots__ = ("_value", "_match")
 
-    def set(self, value: str | None) -> bool:
-        if value == self.value:
-            return False
-        self.value = value
-        self.match = Match(value or "")
-        return True
+    def __init__(self, value: str) -> None:
+        self._value = value
+        self._match = Match(value)
 
-    def _include_entry(self, entry: Directive) -> bool:
-        if self.value is None or self.match is None:
-            return False
-        return any(
-            account.has_component(name, self.value) or self.match(name)
-            for name in get_entry_accounts(entry)
-        )
+    def apply(self, entries: list[Directive]) -> list[Directive]:
+        value = self._value
+        if not value:
+            return entries
+        match = self._match
+        return [
+            entry
+            for entry in entries
+            if any(
+                account.has_component(name, value) or match(name)
+                for name in get_entry_accounts(entry)
+            )
+        ]

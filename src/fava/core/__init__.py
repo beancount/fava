@@ -15,7 +15,6 @@ from typing import TypeVar
 
 from beancount.core import realization
 from beancount.core.data import iter_entry_dates
-from beancount.core.getters import get_min_max_dates
 from beancount.core.inventory import Inventory
 from beancount.loader import _load  # type: ignore
 from beancount.loader import load_file
@@ -65,34 +64,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.types import BeancountOptions
 
 
-class Filters:
-    """The possible entry filters."""
-
-    __slots__ = ("account", "filter", "time")
-
-    def __init__(
-        self,
-        options: BeancountOptions,
-        fava_options: FavaOptions,
-        account: str | None = None,
-        filter: str | None = None,  # noqa: A002
-        time: str | None = None,
-    ) -> None:
-        self.account = AccountFilter(options, fava_options)
-        self.filter = AdvancedFilter(options, fava_options)
-        self.time = TimeFilter(options, fava_options)
-        self.account.set(account)
-        self.filter.set(filter)
-        self.time.set(time)
-
-    def apply(self, entries: list[Directive]) -> list[Directive]:
-        """Apply the filters to the entries."""
-        entries = self.account.apply(entries)
-        entries = self.filter.apply(entries)
-        entries = self.time.apply(entries)
-        return entries
-
-
 MODULES = [
     "accounts",
     "attributes",
@@ -119,13 +90,13 @@ def _cache(func: Callable[..., T]) -> T:
 class FilteredLedger:
     """Filtered Beancount ledger."""
 
-    __slots__ = [
+    __slots__ = (
         "ledger",
         "entries",
-        "filters",
+        "_date_range",
         "_date_first",
         "_date_last",
-    ]
+    )
     _date_first: date | None
     _date_last: date | None
 
@@ -137,24 +108,34 @@ class FilteredLedger:
         time: str | None = None,
     ):
         self.ledger = ledger
-        self.filters = Filters(
-            ledger.options,
-            ledger.fava_options,
-            account=account,
-            filter=filter,
-            time=time,
-        )
-        self.entries = self.filters.apply(ledger.all_entries)
+        self._date_range: DateRange | None = None
 
-        self._date_first, self._date_last = get_min_max_dates(
-            self.entries, (Transaction, Price)
-        )
-        if self._date_last:
-            self._date_last = self._date_last + timedelta(1)
+        entries = ledger.all_entries
+        if account:
+            entries = AccountFilter(account).apply(entries)
+        if filter and filter.strip():
+            entries = AdvancedFilter(filter.strip()).apply(entries)
+        if time:
+            time_filter = TimeFilter(ledger.options, ledger.fava_options, time)
+            entries = time_filter.apply(entries)
+            self._date_range = time_filter.date_range
+        self.entries = entries
 
-        if self.filters.time:
-            self._date_first = self.filters.time.begin_date
-            self._date_last = self.filters.time.end_date
+        if self._date_range:
+            self._date_first = self._date_range.begin
+            self._date_last = self._date_range.end
+            return
+
+        self._date_first = None
+        self._date_last = None
+        for entry in self.entries:
+            if isinstance(entry, (Transaction, Price)):
+                self._date_first = entry.date
+                break
+        for entry in reversed(self.entries):
+            if isinstance(entry, (Transaction, Price)):
+                self._date_last = entry.date + timedelta(1)
+                break
 
     @property
     @_cache
@@ -167,8 +148,9 @@ class FilteredLedger:
     @property
     def end_date(self) -> date | None:
         """The date to use for prices."""
-        if self.filters.time:
-            return self.filters.time.end_date
+        date_range = self._date_range
+        if date_range:
+            return date_range.end_inclusive
         return None
 
     @property
@@ -198,17 +180,12 @@ class FilteredLedger:
         if all_prices is None:
             return []
 
-        if (
-            self.filters.time
-            and self.filters.time.begin_date is not None
-            and self.filters.time.end_date is not None
-        ):
+        date_range = self._date_range
+        if date_range:
             return [
-                (date_, price)
-                for date_, price in all_prices
-                if self.filters.time.begin_date
-                <= date_
-                < self.filters.time.end_date
+                price_point
+                for price_point in all_prices
+                if date_range.begin <= price_point[0] < date_range.end
             ]
         return all_prices
 
@@ -222,9 +199,10 @@ class FilteredLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        if self.filters.time and self._date_last is not None:
+        date_range = self._date_range
+        if date_range:
             return (
-                self.ledger.accounts[account_name].close_date < self._date_last
+                self.ledger.accounts[account_name].close_date < date_range.end
             )
         return self.ledger.accounts[account_name].close_date != date.max
 

@@ -5,11 +5,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 from beancount.core.account import has_component
-from beancount.parser.options import OPTIONS_DEFAULTS
 
 from fava.beans import create
 from fava.beans.account import get_entry_accounts
-from fava.core.fava_options import FavaOptions
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterError
@@ -88,12 +86,11 @@ def test_lexer_parentheses() -> None:
 
 
 def test_filterexception() -> None:
-    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
     with pytest.raises(FilterError, match='Illegal character """ in filter'):
-        filter_.set('who:"fff')
+        AdvancedFilter('who:"fff')
 
     with pytest.raises(FilterError, match="Failed to parse filter"):
-        filter_.set('any(who:"Martin"')
+        AdvancedFilter('any(who:"Martin"')
 
 
 @pytest.mark.parametrize(
@@ -127,15 +124,13 @@ def test_filterexception() -> None:
 def test_advanced_filter(
     example_ledger: FavaLedger, string: str, number: int
 ) -> None:
-    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
-    filter_.set(string)
+    filter_ = AdvancedFilter(string)
     filtered_entries = filter_.apply(example_ledger.all_entries)
     assert len(filtered_entries) == number
 
 
 def test_null_meta_posting() -> None:
-    filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
-    filter_.set('any(some_meta:"1")')
+    filter_ = AdvancedFilter('any(some_meta:"1")')
 
     txn = create.transaction(
         {},
@@ -152,11 +147,8 @@ def test_null_meta_posting() -> None:
 
 
 def test_account_filter(example_ledger: FavaLedger) -> None:
-    account_filter = AccountFilter(
-        example_ledger.options, example_ledger.fava_options
-    )
+    account_filter = AccountFilter("Assets")
 
-    account_filter.set("Assets")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 541
 
@@ -165,29 +157,30 @@ def test_account_filter(example_ledger: FavaLedger) -> None:
             has_component(a, "Assets") for a in get_entry_accounts(entry)
         )
 
-    account_filter.set(".*US:State")
+    account_filter = AccountFilter(".*US:State")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 67
 
 
 def test_time_filter(example_ledger: FavaLedger) -> None:
     time_filter = TimeFilter(
-        example_ledger.options, example_ledger.fava_options
+        example_ledger.options, example_ledger.fava_options, "2017"
     )
 
-    time_filter.set("2017")
-    assert time_filter.begin_date == datetime.date(2017, 1, 1)
-    assert time_filter.end_date == datetime.date(2018, 1, 1)
+    date_range = time_filter.date_range
+    assert date_range
+    assert date_range.begin == datetime.date(2017, 1, 1)
+    assert date_range.end == datetime.date(2018, 1, 1)
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 83
 
-    time_filter.set("1000")
+    time_filter = TimeFilter(
+        example_ledger.options, example_ledger.fava_options, "1000"
+    )
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert not filtered_entries
 
-    time_filter.set(None)
-    filtered_entries = time_filter.apply(example_ledger.all_entries)
-    assert len(filtered_entries) == len(example_ledger.all_entries)
-
     with pytest.raises(FilterError):
-        time_filter.set("no_date")
+        TimeFilter(
+            example_ledger.options, example_ledger.fava_options, "no_date"
+        )
