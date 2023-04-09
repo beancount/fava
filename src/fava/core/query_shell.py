@@ -43,8 +43,6 @@ except ImportError:
 class QueryShell(BQLShell, FavaModule):  # type: ignore
     """A light wrapper around Beancount's shell."""
 
-    # pylint: disable=too-many-instance-attributes
-
     def __init__(self, ledger: FavaLedger):
         self.buffer = io.StringIO()
         BQLShell.__init__(self, True, None, self.buffer)

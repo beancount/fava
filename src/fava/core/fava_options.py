@@ -49,8 +49,6 @@ class InsertEntryOption(NamedTuple):
 class FavaOptions:
     """Options for Fava that can be set in the Beancount file."""
 
-    # pylint: disable=too-many-instance-attributes
-
     account_journal_include_children: bool = True
     auto_reload: bool = False
     collapse_pattern: list[Pattern[str]] = field(default_factory=list)

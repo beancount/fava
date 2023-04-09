@@ -59,7 +59,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
         account = importer.file_account(file)
         date = importer.file_date(file)
         name = importer.file_name(file)
-    except Exception as err:  # pylint: disable=broad-except
+    except Exception as err:  # noqa: BLE001
         raise FavaAPIError(f"Error calling importer method: {err}") from err
 
     return FileImportInfo(
@@ -105,7 +105,7 @@ class IngestModule(FavaModule):
 
         try:
             mod = run_path(module_path)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:  # noqa: BLE001
             message = "".join(traceback.format_exception(*sys.exc_info()))
             self._error(f"Error in importer '{module_path}': {message}")
             return

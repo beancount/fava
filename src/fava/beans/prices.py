@@ -46,7 +46,6 @@ def _keep_last_per_day(
     """In a sorted non-empty list of prices, keep the last one for each day."""
     last: PricePoint | None = None
     for price in prices:
-        # pylint: disable=unsubscriptable-object
         if last is not None and price[0] > last[0]:
             yield last
         last = price

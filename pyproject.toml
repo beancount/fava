@@ -15,23 +15,18 @@ strict = true
 disable = [
     "too-few-public-methods",
     "too-many-instance-attributes",
-    "not-callable",        # false positive for Beancount Entries
-    "wrong-import-order",
     "duplicate-code",
-    "isinstance-second-argument-not-valid-type",
-    "too-many-return-statements",  # is checked by ruff (PLR0911)
-    "redefined-builtin",   # is checked by ruff (A002)
-    "invalid-name",        # is checked by ruff
-    "missing-docstring",   # is checked by ruff
-    "unused-argument"      # is checked by ruff
+    "invalid-unary-operand-type",    # type-checking like, had false-positives
+    "not-an-iterable",               # type-checking like, had false-positives
+    "unsubscriptable-object",        # type-checking like, had false-positives
+    "broad-except",                  # is checked by ruff (BLE)
+    "too-many-return-statements",    # is checked by ruff (PLR0911)
+    "too-many-arguments",            # is checked by ruff (PLR0913)
+    "redefined-builtin",             # is checked by ruff (A002)
+    "invalid-name",                  # is checked by ruff (N)
+    "missing-docstring",             # is checked by ruff (D)
+    "unused-argument"                # is checked by ruff (ARG)
 ]
-
-[tool.pylint.design]
-# max args for a function / method
-max-args = 9
-
-[tool.pylint.similarities]
-ignore-imports = true
 
 [tool.pytest.ini_options]
 filterwarnings = "ignore:.*pkg_resources.declare_namespace.*:DeprecationWarning"
@@ -43,26 +38,28 @@ extend-select = [
     "A002",
     "ARG",
     "B",
+    "BLE",
     "C40",
     "D",
     "I",
-    "ISC",
     "INT",
+    "ISC",
     "N",
     "PIE",
     "PLC",
     "PLE",
     "PLR",
     "PLW",
+    "PT",
     "PYI",
     "Q",
-    "PT",
     "RET",
     "RSE",
     "RUF",
     "SIM",
     "TCH",
     "TID",
+    "TRY",
     "UP",
     "W",
     "YTT",
@@ -90,6 +87,7 @@ extend-ignore = [
     "D416",
     "D417",
     "PLR2004",  # allow magic constants in comparisons
+    "TRY003",   # allow long string constants as error messages
 ]
 
 [tool.ruff.isort]

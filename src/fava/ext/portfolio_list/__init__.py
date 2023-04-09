@@ -24,7 +24,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         tree = g.filtered.root_tree
         portfolios = []
 
-        for option in self.config:  # pylint: disable=not-an-iterable
+        for option in self.config:
             opt_key = option[0]
             if opt_key == "account_name_pattern":
                 portfolio = self._account_name_pattern(tree, option[1])

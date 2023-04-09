@@ -394,7 +394,7 @@ class AdvancedFilter(EntryFilter):
             except FilterError as exception:
                 exception.message = exception.message + value
                 self.value = None
-                raise exception
+                raise
         else:
             self._include = None
         return True

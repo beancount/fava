@@ -229,7 +229,6 @@ class FilteredLedger:
         return self.ledger.accounts[account_name].close_date != date.max
 
 
-# pylint: disable=too-many-public-methods
 class FavaLedger:
     """Create an interface for a Beancount ledger.
 
