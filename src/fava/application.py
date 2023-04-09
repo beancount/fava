@@ -51,7 +51,7 @@ from fava.core import FavaLedger
 from fava.core.charts import setup_json_for_app
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
@@ -71,7 +71,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 STATIC_FOLDER = resource_path("static")
 setup_logging()
-app = Flask(  # pylint: disable=invalid-name
+app = Flask(
     __name__,
     template_folder=str(resource_path("templates")),
     static_folder=str(STATIC_FOLDER),
@@ -286,8 +286,8 @@ def _pull_beancount_file(_: str | None, values: dict[str, str] | None) -> None:
         g.interval = Interval.get(request.args.get("interval", "month"))
 
 
-@app.errorhandler(FavaAPIException)
-def fava_api_exception(error: FavaAPIException) -> str:
+@app.errorhandler(FavaAPIError)
+def fava_api_exception(error: FavaAPIError) -> str:
     """Handle API errors."""
     return render_template(
         "_layout.html", page_title="Error", content=error.message

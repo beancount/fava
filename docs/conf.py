@@ -1,4 +1,3 @@
-# pylint: disable=invalid-name,missing-docstring,redefined-builtin
 from __future__ import annotations
 
 extensions = [
@@ -11,7 +10,7 @@ intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # General information about the project.
 project = "Fava"
-copyright = "2016, Dominik Aumayr"
+copyright = "2016, Dominik Aumayr"  # noqa: A001
 author = "Dominik Aumayr"
 
 extlinks = {

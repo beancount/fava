@@ -1,3 +1,4 @@
+"""Test importer for Fava."""
 from __future__ import annotations
 
 import csv
@@ -14,6 +15,8 @@ from dateutil.parser import parse
 
 
 class TestImporter(importer.ImporterProtocol):
+    """Test importer for Fava."""
+
     account = "Assets:Checking"
     currency = "EUR"
 

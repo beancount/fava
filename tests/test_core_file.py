@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 import re
@@ -17,7 +16,7 @@ from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
 from fava.core.file import save_entry_slice
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Transaction
@@ -55,7 +54,7 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     filename = Path(entry.meta["filename"])
     contents = filename.read_text("utf-8")
 
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         save_entry_slice(entry, new_source, "wrong hash")
     assert filename.read_text("utf-8") == contents
 

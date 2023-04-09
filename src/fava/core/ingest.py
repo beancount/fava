@@ -24,7 +24,7 @@ from beancount.ingest import identify
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -60,9 +60,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
         date = importer.file_date(file)
         name = importer.file_name(file)
     except Exception as err:  # pylint: disable=broad-except
-        raise FavaAPIException(
-            f"Error calling importer method: {err}"
-        ) from err
+        raise FavaAPIError(f"Error calling importer method: {err}") from err
 
     return FileImportInfo(
         importer.name(),
@@ -207,7 +205,7 @@ def filepath_in_primary_imports_folder(
     """
     primary_imports_folder = next(iter(ledger.fava_options.import_dirs), None)
     if primary_imports_folder is None:
-        raise FavaAPIException("You need to set at least one imports-dir.")
+        raise FavaAPIError("You need to set at least one imports-dir.")
 
     for separator in sep, altsep:
         if separator:

@@ -7,7 +7,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from beancount.core import data
-from beancount.core.amount import A as BeancountA  # type: ignore
+from beancount.core.amount import A as BEANCOUNT_A  # type: ignore
 from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Position as BeancountPosition
 
@@ -38,7 +38,7 @@ def amount(amt: Amount | tuple[Decimal, str] | str) -> Amount:
     if isinstance(amt, Amount):
         return amt
     if isinstance(amt, str):
-        return BeancountA(amt)  # type: ignore
+        return BEANCOUNT_A(amt)  # type: ignore
     return BeancountAmount(*amt)  # type: ignore
 
 

@@ -84,8 +84,6 @@ class ExtensionModule(FavaModule):
 
         raise LookupError("Extension report not found.")
 
-    # pylint: disable=missing-docstring
-
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         for ext in self.exts_for_hook("after_entry_modified"):
             ext.after_entry_modified(entry, new_lines)

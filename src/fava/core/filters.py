@@ -12,7 +12,7 @@ from beancount.core import account
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
 from fava.beans.account import get_entry_accounts
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util.date import parse_date
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -23,7 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.fava_options import FavaOptions
 
 
-class FilterException(FavaAPIException):
+class FilterError(FavaAPIError):
     """Filter exception."""
 
     def __init__(self, filter_type: str, message: str) -> None:
@@ -54,8 +54,6 @@ class Token:
 class FilterSyntaxLexer:
     """Lexer for Fava's filter syntax."""
 
-    # pylint: disable=missing-docstring,invalid-name
-
     tokens = ("ANY", "ALL", "KEY", "LINK", "STRING", "TAG")
 
     RULES = (
@@ -71,22 +69,22 @@ class FilterSyntaxLexer:
         "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
     )
 
-    def LINK(self, token: str, value: str) -> tuple[str, str]:
+    def LINK(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
         return token, value[1:]
 
-    def TAG(self, token: str, value: str) -> tuple[str, str]:
+    def TAG(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
         return token, value[1:]
 
-    def KEY(self, token: str, value: str) -> tuple[str, str]:
+    def KEY(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
         return token, value[:-1]
 
-    def ALL(self, token: str, _: str) -> tuple[str, str]:
+    def ALL(self, token: str, _: str) -> tuple[str, str]:  # noqa: N802
         return token, token
 
-    def ANY(self, token: str, _: str) -> tuple[str, str]:
+    def ANY(self, token: str, _: str) -> tuple[str, str]:  # noqa: N802
         return token, token
 
-    def STRING(self, token: str, value: str) -> tuple[str, str]:
+    def STRING(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
         if value[0] in ['"', "'"]:
             return token, value[1:-1]
         return token, value
@@ -126,7 +124,7 @@ class FilterSyntaxLexer:
                 yield Token(char, char)
                 pos += 1
             else:
-                raise FilterException(
+                raise FilterError(
                     "filter", f'Illegal character "{char}" in filter.'
                 )
 
@@ -148,13 +146,11 @@ class Match:
 
 
 class FilterSyntaxParser:
-    # pylint: disable=missing-docstring,invalid-name
-
     precedence = (("left", "AND"), ("right", "UMINUS"))
     tokens = FilterSyntaxLexer.tokens
 
     def p_error(self, _: Any) -> None:
-        raise FilterException("filter", "Failed to parse filter: ")
+        raise FilterError("filter", "Failed to parse filter: ")
 
     def p_filter(self, p: list[Any]) -> None:
         """
@@ -233,7 +229,7 @@ class FilterSyntaxParser:
 
         p[0] = _neg
 
-    def p_simple_expr_TAG(self, p: list[Any]) -> None:
+    def p_simple_expr_TAG(self, p: list[Any]) -> None:  # noqa: N802
         """
         simple_expr : TAG
         """
@@ -245,7 +241,7 @@ class FilterSyntaxParser:
 
         p[0] = _tag
 
-    def p_simple_expr_LINK(self, p: list[Any]) -> None:
+    def p_simple_expr_LINK(self, p: list[Any]) -> None:  # noqa: N802
         """
         simple_expr : LINK
         """
@@ -257,7 +253,7 @@ class FilterSyntaxParser:
 
         p[0] = _link
 
-    def p_simple_expr_STRING(self, p: list[Any]) -> None:
+    def p_simple_expr_STRING(self, p: list[Any]) -> None:  # noqa: N802
         """
         simple_expr : STRING
         """
@@ -356,7 +352,7 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         )
         if not self.begin_date:
             self.value = None
-            raise FilterException("time", f"Failed to parse date: {value}")
+            raise FilterError("time", f"Failed to parse date: {value}")
         return True
 
     def _filter(self, entries: list[Directive]) -> list[Directive]:
@@ -395,7 +391,7 @@ class AdvancedFilter(EntryFilter):
                     lexer="NONE",
                     tokenfunc=lambda toks=tokens: next(toks, None),
                 )
-            except FilterException as exception:
+            except FilterError as exception:
                 exception.message = exception.message + value
                 self.value = None
                 raise exception

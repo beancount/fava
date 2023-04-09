@@ -32,7 +32,7 @@ from fava.core.inventory import SimpleCounterInventory
 from fava.core.module_base import FavaModule
 from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util import listify
 
 with suppress(ImportError):
@@ -73,7 +73,6 @@ class FavaJSONEncoder(JSONEncoder):
         super().__init__(*args, **kwargs)
 
     def default(self, o: Any) -> Any:
-        # pylint: disable=too-many-return-statements
         if isinstance(o, (date, Amount, Booking, Position)):
             return str(o)
         if isinstance(o, (set, frozenset)):
@@ -171,7 +170,6 @@ class ChartModule(FavaModule):
             invert: invert all numbers.
         """
         # pylint: disable=too-many-locals
-        # pylint: disable=too-many-nested-blocks
         prices = self.ledger.prices
 
         # limit the bar charts to 100 intervals
@@ -339,7 +337,7 @@ class ChartModule(FavaModule):
             rows: The result rows.
         """
         if not self.can_plot_query(types):
-            raise FavaAPIException("Can not plot the given chart.")
+            raise FavaAPIError("Can not plot the given chart.")
         if types[0][1] is date:
             return [
                 {"date": date, "balance": units(inv)} for date, inv in rows

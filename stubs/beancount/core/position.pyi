@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring,unused-argument,multiple-statements
 import datetime
 from decimal import Decimal
 from typing import NamedTuple

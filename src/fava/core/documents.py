@@ -9,7 +9,7 @@ from os.path import join
 from os.path import normpath
 from typing import TYPE_CHECKING
 
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -54,10 +54,10 @@ def filepath_in_document_folder(
         The path that the document should be saved at.
     """
     if documents_folder not in ledger.options["documents"]:
-        raise FavaAPIException(f"Not a documents folder: {documents_folder}.")
+        raise FavaAPIError(f"Not a documents folder: {documents_folder}.")
 
     if account not in ledger.attributes.accounts:
-        raise FavaAPIException(f"Not a valid account: '{account}'")
+        raise FavaAPIError(f"Not a valid account: '{account}'")
 
     for separator in sep, altsep:
         if separator:

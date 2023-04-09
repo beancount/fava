@@ -17,7 +17,7 @@ class BeancountError(NamedTuple):
     entry: Directive | None
 
 
-class FavaAPIException(Exception):
+class FavaAPIError(Exception):
     """Fava's base exception class."""
 
     def __init__(self, message: str) -> None:

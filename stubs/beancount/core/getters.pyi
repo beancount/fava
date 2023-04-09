@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring,unused-argument,multiple-statements
 import datetime
 
 from fava.beans.abc import Directive

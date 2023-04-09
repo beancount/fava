@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 import datetime
@@ -14,7 +13,7 @@ from fava.beans import create
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
 from fava.core.charts import pretty_dumps
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import serialise
@@ -239,10 +238,10 @@ def test_deserialise() -> None:
     )
     assert deserialise(json_txn) == txn
 
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         deserialise({})
 
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         deserialise({"type": "NoEntry"})
 
 

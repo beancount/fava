@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 from typing import Iterable
@@ -64,7 +63,6 @@ def test_send_file_inline(app: Flask, test_data_dir: Path) -> None:
             == "inline; filename*=UTF-8''example-balances.csv"
         )
         resp = send_file_inline(str(test_data_dir / "example-utf8-🦁.txt"))
-        # pylint: disable=line-too-long
         assert (
             resp.headers["Content-Disposition"]
             == "inline; filename*=UTF-8''example-utf8-%F0%9F%A6%81.txt"

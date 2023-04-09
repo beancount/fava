@@ -19,7 +19,7 @@ from fava.beans.funcs import execute_query
 from fava.beans.funcs import run_query
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
@@ -86,13 +86,12 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
         """Doesn't do anything in Fava's query shell."""
         print(self.noop.__doc__, file=self.buffer)
 
-    on_Reload = noop
+    on_Reload = noop  # noqa: N815
     do_exit = noop
     do_quit = noop
-    do_EOF = noop
+    do_EOF = noop  # noqa: N815
 
-    def on_Select(self, statement: str) -> None:
-        # pylint: disable=invalid-name
+    def on_Select(self, statement: str) -> None:  # noqa: N802
         try:
             c_query = query_compile.compile(  # type: ignore
                 statement,
@@ -135,7 +134,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
         self.result = None
         return (None, types, rows)
 
-    def on_RunCustom(self, run_stmt: RunCustom) -> Any:
+    def on_RunCustom(self, run_stmt: RunCustom) -> Any:  # noqa: N802
         """Run a custom query."""
         name = run_stmt.query_name
         if name is None:
@@ -169,7 +168,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
             ``data`` contains the file contents.
 
         Raises:
-            FavaAPIException: If the result format is not supported or the
+            FavaAPIError: If the result format is not supported or the
             query failed.
         """
         name = "query_result"
@@ -177,7 +176,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
         try:
             statement = self.parser.parse(query_string)
         except ParseError as exception:
-            raise FavaAPIException(str(exception)) from exception
+            raise FavaAPIError(str(exception)) from exception
 
         if isinstance(statement, RunCustom):
             name = statement.query_name
@@ -187,7 +186,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
                     query for query in self.queries if query.name == name
                 )
             except StopIteration as exc:
-                raise FavaAPIException(f'Query "{name}" not found.') from exc
+                raise FavaAPIError(f'Query "{name}" not found.') from exc
             query_string = query.query_string
 
         try:
@@ -198,13 +197,13 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
                 numberify=True,
             )
         except (CompilationError, ParseError) as exception:
-            raise FavaAPIException(str(exception)) from exception
+            raise FavaAPIError(str(exception)) from exception
 
         if result_format == "csv":
             data = to_csv(types, rows)
         else:
             if not HAVE_EXCEL:
-                raise FavaAPIException("Result format not supported.")
+                raise FavaAPIError("Result format not supported.")
             data = to_excel(types, rows, result_format, query_string)
         return name, data
 
