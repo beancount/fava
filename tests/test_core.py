@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 import datetime
@@ -7,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -15,8 +14,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def test_apiexception() -> None:
-    with pytest.raises(FavaAPIException) as exception:
-        raise FavaAPIException("error")
+    with pytest.raises(FavaAPIError) as exception:
+        raise FavaAPIError("error")
     assert str(exception.value) == "error"
 
 

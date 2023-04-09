@@ -134,7 +134,7 @@ def get_prev_interval(
     raise NotImplementedError
 
 
-def get_next_interval(
+def get_next_interval(  # noqa: PLR0911
     date: datetime.date, interval: Interval
 ) -> datetime.date:
     """Get the start date of the next interval.
@@ -146,7 +146,6 @@ def get_next_interval(
     Returns:
         The start date of the next `interval` after `date`.
     """
-    # pylint: disable=too-many-return-statements
     try:
         if interval is Interval.YEAR:
             return datetime.date(date.year + 1, 1, 1)
@@ -285,7 +284,7 @@ def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
     return string
 
 
-def parse_date(
+def parse_date(  # noqa: PLR0911
     string: str, fye: FiscalYearEnd | None = None
 ) -> tuple[datetime.date | None, datetime.date | None]:
     """Parse a date.
@@ -309,7 +308,6 @@ def parse_date(
     Returns:
         A tuple (start, end) of dates.
     """
-    # pylint: disable=too-many-return-statements
     string = string.strip().lower()
     if not string:
         return None, None

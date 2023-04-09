@@ -28,7 +28,7 @@ from fava.beans.flags import FLAG_TRANSFER
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.str import to_string
 from fava.core.module_base import FavaModule
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util import next_key
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -71,11 +71,11 @@ class FileModule(FavaModule):
             A string with the file contents and the `sha256sum` of the file.
 
         Raises:
-            FavaAPIException: If the file at `path` is not one of the
+            FavaAPIError: If the file at `path` is not one of the
                 source files.
         """
         if path not in self.ledger.options["include"]:
-            raise FavaAPIException("Trying to read a non-source file")
+            raise FavaAPIError("Trying to read a non-source file")
 
         with open(path, mode="rb") as file:
             contents = file.read()
@@ -97,13 +97,13 @@ class FileModule(FavaModule):
             The `sha256sum` of the updated file.
 
         Raises:
-            FavaAPIException: If the file at `path` is not one of the
+            FavaAPIError: If the file at `path` is not one of the
                 source files or if the file was changed externally.
         """
         with self.lock:
             _, original_sha256sum = self.get_source(path)
             if original_sha256sum != sha256sum:
-                raise FavaAPIException("The file changed externally.")
+                raise FavaAPIError("The file changed externally.")
 
             contents = encode(source, encoding="utf-8")
             with open(path, "w+b") as file:
@@ -148,7 +148,7 @@ class FileModule(FavaModule):
         Returns:
             The `sha256sum` of the new lines of the entry.
         Raises:
-            FavaAPIException: If the entry is not found or the file changed.
+            FavaAPIError: If the entry is not found or the file changed.
         """
         with self.lock:
             entry = self.ledger.get_entry(entry_hash)
@@ -287,7 +287,7 @@ def save_entry_slice(
         The `sha256sum` of the new lines of the entry.
 
     Raises:
-        FavaAPIException: If the file at `path` is not one of the
+        FavaAPIError: If the file at `path` is not one of the
             source files.
     """
     with open(entry.meta["filename"], encoding="utf-8") as file:
@@ -297,7 +297,7 @@ def save_entry_slice(
     entry_lines = find_entry_lines(lines, first_entry_line)
     entry_source = "".join(entry_lines).rstrip("\n")
     if sha256_str(entry_source) != sha256sum:
-        raise FavaAPIException("The file changed externally.")
+        raise FavaAPIError("The file changed externally.")
 
     lines = (
         lines[:first_entry_line]

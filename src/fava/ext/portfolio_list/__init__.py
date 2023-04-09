@@ -10,7 +10,7 @@ from decimal import Decimal
 
 from fava.context import g
 from fava.ext import FavaExtensionBase
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.template_filters import cost_or_value
 
 
@@ -33,7 +33,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
                     tree, option[1][0], option[1][1]
                 )
             else:
-                raise FavaAPIException("Portfolio List: Invalid option.")
+                raise FavaAPIError("Portfolio List: Invalid option.")
             portfolios.append(portfolio)
 
         return portfolios

@@ -84,7 +84,9 @@ TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
 STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
 
 
-def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
+def parse_option_custom_entry(  # noqa: PLR0912
+    entry: Custom, options: FavaOptions
+) -> None:
     """Parse a single custom fava-option entry and set option accordingly."""
     key = entry.values[0].value.replace("-", "_")
     assert key in All_OPTS, f"unknown option `{key}`"

@@ -24,7 +24,7 @@ from fava.beans.abc import Posting
 from fava.beans.abc import Transaction
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util.date import parse_date
 
 
@@ -78,7 +78,7 @@ def deserialise_posting(posting: Any) -> Posting:
         f'2000-01-01 * "" ""\n Assets:Account {amount}'
     )
     if errors:
-        raise FavaAPIException(f"Invalid amount: {amount}")
+        raise FavaAPIError(f"Invalid amount: {amount}")
     txn = entries[0]
     assert isinstance(txn, Transaction)
     pos = txn.postings[0]
@@ -93,11 +93,11 @@ def deserialise(json_entry: Any) -> Directive:
 
     Raises:
         KeyError: if one of the required entry fields is missing.
-        FavaAPIException: if the type of the given entry is not supported.
+        FavaAPIError: if the type of the given entry is not supported.
     """
     date = parse_date(json_entry.get("date", ""))[0]
     if not isinstance(date, datetime.date):
-        raise FavaAPIException("Invalid entry date.")
+        raise FavaAPIError("Invalid entry date.")
     if json_entry["type"] == "Transaction":
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
         return create.transaction(
@@ -124,4 +124,4 @@ def deserialise(json_entry: Any) -> Directive:
         return create.note(
             json_entry["meta"], date, json_entry["account"], comment
         )
-    raise FavaAPIException("Unsupported entry type.")
+    raise FavaAPIError("Unsupported entry type.")

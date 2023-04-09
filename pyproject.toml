@@ -18,7 +18,12 @@ disable = [
     "not-callable",        # false positive for Beancount Entries
     "wrong-import-order",
     "duplicate-code",
-    "isinstance-second-argument-not-valid-type"
+    "isinstance-second-argument-not-valid-type",
+    "too-many-return-statements",  # is checked by ruff (PLR0911)
+    "redefined-builtin",   # is checked by ruff (A002)
+    "invalid-name",        # is checked by ruff
+    "missing-docstring",   # is checked by ruff
+    "unused-argument"      # is checked by ruff
 ]
 
 [tool.pylint.design]
@@ -34,6 +39,8 @@ filterwarnings = "ignore:.*pkg_resources.declare_namespace.*:DeprecationWarning"
 [tool.ruff]
 target-version = "py37"
 extend-select = [
+    "A001",
+    "A002",
     "ARG",
     "B",
     "C40",
@@ -41,6 +48,7 @@ extend-select = [
     "I",
     "ISC",
     "INT",
+    "N",
     "PIE",
     "PLC",
     "PLE",
@@ -82,8 +90,6 @@ extend-ignore = [
     "D416",
     "D417",
     "PLR2004",  # allow magic constants in comparisons
-    "PLR0911",  # too-many-.. is handled by pylint
-    "PLR0912",  # too-many-.. is handled by pylint
 ]
 
 [tool.ruff.isort]
@@ -98,6 +104,6 @@ max-args = 9
 [tool.ruff.per-file-ignores]
 "contrib/**" = ["D"]
 "docs/**" = ["D"]
-"tests/**" = ["D"]
+"tests/test_*.py" = ["D"]
 "stubs/**" = ["D", "I002"]  # ignore docs and do not add annotations import
 "src/fava/core/filters.py" = ["D"]

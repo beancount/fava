@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 import datetime
@@ -13,7 +12,7 @@ from fava.beans.account import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
-from fava.core.filters import FilterException
+from fava.core.filters import FilterError
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
@@ -47,7 +46,7 @@ def test_lexer_basic() -> None:
         ("STRING", "string"),
         ("STRING", "string"),
     ]
-    with pytest.raises(FilterException):
+    with pytest.raises(FilterError):
         list(lex("|"))
 
 
@@ -90,12 +89,10 @@ def test_lexer_parentheses() -> None:
 
 def test_filterexception() -> None:
     filter_ = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
-    with pytest.raises(
-        FilterException, match='Illegal character """ in filter'
-    ):
+    with pytest.raises(FilterError, match='Illegal character """ in filter'):
         filter_.set('who:"fff')
 
-    with pytest.raises(FilterException, match="Failed to parse filter"):
+    with pytest.raises(FilterError, match="Failed to parse filter"):
         filter_.set('any(who:"Martin"')
 
 
@@ -192,5 +189,5 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == len(example_ledger.all_entries)
 
-    with pytest.raises(FilterException):
+    with pytest.raises(FilterError):
         time_filter.set("no_date")

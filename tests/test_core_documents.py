@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 from os import path
@@ -8,7 +7,7 @@ import pytest
 
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -43,11 +42,11 @@ def test_filepath_in_documents_folder(
     assert filepath_in_document_folder(
         "/test", "Assets:US:BofA:Checking", "/../file/name", example_ledger
     ) == _join("/test", "Assets", "US", "BofA", "Checking", " .. file name")
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         filepath_in_document_folder(
             "/test", "notanaccount", "filename", example_ledger
         )
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         filepath_in_document_folder(
             "/notadocumentsfolder",
             "Assets:US:BofA:Checking",

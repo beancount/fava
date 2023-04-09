@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 import datetime
@@ -15,7 +14,7 @@ from fava.beans.abc import Transaction
 from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path
@@ -64,7 +63,7 @@ def test_ingest_file_import_info(
         "rawfile", "", datetime.date.today(), "basename"
     )
 
-    with pytest.raises(FavaAPIException) as err:
+    with pytest.raises(FavaAPIError) as err:
         file_import_info("/asdf/basename", Invalid("rawfile"))
     assert "Some error reason..." in err.value.message
 
@@ -118,5 +117,5 @@ def test_filepath_in_primary_imports_folder(
     ) == _join("/test", " .. file name")
 
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", [])
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         filepath_in_primary_imports_folder("filename", example_ledger)

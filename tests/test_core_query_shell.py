@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import annotations
 
 from typing import Any
@@ -7,7 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans.funcs import run_query
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from .conftest import GetFavaLedger
@@ -70,8 +69,8 @@ def test_query_to_file(
     assert name == "query_result"
     snapshot(data.getvalue())
 
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         query_shell.query_to_file(entries, "select sdf", "csv")
 
-    with pytest.raises(FavaAPIException):
+    with pytest.raises(FavaAPIError):
         query_shell.query_to_file(entries, "run testsetest", "csv")

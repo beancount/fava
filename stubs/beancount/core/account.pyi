@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring,unused-argument,multiple-statements
 ACCOUNT_RE: str
 TYPE: str
 

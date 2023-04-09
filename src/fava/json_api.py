@@ -3,7 +3,6 @@
 This module contains the url endpoints of the JSON API that is used by the web
 interface for asynchronous functionality.
 """
-# pylint: disable=no-name-in-module
 from __future__ import annotations
 
 import os
@@ -31,7 +30,7 @@ from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.internal_api import get_errors
 from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
@@ -46,7 +45,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.ingest import FileImporters
 
 
-json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
+json_api = Blueprint("json_api", __name__)
 
 
 class ValidationError(Exception):
@@ -65,8 +64,8 @@ def json_success(data: Any) -> Response:
     )
 
 
-@json_api.errorhandler(FavaAPIException)
-def _json_api_exception(error: FavaAPIException) -> Response:
+@json_api.errorhandler(FavaAPIError)
+def _json_api_exception(error: FavaAPIError) -> Response:
     return json_err(error.message)
 
 
@@ -147,7 +146,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
             if method == "put":
                 request_json = request.get_json(silent=True)
                 if request_json is None:
-                    raise FavaAPIException("Invalid JSON request.")
+                    raise FavaAPIError("Invalid JSON request.")
                 data = request_json
             else:
                 data = request.args
@@ -191,7 +190,7 @@ def get_query_result(query_string: str) -> Any:
         g.filtered.entries, query_string
     )
     if contents and "ERROR" in contents:
-        raise FavaAPIException(contents)
+        raise FavaAPIError(contents)
     table = table(g.ledger, contents, types, rows)
 
     if types and g.ledger.charts.can_plot_query(types):
@@ -228,16 +227,16 @@ def get_context(entry_hash: str) -> Context:
 def get_move(account: str, new_name: str, filename: str) -> str:
     """Move a file."""
     if not g.ledger.options["documents"]:
-        raise FavaAPIException("You need to set a documents folder.")
+        raise FavaAPIError("You need to set a documents folder.")
 
     new_path = filepath_in_document_folder(
         g.ledger.options["documents"][0], account, new_name, g.ledger
     )
 
     if not path.isfile(filename):
-        raise FavaAPIException(f"Not a file: '{filename}'")
+        raise FavaAPIError(f"Not a file: '{filename}'")
     if path.exists(new_path):
-        raise FavaAPIException(f"Target file exists: '{new_path}'")
+        raise FavaAPIError(f"Target file exists: '{new_path}'")
 
     if not path.exists(path.dirname(new_path)):
         os.makedirs(path.dirname(new_path), exist_ok=True)
@@ -287,10 +286,10 @@ def put_format_source(source: str) -> str:
 def delete_document(filename: str) -> str:
     """Delete a document."""
     if not is_document_or_import_file(filename, g.ledger):
-        raise FavaAPIException("No valid document or import file.")
+        raise FavaAPIError("No valid document or import file.")
 
     if not path.exists(filename):
-        raise FavaAPIException(f"{filename} does not exist.")
+        raise FavaAPIError(f"{filename} does not exist.")
 
     remove(filename)
     return f"Deleted {filename}."
@@ -300,14 +299,14 @@ def delete_document(filename: str) -> str:
 def put_add_document() -> str:
     """Upload a document."""
     if not g.ledger.options["documents"]:
-        raise FavaAPIException("You need to set a documents folder.")
+        raise FavaAPIError("You need to set a documents folder.")
 
     upload = request.files.get("file", None)
 
     if not upload:
-        raise FavaAPIException("No file uploaded.")
+        raise FavaAPIError("No file uploaded.")
     if not upload.filename:
-        raise FavaAPIException("Uploaded file is missing filename.")
+        raise FavaAPIError("Uploaded file is missing filename.")
 
     filepath = filepath_in_document_folder(
         request.form["folder"],
@@ -318,7 +317,7 @@ def put_add_document() -> str:
     directory, filename = path.split(filepath)
 
     if path.exists(filepath):
-        raise FavaAPIException(f"{filepath} already exists.")
+        raise FavaAPIError(f"{filepath} already exists.")
 
     if not path.exists(directory):
         os.makedirs(directory, exist_ok=True)
@@ -345,7 +344,7 @@ def put_add_entries(entries: list[Any]) -> str:
     try:
         entries = [deserialise(entry) for entry in entries]
     except KeyError as error:
-        raise FavaAPIException(f"KeyError: {error}") from error
+        raise FavaAPIError(f"KeyError: {error}") from error
 
     g.ledger.file.insert_entries(entries)
 
@@ -358,15 +357,15 @@ def put_upload_import_file() -> str:
     upload = request.files.get("file", None)
 
     if not upload:
-        raise FavaAPIException("No file uploaded.")
+        raise FavaAPIError("No file uploaded.")
     if not upload.filename:
-        raise FavaAPIException("Uploaded file is missing filename.")
+        raise FavaAPIError("Uploaded file is missing filename.")
     filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
 
     directory = path.dirname(filepath)
 
     if path.exists(filepath):
-        raise FavaAPIException(f"{filepath} already exists.")
+        raise FavaAPIError(f"{filepath} already exists.")
 
     if not path.exists(directory):
         os.makedirs(directory, exist_ok=True)

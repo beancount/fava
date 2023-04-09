@@ -51,7 +51,7 @@ from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.helpers import BeancountError
-from fava.helpers import FavaAPIException
+from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import DateRange
 from fava.util.date import dateranges
@@ -75,7 +75,7 @@ class Filters:
         options: BeancountOptions,
         fava_options: FavaOptions,
         account: str | None = None,
-        filter: str | None = None,  # pylint: disable=redefined-builtin
+        filter: str | None = None,  # noqa: A002
         time: str | None = None,
     ) -> None:
         self.account = AccountFilter(options, fava_options)
@@ -133,7 +133,7 @@ class FilteredLedger:
         self,
         ledger: FavaLedger,
         account: str | None = None,
-        filter: str | None = None,  # pylint: disable=redefined-builtin
+        filter: str | None = None,  # noqa: A002
         time: str | None = None,
     ):
         self.ledger = ledger
@@ -229,7 +229,7 @@ class FilteredLedger:
         return self.ledger.accounts[account_name].close_date != date.max
 
 
-# pylint: disable=too-many-instance-attributes,too-many-public-methods
+# pylint: disable=too-many-public-methods
 class FavaLedger:
     """Create an interface for a Beancount ledger.
 
@@ -344,7 +344,7 @@ class FavaLedger:
     def get_filtered(
         self,
         account: str | None = None,
-        filter: str | None = None,  # pylint: disable=redefined-builtin
+        filter: str | None = None,  # noqa: A002
         time: str | None = None,
     ) -> FilteredLedger:
         """Filter the ledger."""
@@ -495,7 +495,7 @@ class FavaLedger:
         Returns:
             The entry with the given hash.
         Raises:
-            FavaAPIException: If there is no entry for the given hash.
+            FavaAPIError: If there is no entry for the given hash.
         """
         try:
             return next(
@@ -504,7 +504,7 @@ class FavaLedger:
                 if entry_hash == hash_entry(entry)
             )
         except StopIteration as exc:
-            raise FavaAPIException(
+            raise FavaAPIError(
                 f'No entry found for hash "{entry_hash}"'
             ) from exc
 
@@ -583,6 +583,6 @@ class FavaLedger:
             ):
                 return document.filename
 
-        raise FavaAPIException("Statement not found.")
+        raise FavaAPIError("Statement not found.")
 
     group_entries_by_type = staticmethod(group_entries_by_type)

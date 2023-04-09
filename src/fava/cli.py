@@ -59,7 +59,7 @@ from fava.util import simple_wsgi
     help="Output directory for profiling data.",
 )
 @click.version_option(version=__version__, prog_name="fava")
-def main(
+def main(  # noqa: PLR0912
     filenames: tuple[str],
     port: int,
     host: str,
