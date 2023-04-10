@@ -59,6 +59,10 @@
 {/if}
 
 <style>
+  :global(body):has(.overlay) {
+    overflow: hidden;
+  }
+
   .background {
     position: fixed;
     top: 0;
@@ -75,10 +79,11 @@
     left: 0;
     z-index: var(--z-index-overlay);
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     width: 100vw;
     height: 100vh;
+    overflow: auto;
   }
 
   .content {
@@ -89,6 +94,8 @@
     max-height: 100%;
     padding: 1em;
     margin: 0.5em;
+    margin-top: 10vh;
+    overflow: visible;
     background: var(--background);
     box-shadow: 0 0 20px var(--overlay-wrapper-background);
   }
@@ -114,13 +121,20 @@
   }
 
   @media (max-width: 767px) {
+    /* Show the modal full-screen on mobile. */
     .overlay {
       height: 100%;
+    }
+
+    .background {
+      /* Ensure that modal overflow gets a white background. */
+      background: var(--background);
     }
 
     .content {
       height: 100%;
       margin: 0;
+      box-shadow: none;
     }
   }
 </style>
