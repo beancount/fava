@@ -28,7 +28,7 @@ def test_paths_to_watch(
     example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     assert example_ledger.paths_to_watch() == (
-        [example_ledger.beancount_file_path],
+        [Path(example_ledger.beancount_file_path)],
         [],
     )
     monkeypatch.setitem(
@@ -36,9 +36,9 @@ def test_paths_to_watch(
     )
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
-        [example_ledger.beancount_file_path],
+        [Path(example_ledger.beancount_file_path)],
         [
-            str(base / account)
+            base / account
             for account in [
                 "Assets",
                 "Liabilities",

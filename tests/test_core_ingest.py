@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from os import path
+from pathlib import Path
 from typing import Any
 from typing import TYPE_CHECKING
 
@@ -17,8 +17,6 @@ from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from pathlib import Path
-
     from fava.core import FavaLedger
 
     from .conftest import GetFavaLedger
@@ -103,8 +101,8 @@ def test_filepath_in_primary_imports_folder(
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test"])
 
-    def _join(start: str, *args: str) -> str:
-        return path.abspath(path.join(start, *args))
+    def _join(start: str, *args: str) -> Path:
+        return Path(start).joinpath(*args).resolve()
 
     assert filepath_in_primary_imports_folder(
         "filename", example_ledger

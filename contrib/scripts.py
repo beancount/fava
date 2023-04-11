@@ -79,7 +79,7 @@ def upload_translations() -> None:
         "updating": "terms",
         # "sync_terms": 1,
     }
-    with open(path, "rb") as file:
+    with path.open("rb") as file:
         files = {"file": file}
         request = requests.post(
             "https://api.poeditor.com/v2/projects/upload",

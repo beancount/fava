@@ -4,10 +4,7 @@ from __future__ import annotations
 from datetime import date
 from datetime import timedelta
 from functools import lru_cache
-from os.path import basename
-from os.path import dirname
-from os.path import join
-from os.path import normpath
+from pathlib import Path
 from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
@@ -346,18 +343,17 @@ class FavaLedger:
             options["name_expenses"],
         )
 
-    def join_path(self, *args: str) -> str:
+    def join_path(self, *args: str) -> Path:
         """Path relative to the directory of the ledger."""
-        include_path = dirname(self.beancount_file_path)
-        return normpath(join(include_path, *args))
+        return Path(self.beancount_file_path).parent.joinpath(*args).resolve()
 
-    def paths_to_watch(self) -> tuple[list[str], list[str]]:
+    def paths_to_watch(self) -> tuple[list[Path], list[Path]]:
         """Get paths to included files and document directories.
 
         Returns:
             A tuple (files, directories).
         """
-        files = list(self.options["include"])
+        files = [Path(i) for i in self.options["include"]]
         if self.ingest.module_path:
             files.append(self.ingest.module_path)
         return (
@@ -550,13 +546,13 @@ class FavaLedger:
         value = entry.meta[metadata_key]
 
         accounts = set(get_entry_accounts(entry))
-        full_path = join(dirname(entry.meta["filename"]), value)
+        full_path = Path(entry.meta["filename"]).parent / value
         for document in self.all_entries_by_type.Document:
-            if document.filename == full_path:
+            if document.filename == str(full_path):
                 return document.filename
             if (
                 document.account in accounts
-                and basename(document.filename) == value
+                and Path(document.filename).name == value
             ):
                 return document.filename
 

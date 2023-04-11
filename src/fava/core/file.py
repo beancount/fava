@@ -7,6 +7,7 @@ from codecs import decode
 from codecs import encode
 from hashlib import sha256
 from operator import attrgetter
+from pathlib import Path
 from typing import Iterable
 from typing import TYPE_CHECKING
 
@@ -77,7 +78,7 @@ class FileModule(FavaModule):
         if path not in self.ledger.options["include"]:
             raise FavaAPIError("Trying to read a non-source file")
 
-        with open(path, mode="rb") as file:
+        with Path(path).open(mode="rb") as file:
             contents = file.read()
 
         sha256sum = sha256(contents).hexdigest()
@@ -106,7 +107,7 @@ class FileModule(FavaModule):
                 raise FavaAPIError("The file changed externally.")
 
             contents = encode(source, encoding="utf-8")
-            with open(path, "w+b") as file:
+            with Path(path).open("w+b") as file:
                 file.write(contents)
 
             self.ledger.extensions.after_write_source(path, source)
@@ -226,12 +227,13 @@ def insert_metadata_in_file(
 
     Takes the whitespace in front of the line that lineno into account.
     """
-    with open(filename, encoding="utf-8") as file:
+    path = Path(filename)
+    with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
     contents.insert(lineno, f'{" " * indent}{key}: "{value}"\n')
 
-    with open(filename, "w", encoding="utf-8") as file:
+    with path.open("w", encoding="utf-8") as file:
         file.write("".join(contents))
 
 
@@ -264,7 +266,8 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
     """
-    with open(entry.meta["filename"], encoding="utf-8") as file:
+    path = Path(entry.meta["filename"])
+    with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
@@ -290,7 +293,8 @@ def save_entry_slice(
         FavaAPIError: If the file at `path` is not one of the
             source files.
     """
-    with open(entry.meta["filename"], encoding="utf-8") as file:
+    path = Path(entry.meta["filename"])
+    with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
     first_entry_line = entry.meta["lineno"] - 1
@@ -304,7 +308,8 @@ def save_entry_slice(
         + [source_slice + "\n"]
         + lines[first_entry_line + len(entry_lines) :]
     )
-    with open(entry.meta["filename"], "w", encoding="utf-8") as file:
+    path = Path(entry.meta["filename"])
+    with path.open("w", encoding="utf-8") as file:
         file.writelines(lines)
 
     return sha256_str(source_slice)
@@ -334,7 +339,8 @@ def insert_entry(
     )
     content = to_string(entry, currency_column, indent)
 
-    with open(filename, encoding="utf-8") as file:
+    path = Path(filename)
+    with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
     if lineno is None:
@@ -343,7 +349,7 @@ def insert_entry(
     else:
         contents.insert(lineno, content + "\n")
 
-    with open(filename, "w", encoding="utf-8") as file:
+    with path.open("w", encoding="utf-8") as file:
         file.writelines(contents)
 
     if lineno is None:

@@ -5,14 +5,12 @@ interface for asynchronous functionality.
 """
 from __future__ import annotations
 
-import os
 import shutil
 from dataclasses import dataclass
 from functools import wraps
 from inspect import Parameter
 from inspect import signature
-from os import path
-from os import remove
+from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Mapping
@@ -232,14 +230,15 @@ def get_move(account: str, new_name: str, filename: str) -> str:
     new_path = filepath_in_document_folder(
         g.ledger.options["documents"][0], account, new_name, g.ledger
     )
+    file_path = Path(filename)
 
-    if not path.isfile(filename):
+    if not file_path.is_file():
         raise FavaAPIError(f"Not a file: '{filename}'")
-    if path.exists(new_path):
+    if new_path.exists():
         raise FavaAPIError(f"Target file exists: '{new_path}'")
 
-    if not path.exists(path.dirname(new_path)):
-        os.makedirs(path.dirname(new_path), exist_ok=True)
+    if not new_path.parent.exists():
+        new_path.parent.mkdir(parents=True)
     shutil.move(filename, new_path)
 
     return f"Moved {filename} to {new_path}."
@@ -288,10 +287,11 @@ def delete_document(filename: str) -> str:
     if not is_document_or_import_file(filename, g.ledger):
         raise FavaAPIError("No valid document or import file.")
 
-    if not path.exists(filename):
+    file_path = Path(filename)
+    if not file_path.exists():
         raise FavaAPIError(f"{filename} does not exist.")
 
-    remove(filename)
+    file_path.unlink()
     return f"Deleted {filename}."
 
 
@@ -314,19 +314,18 @@ def put_add_document() -> str:
         upload.filename,
         g.ledger,
     )
-    directory, filename = path.split(filepath)
 
-    if path.exists(filepath):
+    if filepath.exists():
         raise FavaAPIError(f"{filepath} already exists.")
 
-    if not path.exists(directory):
-        os.makedirs(directory, exist_ok=True)
+    if not filepath.parent.exists():
+        filepath.parent.mkdir(parents=True)
 
     upload.save(filepath)
 
     if request.form.get("hash"):
         g.ledger.file.insert_metadata(
-            request.form["hash"], "document", filename
+            request.form["hash"], "document", filepath.name
         )
     return f"Uploaded to {filepath}"
 
@@ -362,13 +361,11 @@ def put_upload_import_file() -> str:
         raise FavaAPIError("Uploaded file is missing filename.")
     filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
 
-    directory = path.dirname(filepath)
-
-    if path.exists(filepath):
+    if filepath.exists():
         raise FavaAPIError(f"{filepath} already exists.")
 
-    if not path.exists(directory):
-        os.makedirs(directory, exist_ok=True)
+    if not filepath.parent.exists():
+        filepath.parent.mkdir(parents=True)
 
     upload.save(filepath)
 

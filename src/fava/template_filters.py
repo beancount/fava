@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from contextlib import suppress
 from decimal import Decimal
-from os.path import basename as path_basename
+from pathlib import Path
 from typing import MutableMapping
 from typing import TYPE_CHECKING
 from typing import TypeVar
@@ -116,7 +116,7 @@ def should_show(account: TreeNode) -> bool:
 
 def basename(file_path: str) -> str:
     """Return the basename of a filepath."""
-    return normalize("NFC", path_basename(file_path))
+    return normalize("NFC", Path(file_path).name)
 
 
 def collapse_account(account_name: str) -> bool:

@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
+    from pathlib import Path
+
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
@@ -62,7 +64,7 @@ class FavaExtensionBase:
 
 
 def find_extensions(
-    base_path: str, name: str
+    base_path: Path, name: str
 ) -> tuple[list[type[FavaExtensionBase]], list[FavaExtensionError]]:
     """Find extensions in a module.
 
@@ -76,7 +78,7 @@ def find_extensions(
     """
     classes = []
 
-    sys.path.insert(0, base_path)
+    sys.path.insert(0, str(base_path))
     try:
         module = importlib.import_module(name)
     except ImportError as err:

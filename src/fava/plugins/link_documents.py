@@ -7,10 +7,8 @@ from the transaction to documents, as well as the "#linked" tag.
 from __future__ import annotations
 
 from collections import defaultdict
-from os.path import basename
-from os.path import dirname
-from os.path import join
 from os.path import normpath
+from pathlib import Path
 from typing import Any
 
 from fava.beans.abc import Directive
@@ -44,7 +42,7 @@ def link_documents(
     for index, entry in enumerate(entries):
         if isinstance(entry, Document):
             by_fullname[entry.filename] = index
-            by_basename[basename(entry.filename)].append((index, entry))
+            by_basename[Path(entry.filename).name].append((index, entry))
 
     for index, entry in enumerate(entries):
         disk_docs = [
@@ -65,7 +63,7 @@ def link_documents(
                 if document.account in entry_accounts
             ]
             disk_doc_path = normpath(
-                join(dirname(entry.meta["filename"]), disk_doc)
+                Path(entry.meta["filename"]).parent / disk_doc
             )
             if disk_doc_path in by_fullname:
                 documents.append(by_fullname[disk_doc_path])

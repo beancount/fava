@@ -5,7 +5,7 @@ really does hooks at the moment, works.
 """
 from __future__ import annotations
 
-from os.path import dirname
+from pathlib import Path
 from subprocess import call
 from subprocess import DEVNULL
 from typing import Any
@@ -21,7 +21,7 @@ class AutoCommit(FavaExtensionBase):
     """Auto-commit hook for Fava."""
 
     def _run(self, args: list[str]) -> None:
-        cwd = dirname(self.ledger.beancount_file_path)
+        cwd = Path(self.ledger.beancount_file_path).parent
         call(args, cwd=cwd, stdout=DEVNULL)
 
     def after_write_source(self, path: str, _: Any) -> None:

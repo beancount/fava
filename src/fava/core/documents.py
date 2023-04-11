@@ -3,10 +3,7 @@ from __future__ import annotations
 
 from os import altsep
 from os import sep
-from os.path import abspath
-from os.path import dirname
-from os.path import join
-from os.path import normpath
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from fava.helpers import FavaAPIError
@@ -25,23 +22,20 @@ def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
     Returns:
         Whether this is one of the documents or a path in an import dir.
     """
-    filenames = [
-        document.filename for document in ledger.all_entries_by_type.Document
-    ]
-    import_directories = [
-        ledger.join_path(d) for d in ledger.fava_options.import_dirs
-    ]
-    if filename in filenames:
+    if any(
+        filename == d.filename for d in ledger.all_entries_by_type.Document
+    ):
         return True
-    file_path = abspath(filename)
-    if any(file_path.startswith(d) for d in import_directories):
-        return True
-    return False
+    file_path = Path(filename).resolve()
+    return any(
+        str(file_path).startswith(str(ledger.join_path(d)))
+        for d in ledger.fava_options.import_dirs
+    )
 
 
 def filepath_in_document_folder(
     documents_folder: str, account: str, filename: str, ledger: FavaLedger
-) -> str:
+) -> Path:
     """File path for a document in the folder for an account.
 
     Args:
@@ -63,11 +57,8 @@ def filepath_in_document_folder(
         if separator:
             filename = filename.replace(separator, " ")
 
-    return normpath(
-        join(
-            dirname(ledger.beancount_file_path),
-            documents_folder,
-            *account.split(":"),
-            filename,
-        )
+    return ledger.join_path(
+        documents_folder,
+        *account.split(":"),
+        filename,
     )

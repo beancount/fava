@@ -5,7 +5,6 @@ import logging
 import re
 import time
 from functools import wraps
-from os.path import basename
 from pathlib import Path
 from typing import Any
 from typing import Callable
@@ -122,7 +121,7 @@ def send_file_inline(filename: str) -> Response:
         response: Response = send_file(filename)
     except FileNotFoundError:
         return abort(404)
-    base = basename(filename)
+    base = Path(filename).name
     cont_disp = f"inline; filename*=UTF-8''{url_quote(base)}"
     response.headers["Content-Disposition"] = cont_disp
     return response

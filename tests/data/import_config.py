@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import csv
 import datetime
-import os
 from decimal import Decimal
+from pathlib import Path
 
 from beancount.core import amount
 from beancount.core import data
@@ -21,10 +21,10 @@ class TestImporter(importer.ImporterProtocol):
     currency = "EUR"
 
     def identify(self, file):
-        return os.path.basename(file.name) == ("import.csv")
+        return Path(file.name).name == ("import.csv")
 
     def file_name(self, file):
-        return f"examplebank.{os.path.basename(file.name)}"
+        return f"examplebank.{Path(file.name).name}"
 
     def file_account(self, _):
         return self.account
@@ -35,7 +35,7 @@ class TestImporter(importer.ImporterProtocol):
     def extract(self, file):
         entries = []
         index = 0
-        with open(file.name, encoding="utf-8") as file_:
+        with Path(file.name).open(encoding="utf-8") as file_:
             csv_reader = csv.DictReader(file_, delimiter=";")
             for index, row in enumerate(csv_reader):
                 meta = data.new_metadata(file.name, index)

@@ -16,11 +16,11 @@ def test_watcher_file(tmp_path: Path) -> None:
     file2.write_text("test")
 
     watcher = Watcher()
-    watcher.update([str(file1), str(file2)], [])
+    watcher.update([file1, file2], [])
     assert not watcher.check()
 
     # time.time is too precise
-    time.sleep(1)
+    time.sleep(0.05)
 
     file1.write_text("test2")
 
@@ -32,7 +32,7 @@ def test_watcher_deleted_file(tmp_path: Path) -> None:
     file1.write_text("test")
 
     watcher = Watcher()
-    watcher.update([str(file1)], [])
+    watcher.update([file1], [])
     assert not watcher.check()
 
     file1.unlink()
@@ -45,11 +45,11 @@ def test_watcher_folder(tmp_path: Path) -> None:
     (folder / "bar").mkdir()
 
     watcher = Watcher()
-    watcher.update([], [str(folder)])
+    watcher.update([], [folder])
     assert not watcher.check()
 
     # time.time is too precise
-    time.sleep(1)
+    time.sleep(0.05)
 
     (folder / "bar2").mkdir()
 

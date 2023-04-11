@@ -2,8 +2,7 @@
 from __future__ import annotations
 
 from inspect import getfile
-from os.path import dirname
-from os.path import join
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
@@ -31,7 +30,7 @@ class ExtensionModule(FavaModule):
 
         for extension in _extension_entries:
             extensions, errors = find_extensions(
-                dirname(self.ledger.beancount_file_path), extension
+                Path(self.ledger.beancount_file_path).parent, extension
             )
             all_extensions.extend(extensions)
             self.ledger.errors.extend(errors)
@@ -72,14 +71,14 @@ class ExtensionModule(FavaModule):
         """
         for ext_class, ext in self._instances.items():
             if ext_class.__qualname__ == name:
-                extension_dir = dirname(getfile(ext_class))
-                template_path = join(
-                    extension_dir,
-                    "templates",
-                    f"{ext_class.__qualname__}.html",
+                extension_dir = Path(getfile(ext_class)).parent
+                template_path = (
+                    extension_dir
+                    / "templates"
+                    / f"{ext_class.__qualname__}.html"
                 )
 
-                with open(template_path, encoding="utf-8") as ext_template:
+                with template_path.open(encoding="utf-8") as ext_template:
                     return ext_template.read(), ext
 
         raise LookupError("Extension report not found.")

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from os import path
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -30,8 +30,8 @@ def test_filepath_in_documents_folder(
         example_ledger.options, "documents", ["/test"]  # type: ignore
     )
 
-    def _join(start: str, *args: str) -> str:
-        return path.abspath(path.join(start, *args))
+    def _join(start: str, *args: str) -> Path:
+        return Path(start).joinpath(*args).resolve()
 
     assert filepath_in_document_folder(
         "/test", "Assets:US:BofA:Checking", "filename", example_ledger

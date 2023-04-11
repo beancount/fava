@@ -6,13 +6,7 @@ import sys
 import traceback
 from os import altsep
 from os import sep
-from os import stat
-from os.path import basename
-from os.path import dirname
-from os.path import exists
-from os.path import isdir
-from os.path import join
-from os.path import normpath
+from pathlib import Path
 from runpy import run_path
 from typing import Any
 from typing import NamedTuple
@@ -66,7 +60,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
         importer.name(),
         account or "",
         date or datetime.date.today(),
-        name or basename(filename),
+        name or Path(filename).name,
     )
 
 
@@ -81,7 +75,7 @@ class IngestModule(FavaModule):
         self.mtime: int | None = None
 
     @property
-    def module_path(self) -> str | None:
+    def module_path(self) -> Path | None:
         """The path to the importer configuration."""
         config_path = self.ledger.fava_options.import_config
         if not config_path:
@@ -92,25 +86,25 @@ class IngestModule(FavaModule):
         self.ledger.errors.append(IngestError(None, msg, None))
 
     def load_file(self) -> None:
-        module_path = self.module_path
-        if module_path is None:
+        if self.module_path is None:
             return
+        module_path = Path(self.module_path)
 
-        if not exists(module_path) or isdir(module_path):
+        if not module_path.exists() or module_path.is_dir():
             self._error(f"File does not exist: '{module_path}'")
             return
 
-        if stat(module_path).st_mtime_ns == self.mtime:
+        if module_path.stat().st_mtime_ns == self.mtime:
             return
 
         try:
-            mod = run_path(module_path)
+            mod = run_path(str(self.module_path))
         except Exception:  # noqa: BLE001
             message = "".join(traceback.format_exception(*sys.exc_info()))
             self._error(f"Error in importer '{module_path}': {message}")
             return
 
-        self.mtime = stat(module_path).st_mtime_ns
+        self.mtime = module_path.stat().st_mtime_ns
         self.config = mod["CONFIG"]
         self.hooks = [extract.find_duplicate_entries]
         if "HOOKS" in mod:
@@ -141,7 +135,7 @@ class IngestModule(FavaModule):
             full_path = self.ledger.join_path(directory)
             files = list(identify.find_imports(self.config, full_path))
             for filename, importers in files:
-                base = basename(filename)
+                base = Path(filename).name
                 infos = [
                     file_import_info(filename, importer)
                     for importer in importers
@@ -170,7 +164,7 @@ class IngestModule(FavaModule):
 
         if (
             self.mtime is None
-            or stat(self.module_path).st_mtime_ns > self.mtime
+            or Path(self.module_path).stat().st_mtime_ns > self.mtime
         ):
             self.load_file()
 
@@ -193,7 +187,7 @@ class IngestModule(FavaModule):
 
 def filepath_in_primary_imports_folder(
     filename: str, ledger: FavaLedger
-) -> str:
+) -> Path:
     """File path for a document to upload to the primary import folder.
 
     Args:
@@ -211,10 +205,4 @@ def filepath_in_primary_imports_folder(
         if separator:
             filename = filename.replace(separator, " ")
 
-    return normpath(
-        join(
-            dirname(ledger.beancount_file_path),
-            primary_imports_folder,
-            filename,
-        )
-    )
+    return ledger.join_path(primary_imports_folder, filename)

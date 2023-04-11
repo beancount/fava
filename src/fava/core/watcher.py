@@ -1,8 +1,8 @@
 """A simple file and folder watcher."""
 from __future__ import annotations
 
-from os import stat
 from os import walk
+from pathlib import Path
 from typing import Iterable
 
 
@@ -16,11 +16,11 @@ class Watcher:
     __slots__ = ["_files", "_folders", "last_checked"]
 
     def __init__(self) -> None:
-        self._files: list[str] = []
-        self._folders: list[str] = []
+        self._files: list[Path] = []
+        self._folders: list[Path] = []
         self.last_checked = 0
 
-    def update(self, files: Iterable[str], folders: Iterable[str]) -> None:
+    def update(self, files: Iterable[Path], folders: Iterable[Path]) -> None:
         """Update the folders/files to watch.
 
         Args:
@@ -41,14 +41,14 @@ class Watcher:
         latest_mtime = 0
         for path in self._files:
             try:
-                mtime = stat(path).st_mtime_ns
+                mtime = path.stat().st_mtime_ns
             except FileNotFoundError:
                 return True
             if mtime > latest_mtime:
                 latest_mtime = mtime
         for path in self._folders:
             for dirpath, _, _ in walk(path):
-                mtime = stat(dirpath).st_mtime_ns
+                mtime = Path(dirpath).stat().st_mtime_ns
                 if mtime > latest_mtime:
                     latest_mtime = mtime
 
