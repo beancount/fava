@@ -27,7 +27,7 @@ def test_filepath_in_documents_folder(
     example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setitem(
-        example_ledger.options, "documents", ["/test"]  # type: ignore
+        example_ledger.options, "documents", ["/test"]  # type: ignore[arg-type]
     )
 
     def _join(start: str, *args: str) -> Path:

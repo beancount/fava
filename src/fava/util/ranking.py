@@ -46,7 +46,7 @@ class ExponentialDecayRanker:
         self,
         list_: list[str] | None = None,
         rate: float = DEFAULT_RATE,
-    ):
+    ) -> None:
         self.list = list_
         self.rate = rate
         # We don't need to start with float('-inf') here as only the relative

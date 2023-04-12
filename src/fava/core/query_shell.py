@@ -12,8 +12,8 @@ from beancount.query import query_compile
 from beancount.query.query_compile import CompilationError
 from beancount.query.query_parser import ParseError
 from beancount.query.query_parser import RunCustom
-from beancount.query.shell import BQLShell  # type: ignore
-from beancount.utils import pager  # type: ignore
+from beancount.query.shell import BQLShell  # type: ignore[import]
+from beancount.utils import pager  # type: ignore[attr-defined]
 
 from fava.beans.funcs import execute_query
 from fava.beans.funcs import run_query
@@ -40,10 +40,10 @@ except ImportError:
     pass
 
 
-class QueryShell(BQLShell, FavaModule):  # type: ignore
+class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
     """A light wrapper around Beancount's shell."""
 
-    def __init__(self, ledger: FavaLedger):
+    def __init__(self, ledger: FavaLedger) -> None:
         self.buffer = io.StringIO()
         BQLShell.__init__(self, True, None, self.buffer)
         FavaModule.__init__(self, ledger)
@@ -91,7 +91,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
 
     def on_Select(self, statement: str) -> None:  # noqa: N802
         try:
-            c_query = query_compile.compile(  # type: ignore
+            c_query = query_compile.compile(  # type: ignore[attr-defined]
                 statement,
                 self.env_targets,
                 self.env_postings,
@@ -138,14 +138,14 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore
         if name is None:
             # List the available queries.
             for query in self.queries:
-                print(query.name)
+                print(query.name)  # noqa: T201
         else:
             try:
                 query = next(
                     query for query in self.queries if query.name == name
                 )
             except StopIteration:
-                print(f"ERROR: Query '{name}' not found")
+                print(f"ERROR: Query '{name}' not found")  # noqa: T201
             else:
                 statement = self.parser.parse(query.query_string)
                 self.dispatch(statement)

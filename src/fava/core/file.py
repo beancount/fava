@@ -148,6 +148,7 @@ class FileModule(FavaModule):
 
         Returns:
             The `sha256sum` of the new lines of the entry.
+
         Raises:
             FavaAPIError: If the entry is not found or the file changed.
         """
@@ -357,9 +358,11 @@ def insert_entry(
 
     added_lines = content.count("\n") + 1
     return [
-        option._replace(lineno=option.lineno + added_lines)
-        if option.filename == filename and option.lineno > lineno
-        else option
+        (
+            option._replace(lineno=option.lineno + added_lines)
+            if option.filename == filename and option.lineno > lineno
+            else option
+        )
         for option in insert_options
     ]
 

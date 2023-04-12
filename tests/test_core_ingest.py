@@ -6,7 +6,7 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.ingest.importer import ImporterProtocol  # type: ignore
+from beancount.ingest.importer import ImporterProtocol  # type: ignore[import]
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Note
@@ -25,7 +25,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def test_ingest_file_import_info(
     test_data_dir: Path, get_ledger: GetFavaLedger
 ) -> None:
-    class Imp(ImporterProtocol):  # type: ignore
+    class Imp(ImporterProtocol):  # type: ignore[misc]
         def __init__(self, acc: str) -> None:
             self.acc = acc
 
@@ -35,7 +35,7 @@ def test_ingest_file_import_info(
         def identify(self, file: Any) -> bool:
             return self.acc in file.name
 
-    class Invalid(ImporterProtocol):  # type: ignore
+    class Invalid(ImporterProtocol):  # type: ignore[misc]
         def __init__(self, acc: str) -> None:
             self.acc = acc
 

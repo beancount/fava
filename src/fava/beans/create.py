@@ -7,7 +7,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from beancount.core import data
-from beancount.core.amount import A as BEANCOUNT_A  # type: ignore
+from beancount.core.amount import A as BEANCOUNT_A  # type: ignore[attr-defined]
 from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Position as BeancountPosition
 
@@ -38,13 +38,13 @@ def amount(amt: Amount | tuple[Decimal, str] | str) -> Amount:
     if isinstance(amt, Amount):
         return amt
     if isinstance(amt, str):
-        return BEANCOUNT_A(amt)  # type: ignore
-    return BeancountAmount(*amt)  # type: ignore
+        return BEANCOUNT_A(amt)  # type: ignore[no-any-return]
+    return BeancountAmount(*amt)  # type: ignore[return-value]
 
 
 def position(units: Amount, cost: Cost | None) -> Position:
     """Create a position."""
-    return BeancountPosition(units, cost)  # type: ignore
+    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
 
 
 def posting(
@@ -58,8 +58,8 @@ def posting(
     """Create a Beancount Posting."""
     if price is not None:
         price = amount(price)
-    return data.Posting(  # type: ignore
-        account, amount(units), cost, price, flag, meta  # type: ignore
+    return data.Posting(  # type: ignore[return-value]
+        account, amount(units), cost, price, flag, meta  # type: ignore[arg-type]
     )
 
 
@@ -74,8 +74,15 @@ def transaction(
     postings: list[Posting],
 ) -> Transaction:
     """Create a Beancount Transaction."""
-    return data.Transaction(  # type: ignore
-        meta, date, flag, payee, narration, tags, links, postings  # type: ignore
+    return data.Transaction(  # type: ignore[return-value]
+        meta,
+        date,
+        flag,
+        payee,
+        narration,
+        tags,
+        links,
+        postings,  # type: ignore[arg-type]
     )
 
 
@@ -88,8 +95,13 @@ def balance(
     diff_amount: Amount | None = None,
 ) -> Balance:
     """Create a Beancount Balance."""
-    return data.Balance(  # type: ignore
-        meta, date, account, amount(_amount), tolerance, diff_amount  # type: ignore
+    return data.Balance(  # type: ignore[return-value]
+        meta,
+        date,
+        account,
+        amount(_amount),  # type: ignore[arg-type]
+        tolerance,
+        diff_amount,  # type: ignore[arg-type]
     )
 
 
@@ -100,4 +112,6 @@ def note(
     comment: str,
 ) -> Balance:
     """Create a Beancount Note."""
-    return data.Note(meta, date, account, comment)  # type: ignore
+    return data.Note(  # type: ignore[return-value]
+        meta, date, account, comment
+    )

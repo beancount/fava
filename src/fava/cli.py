@@ -95,7 +95,7 @@ def main(  # noqa: PLR0912
     app.config["READ_ONLY"] = read_only
 
     if prefix:
-        app.wsgi_app = DispatcherMiddleware(  # type: ignore
+        app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]
             simple_wsgi, {prefix: app.wsgi_app}
         )
 
@@ -121,7 +121,7 @@ def main(  # noqa: PLR0912
     else:
         if profile:
             app.config["PROFILE"] = True
-            app.wsgi_app = ProfilerMiddleware(  # type: ignore
+            app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
                 app.wsgi_app,
                 restrictions=(30,),
                 profile_dir=profile_dir if profile_dir else None,

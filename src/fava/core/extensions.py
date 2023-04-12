@@ -66,6 +66,7 @@ class ExtensionModule(FavaModule):
 
         Args:
             name: The extension class qualname.
+
         Returns:
             Tuple of associated template source, extension instance
         """
@@ -110,7 +111,6 @@ def extension_entries(
     They have the following format::
 
         2016-04-01 custom "fava-extension" "my_extension" "{'my_option': {}}"
-
     """
     _extension_entries = [
         entry for entry in custom_entries if entry.type == "fava-extension"

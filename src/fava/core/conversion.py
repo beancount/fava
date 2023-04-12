@@ -4,7 +4,6 @@ All functions in this module will be automatically added as template filters.
 """
 from __future__ import annotations
 
-from typing import Any
 from typing import overload
 from typing import TYPE_CHECKING
 
@@ -61,7 +60,6 @@ def get_market_value(
         value_currency = cost_.currency
         base_quote = (units_.currency, value_currency)
         price_number = prices.get_price(base_quote, date)
-        assert units_.number is not None
         if price_number is not None:
             return create.amount(
                 (units_.number * price_number, value_currency)
@@ -122,7 +120,9 @@ def units(inventory: CounterInventory) -> SimpleCounterInventory:
     ...
 
 
-def units(inventory: Inventory | CounterInventory) -> Any:
+def units(
+    inventory: Inventory | CounterInventory,
+) -> Inventory | SimpleCounterInventory:
     """Get the units of an inventory."""
     return inventory.reduce(get_units)
 
@@ -137,7 +137,9 @@ def cost(inventory: CounterInventory) -> SimpleCounterInventory:
     ...
 
 
-def cost(inventory: Inventory | CounterInventory) -> Any:
+def cost(
+    inventory: Inventory | CounterInventory,
+) -> Inventory | SimpleCounterInventory:
     """Get the cost of an inventory."""
     return inventory.reduce(get_cost)
 
@@ -167,7 +169,7 @@ def cost_or_value(
     conversion: str,
     prices: FavaPriceMap,
     date: datetime.date | None = None,
-) -> Any:
+) -> Inventory | SimpleCounterInventory:
     """Get the cost or value of an inventory."""
     if conversion == "at_cost":
         return inventory.reduce(get_cost)

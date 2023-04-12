@@ -76,8 +76,8 @@ class FavaOptions:
 
 _fields = fields(FavaOptions)
 All_OPTS = {f.name for f in _fields}
-BOOL_OPTS = {f.name for f in _fields if f.type == "bool"}  # type: ignore
-INT_OPTS = {f.name for f in _fields if f.type == "int"}  # type: ignore
+BOOL_OPTS = {f.name for f in _fields if str(f.type) == "bool"}
+INT_OPTS = {f.name for f in _fields if str(f.type) == "int"}
 TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
 STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
 
@@ -87,20 +87,22 @@ def parse_option_custom_entry(  # noqa: PLR0912
 ) -> None:
     """Parse a single custom fava-option entry and set option accordingly."""
     key = entry.values[0].value.replace("-", "_")
-    assert key in All_OPTS, f"unknown option `{key}`"
+    if key not in All_OPTS:
+        raise ValueError(f"unknown option `{key}`")
 
     if key == "default_file":
         options.default_file = entry.meta["filename"]
         return
 
     value = entry.values[1].value
-    assert isinstance(value, str), f"expected string value for option `{key}`"
+    if not isinstance(value, str):
+        raise TypeError(f"expected string value for option `{key}`")
 
     if key == "insert_entry":
         try:
             pattern = re.compile(value)
         except re.error as err:
-            raise AssertionError(
+            raise TypeError(
                 f"Should be a regular expression: '{value}'."
             ) from err
         opt = InsertEntryOption(
@@ -111,7 +113,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
         try:
             pattern = re.compile(value)
         except re.error as err:
-            raise AssertionError(
+            raise TypeError(
                 f"Should be a regular expression: '{value}'."
             ) from err
         options.collapse_pattern.append(pattern)
@@ -120,10 +122,11 @@ def parse_option_custom_entry(  # noqa: PLR0912
             Locale.parse(value)
             options.locale = value
         except UnknownLocaleError as err:
-            raise AssertionError(f"Unknown locale: '{value}'.") from err
+            raise ValueError(f"Unknown locale: '{value}'.") from err
     elif key == "fiscal_year_end":
         fye = parse_fye_string(value)
-        assert fye, "Invalid 'fiscal_year_end' option."
+        if fye is None:
+            raise ValueError("Invalid 'fiscal_year_end' option.")
         options.fiscal_year_end = fye
     elif key in STR_OPTS:
         setattr(options, key, value)
@@ -131,8 +134,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
         setattr(options, key, value.lower() == "true")
     elif key in INT_OPTS:
         setattr(options, key, int(value))
-    else:
-        assert key in TUPLE_OPTS, f"unknown option `{key}`"
+    else:  # key in TUPLE_OPTS
         setattr(options, key, tuple(value.strip().split(" ")))
 
 
@@ -158,7 +160,7 @@ def parse_options(
     for entry in (e for e in custom_entries if e.type == "fava-option"):
         try:
             parse_option_custom_entry(entry, options)
-        except (IndexError, TypeError, AssertionError) as err:
+        except (IndexError, TypeError, ValueError) as err:
             msg = f"Failed to parse fava-option entry: {str(err)}"
             errors.append(OptionError(entry.meta, msg, entry))
 

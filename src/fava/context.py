@@ -21,4 +21,4 @@ class Context:
     filtered: FilteredLedger
 
 
-g: Context = flask_g  # type: ignore
+g: Context = flask_g  # type: ignore[assignment]

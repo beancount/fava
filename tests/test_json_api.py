@@ -78,7 +78,7 @@ def test_api_add_document(
         app.preprocess_request()
 
         monkeypatch.setitem(
-            g.ledger.options, "documents", [str(tmp_path)]  # type: ignore
+            g.ledger.options, "documents", [str(tmp_path)]  # type: ignore[arg-type]
         )
         request_data = {
             "folder": str(tmp_path),
@@ -328,9 +328,7 @@ def test_api_add_entries(
         response = test_client.put(url, json={"entries": entries})
         assert_api_success(response, "Stored 3 entries.")
 
-        assert (
-            test_file.read_text("utf-8")
-            == """
+        assert test_file.read_text("utf-8") == """
 2017-01-12 * "Test1" ""
   Assets:US:ETrade:Cash                                 100 USD
   Assets:US:ETrade:GLD
@@ -343,7 +341,6 @@ def test_api_add_entries(
   Assets:US:ETrade:Cash                                 100 USD
   Assets:US:ETrade:GLD
 """
-        )
 
 
 @pytest.mark.parametrize(

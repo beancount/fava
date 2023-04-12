@@ -25,5 +25,5 @@ def test_upcoming_events() -> None:
         f'{datetime.date.today()} event "some_event" "test"\n'
         '2012-12-12 event "test" "test"'
     )
-    events = upcoming_events(entries, 1)  # type: ignore
+    events = upcoming_events(entries, 1)  # type: ignore[arg-type]
     assert len(events) == 1

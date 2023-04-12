@@ -32,7 +32,7 @@ def test_paths_to_watch(
         [],
     )
     monkeypatch.setitem(
-        example_ledger.options, "documents", ["folder"]  # type: ignore
+        example_ledger.options, "documents", ["folder"]  # type: ignore[arg-type]
     )
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (

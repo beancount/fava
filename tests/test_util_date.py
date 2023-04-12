@@ -75,11 +75,6 @@ def test_get_next_interval(
     assert get == _to_date(expect)
 
 
-def test_get_next_intervalfail2() -> None:
-    with pytest.raises(NotImplementedError):
-        get_next_interval(date(2016, 4, 18), "decade")  # type: ignore
-
-
 @pytest.mark.parametrize(
     ("input_date_string", "interval", "expect"),
     [
@@ -102,11 +97,6 @@ def test_get_prev_interval(
 ) -> None:
     get = get_prev_interval(_to_date(input_date_string), interval)
     assert get == _to_date(expect)
-
-
-def test_get_prev_intervalfail2() -> None:
-    with pytest.raises(NotImplementedError):
-        get_prev_interval(date(2016, 4, 18), "decade")  # type: ignore
 
 
 def test_interval_tuples() -> None:
@@ -278,11 +268,6 @@ def test_number_of_days_in_period(
     interval: Interval, date_str: str, expect: int
 ) -> None:
     assert number_of_days_in_period(interval, _to_date(date_str)) == expect
-
-
-def test_number_of_days_in_period2() -> None:
-    with pytest.raises(NotImplementedError):
-        number_of_days_in_period("test", date(2011, 2, 1))  # type: ignore
 
 
 @pytest.mark.parametrize(

@@ -77,7 +77,6 @@ def upload_translations() -> None:
         "api_token": token,
         "id": 90283,
         "updating": "terms",
-        # "sync_terms": 1,
     }
     with path.open("rb") as file:
         files = {"file": file}

@@ -81,7 +81,7 @@ def link_documents(
             for j in documents:
                 # Since we might link a document multiple times, we have to use
                 # the index for the replacement here.
-                doc: Document = entries[j]  # type: ignore
+                doc: Document = entries[j]  # type: ignore[assignment]
                 entries[j] = replace(
                     doc,
                     links=add_to_set(doc.links, hash_),

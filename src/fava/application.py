@@ -20,10 +20,9 @@ from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
 from threading import Lock
-from typing import Any
 from typing import TYPE_CHECKING
 
-import markdown2  # type: ignore
+import markdown2  # type: ignore[import]
 from beancount import __version__ as beancount_version
 from beancount.core.account import ACCOUNT_RE
 from beancount.utils.text_utils import replace_numbers
@@ -35,7 +34,7 @@ from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
-from flask_babel import Babel  # type: ignore
+from flask_babel import Babel  # type: ignore[import]
 from flask_babel import get_translations
 from markupsafe import Markup
 from werkzeug.urls import url_encode
@@ -154,16 +153,16 @@ def get_locale() -> str | None:
 
 
 try:
-    # Flask-Babel <3.0
+    # for Flask-Babel <3.0
     BABEL = Babel(app)
     BABEL.localeselector(get_locale)
 except AttributeError:
-    # Flask-Babel >=3.0
+    # for Flask-Babel >=3.0
     BABEL = Babel(app, locale_selector=get_locale)
 
 
 for function in template_filters.FILTERS:
-    app.add_template_filter(function)  # type: ignore
+    app.add_template_filter(function)
 app.add_template_filter(serialise)
 app.add_template_filter(fields, "dataclass_fields")
 
@@ -204,10 +203,9 @@ def url_for(endpoint: str, **values: str) -> str:
     return CACHED_URL_FOR(endpoint, **values)
 
 
-def translations() -> Any:
+def translations() -> dict[str, str]:
     """Get translations catalog."""
-    # pylint: disable=protected-access
-    return get_translations()._catalog
+    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
 
 
 app.add_template_global(static_url, "static_url")
@@ -218,7 +216,7 @@ app.add_template_global(get_ledger_data, "get_ledger_data")
 
 
 @app.context_processor
-def template_context() -> dict[str, Any]:
+def template_context() -> dict[str, FavaLedger | type[ChartApi]]:
     """Inject variables into the template context."""
     return {"ledger": g.ledger, "chart_api": ChartApi}
 
@@ -378,7 +376,7 @@ def extension_report(report_name: str) -> str:
 
 
 @app.route("/<bfile>/download-query/query_result.<result_format>")
-def download_query(result_format: str) -> Any:
+def download_query(result_format: str) -> Response:
     """Download a query result."""
     name, data = g.ledger.query_shell.query_to_file(
         g.filtered.entries, request.args.get("query_string", ""), result_format
@@ -389,7 +387,7 @@ def download_query(result_format: str) -> Any:
 
 
 @app.route("/<bfile>/download-journal/")
-def download_journal() -> Any:
+def download_journal() -> Response:
     """Download a Journal file."""
     now = datetime.now().replace(microsecond=0)
     filename = f"journal_{now.isoformat()}.beancount"

@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 from flask import current_app
 from flask import url_for
-from flask_babel import gettext  # type: ignore
+from flask_babel import gettext  # type: ignore[import]
 
 from fava.beans.account import root
 from fava.context import g
@@ -27,6 +27,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.accounts import AccountDict
     from fava.core.fava_options import FavaOptions
     from fava.helpers import BeancountError
+    from fava.util.date import Interval
 
 
 class SerialisedError(NamedTuple):
@@ -122,7 +123,7 @@ class ChartData:
 
 
 def _chart_interval_totals(
-    interval: str,
+    interval: Interval,
     account_name: str,
     label: str | None = None,
     invert: bool = False,

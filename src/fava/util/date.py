@@ -16,7 +16,7 @@ from typing import Iterable
 from typing import Iterator
 from typing import NamedTuple
 
-from flask_babel import gettext  # type: ignore
+from flask_babel import gettext  # type: ignore[import]
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
 
@@ -61,15 +61,16 @@ class Interval(Enum):
     DAY = "day"
 
     @property
-    def label(self) -> Interval:
+    def label(self) -> str:
         """The label for the interval."""
-        return {  # type: ignore
+        labels: dict[Interval, str] = {
             Interval.YEAR: gettext("Yearly"),
             Interval.QUARTER: gettext("Quarterly"),
             Interval.MONTH: gettext("Monthly"),
             Interval.WEEK: gettext("Weekly"),
             Interval.DAY: gettext("Daily"),
-        }.get(self)
+        }
+        return labels[self]
 
     @staticmethod
     def get(string: str) -> Interval:
@@ -85,12 +86,11 @@ class Interval(Enum):
             return date.strftime("%Y")
         if self is Interval.QUARTER:
             return f"{date.year}Q{(date.month - 1) // 3 + 1}"
+        if self is Interval.MONTH:
+            return date.strftime("%b %Y")
         if self is Interval.WEEK:
             return date.strftime("%YW%W")
-        if self is Interval.DAY:
-            return date.strftime("%Y-%m-%d")
-        assert self is Interval.MONTH
-        return date.strftime("%b %Y")
+        return date.strftime("%Y-%m-%d")
 
     def format_date_filter(self, date: datetime.date) -> str:
         """Format a date for this interval for the Fava time filter."""
@@ -98,12 +98,11 @@ class Interval(Enum):
             return date.strftime("%Y")
         if self is Interval.QUARTER:
             return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
+        if self is Interval.MONTH:
+            return date.strftime("%Y-%m")
         if self is Interval.WEEK:
             return date.strftime("%Y-W%W")
-        if self is Interval.DAY:
-            return date.strftime("%Y-%m-%d")
-        assert self is Interval.MONTH
-        return date.strftime("%Y-%m")
+        return date.strftime("%Y-%m-%d")
 
 
 def get_prev_interval(
@@ -129,9 +128,7 @@ def get_prev_interval(
         return datetime.date(date.year, date.month, 1)
     if interval is Interval.WEEK:
         return date - timedelta(date.weekday())
-    if interval is Interval.DAY:
-        return date
-    raise NotImplementedError
+    return date
 
 
 def get_next_interval(  # noqa: PLR0911
@@ -304,6 +301,7 @@ def parse_date(  # noqa: PLR0911
 
     Args:
         string: A date(range) in our custom format.
+        fye: The fiscal year end to consider.
 
     Returns:
         A tuple (start, end) of dates.

@@ -96,13 +96,15 @@ def validate_func_arguments(
     sig = signature(func)
     params: list[tuple[str, Any]] = []
     for param in sig.parameters.values():
-        assert param.annotation in {
+        if param.annotation not in {
             "str",
             "list[Any]",
-        }, f"Type of param {param.name} needs to str or list"
-        assert (
-            param.kind == Parameter.POSITIONAL_OR_KEYWORD
-        ), f"Param {param.name} should be positional"
+        }:
+            raise ValueError(
+                f"Type of param {param.name} needs to str or list"
+            )
+        if param.kind != Parameter.POSITIONAL_OR_KEYWORD:
+            raise ValueError(f"Param {param.name} should be positional")
         params.append((param.name, str if param.annotation == "str" else list))
 
     if not params:
@@ -125,8 +127,7 @@ def validate_func_arguments(
 
 
 def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
-    """
-    Register an API endpoint.
+    """Register an API endpoint.
 
     The part of the function name up to the first underscore determines
     the accepted HTTP method. For GET and DELETE endpoints, the function
@@ -134,7 +135,8 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     decorated endpoint handler.
     """
     method, _, name = func.__name__.partition("_")
-    assert method in {"get", "delete", "put"}, func.__name__
+    if method not in {"get", "delete", "put"}:
+        raise ValueError(f"Invalid endpoint function name: {func.__name__}")
     validator = validate_func_arguments(func)
 
     @json_api.route(f"/{name}", methods=[method])
@@ -252,7 +254,7 @@ def get_payee_transaction(payee: str) -> Any:
 
 
 @api_endpoint
-def get_source(filename: str) -> Any:
+def get_source(filename: str) -> dict[str, str]:
     """Load one of the source files."""
     file_path = (
         filename

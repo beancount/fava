@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import Iterable
@@ -10,11 +9,19 @@ from typing import Iterator
 from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
+from typing import TYPE_CHECKING
 
 from fava.beans import create
 from fava.beans.abc import Amount
 from fava.beans.abc import Cost
 from fava.beans.abc import Position
+
+if TYPE_CHECKING:  # pragma: no cover
+    from typing import Concatenate
+    from typing import ParamSpec
+
+    P = ParamSpec("P")
+
 
 ZERO = Decimal()
 InventoryKey = Tuple[str, Optional[Cost]]
@@ -74,7 +81,10 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
             self[key] = new_num
 
     def reduce(
-        self, reducer: Callable[..., Amount], *args: Any
+        self,
+        reducer: Callable[Concatenate[Position, P], Amount],
+        *args: P.args,
+        **_kwargs: P.kwargs,
     ) -> SimpleCounterInventory:
         """Reduce inventory.
 
@@ -85,13 +95,11 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         for (currency, cost), number in self.items():
             pos = create.position(create.amount((number, currency)), cost)
             amount = reducer(pos, *args)
-            assert amount.number is not None
             counter.add(amount.currency, amount.number)
         return counter
 
     def add_amount(self, amount: Amount, cost: Cost | None = None) -> None:
         """Add an Amount to the inventory."""
-        assert amount.number is not None
         key = (amount.currency, cost)
         self.add(key, amount.number)
 

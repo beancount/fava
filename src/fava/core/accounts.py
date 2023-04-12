@@ -46,7 +46,7 @@ def uptodate_status(
     """Status of the last balance or transaction.
 
     Args:
-        account_name: An account name.
+        txn_postings: The TransactionPosting for the account.
 
     Returns:
         A status string for the last balance or transaction of the account.

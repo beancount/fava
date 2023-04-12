@@ -39,12 +39,12 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         return portfolios
 
     def _account_name_pattern(self, tree, pattern):
-        """
-        Return portfolio info based on matching account name.
+        """Return portfolio info based on matching account name.
 
         Args:
             tree: Ledger root tree node.
             pattern: Account name regex pattern.
+
         Return:
             Data structured for use with a querytable (types, rows).
         """
@@ -62,13 +62,13 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         return title, portfolio_data
 
     def _account_metadata_pattern(self, tree, metadata_key, pattern):
-        """
-        Return portfolio info based on matching account open metadata.
+        """Return portfolio info based on matching account open metadata.
 
         Args:
             tree: Ledger root tree node.
             metadata_key: Metadata key to match for in account open.
             pattern: Metadata value's regex pattern to match for.
+
         Return:
             Data structured for use with a querytable - (types, rows).
         """
@@ -92,11 +92,11 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         return title, portfolio_data
 
     def _portfolio_data(self, nodes):
-        """
-        Turn a portfolio of tree nodes into querytable-style data.
+        """Turn a portfolio of tree nodes into querytable-style data.
 
         Args:
             nodes: Account tree nodes.
+
         Return:
             types: Tuples of column names and types as strings.
             rows: Dictionaries of row data by column names.

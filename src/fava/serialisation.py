@@ -31,8 +31,9 @@ from fava.util.date import parse_date
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
-    assert isinstance(entry, Directive), f"Unsupported object {entry}"
-    ret = entry._asdict()  # type: ignore
+    if not isinstance(entry, Directive):
+        raise TypeError(f"Unsupported object {entry}")
+    ret = entry._asdict()  # type: ignore[attr-defined]
     ret["type"] = entry.__class__.__name__
     return ret
 
@@ -40,7 +41,7 @@ def serialise(entry: Directive | Posting) -> Any:
 @serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
     """Serialise an entry."""
-    ret = entry._asdict()  # type: ignore
+    ret = entry._asdict()  # type: ignore[attr-defined]
     ret["meta"] = copy(entry.meta)
     ret["meta"].pop("__tolerances__", None)
     ret["type"] = "Transaction"
@@ -52,7 +53,7 @@ def _(entry: Transaction) -> Any:
 @serialise.register(Balance)
 def _(entry: Balance) -> Any:
     """Serialise an entry."""
-    ret = entry._asdict()  # type: ignore
+    ret = entry._asdict()  # type: ignore[attr-defined]
     ret["type"] = "Balance"
     amt = ret["amount"]
     ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
@@ -80,7 +81,8 @@ def deserialise_posting(posting: Any) -> Posting:
     if errors:
         raise FavaAPIError(f"Invalid amount: {amount}")
     txn = entries[0]
-    assert isinstance(txn, Transaction)
+    if not isinstance(txn, Transaction):
+        raise TypeError("Expected transaction")
     pos = txn.postings[0]
     return replace(pos, account=posting["account"], meta=None)
 

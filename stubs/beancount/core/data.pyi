@@ -20,7 +20,7 @@ Meta: TypeAlias = dict[str, Any]
 Tags: TypeAlias = set[str] | frozenset[str]
 Links: TypeAlias = Tags
 
-EMPTY_SET: Any
+EMPTY_SET: frozenset[str]
 
 class Booking(enum.Enum):
     STRICT: str

@@ -56,6 +56,5 @@ html_theme_options = {
     "link": "#3572b0",
     "link_hover": "#1A2F59",
 }
-# html_static_path = ['_static']
 html_sidebars = {"**": ["about.html", "navigation.html"]}
 htmlhelp_basename = "favadoc"

@@ -12,7 +12,7 @@ from typing import Any
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
-from beancount.ingest import cache  # type: ignore
+from beancount.ingest import cache  # type: ignore[import]
 from beancount.ingest import extract
 from beancount.ingest import identify
 
@@ -67,7 +67,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
 class IngestModule(FavaModule):
     """Exposes ingest functionality."""
 
-    def __init__(self, ledger: FavaLedger):
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.config: list[Any] = []
         self.importers: dict[str, Any] = {}

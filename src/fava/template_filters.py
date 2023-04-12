@@ -4,12 +4,10 @@ All functions in this module will be automatically added as template filters.
 """
 from __future__ import annotations
 
-from contextlib import suppress
 from decimal import Decimal
 from pathlib import Path
-from typing import MutableMapping
+from typing import Callable
 from typing import TYPE_CHECKING
-from typing import TypeVar
 from unicodedata import normalize
 
 from fava.beans import funcs
@@ -26,21 +24,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.tree import TreeNode
 
 
-MappingValue = TypeVar("MappingValue")
 ZERO = Decimal()
-
-
-def remove_keys(
-    _dict: MutableMapping[str, MappingValue] | None, keys: list[str]
-) -> MutableMapping[str, MappingValue]:
-    """Remove keys from a dictionary."""
-    if not _dict:
-        return {}
-    new = dict(_dict)
-    for key in keys:
-        with suppress(KeyError):
-            del new[key]
-    return new
 
 
 def cost_or_value(
@@ -125,7 +109,7 @@ def collapse_account(account_name: str) -> bool:
     return any(pattern.match(account_name) for pattern in collapse_patterns)
 
 
-FILTERS = [
+FILTERS: list[Callable[..., (str | bool | SimpleCounterInventory)]] = [
     basename,
     collapse_account,
     cost,
@@ -136,7 +120,6 @@ FILTERS = [
     format_date,
     format_date_filter,
     funcs.hash_entry,
-    remove_keys,
     should_show,
     units,
 ]

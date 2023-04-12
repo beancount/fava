@@ -21,7 +21,7 @@ class TestImporter(importer.ImporterProtocol):
     currency = "EUR"
 
     def identify(self, file):
-        return Path(file.name).name == ("import.csv")
+        return Path(file.name).name == "import.csv"
 
     def file_name(self, file):
         return f"examplebank.{Path(file.name).name}"

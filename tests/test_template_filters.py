@@ -16,17 +16,10 @@ from fava.template_filters import collapse_account
 from fava.template_filters import format_currency
 from fava.template_filters import format_date
 from fava.template_filters import format_date_filter
-from fava.template_filters import remove_keys
 from fava.template_filters import should_show
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
-
-
-def test_remove_keys() -> None:
-    """Dict keys get remove or return empty dict if None is given."""
-    assert not remove_keys(None, [])
-    assert not remove_keys({"asdf": 1}, ["asdf"])
 
 
 @pytest.mark.parametrize(

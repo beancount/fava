@@ -6,10 +6,14 @@ import datetime
 import io
 from collections import OrderedDict
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.funcs import ResultRow
+    from fava.beans.funcs import ResultType
 
 try:
-    import pyexcel  # type: ignore
+    import pyexcel  # type: ignore[import]
 
     HAVE_EXCEL = True
 except ImportError:  # pragma: no cover
@@ -17,8 +21,11 @@ except ImportError:  # pragma: no cover
 
 
 def to_excel(
-    types: Any, rows: Any, result_format: str, query_string: str
-) -> Any:
+    types: list[ResultType],
+    rows: list[ResultRow],
+    result_format: str,
+    query_string: str,
+) -> io.BytesIO:
     """Save result to spreadsheet document.
 
     Args:
@@ -30,7 +37,8 @@ def to_excel(
     Returns:
         The (binary) file contents.
     """
-    assert result_format in ("xls", "xlsx", "ods")
+    if result_format not in ("xls", "xlsx", "ods"):
+        raise ValueError(f"Invalid result format: {result_format}")
     resp = io.BytesIO()
     book = pyexcel.Book(
         OrderedDict(
@@ -45,7 +53,7 @@ def to_excel(
     return resp
 
 
-def to_csv(types: Any, rows: Any) -> Any:
+def to_csv(types: list[ResultType], rows: list[ResultRow]) -> io.BytesIO:
     """Save result to CSV.
 
     Args:
@@ -61,14 +69,16 @@ def to_csv(types: Any, rows: Any) -> Any:
     return io.BytesIO(resp.getvalue().encode("utf-8"))
 
 
-def _result_array(types: Any, rows: Any) -> Any:
+def _result_array(
+    types: list[ResultType], rows: list[ResultRow]
+) -> list[list[str]]:
     result_array = [[name for name, t in types]]
     for row in rows:
         result_array.append(_row_to_pyexcel(row, types))
     return result_array
 
 
-def _row_to_pyexcel(row: Any, header: Any) -> list[str]:
+def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
     result = []
     for idx, column in enumerate(header):
         value = row[idx]
@@ -85,6 +95,7 @@ def _row_to_pyexcel(row: Any, header: Any) -> list[str]:
         elif type_ == datetime.date:
             result.append(str(value))
         else:
-            assert isinstance(value, str)
+            if not isinstance(value, str):
+                raise TypeError(f"unexpected type {type(value)}")
             result.append(value)
     return result

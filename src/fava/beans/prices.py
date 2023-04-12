@@ -30,13 +30,13 @@ class DateKeyWrapper(Sequence[datetime.date]):
 
     __slots__ = ("inner",)
 
-    def __init__(self, inner: list[PricePoint]):
+    def __init__(self, inner: list[PricePoint]) -> None:
         self.inner = inner
 
     def __len__(self) -> int:
         return len(self.inner)
 
-    def __getitem__(self, k: int) -> datetime.date:  # type: ignore
+    def __getitem__(self, k: int) -> datetime.date:  # type: ignore[override]
         return self.inner[k][0]
 
 
@@ -49,8 +49,8 @@ def _keep_last_per_day(
         if last is not None and price[0] > last[0]:
             yield last
         last = price
-    assert last is not None
-    yield last
+    if last is not None:
+        yield last
 
 
 class FavaPriceMap:
@@ -68,7 +68,7 @@ class FavaPriceMap:
         price_entries: A sorted list of price entries.
     """
 
-    def __init__(self, price_entries: list[Price]):
+    def __init__(self, price_entries: list[Price]) -> None:
         raw_map: dict[BaseQuote, list[PricePoint]] = defaultdict(list)
         counts: Counter[BaseQuote] = Counter()
 

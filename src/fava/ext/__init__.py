@@ -33,8 +33,7 @@ class FavaExtensionBase:
     config: Any
 
     def __init__(self, ledger: FavaLedger, config: str | None = None) -> None:
-        """
-        Initialise extension.
+        """Initialise extension.
 
         Args:
             ledger: Input ledger file.

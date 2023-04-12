@@ -18,6 +18,7 @@
 {% if metadata %}
 <dl class="metadata">
   {% for key, value in metadata.items() %}
+  {% if key not in ['__tolerances__', '__automatic__', 'filename', 'lineno'] %}
   <dt>{{ key }}:</dt>
   <dd>
   {%- if key.startswith('document') %}<a class="filename" data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{{ value }}</a>
@@ -26,6 +27,7 @@
     {{ value }}
   {% endif -%}
   </dd>
+  {% endif %}
   {% endfor %}
 </dl>
 {% endif %}
@@ -60,7 +62,6 @@
     {% set type = entry.__class__.__name__.lower() %}
     {% if type == 'price' %}{% continue %}{% endif %}
     {% set entry_hash = entry|hash_entry %}
-    {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
         <span class="datecell" data-sort-value={{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
@@ -99,10 +100,10 @@
         {% endif %}
         </span>
         <span class="indicators">
-          {{ render_metadata_indicators(metadata) }}
+          {{ render_metadata_indicators(entry.meta) }}
           {% for posting in entry.postings %}
           <span{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}></span>
-          {{ render_metadata_indicators(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename'])) }}
+          {{ render_metadata_indicators(posting.meta) }}
           {% endfor %}
         </span>
         {% if type == 'balance' %}
@@ -117,7 +118,7 @@
           </span>
         {% endif %}
         </p>
-        {{ render_metadata(metadata, entry_hash) }}
+        {{ render_metadata(entry.meta, entry_hash) }}
         {% if entry.postings %}
           <ul class="postings">
         {% for posting in entry.postings %}
@@ -138,7 +139,7 @@
                 <span class="num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename'])) }}
+            {{ render_metadata(posting.meta) }}
         </li>
         {% endfor %}
         </ul>

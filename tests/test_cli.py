@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def get_port() -> int:
     sock = socket()
-    sock.bind(("0.0.0.0", 0))
+    sock.bind(("127.0.0.1", 0))
     port = sock.getsockname()[1]
     sock.close()
     assert isinstance(port, int)

@@ -58,6 +58,8 @@ class TreeNode:
         """Serialise the account.
 
         Args:
+            conversion: The conversion to use.
+            prices: The price map to use.
             end: A date to use for cost conversions.
         """
         children = [
@@ -82,16 +84,16 @@ class Tree(Dict[str, TreeNode]):
         self,
         entries: Iterable[Directive] | None = None,
         create_accounts: list[str] | None = None,
-    ):
+    ) -> None:
         super().__init__(self)
         self.get("", insert=True)
         if create_accounts:
             for account in create_accounts:
                 self.get(account, insert=True)
         if entries:
-            account_balances: dict[
-                str, CounterInventory
-            ] = collections.defaultdict(CounterInventory)
+            account_balances: dict[str, CounterInventory] = (
+                collections.defaultdict(CounterInventory)
+            )
             for entry in entries:
                 if isinstance(entry, Open):
                     self.get(entry.account, insert=True)
@@ -106,6 +108,7 @@ class Tree(Dict[str, TreeNode]):
 
         Args:
             name: An account name.
+
         Yields:
             The ancestors of the given account from the bottom up.
         """
@@ -130,13 +133,16 @@ class Tree(Dict[str, TreeNode]):
         for parent_node in self.ancestors(name):
             parent_node.balance_children.add_inventory(balance)
 
-    def get(self, name: str, insert: bool = False) -> TreeNode:  # type: ignore
+    def get(  # type: ignore[override]
+        self, name: str, insert: bool = False
+    ) -> TreeNode:
         """Get an account.
 
         Args:
             name: An account name.
             insert: If True, insert the name into the tree if it does not
                 exist.
+
         Returns:
             TreeNode: The account of that name or an empty account if the
             account is not in the tree.

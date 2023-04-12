@@ -9,9 +9,9 @@ from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
 
-import ply.yacc  # type: ignore
+import ply.yacc  # type: ignore[import]
 from beancount.core import account
-from beancount.ops.summarize import clamp_opt  # type: ignore
+from beancount.ops.summarize import clamp_opt  # type: ignore[import]
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
@@ -115,7 +115,8 @@ class FilterSyntaxLexer:
                 value = match.group()
                 pos += len(value)
                 token = match.lastgroup
-                assert token is not None, "Internal Error"
+                if token is None:
+                    raise ValueError("Internal Error")
                 func: Callable[[str, str], tuple[str, str]] = getattr(
                     self, token
                 )
@@ -204,7 +205,7 @@ class FilterSyntaxParser:
         left, right = p[1], p[2]
 
         def _and(entry: Directive) -> bool:
-            return left(entry) and right(entry)  # type: ignore
+            return left(entry) and right(entry)  # type: ignore[no-any-return]
 
         p[0] = _and
 
@@ -215,7 +216,7 @@ class FilterSyntaxParser:
         left, right = p[1], p[3]
 
         def _or(entry: Directive) -> bool:
-            return left(entry) or right(entry)  # type: ignore
+            return left(entry) or right(entry)  #  type: ignore[no-any-return]
 
         p[0] = _or
 

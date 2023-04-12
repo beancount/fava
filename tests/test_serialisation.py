@@ -118,7 +118,7 @@ def test_serialise_entry_types(
             (
                 "100 USD",
                 CostSpec(
-                    MISSING, None, MISSING, None, None, False  # type: ignore
+                    MISSING, None, MISSING, None, None, False  # type: ignore[arg-type]
                 ),
                 None,
             ),
@@ -131,7 +131,7 @@ def test_serialise_posting(
     amount_string: str,
 ) -> None:
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price)  # type: ignore
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]
     json = {"account": "Assets", "amount": amount_string}
     assert loads(pretty_dumps(serialise(pos))) == json
     assert deserialise_posting(json) == pos
@@ -157,7 +157,7 @@ def test_deserialise_posting(
 ) -> None:
     """Roundtrip is not possible here due to total price or calculation."""
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price)  # type: ignore
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]
     json = {"account": "Assets", "amount": amount_string}
     assert deserialise_posting(json) == pos
 

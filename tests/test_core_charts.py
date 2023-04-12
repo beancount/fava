@@ -85,9 +85,9 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
 @pytest.mark.parametrize(
     "query",
     [
-        ("select account, sum(position) group by account"),
-        ("select joinstr(tags), sum(position) group by joinstr(tags)"),
-        ("select date, sum(position) group by date"),
+        "select account, sum(position) group by account",
+        "select joinstr(tags), sum(position) group by joinstr(tags)",
+        "select date, sum(position) group by date",
     ],
 )
 def test_query(

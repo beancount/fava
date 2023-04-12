@@ -46,8 +46,10 @@ class FavaMisc(FavaModule):
             self.ledger.errors.append(
                 FavaError(
                     None,
-                    "No operating currency specified. "
-                    "Please add one to your beancount file.",
+                    (
+                        "No operating currency specified. "
+                        "Please add one to your beancount file."
+                    ),
                     None,
                 )
             )

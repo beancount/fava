@@ -13,7 +13,7 @@ from typing import TypeVar
 from beancount.core import realization
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
-from beancount.loader import _load  # type: ignore
+from beancount.loader import _load  # type: ignore[attr-defined]
 from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
 
@@ -81,7 +81,7 @@ T = TypeVar("T")
 def _cache(func: Callable[..., T]) -> T:
     """Wrap lru_cache to avoid type errors."""
     # With Python 3.8 the calls below could be replaced with cached_property
-    return lru_cache()(func)  # type: ignore
+    return lru_cache()(func)  # type: ignore[return-value]
 
 
 class FilteredLedger:
@@ -103,7 +103,7 @@ class FilteredLedger:
         account: str | None = None,
         filter: str | None = None,  # noqa: A002
         time: str | None = None,
-    ):
+    ) -> None:
         self.ledger = ledger
         self._date_range: DateRange | None = None
 
@@ -139,7 +139,7 @@ class FilteredLedger:
     def root_account(self) -> RealAccount:
         """A realized account for the filtered entries."""
         return realization.realize(
-            self.entries, self.ledger.root_accounts  # type: ignore
+            self.entries, self.ledger.root_accounts  # type: ignore[arg-type]
         )
 
     @property
@@ -455,7 +455,7 @@ class FavaLedger:
                 change,
                 balance,
             ) in realization.iterate_with_balance(
-                txn_postings  # type: ignore
+                txn_postings  # type: ignore[arg-type]
             )
         )
 
@@ -467,6 +467,7 @@ class FavaLedger:
 
         Returns:
             The entry with the given hash.
+
         Raises:
             FavaAPIError: If there is no entry for the given hash.
         """

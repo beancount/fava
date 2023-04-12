@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class FavaModule:
     """Base class for the "modules" of FavaLedger."""
 
-    def __init__(self, ledger: FavaLedger):
+    def __init__(self, ledger: FavaLedger) -> None:
         self.ledger = ledger
 
     def load_file(self) -> None:

@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from decimal import Decimal
 from functools import singledispatch
-from typing import Any
 
 from beancount.core.position import CostSpec
-from beancount.parser.printer import format_entry  # type: ignore
+from beancount.parser.printer import format_entry  # type: ignore[import]
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Cost
@@ -18,7 +17,9 @@ from fava.core.misc import align
 
 @singledispatch
 def to_string(
-    obj: Any, _currency_column: int | None = None, _indent: int | None = None
+    obj: Amount | Cost | CostSpec | Directive | Position,
+    _currency_column: int | None = None,
+    _indent: int | None = None,
 ) -> str:
     """Convert to a string."""
     raise TypeError(f"Unsupported object of type {type(obj)}")

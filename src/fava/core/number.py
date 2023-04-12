@@ -38,11 +38,12 @@ def get_locale_format(locale: Locale | None, precision: int) -> Formatter:
         return fmt
 
     pattern = copy.copy(locale.decimal_formats.get(None))
-    assert pattern, "Expected Locale to have a decimal format pattern"
+    if not pattern:
+        raise ValueError("Expected Locale to have a decimal format pattern")
     pattern.frac_prec = (precision, precision)
 
     def locale_fmt(num: Decimal) -> str:
-        return pattern.apply(num, locale)  # type: ignore
+        return pattern.apply(num, locale)  # type: ignore[union-attr,no-any-return]
 
     return locale_fmt
 

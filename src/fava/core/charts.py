@@ -43,6 +43,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from flask import Flask
 
+    from fava.beans.funcs import ResultRow
+    from fava.beans.funcs import ResultType
     from fava.core import FilteredLedger
     from fava.util.date import Interval
 
@@ -59,18 +61,20 @@ def inv_to_dict(inventory: Inventory) -> dict[str, Decimal]:
     }
 
 
-Inventory.for_json = inv_to_dict  # type: ignore
+Inventory.for_json = inv_to_dict  # type: ignore[attr-defined]
 
 
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Allow use of a `for_json` method to serialise dict subclasses.
-        kwargs["for_json"] = True
-        # Sort dict keys (Flask also does this by default).
-        kwargs["sort_keys"] = True
-        super().__init__(*args, **kwargs)
+    def __init__(self, indent: bool | None = False) -> None:
+        super().__init__(
+            indent=indent,
+            # Allow use of a `for_json` method to serialise dict subclasses.
+            for_json=True,
+            # Sort dict keys (Flask also does this by default).
+            sort_keys=True,
+        )
 
     def default(self, o: Any) -> Any:
         if isinstance(o, (date, Amount, Booking, Position)):
@@ -100,7 +104,7 @@ def setup_json_for_app(app: Flask) -> None:
 
             def dumps(
                 self, obj: Any, *, _option: Any = None, **_kwargs: Any
-            ) -> Any:
+            ) -> str:
                 return _ENCODER.encode(obj)
 
             def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
@@ -109,7 +113,7 @@ def setup_json_for_app(app: Flask) -> None:
         app.json = FavaJSONProvider(app)
 
     else:  # pragma: no cover
-        app.json_encoder = FavaJSONEncoder  # type: ignore
+        app.json_encoder = FavaJSONEncoder  # type: ignore[assignment]
 
 
 @dataclass
@@ -164,6 +168,7 @@ class ChartModule(FavaModule):
         """Render totals for account (or accounts) in the intervals.
 
         Args:
+            filtered: The filtered ledger.
             interval: An interval.
             accounts: A single account (str) or a tuple of accounts.
             conversion: The conversion to use.
@@ -229,6 +234,7 @@ class ChartModule(FavaModule):
         """Get the balance of an account as a line chart.
 
         Args:
+            filtered: The filtered ledger.
             account_name: A string.
             conversion: The conversion to use.
 
@@ -241,7 +247,7 @@ class ChartModule(FavaModule):
             filtered.root_account, account_name
         )
         postings = realization.get_postings(real_account)
-        journal = realization.iterate_with_balance(postings)  # type: ignore
+        journal = realization.iterate_with_balance(postings)  # type: ignore[arg-type]
 
         # When the balance for a commodity just went to zero, it will be
         # missing from the 'balance' so keep track of currencies that last had
@@ -274,6 +280,7 @@ class ChartModule(FavaModule):
         """Compute net worth.
 
         Args:
+            filtered: The filtered ledger.
             interval: A string for the interval.
             conversion: The conversion to use.
 
@@ -314,7 +321,7 @@ class ChartModule(FavaModule):
             )
 
     @staticmethod
-    def can_plot_query(types: list[tuple[str, Any]]) -> bool:
+    def can_plot_query(types: list[ResultType]) -> bool:
         """Whether we can plot the given query.
 
         Args:
@@ -327,8 +334,8 @@ class ChartModule(FavaModule):
         )
 
     def query(
-        self, types: list[tuple[str, Any]], rows: list[tuple[Any, ...]]
-    ) -> Any:
+        self, types: list[ResultType], rows: list[ResultRow]
+    ) -> list[dict[str, date | str | Inventory]]:
         """Chart for a query.
 
         Args:

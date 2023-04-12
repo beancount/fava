@@ -18,6 +18,8 @@ from flask import send_file
 from werkzeug.urls import url_quote
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import ParamSpec
+
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
     from flask.wrappers import Response
@@ -26,7 +28,7 @@ if TYPE_CHECKING:  # pragma: no cover
 BASEPATH = Path(__file__).parent.parent
 
 
-def filter_api_changed(record: Any) -> bool:
+def filter_api_changed(record: logging.LogRecord) -> bool:
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.getMessage()
 
@@ -42,30 +44,33 @@ def resource_path(relative_path: str) -> Path:
     return BASEPATH / relative_path
 
 
-Item = TypeVar("Item")
+if TYPE_CHECKING:
+    Item = TypeVar("Item")
+    P = ParamSpec("P")
+    T = TypeVar("T")
 
 
-def listify(func: Callable[..., Iterable[Item]]) -> Callable[..., list[Item]]:
+def listify(func: Callable[P, Iterable[Item]]) -> Callable[P, list[Item]]:
     """Make generator function return a list (decorator)."""
 
     @wraps(func)
-    def _wrapper(*args: Any, **kwargs: Any) -> list[Item]:
+    def _wrapper(*args: P.args, **kwargs: P.kwargs) -> list[Item]:
         return list(func(*args, **kwargs))
 
     return _wrapper
 
 
 def timefunc(
-    func: Any,
-) -> Any:  # pragma: no cover - only used for debugging so far
+    func: Callable[P, T],
+) -> Callable[P, T]:  # pragma: no cover - only used for debugging so far
     """Time function for debugging (decorator)."""
 
     @wraps(func)
-    def _wrapper(*args: Any, **kwargs: Any) -> Any:
+    def _wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        print(f"Ran {func.__name__} in {end - start}")
+        print(f"Ran {func.__name__} in {end - start}")  # noqa: T201
         return result
 
     return _wrapper
