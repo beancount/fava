@@ -8,8 +8,6 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from flask import Flask
-from flask import url_for
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
@@ -19,6 +17,7 @@ from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
 
 if TYPE_CHECKING:  # pragma: no cover
+    from flask import Flask
     from flask.testing import FlaskClient
     from werkzeug.test import TestResponse
 
@@ -85,7 +84,7 @@ def test_api_add_document(
             "account": "Expenses:Food:Restaurant",
             "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
         }
-        url = url_for("json_api.put_add_document")
+        url = "/long-example/api/add_document"
 
         response = test_client.put(url)
         assert_api_error(response, "No file uploaded.")
@@ -118,7 +117,7 @@ def test_api_upload_import_file(
         request_data = {
             "file": (BytesIO(b"asdfasdf"), "recipt.pdf"),
         }
-        url = url_for("json_api.put_upload_import_file")
+        url = "/long-example/api/upload_import_file"
 
         response = test_client.put(url)
         assert_api_error(response, "No file uploaded.")
@@ -166,14 +165,16 @@ def test_api_context(
         )
     )
     response = test_client.get(
-        f"/long-example/api/context?entry_hash={entry_hash}"
+        "/long-example/api/context",
+        query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
     snapshot(data)
 
     entry_hash = hash_entry(example_ledger.all_entries[10])
     response = test_client.get(
-        f"/long-example/api/context?entry_hash={entry_hash}"
+        "/long-example/api/context",
+        query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
     snapshot(data)
@@ -184,9 +185,50 @@ def test_api_payee_accounts(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
 ) -> None:
-    response = test_client.get("/long-example/api/payee_accounts?payee=test")
+    assert_api_error(test_client.get("/long-example/api/payee_accounts"))
+
+    response = test_client.get(
+        "/long-example/api/payee_accounts",
+        query_string={"payee": "EDISON POWER"},
+    )
     data = assert_api_success(response)
-    assert data[0] == "Liabilities:US:Chase:Slate"
+    assert data[0] == "Assets:US:BofA:Checking"
+    assert data[1] == "Expenses:Home:Electricity"
+    snapshot(data)
+
+
+def test_api_payee_transaction(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/payee_transaction",
+        query_string={"payee": "EDISON POWER"},
+    )
+    data = assert_api_success(response)
+    snapshot(data)
+
+
+def test_api_imports(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+) -> None:
+    response = test_client.get("/import/api/imports")
+    data = assert_api_success(response)
+    assert data
+    snapshot(data)
+
+    importable = next(f for f in data if f["importers"])
+    assert importable
+
+    response = test_client.get(
+        "/import/api/extract",
+        query_string={
+            "filename": importable["name"],
+            "importer": importable["importers"][0]["importer_name"],
+        },
+    )
+    data = assert_api_success(response)
     snapshot(data)
 
 
@@ -195,6 +237,22 @@ def test_api_move(test_client: FlaskClient) -> None:
     assert_api_error(
         response, "Invalid API request: Parameter `account` is missing."
     )
+
+    invalid = {"account": "Assets", "new_name": "new", "filename": "old"}
+    response = test_client.get("/long-example/api/move", query_string=invalid)
+    assert_api_error(response, "You need to set a documents folder.")
+
+    response = test_client.get("/import/api/move", query_string=invalid)
+    assert_api_error(response, "Not a valid account: 'Assets'")
+
+    response = test_client.get(
+        "/import/api/move",
+        query_string={
+            **invalid,
+            "account": "Assets:Checking",
+        },
+    )
+    assert_api_error(response, "Not a file: 'old'")
 
 
 def test_api_source_put(
@@ -258,11 +316,11 @@ def test_api_format_source_options(
         path = Path(g.ledger.beancount_file_path)
         payload = path.read_text("utf-8")
 
-        url = url_for("json_api.put_format_source")
-
         monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
 
-        response = test_client.put(url, json={"source": payload})
+        response = test_client.put(
+            "/long-example/api/format_source", json={"source": payload}
+        )
         assert_api_success(response, align(payload, 90))
 
 
@@ -323,7 +381,7 @@ def test_api_add_entries(
             },
         ]
 
-        url = url_for("json_api.put_add_entries")
+        url = "/long-example/api/add_entries"
 
         response = test_client.put(url, json={"entries": entries})
         assert_api_success(response, "Stored 3 entries.")
@@ -354,7 +412,8 @@ def test_api_query_result(
     query_string: str, result_str: str, test_client: FlaskClient
 ) -> None:
     response = test_client.get(
-        f"/long-example/api/query_result?query_string={query_string}"
+        "/long-example/api/query_result",
+        query_string={"query_string": query_string},
     )
     data = assert_api_success(response)
     assert result_str in data["table"]
@@ -362,7 +421,8 @@ def test_api_query_result(
 
 def test_api_query_result_error(test_client: FlaskClient) -> None:
     response = test_client.get(
-        "/long-example/api/query_result?query_string=nononono"
+        "/long-example/api/query_result",
+        query_string={"query_string": "nononono"},
     )
     assert response.status_code == 200
     assert "ERROR: Syntax error near" in response.get_data(True)
@@ -370,7 +430,8 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
 
 def test_api_query_result_filters(test_client: FlaskClient) -> None:
     response = test_client.get(
-        "/long-example/api/query_result?time=2021&query_string=select sum(day)"
+        "/long-example/api/query_result",
+        query_string={"query_string": "select sum(day)", "time": "2021"},
     )
     data = assert_api_success(response)
     assert data["chart"] is None
@@ -385,7 +446,8 @@ def test_api_query_result_charts(
         "WHERE account ~ 'Assets' GROUP BY payee, account"
     )
     response = test_client.get(
-        f"/long-example/api/query_result?query_string={query_string}"
+        "/long-example/api/query_result",
+        query_string={"query_string": query_string},
     )
     data = assert_api_success(response)
     assert data["chart"]
@@ -398,6 +460,12 @@ def test_api_commodities(
     response = test_client.get("/long-example/api/commodities")
     data = assert_api_success(response)
     snapshot(data)
+
+    response = test_client.get(
+        "/long-example/api/commodities", query_string={"time": "3000"}
+    )
+    data = assert_api_success(response)
+    assert not data
 
 
 def test_api_events(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:

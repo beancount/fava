@@ -10,7 +10,6 @@ from werkzeug.urls import url_join
 from fava import __version__ as fava_version
 from fava.application import SERVER_SIDE_REPORTS
 from fava.application import static_url
-from fava.application import url_for
 from fava.context import g
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -35,33 +34,22 @@ FILTER_COMBINATIONS = [
     ],
 )
 def test_reports(
-    app: Flask, test_client: FlaskClient, report: str, filters: dict[str, str]
+    test_client: FlaskClient, report: str, filters: dict[str, str]
 ) -> None:
     """The standard reports work without error (content isn't checked here)."""
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("report", report_name=report, **filters)
-
-    result = test_client.get(url)
+    result = test_client.get(f"/long-example/{report}/", query_string=filters)
     assert result.status_code == 200
 
 
 @pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
 def test_account_page(
-    app: Flask, test_client: FlaskClient, filters: dict[str, str]
+    test_client: FlaskClient, filters: dict[str, str]
 ) -> None:
     """Account page works without error."""
     for subreport in ["journal", "balances", "changes"]:
-        with app.test_request_context("/long-example/"):
-            app.preprocess_request()
-            url = url_for(
-                "account",
-                name="Assets:US:BofA:Checking",
-                subreport=subreport,
-                **filters,
-            )
+        url = f"/long-example/account/Assets:US:BofA:Checking/{subreport}/"
 
-        result = test_client.get(url)
+        result = test_client.get(url, query_string=filters)
         assert result.status_code == 200
 
 
@@ -211,13 +199,12 @@ def test_read_only_mode(
 
 
 def test_download_journal(
-    app: Flask, test_client: FlaskClient, snapshot: SnapshotFunc
+    test_client: FlaskClient, snapshot: SnapshotFunc
 ) -> None:
     """The currently filtered journal can be downloaded."""
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("download_journal", time="2016-05-07")
-    result = test_client.get(url)
+    result = test_client.get(
+        "/long-example/download-journal/", query_string={"time": "2016-05-07"}
+    )
     snapshot(result.get_data(True))
     assert result.headers["Content-Disposition"].startswith(
         'attachment; filename="journal_'
@@ -239,9 +226,9 @@ def test_load_extension_reports(app: Flask, test_client: FlaskClient) -> None:
             ("PortfolioList", "Portfolio List")
         ]
 
-        url = url_for("extension_report", report_name="PortfolioList")
+        url = "/extension-report/extension/PortfolioList/"
         result = test_client.get(url)
         assert result.status_code == 200
-        url = url_for("extension_report", report_name="MissingExtension")
+        url = "/extension-report/extension/MissingExtension/"
         result = test_client.get(url)
         assert result.status_code == 404

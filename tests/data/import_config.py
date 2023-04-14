@@ -11,6 +11,8 @@ from beancount.core import data
 from beancount.ingest import importer
 from dateutil.parser import parse
 
+from fava.beans import create
+
 # mypy: ignore-errors
 
 
@@ -71,8 +73,11 @@ class TestImporter(importer.ImporterProtocol):
             meta = data.new_metadata(file.name, 0)
             meta["__source__"] = "Balance"
             entries.append(
-                data.Balance(
-                    meta, datetime.date.today(), self.account, None, None, None
+                create.balance(
+                    meta,
+                    datetime.date.today(),
+                    self.account,
+                    create.amount("10 USD"),
                 )
             )
         return entries
