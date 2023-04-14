@@ -88,7 +88,7 @@ class IngestModule(FavaModule):
     def load_file(self) -> None:
         if self.module_path is None:
             return
-        module_path = Path(self.module_path)
+        module_path = self.module_path
 
         if not module_path.exists() or module_path.is_dir():
             self._error(f"File does not exist: '{module_path}'")
@@ -133,7 +133,7 @@ class IngestModule(FavaModule):
 
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)
-            files = list(identify.find_imports(self.config, full_path))
+            files = list(identify.find_imports(self.config, str(full_path)))
             for filename, importers in files:
                 base = Path(filename).name
                 infos = [
@@ -154,17 +154,12 @@ class IngestModule(FavaModule):
         Returns:
             A list of new imported entries.
         """
-        if (
-            not filename
-            or not importer_name
-            or not self.config
-            or not self.module_path
-        ):
-            return []
+        if not self.module_path:
+            raise FavaAPIError("Missing import-config option")
 
         if (
             self.mtime is None
-            or Path(self.module_path).stat().st_mtime_ns > self.mtime
+            or self.module_path.stat().st_mtime_ns > self.mtime
         ):
             self.load_file()
 

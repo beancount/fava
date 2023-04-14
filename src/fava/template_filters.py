@@ -19,12 +19,25 @@ from fava.core.conversion import units
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
+    from fava.beans.abc import Meta
+    from fava.beans.abc import MetaValue
     from fava.core.inventory import CounterInventory
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.tree import TreeNode
 
 
 ZERO = Decimal()
+
+
+def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
+    """Remove keys from a dictionary."""
+    if not meta:
+        return []
+    return [
+        (key, value)
+        for key, value in meta.items()
+        if not (key == "filename" or key == "lineno" or key.startswith("__"))
+    ]
 
 
 def cost_or_value(
@@ -109,7 +122,12 @@ def collapse_account(account_name: str) -> bool:
     return any(pattern.match(account_name) for pattern in collapse_patterns)
 
 
-FILTERS: list[Callable[..., (str | bool | SimpleCounterInventory)]] = [
+FILTERS: list[
+    Callable[
+        ...,
+        (str | bool | SimpleCounterInventory | list[tuple[str, MetaValue]]),
+    ]
+] = [
     basename,
     collapse_account,
     cost,
@@ -121,5 +139,6 @@ FILTERS: list[Callable[..., (str | bool | SimpleCounterInventory)]] = [
     format_date_filter,
     funcs.hash_entry,
     should_show,
+    meta_items,
     units,
 ]

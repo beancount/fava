@@ -20,8 +20,7 @@
     <li>
         <p>
         <span class="account-cell depth-0 droptarget has-children" data-account-name="Assets">
-<span class="expander"></span>        <a href="/long-example/account/Assets/?time=2015" class="account">Assets</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets/?time=2015" class="account">Assets</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets/?time=2015-12">
                 <span class="balance-children">
@@ -168,8 +167,7 @@
         <li>
         <p>
         <span class="account-cell depth-1 droptarget has-children" data-account-name="Assets:Testing">
-<span class="expander"></span>        <a href="/long-example/account/Assets:Testing/?time=2015" class="account">Testing</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:Testing/?time=2015" class="account">Testing</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:Testing/?time=2015-12">
             </a>
@@ -223,8 +221,7 @@
         <li>
         <p>
         <span class="account-cell depth-2 droptarget" data-account-name="Assets:Testing:MultipleCommodities">
-        <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015" class="account">MultipleCommodities</a>
-</span>
+        <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015" class="account">MultipleCommodities</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:Testing:MultipleCommodities/?time=2015-12">
             </a>
@@ -284,8 +281,7 @@
     <li>
         <p>
         <span class="account-cell depth-1 droptarget has-children" data-account-name="Assets:US">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US/?time=2015" class="account">US</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US/?time=2015" class="account">US</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US/?time=2015-12">
                 <span class="balance-children">
@@ -432,8 +428,7 @@
         <li>
         <p>
         <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:BayBook">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US:BayBook/?time=2015" class="account">BayBook</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:BayBook/?time=2015" class="account">BayBook</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:BayBook/?time=2015-12">
                 <span class="balance-children">
@@ -523,8 +518,7 @@
         <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:BayBook:Vacation">
-        <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015" class="account">Vacation</a>
-</span>
+        <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015" class="account">Vacation</a></span>
         <span class="num other has-balance">
             <a href="/long-example/account/Assets:US:BayBook:Vacation/?time=2015-12">
                 <span class="balance">
@@ -656,8 +650,7 @@
     <li>
         <p>
         <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:BofA">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US:BofA/?time=2015" class="account">BofA</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:BofA/?time=2015" class="account">BofA</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:BofA/?time=2015-12">
                 <span class="balance-children">
@@ -748,7 +741,6 @@
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:BofA:Checking">
         <a href="/long-example/account/Assets:US:BofA:Checking/?time=2015" class="account">Checking</a>
-
 <copyable-text class="status-indicator status-yellow" title="The last entry is not a balance check.
 
 Click to copy the balance directives to the clipboard:
@@ -891,8 +883,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:ETrade">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US:ETrade/?time=2015" class="account">ETrade</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:ETrade/?time=2015" class="account">ETrade</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:ETrade/?time=2015-12">
                 <span class="balance-children">
@@ -967,8 +958,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
         <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:Cash">
-        <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015" class="account">Cash</a>
-</span>
+        <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015" class="account">Cash</a></span>
         <span class="num other has-balance">
             <a href="/long-example/account/Assets:US:ETrade:Cash/?time=2015-12">
                 <span class="balance">
@@ -1067,8 +1057,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:GLD">
-        <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015" class="account">GLD</a>
-</span>
+        <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015" class="account">GLD</a></span>
         <span class="num other has-balance">
             <a href="/long-example/account/Assets:US:ETrade:GLD/?time=2015-12">
                 <span class="balance">
@@ -1149,8 +1138,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:ITOT">
-        <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015" class="account">ITOT</a>
-</span>
+        <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015" class="account">ITOT</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:ETrade:ITOT/?time=2015-12">
             </a>
@@ -1231,8 +1219,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:VEA">
-        <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015" class="account">VEA</a>
-</span>
+        <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015" class="account">VEA</a></span>
         <span class="num other has-balance">
             <a href="/long-example/account/Assets:US:ETrade:VEA/?time=2015-12">
                 <span class="balance">
@@ -1319,8 +1306,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:ETrade:VHT">
-        <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015" class="account">VHT</a>
-</span>
+        <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015" class="account">VHT</a></span>
         <span class="num other has-balance">
             <a href="/long-example/account/Assets:US:ETrade:VHT/?time=2015-12">
                 <span class="balance">
@@ -1410,8 +1396,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:Federal">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US:Federal/?time=2015" class="account">Federal</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:Federal/?time=2015" class="account">Federal</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Federal/?time=2015-12">
             </a>
@@ -1486,8 +1471,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
         <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Federal:PreTax401k">
-        <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015" class="account">PreTax401k</a>
-</span>
+        <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015" class="account">PreTax401k</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Federal:PreTax401k/?time=2015-12">
             </a>
@@ -1589,8 +1573,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-2 droptarget has-children" data-account-name="Assets:US:Vanguard">
-<span class="expander"></span>        <a href="/long-example/account/Assets:US:Vanguard/?time=2015" class="account">Vanguard</a>
-</span>
+<span class="expander"></span>        <a href="/long-example/account/Assets:US:Vanguard/?time=2015" class="account">Vanguard</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Vanguard/?time=2015-12">
             </a>
@@ -1665,8 +1648,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
         <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:Cash">
-        <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015" class="account">Cash</a>
-</span>
+        <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015" class="account">Cash</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Vanguard:Cash/?time=2015-12">
             </a>
@@ -1759,8 +1741,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:RGAGX">
-        <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015" class="account">RGAGX</a>
-</span>
+        <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015" class="account">RGAGX</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Vanguard:RGAGX/?time=2015-12">
             </a>
@@ -1859,8 +1840,7 @@ TODAY balance Assets:US:BofA:Checking              1632.79 USD
     <li>
         <p>
         <span class="account-cell depth-3 droptarget" data-account-name="Assets:US:Vanguard:VBMPX">
-        <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015" class="account">VBMPX</a>
-</span>
+        <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015" class="account">VBMPX</a></span>
         <span class="num other">
             <a href="/long-example/account/Assets:US:Vanguard:VBMPX/?time=2015-12">
             </a>

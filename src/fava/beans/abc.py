@@ -15,7 +15,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
     from typing import TypeAlias
 
-    Meta: TypeAlias = dict[str, Any]
+    MetaValue: TypeAlias = Any
+    Meta: TypeAlias = dict[str, MetaValue]
     TagsOrLinks: TypeAlias = set[str] | frozenset[str]
 
 

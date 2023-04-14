@@ -12,6 +12,7 @@ from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.core.ingest import file_import_info
+from fava.core.ingest import FileImporters
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIError
@@ -66,10 +67,34 @@ def test_ingest_file_import_info(
     assert "Some error reason..." in err.value.message
 
 
+def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
+    assert not small_example_ledger.ingest.import_data()
+    with pytest.raises(FavaAPIError):
+        small_example_ledger.ingest.extract("import.csv", "import_name")
+
+
 def test_ingest_examplefile(
     test_data_dir: Path, get_ledger: GetFavaLedger
 ) -> None:
     ingest_ledger = get_ledger("import")
+
+    files = ingest_ledger.ingest.import_data()
+    files_with_importers = [f for f in files if f.importers]
+    assert len(files) > 10  # all files in the test datafolder
+    assert files_with_importers == [
+        FileImporters(
+            name=str(test_data_dir / "import.csv"),
+            basename="import.csv",
+            importers=[
+                FileImportInfo(
+                    "<run_path>.TestImporter",
+                    "Assets:Checking",
+                    datetime.date.today(),
+                    "examplebank.import.csv",
+                )
+            ],
+        )
+    ]
 
     entries = ingest_ledger.ingest.extract(
         str(test_data_dir / "import.csv"), "<run_path>.TestImporter"

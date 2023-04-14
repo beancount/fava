@@ -9,16 +9,17 @@
 } %}
 
 {% macro account_link(name) %}<a href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
+
 {% macro render_metadata_indicators(metadata) -%}
-{% for key, value in metadata.items() %}
+{% for key, value in metadata %}
 <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
 {% endfor %}
 {%- endmacro %}
+
 {% macro render_metadata(metadata, entry_hash=None) -%}
 {% if metadata %}
 <dl class="metadata">
-  {% for key, value in metadata.items() %}
-  {% if key not in ['__tolerances__', '__automatic__', 'filename', 'lineno'] %}
+  {% for key, value in metadata %}
   <dt>{{ key }}:</dt>
   <dd>
   {%- if key.startswith('document') %}<a class="filename" data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{{ value }}</a>
@@ -27,11 +28,11 @@
     {{ value }}
   {% endif -%}
   </dd>
-  {% endif %}
   {% endfor %}
 </dl>
 {% endif %}
-{%- endmacro %}
+{% endmacro %}
+
 {% macro render_tags_links(entry) -%}
 {% for tag in entry.tags|sort %}<span class="tag">#{{ tag }}</span>{% endfor %}
 {% for link_ in entry.links|sort %}<span class="link">^{{ link_ }}</span>{% endfor %}
@@ -60,6 +61,7 @@
         {% set entry, change, balance = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
+    {% set metadata_items = entry.meta|meta_items %}
     {% if type == 'price' %}{% continue %}{% endif %}
     {% set entry_hash = entry|hash_entry %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
@@ -100,10 +102,10 @@
         {% endif %}
         </span>
         <span class="indicators">
-          {{ render_metadata_indicators(entry.meta) }}
+          {{ render_metadata_indicators(metadata_items) }}
           {% for posting in entry.postings %}
           <span{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}></span>
-          {{ render_metadata_indicators(posting.meta) }}
+          {{ render_metadata_indicators(posting.meta|meta_items) }}
           {% endfor %}
         </span>
         {% if type == 'balance' %}
@@ -118,7 +120,7 @@
           </span>
         {% endif %}
         </p>
-        {{ render_metadata(entry.meta, entry_hash) }}
+        {{ render_metadata(metadata_items, entry_hash) }}
         {% if entry.postings %}
           <ul class="postings">
         {% for posting in entry.postings %}
@@ -139,7 +141,7 @@
                 <span class="num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta) }}
+            {{ render_metadata(posting.meta|meta_items) }}
         </li>
         {% endfor %}
         </ul>

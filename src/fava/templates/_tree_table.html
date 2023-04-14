@@ -9,66 +9,62 @@
     {% if invert %}
       {% set diff = -diff %}
     {% endif %}
-    {% if diff %}
-    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency, invert=invert) }} {{ currency }}">
-      ({{ diff|format_currency(currency) }})
-    </span>
-    {% endif %}
-  {% endif %}
+    {%- if diff -%}
+    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency, invert=invert) }} {{ currency }}">({{ diff|format_currency(currency) }})</span>
+    {%- endif -%}
+  {%- endif -%}
   <span class="number">{{ num|format_currency(currency, invert=invert) }}</span>
-{% endmacro %}
+{%- endmacro %}
 
-{% macro tree(account_node, invert=False) %}
+{% macro tree(account_node, invert=False, ledger=None) %}
+{% set ledger = ledger or g.ledger %}
 <tree-table>
-<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
-Hold Ctrl or Cmd while clicking to expand one level.') }}">
-  <li class="head">
-    <p>
+  <ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.\nHold Ctrl or Cmd while clicking to expand one level.') }}">
+    <li class="head">
+      <p>
       <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
       {% for currency in ledger.options.operating_currency %}
       <span class="num">{{ currency }}</span>
       {% endfor %}
       <span class="num other">{{ _('Other') }}</span>
-    </p>
-  </li>
-  {% set end_date = g.filtered.end_date %}
-  {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
-  {% set balance = account.balance|cost_or_value(end_date) %}
-  {% set balance_children = account.balance_children|cost_or_value(end_date) %}
-  {% set cost = account.balance|cost if g.conversion == 'at_value' else {} %}
-  {% set cost_children = account.balance_children|cost if g.conversion == 'at_value' else {} %}
-  <li{{ ' class=toggled' if account.name|collapse_account else '' }}>
-    <p{{ ' class=has-balance' if not balance.is_empty() else '' }}>
-    <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
-      {{ account_macros.account_name(ledger, account.name, last_segment=True) }}
-    </span>
-    {% for currency in ledger.options.operating_currency %}
-    <span class="num">
-      <span class="balance">{{ render_diff_and_number(balance, cost, currency, invert=invert) }}</span>
-      <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }}</span>
-    </span>
+      </p>
+    </li>
+    {% set end_date = g.filtered.end_date %}
+    {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
+    {% set balance = account.balance|cost_or_value(end_date) %}
+    {% set balance_children = account.balance_children|cost_or_value(end_date) %}
+    {% set cost = account.balance|cost if g.conversion == 'at_value' else {} %}
+    {% set cost_children = account.balance_children|cost if g.conversion == 'at_value' else {} %}
+    <li{{ ' class=toggled' if account.name|collapse_account else '' }}>
+      <p{{ ' class=has-balance' if not balance.is_empty() else '' }}>
+      <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
+        {{ account_macros.account_name(ledger, account.name, last_segment=True) }}
+      </span>
+      {% for currency in ledger.options.operating_currency %}
+      <span class="num">
+        <span class="balance">{{ render_diff_and_number(balance, cost, currency, invert=invert) }}</span>
+        <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }}</span>
+      </span>
+      {% endfor %}
+      <span class="num other">
+        <span class="balance">
+          {% for currency in balance.keys()|sort %}
+            {{ render_diff_and_number(balance, cost, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
+          {% endfor %}
+        </span>
+        <span class="balance-children">
+          {% for currency in balance_children.keys()|sort %}
+            {{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
+          {% endfor %}
+        </span>
+      </span>
+      </p>
+      {% if account.children %}
+  <ol>{{- loop(account.children|sort(attribute='name')) -}} </ol>
+      {% endif %}
+    </li>
     {% endfor %}
-    <span class="num other">
-      <span class="balance">
-        {% for currency in balance.keys()|sort %}
-        {{ render_diff_and_number(balance, cost, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
-        {% endfor %}
-      </span>
-      <span class="balance-children">
-        {% for currency in balance_children.keys()|sort %}
-        {{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
-        {% endfor %}
-      </span>
-    </span>
-    </p>
-    {% if account.children %}
-    <ol>
-      {{ loop(account.children|sort(attribute='name')) }}
-    </ol>
-    {% endif %}
-  </li>
-  {% endfor %}
-</ol>
+  </ol>
 </tree-table>
 {% endmacro %}
 

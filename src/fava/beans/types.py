@@ -32,7 +32,3 @@ if TYPE_CHECKING:  # pragma: no cover
     LoaderResult = tuple[
         list[Directive], list[BeancountError], BeancountOptions
     ]
-
-else:
-    TypedDict = dict
-    BeancountOptions = dict

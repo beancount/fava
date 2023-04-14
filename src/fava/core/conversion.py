@@ -111,12 +111,14 @@ def convert_position(
 
 
 @overload
-def units(inventory: Inventory) -> Inventory:
+def units(inventory: Inventory) -> Inventory:  # pragma: no cover
     ...
 
 
 @overload
-def units(inventory: CounterInventory) -> SimpleCounterInventory:
+def units(
+    inventory: CounterInventory,
+) -> SimpleCounterInventory:  # pragma: no cover
     ...
 
 
@@ -128,12 +130,14 @@ def units(
 
 
 @overload
-def cost(inventory: Inventory) -> Inventory:
+def cost(inventory: Inventory) -> Inventory:  # pragma: no cover
     ...
 
 
 @overload
-def cost(inventory: CounterInventory) -> SimpleCounterInventory:
+def cost(
+    inventory: CounterInventory,
+) -> SimpleCounterInventory:  # pragma: no cover
     ...
 
 
@@ -150,7 +154,7 @@ def cost_or_value(
     conversion: str,
     prices: FavaPriceMap,
     date: datetime.date | None,
-) -> Inventory:
+) -> Inventory:  # pragma: no cover
     ...
 
 
@@ -160,7 +164,7 @@ def cost_or_value(
     conversion: str,
     prices: FavaPriceMap,
     date: datetime.date | None,
-) -> SimpleCounterInventory:
+) -> SimpleCounterInventory:  # pragma: no cover
     ...
 
 
@@ -171,12 +175,10 @@ def cost_or_value(
     date: datetime.date | None = None,
 ) -> Inventory | SimpleCounterInventory:
     """Get the cost or value of an inventory."""
-    if conversion == "at_cost":
+    if not conversion or conversion == "at_cost":
         return inventory.reduce(get_cost)
     if conversion == "at_value":
         return inventory.reduce(get_market_value, prices, date)
     if conversion == "units":
         return inventory.reduce(get_units)
-    if conversion:
-        return inventory.reduce(convert_position, conversion, prices, date)
-    return inventory.reduce(get_cost)
+    return inventory.reduce(convert_position, conversion, prices, date)

@@ -52,17 +52,28 @@ def test_account_tree(app: Flask, snapshot: SnapshotFunc) -> None:
         )
 
 
+def test_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
+    with app.test_request_context("/off-by-one/?conversion=at_value"):
+        app.preprocess_request()
+        tree = get_template_attribute("_tree_table.html", "tree")
+        snapshot(
+            tree(g.filtered.root_tree.get("Assets")),
+        )
+
+
 def test_account_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
     with app.test_request_context(
         "/off-by-one/?interval=day&conversion=at_value"
     ):
         app.preprocess_request()
-        macro = get_template_attribute("_tree_table.html", "account_tree")
+        account_tree = get_template_attribute(
+            "_tree_table.html", "account_tree"
+        )
         interval_balances, interval_ends = g.ledger.interval_balances(
             g.filtered, g.interval, "Assets", True
         )
         snapshot(
-            macro(
+            account_tree(
                 "Assets",
                 interval_balances,
                 interval_ends,
@@ -115,5 +126,5 @@ def test_account_name(app: Flask, example_ledger: FavaLedger) -> None:
         assert (
             macro(example_ledger, "NONEXISTING")
             == '<a href="/long-example/account/NONEXISTING/"'
-            ' class="account">NONEXISTING</a>\n'
+            ' class="account">NONEXISTING</a>'
         )
