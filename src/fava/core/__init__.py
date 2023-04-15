@@ -18,7 +18,6 @@ from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
 
 from fava.beans.abc import Balance
-from fava.beans.abc import Directive
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
@@ -31,14 +30,12 @@ from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.commodities import CommoditiesModule
 from fava.core.extensions import ExtensionModule
-from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
 from fava.core.file import get_entry_slice
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import TimeFilter
-from fava.core.group_entries import EntriesByType
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
@@ -46,19 +43,22 @@ from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
 from fava.core.watcher import Watcher
-from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
 from fava.util import listify
-from fava.util.date import DateRange
 from fava.util.date import dateranges
-from fava.util.date import Interval
 
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
     from beancount.core.realization import RealAccount
 
+    from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
+    from fava.core.fava_options import FavaOptions
+    from fava.core.group_entries import EntriesByType
+    from fava.helpers import BeancountError
+    from fava.util.date import DateRange
+    from fava.util.date import Interval
 
 
 MODULES = [

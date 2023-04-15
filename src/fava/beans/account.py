@@ -1,12 +1,16 @@
 """Account name helpers."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from beancount.core.account import TYPE as ACCOUNT_TYPE
 
 from fava.beans.abc import Custom
-from fava.beans.abc import Directive
 from fava.beans.abc import Pad
 from fava.beans.abc import Transaction
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
 
 
 def parent(acc: str) -> str | None:

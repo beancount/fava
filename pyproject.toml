@@ -57,14 +57,17 @@ extend-ignore = [
     "TRY003",   # allow long string constants as error messages
 ]
 
-[tool.ruff.pydocstyle]
-convention = "google"
+[tool.ruff.flake8-type-checking]
+strict = true  # always move type-only imports to TYPE_CHECKING-if blocks
 
 [tool.ruff.isort]
 force-single-line = true
 order-by-type = false
 known-first-party = ["fava"]
 required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
 
 [tool.ruff.pylint]
 max-args = 9

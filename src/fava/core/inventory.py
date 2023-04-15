@@ -4,21 +4,22 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Callable
 from typing import Dict
-from typing import Iterable
-from typing import Iterator
 from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 from typing import TYPE_CHECKING
 
 from fava.beans import create
-from fava.beans.abc import Amount
 from fava.beans.abc import Cost
-from fava.beans.abc import Position
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Concatenate
+    from typing import Iterable
+    from typing import Iterator
     from typing import ParamSpec
+
+    from fava.beans.abc import Amount
+    from fava.beans.abc import Position
 
     P = ParamSpec("P")
 

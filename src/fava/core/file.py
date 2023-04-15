@@ -15,7 +15,6 @@ from markupsafe import Markup
 
 from fava.beans.abc import Balance
 from fava.beans.abc import Close
-from fava.beans.abc import Directive
 from fava.beans.abc import Document
 from fava.beans.abc import Open
 from fava.beans.abc import Transaction
@@ -35,6 +34,7 @@ from fava.util import next_key
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
     from fava.core.fava_options import InsertEntryOption
 

@@ -10,8 +10,8 @@ from collections import defaultdict
 from os.path import normpath
 from pathlib import Path
 from typing import Any
+from typing import TYPE_CHECKING
 
-from fava.beans.abc import Directive
 from fava.beans.abc import Document
 from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
@@ -19,6 +19,9 @@ from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
+
+if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.abc import Directive
 
 
 class DocumentError(BeancountError):

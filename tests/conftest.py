@@ -18,10 +18,8 @@ import pytest
 from fava.application import _load_file
 from fava.application import app as fava_app
 from fava.beans.abc import Custom
-from fava.beans.abc import Directive
 from fava.beans.load import load_string
 from fava.core import FavaLedger
-from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -32,7 +30,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.app import Flask
     from flask.testing import FlaskClient
 
+    from fava.beans.abc import Directive
     from fava.beans.types import LoaderResult
+    from fava.core.budgets import BudgetDict
 
     SnapshotFunc: TypeAlias = Callable[[Any], None]
 

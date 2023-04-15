@@ -7,19 +7,19 @@ from typing import Dict
 from typing import Iterable
 from typing import TYPE_CHECKING
 
-from fava.beans.abc import Directive
 from fava.beans.abc import Open
 from fava.beans.account import parent as account_parent
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import get_cost
 from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
+    from fava.beans.abc import Directive
     from fava.beans.prices import FavaPriceMap
     from fava.beans.types import BeancountOptions
+    from fava.core.inventory import SimpleCounterInventory
 
 
 @dataclass

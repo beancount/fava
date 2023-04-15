@@ -3,7 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from flask import Flask
 from flask import get_template_attribute
 
 from fava.beans import create
@@ -11,6 +10,8 @@ from fava.context import g
 from fava.core.inventory import CounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
+    from flask import Flask
+
     from fava.core import FavaLedger
 
     from .conftest import SnapshotFunc

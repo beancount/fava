@@ -28,9 +28,7 @@ from fava.beans.flags import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
 from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
 from fava.core.module_base import FavaModule
-from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIError
 from fava.util import listify
@@ -46,6 +44,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.funcs import ResultRow
     from fava.beans.funcs import ResultType
     from fava.core import FilteredLedger
+    from fava.core.inventory import SimpleCounterInventory
+    from fava.core.tree import SerialisedTreeNode
     from fava.util.date import Interval
 
 
