@@ -34,94 +34,109 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.types import LoaderResult
 
-TEST_DATA_DIR = Path(__file__).parent / "data"
+    SnapshotFunc: TypeAlias = Callable[[Any], None]
 
 
-fava_app.testing = True
-fava_app.config["BEANCOUNT_FILES"] = [
-    str(TEST_DATA_DIR / filename)
-    for filename in [
-        "long-example.beancount",
-        "example.beancount",
-        "extension-report-example.beancount",
-        "import.beancount",
-        "query-example.beancount",
-        "errors.beancount",
-        "off-by-one.beancount",
-    ]
-]
-_load_file()
+@pytest.fixture(scope="session")
+def test_data_dir() -> Path:
+    """Path to the test data files."""
+    return Path(__file__).parent / "data"
 
 
-SNAPSHOT_UPDATE = bool(os.environ.get("SNAPSHOT_UPDATE"))
-MSG = "Maybe snapshots need to be updated with `SNAPSHOT_UPDATE=1 make test`?"
+@pytest.fixture(scope="module")
+def module_path(request: pytest.FixtureRequest) -> Path:
+    """Path to the tested module."""
+    fspath = getattr(request, "fspath")  # noqa: B009
+    return Path(getattr(request, "path", fspath))
 
-# Keep track of multiple calls to snapshot in one test function to generate
-# unique (simply numbered) file names for the snashop files.
-SNAPS: Counter[Path] = Counter()
+
+@pytest.fixture(scope="module")
+def snap_count() -> Counter[str]:
+    """Counter for the number of snapshots per function in a module."""
+    return Counter()
 
 
-SnapshotFunc = Callable[[Any], None]
+@pytest.fixture(scope="module")
+def snap_dir(module_path: Path) -> Path:
+    """Path to snapshot directory."""
+    snap_dir = module_path.parent / "__snapshots__"
+    if not snap_dir.exists():
+        snap_dir.mkdir()
+    return snap_dir
 
 
 @pytest.fixture()
-def snapshot(request: pytest.FixtureRequest) -> SnapshotFunc:
+def snapshot(
+    request: pytest.FixtureRequest,
+    test_data_dir: Path,
+    module_path: Path,
+    snap_dir: Path,
+    snap_count: Counter[str],
+) -> SnapshotFunc:
     """Create a snaphot for some given data."""
-    fspath = getattr(request, "fspath")  # noqa: B009
-    file_path = Path(getattr(request, "path", fspath))
     fn_name = request.function.__name__
-    snap_dir = file_path.parent / "__snapshots__"
-    if not snap_dir.exists():
-        snap_dir.mkdir()
+    module_name = module_path.name
 
-    def _snapshot_data(data: Any) -> None:
-        snap_file = snap_dir / f"{file_path.name}-{fn_name}"
-        SNAPS[snap_file] += 1
-        if SNAPS[snap_file] > 1:
-            snap_file = (
-                snap_dir / f"{file_path.name}-{fn_name}-{SNAPS[snap_file]}"
-            )
+    def snapshot_data(data: Any) -> None:
+        snap_count[fn_name] += 1
+        filename = (
+            f"{module_name}-{fn_name}"
+            if snap_count[fn_name] == 1
+            else (f"{module_name}-{fn_name}-{snap_count[fn_name]}")
+        )
+        snap_file = snap_dir / filename
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         out = out.replace(str(datetime.date.today()), "TODAY")
         out = re.sub(r"\d+ days ago", "X days ago", out)
         for dir_path, replacement in [
-            (str(TEST_DATA_DIR), "TEST_DATA_DIR"),
+            (str(test_data_dir), "TEST_DATA_DIR"),
         ]:
             if os.name == "nt":
                 search = dir_path.replace("\\", "\\\\") + "\\\\"
                 out = out.replace(search, replacement + "/")
             else:
                 out = out.replace(dir_path, replacement)
-        contents = (
-            "" if not snap_file.exists() else snap_file.read_text("utf-8")
-        )
-        if SNAPSHOT_UPDATE:
+
+        if bool(os.environ.get("SNAPSHOT_UPDATE")):
             snap_file.write_text(out, "utf-8")
-            return
+        else:
+            contents = (
+                snap_file.read_text("utf-8") if snap_file.exists() else ""
+            )
+            assert out == contents, (
+                "Snaphot test failed. Snapshots can be updated with "
+                "`SNAPSHOT_UPDATE=1 pytest`"
+            )
 
-        assert out == contents, MSG
-
-    return _snapshot_data
+    return snapshot_data
 
 
-@pytest.fixture()
-def test_data_dir() -> Path:
-    """Get the path to the test data files."""
-    return TEST_DATA_DIR
-
-
-@pytest.fixture()
-def app() -> Flask:
+@pytest.fixture(scope="session")
+def app(test_data_dir: Path) -> Flask:
     """Get the Fava Flask app."""
+    fava_app.testing = True
+    fava_app.config["BEANCOUNT_FILES"] = [
+        str(test_data_dir / filename)
+        for filename in [
+            "long-example.beancount",
+            "example.beancount",
+            "extension-report-example.beancount",
+            "import.beancount",
+            "query-example.beancount",
+            "errors.beancount",
+            "off-by-one.beancount",
+        ]
+    ]
+    _load_file()
     return fava_app
 
 
 @pytest.fixture()
-def test_client() -> FlaskClient:
+def test_client(app: Flask) -> FlaskClient:
     """Get the test client for the Fava Flask app."""
-    return fava_app.test_client()
+    return app.test_client()
 
 
 @pytest.fixture()
@@ -171,14 +186,14 @@ if TYPE_CHECKING:
     GetFavaLedger: TypeAlias = Callable[[LedgerSlug], FavaLedger]
 
 
-@pytest.fixture()
-def get_ledger() -> GetFavaLedger:
+@pytest.fixture(scope="session")
+def get_ledger(app: Flask) -> GetFavaLedger:
     """Getter for one of the loaded ledgers."""
 
     def _get_ledger(name: LedgerSlug) -> FavaLedger:
-        loaded_ledgers = fava_app.config["LEDGERS"]
+        loaded_ledgers = app.config["LEDGERS"]
         assert name in loaded_ledgers, loaded_ledgers.keys()
-        ledger = fava_app.config["LEDGERS"][name]
+        ledger = app.config["LEDGERS"][name]
         assert isinstance(ledger, FavaLedger)
         return ledger
 
