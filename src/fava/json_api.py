@@ -96,14 +96,11 @@ def validate_func_arguments(
     sig = signature(func)
     params: list[tuple[str, Any]] = []
     for param in sig.parameters.values():
-        if param.annotation not in {
-            "str",
-            "list[Any]",
-        }:
+        if param.annotation not in {"str", "list[Any]"}:  # pragma: no cover
             raise ValueError(
                 f"Type of param {param.name} needs to str or list"
             )
-        if param.kind != Parameter.POSITIONAL_OR_KEYWORD:
+        if param.kind != Parameter.POSITIONAL_OR_KEYWORD:  # pragma: no cover
             raise ValueError(f"Param {param.name} should be positional")
         params.append((param.name, str if param.annotation == "str" else list))
 
@@ -135,7 +132,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     decorated endpoint handler.
     """
     method, _, name = func.__name__.partition("_")
-    if method not in {"get", "delete", "put"}:
+    if method not in {"get", "delete", "put"}:  # pragma: no cover
         raise ValueError(f"Invalid endpoint function name: {func.__name__}")
     validator = validate_func_arguments(func)
 
@@ -156,6 +153,20 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
         return json_success(res)
 
     return _wrapper
+
+
+class TargetPathAlreadyExistsError(FavaAPIError):
+    """The given path already exists."""
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(f"{path} already exists.")
+
+
+class DocumentDirectoryMissingError(FavaAPIError):
+    """No document directory was specified."""
+
+    def __init__(self) -> None:
+        super().__init__("You need to set a documents folder.")
 
 
 @api_endpoint
@@ -227,7 +238,7 @@ def get_context(entry_hash: str) -> Context:
 def get_move(account: str, new_name: str, filename: str) -> str:
     """Move a file."""
     if not g.ledger.options["documents"]:
-        raise FavaAPIError("You need to set a documents folder.")
+        raise DocumentDirectoryMissingError
 
     new_path = filepath_in_document_folder(
         g.ledger.options["documents"][0], account, new_name, g.ledger
@@ -237,7 +248,7 @@ def get_move(account: str, new_name: str, filename: str) -> str:
     if not file_path.is_file():
         raise FavaAPIError(f"Not a file: '{filename}'")
     if new_path.exists():
-        raise FavaAPIError(f"Target file exists: '{new_path}'")
+        raise TargetPathAlreadyExistsError(new_path)
 
     if not new_path.parent.exists():
         new_path.parent.mkdir(parents=True)
@@ -301,7 +312,7 @@ def delete_document(filename: str) -> str:
 def put_add_document() -> str:
     """Upload a document."""
     if not g.ledger.options["documents"]:
-        raise FavaAPIError("You need to set a documents folder.")
+        raise DocumentDirectoryMissingError
 
     upload = request.files.get("file", None)
 
@@ -318,7 +329,7 @@ def put_add_document() -> str:
     )
 
     if filepath.exists():
-        raise FavaAPIError(f"{filepath} already exists.")
+        raise TargetPathAlreadyExistsError(filepath)
 
     if not filepath.parent.exists():
         filepath.parent.mkdir(parents=True)
@@ -364,7 +375,7 @@ def put_upload_import_file() -> str:
     filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
 
     if filepath.exists():
-        raise FavaAPIError(f"{filepath} already exists.")
+        raise TargetPathAlreadyExistsError(filepath)
 
     if not filepath.parent.exists():
         filepath.parent.mkdir(parents=True)
