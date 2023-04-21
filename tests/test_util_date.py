@@ -334,16 +334,27 @@ def test_get_fiscal_period(
 
 
 @pytest.mark.parametrize(
-    ("fye", "expected"),
+    ("fye_str", "month", "day"),
     [
-        ("12-31", (12, 31)),
-        ("06-30", (6, 30)),
-        ("02-28", (2, 28)),
-        ("12-32", None),
-        ("asdfasdf", None),
-        ("02-29", None),
+        ("12-31", 12, 31),
+        ("06-30", 6, 30),
+        ("02-28", 2, 28),
     ],
 )
-def test_parse_fye_string(fye: str, expected: tuple[int, int] | None) -> None:
-    fye_tuple = parse_fye_string(fye)
-    assert fye_tuple == expected
+def test_parse_fye_string(fye_str: str, month: int, day: int) -> None:
+    fye = parse_fye_string(fye_str)
+    assert fye
+    assert fye.month == month
+    assert fye.day == day
+
+
+@pytest.mark.parametrize(
+    "fye_str",
+    [
+        "12-32",
+        "asdfasdf",
+        "02-29",
+    ],
+)
+def test_parse_fye_invalid_string(fye_str: str) -> None:
+    assert parse_fye_string(fye_str) is None

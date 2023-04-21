@@ -9,7 +9,6 @@ from __future__ import annotations
 from copy import copy
 from dataclasses import dataclass
 from typing import Any
-from typing import NamedTuple
 from typing import TYPE_CHECKING
 
 from flask import current_app
@@ -30,7 +29,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.util.date import Interval
 
 
-class SerialisedError(NamedTuple):
+@dataclass(frozen=True)
+class SerialisedError:
     """A Beancount error, as passed to the frontend."""
 
     type: str
@@ -46,7 +46,7 @@ class SerialisedError(NamedTuple):
         return SerialisedError(err.__class__.__name__, source, err.message)
 
 
-@dataclass
+@dataclass(frozen=True)
 class LedgerData:
     """This is used as report-independent data in the frontend."""
 
@@ -113,7 +113,7 @@ def get_ledger_data() -> LedgerData:
     )
 
 
-@dataclass
+@dataclass(frozen=True)
 class ChartData:
     """The common data format to pass charts to the frontend."""
 

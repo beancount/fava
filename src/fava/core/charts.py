@@ -116,7 +116,7 @@ def setup_json_for_app(app: Flask) -> None:
         app.json_encoder = FavaJSONEncoder  # type: ignore[assignment]
 
 
-@dataclass
+@dataclass(frozen=True)
 class DateAndBalance:
     """Balance at a date."""
 
@@ -124,7 +124,7 @@ class DateAndBalance:
     balance: dict[str, Decimal]
 
 
-@dataclass
+@dataclass(frozen=True)
 class DateAndBalanceWithBudget:
     """Balance at a date with a budget."""
 

@@ -88,8 +88,12 @@ def snapshot(
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
+        # replace today
         out = out.replace(str(datetime.date.today()), "TODAY")
+        # replace relative dates
         out = re.sub(r"\d+ days ago", "X days ago", out)
+        # replace entry hashes
+        out = re.sub(r'"[0-9a-f]{32}"', '"ENTRY_HASH"', out)
         for dir_path, replacement in [
             (str(test_data_dir), "TEST_DATA_DIR"),
         ]:

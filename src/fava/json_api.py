@@ -185,7 +185,7 @@ def get_payee_accounts(payee: str) -> list[str]:
     return g.ledger.attributes.payee_accounts(payee)
 
 
-@dataclass
+@dataclass(frozen=True)
 class QueryResult:
     """Table and optional chart returned by the query_result endpoint."""
 
@@ -216,7 +216,7 @@ def get_extract(filename: str, importer: str) -> list[Any]:
     return list(map(serialise, entries))
 
 
-@dataclass
+@dataclass(frozen=True)
 class Context:
     """Context for an entry."""
 
@@ -410,7 +410,7 @@ def get_documents() -> list[Document]:
     return [e for e in g.filtered.entries if isinstance(e, Document)]
 
 
-@dataclass
+@dataclass(frozen=True)
 class CommodityPairWithPrices:
     """A pair of commodities and prices for them."""
 

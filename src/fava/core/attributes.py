@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
+from fava.util.date import END_OF_YEAR
 from fava.util.ranking import ExponentialDecayRanker
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -27,7 +28,7 @@ def get_active_years(
         entries.
     """
     years = []
-    if fye == (12, 31):
+    if fye == END_OF_YEAR:
         prev_year = None
         for entry in entries:
             year = entry.date.year

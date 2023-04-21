@@ -22,7 +22,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.inventory import SimpleCounterInventory
 
 
-@dataclass
+@dataclass(frozen=True)
 class SerialisedTreeNode:
     """A serialised TreeNode."""
 

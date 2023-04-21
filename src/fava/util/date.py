@@ -14,7 +14,6 @@ from enum import Enum
 from itertools import tee
 from typing import Iterable
 from typing import Iterator
-from typing import NamedTuple
 
 from flask_babel import gettext  # type: ignore[import]
 
@@ -44,11 +43,15 @@ VARIABLE_RE = re.compile(
 )
 
 
-class FiscalYearEnd(NamedTuple):
+@dataclass(frozen=True)
+class FiscalYearEnd:
     """Month and day that specify the end of the fiscal year."""
 
     month: int
     day: int
+
+
+END_OF_YEAR = FiscalYearEnd(12, 31)
 
 
 class Interval(Enum):
@@ -415,7 +418,7 @@ def get_fiscal_period(
             year=year - 1, month=fye.month, day=fye.day
         ) + timedelta(days=1)
         # Special case 02-28 because of leap years
-        if fye == (2, 28):
+        if fye.month == 2 and fye.day == 28:
             start_date = start_date.replace(month=3, day=1)
 
     if quarter is None:

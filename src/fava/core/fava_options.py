@@ -11,7 +11,6 @@ import re
 from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
-from typing import NamedTuple
 from typing import Pattern
 from typing import TYPE_CHECKING
 
@@ -19,20 +18,22 @@ from babel.core import Locale
 from babel.core import UnknownLocaleError
 
 from fava.helpers import BeancountError
-from fava.util.date import FiscalYearEnd
+from fava.util.date import END_OF_YEAR
 from fava.util.date import parse_fye_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
     from fava.beans.abc import Custom
+    from fava.util.date import FiscalYearEnd
 
 
 class OptionError(BeancountError):
     """An error for one the Fava options."""
 
 
-class InsertEntryOption(NamedTuple):
+@dataclass(frozen=True)
+class InsertEntryOption:
     """Insert option.
 
     An option that determines where entries for matching accounts should be
@@ -56,7 +57,7 @@ class FavaOptions:
     conversion_currencies: tuple[str, ...] = ()
     default_file: str | None = None
     default_page: str = "income_statement/"
-    fiscal_year_end: FiscalYearEnd = FiscalYearEnd(12, 31)  # noqa: RUF009
+    fiscal_year_end: FiscalYearEnd = END_OF_YEAR
     import_config: str | None = None
     import_dirs: tuple[str, ...] = ()
     indent: int = 2

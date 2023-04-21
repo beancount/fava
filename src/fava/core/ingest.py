@@ -4,12 +4,12 @@ from __future__ import annotations
 import datetime
 import sys
 import traceback
+from dataclasses import dataclass
 from os import altsep
 from os import sep
 from pathlib import Path
 from runpy import run_path
 from typing import Any
-from typing import NamedTuple
 from typing import TYPE_CHECKING
 
 from beancount.ingest import cache  # type: ignore[import]
@@ -29,7 +29,8 @@ class IngestError(BeancountError):
     """An error with one of the importers."""
 
 
-class FileImportInfo(NamedTuple):
+@dataclass(frozen=True)
+class FileImportInfo:
     """Info about one file/importer combination."""
 
     importer_name: str
@@ -38,7 +39,8 @@ class FileImportInfo(NamedTuple):
     name: str
 
 
-class FileImporters(NamedTuple):
+@dataclass(frozen=True)
+class FileImporters:
     """Importers for a file."""
 
     name: str
