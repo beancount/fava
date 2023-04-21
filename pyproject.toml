@@ -79,5 +79,5 @@ max-args = 9
 "tests/test_*.py" = ["D", "S101"]
 "tests/data/import_config.py" = ["ANN", "INP"]
 "src/fava/ext/portfolio_list/__init__.py" = ["ANN"]
-"stubs/**" = ["D", "I002"]  # ignore docs and do not add annotations import
+"stubs/**" = ["D"]
 "src/fava/core/filters.py" = ["D"]

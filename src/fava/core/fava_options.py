@@ -56,7 +56,7 @@ class FavaOptions:
     conversion_currencies: tuple[str, ...] = ()
     default_file: str | None = None
     default_page: str = "income_statement/"
-    fiscal_year_end: FiscalYearEnd = FiscalYearEnd(12, 31)
+    fiscal_year_end: FiscalYearEnd = FiscalYearEnd(12, 31)  # noqa: RUF009
     import_config: str | None = None
     import_dirs: tuple[str, ...] = ()
     indent: int = 2

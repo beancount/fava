@@ -22,7 +22,7 @@ class AutoCommit(FavaExtensionBase):
 
     def _run(self, args: list[str]) -> None:
         cwd = Path(self.ledger.beancount_file_path).parent
-        call(args, cwd=cwd, stdout=DEVNULL)
+        call(args, cwd=cwd, stdout=DEVNULL)  # noqa: S603
 
     def after_write_source(self, path: str, _: Any) -> None:
         message = "autocommit: file saved"
