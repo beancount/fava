@@ -10,7 +10,7 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from fava import __version__
-from fava.application import app
+from fava.application import create_app
 from fava.util import simple_wsgi
 
 
@@ -90,9 +90,11 @@ def main(  # noqa: PLR0912
     if not all_filenames:
         raise click.UsageError("No file specified")
 
-    app.config["BEANCOUNT_FILES"] = all_filenames
-    app.config["INCOGNITO"] = incognito
-    app.config["READ_ONLY"] = read_only
+    app = create_app(
+        set(all_filenames),
+        incognito=incognito,
+        read_only=read_only,
+    )
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]
@@ -120,7 +122,6 @@ def main(  # noqa: PLR0912
             raise click.Abort from error
     else:
         if profile:
-            app.config["PROFILE"] = True
             app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
                 app.wsgi_app,
                 restrictions=(30,),

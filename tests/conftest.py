@@ -15,8 +15,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.application import _load_file
-from fava.application import app as fava_app
+from fava.application import create_app
 from fava.beans.abc import Custom
 from fava.beans.load import load_string
 from fava.core import FavaLedger
@@ -78,6 +77,11 @@ def snapshot(
     module_name = module_path.name
 
     def snapshot_data(data: Any) -> None:
+        if os.environ.get("SNAPSHOT_IGNORE"):
+            # For the tests with old dependencies, we avoid comparing the snapshots,
+            # as they might change in subtle ways between dependency versions.
+            return
+
         snap_count[fn_name] += 1
         filename = (
             f"{module_name}-{fn_name}"
@@ -94,6 +98,12 @@ def snapshot(
         out = re.sub(r"\d+ days ago", "X days ago", out)
         # replace entry hashes
         out = re.sub(r'"[0-9a-f]{32}"', '"ENTRY_HASH"', out)
+        # replace mtimes
+        out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
+        out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)
+        # replace env-dependant info
+        out = out.replace('have_excel": false', 'have_excel": true')
+
         for dir_path, replacement in [
             (str(test_data_dir), "TEST_DATA_DIR"),
         ]:
@@ -103,7 +113,7 @@ def snapshot(
             else:
                 out = out.replace(dir_path, replacement)
 
-        if bool(os.environ.get("SNAPSHOT_UPDATE")):
+        if os.environ.get("SNAPSHOT_UPDATE"):
             snap_file.write_text(out, "utf-8")
         else:
             contents = (
@@ -120,20 +130,22 @@ def snapshot(
 @pytest.fixture(scope="session")
 def app(test_data_dir: Path) -> Flask:
     """Get the Fava Flask app."""
+    fava_app = create_app(
+        [
+            test_data_dir / filename
+            for filename in [
+                "long-example.beancount",
+                "example.beancount",
+                "extension-report-example.beancount",
+                "import.beancount",
+                "query-example.beancount",
+                "errors.beancount",
+                "off-by-one.beancount",
+            ]
+        ],
+        load=True,
+    )
     fava_app.testing = True
-    fava_app.config["BEANCOUNT_FILES"] = [
-        str(test_data_dir / filename)
-        for filename in [
-            "long-example.beancount",
-            "example.beancount",
-            "extension-report-example.beancount",
-            "import.beancount",
-            "query-example.beancount",
-            "errors.beancount",
-            "off-by-one.beancount",
-        ]
-    ]
-    _load_file()
     return fava_app
 
 

@@ -39,11 +39,6 @@ def setup_logging() -> None:
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
-def resource_path(relative_path: str) -> Path:
-    """Get absolute path to resource."""
-    return BASEPATH / relative_path
-
-
 if TYPE_CHECKING:
     Item = TypeVar("Item")
     P = ParamSpec("P")

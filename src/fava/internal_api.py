@@ -87,7 +87,7 @@ def get_ledger_data() -> LedgerData:
         ledger.attributes.currencies,
         get_errors(),
         ledger.fava_options,
-        current_app.config.get("INCOGNITO", False),
+        current_app.config["INCOGNITO"],
         HAVE_EXCEL,
         ledger.attributes.links,
         {

@@ -1,10 +1,12 @@
 """fava wsgi application"""
 from __future__ import annotations
 
-from fava.application import app as application
+from fava.application import create_app
 
-application.config["BEANCOUNT_FILES"] = [
-    "/home/favadev/example.beancount",
-    "/home/favadev/budgets-example.beancount",
-    "/home/favadev/huge-example.beancount",
-]
+application = create_app(
+    [
+        "/home/favadev/example.beancount",
+        "/home/favadev/budgets-example.beancount",
+        "/home/favadev/huge-example.beancount",
+    ]
+)

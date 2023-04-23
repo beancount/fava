@@ -1,14 +1,12 @@
 """Fava's main WSGI application.
 
-when using Fava's WSGI app, make sure to set ``app.config['BEANCOUNT_FILES']``.
+you can use `create_app` to create a Fava WSGI app for a given list of files.
 To start a simple server::
 
-    from fava.application import app
-    app.config['BEANCOUNT_FILES'] = ['/path/to/file.beancount']
-    app.run('localhost', 5000)
+    from fava.application import create_app
 
-Attributes:
-    app: An instance of :class:`flask.Flask`, this is Fava's WSGI application.
+    app = create_app(['/path/to/file.beancount'])
+    app.run('localhost', 5000)
 
 """
 from __future__ import annotations
@@ -19,14 +17,15 @@ from datetime import date
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
+from pathlib import Path
 from threading import Lock
 from typing import TYPE_CHECKING
 
 import markdown2  # type: ignore[import]
 from beancount import __version__ as beancount_version
-from beancount.core.account import ACCOUNT_RE
 from beancount.utils.text_utils import replace_numbers
 from flask import abort
+from flask import current_app
 from flask import Flask
 from flask import redirect
 from flask import render_template
@@ -54,9 +53,7 @@ from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
-from fava.serialisation import serialise
 from fava.util import next_key
-from fava.util import resource_path
 from fava.util import send_file_inline
 from fava.util import setup_logging
 from fava.util import slugify
@@ -64,28 +61,13 @@ from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Iterable
+
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse
 
 
-STATIC_FOLDER = resource_path("static")
 setup_logging()
-app = Flask(
-    __name__,
-    template_folder=str(resource_path("templates")),
-    static_folder=str(STATIC_FOLDER),
-)
-app.register_blueprint(json_api, url_prefix="/<bfile>/api")
-
-setup_json_for_app(app)
-jinja_extensions = app.jinja_options.setdefault("extensions", [])
-jinja_extensions.append("jinja2.ext.do")
-jinja_extensions.append("jinja2.ext.loopcontrols")
-app.jinja_env.trim_blocks = True
-app.jinja_env.lstrip_blocks = True
-
-app.config["HAVE_EXCEL"] = HAVE_EXCEL
-app.config["ACCOUNT_RE"] = ACCOUNT_RE
 
 SERVER_SIDE_REPORTS = [
     "balance_sheet",
@@ -107,71 +89,35 @@ CLIENT_SIDE_REPORTS = [
     "query",
 ]
 
-REPORTS = SERVER_SIDE_REPORTS + CLIENT_SIDE_REPORTS
 
-LOAD_FILE_LOCK = Lock()
-
-
-def ledger_slug(ledger: FavaLedger) -> str:
-    """Generate URL slug for a ledger."""
-    title_slug = slugify(ledger.options["title"])
-    return title_slug or slugify(ledger.beancount_file_path)
-
-
-def update_ledger_slugs(ledgers: list[FavaLedger]) -> None:
-    """Update the dictionary mapping URL slugs to ledgers."""
+def _ledger_slugs_dict(ledgers: Iterable[FavaLedger]) -> dict[str, FavaLedger]:
+    """Get  dictionary mapping URL slugs to ledgers."""
     ledgers_by_slug: dict[str, FavaLedger] = {}
     for ledger in ledgers:
-        slug = ledger_slug(ledger)
+        title_slug = slugify(ledger.options["title"])
+        slug = title_slug or slugify(ledger.beancount_file_path)
         unique_key = next_key(slug, ledgers_by_slug)
         ledgers_by_slug[unique_key] = ledger
-    app.config["LEDGERS"] = ledgers_by_slug
+    return ledgers_by_slug
 
 
-def _load_file() -> None:
-    """Load Beancount files.
-
-    This is run automatically on the first request.
-    """
-    ledgers = [
-        FavaLedger(filepath) for filepath in app.config["BEANCOUNT_FILES"]
-    ]
-    update_ledger_slugs(ledgers)
-
-
-def get_locale() -> str | None:
-    """Get locale.
-
-    Returns:
-        The locale that should be used for Babel. If not given as an option to
-        Fava, guess from browser.
-    """
-    lang = g.ledger.fava_options.language
-    if lang is not None:
-        return lang
-    return request.accept_languages.best_match(["en", *LANGUAGES])
+def static_url(filename: str) -> str:
+    """Return a static url with an mtime query string for cache busting."""
+    file_path = Path(__file__).parent / "static" / filename
+    try:
+        mtime = str(int(file_path.stat().st_mtime))
+    except FileNotFoundError:
+        mtime = "0"
+    return url_for("static", filename=filename, mtime=mtime)
 
 
-try:
-    # for Flask-Babel <3.0
-    BABEL = Babel(app)
-    BABEL.localeselector(get_locale)
-except AttributeError:
-    # for Flask-Babel >=3.0
-    BABEL = Babel(app, locale_selector=get_locale)
+_cached_url_for = lru_cache(2048)(flask_url_for)
 
 
-for function in template_filters.FILTERS:
-    app.add_template_filter(function)
-app.add_template_filter(serialise)
-app.add_template_filter(fields, "dataclass_fields")
-
-
-@app.url_defaults
 def _inject_filters(endpoint: str, values: dict[str, str]) -> None:
     if (
         "bfile" not in values
-        and app.url_map.is_endpoint_expecting(endpoint, "bfile")
+        and current_app.url_map.is_endpoint_expecting(endpoint, "bfile")
         and g.beancount_file_slug is not None
     ):
         values["bfile"] = g.beancount_file_slug
@@ -184,23 +130,10 @@ def _inject_filters(endpoint: str, values: dict[str, str]) -> None:
                 values[name] = val
 
 
-def static_url(filename: str) -> str:
-    """Return a static url with an mtime query string for cache busting."""
-    file_path = STATIC_FOLDER / filename
-    try:
-        mtime = int(file_path.stat().st_mtime)
-    except FileNotFoundError:
-        mtime = 0
-    return url_for("static", filename=filename, mtime=str(mtime))
-
-
-CACHED_URL_FOR = lru_cache(2048)(flask_url_for)
-
-
 def url_for(endpoint: str, **values: str) -> str:
     """Wrap flask.url_for using a cache."""
     _inject_filters(endpoint, values)
-    return CACHED_URL_FOR(endpoint, **values)
+    return _cached_url_for(endpoint, **values)
 
 
 def translations() -> dict[str, str]:
@@ -208,238 +141,313 @@ def translations() -> dict[str, str]:
     return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
 
 
-app.add_template_global(static_url, "static_url")
-app.add_template_global(date.today, "today")
-app.add_template_global(url_for, "url_for")
-app.add_template_global(translations, "translations")
-app.add_template_global(get_ledger_data, "get_ledger_data")
+def _setup_template_config(fava_app: Flask) -> None:
+    """Setup jinja, template filters and globals."""
+    # Jinja config
+    fava_app.jinja_options = {
+        "extensions": ["jinja2.ext.do", "jinja2.ext.loopcontrols"],
+        "trim_blocks": True,
+        "lstrip_blocks": True,
+    }
+
+    # Add template filters
+    for function in template_filters.FILTERS:
+        fava_app.add_template_filter(function)
+    fava_app.add_template_filter(fields, "dataclass_fields")
+
+    # Add template global functions
+    fava_app.add_template_global(static_url, "static_url")
+    fava_app.add_template_global(date.today, "today")
+    fava_app.add_template_global(url_for, "url_for")
+    fava_app.add_template_global(translations, "translations")
+    fava_app.add_template_global(get_ledger_data, "get_ledger_data")
+
+    @fava_app.context_processor
+    def _template_context() -> dict[str, FavaLedger | type[ChartApi]]:
+        """Inject variables into the template context."""
+        return {"ledger": g.ledger, "chart_api": ChartApi}
 
 
-@app.context_processor
-def template_context() -> dict[str, FavaLedger | type[ChartApi]]:
-    """Inject variables into the template context."""
-    return {"ledger": g.ledger, "chart_api": ChartApi}
+def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
+    """Setup request handlers/filters."""
+    fava_app.url_defaults(_inject_filters)
 
+    @fava_app.before_request
+    def _perform_global_filters() -> None:
+        if request.endpoint in ("json_api.get_changed", "json_api.get_errors"):
+            return
+        ledger = getattr(g, "ledger", None)
+        if ledger:
+            # check (and possibly reload) source file
+            if request.blueprint != "json_api":
+                ledger.changed()
 
-@app.before_request
-def _perform_global_filters() -> None:
-    if request.endpoint in ("json_api.get_changed", "json_api.get_errors"):
-        return
-    ledger = getattr(g, "ledger", None)
-    if ledger:
-        # check (and possibly reload) source file
-        if request.blueprint != "json_api":
-            ledger.changed()
+            g.filtered = ledger.get_filtered(
+                account=request.args.get("account"),
+                filter=request.args.get("filter"),
+                time=request.args.get("time"),
+            )
 
-        g.filtered = ledger.get_filtered(
-            account=request.args.get("account"),
-            filter=request.args.get("filter"),
-            time=request.args.get("time"),
+    if read_only:
+        # Prevent any request that isn't a GET if read-only mode is active
+        @fava_app.before_request
+        def _read_only() -> None:
+            if request.method != "GET":
+                abort(401)
+
+    if incognito:
+        # Replace all numbers with 'X'.
+        @fava_app.after_request
+        def _incognito(response: WerkzeugResponse) -> WerkzeugResponse:
+            if response.content_type.startswith("text/html"):
+                original_text = response.get_data(as_text=True)
+                response.set_data(replace_numbers(original_text))
+            return response
+
+    load_file_lock = Lock()
+
+    @fava_app.url_value_preprocessor
+    def _pull_beancount_file(
+        _: str | None, values: dict[str, str] | None
+    ) -> None:
+        g.beancount_file_slug = values.pop("bfile", None) if values else None
+        if not fava_app.config["LEDGERS"]:
+            with load_file_lock:
+                if not fava_app.config["LEDGERS"]:
+                    fava_app.config["LEDGERS"] = _ledger_slugs_dict(
+                        FavaLedger(filepath)
+                        for filepath in fava_app.config["BEANCOUNT_FILES"]
+                    )
+        if g.beancount_file_slug:
+            if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
+                # one of the file slugs might have changed, update the mapping
+                fava_app.config["LEDGERS"] = _ledger_slugs_dict(
+                    fava_app.config["LEDGERS"].values()
+                )
+                if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
+                    abort(404)
+            g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
+            g.conversion = request.args.get("conversion", "at_cost")
+            g.interval = Interval.get(request.args.get("interval", "month"))
+
+    @fava_app.errorhandler(FavaAPIError)
+    def fava_api_exception(error: FavaAPIError) -> str:
+        """Handle API errors."""
+        return render_template(
+            "_layout.html", page_title="Error", content=error.message
         )
 
 
-@app.after_request
-def _incognito(
-    response: WerkzeugResponse,
-) -> WerkzeugResponse:
-    """Replace all numbers with 'X'."""
-    if app.config.get("INCOGNITO") and response.content_type.startswith(
-        "text/html"
-    ):
-        is_editor = (
-            request.endpoint == "report"
-            and request.view_args is not None
-            and request.view_args["report_name"] == "editor"
-        )
-        if not is_editor:
-            original_text = response.get_data(as_text=True)
-            response.set_data(replace_numbers(original_text))
-    return response
+def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
+    @fava_app.route("/")
+    @fava_app.route("/<bfile>/")
+    def index() -> WerkzeugResponse:
+        """Redirect to the Income Statement (of the given or first file)."""
+        if not g.beancount_file_slug:
+            g.beancount_file_slug = next(iter(fava_app.config["LEDGERS"]))
+        index_url = url_for("index")
+        default_page = fava_app.config["LEDGERS"][
+            g.beancount_file_slug
+        ].fava_options.default_page
+        return redirect(f"{index_url}{default_page}")
 
-
-@app.before_request
-def _read_only_mode() -> None:
-    """Prevent any request that isn't a GET if read-only mode is active."""
-    if app.config.get("READ_ONLY") and request.method != "GET":
-        abort(401)
-
-
-@app.url_value_preprocessor
-def _pull_beancount_file(_: str | None, values: dict[str, str] | None) -> None:
-    g.beancount_file_slug = values.pop("bfile", None) if values else None
-    with LOAD_FILE_LOCK:
-        if not app.config.get("LEDGERS"):
-            _load_file()
-    if g.beancount_file_slug:
-        if g.beancount_file_slug not in app.config["LEDGERS"]:
-            if not any(
-                g.beancount_file_slug == ledger_slug(ledger)
-                for ledger in app.config["LEDGERS"].values()
-            ):
-                abort(404)
-            # one of the file slugs changed, update the mapping
-            update_ledger_slugs(app.config["LEDGERS"].values())
-        g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
-        g.conversion = request.args.get("conversion", "at_cost")
-        g.interval = Interval.get(request.args.get("interval", "month"))
-
-
-@app.errorhandler(FavaAPIError)
-def fava_api_exception(error: FavaAPIError) -> str:
-    """Handle API errors."""
-    return render_template(
-        "_layout.html", page_title="Error", content=error.message
+    @fava_app.route(
+        "/<bfile>/account/<name>/", defaults={"subreport": "journal"}
     )
-
-
-@app.route("/")
-@app.route("/<bfile>/")
-def index() -> WerkzeugResponse:
-    """Redirect to the Income Statement (of the given or first file)."""
-    if not g.beancount_file_slug:
-        g.beancount_file_slug = next(iter(app.config["LEDGERS"]))
-    index_url = url_for("index")
-    default_path = app.config["LEDGERS"][
-        g.beancount_file_slug
-    ].fava_options.default_page
-    return redirect(f"{index_url}{default_path}")
-
-
-@app.route("/<bfile>/account/<name>/")
-@app.route("/<bfile>/account/<name>/<subreport>/")
-def account(name: str, subreport: str = "journal") -> str:
-    """Get the account report."""
-    if subreport in ["journal", "balances", "changes"]:
+    @fava_app.route(
+        "/<bfile>/account/<name>/<any(balances,changes):subreport>/"
+    )
+    def account(
+        name: str,
+        subreport: str,
+    ) -> str:
+        """Get the account report."""
         return render_template(
             "account.html", account_name=name, subreport=subreport
         )
-    return abort(404)
 
-
-@app.route("/<bfile>/document/", methods=["GET"])
-def document() -> Response:
-    """Download a document."""
-    filename = request.args.get("filename")
-    if filename is None:
+    @fava_app.route("/<bfile>/document/", methods=["GET"])
+    def document() -> Response:
+        """Download a document."""
+        filename = request.args.get("filename", "")
+        if is_document_or_import_file(filename, g.ledger):
+            return send_file_inline(filename)
         return abort(404)
-    if is_document_or_import_file(filename, g.ledger):
-        return send_file_inline(filename)
-    return abort(404)
 
+    @fava_app.route("/<bfile>/statement/", methods=["GET"])
+    def statement() -> Response:
+        """Download a statement file."""
+        entry_hash = request.args.get("entry_hash", "")
+        key = request.args.get("key", "")
+        document_path = g.ledger.statement_path(entry_hash, key)
+        return send_file_inline(document_path)
 
-@app.route("/<bfile>/statement/", methods=["GET"])
-def statement() -> Response:
-    """Download a statement file."""
-    entry_hash = request.args.get("entry_hash", "")
-    key = request.args.get("key", "")
-    document_path = g.ledger.statement_path(entry_hash, key)
-    return send_file_inline(document_path)
-
-
-@app.route("/<bfile>/holdings/by_<aggregation_key>/")
-def holdings_by(aggregation_key: str) -> str:
-    """Get the holdings report."""
-    if aggregation_key in ["account", "currency", "cost_currency"]:
+    @fava_app.route(
+        "/<bfile>/holdings/by_<any(account,currency,cost_currency):aggregation_key>/"
+    )
+    def holdings_by(
+        aggregation_key: str,
+    ) -> str:
+        """Get the holdings report."""
         return render_template(
             "_layout.html",
             active_page="holdings",
             aggregation_key=aggregation_key,
         )
-    return abort(404)
 
-
-@app.route("/<bfile>/<report_name>/")
-def report(report_name: str) -> str:
-    """Endpoint for most reports."""
-    if report_name in CLIENT_SIDE_REPORTS:
-        return render_template(
-            "_layout.html", active_page=report_name, client_side_rendered=True
-        )
-    if report_name in REPORTS:
-        return render_template("_layout.html", active_page=report_name)
-    return abort(404)
-
-
-@app.route("/<bfile>/extension/<report_name>/")
-def extension_report(report_name: str) -> str:
-    """Endpoint for extension reports."""
-    try:
-        template, extension = g.ledger.extensions.template_and_extension(
-            report_name
-        )
-        content = Markup(render_template_string(template, extension=extension))
-        return render_template(
-            "_layout.html", content=content, page_title=extension.report_title
-        )
-    except LookupError:
+    @fava_app.route("/<bfile>/<report_name>/")
+    def report(report_name: str) -> str:
+        """Endpoint for most reports."""
+        if report_name in CLIENT_SIDE_REPORTS:
+            return render_template(
+                "_layout.html",
+                active_page=report_name,
+                client_side_rendered=True,
+            )
+        if report_name in SERVER_SIDE_REPORTS:
+            return render_template("_layout.html", active_page=report_name)
         return abort(404)
 
-
-@app.route("/<bfile>/download-query/query_result.<result_format>")
-def download_query(result_format: str) -> Response:
-    """Download a query result."""
-    name, data = g.ledger.query_shell.query_to_file(
-        g.filtered.entries, request.args.get("query_string", ""), result_format
-    )
-
-    filename = f"{secure_filename(name.strip())}.{result_format}"
-    return send_file(data, as_attachment=True, download_name=filename)
-
-
-@app.route("/<bfile>/download-journal/")
-def download_journal() -> Response:
-    """Download a Journal file."""
-    now = datetime.now().replace(microsecond=0)
-    filename = f"journal_{now.isoformat()}.beancount"
-    data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
-    return send_file(data, as_attachment=True, download_name=filename)
-
-
-@app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
-@app.route("/<bfile>/help/<string:page_slug>")
-def help_page(page_slug: str) -> str:
-    """Fava's included documentation."""
-    if page_slug not in HELP_PAGES:
-        abort(404)
-    html = markdown2.markdown_path(
-        (resource_path("help") / (page_slug + ".md")),
-        extras=["fenced-code-blocks", "tables", "header-ids"],
-    )
-    return render_template(
-        "_layout.html",
-        active_page="help",
-        page_slug=page_slug,
-        help_html=Markup(
-            render_template_string(
-                html,
-                beancount_version=beancount_version,
-                fava_version=fava_version,
+    @fava_app.route("/<bfile>/extension/<report_name>/")
+    def extension_report(report_name: str) -> str:
+        """Endpoint for extension reports."""
+        try:
+            template, extension = g.ledger.extensions.template_and_extension(
+                report_name
             )
-        ),
-        HELP_PAGES=HELP_PAGES,
-    )
+        except LookupError:
+            return abort(404)
+        content = Markup(render_template_string(template, extension=extension))
+        return render_template(
+            "_layout.html",
+            content=content,
+            page_title=extension.report_title,
+        )
+
+    @fava_app.route("/<bfile>/download-query/query_result.<result_format>")
+    def download_query(result_format: str) -> Response:
+        """Download a query result."""
+        name, data = g.ledger.query_shell.query_to_file(
+            g.filtered.entries,
+            request.args.get("query_string", ""),
+            result_format,
+        )
+
+        filename = f"{secure_filename(name.strip())}.{result_format}"
+        return send_file(data, as_attachment=True, download_name=filename)
+
+    @fava_app.route("/<bfile>/download-journal/")
+    def download_journal() -> Response:
+        """Download a Journal file."""
+        now = datetime.now().replace(microsecond=0)
+        filename = f"journal_{now.isoformat()}.beancount"
+        data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
+        return send_file(data, as_attachment=True, download_name=filename)
+
+    @fava_app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
+    @fava_app.route("/<bfile>/help/<page_slug>")
+    def help_page(page_slug: str) -> str:
+        """Fava's included documentation."""
+        if page_slug not in HELP_PAGES:
+            abort(404)
+        html = markdown2.markdown_path(
+            (Path(__file__).parent / "help" / (page_slug + ".md")),
+            extras=["fenced-code-blocks", "tables", "header-ids"],
+        )
+        return render_template(
+            "_layout.html",
+            active_page="help",
+            page_slug=page_slug,
+            help_html=Markup(
+                render_template_string(
+                    html,
+                    beancount_version=beancount_version,
+                    fava_version=fava_version,
+                )
+            ),
+            HELP_PAGES=HELP_PAGES,
+        )
+
+    @fava_app.route("/jump")
+    def jump() -> WerkzeugResponse:
+        """Redirect back to the referer, replacing some parameters.
+
+        This is useful for sidebar links, e.g. a link ``/jump?time=year``
+        would set the time filter to `year` on the current page.
+
+        When accessing ``/jump?param1=abc`` from
+        ``/example/page?param1=123&param2=456``, this view should redirect to
+        ``/example/page?param1=abc&param2=456``.
+
+        """
+        url = url_parse(request.referrer)
+        qs_dict = url.decode_query()
+        for key, values in request.args.lists():
+            if values == [""]:
+                with suppress(KeyError):
+                    del qs_dict[key]
+            else:
+                qs_dict.setlist(key, values)
+
+        redirect_url = url.replace(query=url_encode(qs_dict, sort=True))
+        return redirect(url_unparse(redirect_url))
 
 
-@app.route("/jump")
-def jump() -> WerkzeugResponse:
-    """Redirect back to the referer, replacing some parameters.
+def _setup_babel(fava_app: Flask) -> None:
+    """Configure the Babel Flask extension."""
 
-    This is useful for sidebar links, e.g. a link ``/jump?time=year``
-    would set the time filter to `year` on the current page.
+    def _get_locale() -> str | None:
+        """Get locale."""
+        lang = g.ledger.fava_options.language
+        if lang is not None:
+            return lang
+        return request.accept_languages.best_match(["en", *LANGUAGES])
 
-    When accessing ``/jump?param1=abc`` from
-    ``/example/page?param1=123&param2=456``, this view should redirect to
-    ``/example/page?param1=abc&param2=456``.
+    try:
+        # for Flask-Babel <3.0
+        babel = Babel(fava_app)
+        babel.localeselector(_get_locale)
+    except AttributeError:
+        # for Flask-Babel >=3.0
+        babel = Babel(fava_app, locale_selector=_get_locale)
 
+
+def create_app(
+    files: Iterable[Path | str],
+    load: bool = False,
+    incognito: bool = False,
+    read_only: bool = False,
+) -> Flask:
+    """Create a Fava Flask application.
+
+    Arguments:
+        files: The list of Beancount files (paths).
+        load: Whether to load the Beancount files directly.
+        incognito: Whether to run in incognito mode.
+        read_only: Whether to run in read-only mode.
     """
-    url = url_parse(request.referrer)
-    qs_dict = url.decode_query()
-    for key, values in request.args.lists():
-        if values == [""]:
-            with suppress(KeyError):
-                del qs_dict[key]
-        else:
-            qs_dict.setlist(key, values)
+    fava_app = Flask("fava")
+    fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
+    setup_json_for_app(fava_app)
+    _setup_template_config(fava_app)
+    _setup_babel(fava_app)
+    _setup_filters(fava_app, read_only=read_only, incognito=incognito)
+    _setup_routes(fava_app)
 
-    redirect_url = url.replace(query=url_encode(qs_dict, sort=True))
-    return redirect(url_unparse(redirect_url))
+    fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL
+    fava_app.config["BEANCOUNT_FILES"] = [str(f) for f in files]
+    fava_app.config["INCOGNITO"] = incognito
+
+    if load:
+        fava_app.config["LEDGERS"] = _ledger_slugs_dict(
+            FavaLedger(filepath)
+            for filepath in fava_app.config["BEANCOUNT_FILES"]
+        )
+    else:
+        fava_app.config["LEDGERS"] = None
+
+    return fava_app
+
+
+#: This is still provided for compatibility but will be removed at some point.
+app = create_app([])
