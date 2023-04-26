@@ -310,6 +310,23 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             return render_template(f"{report_name}.html")
         return abort(404)
 
+    @fava_app.route(
+        "/<bfile>/extension/<extension_name>/<endpoint>",
+        methods=["GET", "POST", "PUT", "DELETE"],
+    )
+    def extension_endpoint(extension_name: str, endpoint: str) -> Response:
+        ext = g.ledger.extensions.get_extension(extension_name)
+        key = (endpoint, request.method)
+        if ext is None or key not in ext.endpoints:
+            return abort(404)
+        response = ext.endpoints[key](ext)
+
+        return (
+            fava_app.make_response(response)
+            if response is not None
+            else abort(404)
+        )
+
     @fava_app.route("/<bfile>/extension_js_module/<extension_name>.js")
     def extension_js_module(extension_name: str) -> Response:
         """Endpoint for extension module source."""
