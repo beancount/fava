@@ -11,7 +11,6 @@ To start a simple server::
 """
 from __future__ import annotations
 
-from contextlib import suppress
 from dataclasses import fields
 from datetime import date
 from datetime import datetime
@@ -20,6 +19,10 @@ from io import BytesIO
 from pathlib import Path
 from threading import Lock
 from typing import TYPE_CHECKING
+from urllib.parse import parse_qsl
+from urllib.parse import urlencode
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
 
 import markdown2  # type: ignore[import]
 from beancount import __version__ as beancount_version
@@ -36,9 +39,6 @@ from flask import url_for as flask_url_for
 from flask_babel import Babel  # type: ignore[import]
 from flask_babel import get_translations
 from markupsafe import Markup
-from werkzeug.urls import url_encode
-from werkzeug.urls import url_parse
-from werkzeug.urls import url_unparse
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
@@ -380,17 +380,17 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         ``/example/page?param1=abc&param2=456``.
 
         """
-        url = url_parse(request.referrer)
-        qs_dict = url.decode_query()
+        url = urlparse(request.referrer)
+        query_args = parse_qsl(url.query)
         for key, values in request.args.lists():
-            if values == [""]:
-                with suppress(KeyError):
-                    del qs_dict[key]
-            else:
-                qs_dict.setlist(key, values)
+            query_args = [
+                key_value for key_value in query_args if key_value[0] != key
+            ]
+            if values != [""]:
+                query_args.extend([(key, v) for v in values])
 
-        redirect_url = url.replace(query=url_encode(qs_dict, sort=True))
-        return redirect(url_unparse(redirect_url))
+        redirect_url = url._replace(query=urlencode(query_args))
+        return redirect(urlunparse(redirect_url))
 
 
 def _setup_babel(fava_app: Flask) -> None:

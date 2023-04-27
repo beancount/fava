@@ -2,10 +2,10 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from urllib.parse import urljoin
 
 import pytest
 from beancount import __version__ as beancount_version
-from werkzeug.urls import url_join
 
 from fava import __version__ as fava_version
 from fava.application import create_app
@@ -130,7 +130,7 @@ def test_default_path_redirection(
         result = test_client.get(url)
         get_url = result.headers.get("Location", "")
         # pre Werkzeug 2.1:
-        expect_url = url_join("http://localhost/", expect)
+        expect_url = urljoin("http://localhost/", expect)
         assert result.status_code == 302
         assert get_url in (expect, expect_url)
 
@@ -139,8 +139,8 @@ def test_default_path_redirection(
     ("referer", "jump_link", "expect"),
     [
         ("/?foo=bar", "/jump?foo=baz", "/?foo=baz"),
-        ("/?foo=bar", "/jump?baz=qux", "/?baz=qux&foo=bar"),
-        ("/", "/jump?foo=bar&baz=qux", "/?baz=qux&foo=bar"),
+        ("/?foo=bar", "/jump?baz=qux", "/?foo=bar&baz=qux"),
+        ("/", "/jump?foo=bar&baz=qux", "/?foo=bar&baz=qux"),
         ("/", "/jump?baz=qux", "/?baz=qux"),
         ("/?foo=bar", "/jump?foo=", "/"),
         ("/?foo=bar", "/jump?foo=&foo=", "/?foo=&foo="),
@@ -162,7 +162,7 @@ def test_jump_handler(
     with app.test_request_context():
         get_url = result.headers.get("Location", "")
         # pre Werkzeug 2.1:
-        expect_url = url_join("http://localhost/", expect)
+        expect_url = urljoin("http://localhost/", expect)
         assert result.status_code == 302
         assert get_url in (expect, expect_url)
 

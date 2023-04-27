@@ -12,10 +12,10 @@ from typing import Iterable
 from typing import TYPE_CHECKING
 from typing import TypeVar
 from unicodedata import normalize
+from urllib.parse import quote
 
 from flask import abort
 from flask import send_file
-from werkzeug.urls import url_quote
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import ParamSpec
@@ -122,6 +122,6 @@ def send_file_inline(filename: str) -> Response:
     except FileNotFoundError:
         return abort(404)
     base = Path(filename).name
-    cont_disp = f"inline; filename*=UTF-8''{url_quote(base)}"
+    cont_disp = f"inline; filename*=UTF-8''{quote(base)}"
     response.headers["Content-Disposition"] = cont_disp
     return response
