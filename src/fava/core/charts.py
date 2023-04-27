@@ -67,7 +67,7 @@ Inventory.for_json = inv_to_dict  # type: ignore[attr-defined]
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
 
-    def __init__(self, indent: bool | None = False) -> None:
+    def __init__(self, indent: bool | None = False, **_kwargs: None) -> None:
         super().__init__(
             indent=indent,
             # Allow use of a `for_json` method to serialise dict subclasses.
