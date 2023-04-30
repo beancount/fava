@@ -1,8 +1,14 @@
 {% import "_query_table.html" as querytable %}
-
+{% set arg_filter = request.args.get('account_filter') %}
 <h2>Portfolio List Sample Report Extension</h2>
 <br />
-{% for portfolio in extension.portfolio_accounts() %}
+<label for="portfolio-list-filter">Custom Account Filter:</label>
+<input id="portfolio-list-filter" value={{arg_filter or ""}}>
+<button onclick="extension.updateFilter()">Update Filter</button>
+<button onclick="extension.clearFilter()">Clear Filter</button>
+<br />
+<br />
+{% for portfolio in extension.portfolio_accounts(arg_filter) %}
     <h3>{{ portfolio[0] }}</h3>
     {{ querytable.querytable(ledger, None, *portfolio[1]) }}
     <br />

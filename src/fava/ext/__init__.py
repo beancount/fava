@@ -30,6 +30,8 @@ class FavaExtensionBase:
 
     report_title: str | None = None
 
+    has_js_module: bool | None = None
+
     config: Any
 
     def __init__(self, ledger: FavaLedger, config: str | None = None) -> None:

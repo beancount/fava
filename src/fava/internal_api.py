@@ -67,6 +67,7 @@ class LedgerData:
     user_queries: list[Any]
     upcoming_events_count: int
     extension_reports: list[tuple[str, str]]
+    extension_js_modules: list[str]
     sidebar_links: list[tuple[str, str]]
     other_ledgers: list[tuple[str, str]]
 
@@ -104,6 +105,7 @@ def get_ledger_data() -> LedgerData:
         ledger.query_shell.queries[: ledger.fava_options.sidebar_show_queries],
         len(ledger.misc.upcoming_events),
         ledger.extensions.reports,
+        ledger.extensions.js_modules,
         ledger.misc.sidebar_links,
         [
             (ledger.options["title"], url_for("index", bfile=file_slug))

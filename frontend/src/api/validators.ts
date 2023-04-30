@@ -72,6 +72,7 @@ export const ledgerDataValidator = object({
   user_queries: array(object({ name: string, query_string: string })),
   upcoming_events_count: number,
   extension_reports: array(tuple([string, string])),
+  extension_js_modules: array(string),
   sidebar_links: array(tuple([string, string])),
   other_ledgers: array(tuple([string, string])),
 });

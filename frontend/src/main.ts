@@ -30,6 +30,7 @@ import { get } from "./api";
 import { ledgerDataValidator } from "./api/validators";
 import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./codemirror/setup";
+import { urlFor } from "./helpers";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
@@ -60,10 +61,68 @@ function defineCustomElements() {
   customElements.define("svelte-component", SvelteCustomElement);
 }
 
+interface ExtensionModule {
+  onExtensionInit?: (this: ExtensionModule) => void;
+  onExtensionPageLoad?: (this: ExtensionModule) => void;
+}
+
+declare global {
+  interface Window {
+    extension?: ExtensionModule;
+  }
+}
+
+/**
+ * Class to wrap an individual extension module and handle calling module functions
+ */
+class Extension {
+  extension_name: string;
+
+  extension_module: ExtensionModule;
+
+  constructor(extension_name: string, extension_module: ExtensionModule) {
+    this.extension_name = extension_name;
+    this.extension_module = extension_module;
+  }
+
+  initExtension(): void {
+    if (this.extension_module.onExtensionInit) {
+      this.extension_module.onExtensionInit();
+    }
+  }
+
+  onPageLoad(): void {
+    if (this.extension_module.onExtensionPageLoad) {
+      this.extension_module.onExtensionPageLoad();
+    }
+  }
+}
+
+const extensions: Extension[] = [];
+
+/**
+ * On page load, check if the new page is an extension report page,
+ * and update the window.extension property. If it is an extension page,
+ * notify the extension module of the page load.
+ */
+function handleExtensionPageLoad() {
+  const paths = window.location.pathname.split("/");
+  window.extension = undefined;
+  if (paths.length > 3 && paths[2] === "extension") {
+    for (const ext of extensions) {
+      if (paths[3] === ext.extension_name) {
+        window.extension = ext.extension_module;
+        ext.onPageLoad();
+      }
+    }
+  }
+}
+
 router.on("page-loaded", () => {
   read_mtime();
   updatePageTitle();
   has_changes.set(false);
+  handleExtensionPageLoad();
 });
 
 /**
@@ -86,6 +145,42 @@ function pollForChanges(): void {
       }
     }
   }, log_error);
+}
+
+interface ModuleImport {
+  default?: ExtensionModule;
+}
+
+/**
+ * Check the extension_modules endpoint to get a list of extension modules
+ * to load dynamically. Load and initialize each of these modules and trigger
+ * the "page-loaded" event once everything is loaded.
+ */
+function initExtensions(extension_modules: string[]): void {
+  const module_promises = extension_modules.map(async (name) => {
+    const extension_module: ModuleImport = await (import(
+      urlFor(`extension_js_module/${name}.js`, undefined, false)
+    ) as Promise<ModuleImport>);
+    if (typeof extension_module.default === "object") {
+      return new Extension(name, extension_module.default);
+    }
+    throw new Error(
+      `Error importing module for extension ${name}: module must export "default" object`
+    );
+  });
+  Promise.allSettled(module_promises)
+    .then((extensionResults) => {
+      for (const res of extensionResults) {
+        if (res.status === "fulfilled") {
+          res.value.initExtension();
+          extensions.push(res.value);
+        } else {
+          log_error(res.reason);
+        }
+      }
+      router.trigger("page-loaded");
+    })
+    .catch(log_error);
 }
 
 function init(): void {
@@ -122,9 +217,8 @@ function init(): void {
 
   ledgerData.subscribe((val) => {
     errors.set(val.errors);
+    initExtensions(val.extension_js_modules);
   });
-
-  router.trigger("page-loaded");
 }
 
 init();

@@ -308,6 +308,17 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             return render_template("_layout.html", active_page=report_name)
         return abort(404)
 
+    @fava_app.route("/<bfile>/extension_js_module/<extension_name>.js")
+    def extension_js_module(extension_name: str) -> Response:
+        """Endpoint for extension module source."""
+        try:
+            extension_path = g.ledger.extensions.get_extension_js_module(
+                extension_name
+            )
+            return send_file(extension_path)
+        except LookupError:
+            return abort(404)
+
     @fava_app.route("/<bfile>/extension/<report_name>/")
     def extension_report(report_name: str) -> str:
         """Endpoint for extension reports."""

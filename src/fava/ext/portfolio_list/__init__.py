@@ -19,22 +19,28 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     report_title = "Portfolio List"
 
-    def portfolio_accounts(self):
+    has_js_module = True
+
+    def portfolio_accounts(self, filter_str=None):
         """Get an account tree based on matching regex patterns."""
         tree = g.filtered.root_tree
         portfolios = []
 
-        for option in self.config:
-            opt_key = option[0]
-            if opt_key == "account_name_pattern":
-                portfolio = self._account_name_pattern(tree, option[1])
-            elif opt_key == "account_open_metadata_pattern":
-                portfolio = self._account_metadata_pattern(
-                    tree, option[1][0], option[1][1]
-                )
-            else:
-                raise FavaAPIError("Portfolio List: Invalid option.")
+        if filter_str:
+            portfolio = self._account_name_pattern(tree, filter_str)
             portfolios.append(portfolio)
+        else:
+            for option in self.config:
+                opt_key = option[0]
+                if opt_key == "account_name_pattern":
+                    portfolio = self._account_name_pattern(tree, option[1])
+                elif opt_key == "account_open_metadata_pattern":
+                    portfolio = self._account_metadata_pattern(
+                        tree, option[1][0], option[1][1]
+                    )
+                else:
+                    raise FavaAPIError("Portfolio List: Invalid option.")
+                portfolios.append(portfolio)
 
         return portfolios
 

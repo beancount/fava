@@ -113,7 +113,7 @@ def setup_json_for_app(app: Flask) -> None:
         app.json = FavaJSONProvider(app)
 
     else:  # pragma: no cover
-        app.json_encoder = FavaJSONEncoder  # type: ignore[attr-defined]
+        app.json_encoder = FavaJSONEncoder  # type: ignore[assignment]
 
 
 @dataclass(frozen=True)

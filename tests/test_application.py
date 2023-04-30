@@ -260,6 +260,9 @@ def test_load_extension_reports(app: Flask, test_client: FlaskClient) -> None:
         url = "/extension-report/extension/PortfolioList/"
         result = test_client.get(url)
         assert result.status_code == 200
+        url = "/extension-report/extension_js_module/PortfolioList.js"
+        result = test_client.get(url)
+        assert result.status_code == 200
         url = "/extension-report/extension/MissingExtension/"
         result = test_client.get(url)
         assert result.status_code == 404

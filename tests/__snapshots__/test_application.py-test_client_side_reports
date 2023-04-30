@@ -899,6 +899,7 @@
 "XYZ"
 ],
 "errors": [],
+"extension_js_modules": [],
 "extension_reports": [],
 "fava_options": {
 "account_journal_include_children": true,

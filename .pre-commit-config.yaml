@@ -36,4 +36,4 @@ repos:
             language: node
             entry: ./frontend/node_modules/eslint/bin/eslint.js --max-warnings 0
             require_serial: true
-            files: \.(js|ts|svelte)$
+            files: frontend/.*\.(js|ts|svelte)$
