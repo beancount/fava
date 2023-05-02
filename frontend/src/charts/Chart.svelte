@@ -4,7 +4,6 @@
   import type { Writable } from "svelte/store";
 
   import { _ } from "../i18n";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
   import {
     barChartMode,
     chartCurrency,
@@ -87,7 +86,6 @@
   <button
     type="button"
     on:click={() => showCharts.update((v) => !v)}
-    use:keyboardShortcut={"Control+c"}
     class:closed={!$showCharts}
     class="toggle-chart"
   />
