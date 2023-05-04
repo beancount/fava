@@ -44,6 +44,15 @@ def test_reports(
     assert result.status_code == 200
 
 
+def test_client_side_reports(
+    test_client: FlaskClient, snapshot: SnapshotFunc
+) -> None:
+    """The client-side rendered reports are generated."""
+    result = test_client.get("/long-example/documents/")
+    assert result.status_code == 200
+    snapshot(result.get_data(True))
+
+
 @pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
 def test_account_page(
     test_client: FlaskClient, filters: dict[str, str]
