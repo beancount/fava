@@ -162,7 +162,7 @@ def parse_options(
         try:
             parse_option_custom_entry(entry, options)
         except (IndexError, TypeError, ValueError) as err:
-            msg = f"Failed to parse fava-option entry: {str(err)}"
+            msg = f"Failed to parse fava-option entry: {err!s}"
             errors.append(OptionError(entry.meta, msg, entry))
 
     return options, errors

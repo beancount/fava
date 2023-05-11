@@ -6,9 +6,6 @@ const config = {
       true,
       { ignorePseudoClasses: ["global"] },
     ],
-    // The following rule leads to a Svelte parsing error currently.
-    // Should be fixed in the next Svelte release after 3.58.0
-    "media-feature-range-notation": null,
   },
 };
 

@@ -120,7 +120,7 @@
     margin-bottom: 6px;
   }
 
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     /* Show the modal full-screen on mobile. */
     .overlay {
       height: 100%;

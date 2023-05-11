@@ -54,7 +54,7 @@
     background-color: var(--sidebar-background);
   }
 
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     aside {
       top: 0;
       margin-left: calc(-1 * var(--aside-width));

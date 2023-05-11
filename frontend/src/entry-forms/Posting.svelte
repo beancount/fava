@@ -115,7 +115,7 @@
     width: 192px;
   }
 
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     div {
       padding-left: 0;
     }

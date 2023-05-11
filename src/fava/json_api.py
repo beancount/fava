@@ -74,7 +74,7 @@ def _json_api_oserror(error: OSError) -> Response:
 
 @json_api.errorhandler(ValidationError)
 def _json_api_validation_error(error: ValidationError) -> Response:
-    return json_err(f"Invalid API request: {str(error)}")
+    return json_err(f"Invalid API request: {error!s}")
 
 
 def validate_func_arguments(

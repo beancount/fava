@@ -169,7 +169,7 @@
     display: none;
   }
 
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     label > span:first-child,
     .label > span:first-child {
       display: initial;

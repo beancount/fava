@@ -34,13 +34,10 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
         run_text("help exit") == "Doesn't do anything in Fava's query shell."
     )
     snapshot(run_text("explain select date, balance"))
-    assert run("lex select date, balance")[0] == "\n".join(
-        [
-            "LexToken(SELECT,'SELECT',1,0)",
-            "LexToken(ID,'date',1,7)",
-            "LexToken(COMMA,',',1,11)",
-            "LexToken(ID,'balance',1,13)",
-        ]
+    assert (
+        run("lex select date, balance")[0]
+        == "LexToken(SELECT,'SELECT',1,0)\nLexToken(ID,'date',1,7)\nL"
+        "exToken(COMMA,',',1,11)\nLexToken(ID,'balance',1,13)"
     )
 
     assert run_text("run") == "custom_query\ncustom query with space"
