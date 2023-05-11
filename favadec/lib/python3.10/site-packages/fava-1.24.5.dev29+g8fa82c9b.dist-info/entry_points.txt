@@ -1,0 +1,2 @@
+[console_scripts]
+fava = fava.cli:main

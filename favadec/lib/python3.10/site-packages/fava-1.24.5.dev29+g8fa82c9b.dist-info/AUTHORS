@@ -1,0 +1,11 @@
+Fava was created by Dominik Aumayr <dominik@aumayr.name>.
+Fava is maintained by Dominik Aumayr and Jakob Schnitzer.
+
+See the Issue Tracker and the Git log for other contributors, e.g., with:
+    git log --format='%aN' | sort -u
+
+Translations: The translations are maintained on POEditor. See the project
+there (https://poeditor.com/join/project/TlraSxOCxt) for details.
+
+A big thank you goes to Martin Blais for creating Beancount and all the
+invaluable documentation for it.

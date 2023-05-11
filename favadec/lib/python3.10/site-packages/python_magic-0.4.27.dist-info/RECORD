@@ -1,0 +1,14 @@
+magic/__init__.py,sha256=jDF2AAIlj3uXKjP6x_wEhXYuPrZbl-AF3TAjb0ndeCk,14964
+magic/__init__.pyi,sha256=CEfbEKmlkr-CRzInSUMZpGPCx4lwvqavtOW3jgy-n0E,2506
+magic/__pycache__/__init__.cpython-310.pyc,,
+magic/__pycache__/compat.cpython-310.pyc,,
+magic/__pycache__/loader.cpython-310.pyc,,
+magic/compat.py,sha256=OtSQ2C8tpy3NUjKiu-yYGiZzRU-nk-5UY2GCp5o-FpI,8316
+magic/loader.py,sha256=J5oRRm9940UOf3rv3KImT-2zM9pa_0RRWi-JF0GtjlU,1168
+magic/py.typed,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+python_magic-0.4.27.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+python_magic-0.4.27.dist-info/LICENSE,sha256=UIEFOtOtsEI9wMWByxFVpg5OKgVx1aZB0wg8tlsfS7I,2869
+python_magic-0.4.27.dist-info/METADATA,sha256=QG_S8JCIajigillHcSMKFUtWG4U_ZjTuONJDi5NNZNM,5844
+python_magic-0.4.27.dist-info/RECORD,,
+python_magic-0.4.27.dist-info/WHEEL,sha256=WzZ8cwjh8l0jtULNjYq1Hpr-WCqCRgPr--TX4P5I1Wo,110
+python_magic-0.4.27.dist-info/top_level.txt,sha256=MDDOZCPmPBiPXW10LHC6RzAJaGX08WaDj_oOOo7sQRc,6

@@ -1,0 +1,17 @@
+[console_scripts]
+bean-bake = beancount.scripts.bake:main
+bean-check = beancount.scripts.check:main
+bean-doctor = beancount.scripts.doctor:main
+bean-example = beancount.scripts.example:main
+bean-extract = beancount.ingest.scripts_utils:extract_main
+bean-file = beancount.ingest.scripts_utils:file_main
+bean-format = beancount.scripts.format:main
+bean-identify = beancount.ingest.scripts_utils:identify_main
+bean-price = beancount.prices.price:main
+bean-query = beancount.query.shell:main
+bean-report = beancount.reports.report:main
+bean-sql = beancount.scripts.sql:main
+bean-web = beancount.web.web:main
+treeify = beancount.tools.treeify:main
+upload-to-sheets = beancount.tools.sheets_upload:main
+

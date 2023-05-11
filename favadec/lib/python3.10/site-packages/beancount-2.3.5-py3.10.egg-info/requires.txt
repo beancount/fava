@@ -1,0 +1,12 @@
+pytest
+python-dateutil
+ply
+bottle
+lxml
+beautifulsoup4
+requests
+chardet
+google-api-python-client
+
+[:sys_platform != "win32"]
+python-magic>=0.4.12
