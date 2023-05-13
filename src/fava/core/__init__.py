@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from datetime import date
 from datetime import timedelta
+from functools import cached_property
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
 from typing import TypeVar
@@ -78,16 +78,11 @@ MODULES = [
 T = TypeVar("T")
 
 
-def _cache(func: Callable[..., T]) -> T:
-    """Wrap lru_cache to avoid type errors."""
-    # With Python 3.8 the calls below could be replaced with cached_property
-    return lru_cache()(func)  # type: ignore[return-value]
-
-
 class FilteredLedger:
     """Filtered Beancount ledger."""
 
     __slots__ = (
+        "__dict__",  # for the cached_property decorator
         "ledger",
         "entries",
         "_date_range",
@@ -134,8 +129,7 @@ class FilteredLedger:
                 self._date_last = entry.date + timedelta(1)
                 break
 
-    @property
-    @_cache
+    @cached_property
     def root_account(self) -> RealAccount:
         """A realized account for the filtered entries."""
         return realization.realize(
@@ -150,14 +144,12 @@ class FilteredLedger:
             return date_range.end_inclusive
         return None
 
-    @property
-    @_cache
+    @cached_property
     def root_tree(self) -> Tree:
         """A root tree."""
         return Tree(self.entries)
 
-    @property
-    @_cache
+    @cached_property
     def root_tree_closed(self) -> Tree:
         """A root tree for the balance sheet."""
         tree = Tree(self.entries)

@@ -2,15 +2,11 @@
 from __future__ import annotations
 
 from contextlib import suppress
-from sys import version_info
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version
 
-if version_info >= (3, 8):
-    from importlib import metadata as importlib_metadata
-else:
-    import importlib_metadata  # type: ignore[import,no-redef]
-
-with suppress(importlib_metadata.PackageNotFoundError):
-    __version__ = importlib_metadata.version(__name__)
+with suppress(PackageNotFoundError):
+    __version__ = version(__name__)
 
 LOCALES = [
     "bg",

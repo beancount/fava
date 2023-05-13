@@ -15,7 +15,7 @@ jobs:
         strategy:
             matrix:
                 os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-                py: ["3.11", "3.7"]
+                py: ["3.11", "3.8"]
                 toxenv: ["py", "old_deps"]
                 exclude:
                     - os: "macos-latest"
