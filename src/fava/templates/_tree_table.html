@@ -117,7 +117,7 @@
                     {{ commodity_macros.render_amount(ledger, amt, 'number') }}
                 </span>
             {% endfor %}
-            {% for currency, number in budget.items() if currency not in balance.currencies() %}
+            {% for currency, number in budget.items() if currency not in balance %}
               <span class="balance">
               {{ render_budget(budget, currency) }}
               </span>
@@ -128,7 +128,7 @@
                     {{ commodity_macros.render_amount(ledger, amt, 'number') }}
                 </span>
             {% endfor %}
-            {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}
+            {% for currency, number in budget_children.items() if currency not in balance_children %}
               <span class="balance-children">
               {{ render_budget(budget_children, currency) }}
               </span>
