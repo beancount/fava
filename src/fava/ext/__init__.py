@@ -5,14 +5,13 @@ import ast
 import importlib
 import inspect
 import sys
+from pathlib import Path
 from typing import Any
 from typing import TYPE_CHECKING
 
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from pathlib import Path
-
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
@@ -28,9 +27,11 @@ class FavaExtensionBase:
     discover all subclasses of this class in the specified modules.
     """
 
+    #: Name for a HTML report for this extension.
     report_title: str | None = None
 
-    has_js_module: bool | None = None
+    #: Whether this extension includes a Javascript module.
+    has_js_module: bool = False
 
     config: Any
 
@@ -47,7 +48,16 @@ class FavaExtensionBase:
             self.config = ast.literal_eval(config) if config else None
         except ValueError:
             self.config = None
-        self.name = self.__class__.__qualname__
+
+    @property
+    def name(self) -> str:
+        """Unique name of this extension."""
+        return self.__class__.__qualname__
+
+    @property
+    def extension_dir(self) -> Path:
+        """Directory to look for templates directory and Javascript code."""
+        return Path(inspect.getfile(self.__class__)).parent
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Run after an `entry` has been modified."""

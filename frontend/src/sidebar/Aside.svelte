@@ -2,7 +2,7 @@
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { errors, ledgerData } from "../stores";
+  import { errors, extensions, ledgerData } from "../stores";
 
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
@@ -11,8 +11,8 @@
 
   $: user_queries = $ledgerData.user_queries;
   $: upcoming_events_count = $ledgerData.upcoming_events_count;
-  $: extension_reports = $ledgerData.extension_reports;
   $: sidebar_links = $ledgerData.sidebar_links;
+  $: extension_reports = $extensions.filter((e) => e.report_title);
 </script>
 
 {#if sidebar_links.length}
@@ -75,8 +75,8 @@
 </ul>
 {#if extension_reports.length}
   <ul class="navigation">
-    {#each extension_reports as [name, label]}
-      <Link report={`extension/${name}`} name={label} />
+    {#each extension_reports as ext}
+      <Link report={`extension/${ext.name}`} name={ext.report_title ?? ""} />
     {/each}
   </ul>
 {/if}

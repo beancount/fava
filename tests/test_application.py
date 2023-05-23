@@ -249,20 +249,18 @@ def test_static_url(app: Flask) -> None:
         assert url == "/static/nonexistent.js?mtime=0"
 
 
-def test_load_extension_reports(app: Flask, test_client: FlaskClient) -> None:
+def test_load_extension_reports(test_client: FlaskClient) -> None:
     """Extension can register reports."""
-    with app.test_request_context("/extension-report/"):
-        app.preprocess_request()
-        assert g.ledger.extensions.reports == [
-            ("PortfolioList", "Portfolio List")
-        ]
 
-        url = "/extension-report/extension/PortfolioList/"
-        result = test_client.get(url)
-        assert result.status_code == 200
-        url = "/extension-report/extension_js_module/PortfolioList.js"
-        result = test_client.get(url)
-        assert result.status_code == 200
-        url = "/extension-report/extension/MissingExtension/"
-        result = test_client.get(url)
-        assert result.status_code == 404
+    url = "/extension-report/extension/PortfolioList/"
+    result = test_client.get(url)
+    assert result.status_code == 200
+    url = "/extension-report/extension_js_module/PortfolioList.js"
+    result = test_client.get(url)
+    assert result.status_code == 200
+    url = "/extension-report/extension_js_module/Missing.js"
+    result = test_client.get(url)
+    assert result.status_code == 404
+    url = "/extension-report/extension/MissingExtension/"
+    result = test_client.get(url)
+    assert result.status_code == 404

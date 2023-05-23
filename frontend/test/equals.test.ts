@@ -8,8 +8,6 @@ test("shallow array equality", () => {
   assert.ok(shallow_equal(["asdf", 1], ["asdf", 1]));
   assert.ok(!shallow_equal([1, "asdf"], ["asdf", 1]));
   assert.ok(shallow_equal(["asdf"], ["asdf"]));
-  const obj = {};
-  assert.ok(shallow_equal([obj], [obj]));
 });
 
 test.run();

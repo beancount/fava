@@ -1,18 +1,27 @@
 """Fava extensions."""
 from __future__ import annotations
 
-from inspect import getfile
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
-from fava.ext import FavaExtensionBase
 from fava.ext import find_extensions
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
+    from fava.ext import FavaExtensionBase
+
+
+@dataclass
+class ExtensionDetails:
+    """The information about an extension that is needed for the frontend."""
+
+    name: str
+    report_title: str | None
+    has_js_module: bool
 
 
 class ExtensionModule(FavaModule):
@@ -20,9 +29,8 @@ class ExtensionModule(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self._instances: dict[type[FavaExtensionBase], FavaExtensionBase] = {}
-        self.reports: list[tuple[str, str]] = []
-        self.js_modules: list[str] = []
+        self._instances: dict[str, FavaExtensionBase] = {}
+        self._loaded_extensions: set[type[FavaExtensionBase]] = set()
 
     def load_file(self) -> None:
         all_extensions = []
@@ -43,75 +51,43 @@ class ExtensionModule(FavaModule):
                 if (module in _extension_entries)
                 else None
             )
-            if cls not in self._instances:
-                self._instances[cls] = cls(self.ledger, ext_config)
+            if cls not in self._loaded_extensions:
+                self._loaded_extensions.add(cls)
+                ext = cls(self.ledger, ext_config)
+                self._instances[ext.name] = ext
 
-        self.reports = [
-            (ext.name, ext.report_title)
-            for ext in self._instances.values()
-            if ext.report_title is not None
-        ]
+    @property
+    def _exts(self) -> list[FavaExtensionBase]:
+        return list(self._instances.values())
 
-        self.js_modules = [
-            ext.name for ext in self._instances.values() if ext.has_js_module
-        ]
-
-    def exts_for_hook(self, hook: str) -> list[FavaExtensionBase]:
-        """Find all extensions that have implemented the given hook."""
+    @property
+    def extension_details(self) -> list[ExtensionDetails]:
+        """Extension information to provide to the Frontend."""
         return [
-            ext
-            for base, ext in self._instances.items()
-            if getattr(base, hook) != getattr(FavaExtensionBase, hook)
+            ExtensionDetails(ext.name, ext.report_title, ext.has_js_module)
+            for ext in self._exts
         ]
 
-    def get_extension_js_module(self, name: str) -> Path:
-        """Get the path of the javascript module file for a given extension."""
-        for ext_class, ext in self._instances.items():
-            if ext.name == name:
-                extension_dir = Path(getfile(ext_class)).parent
-                return extension_dir / f"{ext.name}.js"
-
-        raise LookupError("Extension report not found.")
-
-    def template_and_extension(
-        self, name: str
-    ) -> tuple[str, FavaExtensionBase]:
-        """Provide data to render an extension report.
-
-        Args:
-            name: The extension class qualname.
-
-        Returns:
-            Tuple of associated template source, extension instance
-        """
-        for ext_class, ext in self._instances.items():
-            if ext.name == name:
-                extension_dir = Path(getfile(ext_class)).parent
-                template_path = (
-                    extension_dir / "templates" / f"{ext.name}.html"
-                )
-
-                with template_path.open(encoding="utf-8") as ext_template:
-                    return ext_template.read(), ext
-
-        raise LookupError("Extension report not found.")
+    def get_extension(self, name: str) -> FavaExtensionBase | None:
+        """Get the extension with the given name."""
+        return self._instances.get(name, None)
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
-        for ext in self.exts_for_hook("after_entry_modified"):
+        for ext in self._exts:
             ext.after_entry_modified(entry, new_lines)
 
     def after_insert_entry(self, entry: Directive) -> None:
-        for ext in self.exts_for_hook("after_insert_entry"):
+        for ext in self._exts:
             ext.after_insert_entry(entry)
 
     def after_insert_metadata(
         self, entry: Directive, key: str, value: str
     ) -> None:
-        for ext in self.exts_for_hook("after_insert_metadata"):
+        for ext in self._exts:
             ext.after_insert_metadata(entry, key, value)
 
     def after_write_source(self, path: str, source: str) -> None:
-        for ext in self.exts_for_hook("after_write_source"):
+        for ext in self._exts:
             ext.after_write_source(path, source)
 
 

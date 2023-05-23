@@ -24,6 +24,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Meta
     from fava.core.accounts import AccountDict
+    from fava.core.extensions import ExtensionDetails
     from fava.core.fava_options import FavaOptions
     from fava.helpers import BeancountError
     from fava.util.date import Interval
@@ -66,8 +67,7 @@ class LedgerData:
     years: list[str]
     user_queries: list[Any]
     upcoming_events_count: int
-    extension_reports: list[tuple[str, str]]
-    extension_js_modules: list[str]
+    extensions: list[ExtensionDetails]
     sidebar_links: list[tuple[str, str]]
     other_ledgers: list[tuple[str, str]]
 
@@ -104,8 +104,7 @@ def get_ledger_data() -> LedgerData:
         ledger.attributes.years,
         ledger.query_shell.queries[: ledger.fava_options.sidebar_show_queries],
         len(ledger.misc.upcoming_events),
-        ledger.extensions.reports,
-        ledger.extensions.js_modules,
+        ledger.extensions.extension_details,
         ledger.misc.sidebar_links,
         [
             (ledger.options["title"], url_for("index", bfile=file_slug))

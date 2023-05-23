@@ -1,7 +1,13 @@
+/** Types for which we can do a strict comparison. */
+export type StrictEquality = string | number | null;
+
 /**
- * Shallow equality of two arrays.
+ * Shallow equality of two arrays - the elements are compared strictly.
  */
-export function shallow_equal<T>(a: T[], b: T[]): boolean {
+export function shallow_equal<T extends StrictEquality>(
+  a: T[],
+  b: T[]
+): boolean {
   const l = a.length;
   if (l !== b.length) {
     return false;

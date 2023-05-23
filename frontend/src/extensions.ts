@@ -7,7 +7,7 @@ import { get as store_get } from "svelte/store";
 
 import { getUrlPath, urlFor } from "./helpers";
 import { log_error } from "./log";
-import { extension_js_modules } from "./stores";
+import { extensions } from "./stores";
 
 /**
  * The Javascript code of a Fava extension should export an object of this type.
@@ -51,8 +51,8 @@ async function getExt(name: string): Promise<ExtensionModule> {
  * On page load, run check if the new page is an extension report page and run hooks.
  */
 export function handleExtensionPageLoad() {
-  const exts = store_get(extension_js_modules);
-  for (const name of exts) {
+  const exts = store_get(extensions).filter((e) => e.has_js_module);
+  for (const { name } of exts) {
     // Run the onPageLoad handler for all pages.
     getExt(name)
       .then((m) => m.onPageLoad?.())
@@ -60,7 +60,7 @@ export function handleExtensionPageLoad() {
   }
   const path = getUrlPath(window.location);
   if (path?.startsWith("extension/")) {
-    for (const name of exts) {
+    for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {
         getExt(name)
           .then((m) => m.onExtensionPageLoad?.())

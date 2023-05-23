@@ -311,28 +311,24 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/extension_js_module/<extension_name>.js")
     def extension_js_module(extension_name: str) -> Response:
         """Endpoint for extension module source."""
-        try:
-            extension_path = g.ledger.extensions.get_extension_js_module(
-                extension_name
-            )
-            return send_file(extension_path)
-        except LookupError:
+        ext = g.ledger.extensions.get_extension(extension_name)
+        if ext is None or not ext.has_js_module:
             return abort(404)
+        return send_file(ext.extension_dir / f"{ext.name}.js")
 
-    @fava_app.route("/<bfile>/extension/<report_name>/")
-    def extension_report(report_name: str) -> str:
+    @fava_app.route("/<bfile>/extension/<extension_name>/")
+    def extension_report(extension_name: str) -> str:
         """Endpoint for extension reports."""
-        try:
-            template, extension = g.ledger.extensions.template_and_extension(
-                report_name
-            )
-        except LookupError:
-            return abort(404)
-        content = Markup(render_template_string(template, extension=extension))
+        ext = g.ledger.extensions.get_extension(extension_name)
+        if ext is None or ext.report_title is None:
+            abort(404)
+        template_path = ext.extension_dir / "templates" / f"{ext.name}.html"
+        template = template_path.read_text(encoding="utf-8")
+        content = Markup(render_template_string(template, extension=ext))
         return render_template(
             "_layout.html",
             content=content,
-            page_title=extension.report_title,
+            page_title=ext.report_title,
         )
 
     @fava_app.route("/<bfile>/download-query/query_result.<result_format>")

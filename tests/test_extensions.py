@@ -3,28 +3,25 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from fava.core.extensions import ExtensionDetails
+
 if TYPE_CHECKING:  # pragma: no cover
     from .conftest import GetFavaLedger
 
 
 def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
-    """Extensions can register reports."""
+    """Extensions can register reports and have JS modules."""
     extension_report_ledger = get_ledger("extension-report")
-    result = extension_report_ledger.extensions.reports
-    assert result == [("PortfolioList", "Portfolio List")]
+    result = extension_report_ledger.extensions.extension_details
+    assert result == [
+        ExtensionDetails("PortfolioList", "Portfolio List", True)
+    ]
 
     extension_report_ledger.extensions.after_write_source("test", "test")
 
+    ext = extension_report_ledger.extensions.get_extension("PortfolioList")
+    assert ext
+    assert ext.name == "PortfolioList"
 
-def test_extension_module_globals(get_ledger: GetFavaLedger) -> None:
-    """Extensions can have Javascript modules."""
-    extension_report_ledger = get_ledger("extension-report")
-    modules = extension_report_ledger.extensions.js_modules
-    assert modules == ["PortfolioList"]
-
-    module_path = extension_report_ledger.extensions.get_extension_js_module(
-        "PortfolioList"
-    )
-
-    assert module_path.exists()
-    assert module_path.name == "PortfolioList.js"
+    assert ext.extension_dir.exists()
+    assert (ext.extension_dir / "PortfolioList.js").exists()

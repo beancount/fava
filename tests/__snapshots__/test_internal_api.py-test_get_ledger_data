@@ -884,8 +884,7 @@
   "XYZ"
  ],
  "errors": [],
- "extension_js_modules": [],
- "extension_reports": [],
+ "extensions": [],
  "fava_options": {
   "account_journal_include_children": true,
   "auto_reload": false,

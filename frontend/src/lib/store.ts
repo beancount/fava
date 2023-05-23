@@ -1,6 +1,7 @@
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
+import type { StrictEquality } from "./equals";
 import { shallow_equal } from "./equals";
 import { parseJSON } from "./json";
 import type { Validator } from "./validation";
@@ -10,7 +11,7 @@ import type { Validator } from "./validation";
  * @param store - The store to derive the value from.
  * @param getter - A getter that obtains the array that should be contained in the store.
  */
-export function derived_array<S, T>(
+export function derived_array<S, T extends StrictEquality>(
   store: Readable<S>,
   getter: (values: S) => T[]
 ): Readable<T[]> {
