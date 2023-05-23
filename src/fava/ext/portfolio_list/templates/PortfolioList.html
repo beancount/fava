@@ -4,8 +4,8 @@
 <br />
 <label for="portfolio-list-filter">Custom Account Filter:</label>
 <input id="portfolio-list-filter" value={{arg_filter or ""}}>
-<button onclick="extension.updateFilter()">Update Filter</button>
-<button onclick="extension.clearFilter()">Clear Filter</button>
+<button id="portfolio-update-filter">Update Filter</button>
+<button id="portfolio-clear-filter">Clear Filter</button>
 <br />
 <br />
 {% for portfolio in extension.portfolio_accounts(arg_filter) %}

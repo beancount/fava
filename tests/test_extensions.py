@@ -17,13 +17,14 @@ def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
 
 
 def test_extension_module_globals(get_ledger: GetFavaLedger) -> None:
-    """Extensions can javascript modules."""
+    """Extensions can have Javascript modules."""
     extension_report_ledger = get_ledger("extension-report")
     modules = extension_report_ledger.extensions.js_modules
     assert modules == ["PortfolioList"]
 
     module_path = extension_report_ledger.extensions.get_extension_js_module(
-        modules[0]
+        "PortfolioList"
     )
 
-    assert module_path.endswith("PortfolioList.js")
+    assert module_path.exists()
+    assert module_path.name == "PortfolioList.js"
