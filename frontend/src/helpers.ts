@@ -4,6 +4,17 @@ import { base_url, fava_options } from "./stores";
 import { urlSyncedParams } from "./stores/url";
 
 /**
+ * Get the URL path relative to the base url of the current ledger.
+ */
+export function getUrlPath(url: URL | Location): string | null {
+  const base_url_val = get(base_url);
+  if (base_url_val && url.pathname.startsWith(base_url_val)) {
+    return url.pathname.slice(base_url_val.length);
+  }
+  return null;
+}
+
+/**
  * Get the URL string for one of Fava's reports.
  */
 export function urlFor(

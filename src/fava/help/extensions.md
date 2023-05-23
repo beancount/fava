@@ -15,12 +15,17 @@ class has a `report_title` attribute. The template for the report should be in a
 check out `fava.ext.portfolio_list` which has its template located at
 `fava/ext/portfolio_list/templates/PortfolioList.html`.
 
-Finally, extensions may contain a javascript module to be loaded in the
-frontend. The module should be in a javascript file matching the class's name.
-The module can define hooks to be called when different events happen, and other
-functions to be used in the report template, where is can be accessed as
-'extension'. Take a look at `fava/ext/portfolio_list/PortfolioList.js` for an
-example.
+Finally, extensions may contain a Javascript module to be loaded in the
+frontend. The module should be in a Javascript file matching the class's name
+and the extension should have its `has_js_module` attribte set to `True`. The
+module can define functions to be called when different events happen. Take a
+look at `fava/ext/portfolio_list/PortfolioList.js` for an example. Currently,
+the following events/functions can be specified:
+
+-   `init`: is called when a Fava report is first opened
+-   `onPageLoad`: Is called when any page in Fava is loaded (so on first open
+    and on any further navigation).
+-   `onExtensionPageLoad`: Is called when the extension report is loaded.
 
 The whole extension system should be considered unstable and it might change
 drastically.

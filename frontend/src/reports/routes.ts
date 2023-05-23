@@ -1,8 +1,7 @@
 import type { SvelteComponent } from "svelte";
-import { get } from "svelte/store";
 
+import { getUrlPath } from "../helpers";
 import { _ } from "../i18n";
-import { base_url } from "../stores";
 
 import CommoditiesSvelte from "./commodities/Commodities.svelte";
 import { load as load_commodities } from "./commodities/load";
@@ -48,16 +47,13 @@ const routes: [
 ];
 
 export function shouldRenderInFrontend(
-  url: Pick<URL, "pathname">
+  url: URL | Location
 ): [Cls: FrontendComponent, load: LoadFunction, title: string] | null {
-  const base_url_val = get(base_url);
-  if (base_url_val && url.pathname.startsWith(base_url_val)) {
-    const report = url.pathname.slice(base_url_val.length);
-    for (const route of routes) {
-      const [rep, Cls, load, title_getter] = route;
-      if (report === `${rep}/`) {
-        return [Cls, load, title_getter()];
-      }
+  const report = getUrlPath(url);
+  for (const route of routes) {
+    const [rep, Cls, load, title_getter] = route;
+    if (report === `${rep}/`) {
+      return [Cls, load, title_getter()];
     }
   }
   return null;

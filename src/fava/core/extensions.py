@@ -64,13 +64,12 @@ class ExtensionModule(FavaModule):
             if getattr(base, hook) != getattr(FavaExtensionBase, hook)
         ]
 
-    def get_extension_js_module(self, name: str) -> str:
+    def get_extension_js_module(self, name: str) -> Path:
         """Get the path of the javascript module file for a given extension."""
-        for ext_class in self._instances:
-            if ext_class.__qualname__ == name:
+        for ext_class, ext in self._instances.items():
+            if ext.name == name:
                 extension_dir = Path(getfile(ext_class)).parent
-                js_module = extension_dir / f"{ext_class.__qualname__}.js"
-                return str(js_module)
+                return extension_dir / f"{ext.name}.js"
 
         raise LookupError("Extension report not found.")
 
@@ -86,12 +85,10 @@ class ExtensionModule(FavaModule):
             Tuple of associated template source, extension instance
         """
         for ext_class, ext in self._instances.items():
-            if ext_class.__qualname__ == name:
+            if ext.name == name:
                 extension_dir = Path(getfile(ext_class)).parent
                 template_path = (
-                    extension_dir
-                    / "templates"
-                    / f"{ext_class.__qualname__}.html"
+                    extension_dir / "templates" / f"{ext.name}.html"
                 )
 
                 with template_path.open(encoding="utf-8") as ext_template:

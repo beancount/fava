@@ -27,6 +27,11 @@ export const HAVE_EXCEL = derived(ledgerData, (val) => val.have_excel);
 export const incognito = derived(ledgerData, (val) => val.incognito);
 /** Base URL. */
 export const base_url = derived(ledgerData, (val) => val.base_url);
+/** The names of Fava extensions that have JS modules. */
+export const extension_js_modules = derived_array(
+  ledgerData,
+  (val) => val.extension_js_modules
+);
 
 /** The ranked array of all accounts. */
 export const accounts = derived_array(ledgerData, (val) => val.accounts);
