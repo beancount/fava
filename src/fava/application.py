@@ -46,7 +46,7 @@ from fava import LANGUAGES
 from fava import template_filters
 from fava.context import g
 from fava.core import FavaLedger
-from fava.core.charts import setup_json_for_app
+from fava.core.charts import FavaJSONProvider
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIError
@@ -435,7 +435,7 @@ def create_app(
     """
     fava_app = Flask("fava")
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
-    setup_json_for_app(fava_app)
+    fava_app.json = FavaJSONProvider(fava_app)
     _setup_template_config(fava_app)
     _setup_babel(fava_app)
     _setup_filters(fava_app, read_only=read_only, incognito=incognito)

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core.charts import pretty_dumps
+from fava.core.charts import dumps
 from fava.util.date import Interval
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -23,7 +23,7 @@ def test_interval_totals(
         data = small_example_ledger.charts.interval_totals(
             filtered, Interval.MONTH, "Expenses", conversion
         )
-        snapshot(pretty_dumps(data))
+        snapshot(dumps(data))
 
 
 def test_interval_totals_inverted(
@@ -34,7 +34,7 @@ def test_interval_totals_inverted(
         data = small_example_ledger.charts.interval_totals(
             filtered, Interval.MONTH, "Expenses", conversion, invert=True
         )
-        snapshot(pretty_dumps(data))
+        snapshot(dumps(data))
 
 
 def test_linechart_data(
@@ -45,13 +45,13 @@ def test_linechart_data(
         data = example_ledger.charts.linechart(
             filtered, "Assets:Testing:MultipleCommodities", conversion
         )
-        snapshot(pretty_dumps(data))
+        snapshot(dumps(data))
 
 
 def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.net_worth(filtered, Interval.MONTH, "USD")
-    snapshot(pretty_dumps(data))
+    snapshot(dumps(data))
 
 
 def test_net_worth_off_by_one(
@@ -64,7 +64,7 @@ def test_net_worth_off_by_one(
         data = off_by_one.charts.net_worth(
             off_by_one_filtered, interval, "at_value"
         )
-        snapshot(pretty_dumps(data))
+        snapshot(dumps(data))
 
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
@@ -97,4 +97,4 @@ def test_query(
         example_ledger.all_entries, query
     )
     data = example_ledger.charts.query(types, rows)
-    snapshot(pretty_dumps(data))
+    snapshot(dumps(data))

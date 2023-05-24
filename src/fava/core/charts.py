@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from contextlib import suppress
 from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
@@ -18,8 +17,9 @@ from beancount.core.data import Booking
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
 from beancount.core.number import MISSING
-from simplejson import JSONEncoder
-from simplejson import loads
+from flask.json.provider import JSONProvider
+from simplejson import dumps as simplejson_dumps
+from simplejson import loads as simplejson_loads
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Position
@@ -33,13 +33,8 @@ from fava.core.tree import Tree
 from fava.helpers import FavaAPIError
 from fava.util import listify
 
-with suppress(ImportError):
-    from flask.json.provider import JSONProvider
-
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
-
-    from flask import Flask
 
     from fava.beans.funcs import ResultRow
     from fava.beans.funcs import ResultType
@@ -64,56 +59,45 @@ def inv_to_dict(inventory: Inventory) -> dict[str, Decimal]:
 Inventory.for_json = inv_to_dict  # type: ignore[attr-defined]
 
 
-class FavaJSONEncoder(JSONEncoder):
-    """Allow encoding some Beancount date structures."""
-
-    def __init__(self, indent: bool | None = False, **_kwargs: None) -> None:
-        super().__init__(
-            indent=indent,
-            # Allow use of a `for_json` method to serialise dict subclasses.
-            for_json=True,
-            # Sort dict keys (Flask also does this by default).
-            sort_keys=True,
-        )
-
-    def default(self, o: Any) -> Any:
-        if isinstance(o, (date, Amount, Booking, Position)):
-            return str(o)
-        if isinstance(o, (set, frozenset)):
-            return list(o)
-        if isinstance(o, Pattern):
-            return o.pattern
-        if is_dataclass(o):
-            return {field.name: getattr(o, field.name) for field in fields(o)}
-        if o is MISSING:
-            return None
-        return JSONEncoder.default(self, o)
+def _json_default(o: Any) -> Any:
+    """Specific serialisation for some data types."""
+    if isinstance(o, (date, Amount, Booking, Position)):
+        return str(o)
+    if isinstance(o, (set, frozenset)):
+        return list(o)
+    if isinstance(o, Pattern):
+        return o.pattern
+    if is_dataclass(o):
+        return {field.name: getattr(o, field.name) for field in fields(o)}
+    if o is MISSING:
+        return None
+    raise TypeError
 
 
-_ENCODER = FavaJSONEncoder()
-_PRETTY_ENCODER = FavaJSONEncoder(indent=True)
-pretty_dumps = _PRETTY_ENCODER.encode
+def dumps(obj: Any, **_kwargs: Any) -> str:
+    """Dump as a JSON string."""
+    return simplejson_dumps(
+        obj,
+        indent="  ",
+        sort_keys=True,
+        default=_json_default,
+        for_json=True,
+    )
 
 
-def setup_json_for_app(app: Flask) -> None:
-    """Use custom JSON encoder."""
-    if hasattr(app, "json_provider_class"):  # Flask >=2.2
+def loads(s: str | bytes) -> Any:
+    """Load a JSON string."""
+    return simplejson_loads(s)
 
-        class FavaJSONProvider(JSONProvider):
-            """Use custom JSON encoder and decoder."""
 
-            def dumps(
-                self, obj: Any, *, _option: Any = None, **_kwargs: Any
-            ) -> str:
-                return _ENCODER.encode(obj)
+class FavaJSONProvider(JSONProvider):
+    """Use custom JSON encoder and decoder."""
 
-            def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
-                return loads(s)
+    def dumps(self, obj: Any, **_kwargs: Any) -> str:
+        return dumps(obj)
 
-        app.json = FavaJSONProvider(app)
-
-    else:  # pragma: no cover
-        app.json_encoder = FavaJSONEncoder  # type: ignore[attr-defined]
+    def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
+        return loads(s)
 
 
 @dataclass(frozen=True)

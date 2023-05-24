@@ -11,7 +11,7 @@ import pytest
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
-from fava.core.charts import pretty_dumps
+from fava.core.charts import dumps
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
@@ -471,4 +471,4 @@ def test_api_commodities(
 def test_api_events(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
     response = test_client.get("/long-example/api/events")
     data = assert_api_success(response)
-    snapshot(pretty_dumps(data))
+    snapshot(dumps(data))
