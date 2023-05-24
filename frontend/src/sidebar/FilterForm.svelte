@@ -41,6 +41,14 @@
     time_filter_value = v;
   });
 
+  /**
+   * Submit the filter form.
+   *
+   * This is called on all the three possible events (blur, select, enter)
+   * and also on the form submit. Having the listener on:enter would
+   * theoretically be unnecessary (as the form would also be submitted) but
+   * it seems to work around a Safari bug, see #809 and #1528.
+   */
   function submit() {
     account_filter.set(account_filter_value);
     fql_filter.set(fql_filter_value);
@@ -58,6 +66,7 @@
     setSize={true}
     on:blur={submit}
     on:select={submit}
+    on:enter={submit}
   />
   <AutocompleteInput
     bind:value={account_filter_value}
@@ -68,6 +77,7 @@
     setSize={true}
     on:blur={submit}
     on:select={submit}
+    on:enter={submit}
   />
   <AutocompleteInput
     bind:value={fql_filter_value}
@@ -80,6 +90,7 @@
     {valueSelector}
     on:blur={submit}
     on:select={submit}
+    on:enter={submit}
   />
   <button type="submit" />
 </form>

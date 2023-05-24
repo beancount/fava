@@ -4,7 +4,11 @@
   import { keyboardShortcut } from "./keyboard-shortcuts";
   import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy";
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    blur: HTMLInputElement;
+    enter: HTMLInputElement;
+    select: HTMLInputElement;
+  }>();
 
   export let value: string;
   export let suggestions: string[];
@@ -62,12 +66,10 @@
 
   function keydown(event: KeyboardEvent) {
     if (event.key === "Enter") {
-      if (index > -1 && !hidden && filteredSuggestions[index]) {
+      const suggestion = filteredSuggestions[index]?.suggestion;
+      if (index > -1 && !hidden && suggestion) {
         event.preventDefault();
-        const suggestion = filteredSuggestions[index]?.suggestion;
-        if (suggestion) {
-          select(suggestion);
-        }
+        select(suggestion);
       } else {
         dispatch("enter", input);
       }
@@ -98,7 +100,7 @@
     use:keyboardShortcut={key}
     on:blur={() => {
       hidden = true;
-      dispatch("blur");
+      dispatch("blur", input);
     }}
     on:focus={() => {
       hidden = false;
