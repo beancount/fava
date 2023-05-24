@@ -52,7 +52,7 @@ click==8.1.3
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.2.5
+coverage==7.2.6
     # via pytest-cov
 cryptography==40.0.2
     # via secretstorage
@@ -261,7 +261,7 @@ pyyaml==6.0
     # via pre-commit
 readme-renderer==37.3
     # via twine
-requests==2.30.0
+requests==2.31.0
     # via
     #   beancount
     #   google-api-core
@@ -321,11 +321,11 @@ types-pytz==2023.3.0.0
     # via types-babel
 types-simplejson==3.19.0.1
     # via fava (pyproject.toml)
-typing-extensions==4.5.0
+typing-extensions==4.6.1
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
-urllib3==1.26.15
+urllib3==1.26.16
     # via
     #   google-auth
     #   requests
