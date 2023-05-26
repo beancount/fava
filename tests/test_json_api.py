@@ -43,13 +43,16 @@ def test_validate_get_args() -> None:
     assert validator({"test": "value"}) == ["value"]
 
 
-def assert_api_error(response: TestResponse, msg: str | None = None) -> None:
+def assert_api_error(response: TestResponse, msg: str | None = None) -> str:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == 200
     assert response.json
     assert not response.json["success"], response.json
+    err_msg = response.json["error"]
+    assert isinstance(err_msg, str)
     if msg:
-        assert msg == response.json["error"]
+        assert msg == err_msg
+    return err_msg
 
 
 def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
@@ -253,6 +256,23 @@ def test_api_move(test_client: FlaskClient) -> None:
         },
     )
     assert_api_error(response, "Not a file: 'old'")
+
+
+def test_api_get_source_invalid_unicode(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/invalid-unicode/api/source", query_string={"filename": ""}
+    )
+    err_msg = assert_api_error(response)
+    assert "The source file contains invalid unicode" in err_msg
+
+
+def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/example/api/source",
+        query_string={"filename": "/home/not-one-of-the-includes"},
+    )
+    err_msg = assert_api_error(response)
+    assert "Trying to read a non-source file" in err_msg
 
 
 def test_api_source_put(

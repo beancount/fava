@@ -272,14 +272,14 @@ def get_source(filename: str) -> dict[str, str]:
         or g.ledger.fava_options.default_file
         or g.ledger.beancount_file_path
     )
-    source, sha256sum = g.ledger.file.get_source(file_path)
+    source, sha256sum = g.ledger.file.get_source(Path(file_path))
     return {"source": source, "sha256sum": sha256sum, "file_path": file_path}
 
 
 @api_endpoint
 def put_source(file_path: str, source: str, sha256sum: str) -> str:
     """Write one of the source files and return the updated sha256sum."""
-    return g.ledger.file.set_source(file_path, source, sha256sum)
+    return g.ledger.file.set_source(Path(file_path), source, sha256sum)
 
 
 @api_endpoint

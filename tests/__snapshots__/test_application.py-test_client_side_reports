@@ -968,6 +968,10 @@
     [
       "off-by-one",
       "/off-by-one/"
+    ],
+    [
+      "invalid-unicode",
+      "/invalid-unicode/"
     ]
   ],
   "payees": [

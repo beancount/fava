@@ -11,12 +11,12 @@ import pytest
 from fava.beans import create
 from fava.beans.helpers import replace
 from fava.core.fava_options import InsertEntryOption
+from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
 from fava.core.file import save_entry_slice
-from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Transaction
@@ -54,7 +54,7 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     filename = Path(entry.meta["filename"])
     contents = filename.read_text("utf-8")
 
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(ExternallyChangedError):
         save_entry_slice(entry, new_source, "wrong hash")
     assert filename.read_text("utf-8") == contents
 
@@ -74,8 +74,8 @@ def test_insert_metadata_in_file(tmp_path: Path) -> None:
     samplefile.write_text(file_content)
 
     # Insert some metadata lines.
-    insert_metadata_in_file(str(samplefile), 1, 4, "metadata", "test1")
-    insert_metadata_in_file(str(samplefile), 1, 4, "metadata", "test2")
+    insert_metadata_in_file(samplefile, 1, 4, "metadata", "test1")
+    insert_metadata_in_file(samplefile, 1, 4, "metadata", "test2")
     assert samplefile.read_text("utf-8") == dedent("""\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"
@@ -85,7 +85,7 @@ def test_insert_metadata_in_file(tmp_path: Path) -> None:
         """)
 
     # Check that inserting also works if the next line is empty.
-    insert_metadata_in_file(str(samplefile), 5, 4, "metadata", "test1")
+    insert_metadata_in_file(samplefile, 5, 4, "metadata", "test1")
     assert samplefile.read_text("utf-8") == dedent("""\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"

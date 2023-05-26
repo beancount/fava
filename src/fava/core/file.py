@@ -56,6 +56,29 @@ def sha256_str(val: str) -> str:
     return sha256(encode(val, encoding="utf-8")).hexdigest()
 
 
+class NonSourceFileError(FavaAPIError):
+    """Trying to read a non-source file."""
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(f"Trying to read a non-source file at '{path}'")
+
+
+class ExternallyChangedError(FavaAPIError):
+    """The file changed externally."""
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(f"The file at '{path}' changed externally.")
+
+
+class InvalidUnicodeError(FavaAPIError):
+    """The source file contains invalid unicode."""
+
+    def __init__(self, reason: str) -> None:
+        super().__init__(
+            f"The source file contains invalid unicode: {reason}."
+        )
+
+
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
@@ -63,7 +86,7 @@ class FileModule(FavaModule):
         super().__init__(ledger)
         self.lock = threading.Lock()
 
-    def get_source(self, path: str) -> tuple[str, str]:
+    def get_source(self, path: Path) -> tuple[str, str]:
         """Get source files.
 
         Args:
@@ -74,20 +97,23 @@ class FileModule(FavaModule):
 
         Raises:
             FavaAPIError: If the file at `path` is not one of the
-                source files.
+                source files or it contains invalid unicode.
         """
-        if path not in self.ledger.options["include"]:
-            raise FavaAPIError("Trying to read a non-source file")
+        if str(path) not in self.ledger.options["include"]:
+            raise NonSourceFileError(path)
 
-        with Path(path).open(mode="rb") as file:
+        with path.open(mode="rb") as file:
             contents = file.read()
 
         sha256sum = sha256(contents).hexdigest()
-        source = decode(contents)
+        try:
+            source = decode(contents)
+        except UnicodeDecodeError as exc:
+            raise InvalidUnicodeError(str(exc)) from exc
 
         return source, sha256sum
 
-    def set_source(self, path: str, source: str, sha256sum: str) -> str:
+    def set_source(self, path: Path, source: str, sha256sum: str) -> str:
         """Write to source file.
 
         Args:
@@ -105,13 +131,13 @@ class FileModule(FavaModule):
         with self.lock:
             _, original_sha256sum = self.get_source(path)
             if original_sha256sum != sha256sum:
-                raise FavaAPIError("The file changed externally.")
+                raise ExternallyChangedError(path)
 
             contents = encode(source, encoding="utf-8")
-            with Path(path).open("w+b") as file:
+            with path.open("w+b") as file:
                 file.write(contents)
 
-            self.ledger.extensions.after_write_source(path, source)
+            self.ledger.extensions.after_write_source(str(path), source)
             self.ledger.load_file()
 
             return sha256(contents).hexdigest()
@@ -129,7 +155,7 @@ class FileModule(FavaModule):
             key = next_key(basekey, entry.meta)
             indent = self.ledger.fava_options.indent
             insert_metadata_in_file(
-                entry.meta["filename"],
+                Path(entry.meta["filename"]),
                 entry.meta["lineno"],
                 indent,
                 key,
@@ -223,13 +249,12 @@ def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
 
 
 def insert_metadata_in_file(
-    filename: str, lineno: int, indent: int, key: str, value: str
+    path: Path, lineno: int, indent: int, key: str, value: str
 ) -> None:
     """Insert the specified metadata in the file below lineno.
 
     Takes the whitespace in front of the line that lineno into account.
     """
-    path = Path(filename)
     with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
@@ -303,7 +328,7 @@ def save_entry_slice(
     entry_lines = find_entry_lines(lines, first_entry_line)
     entry_source = "".join(entry_lines).rstrip("\n")
     if sha256_str(entry_source) != sha256sum:
-        raise FavaAPIError("The file changed externally.")
+        raise ExternallyChangedError(path)
 
     lines = (
         lines[:first_entry_line]

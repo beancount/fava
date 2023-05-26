@@ -141,6 +141,7 @@ def app(test_data_dir: Path) -> Flask:
                 "query-example.beancount",
                 "errors.beancount",
                 "off-by-one.beancount",
+                "invalid-unicode.beancount",
             ]
         ],
         load=True,
@@ -198,6 +199,7 @@ if TYPE_CHECKING:
         "extension-report",
         "import",
         "off-by-one",
+        "invalid-unicode",
     ]
     GetFavaLedger: TypeAlias = Callable[[LedgerSlug], FavaLedger]
 

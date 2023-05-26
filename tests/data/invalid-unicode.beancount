@@ -1,0 +1,12 @@
+option "title" "invalid-unicode"
+
+2019-01-01 open Assets:Cash
+2019-01-01 open Assets:Stock
+2019-01-01 open Expenses:Stuff
+
+2019-01-01 * "buy" ""
+  Assets:Stock  0.1 ACME {80.00 USD}
+  Assets:Cash
+
+;ÂÂ
+

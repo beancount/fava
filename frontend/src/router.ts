@@ -14,6 +14,7 @@ import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
 import { notify_err } from "./notifications";
+import ErrorSvelte from "./reports/Error.svelte";
 import type { GetFrontendComponent } from "./reports/routes";
 import { raw_page_title } from "./sidebar/page-title";
 import { conversion, interval, urlHash } from "./stores";
@@ -111,16 +112,29 @@ class Router extends Events<"page-loaded"> {
     if (frontend) {
       const [Cls, load, title] = frontend;
       is_loading_internal.set(true);
-      const data = await load(url);
-      is_loading_internal.set(false);
-      // Check if the component is changed - otherwise only update the data.
-      if (Cls !== this.component?.constructor) {
-        this.component?.$destroy();
-        this.article.innerHTML = "";
-        this.component = new Cls({ target: this.article, props: { data } });
+      try {
+        const data = await load(url);
+        // Check if the component is changed - otherwise only update the data.
+        if (Cls !== this.component?.constructor) {
+          this.component?.$destroy();
+          this.article.innerHTML = "";
+          this.component = new Cls({ target: this.article, props: { data } });
+        } else {
+          this.component.$set({ data });
+        }
+      } catch (error: unknown) {
+        log_error(error);
+        if (error instanceof Error) {
+          this.component?.$destroy();
+          this.article.innerHTML = "";
+          this.component = new ErrorSvelte({
+            target: this.article,
+            props: { title, error },
+          });
+        }
+      } finally {
+        is_loading_internal.set(false);
         raw_page_title.set(title);
-      } else {
-        this.component.$set({ data });
       }
     } else {
       this.component?.$destroy();
