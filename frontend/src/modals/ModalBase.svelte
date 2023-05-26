@@ -91,11 +91,9 @@
     display: flex;
     width: 100%;
     max-width: 767px;
-    max-height: 100%;
     padding: 1em;
     margin: 0.5em;
     margin-top: 10vh;
-    overflow: visible;
     background: var(--background);
     box-shadow: 0 0 20px var(--overlay-wrapper-background);
   }
