@@ -10,6 +10,7 @@ import {
   historyKeymap,
   indentWithTab,
 } from "@codemirror/commands";
+import type { LanguageSupport } from "@codemirror/language";
 import {
   bracketMatching,
   defaultHighlightStyle,
@@ -36,9 +37,10 @@ import {
 } from "@codemirror/view";
 import { get } from "svelte/store";
 
+import { log_error } from "../log";
 import { fava_options } from "../stores";
 
-import { beancount } from "./beancount";
+import { getBeancountLanguageSupport } from "./beancount";
 import { bql } from "./bql";
 import { rulerPlugin } from "./ruler";
 
@@ -100,13 +102,17 @@ export function initDocumentPreviewEditor(value: string): EditorAndAction {
 export class BeancountTextarea extends HTMLTextAreaElement {
   constructor() {
     super();
-    const [view] = setup(this.value, [
-      beancount,
-      syntaxHighlighting(defaultHighlightStyle),
-      EditorView.editable.of(false),
-    ]);
-    this.parentNode?.insertBefore(view.dom, this);
-    this.style.display = "none";
+    getBeancountLanguageSupport()
+      .then((beancount) => {
+        const [view] = setup(this.value, [
+          beancount,
+          syntaxHighlighting(defaultHighlightStyle),
+          EditorView.editable.of(false),
+        ]);
+        this.parentNode?.insertBefore(view.dom, this);
+        this.style.display = "none";
+      })
+      .catch(log_error);
   }
 }
 
@@ -116,7 +122,8 @@ export class BeancountTextarea extends HTMLTextAreaElement {
 export function initBeancountEditor(
   value: string,
   onDocChanges: (s: EditorState) => void,
-  commands: KeyBinding[]
+  commands: KeyBinding[],
+  beancount: LanguageSupport
 ): EditorAndAction {
   const { indent, currency_column } = get(fava_options);
   return setup(value, [

@@ -1,18 +1,21 @@
-import type { CompletionSource } from "@codemirror/autocomplete";
-import { StreamLanguage } from "@codemirror/language";
-import type { Readable } from "svelte/store";
+import type {
+  Completion,
+  CompletionResult,
+  CompletionSource,
+} from "@codemirror/autocomplete";
+import { syntaxTree } from "@codemirror/language";
 import { get } from "svelte/store";
 
 import { accounts, currencies, links, payees, tags } from "../stores";
 
 import { beancountSnippets } from "./beancount-snippets";
-import { beancountStreamParser } from "./beancount-stream-parser";
 
 const undatedDirectives = ["option", "plugin", "include"];
 const datedDirectives = [
   "*",
   "open",
   "close",
+  "custom",
   "commodity",
   "balance",
   "pad",
@@ -23,93 +26,109 @@ const datedDirectives = [
   "query",
 ];
 
+/** Get Completion objects from strings. */
+const opts = (s: string[]): Completion[] => s.map((label) => ({ label }));
+
 /** Generate completion result list for codemirror from strings. */
-const res = (s: string[], from: number) => ({
-  options: s.map((label) => ({ label })),
+const res = (s: string[], from: number): CompletionResult => ({
+  options: opts(s),
   from,
 });
 
-const lang = StreamLanguage.define(beancountStreamParser);
-
-const directiveCompletions: Record<
-  string,
-  (Readable<string[]> | null)[] | undefined
-> = {
-  open: [accounts, currencies],
-  close: [accounts],
-  commodity: [currencies],
-  balance: [accounts, null, currencies],
-  pad: [accounts, accounts],
-  note: [accounts],
-  document: [accounts],
-  price: [currencies, null, currencies],
-};
-
 export const beancountCompletion: CompletionSource = (context) => {
-  const { state, pos } = context;
-  const { doc } = state;
-
   const tag = context.matchBefore(/#[A-Za-z0-9\-_/.]*/);
   if (tag) {
-    return res(get(tags), tag.from + 1);
+    return {
+      options: opts(get(tags)),
+      from: tag.from + 1,
+      validFor: /\S+/,
+    };
   }
 
   const link = context.matchBefore(/\^[A-Za-z0-9\-_/.]*/);
   if (link) {
-    return res(get(links), link.from + 1);
+    return {
+      options: opts(get(links)),
+      from: link.from + 1,
+      validFor: /\S+/,
+    };
   }
 
   const indented = context.matchBefore(/^\s+[A-Z]\S*/);
   if (indented) {
     const indentation = indented.text.length - indented.text.trimStart().length;
-    return res(get(accounts), indented.from + indentation);
+    return {
+      options: opts(get(accounts)),
+      from: indented.from + indentation,
+      validFor: /\S+/,
+    };
   }
 
-  const line = doc.lineAt(pos);
-
+  const line = context.state.doc.lineAt(context.pos);
   if (context.matchBefore(/\d+/)) {
     return { options: beancountSnippets(), from: line.from };
   }
+
   const currentWord = context.matchBefore(/\S*/);
   if (currentWord?.from === line.from && line.length > 0) {
-    return res(undatedDirectives, line.from);
+    return {
+      options: opts(undatedDirectives),
+      from: line.from,
+      validFor: /\S+/,
+    };
   }
 
-  const lineContent = doc.sliceString(line.from, pos);
-  const node = lang.parser.parse(lineContent).cursor();
-  const tokens: { name: string; from: number; to: number }[] = [];
-  while (node.next()) {
-    if (node.name !== "invalid.special") {
-      tokens.push({ name: node.name, from: node.from, to: node.to });
-    }
+  const tree = syntaxTree(context.state);
+  const before = tree.resolve(context.pos, -1);
+  // Node types of the last 4 nodes.
+  const nodeTypesBefore = [
+    before.name,
+    before.prevSibling?.name,
+    before.prevSibling?.prevSibling?.name,
+    before.prevSibling?.prevSibling?.prevSibling?.name,
+  ];
+  type T = string | string[];
+  // Check whether the previous nodes (up to 4) match the given types.
+  const match = (...types: [T] | [T, T] | [T, T, T] | [T, T, T, T]): boolean =>
+    types.every((t, i) => {
+      const nodeType = nodeTypesBefore[i];
+      return typeof t === "string"
+        ? nodeType === t
+        : t.some((n) => nodeType === n);
+    });
+
+  // complete payee after transaction flag.
+  if (match("string", "flag")) {
+    return res(get(payees), before.from + 1);
   }
-  const first = tokens[0];
-  const last = tokens[tokens.length - 1];
-  if (first !== undefined && last !== undefined) {
-    const lineFrom = line.from;
-    // Dates have the 'number.special' token name
-    if (first.name === "number.special" && line.length > last.to) {
-      const second = tokens[1];
-      if (second === undefined) {
-        return res(datedDirectives, lineFrom + first.to + 1);
-      }
-      const directive = lineContent.slice(second.from, second.to);
-      const compl = directiveCompletions[directive];
-      if (compl) {
-        const completions = compl[tokens.length - 2];
-        if (completions) {
-          return res(get(completions), lineFrom + last.to + 1);
-        }
-      }
-      if (directive === "txn" || directive.length === 1) {
-        if (tokens.length === 3 || last.name === "string.special") {
-          return res(get(payees), lineFrom + last.from + 1);
-        }
-      }
-    }
-    if (last.name === "number" && line.length > last.to) {
-      return res(get(currencies), lineFrom + last.to + 1);
-    }
+
+  // complete directive names after a date.
+  if (match("keyword", "date")) {
+    return res(datedDirectives, before.from);
+  }
+
+  if (
+    // account directly after one of these directives:
+    match(
+      ["ERROR", "account"],
+      ["BALANCE", "CLOSE", "OPEN", "PAD", "NOTE", "DOCUMENT"],
+      "date"
+    ) ||
+    // padding account
+    match(["ERROR", "account"], "account", "PAD", "date")
+  ) {
+    return res(get(accounts), before.from);
+  }
+
+  if (
+    // complete currencies after a number.
+    match("ERROR", "number") ||
+    // account currency
+    match(["ERROR", "currency"], "account", "OPEN", "date") ||
+    // price or commodity currency
+    match(["ERROR", "currency"], ["COMMODITY", "PRICE"], "date")
+  ) {
+    return res(get(currencies), before.from);
   }
 
   return null;

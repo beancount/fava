@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { LanguageSupport } from "@codemirror/language";
+
   import { put } from "../api";
   import { initBeancountEditor } from "../codemirror/setup";
   import { _ } from "../i18n";
@@ -9,6 +11,7 @@
 
   import SaveButton from "./SaveButton.svelte";
 
+  export let beancount_language_support: LanguageSupport;
   export let slice: string;
   export let entry_hash: string;
   export let sha256sum: string;
@@ -53,7 +56,8 @@
           return true;
         },
       },
-    ]
+    ],
+    beancount_language_support
   );
 </script>
 

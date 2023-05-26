@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { LanguageSupport } from "@codemirror/language";
   import type { EditorView } from "@codemirror/view";
   import { onMount } from "svelte";
 
@@ -21,9 +22,10 @@
   import EditorMenu from "./EditorMenu.svelte";
   import type { PageData } from "./load";
 
-  export let data: PageData["data"];
+  export let source: PageData["source"];
+  export let beancount_language_support: LanguageSupport;
 
-  $: file_path = data.file_path;
+  $: file_path = source.file_path;
 
   let changed = false;
   const onDocChanges = () => {
@@ -54,23 +56,28 @@
     }
   }
 
-  const [editor, useEditor] = initBeancountEditor(data.source, onDocChanges, [
-    {
-      key: "Control-s",
-      mac: "Meta-s",
-      run: () => {
-        save(editor).catch(() => {
-          // save should catch all errors itself, see above
-        });
-        return true;
+  const [editor, useEditor] = initBeancountEditor(
+    "",
+    onDocChanges,
+    [
+      {
+        key: "Control-s",
+        mac: "Meta-s",
+        run: () => {
+          save(editor).catch(() => {
+            // save should catch all errors itself, see above
+          });
+          return true;
+        },
       },
-    },
-  ]);
+    ],
+    beancount_language_support
+  );
 
   // update editor contents
-  $: if (data) {
-    editor.dispatch(replaceContents(editor.state, data.source));
-    sha256sum = data.sha256sum;
+  $: if (source) {
+    editor.dispatch(replaceContents(editor.state, source.source));
+    sha256sum = source.sha256sum;
     editor.focus();
     changed = false;
   }
@@ -98,7 +105,7 @@
   $: {
     // Only show errors for this file, or general errors (AKA no source)
     const errorsForFile = $errors.filter(
-      ({ source }) => source === null || source.filename === file_path
+      (err) => err.source === null || err.source.filename === file_path
     );
     editor.dispatch(setErrors(editor.state, errorsForFile));
   }

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { get } from "../api";
+  import { getBeancountLanguageSupport } from "../codemirror/beancount";
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { urlHash } from "../stores";
 
@@ -22,11 +23,16 @@
           balances_before={response.balances_before}
           balances_after={response.balances_after}
         />
-        <SliceEditor
-          {entry_hash}
-          slice={response.slice}
-          sha256sum={response.sha256sum}
-        />
+        {#await getBeancountLanguageSupport() then beancount_language_support}
+          <SliceEditor
+            {entry_hash}
+            slice={response.slice}
+            sha256sum={response.sha256sum}
+            {beancount_language_support}
+          />
+        {:catch}
+          Loading tree-sitter language failed...
+        {/await}
       {/if}
     {:catch}
       Loading entry context failed...

@@ -34,7 +34,9 @@ async function runBuild(dev: boolean) {
     format: "esm",
     bundle: true,
     outfile: "../src/fava/static/app.js",
+    external: ["fs", "path"], // for web-tree-sitter
     loader: {
+      ".wasm": "file",
       ".woff": "file",
       ".woff2": "file",
     },
