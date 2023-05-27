@@ -461,3 +461,19 @@ td .status-indicator {
 .options td:nth-child(2) {
   white-space: normal;
 }
+/*
+ * Incomes Expenses Average
+ */
+.inc_exp_avg_row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.inc_exp_avg_column {
+  flex: 1;
+}
+.inc_exp_avg_header {
+  font-weight: 400;
+  background-color: var(--table-header-background);
+  border: 1px solid var(--table-border);
+  text-align: center;
+}

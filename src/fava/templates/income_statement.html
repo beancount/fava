@@ -3,6 +3,8 @@
 {% set root_tree = g.filtered.root_tree %}
 {% set options = ledger.options %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
+{% set incomesAverage =  incomes_expenses_averages[0]%}
+{% set expensesAverage =  incomes_expenses_averages[1]%}
 
 <svelte-component type="charts"><script type="application/json">{{
   [
@@ -13,6 +15,35 @@
     chart_api.hierarchy(options['name_expenses']),
   ]|tojson
 }}</script></svelte-component>
+
+<div class="row">
+  <div class="column">
+    <div class="inc_exp_avg_header">Incomes Average</div>
+    {% for inc_average in incomes_expenses_averages[0] %}
+    <div class="inc_exp_avg_row">
+      <div class="inc_exp_avg_column">
+        {{inc_average}}
+      </div>
+      <div class="inc_exp_avg_column">
+        {{incomesAverage[inc_average] | format_currency}}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="column">
+    <div class="inc_exp_avg_header">Expenses Average</div>
+    {% for exp_average in incomes_expenses_averages[1] %}
+    <div class="inc_exp_avg_row">
+      <div class="inc_exp_avg_column">
+        {{exp_average}}
+      </div>
+      <div class="inc_exp_avg_column">
+        {{expensesAverage[exp_average] | format_currency}}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
 <div class="row">
   <div class="column">

@@ -8,10 +8,12 @@ import pytest
 from beancount import __version__ as beancount_version
 
 from fava import __version__ as fava_version
+from fava.application import _calculate_chart_average
 from fava.application import create_app
 from fava.application import SERVER_SIDE_REPORTS
 from fava.application import static_url
 from fava.context import g
+from fava.template_filters import format_currency
 
 if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path
@@ -264,3 +266,19 @@ def test_load_extension_reports(test_client: FlaskClient) -> None:
     url = "/extension-report/extension/MissingExtension/"
     result = test_client.get(url)
     assert result.status_code == 404
+
+
+def test_calculate_average_income_expenses(app: Flask) -> None:
+    with app.test_request_context("/long-example/?interval=year"):
+        app.preprocess_request()
+        averages = _calculate_chart_average()
+        income_averages = averages[0]
+        expenses_averages = averages[1]
+
+        assert format_currency(income_averages["IRAUSD"]) == "-3147.06"
+        assert format_currency(income_averages["USD"]) == "-18309.54"
+        assert format_currency(income_averages["VACHR"]) == "-18.24"
+
+        assert format_currency(expenses_averages["IRAUSD"]) == "2723.53"
+        assert format_currency(expenses_averages["USD"]) == "13142.98"
+        assert format_currency(expenses_averages["VACHR"]) == "23.06"
