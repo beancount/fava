@@ -100,8 +100,7 @@ def slugify(string: str) -> str:
     # remove all non-word characters (except '-')
     string = re.sub(r"[^\s\w-]", "", string).strip().lower()
     # replace spaces (or groups of spaces and dashes) with dashes
-    string = re.sub(r"[-\s]+", "-", string)
-    return string
+    return re.sub(r"[-\s]+", "-", string)
 
 
 def simple_wsgi(

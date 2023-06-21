@@ -203,7 +203,7 @@ class FavaLedger:
         path: Path to the main Beancount file.
     """
 
-    __slots__ = [
+    __slots__ = (
         "accounts",
         "all_entries",
         "all_entries_by_type",
@@ -215,7 +215,7 @@ class FavaLedger:
         "prices",
         "_watcher",
         *MODULES,
-    ]
+    )
 
     #: List of all (unfiltered) entries.
     all_entries: list[Directive]

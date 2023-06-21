@@ -79,9 +79,7 @@ def test_api_add_document(
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 
-        monkeypatch.setitem(
-            g.ledger.options, "documents", [str(tmp_path)]  # type: ignore[arg-type]
-        )
+        monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])
         request_data = {
             "folder": str(tmp_path),
             "account": "Expenses:Food:Restaurant",

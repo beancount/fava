@@ -42,7 +42,7 @@ class Token:
     error.
     """
 
-    __slots__ = ["type", "value", "lexer"]
+    __slots__ = ("type", "value", "lexer")
 
     def __init__(self, type_: str, value: str) -> None:
         self.type = type_
@@ -134,7 +134,7 @@ class FilterSyntaxLexer:
 class Match:
     """Match a string."""
 
-    __slots__ = ["match"]
+    __slots__ = ("match",)
 
     def __init__(self, search: str) -> None:
         try:

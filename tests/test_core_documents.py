@@ -26,9 +26,7 @@ def test_is_document_or_import_file(
 def test_filepath_in_documents_folder(
     example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setitem(
-        example_ledger.options, "documents", ["/test"]  # type: ignore[arg-type]
-    )
+    monkeypatch.setitem(example_ledger.options, "documents", ["/test"])
 
     def _join(start: str, *args: str) -> Path:
         return Path(start).joinpath(*args).resolve()

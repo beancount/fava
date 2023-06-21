@@ -66,7 +66,7 @@ docutils==0.20.1
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.12.0
+filelock==3.12.2
     # via
     #   tox
     #   virtualenv
@@ -82,18 +82,18 @@ flask==2.3.2
     #   flask-babel
 flask-babel==3.1.0
     # via fava (pyproject.toml)
-google-api-core==2.11.0
+google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.88.0
+google-api-python-client==2.90.0
     # via beancount
-google-auth==2.19.1
+google-auth==2.20.0
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
 google-auth-httplib2==0.1.0
     # via google-api-python-client
-googleapis-common-protos==1.59.0
+googleapis-common-protos==1.59.1
     # via google-api-core
 httplib2==0.22.0
     # via
@@ -105,7 +105,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.6.0
+importlib-metadata==6.7.0
     # via
     #   keyring
     #   twine
@@ -129,7 +129,7 @@ jinja2==3.1.2
     #   flask
     #   flask-babel
     #   sphinx
-keyring==23.13.1
+keyring==24.0.0
     # via twine
 lazy-object-proxy==1.9.0
     # via astroid
@@ -142,7 +142,7 @@ lxml==4.9.2
     #   beancount
     #   pyexcel-ezodf
     #   pyexcel-ods3
-markdown-it-py==2.2.0
+markdown-it-py==3.0.0
     # via rich
 markdown2==2.4.8
     # via fava (pyproject.toml)
@@ -161,7 +161,7 @@ more-itertools==9.1.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.3.0
+mypy==1.4.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -178,12 +178,12 @@ packaging==23.1
     #   tox
 pkginfo==1.9.6
     # via twine
-platformdirs==3.5.1
+platformdirs==3.7.0
     # via
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.0.0
+pluggy==1.2.0
     # via
     #   pytest
     #   tox
@@ -191,9 +191,9 @@ ply==3.11
     # via
     #   beancount
     #   fava (pyproject.toml)
-pre-commit==3.3.2
+pre-commit==3.3.3
     # via fava (pyproject.toml)
-protobuf==4.23.2
+protobuf==4.23.3
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -232,19 +232,19 @@ pygments==2.15.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==5.11.0
+pyinstaller==5.12.0
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2023.3
     # via pyinstaller
 pylint==2.17.4
     # via fava (pyproject.toml)
-pyparsing==3.0.9
+pyparsing==3.1.0
     # via httplib2
-pyproject-api==1.5.1
+pyproject-api==1.5.2
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.3.1
+pytest==7.3.2
     # via
     #   beancount
     #   fava (pyproject.toml)
@@ -259,7 +259,7 @@ pytz==2023.3
     # via flask-babel
 pyyaml==6.0
     # via pre-commit
-readme-renderer==37.3
+readme-renderer==40.0
     # via twine
 requests==2.31.0
     # via
@@ -272,7 +272,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.4.1
+rich==13.4.2
     # via twine
 rsa==4.9
     # via google-auth
@@ -309,7 +309,7 @@ texttable==1.6.7
     # via pyexcel
 tomlkit==0.11.8
     # via pylint
-tox==4.6.0
+tox==4.6.3
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
@@ -319,7 +319,7 @@ types-pkg-resources==0.1.3
     # via fava (pyproject.toml)
 types-pytz==2023.3.0.0
     # via types-babel
-types-setuptools==67.8.0.0
+types-setuptools==68.0.0.0
     # via types-babel
 types-simplejson==3.19.0.1
     # via fava (pyproject.toml)
@@ -332,13 +332,13 @@ urllib3==1.26.16
     #   google-auth
     #   requests
     #   twine
-virtualenv==20.23.0
+virtualenv==20.23.1
     # via
     #   pre-commit
     #   tox
 webencodings==0.5.1
     # via bleach
-werkzeug==2.3.5
+werkzeug==2.3.6
     # via
     #   fava (pyproject.toml)
     #   flask

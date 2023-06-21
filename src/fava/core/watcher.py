@@ -13,7 +13,7 @@ class Watcher:
     So a file change won't be noticed, but only new/deleted files.
     """
 
-    __slots__ = ["_files", "_folders", "last_checked"]
+    __slots__ = ("_files", "_folders", "last_checked")
 
     def __init__(self) -> None:
         self._files: list[Path] = []
