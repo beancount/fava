@@ -5,13 +5,15 @@
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
 <svelte-component type="charts"><script type="application/json">{{
-  [
-    chart_api.interval_totals(g.interval, (options['name_income'], options['name_expenses']), label=_('Net Profit'), invert=invert),
-    chart_api.interval_totals(g.interval, options['name_income'], label='{} ({})'.format(_('Income'), g.interval.label), invert=invert),
-    chart_api.interval_totals(g.interval, options['name_expenses'], label='{} ({})'.format(_('Expenses'), g.interval.label)),
-    chart_api.hierarchy(options['name_income']),
-    chart_api.hierarchy(options['name_expenses']),
-  ]|tojson
+    {
+	'data': [
+	    chart_api.interval_totals(g.interval, (options['name_income'], options['name_expenses']), label=_('Net Profit'), invert=invert),
+	    chart_api.interval_totals(g.interval, options['name_income'], label='{} ({})'.format(_('Income'), g.interval.label), invert=invert),
+	    chart_api.interval_totals(g.interval, options['name_expenses'], label='{} ({})'.format(_('Expenses'), g.interval.label)),
+	    chart_api.hierarchy(options['name_income']),
+	    chart_api.hierarchy(options['name_expenses']),
+	]
+    }|tojson
 }}</script></svelte-component>
 
 <div class="row">

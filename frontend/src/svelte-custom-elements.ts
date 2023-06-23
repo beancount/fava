@@ -5,9 +5,14 @@
 import type { SvelteComponent } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
+import SliceEditor from "./editor/SliceEditor.svelte";
 
-const components = new Map<string, typeof SvelteComponent<{ data?: unknown }>>([
+const components = new Map<
+  string,
+  typeof SvelteComponent<Record<string, unknown>>
+>([
   ["charts", ChartSwitcher],
+  ["slice-editor", SliceEditor],
 ]);
 
 /**
@@ -17,7 +22,7 @@ const components = new Map<string, typeof SvelteComponent<{ data?: unknown }>>([
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {
-  component?: SvelteComponent<{ data?: unknown }>;
+  component?: SvelteComponent<Record<string, unknown>>;
 
   connectedCallback(): void {
     if (this.component) {
@@ -31,10 +36,13 @@ export class SvelteCustomElement extends HTMLElement {
     if (!Cls) {
       throw new Error("Invalid component");
     }
-    const props: { data?: unknown } = {};
+    const props: Record<string, unknown> = {};
     const script = this.querySelector("script");
     if (script && script.type === "application/json") {
-      props.data = JSON.parse(script.innerHTML);
+      const data: unknown = JSON.parse(script.innerHTML);
+      if (data instanceof Object) {
+        Object.assign(props, data);
+      }
     }
     this.component = new Cls({ target: this, props });
   }
