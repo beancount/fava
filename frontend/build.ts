@@ -6,6 +6,8 @@ import { context } from "esbuild";
 import svelte from "esbuild-svelte";
 import { typescript } from "svelte-preprocess-esbuild";
 
+import { compilerOptions } from "./tsconfig.json";
+
 /**
  * Create a debounced function.
  */
@@ -38,6 +40,7 @@ async function runBuild(dev: boolean) {
     },
     plugins: [svelte({ preprocess: typescript() })],
     sourcemap: dev,
+    target: compilerOptions.target,
   });
   console.log("starting build");
   await ctx.rebuild();

@@ -74,7 +74,7 @@ flake8==6.0.0
     # via
     #   fava (pyproject.toml)
     #   flake8-pyi
-flake8-pyi==23.5.0
+flake8-pyi==23.6.0
     # via fava (pyproject.toml)
 flask==2.3.2
     # via
@@ -86,7 +86,7 @@ google-api-core==2.11.1
     # via google-api-python-client
 google-api-python-client==2.90.0
     # via beancount
-google-auth==2.20.0
+google-auth==2.21.0
     # via
     #   google-api-core
     #   google-api-python-client
@@ -117,7 +117,7 @@ itsdangerous==2.1.2
     # via flask
 jaraco-classes==3.2.3
     # via keyring
-jaraco-functools==3.7.0
+jaraco-functools==3.8.0
     # via cheroot
 jeepney==0.8.0
     # via
@@ -129,7 +129,7 @@ jinja2==3.1.2
     #   flask
     #   flask-babel
     #   sphinx
-keyring==24.0.0
+keyring==24.2.0
     # via twine
 lazy-object-proxy==1.9.0
     # via astroid
@@ -144,7 +144,7 @@ lxml==4.9.2
     #   pyexcel-ods3
 markdown-it-py==3.0.0
     # via rich
-markdown2==2.4.8
+markdown2==2.4.9
     # via fava (pyproject.toml)
 markupsafe==2.1.3
     # via
@@ -161,7 +161,7 @@ more-itertools==9.1.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.4.0
+mypy==1.4.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -178,7 +178,7 @@ packaging==23.1
     #   tox
 pkginfo==1.9.6
     # via twine
-platformdirs==3.7.0
+platformdirs==3.8.0
     # via
     #   pylint
     #   tox
@@ -232,9 +232,9 @@ pygments==2.15.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==5.12.0
+pyinstaller==5.13.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.3
+pyinstaller-hooks-contrib==2023.4
     # via pyinstaller
 pylint==2.17.4
     # via fava (pyproject.toml)
@@ -244,7 +244,7 @@ pyproject-api==1.5.2
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.3.2
+pytest==7.4.0
     # via
     #   beancount
     #   fava (pyproject.toml)
