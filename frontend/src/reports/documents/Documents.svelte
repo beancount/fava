@@ -15,7 +15,7 @@
   import Table from "./Table.svelte";
   import type { Document } from "./types";
 
-  export let data: PageData;
+  export let data: PageData["data"];
 
   interface MoveDetails {
     account: string;

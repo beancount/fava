@@ -5,7 +5,6 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
-import type { SvelteComponent } from "svelte";
 import type { Readable, Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
@@ -14,8 +13,7 @@ import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
 import { notify_err } from "./notifications";
-import ErrorSvelte from "./reports/Error.svelte";
-import type { GetFrontendComponent } from "./reports/routes";
+import type { Route } from "./reports/routes";
 import { raw_page_title } from "./sidebar/page-title";
 import { conversion, interval, urlHash } from "./stores";
 import { showCharts } from "./stores/chart";
@@ -52,10 +50,11 @@ class Router extends Events<"page-loaded"> {
   /** The <article> element. */
   private article: HTMLElement;
 
-  private shouldRenderInFrontend?: GetFrontendComponent;
+  /** A function to get the Route to render for the given URL. */
+  private shouldRenderInFrontend?: (url: URL) => Route | undefined;
 
   /** A possibly frontend rendered component. */
-  private component?: SvelteComponent;
+  private frontend_route?: Route;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -108,45 +107,26 @@ class Router extends Events<"page-loaded"> {
   }
 
   private async frontendRender(url: URL): Promise<void> {
-    const frontend = this.shouldRenderInFrontend?.(url);
-    if (frontend) {
-      const [Cls, load, title] = frontend;
+    const route = this.shouldRenderInFrontend?.(url);
+    if (route) {
       is_loading_internal.set(true);
       try {
-        const data = await load(url);
-        // Check if the component is changed - otherwise only update the data.
-        if (Cls !== this.component?.constructor) {
-          this.component?.$destroy();
-          this.article.innerHTML = "";
-          this.component = new Cls({ target: this.article, props: { data } });
-        } else {
-          this.component.$set({ data });
-        }
-      } catch (error: unknown) {
-        log_error(error);
-        if (error instanceof Error) {
-          this.component?.$destroy();
-          this.article.innerHTML = "";
-          this.component = new ErrorSvelte({
-            target: this.article,
-            props: { title, error },
-          });
-        }
+        await route.render(this.article, url, this.frontend_route);
       } finally {
         is_loading_internal.set(false);
-        raw_page_title.set(title);
       }
+      raw_page_title.set(route.title);
     } else {
-      this.component?.$destroy();
-      this.component = undefined;
+      this.frontend_route?.destroy();
     }
+    this.frontend_route = route;
   }
 
   /**
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(shouldRenderInFrontend: GetFrontendComponent): void {
+  init(shouldRenderInFrontend: (url: URL) => Route | undefined): void {
     this.shouldRenderInFrontend = shouldRenderInFrontend;
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
@@ -213,7 +193,7 @@ class Router extends Events<"page-loaded"> {
     await this.frontendRender(getUrl);
 
     try {
-      if (!this.component) {
+      if (!this.frontend_route) {
         getUrl.searchParams.set("partial", "true");
         is_loading_internal.set(true);
         const content = await fetch(getUrl.toString()).then(handleText);

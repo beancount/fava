@@ -54,6 +54,7 @@
   on:dragover={dragenter}
   on:dragleave={dragleave}
   on:drop|preventDefault={drop}
+  role="group"
 >
   <button
     type="button"

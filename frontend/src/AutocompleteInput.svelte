@@ -119,7 +119,7 @@
       class="muted round"
       on:click={() => {
         value = "";
-        dispatch("select");
+        dispatch("select", input);
       }}
     >
       ×
@@ -128,6 +128,7 @@
   {#if filteredSuggestions.length}
     <ul {hidden}>
       {#each filteredSuggestions as { innerHTML, suggestion }, i}
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <li
           class:selected={i === index}
           on:mousedown={(ev) => mousedown(ev, suggestion)}

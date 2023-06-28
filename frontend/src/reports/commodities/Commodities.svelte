@@ -7,10 +7,8 @@
 
   import type { PageData } from "./load";
 
-  export let data: PageData;
-
-  $: charts = data.charts;
-  $: commodities = data.commodities;
+  export let charts: PageData["charts"];
+  export let commodities: PageData["commodities"];
 </script>
 
 <ChartSwitcherTyped {charts} />

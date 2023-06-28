@@ -21,7 +21,7 @@
   import EditorMenu from "./EditorMenu.svelte";
   import type { PageData } from "./load";
 
-  export let data: PageData;
+  export let data: PageData["data"];
 
   $: file_path = data.file_path;
 

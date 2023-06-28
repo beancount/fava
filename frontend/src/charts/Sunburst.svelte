@@ -56,6 +56,7 @@
   on:mouseleave={() => {
     current = null;
   }}
+  role="img"
 >
   <circle style="opacity:0" r={radius} />
   <text class="account" text-anchor="middle">
@@ -75,6 +76,7 @@
         fill-rule="evenodd"
         fill={$sunburstScale(d.data.account)}
         d={arcShape(d) ?? undefined}
+        role="img"
       />
     </a>
   {/each}

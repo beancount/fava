@@ -2,14 +2,13 @@
  * A custom element that will render a Svelte component.
  */
 
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 
-const components = new Map<
-  string,
-  typeof SvelteComponentTyped<{ data?: unknown }>
->([["charts", ChartSwitcher]]);
+const components = new Map<string, typeof SvelteComponent<{ data?: unknown }>>([
+  ["charts", ChartSwitcher],
+]);
 
 /**
  * A custom element that represents a Svelte component.
@@ -18,7 +17,7 @@ const components = new Map<
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {
-  component?: SvelteComponentTyped<{ data?: unknown }>;
+  component?: SvelteComponent<{ data?: unknown }>;
 
   connectedCallback(): void {
     if (this.component) {

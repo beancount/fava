@@ -6,10 +6,8 @@
 
   import type { PageData } from "./load";
 
-  export let data: PageData;
-
-  $: charts = data.charts;
-  $: groups = data.groups;
+  export let charts: PageData["charts"];
+  export let groups: PageData["groups"];
 </script>
 
 {#if groups.length}

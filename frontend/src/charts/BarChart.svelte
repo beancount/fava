@@ -149,6 +149,7 @@
               on:blur={() => {
                 highlighted = null;
               }}
+              role="img"
             >
               {#each stack as bar}
                 <rect

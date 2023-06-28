@@ -21,7 +21,7 @@
   import FileList from "./FileList.svelte";
   import type { PageData, ProcessedImportableFile } from "./load";
 
-  export let data: PageData;
+  export let data: PageData["data"];
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = [];

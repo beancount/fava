@@ -49,6 +49,9 @@ export function preprocessData(
   });
 }
 
-export const load = () => get("imports", undefined).then(preprocessData);
+export const load = () =>
+  get("imports", undefined)
+    .then(preprocessData)
+    .then((data) => ({ data }));
 
 export type PageData = Awaited<ReturnType<typeof load>>;
