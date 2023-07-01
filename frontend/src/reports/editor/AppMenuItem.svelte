@@ -48,7 +48,7 @@
     display: none;
     width: 500px;
     max-height: 400px;
-    margin: 0.75rem 0 0 -0.5rem;
+    margin: 0.7rem 0 0 -0.5rem;
     overflow-y: auto;
     background-color: var(--background);
     border: 1px solid var(--border);
