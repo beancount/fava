@@ -80,6 +80,10 @@ class ExtensionModule(FavaModule):
         for ext in self._exts:
             ext.after_insert_entry(entry)
 
+    def after_delete_entry(self, entry: Directive) -> None:
+        for ext in self._exts:
+            ext.after_delete_entry(entry)
+
     def after_insert_metadata(
         self, entry: Directive, key: str, value: str
     ) -> None:

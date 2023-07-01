@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import hashlib
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,9 @@ import pytest
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.charts import dumps
+from fava.core.fava_options import InsertEntryOption
+from fava.core.file import get_entry_slice
+from fava.core.file import insert_entry
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
@@ -340,6 +344,50 @@ def test_api_format_source_options(
             "/long-example/api/format_source", json={"source": payload}
         )
         assert_api_success(response, align(payload, 90))
+
+
+def test_api_source_slice_delete(
+    test_client: FlaskClient, example_ledger: FavaLedger
+) -> None:
+    path = Path(example_ledger.beancount_file_path)
+    contents = path.read_text("utf-8")
+
+    url = "/long-example/api/source_slice"
+    # test bad request
+    response = test_client.delete(url)
+    assert_api_error(
+        response, "Invalid API request: Parameter `entry_hash` is missing."
+    )
+
+    entry = next(
+        entry
+        for entry in example_ledger.all_entries_by_type.Transaction
+        if entry.payee == "Chichipotle"
+        and entry.date == datetime.date(2016, 5, 3)
+    )
+    entry_hash = hash_entry(entry)
+    entry_source, sha256sum = get_entry_slice(entry)
+
+    # delete entry
+    response = test_client.delete(
+        url,
+        query_string={
+            "entry_hash": entry_hash,
+            "sha256sum": sha256sum,
+        },
+    )
+    assert_api_success(response, f"Deleted entry {entry_hash}.")
+
+    assert path.read_text("utf-8") != contents
+
+    insert_option = InsertEntryOption(
+        datetime.date(1, 1, 1),
+        re.compile(".*"),
+        entry.meta["filename"],
+        entry.meta["lineno"],
+    )
+    insert_entry(entry, entry.meta["filename"], [insert_option], 59, 2)
+    assert path.read_text("utf-8") == contents
 
 
 def test_api_add_entries(

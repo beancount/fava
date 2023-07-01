@@ -82,6 +82,12 @@ Called after an `entry` has been modified, e.g., via the context popup.
 
 ---
 
+### `after_delete_entry(entry: Directive)`
+
+Called after an `entry` has been deleted, e.g., via the context popup.
+
+---
+
 ## Extension attributes
 
 ### `report_title`

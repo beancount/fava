@@ -65,6 +65,9 @@ class FavaExtensionBase:
     def after_insert_entry(self, entry: Directive) -> None:
         """Run after an `entry` has been inserted."""
 
+    def after_delete_entry(self, entry: Directive) -> None:
+        """Run after an `entry` has been deleted."""
+
     def after_insert_metadata(
         self, entry: Directive, key: str, value: str
     ) -> None:

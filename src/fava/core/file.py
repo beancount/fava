@@ -185,6 +185,21 @@ class FileModule(FavaModule):
             self.ledger.extensions.after_entry_modified(entry, source_slice)
             return ret
 
+    def delete_entry_slice(self, entry_hash: str, sha256sum: str) -> None:
+        """Delete slice of the source file for an entry.
+
+        Args:
+            entry_hash: An entry.
+            sha256sum: The sha256sum of the current lines of the entry.
+
+        Raises:
+            FavaAPIError: If the entry is not found or the file changed.
+        """
+        with self.lock:
+            entry = self.ledger.get_entry(entry_hash)
+            delete_entry_slice(entry, sha256sum)
+            self.ledger.extensions.after_delete_entry(entry)
+
     def insert_entries(self, entries: list[Directive]) -> None:
         """Insert entries.
 
@@ -340,6 +355,43 @@ def save_entry_slice(
         file.writelines(lines)
 
     return sha256_str(source_slice)
+
+
+def delete_entry_slice(entry: Directive, sha256sum: str) -> None:
+    """Delete slice of the source file for an entry.
+
+    Args:
+        entry: An entry.
+        sha256sum: The sha256sum of the current lines of the entry.
+
+    Raises:
+        FavaAPIError: If the file at `path` is not one of the
+            source files.
+    """
+    path = Path(entry.meta["filename"])
+    with path.open(encoding="utf-8") as file:
+        lines = file.readlines()
+
+    first_entry_line = entry.meta["lineno"] - 1
+    entry_lines = find_entry_lines(lines, first_entry_line)
+    entry_source = "".join(entry_lines).rstrip("\n")
+    if sha256_str(entry_source) != sha256sum:
+        raise ExternallyChangedError(path)
+
+    # Also delete the whitespace following this entry
+    last_entry_line = first_entry_line + len(entry_lines)
+    while True:
+        try:
+            line = lines[last_entry_line]
+        except IndexError:
+            break
+        if line.strip():
+            break
+        last_entry_line += 1
+    lines = lines[:first_entry_line] + lines[last_entry_line:]
+    path = Path(entry.meta["filename"])
+    with path.open("w", encoding="utf-8") as file:
+        file.writelines(lines)
 
 
 def insert_entry(

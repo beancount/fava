@@ -88,6 +88,31 @@ export async function get<T extends keyof GetAPIParams>(
   throw new Error(res.value);
 }
 
+interface DeleteAPIParams {
+  document: { filename: string };
+  source_slice: { entry_hash: string; sha256sum: string };
+}
+
+/**
+ * Delete an API endpoint and convert the JSON data to an object.
+ * @param endpoint - the endpoint to fetch
+ * @param params - a string to append as params or an object.
+ * @returns the response returned by the endpoint.
+ */
+export async function doDelete<T extends keyof DeleteAPIParams>(
+  endpoint: T,
+  params: DeleteAPIParams[T],
+): Promise<string> {
+  const url = urlFor(`api/${endpoint}`, params, false);
+  const json = await fetchJSON(url, { method: "DELETE" });
+  const res = string(json);
+  if (res.success) {
+    return res.value;
+  }
+  notify(`Invalid data returned in API request: ${res.value}`, "error");
+  throw new Error(res.value);
+}
+
 /**
  * Move a file, either in an import directory or a document.
  * @param filename - the current name of the file.
@@ -117,11 +142,9 @@ export async function moveDocument(
  */
 export async function deleteDocument(filename: string): Promise<boolean> {
   try {
-    const url = urlFor("api/document", { filename }, false);
-    const res = await fetchJSON(url, { method: "DELETE" });
-    const d = string(res);
-    notify(d.value);
-    return d.success;
+    const msg = await doDelete("document", { filename });
+    notify(msg);
+    return true;
   } catch (error) {
     notify_err(error, (e) => e.message);
     return false;

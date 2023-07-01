@@ -37,6 +37,10 @@ class AutoCommit(FavaExtensionBase):
         message = f"autocommit: entry on {entry.date}"
         self._run(["git", "commit", "-am", message])
 
+    def after_delete_entry(self, entry: Directive) -> None:
+        message = f"autocommit: deleted entry on {entry.date}"
+        self._run(["git", "commit", "-am", message])
+
     def after_entry_modified(self, entry: Directive, _: Any) -> None:
         message = f"autocommit: modified entry on {entry.date}"
         self._run(["git", "commit", "-am", message])

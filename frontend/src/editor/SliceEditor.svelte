@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LanguageSupport } from "@codemirror/language";
 
-  import { put } from "../api";
+  import { doDelete, put } from "../api";
   import { initBeancountEditor } from "../codemirror/setup";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
@@ -9,6 +9,7 @@
   import { closeOverlay } from "../stores";
   import { reloadAfterSavingEntrySlice } from "../stores/editor";
 
+  import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 
   export let beancount_language_support: LanguageSupport;
@@ -20,6 +21,7 @@
   $: changed = currentSlice !== slice;
 
   let saving = false;
+  let deleting = false;
 
   async function save() {
     saving = true;
@@ -37,6 +39,25 @@
       notify_err(error, (err) => `Saving failed: ${err.message}`);
     } finally {
       saving = false;
+    }
+  }
+
+  async function deleteSlice() {
+    deleting = true;
+    try {
+      await doDelete("source_slice", {
+        entry_hash,
+        sha256sum,
+      });
+      entry_hash = "";
+      if ($reloadAfterSavingEntrySlice) {
+        router.reload();
+      }
+      closeOverlay();
+    } catch (error) {
+      notify_err(error, (err) => `Deleting failed: ${err.message}`);
+    } finally {
+      deleting = false;
     }
   }
 
@@ -69,6 +90,7 @@
       <input type="checkbox" bind:checked={$reloadAfterSavingEntrySlice} />
       <span>{_("reload")}</span>
     </label>
+    <DeleteButton {deleting} onDelete={deleteSlice} />
     <SaveButton {changed} {saving} />
   </div>
 </form>

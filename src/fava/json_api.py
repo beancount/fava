@@ -289,6 +289,13 @@ def put_source_slice(entry_hash: str, source: str, sha256sum: str) -> str:
 
 
 @api_endpoint
+def delete_source_slice(entry_hash: str, sha256sum: str) -> str:
+    """Delete an entry source slice."""
+    g.ledger.file.delete_entry_slice(entry_hash, sha256sum)
+    return f"Deleted entry {entry_hash}."
+
+
+@api_endpoint
 def put_format_source(source: str) -> str:
     """Format beancount file."""
     return align(source, g.ledger.fava_options.currency_column)
