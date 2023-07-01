@@ -1,0 +1,18 @@
+<div>
+  <h3>Query</h3>
+  <label for="batch_edit_query">SELECT id WHERE </label>
+  <input id="batch_edit_query" name="batch_edit_query">
+  <button id="batch_query_submit" class="extension-handler" data-handler-click="this.runQuery()">Run Query</button>
+</div>
+<br>
+{% set query = request.args.get('query') %}
+{% if query %}
+<div>
+  {% for slice in extension.source_slices(query) %}
+  <div>
+  <span>{{slice["entry_hash"]}}</span>
+  <svelte-component type="slice-editor"><script type="application/json">{{ slice|tojson }}</script></svelte-component>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
