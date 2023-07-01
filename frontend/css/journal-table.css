@@ -60,7 +60,7 @@
 }
 
 .journal .postings .num {
-  overflow: hidden;
+  overflow: scroll;
   line-height: 16px;
 }
 
@@ -126,7 +126,6 @@
 
 .journal p > .num {
   width: 9rem;
-  white-space: pre;
   border-left: 1px solid var(--table-border);
 }
 

@@ -3,6 +3,7 @@
 
 {% macro render_diff_and_number(balance, cost, currency, invert=False) %}
   {% set num = balance.pop(currency, 0) %}
+  <span class="number">{{ num|format_currency(currency, invert=invert) }}</span>
   {% if currency in cost %}
     {% set cost_num = cost.pop(currency, 0) %}
     {% set diff = num - cost_num %}
@@ -10,10 +11,10 @@
       {% set diff = -diff %}
     {% endif %}
     {%- if diff -%}
+    <br>
     <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency, invert=invert) }} {{ currency }}">({{ diff|format_currency(currency) }})</span>
     {%- endif -%}
   {%- endif -%}
-  <span class="number">{{ num|format_currency(currency, invert=invert) }}</span>
 {%- endmacro %}
 
 {% macro tree(account_node, invert=False, ledger=None) %}

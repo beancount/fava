@@ -14,8 +14,11 @@ Hold Ctrl or Cmd while clicking to expand one level.">
         <a href="/off-by-one/account/Assets/?conversion=at_value" class="account">Assets</a>
       </span>
       <span class="num">
-        <span class="balance"><span class="number"></span></span>
-        <span class="balance-children"><span class="diff positive" title="100 USD">(4)</span><span class="number">104</span></span>
+        <span class="balance">  <span class="number"></span>
+</span>
+        <span class="balance-children">  <span class="number">104</span>
+<br>
+    <span class="diff positive" title="100 USD">(4)</span></span>
       </span>
       <span class="num other">
         <span class="balance">
@@ -30,8 +33,10 @@ Hold Ctrl or Cmd while clicking to expand one level.">
         <a href="/off-by-one/account/Assets:Cash/?conversion=at_value" class="account">Cash</a>
       </span>
       <span class="num">
-        <span class="balance"><span class="number"></span></span>
-        <span class="balance-children"><span class="number"></span></span>
+        <span class="balance">  <span class="number"></span>
+</span>
+        <span class="balance-children">  <span class="number"></span>
+</span>
       </span>
       <span class="num other">
         <span class="balance">
@@ -47,8 +52,12 @@ Hold Ctrl or Cmd while clicking to expand one level.">
         <a href="/off-by-one/account/Assets:Commodity/?conversion=at_value" class="account">Commodity</a>
       </span>
       <span class="num">
-        <span class="balance"><span class="diff positive" title="100 USD">(4)</span><span class="number">104</span></span>
-        <span class="balance-children"><span class="diff positive" title="100 USD">(4)</span><span class="number">104</span></span>
+        <span class="balance">  <span class="number">104</span>
+<br>
+    <span class="diff positive" title="100 USD">(4)</span></span>
+        <span class="balance-children">  <span class="number">104</span>
+<br>
+    <span class="diff positive" title="100 USD">(4)</span></span>
       </span>
       <span class="num other">
         <span class="balance">
