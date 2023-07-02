@@ -28,7 +28,7 @@
   }
 
   li {
-    padding: 2px 10px;
+    padding: 0.25em 0.5em;
     cursor: pointer;
   }
 

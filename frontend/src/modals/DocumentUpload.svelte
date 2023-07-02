@@ -79,7 +79,7 @@
   }
 
   .fieldset {
-    display: block;
+    margin-bottom: 6px;
   }
 
   .fieldset :global(span):first-child {

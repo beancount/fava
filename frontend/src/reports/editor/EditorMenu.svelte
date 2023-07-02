@@ -35,7 +35,7 @@
   }
 </script>
 
-<div class="fieldset">
+<div>
   <AppMenu>
     <AppMenuItem name={_("File")}>
       {#each sources as source}
@@ -83,8 +83,10 @@
 </div>
 
 <style>
-  .fieldset {
-    height: 3rem;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     background: var(--sidebar-background);
     border-bottom: 1px solid var(--sidebar-border);
   }

@@ -153,7 +153,7 @@
   form div {
     flex: 1;
     width: 100%;
-    height: calc(100% - 3rem);
+    height: 100px; /* As a flex-base so that it uses exactly the available space. */
   }
 
   form :global(.cm-editor) {

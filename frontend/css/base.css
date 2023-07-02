@@ -159,13 +159,6 @@ a:focus-visible {
   outline: var(--link-color) dotted 2px;
 }
 
-/* fake fieldsets to work around browser bugs with <fieldset> */
-.fieldset {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 button,
 input,
 textarea {

@@ -114,10 +114,6 @@
     width: 100%;
   }
 
-  .content :global(.fieldset) {
-    margin-bottom: 6px;
-  }
-
   @media (width <= 767px) {
     /* Show the modal full-screen on mobile. */
     .overlay {

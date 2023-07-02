@@ -29,7 +29,7 @@
 
 <style>
   span {
-    padding: 0.7rem 0.5rem;
+    padding: 0.7em 0.5em;
     cursor: pointer;
   }
 
@@ -48,12 +48,10 @@
     display: none;
     width: 500px;
     max-height: 400px;
-    margin: 0.75rem 0 0 -0.5rem;
+    margin: 0.7em 0 0 -0.5em; /* The top margin should match the (bottom) padding of the span above. */
     overflow-y: auto;
     background-color: var(--background);
     border: 1px solid var(--border);
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
     box-shadow: 0 3px 6px var(--transparent-black);
   }
 

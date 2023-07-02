@@ -10,9 +10,8 @@
 <style>
   div {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.5em;
     align-items: stretch;
-    height: 100%;
-    margin-right: 0.5rem;
+    margin-right: 0.5em;
   }
 </style>
