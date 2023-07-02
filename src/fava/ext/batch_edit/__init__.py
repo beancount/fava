@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from fava.beans.abc import Transaction
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.file import get_entry_slice
@@ -55,7 +56,7 @@ class BatchEdit(FavaExtensionBase):
         for tx_id in transaction_ids[:20]:
             entry = entries[tx_id]
             # Skip generated entries
-            if entry.flag == "S":
+            if isinstance(entry, Transaction) and entry.flag == "S":
                 continue
             source_slice, sha256sum = get_entry_slice(entry)
             results.append(
