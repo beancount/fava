@@ -73,8 +73,7 @@ def _result_array(
     types: list[ResultType], rows: list[ResultRow]
 ) -> list[list[str]]:
     result_array = [[name for name, t in types]]
-    for row in rows:
-        result_array.append(_row_to_pyexcel(row, types))
+    result_array.extend(_row_to_pyexcel(row, types) for row in rows)
     return result_array
 
 

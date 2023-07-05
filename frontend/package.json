@@ -1,6 +1,7 @@
 {
   "name": "fava",
   "private": true,
+  "version": "1.0.0",
   "scripts": {
     "build": "node -r esbuild-register build.ts",
     "dev": "node -r esbuild-register build.ts --watch",
@@ -40,7 +41,7 @@
     "prettier-plugin-svelte": "^2.4.0",
     "stylelint": "^15.1.0",
     "stylelint-config-recess-order": "^4.0.0",
-    "stylelint-config-standard": "^33.0.0",
+    "stylelint-config-standard": "^34.0.0",
     "svelte-check": "^3.0.1",
     "svelte-preprocess-esbuild": "^3.0.0",
     "typescript": "^5.0.2",

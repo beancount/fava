@@ -7,6 +7,7 @@ from dataclasses import fields
 from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
+from decimal import Decimal
 from typing import Any
 from typing import Iterable
 from typing import Pattern
@@ -34,8 +35,6 @@ from fava.helpers import FavaAPIError
 from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
-    from decimal import Decimal
-
     from fava.beans.funcs import ResultRow
     from fava.beans.funcs import ResultType
     from fava.core import FilteredLedger
@@ -45,6 +44,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 ONE_DAY = timedelta(days=1)
+ZERO = Decimal("0")
 
 
 def inv_to_dict(inventory: Inventory) -> dict[str, Decimal]:
@@ -252,7 +252,7 @@ class ChartModule(FavaModule):
             currencies = set(balance.keys())
             if last_currencies:
                 for currency in last_currencies - currencies:
-                    balance[currency] = 0
+                    balance[currency] = ZERO
             last_currencies = currencies
 
             yield DateAndBalance(entry.date, balance)

@@ -42,11 +42,11 @@ chardet==5.1.0
     #   beancount
     #   pyexcel
     #   tox
-charset-normalizer==3.1.0
+charset-normalizer==3.2.0
     # via requests
 cheroot==9.0.0
     # via fava (pyproject.toml)
-click==8.1.3
+click==8.1.4
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -84,7 +84,7 @@ flask-babel==3.1.0
     # via fava (pyproject.toml)
 google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.90.0
+google-api-python-client==2.92.0
     # via beancount
 google-auth==2.21.0
     # via
@@ -105,7 +105,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.7.0
+importlib-metadata==6.8.0
     # via
     #   keyring
     #   twine
@@ -137,7 +137,7 @@ lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==4.9.2
+lxml==4.9.3
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -178,7 +178,7 @@ packaging==23.1
     #   tox
 pkginfo==1.9.6
     # via twine
-platformdirs==3.8.0
+platformdirs==3.8.1
     # via
     #   pylint
     #   tox
@@ -193,7 +193,7 @@ ply==3.11
     #   fava (pyproject.toml)
 pre-commit==3.3.3
     # via fava (pyproject.toml)
-protobuf==4.23.3
+protobuf==4.23.4
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -234,13 +234,13 @@ pygments==2.15.1
     #   sphinx
 pyinstaller==5.13.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.4
+pyinstaller-hooks-contrib==2023.5
     # via pyinstaller
 pylint==2.17.4
     # via fava (pyproject.toml)
 pyparsing==3.1.0
     # via httplib2
-pyproject-api==1.5.2
+pyproject-api==1.5.3
     # via tox
 pyproject-hooks==1.0.0
     # via build
@@ -309,7 +309,7 @@ texttable==1.6.7
     # via pyexcel
 tomlkit==0.11.8
     # via pylint
-tox==4.6.3
+tox==4.6.4
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
@@ -319,11 +319,11 @@ types-pkg-resources==0.1.3
     # via fava (pyproject.toml)
 types-pytz==2023.3.0.0
     # via types-babel
-types-setuptools==68.0.0.0
+types-setuptools==68.0.0.1
     # via types-babel
 types-simplejson==3.19.0.1
     # via fava (pyproject.toml)
-typing-extensions==4.6.3
+typing-extensions==4.7.1
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client

@@ -12,7 +12,7 @@ import { join } from "path";
 
 import { load } from "js-yaml";
 
-import { dependencies } from "./package-lock.json";
+import { packages } from "./package-lock.json";
 import { array, object, optional, string } from "./src/lib/validation";
 
 const preCommitConfigPath = join(__dirname, "..", ".pre-commit-config.yaml");
@@ -40,7 +40,8 @@ async function main() {
       if (language === "node" && additional_dependencies) {
         for (const dep of additional_dependencies) {
           const name = dep.split(/@[^@]*$/)[0] ?? "ERROR";
-          const { version } = dependencies[name as keyof typeof dependencies];
+          const { version } =
+            packages[`node_modules/${name}` as keyof typeof packages];
           const currentDep = `${name}@${version}`;
           if (dep !== currentDep) {
             console.log(

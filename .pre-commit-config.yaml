@@ -6,7 +6,7 @@ repos:
       hooks:
           - id: black
     - repo: https://github.com/charliermarsh/ruff-pre-commit
-      rev: v0.0.275
+      rev: v0.0.277
       hooks:
           - id: ruff
     - repo: local
@@ -19,7 +19,7 @@ repos:
             additional_dependencies:
                 - "prettier@2.8.8"
                 - "prettier-plugin-svelte@2.10.1"
-                - "svelte@4.0.1"
+                - "svelte@4.0.5"
           - id: stylelint
             name: stylelint
             language: node
@@ -27,9 +27,9 @@ repos:
             files: \.(css|svelte)$
             require_serial: true
             additional_dependencies:
-                - "stylelint@15.9.0"
+                - "stylelint@15.10.1"
                 - "stylelint-config-recess-order@4.2.0"
-                - "stylelint-config-standard@33.0.0"
+                - "stylelint-config-standard@34.0.0"
                 - "postcss-html@1.5.0"
           - id: eslint
             name: eslint

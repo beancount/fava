@@ -2,16 +2,44 @@
 
 This is a simple example of Fava's extension reports system.
 """
-# mypy: ignore-errors
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
 from decimal import Decimal
+from typing import NamedTuple
+from typing import TYPE_CHECKING
 
 from fava.context import g
 from fava.ext import FavaExtensionBase
 from fava.helpers import FavaAPIError
 from fava.template_filters import cost_or_value
+
+if TYPE_CHECKING:
+    from fava.beans.funcs import ResultType
+    from fava.core.tree import Tree
+    from fava.core.tree import TreeNode
+
+
+class Row(NamedTuple):
+    """A row in the portfolio tables."""
+
+    account: str
+    balance: Decimal | None
+    allocation: Decimal | None
+
+
+@dataclass
+class Portfolio:
+    """A portfolio."""
+
+    title: str
+    rows: list[Row]
+    types: tuple[ResultType, ...] = (
+        ("account", str),
+        ("balance", Decimal),
+        ("allocation", Decimal),
+    )
 
 
 class PortfolioList(FavaExtensionBase):  # pragma: no cover
@@ -21,7 +49,9 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     has_js_module = True
 
-    def portfolio_accounts(self, filter_str=None):
+    def portfolio_accounts(
+        self, filter_str: str | None = None
+    ) -> list[Portfolio]:
         """Get an account tree based on matching regex patterns."""
         tree = g.filtered.root_tree
         portfolios = []
@@ -44,7 +74,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
         return portfolios
 
-    def _account_name_pattern(self, tree, pattern):
+    def _account_name_pattern(self, tree: Tree, pattern: str) -> Portfolio:
         """Return portfolio info based on matching account name.
 
         Args:
@@ -54,20 +84,18 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         Return:
             Data structured for use with a querytable (types, rows).
         """
-        title = "Account names matching: '" + pattern + "'"
-        selected_accounts = []
         regexer = re.compile(pattern)
-        for acct in tree:
-            if (regexer.match(acct) is not None) and (
-                acct not in selected_accounts
-            ):
-                selected_accounts.append(acct)
+        selected_nodes = [
+            node for acct, node in tree.items() if regexer.match(acct)
+        ]
+        return Portfolio(
+            f"Account names matching: '{pattern}'",
+            self._portfolio_data(selected_nodes),
+        )
 
-        selected_nodes = [tree[x] for x in selected_accounts]
-        portfolio_data = self._portfolio_data(selected_nodes)
-        return title, portfolio_data
-
-    def _account_metadata_pattern(self, tree, metadata_key, pattern):
+    def _account_metadata_pattern(
+        self, tree: Tree, metadata_key: str, pattern: str
+    ) -> Portfolio:
         """Return portfolio info based on matching account open metadata.
 
         Args:
@@ -78,26 +106,19 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         Return:
             Data structured for use with a querytable - (types, rows).
         """
-        title = (
-            "Accounts with '"
-            + metadata_key
-            + "' metadata matching: '"
-            + pattern
-            + "'"
-        )
-        selected_accounts = []
         regexer = re.compile(pattern)
-        for entry in self.ledger.all_entries_by_type.Open:
-            if (metadata_key in entry.meta) and (
-                regexer.match(entry.meta[metadata_key]) is not None
-            ):
-                selected_accounts.append(entry.account)
+        selected_nodes = [
+            tree[entry.account]
+            for entry in self.ledger.all_entries_by_type.Open
+            if metadata_key in entry.meta
+            and regexer.match(entry.meta[metadata_key])
+        ]
+        return Portfolio(
+            f"Accounts with '{metadata_key}' metadata matching: '{pattern }'",
+            self._portfolio_data(selected_nodes),
+        )
 
-        selected_nodes = [tree[x] for x in selected_accounts]
-        portfolio_data = self._portfolio_data(selected_nodes)
-        return title, portfolio_data
-
-    def _portfolio_data(self, nodes):
+    def _portfolio_data(self, nodes: list[TreeNode]) -> list[Row]:
         """Turn a portfolio of tree nodes into querytable-style data.
 
         Args:
@@ -108,27 +129,23 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
             rows: Dictionaries of row data by column names.
         """
         operating_currency = self.ledger.options["operating_currency"][0]
-        acct_type = ("account", str(str))
-        bal_type = ("balance", str(Decimal))
-        alloc_type = ("allocation", str(Decimal))
-        types = [acct_type, bal_type, alloc_type]
 
-        rows = []
-        portfolio_total = Decimal()
+        acct_balances: list[tuple[str, Decimal | None]] = []
+        total = Decimal()
         for node in nodes:
-            row = {}
-            row["account"] = node.name
             balance = cost_or_value(node.balance)
             if operating_currency in balance:
                 balance_dec = balance[operating_currency]
-                portfolio_total += balance_dec
-                row["balance"] = balance_dec
-            rows.append(row)
+                total += balance_dec
+                acct_balances.append((node.name, balance_dec))
+            else:
+                acct_balances.append((node.name, None))
 
-        for row in rows:
-            if "balance" in row:
-                row["allocation"] = round(
-                    (row["balance"] / portfolio_total) * 100, 2
-                )
-
-        return types, rows
+        return [
+            Row(
+                account,
+                bal,
+                (round((bal / total) * 100, 2) if bal else None),
+            )
+            for account, bal in acct_balances
+        ]

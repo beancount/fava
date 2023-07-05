@@ -9,7 +9,7 @@
 <br />
 <br />
 {% for portfolio in extension.portfolio_accounts(arg_filter) %}
-    <h3>{{ portfolio[0] }}</h3>
-    {{ querytable.querytable(ledger, None, *portfolio[1]) }}
+    <h3>{{ portfolio.title }}</h3>
+    {{ querytable.querytable(ledger, None, portfolio.types, portfolio.rows) }}
     <br />
 {% endfor %}
