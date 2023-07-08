@@ -13,7 +13,10 @@ from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import uromyces
 from beancount.utils.encryption import is_encrypted_file
+from uromyces._convert import beancount_entries
+from uromyces._convert import convert_options
 
 from fava.beans.abc import Balance
 from fava.beans.abc import Price
@@ -59,13 +62,15 @@ if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
     from typing import Literal
 
+    from beancount.core.data import BeancountError
+    from uromyces._uromyces import UromycesOptions
+
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.core.conversion import Conversion
     from fava.core.fava_options import FavaOptions
     from fava.core.group_entries import EntriesByType
     from fava.core.inventory import SimpleCounterInventory
-    from fava.helpers import BeancountError
     from fava.util.date import DateRange
     from fava.util.date import Interval
 
@@ -149,7 +154,12 @@ class FilteredLedger:
         if filter and filter.strip():
             entries = AdvancedFilter(filter.strip()).apply(entries)
         if time:
-            time_filter = TimeFilter(ledger.options, ledger.fava_options, time)
+            time_filter = TimeFilter(
+                ledger.options,
+                ledger.fava_options,
+                time,
+                uro_options=ledger.uro_options,
+            )
             entries = time_filter.apply(entries)
             self.date_range = time_filter.date_range
         self.entries = entries
@@ -183,7 +193,10 @@ class FilteredLedger:
         """The filtered entries, with all prices added back in for queries."""
         entries = [*self.entries, *self.ledger.all_entries_by_type.Price]
         entries.sort(key=_incomplete_sortkey)
-        return entries
+
+        if self.ledger.use_uromyces:
+            entries = beancount_entries(entries)  # type: ignore[assignment, arg-type]
+        return entries  # ty:ignore[invalid-return-type]
 
     @cached_property
     def entries_without_prices(self) -> Sequence[Directive]:
@@ -318,6 +331,8 @@ class FavaLedger:
         "options",
         "prices",
         "query_shell",
+        "uro_options",
+        "use_uromyces",
         "watcher",
     )
 
@@ -329,6 +344,9 @@ class FavaLedger:
 
     #: The Beancount options map.
     options: BeancountOptions
+
+    #: The Beancount options map.
+    uro_options: UromycesOptions | None
 
     #: A dict with all of Fava's option values.
     fava_options: FavaOptions
@@ -375,15 +393,23 @@ class FavaLedger:
     #: A :class:`.QueryShell` instance.
     query_shell: QueryShell
 
-    def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
+    def __init__(
+        self,
+        path: str,
+        *,
+        poll_watcher: bool = False,
+        use_uromyces: bool = True,
+    ) -> None:
         """Create an interface for a Beancount ledger.
 
         Arguments:
             path: Path to the main Beancount file.
             poll_watcher: Whether to use the polling file watcher.
+            use_uromyces: Whether to use uromyces to load the file.
         """
         #: The path to the main Beancount file.
         self.beancount_file_path = path
+        self.use_uromyces = use_uromyces
         self._is_encrypted = is_encrypted_file(path)
         self.get_filtered = lru_cache(maxsize=16)(self._get_filtered)
         self.get_entry = lru_cache(maxsize=16)(self._get_entry)
@@ -406,17 +432,25 @@ class FavaLedger:
 
     def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
-        self.all_entries, self.load_errors, self.options = load_uncached(
-            self.beancount_file_path,
-            is_encrypted=self._is_encrypted,
-        )
+        if self.use_uromyces:
+            ledger = uromyces.load_file(self.beancount_file_path)
+            self.all_entries = ledger.entries
+            self.load_errors = ledger.errors  # type: ignore[assignment]
+            self.options = convert_options(ledger)
+            self.uro_options = ledger.options
+        else:
+            self.all_entries, self.load_errors, self.options = load_uncached(
+                self.beancount_file_path,
+                is_encrypted=self._is_encrypted,
+                use_uromyces=self.use_uromyces,
+            )
         self.get_filtered.cache_clear()
         self.get_entry.cache_clear()
 
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
         self.prices = FavaPriceMap(self.all_entries_by_type.Price)
 
-        self.fava_options, self.fava_options_errors = parse_options(
+        self.fava_options, self.fava_options_errors = parse_options(  # type: ignore[assignment]
             self.all_entries_by_type.Custom,
         )
 
@@ -468,10 +502,10 @@ class FavaLedger:
         return [
             *self.load_errors,
             *self.fava_options_errors,
-            *self.budgets.errors,
-            *self.extensions.errors,
-            *self.misc.errors,
-            *self.ingest.errors,
+            *self.budgets.errors,  # type: ignore[list-item]
+            *self.extensions.errors,  # type: ignore[list-item]
+            *self.misc.errors,  # type: ignore[list-item]
+            *self.ingest.errors,  # type: ignore[list-item]
         ]
 
     @property

@@ -50,6 +50,22 @@
     ],
     [
       2,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "currency": "IRAUSD", "number": -1200.0 },
+      { "IRAUSD": -1200.0, "USD": 2550.6 },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
+      { "currency": "IRAUSD", "number": 1200.0 },
+      { "USD": 2550.6 },
+      "BayBook",
+      []
+    ],
+    [
+      2,
       { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
       { "currency": "USD", "number": -4615.38 },
       { "USD": -2064.78 },
@@ -140,22 +156,6 @@
       2,
       { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
       { "currency": "USD", "number": 281.54 },
-      {},
-      "BayBook",
-      []
-    ],
-    [
-      2,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
-      { "currency": "IRAUSD", "number": -1200.0 },
-      { "IRAUSD": -1200.0 },
-      "BayBook",
-      []
-    ],
-    [
-      2,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
-      { "currency": "IRAUSD", "number": 1200.0 },
       {},
       "BayBook",
       []
@@ -498,6 +498,22 @@
     ],
     [
       16,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "currency": "IRAUSD", "number": -1200.0 },
+      { "IRAUSD": -1200.0, "RGAGX": 11.644, "USD": 750.64, "VBMPX": 21.964 },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
+      { "currency": "IRAUSD", "number": 1200.0 },
+      { "RGAGX": 11.644, "USD": 750.64, "VBMPX": 21.964 },
+      "BayBook",
+      []
+    ],
+    [
+      16,
       { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
       { "currency": "USD", "number": -4615.38 },
       { "RGAGX": 11.644, "USD": -3864.74, "VBMPX": 21.964 },
@@ -588,22 +604,6 @@
       16,
       { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
       { "currency": "USD", "number": 281.54 },
-      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 },
-      "BayBook",
-      []
-    ],
-    [
-      16,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
-      { "currency": "IRAUSD", "number": -1200.0 },
-      { "IRAUSD": -1200.0, "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 },
-      "BayBook",
-      []
-    ],
-    [
-      16,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
-      { "currency": "IRAUSD", "number": 1200.0 },
       { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 },
       "BayBook",
       []
@@ -898,6 +898,22 @@
     ],
     [
       30,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "currency": "IRAUSD", "number": -1200.0 },
+      { "IRAUSD": -1200.0, "RGAGX": 23.368, "USD": -1049.39, "VBMPX": 43.684 },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
+      { "currency": "IRAUSD", "number": 1200.0 },
+      { "RGAGX": 23.368, "USD": -1049.39, "VBMPX": 43.684 },
+      "BayBook",
+      []
+    ],
+    [
+      30,
       { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
       { "currency": "USD", "number": -4615.38 },
       { "RGAGX": 23.368, "USD": -5664.77, "VBMPX": 43.684 },
@@ -988,22 +1004,6 @@
       30,
       { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
       { "currency": "USD", "number": 281.54 },
-      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 },
-      "BayBook",
-      []
-    ],
-    [
-      30,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
-      { "currency": "IRAUSD", "number": -1200.0 },
-      { "IRAUSD": -1200.0, "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 },
-      "BayBook",
-      []
-    ],
-    [
-      30,
-      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
-      { "currency": "IRAUSD", "number": 1200.0 },
       { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 },
       "BayBook",
       []
