@@ -6,6 +6,7 @@ from decimal import Decimal
 from functools import singledispatch
 from typing import TYPE_CHECKING
 
+import uromyces
 from beancount.core import amount
 from beancount.core import data
 from beancount.core import position
@@ -45,12 +46,14 @@ def to_string(
     raise TypeError(msg)
 
 
+@to_string.register(uromyces.Amount)
 @to_string.register(amount.Amount)
 def amount_to_string(obj: amount.Amount | protocols.Amount) -> str:
     """Convert an amount to a string."""
     return f"{obj.number} {obj.currency}"
 
 
+@to_string.register(uromyces.Cost)
 @to_string.register(position.Cost)
 def cost_to_string(cost: protocols.Cost | position.Cost) -> str:
     """Convert a cost to a string."""
