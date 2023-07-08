@@ -28,8 +28,9 @@ def run_query(get_ledger: GetFavaLedger) -> Callable[[str], QueryResult]:
     query_ledger = get_ledger("query-example")
 
     def _run_query(query_string: str) -> QueryResult:
+        query_entries = query_ledger.get_filtered().entries_with_all_prices
         return query_ledger.query_shell.execute_query_serialised(
-            query_ledger.all_entries,
+            query_entries,
             query_string,
         )
 
@@ -100,7 +101,7 @@ def test_query_to_file(
     get_ledger: GetFavaLedger,
 ) -> None:
     query_ledger = get_ledger("query-example")
-    entries = query_ledger.all_entries
+    entries = query_ledger.get_filtered().entries_with_all_prices
     query_shell = query_ledger.query_shell
 
     name, data = query_shell.query_to_file(entries, "run custom_query", "csv")
@@ -124,7 +125,7 @@ def test_query_to_file(
 @pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
 def test_query_to_excel_file(get_ledger: GetFavaLedger) -> None:
     query_ledger = get_ledger("query-example")
-    entries = query_ledger.all_entries
+    entries = query_ledger.get_filtered().entries_with_all_prices
     query_shell = query_ledger.query_shell
 
     name, _data = query_shell.query_to_file(entries, "run custom_query", "ods")
