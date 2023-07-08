@@ -17,6 +17,7 @@ from decimal import Decimal
 from functools import singledispatch
 from typing import Any
 
+import uromyces
 from beancount.core import amount
 from beancount.parser.parser import parse_string
 
@@ -76,7 +77,8 @@ def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
 serialise.register(dict, _serialise_dict)
 
 
-@serialise.register
+@serialise.register(uromyces.Amount)
+@serialise.register(amount.Amount)
 def _(o: amount.Amount) -> _Amount:
     return _Amount.from_amount(o)
 
@@ -89,7 +91,9 @@ def _(o: abc.Balance) -> Balance:
         meta=_serialise_dict(o.meta),
         account=o.account,
         amount=_Amount.from_amount(o.amount),
-        diff_amount=_Amount.from_amount(o.diff_amount),
+        diff_amount=_Amount.from_amount(o.diff_amount)
+        if hasattr(o, "diff_amount")
+        else None,
         tolerance=o.tolerance,
     )
 
