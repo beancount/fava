@@ -12,10 +12,6 @@ from typing import TYPE_CHECKING
 
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
-from beancount.loader import (  # type: ignore[attr-defined]
-    _load,  # noqa: PLC2701
-)
-from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
 
 from fava.beans.abc import Balance
@@ -25,6 +21,7 @@ from fava.beans.account import child_account_tester
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
+from fava.beans.load import load_uncached
 from fava.beans.prices import FavaPriceMap
 from fava.beans.str import to_string
 from fava.core.accounts import AccountDict
@@ -269,19 +266,10 @@ class FavaLedger:
 
     def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
-        # use the internal function to disable cache
-        if not self._is_encrypted:
-            self.all_entries, self.errors, self.options = _load(
-                [(self.beancount_file_path, True)],
-                None,
-                None,
-                None,
-            )
-        else:
-            self.all_entries, self.errors, self.options = load_file(
-                self.beancount_file_path,
-            )
-
+        self.all_entries, self.errors, self.options = load_uncached(
+            self.beancount_file_path,
+            is_encrypted=self._is_encrypted,
+        )
         self.get_filtered.cache_clear()
 
         self.all_entries_by_type = group_entries_by_type(self.all_entries)

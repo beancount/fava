@@ -13,6 +13,6 @@ T = TypeVar("T", Directive, Posting)
 
 def replace(entry: T, **kwargs: Any) -> T:
     """Create a copy of the given directive, replacing some arguments."""
-    if isinstance(entry, tuple):
-        return entry._replace(**kwargs)  # type: ignore[attr-defined,no-any-return]
+    if hasattr(entry, "_replace"):
+        return entry._replace(**kwargs)  # type: ignore[no-any-return]
     raise TypeError(f"Could not replace attribute in type {type(entry)}")

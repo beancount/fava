@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.loader import load_string as load_string_bc
+from beancount import loader
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.types import LoaderResult
@@ -12,4 +12,21 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def load_string(value: str) -> LoaderResult:
     """Load a Beancoun string."""
-    return load_string_bc(value)
+    return loader.load_string(value)
+
+
+def load_uncached(
+    beancount_file_path: str,
+    *,
+    is_encrypted: bool,
+) -> LoaderResult:
+    """Load a Beancount file."""
+    if is_encrypted:
+        return loader.load_file(beancount_file_path)
+
+    return loader._load(  # type: ignore[attr-defined,no-any-return]  # noqa: SLF001
+        [(beancount_file_path, True)],
+        None,
+        None,
+        None,
+    )
