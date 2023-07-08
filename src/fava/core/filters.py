@@ -6,6 +6,7 @@ from abc import ABC
 from abc import abstractmethod
 from typing import TYPE_CHECKING
 
+import uromyces
 from beancount.core import account
 from beancount.ops.summarize import clamp_opt
 
@@ -19,6 +20,8 @@ from fava.util.parsing import ParseError
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
+
+    from uromyces._uromyces import UromycesOptions
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
@@ -55,7 +58,7 @@ class EntryFilter(ABC):
 class TimeFilter(EntryFilter):
     """Filter by dates."""
 
-    __slots__ = ("_options", "date_range")
+    __slots__ = ("_options", "_uro_options", "date_range")
 
     date_range: DateRange
 
@@ -64,8 +67,10 @@ class TimeFilter(EntryFilter):
         options: BeancountOptions,
         fava_options: FavaOptions,
         value: str,
+        uro_options: UromycesOptions | None,
     ) -> None:
         self._options = options
+        self._uro_options = uro_options
         try:
             self.date_range = parse_date(value, fava_options.fiscal_year_end)
         except (ParseError, InvalidDateRangeError) as error:
@@ -73,6 +78,13 @@ class TimeFilter(EntryFilter):
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         """Filter and summarise the entries in the date range."""
+        if self._uro_options:
+            return uromyces.summarize_clamp(
+                entries,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
+                self.date_range.begin,
+                self.date_range.end,
+                self._uro_options,
+            )
         clamped_entries, _ = clamp_opt(
             entries,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
             self.date_range.begin,

@@ -13,14 +13,17 @@ if TYPE_CHECKING:  # pragma: no cover
     from beanquery import Column
 
     from fava.core import FavaLedger
+    from fava.core import FilteredLedger
 
 
 def _run_query(
     ledger: FavaLedger, query: str
 ) -> tuple[list[Column], list[tuple[object, ...]]]:
+    filtered: FilteredLedger = ledger.get_filtered()
+    query_entries = filtered.entries_with_all_prices
     conn = beanquery.connect(
         "beancount:",
-        entries=ledger.all_entries,
+        entries=query_entries,
         options=ledger.options,
         errors=ledger.errors,
     )
