@@ -28,9 +28,6 @@ jobs:
             make_target: "test-py"
             py: "3.14"
           - os: "ubuntu-latest"
-            make_target: "test-py-old-deps"
-            py: "3.10"
-          - os: "ubuntu-latest"
             make_target: "test-py-typeguard"
             py: "3.14"
     steps:

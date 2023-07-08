@@ -761,8 +761,7 @@
     ["import", "/import/"],
     ["Query Example", "/query-example/"],
     ["errors", "/errors/"],
-    ["off-by-one", "/off-by-one/"],
-    ["invalid-unicode", "/invalid-unicode/"]
+    ["off-by-one", "/off-by-one/"]
   ],
   "payees": [
     "BayBook",
@@ -828,12 +827,15 @@
   "user_queries": [
     {
       "date": "2016-01-01",
+      "links": [],
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
         "lineno": 11
       },
       "name": "fava",
-      "query_string": "journal"
+      "query_string": "journal",
+      "t": "Query",
+      "tags": []
     }
   ],
   "years": [
