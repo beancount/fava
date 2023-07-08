@@ -74,13 +74,21 @@ class DecimalFormatModule(FavaModule):
         if locale_option:
             locale = Locale.parse(locale_option)
 
-        dcontext = self.ledger.options["dcontext"]
-        assert isinstance(dcontext, DisplayContext)  # noqa: S101
         precisions: dict[str, int] = {}
-        for currency, ccontext in dcontext.ccontexts.items():
-            prec = ccontext.get_fractional(Precision.MOST_COMMON)
-            if prec is not None:
-                precisions[currency] = prec
+        if self.ledger.uro_options:
+            for (
+                currency,
+                currency_precision,
+            ) in self.ledger.uro_options.display_precisions.items():
+                precisions[currency] = currency_precision.common
+        else:
+            dcontext = self.ledger.options["dcontext"]
+            assert isinstance(dcontext, DisplayContext)  # noqa: S101
+            for currency, ccontext in dcontext.ccontexts.items():
+                prec = ccontext.get_fractional(Precision.MOST_COMMON)
+                if prec is not None:
+                    precisions[currency] = prec
+
         precisions.update(self.ledger.commodities.precisions)
 
         self._locale = locale
