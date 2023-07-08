@@ -38,32 +38,6 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "__duplicate__": {
-        "date": "2017-02-14",
-        "flag": "*",
-        "links": [],
-        "meta": {
-          "__tolerances__": { "EUR": 0.005 },
-          "filename": "TEST_DATA_DIR/import.beancount",
-          "lineno": 8
-        },
-        "narration": " BANKOMAT  00000483 K2 UM 11:56",
-        "payee": "",
-        "postings": [
-          {
-            "account": "Assets:Checking",
-            "cost": null,
-            "flag": null,
-            "meta": {
-              "filename": "TEST_DATA_DIR/import.beancount",
-              "lineno": 9
-            },
-            "price": null,
-            "units": { "currency": "EUR", "number": -100.0 }
-          }
-        ],
-        "tags": []
-      },
       "__source__": "ATXYZ123400000;1;2017-02-14;2017-02-14;2017-02-14-11.57.44.235044;;EUR;-100,00;Bankomat; BANKOMAT  00000483 K2 UM 11:56;4.467,89",
       "filename": "TEST_DATA_DIR/import.csv",
       "lineno": 0
