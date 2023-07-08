@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Mapping
 from decimal import Decimal
 from re import Pattern
 from typing import TYPE_CHECKING
@@ -29,7 +30,6 @@ except ImportError:  # pragma: no cover
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
-    from collections.abc import Mapping
     from datetime import date
 
     from fava.core import FilteredLedger
@@ -44,6 +44,8 @@ ZERO = Decimal()
 
 def _enc_hook(o: object) -> object:
     """Specific serialisation for data types unknown to msgspec."""
+    if isinstance(o, Mapping):
+        return dict(o)
     if isinstance(o, Pattern):
         return o.pattern
     if isinstance(o, Markup):
