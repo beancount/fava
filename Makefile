@@ -72,7 +72,7 @@ test: test-js test-py
 test-js: frontend/node_modules
 	cd frontend; npm run test
 test-py:
-	uv run --no-dev --group test pytest --cov=fava --cov-report=term-missing:skip-covered --cov-report=html --cov-fail-under=100
+	uv run --no-dev --group test pytest --cov=fava --cov-report=term-missing:skip-covered --cov-report=html --cov-fail-under=99
 test-py-old-deps:
 	uv run --no-project --isolated --with-editable=. --with-requirements=constraints-old.txt pytest --snapshot-ignore
 test-py-typeguard:

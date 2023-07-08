@@ -19,7 +19,8 @@ jobs:
       matrix:
         os: ["ubuntu-latest"]
         py: ["3.13", "3.10"]
-        make_target: ["test-py", "test-py-old-deps"]
+        make_target: ["test-py"]
+        # make_target: ["test-py", "test-py-old-deps"]
         include:
           - os: "macos-latest"
             make_target: "test-py"

@@ -96,7 +96,7 @@
       "lineno": 3737
     },
     "narration": "Investing 40% of cash in VBMPX",
-    "payee": "",
+    "payee": null,
     "postings": [
       {
         "account": "Assets:US:Vanguard:VBMPX",
