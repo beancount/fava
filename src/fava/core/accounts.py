@@ -58,7 +58,10 @@ def uptodate_status(
     """
     for txn_posting in reversed(txn_postings):
         if isinstance(txn_posting, Balance):
-            return "red" if txn_posting.diff_amount else "green"
+            # diff_amount is missing in uromyces
+            return (
+                "red" if getattr(txn_posting, "diff_amount", None) else "green"
+            )
         if (
             isinstance(txn_posting, TransactionPosting)
             and txn_posting.transaction.flag != FLAG_UNREALIZED
