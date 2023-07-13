@@ -1,0 +1,38 @@
+name: Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: ["*"]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Publish Docker image (latest)
+      if: github.ref_type != 'tag'
+      run: |
+          docker build contrib/docker --tag ghcr.io/beancount/fava:latest
+          docker push ghcr.io/beancount/fava:latest
+
+    - name: Set release version
+      if: github.ref_type == 'tag'
+      id: release
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+    - name: Publish Docker image (tag)
+      if: github.ref_type == 'tag'
+      run: |
+          docker build contrib/docker --tag ghcr.io/beancount/fava:${{ steps.release.outputs.tag }}
+          docker push ghcr.io/beancount/fava:${{ steps.release.outputs.tag }}
