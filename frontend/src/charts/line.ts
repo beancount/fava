@@ -33,10 +33,10 @@ export function balances(json: unknown): Result<LineChart, string> {
   }
   const parsedData = res.value;
   const groups = new Map<string, LineChartDatum[]>();
-  for (const { date: date_, balance } of parsedData) {
+  for (const { date: date_val, balance } of parsedData) {
     Object.entries(balance).forEach(([currency, value]) => {
       const group = groups.get(currency);
-      const datum = { date: date_, value, name: currency };
+      const datum = { date: date_val, value, name: currency };
       if (group) {
         group.push(datum);
       } else {

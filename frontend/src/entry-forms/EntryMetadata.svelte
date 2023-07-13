@@ -11,7 +11,7 @@
   );
 
   function removeMetadata(metakey: string) {
-    const { [metakey]: _m, ...rest } = meta;
+    const { [metakey]: ignored, ...rest } = meta;
     meta = rest;
   }
 
@@ -43,7 +43,9 @@
     <button
       type="button"
       class="muted round remove-row"
-      on:click={() => removeMetadata(metakey)}
+      on:click={() => {
+        removeMetadata(metakey);
+      }}
       tabindex={-1}
     >
       ×

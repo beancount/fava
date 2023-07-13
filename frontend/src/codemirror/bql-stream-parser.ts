@@ -21,7 +21,7 @@ export const bqlStreamParser: StreamParser<unknown> = {
     if (stream.match(string)) {
       return "string";
     }
-    if (stream.match(date) || stream.match(decimal) || stream.match(integer)) {
+    if (stream.match(date) ?? stream.match(decimal) ?? stream.match(integer)) {
       return "number";
     }
     if (stream.match(/\w+/)) {

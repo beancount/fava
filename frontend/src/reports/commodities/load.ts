@@ -4,7 +4,16 @@ import { domHelpers } from "../../charts/tooltip";
 import { day } from "../../format";
 import { getURLFilters } from "../../stores/filters";
 
-export const load = (url: URL) =>
+export const load = (
+  url: URL
+): Promise<{
+  commodities: {
+    base: string;
+    quote: string;
+    prices: [Date, number][];
+  }[];
+  charts: NamedFavaChart[];
+}> =>
   get("commodities", getURLFilters(url)).then((commodities) => {
     const charts: NamedFavaChart[] = commodities.map(
       ({ base, quote, prices }) => {

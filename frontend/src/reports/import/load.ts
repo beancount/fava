@@ -49,7 +49,9 @@ export function preprocessData(
   });
 }
 
-export const load = () =>
+export const load = (): Promise<{
+  data: ProcessedImportableFile[];
+}> =>
   get("imports", undefined)
     .then(preprocessData)
     .then((data) => ({ data }));

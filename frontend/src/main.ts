@@ -81,7 +81,9 @@ function pollForChanges(): void {
       if (store_get(fava_options).auto_reload) {
         router.reload();
       } else {
-        get("errors").then((v) => errors.set(v), log_error);
+        get("errors").then((v) => {
+          errors.set(v);
+        }, log_error);
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
         });

@@ -1,7 +1,18 @@
+import type { LanguageSupport } from "@codemirror/language";
+
 import { get } from "../../api";
 import { getBeancountLanguageSupport } from "../../codemirror/beancount";
 
-export const load = (url: URL) =>
+export const load = (
+  url: URL
+): Promise<{
+  source: {
+    source: string;
+    sha256sum: string;
+    file_path: string;
+  };
+  beancount_language_support: LanguageSupport;
+}> =>
   Promise.all([
     get("source", {
       filename: url.searchParams.get("file_path") ?? "",

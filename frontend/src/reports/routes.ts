@@ -35,12 +35,12 @@ export class Route<
   ) {}
 
   /** The title of this report. */
-  get title() {
+  get title(): string {
     return this.get_title();
   }
 
   /** Destroy any components that might be rendered by this route. */
-  destroy() {
+  destroy(): void {
     this.instance?.component.$destroy();
     this.instance = undefined;
   }

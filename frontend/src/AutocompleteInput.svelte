@@ -131,7 +131,9 @@
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <li
           class:selected={i === index}
-          on:mousedown={(ev) => mousedown(ev, suggestion)}
+          on:mousedown={(ev) => {
+            mousedown(ev, suggestion);
+          }}
         >
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html innerHTML}

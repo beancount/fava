@@ -2,11 +2,11 @@ ci:
     skip: ["eslint"]
 repos:
     - repo: https://github.com/psf/black
-      rev: 23.3.0
+      rev: 23.7.0
       hooks:
           - id: black
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.0.277
+      rev: v0.0.278
       hooks:
           - id: ruff
     - repo: local
@@ -28,7 +28,7 @@ repos:
             require_serial: true
             additional_dependencies:
                 - "stylelint@15.10.1"
-                - "stylelint-config-recess-order@4.2.0"
+                - "stylelint-config-recess-order@4.3.0"
                 - "stylelint-config-standard@34.0.0"
                 - "postcss-html@1.5.0"
           - id: eslint

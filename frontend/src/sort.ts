@@ -116,7 +116,9 @@ export function sortableJournal(ol: HTMLOListElement): void {
 
     const sort = (order: SortOrder) => {
       // update displayed sort order
-      headers.forEach((el) => el.removeAttribute("data-order"));
+      headers.forEach((el) => {
+        el.removeAttribute("data-order");
+      });
       header.setAttribute("data-order", order);
       // sort elements
       sortElements(
@@ -143,7 +145,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
 /**
  * A svelte action to turn a table into a sortable table.
  */
-export function sortableTable(el: HTMLTableElement) {
+export function sortableTable(el: HTMLTableElement): void {
   const body = el.tBodies.item(0);
   if (!el.tHead || !body) {
     return;

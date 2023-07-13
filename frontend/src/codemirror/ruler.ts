@@ -1,9 +1,15 @@
+import type { ViewUpdate } from "@codemirror/view";
 import { ViewPlugin } from "@codemirror/view";
 
 /**
  * This CodeMirror view plugin creates a ruler at (before) the given column.
  */
-export const rulerPlugin = (column: number) =>
+export const rulerPlugin = (
+  column: number
+): ViewPlugin<{
+  update(update: ViewUpdate): void;
+  destroy(): void;
+}> =>
   ViewPlugin.define((view) => {
     const ruler = view.dom.appendChild(document.createElement("div"));
     ruler.style.position = "absolute";

@@ -41,7 +41,9 @@
     }
 
     return {
-      destroy: () => document.removeEventListener("keydown", keydown),
+      destroy: () => {
+        document.removeEventListener("keydown", keydown);
+      },
     };
   }
 </script>

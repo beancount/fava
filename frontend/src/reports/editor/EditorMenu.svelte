@@ -40,7 +40,9 @@
     <AppMenuItem name={_("File")}>
       {#each sources as source}
         <AppMenuSubItem
-          action={() => goToFileAndLine(source)}
+          action={() => {
+            goToFileAndLine(source);
+          }}
           selected={source === file_path}
         >
           {source}
@@ -70,7 +72,9 @@
         {#each insertEntryOptions as opt}
           <AppMenuSubItem
             title={`${opt.filename}:${opt.lineno}`}
-            action={() => goToFileAndLine(opt.filename, opt.lineno - 1)}
+            action={() => {
+              goToFileAndLine(opt.filename, opt.lineno - 1);
+            }}
           >
             {opt.re}
             <span slot="right">{opt.date}</span>

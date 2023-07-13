@@ -5,7 +5,19 @@ import type { NamedFavaChart } from "../../charts";
 import { _, format } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 
-export const load = (url: URL) =>
+export const load = (
+  url: URL
+): Promise<{
+  charts: NamedFavaChart[];
+  groups: [
+    string,
+    {
+      type: string;
+      description: string;
+      date: Date;
+    }[]
+  ][];
+}> =>
   get("events", getURLFilters(url)).then((events) => {
     const groups = [...group(events, (e) => e.type)];
 

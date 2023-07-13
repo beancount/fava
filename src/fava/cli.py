@@ -14,9 +14,7 @@ from fava.application import create_app
 from fava.util import simple_wsgi
 
 
-@click.command(  # type: ignore[arg-type]
-    context_settings={"auto_envvar_prefix": "FAVA"}
-)
+@click.command(context_settings={"auto_envvar_prefix": "FAVA"})
 @click.argument(
     "filenames",
     nargs=-1,
@@ -146,4 +144,4 @@ def main(  # noqa: PLR0912
 # needed for pyinstaller:
 if __name__ == "__main__":  # pragma: no cover
     # pylint: disable=no-value-for-parameter
-    main()  # type: ignore[misc]
+    main()

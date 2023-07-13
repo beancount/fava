@@ -50,7 +50,7 @@ async function getExt(name: string): Promise<ExtensionModule> {
 /**
  * On page load, run check if the new page is an extension report page and run hooks.
  */
-export function handleExtensionPageLoad() {
+export function handleExtensionPageLoad(): void {
   const exts = store_get(extensions).filter((e) => e.has_js_module);
   for (const { name } of exts) {
     // Run the onPageLoad handler for all pages.

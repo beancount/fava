@@ -85,7 +85,9 @@
   <slot />
   <button
     type="button"
-    on:click={() => showCharts.update((v) => !v)}
+    on:click={() => {
+      showCharts.update((v) => !v);
+    }}
     class:closed={!$showCharts}
     class="toggle-chart"
   />

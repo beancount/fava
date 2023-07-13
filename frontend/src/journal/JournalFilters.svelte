@@ -72,7 +72,9 @@
       title={title ?? format(toggleText, { type: button_text })}
       use:keyboardShortcut={shortcut}
       class:inactive={!active(type, supertype)}
-      on:click={() => toggle(type)}
+      on:click={() => {
+        toggle(type);
+      }}
     >
       {button_text}
     </button>

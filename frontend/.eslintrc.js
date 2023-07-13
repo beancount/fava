@@ -1,26 +1,39 @@
 const OFF = 0;
+const ON = "error";
 
 const airbnbConfigOverrides = {
   "max-classes-per-file": OFF,
-  "no-param-reassign": ["error", { props: false }],
+  "no-param-reassign": [ON, { props: false }],
   "no-restricted-syntax": [
-    "error",
+    ON,
     "ForInStatement",
     "LabelStatement",
     "WithStatement",
   ],
   "no-underscore-dangle": OFF,
-  "import/extensions": OFF,
-  "import/no-unresolved": OFF,
   "import/prefer-default-export": OFF,
-  "@typescript-eslint/naming-convention": OFF,
+  "@typescript-eslint/naming-convention": [
+    ON,
+    {
+      selector: "variable",
+      format: ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
+    },
+    {
+      selector: "function",
+      format: ["camelCase", "PascalCase", "snake_case"],
+    },
+    {
+      selector: "typeLike",
+      format: ["PascalCase"],
+    },
+  ],
 };
 
 // Sort import statements and members alphabetically.
 const sortImports = {
-  "sort-imports": ["warn", { ignoreDeclarationSort: true, ignoreCase: true }],
+  "sort-imports": [ON, { ignoreDeclarationSort: true, ignoreCase: true }],
   "import/order": [
-    "warn",
+    ON,
     {
       "newlines-between": "always",
       alphabetize: { order: "asc", caseInsensitive: true },
@@ -34,9 +47,9 @@ module.exports = {
     "airbnb-base",
     "airbnb-typescript/base",
     "plugin:svelte/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:svelte/prettier",
     "prettier",
   ],
@@ -50,8 +63,9 @@ module.exports = {
   rules: {
     ...airbnbConfigOverrides,
     ...sortImports,
-    "@typescript-eslint/consistent-type-imports": "warn",
-    curly: ["error", "all"],
+    "@typescript-eslint/consistent-type-imports": ON,
+    "@typescript-eslint/explicit-module-boundary-types": ON,
+    curly: [ON, "all"],
   },
   overrides: [
     {
@@ -61,19 +75,14 @@ module.exports = {
         parser: "@typescript-eslint/parser",
       },
       rules: {
-        "svelte/button-has-type": 1,
-        "svelte/valid-compile": OFF,
-        // this seems to have a few false positives
-        "svelte/no-unused-svelte-ignore": OFF,
+        "svelte/button-has-type": ON,
         "no-self-assign": OFF,
         "no-undef-init": OFF,
-        "import/first": OFF,
         "import/no-mutable-exports": OFF,
         "@typescript-eslint/no-unsafe-argument": OFF,
         "@typescript-eslint/no-unsafe-assignment": OFF,
         "@typescript-eslint/no-unsafe-call": OFF,
         "@typescript-eslint/no-unsafe-member-access": OFF,
-        "@typescript-eslint/no-misused-promises": OFF,
         // Has some false positives in Svelte files were we have if()
         // checks to trigger re-computations:
         "@typescript-eslint/no-unnecessary-condition": OFF,

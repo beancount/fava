@@ -40,7 +40,9 @@ function showTooltips(): () => void {
     }
   });
   return (): void => {
-    removes.forEach((r) => r());
+    removes.forEach((r) => {
+      r();
+    });
   };
 }
 

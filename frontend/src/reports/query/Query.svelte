@@ -123,7 +123,9 @@
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <summary
         class:inactive={!result && !error}
-        on:click={() => click(history_item)}
+        on:click={() => {
+          click(history_item);
+        }}
       >
         <ReadonlyQueryEditor value={history_item} error={!!error} />
         <span class="spacer" />

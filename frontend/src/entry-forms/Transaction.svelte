@@ -141,7 +141,9 @@
       date={entry.date}
       add={addPosting}
       move={movePosting}
-      remove={() => removePosting(posting)}
+      remove={() => {
+        removePosting(posting);
+      }}
     />
   {/each}
 </div>

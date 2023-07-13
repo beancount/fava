@@ -48,7 +48,9 @@
       });
       changed = false;
       cm.focus();
-      get("errors").then((v) => errors.set(v), log_error);
+      get("errors").then((v) => {
+        errors.set(v);
+      }, log_error);
     } catch (error) {
       notify_err(error, (e) => e.message);
     } finally {

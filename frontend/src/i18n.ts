@@ -8,6 +8,7 @@ const validator = record(string);
 /**
  * Translate the given string.
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function _(text: string): string {
   if (translations === undefined) {
     const res = getScriptTagValue("#translations", validator);

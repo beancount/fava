@@ -73,7 +73,7 @@ export class FavaJournal extends HTMLElement {
 
   unsubscribe?: () => void;
 
-  connectedCallback() {
+  connectedCallback(): void {
     const ol = this.querySelector("ol");
     if (!ol) {
       throw new Error("fava-journal is missing its <ol>");

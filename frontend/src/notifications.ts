@@ -46,7 +46,7 @@ export function notify(
 /**
  * Notify the user about an error and log to console.
  */
-export function notify_err(error: unknown, msg: (e: Error) => string) {
+export function notify_err(error: unknown, msg: (e: Error) => string): void {
   if (error instanceof Error) {
     notify(msg(error), "error");
   }

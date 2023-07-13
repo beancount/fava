@@ -48,7 +48,9 @@
     <tr>
       {#each headers as header, index}
         <th
-          on:click={() => setSort(index)}
+          on:click={() => {
+            setSort(index);
+          }}
           data-sort
           data-order={index === sortColumn ? sortOrder : null}
         >
