@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v1.25 (2023-07-17)
+------------------
+
+With this release, extensions can now ship Javascript code to run in the
+frontend. The editor in Fava now uses a tree-sitter grammar to obtain a full
+parsed syntax tree, which makes editor functionality more maintainable and
+should improve the autocompletion. The Flask WSGI app is now created using the
+application factory pattern - users who use the Fava WSGI app directly should
+switch from `fava.application.app` to the `create_app` function in
+`fava.application`. This release also drops support for Python 3.7 and contains
+a couple of minor fixes and changes, in particular various styling fixes.
+
 v1.24 (2023-02-21)
 ------------------
 
