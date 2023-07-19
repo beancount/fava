@@ -9,5 +9,5 @@ export const bql = new LanguageSupport(
   bqlLanguage,
   bqlLanguage.data.of({
     autocomplete: bqlCompletion,
-  })
+  }),
 );

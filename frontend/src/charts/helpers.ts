@@ -41,7 +41,7 @@ export function filterTicks(domain: string[], count: number): string[] {
 export function hclColorRange(
   count: number,
   chroma = 45,
-  luminance = 70
+  luminance = 70,
 ): string[] {
   const offset = 270;
   const delta = 360 / count;
@@ -64,11 +64,11 @@ export const colors15 = hclColorRange(15, 30, 80);
 export const scatterplotScale = scaleOrdinal(colors10);
 
 export const treemapScale = derived(accounts, (accounts_val) =>
-  scaleOrdinal(colors15).domain(accounts_val)
+  scaleOrdinal(colors15).domain(accounts_val),
 );
 
 export const sunburstScale = derived(accounts, (accounts_val) =>
-  scaleOrdinal(colors10).domain(accounts_val)
+  scaleOrdinal(colors10).domain(accounts_val),
 );
 
 export const currenciesScale = derived(
@@ -77,5 +77,5 @@ export const currenciesScale = derived(
     scaleOrdinal(colors10).domain([
       ...operating_currency_val,
       ...currencies_sorted_val,
-    ])
+    ]),
 );

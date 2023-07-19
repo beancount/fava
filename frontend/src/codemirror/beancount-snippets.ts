@@ -10,7 +10,7 @@ export const beancountSnippets: () => readonly Completion[] = () => {
       `${today} #{*} "#{}" "#{}"\n  #{Account:A}  #{Amount}\n  #{Account:B}`,
       {
         label: `${today} * transaction`,
-      }
+      },
     ),
   ];
 };

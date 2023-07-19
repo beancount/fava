@@ -18,7 +18,7 @@ function escape(value: string): string {
  */
 function addFilter(value: string): void {
   fql_filter.update((fql_filter_val) =>
-    fql_filter_val ? `${fql_filter_val} ${value}` : value
+    fql_filter_val ? `${fql_filter_val} ${value}` : value,
   );
 }
 

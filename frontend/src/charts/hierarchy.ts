@@ -50,7 +50,7 @@ const hierarchy_validator = object({
 
 export function hierarchy(
   json: unknown,
-  { currencies }: ChartContext
+  { currencies }: ChartContext,
 ): Result<HierarchyChart, string> {
   const res = hierarchy_validator(json);
   if (!res.success) {

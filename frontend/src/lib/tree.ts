@@ -21,7 +21,7 @@ export type TreeNode<S> = S & { children: TreeNode<S>[] };
 export function stratify<T, S = null>(
   data: Iterable<T>,
   id: (datum: T) => string,
-  init: (name: string, datum?: T) => S
+  init: (name: string, datum?: T) => S,
 ): TreeNode<S> {
   const root: TreeNode<S> = { children: [], ...init("") };
   const map = new Map<string, TreeNode<S>>();

@@ -17,8 +17,8 @@ export const ctx = derived(
     const currencyFormatters = Object.fromEntries(
       Object.entries(p).map(
         ([currency, prec]) =>
-          [currency, localeFormatter(f.locale, prec)] as const
-      )
+          [currency, localeFormatter(f.locale, prec)] as const,
+      ),
     );
     const formatWithCurrency = (n: number, c: string) => {
       const currencyFormatter = currencyFormatters[c];
@@ -33,11 +33,11 @@ export const ctx = derived(
           short: (n) => formatterShort(n),
           amount: (n, c) => `${formatWithCurrency(n, c)} ${c}`,
         };
-  }
+  },
 );
 
 export const currentDateFormat = derived(interval, (val) => dateFormat[val]);
 export const currentTimeFilterDateFormat = derived(
   interval,
-  (val) => timeFilterDateFormat[val]
+  (val) => timeFilterDateFormat[val],
 );

@@ -37,7 +37,7 @@ export const ledgerDataValidator = object({
       uptodate_status: optional(string),
       last_entry: optional(object({ date, entry_hash: string })),
       balance_string: optional(string),
-    })
+    }),
   ),
   base_url: string,
   currencies: array(string),
@@ -51,7 +51,7 @@ export const ledgerDataValidator = object({
     locale: union(string, constant(null)),
     uptodate_indicator_grey_lookback_days: number,
     insert_entry: array(
-      object({ date: string, filename: string, lineno: number, re: string })
+      object({ date: string, filename: string, lineno: number, re: string }),
     ),
     use_external_editor: boolean,
   }),
@@ -76,7 +76,7 @@ export const ledgerDataValidator = object({
       name: string,
       report_title: optional(string),
       has_js_module: boolean,
-    })
+    }),
   ),
   sidebar_links: array(tuple([string, string])),
   other_ledgers: array(tuple([string, string])),
@@ -94,9 +94,9 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
         importer_name: string,
         date: optional(string),
         name: optional(string),
-      })
+      }),
     ),
-  })
+  }),
 );
 
 export const getAPIValidators = {
@@ -113,7 +113,7 @@ export const getAPIValidators = {
       base: string,
       quote: string,
       prices: array(tuple([date, number])),
-    })
+    }),
   ),
   documents: array(object({ account: string, filename: string, date: string })),
   errors: array(error_validator),

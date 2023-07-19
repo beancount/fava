@@ -4,7 +4,7 @@ import { get } from "../../api";
 import { getBeancountLanguageSupport } from "../../codemirror/beancount";
 
 export const load = (
-  url: URL
+  url: URL,
 ): Promise<{
   source: {
     source: string;

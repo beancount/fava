@@ -7,19 +7,19 @@ test("tree: stratify", () => {
   const empty = stratify(
     [],
     () => "",
-    () => null
+    () => null,
   );
   assert.equal(empty, { children: [] });
   const emptyWithData = stratify(
     [],
     () => "",
-    () => ({ test: "test" })
+    () => ({ test: "test" }),
   );
   assert.equal(emptyWithData, { children: [], test: "test" });
   const tree = stratify(
     ["aName:cName", "aName", "aName:bName"],
     (s) => s,
-    (name) => ({ name })
+    (name) => ({ name }),
   );
 
   assert.equal(tree, {
@@ -38,7 +38,7 @@ test("tree: stratify", () => {
     stratify(
       ["Assets:Cash"],
       (s) => s,
-      (name) => ({ name })
+      (name) => ({ name }),
     ),
     {
       children: [
@@ -48,7 +48,7 @@ test("tree: stratify", () => {
         },
       ],
       name: "",
-    }
+    },
   );
 });
 

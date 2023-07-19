@@ -283,7 +283,7 @@ class Router extends Events<"page-loaded"> {
           link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
 
         this.navigate(href);
-      }
+      },
     );
   }
 
@@ -307,7 +307,7 @@ function syncToURL<T extends boolean | string>(
   store: Writable<T>,
   name: string,
   defaultValue: T,
-  shouldLoad = true
+  shouldLoad = true,
 ): void {
   store.subscribe((val: T) => {
     const newURL = new URL(window.location.href);

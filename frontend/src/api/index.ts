@@ -30,7 +30,7 @@ interface PutAPIInputs {
  */
 export async function put<T extends keyof PutAPIInputs>(
   endpoint: T,
-  body: PutAPIInputs[T]
+  body: PutAPIInputs[T],
 ): Promise<string> {
   const opts =
     body instanceof FormData
@@ -98,7 +98,7 @@ export async function get<T extends keyof GetAPIParams>(
 export async function moveDocument(
   filename: string,
   account: string,
-  new_name: string
+  new_name: string,
 ): Promise<boolean> {
   try {
     const msg = await get("move", { filename, account, new_name });

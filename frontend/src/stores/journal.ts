@@ -19,7 +19,7 @@ const defaultValue = [
 export const journalShow = localStorageSyncedStore(
   "journal-show",
   array(string),
-  () => defaultValue
+  () => defaultValue,
 );
 
 const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
@@ -28,5 +28,5 @@ const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
 export const journalSortOrder = localStorageSyncedStore(
   "journal-sort-order",
   tuple([string, union(constant("asc"), constant("desc"))]),
-  () => defaultSortOrder
+  () => defaultSortOrder,
 );

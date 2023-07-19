@@ -14,7 +14,7 @@ class FetchError extends Error {}
 /** Wrapper around fetch with some default options */
 export function fetch(
   input: string,
-  init: RequestInit = {}
+  init: RequestInit = {},
 ): Promise<Response> {
   return window.fetch(input, { credentials: "same-origin", ...init });
 }
@@ -35,7 +35,7 @@ async function handleJSON(response: Response): Promise<unknown> {
     throw new FetchError(
       typeof data.error === "string"
         ? data.error
-        : "Invalid response: missing error"
+        : "Invalid response: missing error",
     );
   }
   return data;
@@ -48,7 +48,7 @@ const response_validator = object({
 
 export async function fetchJSON(
   input: string,
-  init?: RequestInit
+  init?: RequestInit,
 ): Promise<unknown> {
   const res = await fetch(input, init).then(handleJSON);
   const parsed = response_validator(res);

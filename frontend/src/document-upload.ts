@@ -87,9 +87,9 @@ function drop(event: DragEvent, target: HTMLElement): void {
         (error) => {
           notify_err(
             error,
-            (e) => `Adding document metadata failed: ${e.message}`
+            (e) => `Adding document metadata failed: ${e.message}`,
           );
-        }
+        },
       );
     }
   }

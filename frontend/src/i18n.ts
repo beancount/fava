@@ -26,6 +26,6 @@ export function _(text: string): string {
 export function format(text: string, values: Record<string, string>): string {
   return text.replace(
     /%\(\w+\)s/g,
-    (match) => values[match.slice(2, -2)] ?? "MISSING"
+    (match) => values[match.slice(2, -2)] ?? "MISSING",
   );
 }

@@ -60,11 +60,11 @@ const props = [
     key: tags.propertyName,
     bool: tags.bool,
     "PUSHTAG POPTAG PUSHMETA POPMETA OPTION PLUGIN INCLUDE": tags.standard(
-      tags.string
+      tags.string,
     ),
   }),
   languageDataProp.add((type) =>
-    type.isTop ? beancountLanguageFacet : undefined
+    type.isTop ? beancountLanguageFacet : undefined,
   ),
 ];
 
@@ -86,8 +86,8 @@ export async function getBeancountLanguageSupport(): Promise<LanguageSupport> {
       beancountLanguageFacet,
       new LezerTSParser(ts_parser, props, "beancount_file"),
       [],
-      "beancount"
+      "beancount",
     ),
-    beancountLanguageSupportExtensions
+    beancountLanguageSupportExtensions,
   );
 }

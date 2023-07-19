@@ -137,7 +137,7 @@ function getKeySpecKey(keySpec: KeySpec): string {
  */
 export function bindKey(
   keySpec: KeySpec,
-  handler: KeyboardShortcutAction
+  handler: KeyboardShortcutAction,
 ): () => void {
   const key = getKeySpecKey(keySpec);
   const sequence = key.split(" ");
@@ -164,7 +164,7 @@ export function bindKey(
  */
 export function keyboardShortcut(
   node: HTMLElement,
-  key?: string
+  key?: string,
 ): { destroy?: () => void } {
   if (!key) {
     return {};

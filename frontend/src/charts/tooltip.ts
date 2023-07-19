@@ -40,7 +40,7 @@ export type TooltipContent = (HTMLElement | Text)[];
  */
 export function followingTooltip(
   node: SVGElement,
-  text: () => TooltipContent
+  text: () => TooltipContent,
 ): { destroy: () => void; update: (t: () => TooltipContent) => void } {
   let getter = text;
   /** Event listener to have the tooltip follow the mouse. */
@@ -68,7 +68,7 @@ export function followingTooltip(
 /** A function to find the closest node and the content to show in the tooltip. */
 export type TooltipFindNode = (
   x: number,
-  y: number
+  y: number,
 ) => [number, number, TooltipContent] | undefined;
 
 /**
@@ -81,7 +81,7 @@ export type TooltipFindNode = (
  */
 export function positionedTooltip(
   node: SVGGElement,
-  find: TooltipFindNode
+  find: TooltipFindNode,
 ): { destroy: () => void } {
   function mousemove(event: MouseEvent): void {
     const [xPointer, yPointer] = pointer(event);

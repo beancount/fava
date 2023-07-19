@@ -13,7 +13,7 @@ import type { Validator } from "./validation";
  */
 export function derived_array<S, T extends StrictEquality>(
   store: Readable<S>,
-  getter: (values: S) => T[]
+  getter: (values: S) => T[],
 ): Readable<T[]> {
   let val: T[] = [];
   return derived(
@@ -25,7 +25,7 @@ export function derived_array<S, T extends StrictEquality>(
         val = newVal;
       }
     },
-    val
+    val,
   );
 }
 
@@ -39,7 +39,7 @@ export function derived_array<S, T extends StrictEquality>(
 export function localStorageSyncedStore<T>(
   key: string,
   validator: Validator<T>,
-  init: () => T
+  init: () => T,
 ): Writable<T> {
   const fullKey = `fava-${key}`;
 

@@ -8,7 +8,7 @@ export default {
   onExtensionPageLoad() {
     console.log(
       "the page for the PortfolioList extension has loaded",
-      window.location.pathname
+      window.location.pathname,
     );
 
     const updateFilter = document.getElementById("portfolio-update-filter");

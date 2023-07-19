@@ -28,7 +28,7 @@ async function loadExtensionModule(name: string): Promise<ExtensionModule> {
     return mod.default;
   }
   throw new Error(
-    `Error importing module for extension ${name}: module must export "default" object`
+    `Error importing module for extension ${name}: module must export "default" object`,
   );
 }
 

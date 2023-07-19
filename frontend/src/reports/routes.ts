@@ -20,7 +20,7 @@ import QuerySvelte from "./query/Query.svelte";
 
 /** This class pairs the components and their load functions to use them in a type-safe way. */
 export class Route<
-  T extends Record<string, unknown> = Record<string, unknown>
+  T extends Record<string, unknown> = Record<string, unknown>,
 > {
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
@@ -31,7 +31,7 @@ export class Route<
     readonly report: string,
     private readonly Component: typeof SvelteComponent<T>,
     private readonly load: (url: URL) => Promise<T>,
-    private readonly get_title: () => string
+    private readonly get_title: () => string,
   ) {}
 
   /** The title of this report. */
@@ -92,7 +92,7 @@ const noload = () => Promise.resolve({});
  */
 export const frontend_routes: Route[] = [
   new Route("commodities", CommoditiesSvelte, load_commodities, () =>
-    _("Commodities")
+    _("Commodities"),
   ),
   new Route("documents", DocumentsSvelte, load_documents, () => _("Documents")),
   new Route("editor", EditorSvelte, load_editor, () => _("Editor")),

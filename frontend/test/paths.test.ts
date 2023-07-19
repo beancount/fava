@@ -23,19 +23,19 @@ test("get file extension", () => {
 test("detect account of document", () => {
   assert.is(
     true,
-    documentHasAccount("/home/Assets/Cash/document.pdf", "Assets:Cash")
+    documentHasAccount("/home/Assets/Cash/document.pdf", "Assets:Cash"),
   );
   assert.is(
     false,
-    documentHasAccount("/home/Assets/Test/Cash/document.pdf", "Assets:Cash")
+    documentHasAccount("/home/Assets/Test/Cash/document.pdf", "Assets:Cash"),
   );
   assert.is(
     true,
-    documentHasAccount("C:\\Assets\\Cash\\document.pdf", "Assets:Cash")
+    documentHasAccount("C:\\Assets\\Cash\\document.pdf", "Assets:Cash"),
   );
   assert.is(
     false,
-    documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash")
+    documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
   );
 });
 

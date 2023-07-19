@@ -5,12 +5,12 @@ import { boolean } from "../lib/validation";
 export const reloadAfterSavingEntrySlice = localStorageSyncedStore(
   "reload-after-saving-entry-slice",
   boolean,
-  () => true
+  () => true,
 );
 
 /** Whether to continue (and add another entry) after adding an entry in the AddEntry dialog. */
 export const addEntryContinue = localStorageSyncedStore(
   "add-entry-continue",
   boolean,
-  () => false
+  () => false,
 );

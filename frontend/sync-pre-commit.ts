@@ -24,9 +24,9 @@ const confValidator = object({
         object({
           language: optional(string),
           additional_dependencies: optional(array(string)),
-        })
+        }),
       ),
-    })
+    }),
   ),
 });
 
@@ -45,7 +45,7 @@ async function main() {
           const currentDep = `${name}@${version}`;
           if (dep !== currentDep) {
             console.log(
-              `Updating dependency '${name}' from '${dep}' to '${currentDep}'.`
+              `Updating dependency '${name}' from '${dep}' to '${currentDep}'.`,
             );
             newConfig = newConfig.replace(`"${dep}"`, `"${currentDep}"`);
           }

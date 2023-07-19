@@ -23,11 +23,11 @@ import { balances } from "./line";
 import type { FavaChart } from "./index";
 
 const grouped_chart_validator = array(
-  object({ group: string, balance: record(number) })
+  object({ group: string, balance: record(number) }),
 );
 export function parseGroupedQueryChart(
   json: unknown,
-  { currencies }: ChartContext
+  { currencies }: ChartContext,
 ): Result<HierarchyChart, string> {
   const grouped = grouped_chart_validator(json);
   if (!grouped.success) {
@@ -36,7 +36,7 @@ export function parseGroupedQueryChart(
   const root: AccountHierarchyDatum = stratify(
     grouped.value,
     (d) => d.group,
-    (account, d) => ({ account, balance: d?.balance ?? {} })
+    (account, d) => ({ account, balance: d?.balance ?? {} }),
   );
   root.account = "(root)";
 
@@ -59,7 +59,7 @@ export function parseGroupedQueryChart(
  */
 export function parseQueryChart(
   json: unknown,
-  ctx: ChartContext
+  ctx: ChartContext,
 ): Result<FavaChart, string> {
   const tree = parseGroupedQueryChart(json, ctx);
   if (tree.success) {

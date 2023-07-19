@@ -35,7 +35,7 @@ export const accounts = derived_array(ledgerData, (val) => val.accounts);
 
 export const account_details = derived(
   ledgerData,
-  (val) => val.account_details
+  (val) => val.account_details,
 );
 /** The ranked array of all currencies. */
 export const currencies = derived_array(ledgerData, (val) => val.currencies);
@@ -50,17 +50,17 @@ export const years = derived_array(ledgerData, (val) => val.years);
 
 /** The sorted array of operating currencies. */
 export const operating_currency = derived_array(ledgerData, (val) =>
-  val.options.operating_currency.sort()
+  val.options.operating_currency.sort(),
 );
 /** The customized currency conversion select list */
 export const conversion_currencies = derived_array(
   ledgerData,
-  (val) => val.fava_options.conversion_currencies
+  (val) => val.fava_options.conversion_currencies,
 );
 
 /** The sorted array of all used currencies. */
 export const currencies_sorted = derived_array(currencies, (val) =>
-  [...val].sort()
+  [...val].sort(),
 );
 
 /** The Beancount errors. */

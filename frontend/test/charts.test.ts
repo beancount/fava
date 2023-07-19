@@ -66,7 +66,7 @@ test("handle data for query charts", () => {
       .get("EUR")
       ?.descendants()
       .map((n) => n.data.account),
-    ["(root)", "Assets", "Assets:Cash"]
+    ["(root)", "Assets", "Assets:Cash"],
   );
 });
 

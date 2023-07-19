@@ -18,10 +18,13 @@ const operatingCurrenciesWithConversion = derived(
     currencies_val.includes(conversion_val) &&
     !operating_currency_val.includes(conversion_val)
       ? [...operating_currency_val, conversion_val]
-      : operating_currency_val
+      : operating_currency_val,
 );
 
 export const chartContext: Readable<ChartContext> = derived(
   [operatingCurrenciesWithConversion, currentDateFormat],
-  ([currencies_val, dateFormat]) => ({ currencies: currencies_val, dateFormat })
+  ([currencies_val, dateFormat]) => ({
+    currencies: currencies_val,
+    dateFormat,
+  }),
 );

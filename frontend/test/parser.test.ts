@@ -13,7 +13,7 @@ async function load(): Promise<TSParser> {
     "..",
     "src",
     "codemirror",
-    "tree-sitter-beancount.wasm"
+    "tree-sitter-beancount.wasm",
   );
   const lang = await TSParser.Language.load(path);
   const parser = new TSParser();
@@ -28,7 +28,7 @@ test("parse a single price directive", async () => {
   assert.snapshot(
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     tree.toString(),
-    "beancount_file(price(date,PRICE,currency,amount(number,currency)))"
+    "beancount_file(price(date,PRICE,currency,amount(number,currency)))",
   );
 });
 

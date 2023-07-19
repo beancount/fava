@@ -6,7 +6,7 @@ import { _, format } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 
 export const load = (
-  url: URL
+  url: URL,
 ): Promise<{
   charts: NamedFavaChart[];
   groups: [
@@ -15,7 +15,7 @@ export const load = (
       type: string;
       description: string;
       date: Date;
-    }[]
+    }[],
   ][];
 }> =>
   get("events", getURLFilters(url)).then((events) => {
@@ -28,7 +28,7 @@ export const load = (
           name: format(_("Event: %(type)s"), { type }),
           type: "scatterplot",
           data,
-        })
+        }),
       ),
     ];
 

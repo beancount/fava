@@ -77,7 +77,7 @@ type EditorAndAction = [EditorView, (el: HTMLElement) => void];
 
 function setup(
   value: string | undefined,
-  extensions: Extension[]
+  extensions: Extension[],
 ): EditorAndAction {
   const view = new EditorView({
     state: EditorState.create({ doc: value, extensions }),
@@ -123,7 +123,7 @@ export function initBeancountEditor(
   value: string,
   onDocChanges: (s: EditorState) => void,
   commands: KeyBinding[],
-  beancount: LanguageSupport
+  beancount: LanguageSupport,
 ): EditorAndAction {
   const { indent, currency_column } = get(fava_options);
   return setup(value, [
@@ -158,7 +158,7 @@ export function initQueryEditor(
   value: string | undefined,
   onDocChanges: (s: EditorState) => void,
   _placeholder: string,
-  submit: () => void
+  submit: () => void,
 ): EditorAndAction {
   return setup(value, [
     bql,

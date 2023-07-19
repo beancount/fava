@@ -44,7 +44,7 @@ export interface BarChart {
   tooltipText: (
     c: FormatterContext,
     d: BarChartDatum,
-    e: string
+    e: string,
   ) => TooltipContent;
 }
 
@@ -54,7 +54,7 @@ const bar_validator = array(
     budgets: record(number),
     balance: record(number),
     account_balances: record(record(number)),
-  })
+  }),
 );
 
 /** Calculate the currencies to use for the chart. */
@@ -63,7 +63,7 @@ function calculateCurrenciesToShow(
     budgets: Record<string, number>;
     balance: Record<string, number>;
   }[],
-  operatingCurrencies: string[]
+  operatingCurrencies: string[],
 ): string[] {
   // Count the usage of each currency in the data.
   const inData = rollup(
@@ -72,7 +72,7 @@ function calculateCurrenciesToShow(
       ...Object.entries(interval.balance),
     ]),
     (v) => v.length,
-    (r) => r[0]
+    (r) => r[0],
   );
 
   const toShow = [];
@@ -99,7 +99,7 @@ function calculateCurrenciesToShow(
  */
 export function bar(
   json: unknown,
-  ctx: ChartContext
+  ctx: ChartContext,
 ): Result<BarChart, string> {
   const res = bar_validator(json);
   if (!res.success) {
@@ -119,7 +119,9 @@ export function bar(
     account_balances: interval.account_balances,
   }));
   const accounts = Array.from(
-    new Set(parsedData.map((d) => [...Object.keys(d.account_balances)]).flat(2))
+    new Set(
+      parsedData.map((d) => [...Object.keys(d.account_balances)]).flat(2),
+    ),
   ).sort();
   const hasStackedData = accounts.length > 1;
 
@@ -131,7 +133,7 @@ export function bar(
         .value((obj, key) => obj.account_balances[key]?.[currency] ?? 0)
         .offset(stackOffsetDiverging)(bar_groups)
         .filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
-    ]
+    ],
   );
 
   return ok({
@@ -146,10 +148,10 @@ export function bar(
               a.budget
                 ? `${c.amount(a.value, a.currency)} / ${c.amount(
                     a.budget,
-                    a.currency
+                    a.currency,
                   )}`
-                : c.amount(a.value, a.currency)
-            )
+                : c.amount(a.value, a.currency),
+            ),
           );
           content.push(domHelpers.br());
         });

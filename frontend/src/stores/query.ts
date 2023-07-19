@@ -4,7 +4,7 @@ import { array, string } from "../lib/validation";
 export const query_shell_history = localStorageSyncedStore(
   "query-history",
   array(string),
-  () => []
+  () => [],
 );
 
 export function addToHistory(query: string): void {

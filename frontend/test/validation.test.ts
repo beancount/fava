@@ -66,7 +66,7 @@ test("validate object", () => {
   const val = object({ str: string, num: number });
   assert.equal(
     val({ str: "str", num: 1, extra: 1 }),
-    ok({ str: "str", num: 1 })
+    ok({ str: "str", num: 1 }),
   );
   assert.equal(val({ str: "str", num: 1 }), ok({ str: "str", num: 1 }));
   assert.is(false, val({ str: 1 }).success);

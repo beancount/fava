@@ -23,7 +23,7 @@ export type ValidationT<R> = R extends Validator<infer T> ? T : never;
  */
 export function defaultValue<T>(
   validator: Validator<T>,
-  value: T
+  value: T,
 ): SafeValidator<T> {
   return (json) => {
     const res = validator(json);
@@ -75,7 +75,7 @@ export const date: Validator<Date> = (json) => {
  * Validate a value to be equal to a constant value.
  */
 export function constant<T extends null | boolean | string | number>(
-  value: T
+  value: T,
 ): Validator<T> {
   return (json) =>
     json === value ? ok(json as T) : err("Expected a constant");
@@ -140,7 +140,7 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
  * Validator for a tuple of fixed length.
  */
 export function tuple<A, B>(
-  decoders: [Validator<A>, Validator<B>]
+  decoders: [Validator<A>, Validator<B>],
 ): Validator<[A, B]> {
   return (json) => {
     if (Array.isArray(json) && json.length === 2) {
@@ -188,7 +188,7 @@ export function object<T>(validators: {
             obj[key] = res.value;
           } else {
             return err(
-              `Validating object failed at key '${key}': ${res.value}`
+              `Validating object failed at key '${key}': ${res.value}`,
             );
           }
         }

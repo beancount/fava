@@ -14,7 +14,7 @@ export interface ScatterPlot {
 }
 
 const scatterplot_validator = array(
-  object({ type: string, date, description: string })
+  object({ type: string, date, description: string }),
 );
 
 export function scatterplot(json: unknown): Result<ScatterPlot, string> {

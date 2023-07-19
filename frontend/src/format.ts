@@ -12,7 +12,7 @@ import { timeFormat, utcFormat } from "d3-time-format";
  */
 export function localeFormatter(
   locale: string | null,
-  precision = 2
+  precision = 2,
 ): (num: number) => string {
   if (!locale) {
     return format(`.${precision}f`);

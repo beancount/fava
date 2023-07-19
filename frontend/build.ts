@@ -60,7 +60,7 @@ async function runBuild(dev: boolean) {
         },
         (err) => {
           console.error(err);
-        }
+        },
       );
     }, 200);
     chokidar

@@ -42,7 +42,7 @@ export class Events<T = string> {
     if (events) {
       this.events.set(
         event,
-        events.filter((c) => c !== callback)
+        events.filter((c) => c !== callback),
       );
     }
   }
@@ -71,7 +71,7 @@ export function delegate<T extends Event, C extends Element>(
   element: Element | Document,
   type: string,
   selector: string,
-  callback: (e: T, c: C) => void
+  callback: (e: T, c: C) => void,
 ): void {
   element.addEventListener(type, (event) => {
     let { target } = event;

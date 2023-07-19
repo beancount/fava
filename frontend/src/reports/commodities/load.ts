@@ -5,7 +5,7 @@ import { day } from "../../format";
 import { getURLFilters } from "../../stores/filters";
 
 export const load = (
-  url: URL
+  url: URL,
 ): Promise<{
   commodities: {
     base: string;
@@ -29,7 +29,7 @@ export const load = (
             domHelpers.em(day(d.date)),
           ],
         };
-      }
+      },
     );
     return { commodities, charts };
   });

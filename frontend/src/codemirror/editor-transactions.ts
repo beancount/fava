@@ -13,7 +13,7 @@ import type { BeancountError } from "../api/validators";
  */
 export function replaceContents(
   state: EditorState,
-  value: string
+  value: string,
 ): TransactionSpec {
   return {
     changes: { from: 0, to: state.doc.length, insert: value },
@@ -25,7 +25,7 @@ export function replaceContents(
  */
 export function scrollToLine(
   state: EditorState,
-  line: number
+  line: number,
 ): TransactionSpec {
   const linePos = state.doc.line(line);
   return {
@@ -39,7 +39,7 @@ export function scrollToLine(
  */
 export function setErrors(
   state: EditorState,
-  errors: BeancountError[]
+  errors: BeancountError[],
 ): TransactionSpec {
   const diagnostics = errors.map(({ source, message }): Diagnostic => {
     // Show errors without a line number on first line and ensure it is within the document.

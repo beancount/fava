@@ -20,7 +20,7 @@ export function getUrlPath(url: URL | Location): string | null {
 export function urlFor(
   report: string,
   params?: Record<string, string | number | undefined>,
-  update = true
+  update = true,
 ): string {
   const url = `${get(base_url)}${report}`;
   const urlParams = new URLSearchParams();

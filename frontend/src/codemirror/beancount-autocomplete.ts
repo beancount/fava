@@ -112,7 +112,7 @@ export const beancountCompletion: CompletionSource = (context) => {
     match(
       ["ERROR", "account"],
       ["BALANCE", "CLOSE", "OPEN", "PAD", "NOTE", "DOCUMENT"],
-      "date"
+      "date",
     ) ||
     // padding account
     match(["ERROR", "account"], "account", "PAD", "date")

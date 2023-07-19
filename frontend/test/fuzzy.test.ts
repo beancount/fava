@@ -32,7 +32,7 @@ test("fuzzy filter", () => {
       "nomatch",
       "asdf",
     ]),
-    ["asdfasdf", "asdf", "asdxf", "asxxdf"]
+    ["asdfasdf", "asdf", "asdxf", "asxxdf"],
   );
 });
 

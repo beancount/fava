@@ -20,17 +20,17 @@ export const hierarchyChartMode = localStorageSyncedStore<
 >(
   "hierarchy-chart-mode",
   union(constant("treemap"), constant("sunburst")),
-  () => "treemap"
+  () => "treemap",
 );
 export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   "line-chart-mode",
   union(constant("line"), constant("area")),
-  () => "line"
+  () => "line",
 );
 export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
   "bar-chart-mode",
   union(constant("stacked"), constant("single")),
-  () => "stacked"
+  () => "stacked",
 );
 export const chartCurrency = writable("");
 
@@ -47,9 +47,9 @@ const currencySuggestions = derived(
           ...operating_currency_val,
           ...currencies_sorted_val.filter(
             (c) =>
-              !operating_currency_val.includes(c) && iso4217currencies.has(c)
+              !operating_currency_val.includes(c) && iso4217currencies.has(c),
           ),
-        ]
+        ],
 );
 
 export const conversions = derived(
@@ -62,5 +62,5 @@ export const conversions = derived(
       currency,
       format(_("Converted to %(currency)s"), { currency }),
     ]),
-  ]
+  ],
 );

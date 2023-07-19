@@ -44,7 +44,7 @@ export class TreeTable extends HTMLElement {
 
       expandAllLink?.classList.toggle(
         "hidden",
-        !this.querySelectorAll(".toggled").length
+        !this.querySelectorAll(".toggled").length,
       );
     });
   }

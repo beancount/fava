@@ -50,7 +50,7 @@ function getValue(el: HTMLElement | null): string {
 export function sortFunc<T>(
   type: string | null,
   order: SortOrder,
-  getter: (e: T) => string
+  getter: (e: T) => string,
 ): (a: T, b: T) => number {
   const comparator = type === "num" ? numComparator : stringComparator;
   function func(a: T, b: T): number {
@@ -72,7 +72,7 @@ function sortElements<T extends Element, C extends HTMLElement>(
   elements: T[],
   selector: (e: T) => C | null,
   order: SortOrder,
-  type: string | null
+  type: string | null,
 ): void {
   const sortFunction = sortFunc(type, order, (a: T) => getValue(selector(a)));
   const fragment = document.createDocumentFragment();
@@ -127,7 +127,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
         (li: HTMLLIElement): HTMLElement | null =>
           li.querySelector(`.${headerClass}`),
         order,
-        type
+        type,
       );
     };
     if (name === initialColumn) {
@@ -169,7 +169,7 @@ export function sortableTable(el: HTMLTableElement): void {
         [...body.querySelectorAll("tr")],
         (tr: HTMLTableRowElement): HTMLElement | null => tr.cells.item(index),
         order,
-        type
+        type,
       );
     });
   });

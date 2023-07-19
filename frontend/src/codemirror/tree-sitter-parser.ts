@@ -29,7 +29,7 @@ const dummyPosition: TSParser.Point = { row: 0, column: 0 };
 function ts_edit(
   startIndex: number,
   oldEndIndex: number,
-  newEndIndex: number
+  newEndIndex: number,
 ): TSParser.Edit {
   return {
     startIndex,
@@ -75,7 +75,7 @@ class Parse implements PartialParse {
     readonly node_types: NodeType[],
     readonly input: Input,
     readonly fragments: readonly TreeFragment[],
-    readonly ranges: readonly { from: number; to: number }[]
+    readonly ranges: readonly { from: number; to: number }[],
   ) {
     if (
       ranges.length !== 1 ||
@@ -90,7 +90,7 @@ class Parse implements PartialParse {
   private get_tree_for_ts_cursor(
     ts_cursor: TSParser.TreeCursor,
     edit?: TSParser.Edit,
-    old_cursor?: TreeCursor
+    old_cursor?: TreeCursor,
   ): Tree {
     const { nodeTypeId, startIndex, endIndex } = ts_cursor;
     if (edit && endIndex < edit.startIndex && old_cursor?.tree) {
@@ -118,19 +118,19 @@ class Parse implements PartialParse {
   /** Convert the tree-sitter Tree to a Lezer tree, possibly reusing parts of an old one. */
   private convert_tree(
     ts_tree: TSParser.Tree,
-    change: ChangeDetails | null
+    change: ChangeDetails | null,
   ): Tree {
     const tree = this.get_tree_for_ts_cursor(
       ts_tree.rootNode.walk(),
       change?.edit,
-      change?.old_tree.cursor()
+      change?.old_tree.cursor(),
     );
     const tree_with_ts_tree_prop = new Tree(
       tree.type,
       tree.children,
       tree.positions,
       tree.length,
-      [[TSTreeProp, ts_tree]]
+      [[TSTreeProp, ts_tree]],
     );
     return tree_with_ts_tree_prop;
   }
@@ -169,7 +169,7 @@ class Parse implements PartialParse {
         "Unexpected tree length after edit - do a full parse",
         edit,
         edited_old_ts_tree.rootNode.endIndex,
-        this.input.length
+        this.input.length,
       );
       return null;
     }
@@ -185,7 +185,7 @@ class Parse implements PartialParse {
    */
   private static extend_change(
     change: ChangeDetails,
-    ts_tree: TSParser.Tree
+    ts_tree: TSParser.Tree,
   ): ChangeDetails {
     const { edit, edited_old_ts_tree } = change;
     const changed_ranges = edited_old_ts_tree.getChangedRanges(ts_tree);
@@ -194,7 +194,7 @@ class Parse implements PartialParse {
     const extended_edit = ts_edit(
       changed_ranges[0]?.startIndex ?? edit.startIndex,
       newEndIndex + (edit.oldEndIndex - edit.newEndIndex),
-      newEndIndex
+      newEndIndex,
     );
     return {
       ...change,
@@ -239,21 +239,21 @@ export class LezerTSParser extends Parser {
   constructor(
     readonly ts_parser: TSParser,
     props: NodePropSource[],
-    top_node: string
+    top_node: string,
   ) {
     super();
 
     // @ts-expect-error Type definitions seem to be incomplete and missing this attribute.
     const types = ts_parser.getLanguage().types as string[];
     this.node_types = types.map((name, id) =>
-      NodeType.define({ id, name, props, top: name === top_node })
+      NodeType.define({ id, name, props, top: name === top_node }),
     );
   }
 
   createParse(
     input: Input,
     fragments: readonly TreeFragment[],
-    ranges: readonly { from: number; to: number }[]
+    ranges: readonly { from: number; to: number }[],
   ): PartialParse {
     return new Parse(this.ts_parser, this.node_types, input, fragments, ranges);
   }

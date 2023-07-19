@@ -19,7 +19,7 @@ export type Filters = {
 /** The current filters, can be used as URL parameters. */
 export const filter_params = derived(
   [time_filter, account_filter, fql_filter],
-  ([time, account, filter]): Filters => ({ time, account, filter })
+  ([time, account, filter]): Filters => ({ time, account, filter }),
 );
 
 export function getURLFilters(url: URL): Filters {

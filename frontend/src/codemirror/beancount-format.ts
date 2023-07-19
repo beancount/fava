@@ -12,7 +12,7 @@ export const beancountFormat: Command = (cm) => {
     },
     (error) => {
       notify_err(error, (err) => `Formatting source failed: ${err.message}`);
-    }
+    },
   );
   return true;
 };

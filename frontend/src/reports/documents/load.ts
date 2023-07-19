@@ -2,7 +2,7 @@ import { get } from "../../api";
 import { getURLFilters } from "../../stores/filters";
 
 export const load = (
-  url: URL
+  url: URL,
 ): Promise<{
   data: {
     account: string;

@@ -6,7 +6,7 @@ export type StrictEquality = string | number | null;
  */
 export function shallow_equal<T extends StrictEquality>(
   a: T[],
-  b: T[]
+  b: T[],
 ): boolean {
   const l = a.length;
   if (l !== b.length) {

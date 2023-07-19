@@ -30,7 +30,7 @@ export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
  * Initially set the file names for all importable files.
  */
 export function preprocessData(
-  arr: ImportableFile[]
+  arr: ImportableFile[],
 ): ProcessedImportableFile[] {
   const today = todayAsString();
   return arr.map((file) => {
@@ -39,7 +39,7 @@ export function preprocessData(
         account,
         importer_name,
         newName: newFilename(date, name),
-      })
+      }),
     );
     if (importers.length === 0) {
       const newName = newFilename(today, file.basename);

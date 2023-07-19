@@ -28,7 +28,7 @@ export function notify(
   msg: string,
   // eslint-disable-next-line default-param-last
   cls: NotificationType = "info",
-  callback?: () => void
+  callback?: () => void,
 ): void {
   const notification = document.createElement("li");
   notification.classList.add(cls);
