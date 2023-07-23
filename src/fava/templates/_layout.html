@@ -1,4 +1,3 @@
-{% import "_charts.html" as charts with context %}
 {% set all_pages = {
     'balance_sheet':    _('Balance Sheet'),
     'errors':           _('Errors'),
@@ -26,7 +25,6 @@
     <!-- <header> and <aside> get inserted here -->
     <article>
       {%- endif %}
-      <svelte-component type="charts"></svelte-component>
       {% if not client_side_rendered %}
         {% block content %}
           {% if content %}
@@ -36,7 +34,6 @@
           {% endif %}
         {% endblock %}
       {% endif %}
-      <script type="application/json" id="chart-data">{{ charts.chart_data|tojson }}</script>
       <script type="application/json" id="page-title">{{ page_title|tojson }}</script>
       {% if partial %}<script type="application/json" id="ledger-mtime">{{ ledger.mtime|tojson }}</script>{% endif %}
       {%- if not partial %}

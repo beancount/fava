@@ -9,9 +9,7 @@
   </head>
   <body>
     <!-- <header> and <aside> get inserted here -->
-    <article>      <svelte-component type="charts"></svelte-component>
-      <script type="application/json" id="chart-data">[]</script>
-      <script type="application/json" id="page-title">""</script>
+    <article>      <script type="application/json" id="page-title">""</script>
     </article>
     <script type="application/json" id="ledger-data">{
   "account_details": {
