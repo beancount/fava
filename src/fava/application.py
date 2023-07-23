@@ -283,7 +283,8 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         return send_file_inline(document_path)
 
     @fava_app.route(
-        "/<bfile>/holdings/by_<any(account,currency,cost_currency):aggregation_key>/"
+        "/<bfile>/holdings"
+        "/by_<any(account,currency,cost_currency):aggregation_key>/"
     )
     def holdings_by(
         aggregation_key: str,

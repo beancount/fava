@@ -1,5 +1,7 @@
 {% import '_tree_table.html' as tree_table with context %}
 
+{% set page_title = _('Trial Balance') %}
+
 <svelte-component type="charts"><script type="application/json">{{
   [
     chart_api.hierarchy(ledger.options['name_expenses']),
