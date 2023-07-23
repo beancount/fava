@@ -24,6 +24,7 @@ from urllib.parse import urlencode
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
+import jinja2
 import markdown2  # type: ignore[import]
 from beancount import __version__ as beancount_version
 from beancount.utils.text_utils import replace_numbers
@@ -321,16 +322,16 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/extension/<extension_name>/")
     def extension_report(extension_name: str) -> str:
         """Endpoint for extension reports."""
-        ext = g.ledger.extensions.get_extension(extension_name)
-        if ext is None or ext.report_title is None:
+        g.extension = g.ledger.extensions.get_extension(extension_name)
+        if not g.extension or g.extension.report_title is None:
             abort(404)
-        template_path = ext.extension_dir / "templates" / f"{ext.name}.html"
-        template = template_path.read_text(encoding="utf-8")
-        content = Markup(render_template_string(template, extension=ext))
+        content = Markup(
+            render_template(f"{g.extension.name}.html", extension=g.extension),
+        )
         return render_template(
             "_layout.html",
             content=content,
-            page_title=ext.report_title,
+            page_title=g.extension.report_title,
         )
 
     @fava_app.route("/<bfile>/download-query/query_result.<result_format>")
@@ -420,6 +421,18 @@ def _setup_babel(fava_app: Flask) -> None:
         babel = Babel(fava_app, locale_selector=_get_locale)
 
 
+def _ext_template_loader_func(name: str) -> str | None:
+    """Load a template from the extension folder if an extension is active."""
+    if g.extension:
+        template_path = g.extension.extension_dir / "templates" / name
+        if template_path.exists():
+            return template_path.read_text(encoding="utf-8")
+    return None
+
+
+_ext_template_loader = jinja2.FunctionLoader(_ext_template_loader_func)
+
+
 def create_app(
     files: Iterable[Path | str],
     load: bool = False,
@@ -441,6 +454,12 @@ def create_app(
     _setup_babel(fava_app)
     _setup_filters(fava_app, read_only=read_only, incognito=incognito)
     _setup_routes(fava_app)
+    loader = fava_app.jinja_loader
+    if loader is None:
+        raise ValueError("Expected Flask app to have jinja_loader.")
+    fava_app.jinja_loader = jinja2.ChoiceLoader(  # type: ignore[assignment]
+        [loader, _ext_template_loader],
+    )
 
     fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL
     fava_app.config["BEANCOUNT_FILES"] = [str(f) for f in files]
