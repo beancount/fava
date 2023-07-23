@@ -20,7 +20,7 @@ function showTooltip(target: HTMLElement): () => void {
   const top =
     parentCoords.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
   tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${top + window.pageYOffset}px`;
+  tooltip.style.top = `${top + window.scrollY}px`;
   return (): void => {
     tooltip.remove();
     if (isHidden) {
@@ -111,12 +111,12 @@ document.addEventListener("keydown", keydown);
 /** A type to specify a platform-dependent keyboard shortcut. */
 export type KeySpec = string | { key: string; mac: string };
 
-const currentPlatform: "mac" | "key" =
-  typeof navigator !== "undefined" && navigator.platform.includes("Mac")
-    ? "mac"
-    : "key";
+const isMac =
+  // This still seems to be the least bad way to check whether we are running on macOS or iOS
+  // eslint-disable-next-line deprecation/deprecation
+  navigator.platform.startsWith("Mac") || navigator.platform === "iPhone";
 
-export const modKey = currentPlatform === "mac" ? "Cmd" : "Ctrl";
+export const modKey = isMac ? "Cmd" : "Ctrl";
 
 /**
  * Get the keyboard key specifier string for the current platform.
@@ -126,7 +126,7 @@ function getKeySpecKey(keySpec: KeySpec): string {
   if (typeof keySpec === "string") {
     return keySpec;
   }
-  return currentPlatform === "mac" ? keySpec.mac : keySpec.key;
+  return isMac ? keySpec.mac : keySpec.key;
 }
 
 /**
