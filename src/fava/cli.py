@@ -51,7 +51,9 @@ from fava.util import simple_wsgi
 )
 @click.option("-d", "--debug", is_flag=True, help="Turn on debugging.")
 @click.option(
-    "--profile", is_flag=True, help="Turn on profiling. Implies --debug."
+    "--profile",
+    is_flag=True,
+    help="Turn on profiling. Implies --debug.",
 )
 @click.option(
     "--profile-dir",
@@ -98,7 +100,8 @@ def main(  # noqa: PLR0912
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]
-            simple_wsgi, {prefix: app.wsgi_app}
+            simple_wsgi,
+            {prefix: app.wsgi_app},
         )
 
     if host == "localhost":
@@ -117,7 +120,7 @@ def main(  # noqa: PLR0912
             if "No socket could be created" in str(error):
                 click.echo(
                     f"Cannot start Fava because port {port} is already in use."
-                    "\nPlease choose a different port with the '-p' option."
+                    "\nPlease choose a different port with the '-p' option.",
                 )
             raise click.Abort from error
     else:
@@ -135,7 +138,7 @@ def main(  # noqa: PLR0912
             if error.errno == errno.EADDRINUSE:
                 click.echo(
                     f"Cannot start Fava because port {port} is already in use."
-                    "\nPlease choose a different port with the '-p' option."
+                    "\nPlease choose a different port with the '-p' option.",
                 )
                 raise click.Abort from error
             raise

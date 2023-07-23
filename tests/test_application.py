@@ -37,7 +37,9 @@ FILTER_COMBINATIONS = [
     ],
 )
 def test_reports(
-    test_client: FlaskClient, report: str, filters: dict[str, str]
+    test_client: FlaskClient,
+    report: str,
+    filters: dict[str, str],
 ) -> None:
     """The standard reports work without error (content isn't checked here)."""
     result = test_client.get(f"/long-example/{report}/", query_string=filters)
@@ -45,7 +47,8 @@ def test_reports(
 
 
 def test_client_side_reports(
-    test_client: FlaskClient, snapshot: SnapshotFunc
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
 ) -> None:
     """The client-side rendered reports are generated."""
     result = test_client.get("/long-example/documents/")
@@ -55,7 +58,8 @@ def test_client_side_reports(
 
 @pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
 def test_account_page(
-    test_client: FlaskClient, filters: dict[str, str]
+    test_client: FlaskClient,
+    filters: dict[str, str],
 ) -> None:
     """Account page works without error."""
     for url in [
@@ -191,7 +195,7 @@ def test_help_ages(test_client: FlaskClient) -> None:
 def test_query_download(test_client: FlaskClient) -> None:
     """Download query as csv."""
     result = test_client.get(
-        "/long-example/download-query/query_result.csv?query_string=balances"
+        "/long-example/download-query/query_result.csv?query_string=balances",
     )
     assert result.status_code == 200
 
@@ -227,15 +231,17 @@ def test_read_only_mode(test_data_dir: Path) -> None:
 
 
 def test_download_journal(
-    test_client: FlaskClient, snapshot: SnapshotFunc
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
 ) -> None:
     """The currently filtered journal can be downloaded."""
     result = test_client.get(
-        "/long-example/download-journal/", query_string={"time": "2016-05-07"}
+        "/long-example/download-journal/",
+        query_string={"time": "2016-05-07"},
     )
     snapshot(result.get_data(True))
     assert result.headers["Content-Disposition"].startswith(
-        'attachment; filename="journal_'
+        'attachment; filename="journal_',
     )
     assert result.headers["Content-Type"] == "application/octet-stream"
 

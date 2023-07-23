@@ -17,7 +17,6 @@ disable = [
     "too-few-public-methods",
     "too-many-branches",
     "too-many-instance-attributes",
-    "import-error",                  # type-checking like, had false-positives
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives
     "unsubscriptable-object",        # type-checking like, had false-positives
@@ -28,7 +27,6 @@ disable = [
     "protected-access",              # is checked by ruff (SLF001)
     "invalid-name",                  # is checked by ruff (N)
     "missing-docstring",             # is checked by ruff (D)
-    "unused-argument"                # is checked by ruff (ARG)
 ]
 
 [tool.pytest.ini_options]
@@ -44,7 +42,6 @@ extend-ignore = [
     "ANN101",   # allow `self` to be untyped
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
-    "COM812",   # do not enforce trailing commas
     "D102",     # allow undocumented methods
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.

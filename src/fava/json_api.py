@@ -58,7 +58,7 @@ def json_err(msg: str) -> Response:
 def json_success(data: Any) -> Response:
     """Jsonify the response."""
     return jsonify(
-        {"success": True, "data": data, "mtime": str(g.ledger.mtime)}
+        {"success": True, "data": data, "mtime": str(g.ledger.mtime)},
     )
 
 
@@ -78,7 +78,7 @@ def _json_api_validation_error(error: ValidationError) -> Response:
 
 
 def validate_func_arguments(
-    func: Callable[..., Any]
+    func: Callable[..., Any],
 ) -> Callable[[Mapping[str, str]], list[str]] | None:
     """Validate arguments for a function.
 
@@ -98,7 +98,7 @@ def validate_func_arguments(
     for param in sig.parameters.values():
         if param.annotation not in {"str", "list[Any]"}:  # pragma: no cover
             raise ValueError(
-                f"Type of param {param.name} needs to str or list"
+                f"Type of param {param.name} needs to str or list",
             )
         if param.kind != Parameter.POSITIONAL_OR_KEYWORD:  # pragma: no cover
             raise ValueError(f"Param {param.name} should be positional")
@@ -115,7 +115,7 @@ def validate_func_arguments(
                 raise ValidationError(f"Parameter `{param}` is missing.")
             if not isinstance(val, type_):
                 raise ValidationError(
-                    f"Parameter `{param}` of incorrect type."
+                    f"Parameter `{param}` of incorrect type.",
                 )
             args.append(val)
         return args
@@ -198,7 +198,8 @@ def get_query_result(query_string: str) -> Any:
     """Render a query result to HTML."""
     table = get_template_attribute("_query_table.html", "querytable")
     contents, types, rows = g.ledger.query_shell.execute_query(
-        g.filtered.entries, query_string
+        g.filtered.entries,
+        query_string,
     )
     if contents and "ERROR" in contents:
         raise FavaAPIError(contents)
@@ -241,7 +242,10 @@ def get_move(account: str, new_name: str, filename: str) -> str:
         raise DocumentDirectoryMissingError
 
     new_path = filepath_in_document_folder(
-        g.ledger.options["documents"][0], account, new_name, g.ledger
+        g.ledger.options["documents"][0],
+        account,
+        new_name,
+        g.ledger,
     )
     file_path = Path(filename)
 
@@ -345,7 +349,9 @@ def put_add_document() -> str:
 
     if request.form.get("hash"):
         g.ledger.file.insert_metadata(
-            request.form["hash"], "document", filepath.name
+            request.form["hash"],
+            "document",
+            filepath.name,
         )
     return f"Uploaded to {filepath}"
 

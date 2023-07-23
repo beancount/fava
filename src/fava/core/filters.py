@@ -67,7 +67,7 @@ class FilterSyntaxLexer:
     )
 
     regex = re.compile(
-        "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
+        "|".join((f"(?P<{name}>{rule})" for name, rule in RULES)),
     )
 
     def LINK(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
@@ -118,7 +118,8 @@ class FilterSyntaxLexer:
                 if token is None:
                     raise ValueError("Internal Error")
                 func: Callable[[str, str], tuple[str, str]] = getattr(
-                    self, token
+                    self,
+                    token,
                 )
                 ret = func(token, value)
                 yield Token(*ret)
@@ -127,7 +128,8 @@ class FilterSyntaxLexer:
                 pos += 1
             else:
                 raise FilterError(
-                    "filter", f'Illegal character "{char}" in filter.'
+                    "filter",
+                    f'Illegal character "{char}" in filter.',
                 )
 
 
@@ -315,7 +317,10 @@ class TimeFilter(EntryFilter):
 
     def apply(self, entries: list[Directive]) -> list[Directive]:
         entries, _ = clamp_opt(
-            entries, self.date_range.begin, self.date_range.end, self._options
+            entries,
+            self.date_range.begin,
+            self.date_range.end,
+            self._options,
         )
         return entries
 

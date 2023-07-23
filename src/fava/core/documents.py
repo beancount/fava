@@ -34,7 +34,10 @@ def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
 
 
 def filepath_in_document_folder(
-    documents_folder: str, account: str, filename: str, ledger: FavaLedger
+    documents_folder: str,
+    account: str,
+    filename: str,
+    ledger: FavaLedger,
 ) -> Path:
     """File path for a document in the folder for an account.
 

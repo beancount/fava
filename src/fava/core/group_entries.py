@@ -35,7 +35,18 @@ def group_entries_by_type(entries: list[abc.Directive]) -> EntriesByType:
         A namedtuple containing the grouped lists of entries.
     """
     entries_by_type = EntriesByType(
-        [], [], [], [], [], [], [], [], [], [], [], []
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
     )
     for entry in entries:
         getattr(entries_by_type, entry.__class__.__name__).append(entry)
@@ -61,7 +72,7 @@ def group_entries_by_account(
         A dict mapping account names to their entries.
     """
     res: dict[str, list[abc.Directive | TransactionPosting]] = defaultdict(
-        list
+        list,
     )
 
     for entry in entries:

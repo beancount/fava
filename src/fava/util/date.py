@@ -39,7 +39,7 @@ FY_QUARTER_RE = re.compile(r"^fy(\d{4})-q(\d)$")
 
 VARIABLE_RE = re.compile(
     r"\(?(fiscal_year|year|fiscal_quarter|quarter"
-    r"|month|week|day)(?:([-+])(\d+))?\)?"
+    r"|month|week|day)(?:([-+])(\d+))?\)?",
 )
 
 
@@ -109,7 +109,8 @@ class Interval(Enum):
 
 
 def get_prev_interval(
-    date: datetime.date, interval: Interval
+    date: datetime.date,
+    interval: Interval,
 ) -> datetime.date:
     """Get the start date of the interval in which the date falls.
 
@@ -135,7 +136,8 @@ def get_prev_interval(
 
 
 def get_next_interval(  # noqa: PLR0911
-    date: datetime.date, interval: Interval
+    date: datetime.date,
+    interval: Interval,
 ) -> datetime.date:
     """Get the start date of the next interval.
 
@@ -168,7 +170,9 @@ def get_next_interval(  # noqa: PLR0911
 
 
 def interval_ends(
-    first: datetime.date, last: datetime.date, interval: Interval
+    first: datetime.date,
+    last: datetime.date,
+    interval: Interval,
 ) -> Iterator[datetime.date]:
     """Get interval ends."""
     yield get_prev_interval(first, interval)
@@ -196,7 +200,9 @@ class DateRange:
 
 
 def dateranges(
-    begin: datetime.date, end: datetime.date, interval: Interval
+    begin: datetime.date,
+    end: datetime.date,
+    interval: Interval,
 ) -> Iterable[DateRange]:
     """Get date ranges for the given begin and end date.
 
@@ -252,7 +258,7 @@ def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
             if start and start.day != 1:
                 raise ValueError(
                     "Cannot use fiscal_quarter if fiscal year "
-                    "does not start on first of the month"
+                    "does not start on first of the month",
                 )
             if end and target >= end:
                 start = end
@@ -274,18 +280,21 @@ def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
         if interval == "week":
             delta = timedelta(plusminus * mod * 7)
             string = string.replace(
-                complete_match, (today + delta).strftime("%Y-W%W")
+                complete_match,
+                (today + delta).strftime("%Y-W%W"),
             )
         if interval == "day":
             delta = timedelta(plusminus * mod)
             string = string.replace(
-                complete_match, (today + delta).isoformat()
+                complete_match,
+                (today + delta).isoformat(),
             )
     return string
 
 
 def parse_date(  # noqa: PLR0911
-    string: str, fye: FiscalYearEnd | None = None
+    string: str,
+    fye: FiscalYearEnd | None = None,
 ) -> tuple[datetime.date | None, datetime.date | None]:
     """Parse a date.
 
@@ -395,7 +404,9 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 
 
 def get_fiscal_period(
-    year: int, fye: FiscalYearEnd | None, quarter: int | None = None
+    year: int,
+    fye: FiscalYearEnd | None,
+    quarter: int | None = None,
 ) -> tuple[datetime.date | None, datetime.date | None]:
     """Calculate fiscal periods.
 
@@ -415,7 +426,9 @@ def get_fiscal_period(
         start_date = datetime.date(year=year, month=1, day=1)
     else:
         start_date = datetime.date(
-            year=year - 1, month=fye.month, day=fye.day
+            year=year - 1,
+            month=fye.month,
+            day=fye.day,
         ) + timedelta(days=1)
         # Special case 02-28 because of leap years
         if fye.month == 2 and fye.day == 28:
@@ -440,7 +453,8 @@ def get_fiscal_period(
 
 
 def days_in_daterange(
-    start_date: datetime.date, end_date: datetime.date
+    start_date: datetime.date,
+    end_date: datetime.date,
 ) -> Iterator[datetime.date]:
     """Yield a datetime for every day in the specified interval.
 

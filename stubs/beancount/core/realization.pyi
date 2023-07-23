@@ -13,7 +13,8 @@ class RealAccount(dict[str, RealAccount]):
     balance: Inventory
 
 def iter_children(
-    real_account: RealAccount, leaf_only: bool = ...
+    real_account: RealAccount,
+    leaf_only: bool = ...,
 ) -> Iterator[RealAccount]: ...
 def get(
     real_account: RealAccount,
@@ -21,7 +22,8 @@ def get(
     default: RealAccount | None = ...,
 ) -> RealAccount: ...
 def get_or_create(
-    real_account: RealAccount, account_name: str
+    real_account: RealAccount,
+    account_name: str,
 ) -> RealAccount: ...
 def realize(
     entries: list[Directive],

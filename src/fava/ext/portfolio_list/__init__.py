@@ -50,7 +50,8 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
     has_js_module = True
 
     def portfolio_accounts(
-        self, filter_str: str | None = None
+        self,
+        filter_str: str | None = None,
     ) -> list[Portfolio]:
         """Get an account tree based on matching regex patterns."""
         tree = g.filtered.root_tree
@@ -66,7 +67,9 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
                     portfolio = self._account_name_pattern(tree, option[1])
                 elif opt_key == "account_open_metadata_pattern":
                     portfolio = self._account_metadata_pattern(
-                        tree, option[1][0], option[1][1]
+                        tree,
+                        option[1][0],
+                        option[1][1],
                     )
                 else:
                     raise FavaAPIError("Portfolio List: Invalid option.")
@@ -94,7 +97,10 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         )
 
     def _account_metadata_pattern(
-        self, tree: Tree, metadata_key: str, pattern: str
+        self,
+        tree: Tree,
+        metadata_key: str,
+        pattern: str,
     ) -> Portfolio:
         """Return portfolio info based on matching account open metadata.
 

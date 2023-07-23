@@ -75,7 +75,7 @@ class InvalidUnicodeError(FavaAPIError):
 
     def __init__(self, reason: str) -> None:
         super().__init__(
-            f"The source file contains invalid unicode: {reason}."
+            f"The source file contains invalid unicode: {reason}.",
         )
 
 
@@ -143,7 +143,10 @@ class FileModule(FavaModule):
             return sha256(contents).hexdigest()
 
     def insert_metadata(
-        self, entry_hash: str, basekey: str, value: str
+        self,
+        entry_hash: str,
+        basekey: str,
+        value: str,
     ) -> None:
         """Insert metadata into a file at lineno.
 
@@ -164,7 +167,10 @@ class FileModule(FavaModule):
             self.ledger.extensions.after_insert_metadata(entry, key, value)
 
     def save_entry_slice(
-        self, entry_hash: str, source_slice: str, sha256sum: str
+        self,
+        entry_hash: str,
+        source_slice: str,
+        sha256sum: str,
     ) -> str:
         """Save slice of the source file for an entry.
 
@@ -246,7 +252,7 @@ class FileModule(FavaModule):
                             entry,
                             self.ledger.fava_options.currency_column,
                             indent,
-                        )
+                        ),
                     )
 
 
@@ -264,7 +270,11 @@ def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
 
 
 def insert_metadata_in_file(
-    path: Path, lineno: int, indent: int, key: str, value: str
+    path: Path,
+    lineno: int,
+    indent: int,
+    key: str,
+    value: str,
 ) -> None:
     """Insert the specified metadata in the file below lineno.
 
@@ -319,7 +329,9 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
 
 
 def save_entry_slice(
-    entry: Directive, source_slice: str, sha256sum: str
+    entry: Directive,
+    source_slice: str,
+    sha256sum: str,
 ) -> str:
     """Save slice of the source file for an entry.
 
@@ -414,7 +426,9 @@ def insert_entry(
         A list of updated insert options.
     """
     filename, lineno = find_insert_position(
-        entry, insert_options, default_filename
+        entry,
+        insert_options,
+        default_filename,
     )
     content = to_string(entry, currency_column, indent)
 
@@ -467,7 +481,9 @@ def find_insert_position(
     # Make no assumptions about the order of insert_options entries and instead
     # sort them ourselves (by descending dates)
     insert_options = sorted(
-        insert_options, key=attrgetter("date"), reverse=True
+        insert_options,
+        key=attrgetter("date"),
+        reverse=True,
     )
 
     for account in accounts:

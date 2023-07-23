@@ -44,7 +44,8 @@ def _(cost: Cost) -> str:
 def _(cost: CostSpec) -> str:
     strs = []
     if isinstance(cost.number_per, Decimal) or isinstance(
-        cost.number_total, Decimal
+        cost.number_total,
+        Decimal,
     ):
         amountlist = []
         if isinstance(cost.number_per, Decimal):
@@ -75,7 +76,9 @@ def _(obj: Position) -> str:
 
 @to_string.register(Directive)
 def _format_entry(
-    entry: Directive, currency_column: int = 61, indent: int = 2
+    entry: Directive,
+    currency_column: int = 61,
+    indent: int = 2,
 ) -> str:
     meta = {
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")

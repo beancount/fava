@@ -43,7 +43,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
             re.compile("Ausgaben:Test"),
             "<string>",
             6,
-        )
+        ),
     ]
     assert options.show_closed_accounts
     assert options.currency_column == 10

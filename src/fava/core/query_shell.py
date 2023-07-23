@@ -67,7 +67,8 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                 self.__class__,
                 f"help_{command_name.lower()}",
                 lambda _, fun=func: print(
-                    textwrap.dedent(fun.__doc__).strip(), file=self.buffer
+                    textwrap.dedent(fun.__doc__).strip(),
+                    file=self.buffer,
                 ),
             )
 
@@ -151,7 +152,10 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                 self.dispatch(statement)
 
     def query_to_file(
-        self, entries: list[Directive], query_string: str, result_format: str
+        self,
+        entries: list[Directive],
+        query_string: str,
+        result_format: str,
     ) -> Any:
         """Get query result as file.
 

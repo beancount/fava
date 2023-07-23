@@ -48,7 +48,7 @@ class BudgetModule(FavaModule):
 
     def load_file(self) -> None:
         self.budget_entries, errors = parse_budgets(
-            self.ledger.all_entries_by_type.Custom
+            self.ledger.all_entries_by_type.Custom,
         )
         self.ledger.errors.extend(errors)
 
@@ -60,7 +60,10 @@ class BudgetModule(FavaModule):
     ) -> dict[str, Decimal]:
         """Calculate the budget for an account in an interval."""
         return calculate_budget(
-            self.budget_entries, account, begin_date, end_date
+            self.budget_entries,
+            account,
+            begin_date,
+            end_date,
         )
 
     def calculate_children(
@@ -71,7 +74,10 @@ class BudgetModule(FavaModule):
     ) -> dict[str, Decimal]:
         """Calculate the budget for an account including its children."""
         return calculate_budget_children(
-            self.budget_entries, account, begin_date, end_date
+            self.budget_entries,
+            account,
+            begin_date,
+            end_date,
         )
 
     def __bool__(self) -> bool:
@@ -112,7 +118,7 @@ def parse_budgets(
                         entry.meta,
                         "Invalid interval for budget entry",
                         entry,
-                    )
+                    ),
                 )
                 continue
             budget = Budget(
@@ -125,14 +131,16 @@ def parse_budgets(
             budgets[budget.account].append(budget)
         except (IndexError, TypeError):
             errors.append(
-                BudgetError(entry.meta, "Failed to parse budget entry", entry)
+                BudgetError(entry.meta, "Failed to parse budget entry", entry),
             )
 
     return budgets, errors
 
 
 def _matching_budgets(
-    budgets: BudgetDict, accounts: str, date_active: datetime.date
+    budgets: BudgetDict,
+    accounts: str,
+    date_active: datetime.date,
 ) -> dict[str, Budget]:
     """Find matching budgets.
 
@@ -178,7 +186,8 @@ def calculate_budget(
             currency_dict[
                 budget.currency
             ] += budget.number / number_of_days_in_period(
-                budget.period, single_day
+                budget.period,
+                single_day,
             )
     return currency_dict
 
@@ -206,6 +215,6 @@ def calculate_budget_children(
     for child in budgets:
         if child.startswith(account):
             currency_dict.update(
-                calculate_budget(budgets, child, date_from, date_to)
+                calculate_budget(budgets, child, date_from, date_to),
             )
     return currency_dict

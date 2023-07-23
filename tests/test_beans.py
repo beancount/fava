@@ -77,11 +77,11 @@ def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
     )
     assert prices.get_price(usd_chf) == Decimal("0.9288")
     assert prices.get_price(usd_chf, datetime.date(2022, 12, 18)) == Decimal(
-        "0.88"
+        "0.88",
     )
     assert prices.get_price(usd_chf, datetime.date(2022, 12, 19)) == Decimal(
-        "0.9288"
+        "0.9288",
     )
     assert prices.get_price(usd_chf, datetime.date(2022, 12, 20)) == Decimal(
-        "0.9288"
+        "0.9288",
     )

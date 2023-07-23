@@ -117,7 +117,9 @@ def test_api_upload_import_file(
         app.preprocess_request()
 
         monkeypatch.setattr(
-            g.ledger.fava_options, "import_dirs", [str(tmp_path)]
+            g.ledger.fava_options,
+            "import_dirs",
+            [str(tmp_path)],
         )
         request_data = {
             "file": (BytesIO(b"asdfasdf"), "recipt.pdf"),
@@ -158,7 +160,8 @@ def test_api_context(
 ) -> None:
     response = test_client.get("/long-example/api/context")
     assert_api_error(
-        response, "Invalid API request: Parameter `entry_hash` is missing."
+        response,
+        "Invalid API request: Parameter `entry_hash` is missing.",
     )
 
     entry_hash = hash_entry(
@@ -167,7 +170,7 @@ def test_api_context(
             for entry in example_ledger.all_entries_by_type.Transaction
             if entry.narration == r"Investing 40% of cash in VBMPX"
             and entry.date == datetime.date(2016, 5, 9)
-        )
+        ),
     )
     response = test_client.get(
         "/long-example/api/context",
@@ -240,7 +243,8 @@ def test_api_imports(
 def test_api_move(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/move")
     assert_api_error(
-        response, "Invalid API request: Parameter `account` is missing."
+        response,
+        "Invalid API request: Parameter `account` is missing.",
     )
 
     invalid = {"account": "Assets", "new_name": "new", "filename": "old"}
@@ -262,7 +266,8 @@ def test_api_move(test_client: FlaskClient) -> None:
 
 def test_api_get_source_invalid_unicode(test_client: FlaskClient) -> None:
     response = test_client.get(
-        "/invalid-unicode/api/source", query_string={"filename": ""}
+        "/invalid-unicode/api/source",
+        query_string={"filename": ""},
     )
     err_msg = assert_api_error(response)
     assert "The source file contains invalid unicode" in err_msg
@@ -278,7 +283,8 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
 
 
 def test_api_source_put(
-    test_client: FlaskClient, example_ledger: FavaLedger
+    test_client: FlaskClient,
+    example_ledger: FavaLedger,
 ) -> None:
     path = Path(example_ledger.beancount_file_path)
 
@@ -319,7 +325,8 @@ def test_api_source_put(
 
 
 def test_api_format_source(
-    test_client: FlaskClient, example_ledger: FavaLedger
+    test_client: FlaskClient,
+    example_ledger: FavaLedger,
 ) -> None:
     path = Path(example_ledger.beancount_file_path)
     url = "/long-example/api/format_source"
@@ -331,7 +338,9 @@ def test_api_format_source(
 
 
 def test_api_format_source_options(
-    app: Flask, test_client: FlaskClient, monkeypatch: pytest.MonkeyPatch
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -341,13 +350,15 @@ def test_api_format_source_options(
         monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
 
         response = test_client.put(
-            "/long-example/api/format_source", json={"source": payload}
+            "/long-example/api/format_source",
+            json={"source": payload},
         )
         assert_api_success(response, align(payload, 90))
 
 
 def test_api_source_slice_delete(
-    test_client: FlaskClient, example_ledger: FavaLedger
+    test_client: FlaskClient,
+    example_ledger: FavaLedger,
 ) -> None:
     path = Path(example_ledger.beancount_file_path)
     contents = path.read_text("utf-8")
@@ -356,7 +367,8 @@ def test_api_source_slice_delete(
     # test bad request
     response = test_client.delete(url)
     assert_api_error(
-        response, "Invalid API request: Parameter `entry_hash` is missing."
+        response,
+        "Invalid API request: Parameter `entry_hash` is missing.",
     )
 
     entry = next(
@@ -475,7 +487,9 @@ def test_api_add_entries(
     ],
 )
 def test_api_query_result(
-    query_string: str, result_str: str, test_client: FlaskClient
+    query_string: str,
+    result_str: str,
+    test_client: FlaskClient,
 ) -> None:
     response = test_client.get(
         "/long-example/api/query_result",
@@ -505,7 +519,8 @@ def test_api_query_result_filters(test_client: FlaskClient) -> None:
 
 
 def test_api_query_result_charts(
-    test_client: FlaskClient, snapshot: SnapshotFunc
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
 ) -> None:
     query_string = (
         "SELECT payee, SUM(COST(position)) AS balance "
@@ -521,14 +536,16 @@ def test_api_query_result_charts(
 
 
 def test_api_commodities(
-    test_client: FlaskClient, snapshot: SnapshotFunc
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
 ) -> None:
     response = test_client.get("/long-example/api/commodities")
     data = assert_api_success(response)
     snapshot(data)
 
     response = test_client.get(
-        "/long-example/api/commodities", query_string={"time": "3000"}
+        "/long-example/api/commodities",
+        query_string={"time": "3000"},
     )
     data = assert_api_success(response)
     assert not data

@@ -172,18 +172,20 @@ class IngestModule(FavaModule):
         )
 
         new_entries_list: list[tuple[str, list[Directive]]] = [
-            (filename, new_entries)
+            (filename, new_entries),
         ]
         for hook_fn in self.hooks:
             new_entries_list = hook_fn(
-                new_entries_list, self.ledger.all_entries
+                new_entries_list,
+                self.ledger.all_entries,
             )
 
         return new_entries_list[0][1]
 
 
 def filepath_in_primary_imports_folder(
-    filename: str, ledger: FavaLedger
+    filename: str,
+    ledger: FavaLedger,
 ) -> Path:
     """File path for a document to upload to the primary import folder.
 

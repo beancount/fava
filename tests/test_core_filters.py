@@ -122,7 +122,9 @@ def test_filterexception() -> None:
     ],
 )
 def test_advanced_filter(
-    example_ledger: FavaLedger, string: str, number: int
+    example_ledger: FavaLedger,
+    string: str,
+    number: int,
 ) -> None:
     filter_ = AdvancedFilter(string)
     filtered_entries = filter_.apply(example_ledger.all_entries)
@@ -164,7 +166,9 @@ def test_account_filter(example_ledger: FavaLedger) -> None:
 
 def test_time_filter(example_ledger: FavaLedger) -> None:
     time_filter = TimeFilter(
-        example_ledger.options, example_ledger.fava_options, "2017"
+        example_ledger.options,
+        example_ledger.fava_options,
+        "2017",
     )
 
     date_range = time_filter.date_range
@@ -175,12 +179,16 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
     assert len(filtered_entries) == 83
 
     time_filter = TimeFilter(
-        example_ledger.options, example_ledger.fava_options, "1000"
+        example_ledger.options,
+        example_ledger.fava_options,
+        "1000",
     )
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert not filtered_entries
 
     with pytest.raises(FilterError):
         TimeFilter(
-            example_ledger.options, example_ledger.fava_options, "no_date"
+            example_ledger.options,
+            example_ledger.fava_options,
+            "no_date",
         )

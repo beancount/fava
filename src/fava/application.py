@@ -208,7 +208,8 @@ def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
 
     @fava_app.url_value_preprocessor
     def _pull_beancount_file(
-        _: str | None, values: dict[str, str] | None
+        _: str | None,
+        values: dict[str, str] | None,
     ) -> None:
         g.beancount_file_slug = values.pop("bfile", None) if values else None
         if not fava_app.config["LEDGERS"]:
@@ -222,7 +223,7 @@ def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
             if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
                 # one of the file slugs might have changed, update the mapping
                 fava_app.config["LEDGERS"] = _ledger_slugs_dict(
-                    fava_app.config["LEDGERS"].values()
+                    fava_app.config["LEDGERS"].values(),
                 )
                 if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
                     abort(404)
@@ -234,7 +235,9 @@ def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
     def fava_api_exception(error: FavaAPIError) -> str:
         """Handle API errors."""
         return render_template(
-            "_layout.html", page_title="Error", content=error.message
+            "_layout.html",
+            page_title="Error",
+            content=error.message,
         )
 
 
@@ -252,10 +255,11 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         return redirect(f"{index_url}{default_page}")
 
     @fava_app.route(
-        "/<bfile>/account/<name>/", defaults={"subreport": "journal"}
+        "/<bfile>/account/<name>/",
+        defaults={"subreport": "journal"},
     )
     @fava_app.route(
-        "/<bfile>/account/<name>/<any(balances,changes):subreport>/"
+        "/<bfile>/account/<name>/<any(balances,changes):subreport>/",
     )
     def account(
         name: str,
@@ -263,7 +267,9 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     ) -> str:
         """Get the account report."""
         return render_template(
-            "account.html", account_name=name, subreport=subreport
+            "account.html",
+            account_name=name,
+            subreport=subreport,
         )
 
     @fava_app.route("/<bfile>/document/", methods=["GET"])
@@ -284,7 +290,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
 
     @fava_app.route(
         "/<bfile>/holdings"
-        "/by_<any(account,currency,cost_currency):aggregation_key>/"
+        "/by_<any(account,currency,cost_currency):aggregation_key>/",
     )
     def holdings_by(
         aggregation_key: str,
@@ -371,7 +377,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
                     html,
                     beancount_version=beancount_version,
                     fava_version=fava_version,
-                )
+                ),
             ),
             HELP_PAGES=HELP_PAGES,
         )

@@ -251,7 +251,11 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     ]
     new_transaction = replace(transaction, narration="narr2")
     new_options = insert_entry(
-        new_transaction, str(samplefile), options, 61, 4
+        new_transaction,
+        str(samplefile),
+        options,
+        61,
+        4,
     )
     assert new_options[0].lineno == 9
     assert new_options[1].lineno == 1
@@ -396,7 +400,8 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
 
 
 def test_render_entries(
-    example_ledger: FavaLedger, snapshot: SnapshotFunc
+    example_ledger: FavaLedger,
+    snapshot: SnapshotFunc,
 ) -> None:
     entry1 = _get_entry(example_ledger, "Uncle Boons", "2016-04-09")
     entry2 = _get_entry(example_ledger, "BANK FEES", "2016-05-04")
@@ -427,5 +432,5 @@ def test_render_entries(
         """)
 
     assert file_content == "\n".join(
-        example_ledger.file.render_entries([entry1, entry2])
+        example_ledger.file.render_entries([entry1, entry2]),
     )

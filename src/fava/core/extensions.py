@@ -39,7 +39,8 @@ class ExtensionModule(FavaModule):
 
         for extension in _extension_entries:
             extensions, errors = find_extensions(
-                Path(self.ledger.beancount_file_path).parent, extension
+                Path(self.ledger.beancount_file_path).parent,
+                extension,
             )
             all_extensions.extend(extensions)
             self.ledger.errors.extend(errors)
@@ -85,7 +86,10 @@ class ExtensionModule(FavaModule):
             ext.after_delete_entry(entry)
 
     def after_insert_metadata(
-        self, entry: Directive, key: str, value: str
+        self,
+        entry: Directive,
+        key: str,
+        value: str,
     ) -> None:
         for ext in self._exts:
             ext.after_insert_metadata(entry, key, value)

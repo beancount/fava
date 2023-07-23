@@ -41,11 +41,15 @@ def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
 
 
 def cost_or_value(
-    inventory: CounterInventory, date: datetime.date | None = None
+    inventory: CounterInventory,
+    date: datetime.date | None = None,
 ) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
     return cost_or_value_without_context(
-        inventory, g.conversion, g.ledger.prices, date
+        inventory,
+        g.conversion,
+        g.ledger.prices,
+        date,
     )
 
 
@@ -95,7 +99,7 @@ def should_show(account: TreeNode) -> bool:
         return False
     fava_options = ledger.fava_options
     if not fava_options.show_closed_accounts and filtered.account_is_closed(
-        account.name
+        account.name,
     ):
         return False
     if (

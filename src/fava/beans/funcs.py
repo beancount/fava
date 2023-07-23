@@ -25,11 +25,15 @@ def hash_entry(entry: Directive) -> str:
 
 
 def execute_query(
-    query_: str, entries: list[Directive], options_map: BeancountOptions
+    query_: str,
+    entries: list[Directive],
+    options_map: BeancountOptions,
 ) -> QueryResult:
     """Execture a query."""
     return query_execute.execute_query(  # type: ignore[no-any-return]
-        query_, entries, options_map
+        query_,
+        entries,
+        options_map,
     )
 
 

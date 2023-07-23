@@ -14,7 +14,7 @@ def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
     extension_report_ledger = get_ledger("extension-report")
     result = extension_report_ledger.extensions.extension_details
     assert result == [
-        ExtensionDetails("PortfolioList", "Portfolio List", True)
+        ExtensionDetails("PortfolioList", "Portfolio List", True),
     ]
 
     extension_report_ledger.extensions.after_write_source("test", "test")

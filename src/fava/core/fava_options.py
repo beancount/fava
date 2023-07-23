@@ -84,7 +84,8 @@ STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
 
 
 def parse_option_custom_entry(  # noqa: PLR0912
-    entry: Custom, options: FavaOptions
+    entry: Custom,
+    options: FavaOptions,
 ) -> None:
     """Parse a single custom fava-option entry and set option accordingly."""
     key = entry.values[0].value.replace("-", "_")
@@ -104,10 +105,13 @@ def parse_option_custom_entry(  # noqa: PLR0912
             pattern = re.compile(value)
         except re.error as err:
             raise TypeError(
-                f"Should be a regular expression: '{value}'."
+                f"Should be a regular expression: '{value}'.",
             ) from err
         opt = InsertEntryOption(
-            entry.date, pattern, entry.meta["filename"], entry.meta["lineno"]
+            entry.date,
+            pattern,
+            entry.meta["filename"],
+            entry.meta["lineno"],
         )
         options.insert_entry.append(opt)
     elif key == "collapse_pattern":
@@ -115,7 +119,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
             pattern = re.compile(value)
         except re.error as err:
             raise TypeError(
-                f"Should be a regular expression: '{value}'."
+                f"Should be a regular expression: '{value}'.",
             ) from err
         options.collapse_pattern.append(pattern)
     elif key == "locale":

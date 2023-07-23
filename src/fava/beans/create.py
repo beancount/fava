@@ -59,7 +59,12 @@ def posting(
     if price is not None:
         price = amount(price)
     return data.Posting(  # type: ignore[return-value]
-        account, amount(units), cost, price, flag, meta  # type: ignore[arg-type]
+        account,
+        amount(units),  # type: ignore[arg-type]
+        cost,  # type: ignore[arg-type]
+        price,  # type: ignore[arg-type]
+        flag,
+        meta,
     )
 
 
@@ -113,5 +118,8 @@ def note(
 ) -> Balance:
     """Create a Beancount Note."""
     return data.Note(  # type: ignore[return-value]
-        meta, date, account, comment
+        meta,
+        date,
+        account,
+        comment,
     )

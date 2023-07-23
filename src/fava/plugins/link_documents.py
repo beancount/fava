@@ -32,7 +32,8 @@ __plugins__ = ["link_documents"]
 
 
 def link_documents(
-    entries: list[Directive], _: Any
+    entries: list[Directive],
+    _: Any,
 ) -> tuple[list[Directive], list[DocumentError]]:
     """Link entries to documents."""
     errors = []
@@ -66,7 +67,7 @@ def link_documents(
                 if document.account in entry_accounts
             ]
             disk_doc_path = normpath(
-                Path(entry.meta["filename"]).parent / disk_doc
+                Path(entry.meta["filename"]).parent / disk_doc,
             )
             if disk_doc_path in by_fullname:
                 documents.append(by_fullname[disk_doc_path])
@@ -77,7 +78,7 @@ def link_documents(
                         entry.meta,
                         f"Document not found: '{disk_doc}'",
                         entry,
-                    )
+                    ),
                 )
                 continue
 
@@ -95,7 +96,8 @@ def link_documents(
             # txns.
             if isinstance(entry, Transaction):
                 entries[index] = replace(
-                    entry, links=add_to_set(entry.links, hash_)
+                    entry,
+                    links=add_to_set(entry.links, hash_),
                 )
 
     return entries, errors

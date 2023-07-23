@@ -49,7 +49,7 @@ class FavaMisc(FavaModule):
                     "No operating currency specified. "
                     "Please add one to your beancount file.",
                     None,
-                )
+                ),
             )
 
 
@@ -92,7 +92,7 @@ def upcoming_events(events: list[Event], max_delta: int) -> list[Event]:
 
 
 ALIGN_RE = re.compile(
-    rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({CURRENCY_RE}\b.*)'
+    rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({CURRENCY_RE}\b.*)',
 )
 
 

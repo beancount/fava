@@ -37,7 +37,9 @@ def get_cost(pos: Position) -> Amount:
 
 
 def get_market_value(
-    pos: Position, prices: FavaPriceMap, date: datetime.date | None = None
+    pos: Position,
+    prices: FavaPriceMap,
+    date: datetime.date | None = None,
 ) -> Amount:
     """Get the market value of a Position.
 
@@ -62,7 +64,7 @@ def get_market_value(
         price_number = prices.get_price(base_quote, date)
         if price_number is not None:
             return create.amount(
-                (units_.number * price_number, value_currency)
+                (units_.number * price_number, value_currency),
             )
         return create.amount((units_.number * cost_.number, value_currency))
     return units_
@@ -105,7 +107,7 @@ def convert_position(
                 rate2 = prices.get_price(base_quote2, date)
                 if rate2 is not None:
                     return create.amount(
-                        (units_.number * rate1 * rate2, target_currency)
+                        (units_.number * rate1 * rate2, target_currency),
                     )
     return units_
 

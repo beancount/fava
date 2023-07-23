@@ -69,7 +69,10 @@ class FavaExtensionBase:
         """Run after an `entry` has been deleted."""
 
     def after_insert_metadata(
-        self, entry: Directive, key: str, value: str
+        self,
+        entry: Directive,
+        key: str,
+        value: str,
     ) -> None:
         """Run after metadata (key: value) was added to an entry."""
 
@@ -78,7 +81,8 @@ class FavaExtensionBase:
 
 
 def find_extensions(
-    base_path: Path, name: str
+    base_path: Path,
+    name: str,
 ) -> tuple[list[type[FavaExtensionBase]], list[FavaExtensionError]]:
     """Find extensions in a module.
 

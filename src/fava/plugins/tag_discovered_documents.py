@@ -20,7 +20,8 @@ __plugins__ = ["tag_discovered_documents"]
 
 
 def tag_discovered_documents(
-    entries: list[Directive], options_map: BeancountOptions
+    entries: list[Directive],
+    options_map: BeancountOptions,
 ) -> tuple[list[Directive], list[BeancountError]]:
     """Tag automatically added documents."""
     if not options_map["documents"]:  # pragma: no cover
@@ -29,7 +30,8 @@ def tag_discovered_documents(
     for index, entry in enumerate(entries):
         if isinstance(entry, Document) and entry.meta["lineno"] == 0:
             entries[index] = replace(
-                entry, tags=add_to_set(entry.tags, "discovered")
+                entry,
+                tags=add_to_set(entry.tags, "discovered"),
             )
 
     return entries, []
