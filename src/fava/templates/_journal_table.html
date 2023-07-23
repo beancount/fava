@@ -23,7 +23,7 @@
   <dt>{{ key }}:</dt>
   <dd>
   {%- if key.startswith('document') %}<a class="filename" data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{{ value }}</a>
-  {% elif value is string and (value.startswith('http://') or value.startswith('https://')) %}<a class="url" data-remote target=_blank href="{{ value }}">{{ value }}</a>
+  {% elif value is string and (value.startswith('http://') or value.startswith('https://')) %}<a class="url" data-remote target=_blank rel="noopener noreferrer" href="{{ value }}">{{ value }}</a>
   {% else %}
     {{ value }}
   {% endif -%}
