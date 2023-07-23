@@ -9,8 +9,7 @@
   </head>
   <body>
     <!-- <header> and <aside> get inserted here -->
-    <article>      <script type="application/json" id="page-title">""</script>
-    </article>
+    <article>    </article>
     <script type="application/json" id="ledger-data">{
   "account_details": {
     "Assets:Testing:MultipleCommodities": {

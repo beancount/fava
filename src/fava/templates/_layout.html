@@ -1,15 +1,3 @@
-{% set all_pages = {
-    'balance_sheet':    _('Balance Sheet'),
-    'errors':           _('Errors'),
-    'help':             _('Help'),
-    'holdings':         _('Holdings'),
-    'income_statement': _('Income Statement'),
-    'journal':          _('Journal'),
-    'options':          _('Options'),
-    'statistics':       _('Statistics'),
-    'trial_balance':    _('Trial Balance'),
-} %}
-{% set page_title = all_pages.get(active_page, "") if not page_title else page_title %}
 {% set partial = request.args.get('partial') %}
 {% if not partial %}
 <!doctype html>
@@ -18,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}">
     <link rel="stylesheet" href="{{ static_url('app.css') }}">
-    <title>{{ page_title }} - {{ ledger.options.title }}</title>
+    <title>{{ page_title or "" }} - {{ ledger.options.title }}</title>
     <script type="module" src="{{ static_url('app.js') }}"></script>
   </head>
   <body>
@@ -34,7 +22,7 @@
           {% endif %}
         {% endblock %}
       {% endif %}
-      <script type="application/json" id="page-title">{{ page_title|tojson }}</script>
+      {% if page_title %}<script type="application/json" id="page-title">{{ page_title|tojson }}</script>{% endif %}
       {% if partial %}<script type="application/json" id="ledger-mtime">{{ ledger.mtime|tojson }}</script>{% endif %}
       {%- if not partial %}
     </article>

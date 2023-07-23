@@ -1,3 +1,5 @@
 {% import '_journal_table.html' as journal_table with context %}
 
+{% set page_title = _('Journal') %}
+
 {{ journal_table.journal_table(g.filtered.entries) }}

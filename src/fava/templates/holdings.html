@@ -1,5 +1,7 @@
 {% import '_query_table.html' as querytable %}
 
+{% set page_title = _('Holdings') %}
+
 {% set holdings_all = 'SELECT account,
     units(sum(position)) as units,
     cost_number as cost,

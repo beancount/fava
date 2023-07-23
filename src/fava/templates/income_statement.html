@@ -1,5 +1,6 @@
 {% import '_tree_table.html' as tree_table with context %}
 
+{% set page_title = _('Income Statement') %}
 {% set root_tree = g.filtered.root_tree %}
 {% set options = ledger.options %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
