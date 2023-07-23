@@ -33,7 +33,10 @@ if TYPE_CHECKING:  # pragma: no cover
     ],
 )
 def test_format_date(
-    app: Flask, interval: str, output: str, output_filter: str
+    app: Flask,
+    interval: str,
+    output: str,
+    output_filter: str,
 ) -> None:
     test_date = date(2012, 12, 20)
     url = (
@@ -66,7 +69,7 @@ def test_should_show(app: Flask) -> None:
         account = TreeNode("name")
         assert should_show(account) is False
         account.balance_children = CounterInventory(
-            {("USD", None): Decimal("9")}
+            {("USD", None): Decimal("9")},
         )
         assert should_show(account) is True
     with app.test_request_context("/long-example/income_statement/?time=2100"):
@@ -90,7 +93,9 @@ def test_collapse_account(app: Flask, monkeypatch: pytest.MonkeyPatch) -> None:
         )
         monkeypatch.setitem(g.ledger.accounts, "Assets:Stock", AccountData())
         monkeypatch.setitem(
-            g.ledger.accounts, "Assets:Property", AccountData()
+            g.ledger.accounts,
+            "Assets:Property",
+            AccountData(),
         )
 
         assert collapse_account("Assets:Cash") is False

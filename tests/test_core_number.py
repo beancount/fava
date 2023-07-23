@@ -49,7 +49,8 @@ def test_format_decimal(example_ledger: FavaLedger) -> None:
 
 
 def test_format_decimal_locale(
-    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fmt = example_ledger.format_decimal
 

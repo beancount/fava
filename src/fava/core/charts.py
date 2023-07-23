@@ -167,20 +167,25 @@ class ChartModule(FavaModule):
         for date_range in intervals:
             inventory = CounterInventory()
             entries = iter_entry_dates(
-                filtered.entries, date_range.begin, date_range.end
+                filtered.entries,
+                date_range.begin,
+                date_range.end,
             )
             account_inventories: dict[str, CounterInventory] = defaultdict(
-                CounterInventory
+                CounterInventory,
             )
             for entry in entries:
                 for posting in getattr(entry, "postings", []):
                     if posting.account.startswith(accounts):
                         account_inventories[posting.account].add_position(
-                            posting
+                            posting,
                         )
                         inventory.add_position(posting)
             balance = cost_or_value(
-                inventory, conversion, prices, date_range.end_inclusive
+                inventory,
+                conversion,
+                prices,
+                date_range.end_inclusive,
             )
             account_balances = {
                 account: cost_or_value(
@@ -193,7 +198,9 @@ class ChartModule(FavaModule):
             }
             budgets = (
                 self.ledger.budgets.calculate_children(
-                    accounts, date_range.begin, date_range.end
+                    accounts,
+                    date_range.begin,
+                    date_range.end,
                 )
                 if isinstance(accounts, str)
                 else {}
@@ -213,7 +220,10 @@ class ChartModule(FavaModule):
 
     @listify
     def linechart(
-        self, filtered: FilteredLedger, account_name: str, conversion: str
+        self,
+        filtered: FilteredLedger,
+        account_name: str,
+        conversion: str,
     ) -> Iterable[DateAndBalance]:
         """Get the balance of an account as a line chart.
 
@@ -228,7 +238,8 @@ class ChartModule(FavaModule):
             account at that date.
         """
         real_account = realization.get_or_create(
-            filtered.root_account, account_name
+            filtered.root_account,
+            account_name,
         )
         postings = realization.get_postings(real_account)
         journal = realization.iterate_with_balance(postings)  # type: ignore[arg-type]
@@ -245,8 +256,11 @@ class ChartModule(FavaModule):
 
             balance = inv_to_dict(
                 cost_or_value(
-                    balance_inventory, conversion, prices, entry.date
-                )
+                    balance_inventory,
+                    conversion,
+                    prices,
+                    entry.date,
+                ),
             )
 
             currencies = set(balance.keys())
@@ -259,7 +273,10 @@ class ChartModule(FavaModule):
 
     @listify
     def net_worth(
-        self, filtered: FilteredLedger, interval: Interval, conversion: str
+        self,
+        filtered: FilteredLedger,
+        interval: Interval,
+        conversion: str,
     ) -> Iterable[DateAndBalance]:
         """Compute net worth.
 
@@ -300,7 +317,10 @@ class ChartModule(FavaModule):
             yield DateAndBalance(
                 date_range.end_inclusive,
                 cost_or_value(
-                    inventory, conversion, prices, date_range.end_inclusive
+                    inventory,
+                    conversion,
+                    prices,
+                    date_range.end_inclusive,
                 ),
             )
 
@@ -318,7 +338,9 @@ class ChartModule(FavaModule):
         )
 
     def query(
-        self, types: list[ResultType], rows: list[ResultRow]
+        self,
+        types: list[ResultType],
+        rows: list[ResultRow],
     ) -> list[dict[str, date | str | Inventory]]:
         """Chart for a query.
 

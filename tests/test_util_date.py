@@ -42,7 +42,10 @@ def _to_date(string: str) -> date:
     ],
 )
 def test_interval_format(
-    input_date_string: str, interval: Interval, expect: str, expect_filter: str
+    input_date_string: str,
+    interval: Interval,
+    expect: str,
+    expect_filter: str,
 ) -> None:
     assert interval.format_date(_to_date(input_date_string)) == expect
     assert (
@@ -69,7 +72,9 @@ def test_interval_format(
     ],
 )
 def test_get_next_interval(
-    input_date_string: str, interval: Interval, expect: str
+    input_date_string: str,
+    interval: Interval,
+    expect: str,
 ) -> None:
     get = get_next_interval(_to_date(input_date_string), interval)
     assert get == _to_date(expect)
@@ -93,7 +98,9 @@ def test_get_next_interval(
     ],
 )
 def test_get_prev_interval(
-    input_date_string: str, interval: Interval, expect: str
+    input_date_string: str,
+    interval: Interval,
+    expect: str,
 ) -> None:
     get = get_prev_interval(_to_date(input_date_string), interval)
     assert get == _to_date(expect)
@@ -101,7 +108,7 @@ def test_get_prev_interval(
 
 def test_interval_tuples() -> None:
     assert list(
-        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH)
+        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH),
     ) == [
         date(2014, 3, 1),
         date(2014, 4, 1),
@@ -109,7 +116,7 @@ def test_interval_tuples() -> None:
         date(2014, 6, 1),
     ]
     assert list(
-        interval_ends(date(2014, 1, 1), date(2014, 5, 1), Interval.MONTH)
+        interval_ends(date(2014, 1, 1), date(2014, 5, 1), Interval.MONTH),
     ) == [
         date(2014, 1, 1),
         date(2014, 2, 1),
@@ -118,10 +125,10 @@ def test_interval_tuples() -> None:
         date(2014, 5, 1),
     ]
     assert list(
-        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.YEAR)
+        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.YEAR),
     ) == [date(2014, 1, 1), date(2015, 1, 1)]
     assert list(
-        interval_ends(date(2014, 1, 1), date(2015, 1, 1), Interval.YEAR)
+        interval_ends(date(2014, 1, 1), date(2015, 1, 1), Interval.YEAR),
     ) == [date(2014, 1, 1), date(2015, 1, 1)]
 
 
@@ -177,7 +184,10 @@ def test_substitute(string: str, output: str) -> None:
     ],
 )
 def test_fiscal_substitute(
-    fye_str: str, test_date: str, string: str, output: str | None
+    fye_str: str,
+    test_date: str,
+    string: str,
+    output: str | None,
 ) -> None:
     fye = parse_fye_string(fye_str)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
@@ -185,7 +195,8 @@ def test_fiscal_substitute(
         mock_date.side_effect = date
         if output is None:
             with pytest.raises(
-                ValueError, match="Cannot use fiscal_quarter if fiscal year"
+                ValueError,
+                match="Cannot use fiscal_quarter if fiscal year",
             ):
                 substitute(string, fye)
         else:
@@ -233,7 +244,9 @@ def test_parse_date_empty() -> None:
     ],
 )
 def test_parse_date_relative(
-    expect_start: str, expect_end: str, text: str
+    expect_start: str,
+    expect_end: str,
+    text: str,
 ) -> None:
     start, end = _to_date(expect_start), _to_date(expect_end)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
@@ -265,7 +278,9 @@ def test_parse_date_relative(
     ],
 )
 def test_number_of_days_in_period(
-    interval: Interval, date_str: str, expect: int
+    interval: Interval,
+    date_str: str,
+    expect: int,
 ) -> None:
     assert number_of_days_in_period(interval, _to_date(date_str)) == expect
 
@@ -281,7 +296,9 @@ def test_number_of_days_in_period(
     ],
 )
 def test_month_offset(
-    date_input: str, offset: int, expected: str | None
+    date_input: str,
+    offset: int,
+    expected: str | None,
 ) -> None:
     start_date = _to_date(date_input)
     if expected is None:

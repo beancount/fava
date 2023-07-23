@@ -25,7 +25,8 @@ def test_attributes(example_ledger: FavaLedger) -> None:
 
 
 def test_paths_to_watch(
-    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     assert example_ledger.paths_to_watch() == (
         [Path(example_ledger.beancount_file_path)],
@@ -58,7 +59,8 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
 
 
 def test_group_entries(
-    example_ledger: FavaLedger, load_doc_entries: list[Directive]
+    example_ledger: FavaLedger,
+    load_doc_entries: list[Directive],
 ) -> None:
     """
     2010-11-12 * "test"

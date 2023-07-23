@@ -33,7 +33,8 @@ def test_tree() -> None:
 
 
 def test_tree_from_entries(
-    example_ledger: FavaLedger, snapshot: SnapshotFunc
+    example_ledger: FavaLedger,
+    snapshot: SnapshotFunc,
 ) -> None:
     tree = Tree(example_ledger.all_entries)
 

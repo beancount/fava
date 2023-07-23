@@ -66,7 +66,8 @@ def test_serialise_txn() -> None:
 
 
 def test_serialise_entry_types(
-    snapshot: SnapshotFunc, load_doc_entries: list[Directive]
+    snapshot: SnapshotFunc,
+    load_doc_entries: list[Directive],
 ) -> None:
     """
     2017-12-11 open Assets:Cash USD "STRICT"
@@ -118,7 +119,12 @@ def test_serialise_entry_types(
             (
                 "100 USD",
                 CostSpec(
-                    MISSING, None, MISSING, None, None, False  # type: ignore[arg-type]
+                    MISSING,  # type: ignore[arg-type]
+                    None,
+                    MISSING,  # type: ignore[arg-type]
+                    None,
+                    None,
+                    False,
                 ),
                 None,
             ),
@@ -232,7 +238,8 @@ def test_deserialise() -> None:
         [
             create.posting("Assets:ETrade:Cash", "100 USD"),
             replace(
-                create.posting("Assets:ETrade:GLD", "100 USD"), units=MISSING
+                create.posting("Assets:ETrade:GLD", "100 USD"),
+                units=MISSING,
             ),
         ],
     )

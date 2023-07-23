@@ -134,7 +134,9 @@ class Tree(Dict[str, TreeNode]):
             parent_node.balance_children.add_inventory(balance)
 
     def get(  # type: ignore[override]
-        self, name: str, insert: bool = False
+        self,
+        name: str,
+        insert: bool = False,
     ) -> TreeNode:
         """Get an account.
 
@@ -159,7 +161,9 @@ class Tree(Dict[str, TreeNode]):
             return node
 
     def net_profit(
-        self, options: BeancountOptions, account_name: str
+        self,
+        options: BeancountOptions,
+        account_name: str,
     ) -> TreeNode:
         """Calculate the net profit.
 
@@ -173,7 +177,8 @@ class Tree(Dict[str, TreeNode]):
 
         net_profit = Tree()
         net_profit.insert(
-            account_name, income.balance_children + expenses.balance_children
+            account_name,
+            income.balance_children + expenses.balance_children,
         )
 
         return net_profit.get(account_name)
@@ -193,17 +198,19 @@ class Tree(Dict[str, TreeNode]):
                 for currency, number in self.get("")
                 .balance_children.reduce(get_cost)
                 .items()
-            }
+            },
         )
 
         # Add conversions
         self.insert(
-            equity + ":" + options["account_current_conversions"], conversions
+            equity + ":" + options["account_current_conversions"],
+            conversions,
         )
 
         # Insert unrealized gains.
         self.insert(
-            equity + ":" + unrealized_account, -self.get("").balance_children
+            equity + ":" + unrealized_account,
+            -self.get("").balance_children,
         )
 
         # Transfer Income and Expenses

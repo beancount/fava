@@ -45,8 +45,8 @@ def to_excel(
             [
                 ("Results", _result_array(types, rows)),
                 ("Query", [["Query"], [query_string]]),
-            ]
-        )
+            ],
+        ),
     )
     book.save_to_memory(result_format, resp)
     resp.seek(0)
@@ -70,7 +70,8 @@ def to_csv(types: list[ResultType], rows: list[ResultRow]) -> io.BytesIO:
 
 
 def _result_array(
-    types: list[ResultType], rows: list[ResultRow]
+    types: list[ResultType],
+    rows: list[ResultRow],
 ) -> list[list[str]]:
     result_array = [[name for name, t in types]]
     result_array.extend(_row_to_pyexcel(row, types) for row in rows)

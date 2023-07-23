@@ -133,7 +133,8 @@ class FilteredLedger:
     def root_account(self) -> RealAccount:
         """A realized account for the filtered entries."""
         return realization.realize(
-            self.entries, self.ledger.root_accounts  # type: ignore[arg-type]
+            self.entries,  # type: ignore[arg-type]
+            self.ledger.root_accounts,
         )
 
     @property
@@ -283,11 +284,14 @@ class FavaLedger:
         if not self._is_encrypted:
             # pylint: disable=protected-access
             self.all_entries, self.errors, self.options = _load(
-                [(self.beancount_file_path, True)], None, None, None
+                [(self.beancount_file_path, True)],
+                None,
+                None,
+                None,
             )
         else:
             self.all_entries, self.errors, self.options = load_file(
-                self.beancount_file_path
+                self.beancount_file_path,
             )
 
         self.get_filtered.cache_clear()
@@ -296,7 +300,7 @@ class FavaLedger:
         self.prices = FavaPriceMap(self.all_entries_by_type.Price)
 
         self.fava_options, errors = parse_options(
-            self.all_entries_by_type.Custom
+            self.all_entries_by_type.Custom,
         )
         self.errors.extend(errors)
 
@@ -315,7 +319,10 @@ class FavaLedger:
     ) -> FilteredLedger:
         """Filter the ledger."""
         return FilteredLedger(
-            ledger=self, account=account, filter=filter, time=time
+            ledger=self,
+            account=account,
+            filter=filter,
+            time=time,
         )
 
     @property
@@ -431,7 +438,8 @@ class FavaLedger:
             change and balance have already been reduced to units.
         """
         real_account = realization.get_or_create(
-            filtered.root_account, account_name
+            filtered.root_account,
+            account_name,
         )
         txn_postings = (
             realization.get_postings(real_account)
@@ -447,7 +455,7 @@ class FavaLedger:
                 change,
                 balance,
             ) in realization.iterate_with_balance(
-                txn_postings  # type: ignore[arg-type]
+                txn_postings,  # type: ignore[arg-type]
             )
         )
 
@@ -471,11 +479,12 @@ class FavaLedger:
             )
         except StopIteration as exc:
             raise FavaAPIError(
-                f'No entry found for hash "{entry_hash}"'
+                f'No entry found for hash "{entry_hash}"',
             ) from exc
 
     def context(
-        self, entry_hash: str
+        self,
+        entry_hash: str,
     ) -> tuple[
         Directive,
         dict[str, list[str]] | None,

@@ -15,7 +15,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def get_active_years(
-    entries: list[Directive], fye: FiscalYearEnd
+    entries: list[Directive],
+    fye: FiscalYearEnd,
 ) -> list[str]:
     """Return active years, with support for fiscal years.
 
@@ -80,11 +81,12 @@ class AttributesModule(FavaModule):
         self.tags = sorted(all_tags)
 
         self.years = get_active_years(
-            all_entries, self.ledger.fava_options.fiscal_year_end
+            all_entries,
+            self.ledger.fava_options.fiscal_year_end,
         )
 
         account_ranker = ExponentialDecayRanker(
-            sorted(self.ledger.accounts.keys())
+            sorted(self.ledger.accounts.keys()),
         )
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()

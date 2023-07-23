@@ -104,7 +104,8 @@ def slugify(string: str) -> str:
 
 
 def simple_wsgi(
-    _: WSGIEnvironment, start_response: StartResponse
+    _: WSGIEnvironment,
+    start_response: StartResponse,
 ) -> list[bytes]:
     """Return an empty response (a simple WSGI app)."""
     start_response("200 OK", [("Content-Type", "text/html")])

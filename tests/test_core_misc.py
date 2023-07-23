@@ -23,7 +23,7 @@ def test_sidebar_links(load_doc_custom_entries: list[Custom]) -> None:
 def test_upcoming_events() -> None:
     entries, _, _ = load_string(
         f'{datetime.date.today()} event "some_event" "test"\n'
-        '2012-12-12 event "test" "test"'
+        '2012-12-12 event "test" "test"',
     )
     events = upcoming_events(entries, 1)  # type: ignore[arg-type]
     assert len(events) == 1

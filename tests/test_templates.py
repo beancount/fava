@@ -21,7 +21,8 @@ def test_render_diff_and_number(app: Flask, snapshot: SnapshotFunc) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(
-            "_tree_table.html", "render_diff_and_number"
+            "_tree_table.html",
+            "render_diff_and_number",
         )
 
         for invert in [False, True]:
@@ -40,7 +41,9 @@ def test_account_tree(app: Flask, snapshot: SnapshotFunc) -> None:
 
         macro = get_template_attribute("_tree_table.html", "account_tree")
         interval_balances, interval_ends = g.ledger.interval_balances(
-            g.filtered, g.interval, "Assets"
+            g.filtered,
+            g.interval,
+            "Assets",
         )
         snapshot(
             macro(
@@ -64,14 +67,18 @@ def test_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
 
 def test_account_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
     with app.test_request_context(
-        "/off-by-one/?interval=day&conversion=at_value"
+        "/off-by-one/?interval=day&conversion=at_value",
     ):
         app.preprocess_request()
         account_tree = get_template_attribute(
-            "_tree_table.html", "account_tree"
+            "_tree_table.html",
+            "account_tree",
         )
         interval_balances, interval_ends = g.ledger.interval_balances(
-            g.filtered, g.interval, "Assets", True
+            g.filtered,
+            g.interval,
+            "Assets",
+            True,
         )
         snapshot(
             account_tree(
@@ -87,7 +94,8 @@ def test_account_tree_off_by_one(app: Flask, snapshot: SnapshotFunc) -> None:
 def test_render_currency(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context(""):
         macro = get_template_attribute(
-            "macros/_commodity_macros.html", "render_currency"
+            "macros/_commodity_macros.html",
+            "render_currency",
         )
         assert "US Dollar" in macro(example_ledger, "USD")
         test = '<span title="TEST">TEST</span>'
@@ -98,7 +106,8 @@ def test_render_amount(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(
-            "macros/_commodity_macros.html", "render_amount"
+            "macros/_commodity_macros.html",
+            "render_amount",
         )
         res = '<span class="num" title="US Dollar">10.00 USD</span>'
         assert macro(example_ledger, create.amount("10 USD")) == res
@@ -111,7 +120,8 @@ def test_render_amount(app: Flask, example_ledger: FavaLedger) -> None:
 def test_account_indicator(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context(""):
         macro = get_template_attribute(
-            "macros/_account_macros.html", "indicator"
+            "macros/_account_macros.html",
+            "indicator",
         )
         assert not macro(example_ledger, "NONEXISTING")
         yellow_status = macro(example_ledger, "Assets:US:BofA:Checking")
@@ -122,7 +132,8 @@ def test_account_name(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(
-            "macros/_account_macros.html", "account_name"
+            "macros/_account_macros.html",
+            "account_name",
         )
         assert (
             macro(example_ledger, "NONEXISTING")

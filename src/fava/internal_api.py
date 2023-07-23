@@ -133,7 +133,11 @@ def _chart_interval_totals(
         "bar",
         label or account_name,
         g.ledger.charts.interval_totals(
-            g.filtered, interval, account_name, g.conversion, invert
+            g.filtered,
+            interval,
+            account_name,
+            g.conversion,
+            invert,
         ),
     )
 

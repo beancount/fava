@@ -30,5 +30,7 @@ if TYPE_CHECKING:  # pragma: no cover
         dcontext: DisplayContext
 
     LoaderResult = tuple[
-        list[Directive], list[BeancountError], BeancountOptions
+        list[Directive],
+        list[BeancountError],
+        BeancountOptions,
     ]

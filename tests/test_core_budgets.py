@@ -26,12 +26,18 @@ def test_budgets(load_doc_custom_entries: list[Custom]) -> None:
     assert len(errors) == 2
 
     empty = calculate_budget(
-        budgets, "Expenses", date(2016, 6, 1), date(2016, 6, 8)
+        budgets,
+        "Expenses",
+        date(2016, 6, 1),
+        date(2016, 6, 8),
     )
     assert empty == {}
 
     budgets_ = calculate_budget(
-        budgets, "Expenses:Groceries", date(2016, 6, 1), date(2016, 6, 8)
+        budgets,
+        "Expenses:Groceries",
+        date(2016, 6, 1),
+        date(2016, 6, 8),
     )
 
     assert budgets_["CNY"] == Decimal("100")
@@ -43,7 +49,10 @@ def test_budgets_daily(budgets_doc: BudgetDict) -> None:
     2016-05-01 custom "budget" Expenses:Books "daily" 2.5 EUR"""
 
     assert "EUR" not in calculate_budget(
-        budgets_doc, "Expenses:Books", date(2010, 2, 1), date(2010, 2, 2)
+        budgets_doc,
+        "Expenses:Books",
+        date(2010, 2, 1),
+        date(2010, 2, 2),
     )
 
     for start, end, num in [
@@ -98,7 +107,10 @@ def test_budgets_doc_yearly(budgets_doc: BudgetDict) -> None:
     2010-01-01 custom "budget" Expenses:Books "yearly" 99999.87 EUR"""
 
     budget = calculate_budget(
-        budgets_doc, "Expenses:Books", date(2011, 2, 1), date(2011, 2, 2)
+        budgets_doc,
+        "Expenses:Books",
+        date(2011, 2, 1),
+        date(2011, 2, 2),
     )
     assert budget["EUR"] == Decimal("99999.87") / 365
 
@@ -109,12 +121,18 @@ def test_budgets_children(budgets_doc: BudgetDict) -> None:
     2017-01-01 custom "budget" Expenses:Books:Notebooks "daily" 2.00 USD"""
 
     budget = calculate_budget_children(
-        budgets_doc, "Expenses", date(2017, 1, 1), date(2017, 1, 2)
+        budgets_doc,
+        "Expenses",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
     )
     assert budget["USD"] == Decimal("12.00")
 
     budget = calculate_budget_children(
-        budgets_doc, "Expenses:Books", date(2017, 1, 1), date(2017, 1, 2)
+        budgets_doc,
+        "Expenses:Books",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
     )
     assert budget["USD"] == Decimal("12.00")
 

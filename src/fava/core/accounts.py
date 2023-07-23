@@ -121,8 +121,11 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
         return self.EMPTY
 
     def setdefault(
-        self, key: str, _: AccountData | None = None
+        self,
+        key: str,
+        _: AccountData | None = None,
     ) -> AccountData:
+        """Get the account of the given name, insert one if it is missing."""
         if key not in self:
             self[key] = AccountData()
         return self[key]
@@ -140,13 +143,14 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
             last = get_last_entry(txn_postings)
             if last is not None and not isinstance(last, Close):
                 account_data.last_entry = LastEntry(
-                    date=last.date, entry_hash=hash_entry(last)
+                    date=last.date,
+                    entry_hash=hash_entry(last),
                 )
             if meta.get("fava-uptodate-indication"):
                 account_data.uptodate_status = uptodate_status(txn_postings)
                 if account_data.uptodate_status != "green":
                     account_data.balance_string = balance_string(
-                        tree.get(open_entry.account)
+                        tree.get(open_entry.account),
                     )
         for close in self.ledger.all_entries_by_type.Close:
             self.setdefault(close.account).close_date = close.date

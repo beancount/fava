@@ -26,7 +26,7 @@ def cli() -> None:
 
 
 def _env_to_list(
-    attributes: dict[str, str | tuple[str, str]]
+    attributes: dict[str, str | tuple[str, str]],
 ) -> Iterable[str]:
     for name in attributes:
         yield name[0] if isinstance(name, tuple) else name
@@ -57,7 +57,7 @@ def download_translations() -> None:
     token = environ.get("POEDITOR_TOKEN")
     if not token:
         raise UsageError(
-            "The POEDITOR_TOKEN environment variable needs to be set."
+            "The POEDITOR_TOKEN environment variable needs to be set.",
         )
     for language in LOCALES:
         download_from_poeditor(language, token)
@@ -69,7 +69,7 @@ def upload_translations() -> None:
     token = environ.get("POEDITOR_TOKEN")
     if not token:
         raise UsageError(
-            "The POEDITOR_TOKEN environment variable needs to be set."
+            "The POEDITOR_TOKEN environment variable needs to be set.",
         )
     path = FAVA_PATH / "translations" / "messages.pot"
     echo(f"Uploading message catalog: {path}")
@@ -104,7 +104,9 @@ def download_from_poeditor(language: str, token: str) -> None:
         "type": "po",
     }
     request = requests.post(
-        "https://api.poeditor.com/v2/projects/export", data=data, timeout=10
+        "https://api.poeditor.com/v2/projects/export",
+        data=data,
+        timeout=10,
     )
     url = request.json()["result"]["url"]
     content = requests.get(url, timeout=10).content

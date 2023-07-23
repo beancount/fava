@@ -24,7 +24,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def test_ingest_file_import_info(
-    test_data_dir: Path, get_ledger: GetFavaLedger
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
 ) -> None:
     class Imp(ImporterProtocol):  # type: ignore[misc]
         def __init__(self, acc: str) -> None:
@@ -59,7 +60,10 @@ def test_ingest_file_import_info(
     info2 = file_import_info("/asdf/basename", Imp("rawfile"))
     assert isinstance(info2.account, str)
     assert info2 == FileImportInfo(
-        "rawfile", "", datetime.date.today(), "basename"
+        "rawfile",
+        "",
+        datetime.date.today(),
+        "basename",
     )
 
     with pytest.raises(FavaAPIError) as err:
@@ -74,7 +78,8 @@ def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
 
 
 def test_ingest_examplefile(
-    test_data_dir: Path, get_ledger: GetFavaLedger
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
 ) -> None:
     ingest_ledger = get_ledger("import")
 
@@ -91,13 +96,14 @@ def test_ingest_examplefile(
                     "Assets:Checking",
                     datetime.date.today(),
                     "examplebank.import.csv",
-                )
+                ),
             ],
-        )
+        ),
     ]
 
     entries = ingest_ledger.ingest.extract(
-        str(test_data_dir / "import.csv"), "<run_path>.TestImporter"
+        str(test_data_dir / "import.csv"),
+        "<run_path>.TestImporter",
     )
     assert len(entries) == 4
     assert entries[0].date == datetime.date(2017, 2, 12)
@@ -122,7 +128,8 @@ def test_ingest_examplefile(
 
 
 def test_filepath_in_primary_imports_folder(
-    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test"])
 
@@ -130,13 +137,16 @@ def test_filepath_in_primary_imports_folder(
         return Path(start).joinpath(*args).resolve()
 
     assert filepath_in_primary_imports_folder(
-        "filename", example_ledger
+        "filename",
+        example_ledger,
     ) == _join("/test", "filename")
     assert filepath_in_primary_imports_folder(
-        "file/name", example_ledger
+        "file/name",
+        example_ledger,
     ) == _join("/test", "file name")
     assert filepath_in_primary_imports_folder(
-        "/../file/name", example_ledger
+        "/../file/name",
+        example_ledger,
     ) == _join("/test", " .. file name")
 
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", [])

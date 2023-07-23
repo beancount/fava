@@ -18,7 +18,8 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
 
     def run(query_string: str) -> Any:
         return query_ledger.query_shell.execute_query(
-            query_ledger.all_entries, query_string
+            query_ledger.all_entries,
+            query_string,
         )
 
     def run_text(query_string: str) -> str:
@@ -46,7 +47,9 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
     assert run("run custom_query") == bal
     assert run("run 'custom query with space'") == bal
     assert run("balances")[1:] == run_query(
-        query_ledger.all_entries, query_ledger.options, "balances"
+        query_ledger.all_entries,
+        query_ledger.options,
+        "balances",
     )
     assert (
         run_text("asdf")
@@ -55,7 +58,8 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
 
 
 def test_query_to_file(
-    snapshot: SnapshotFunc, get_ledger: GetFavaLedger
+    snapshot: SnapshotFunc,
+    get_ledger: GetFavaLedger,
 ) -> None:
     query_ledger = get_ledger("query-example")
     entries = query_ledger.all_entries

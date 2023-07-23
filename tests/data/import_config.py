@@ -49,13 +49,19 @@ class TestImporter(importer.ImporterProtocol):
                     entries.append(data.Note(meta, date, self.account, desc))
                 else:
                     units_d = round(
-                        Decimal(row["Betrag"].replace(",", ".")), 2
+                        Decimal(row["Betrag"].replace(",", ".")),
+                        2,
                     )
                     units = amount.Amount(units_d, self.currency)
 
                     posting1 = data.Posting("", -units, None, None, None, None)
                     posting2 = data.Posting(
-                        self.account, units, None, None, None, None
+                        self.account,
+                        units,
+                        None,
+                        None,
+                        None,
+                        None,
                     )
                     txn = data.Transaction(
                         meta,
@@ -78,7 +84,7 @@ class TestImporter(importer.ImporterProtocol):
                     datetime.date.today(),
                     self.account,
                     create.amount("10 USD"),
-                )
+                ),
             )
         return entries
 

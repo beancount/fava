@@ -79,7 +79,7 @@ class FavaPriceMap:
             counts[base_quote] += 1
             if rate != ZERO:
                 raw_map[(price.amount.currency, price.currency)].append(
-                    (price.date, ONE / rate)
+                    (price.date, ONE / rate),
                 )
         self._forward_pairs = [
             (base, quote)
@@ -91,7 +91,8 @@ class FavaPriceMap:
         }
 
     def commodity_pairs(
-        self, operating_currencies: list[str]
+        self,
+        operating_currencies: list[str],
     ) -> list[BaseQuote]:
         """List pairs of commodities.
 
@@ -115,13 +116,17 @@ class FavaPriceMap:
         return self._map.get(base_quote)
 
     def get_price(
-        self, base_quote: BaseQuote, date: datetime.date | None = None
+        self,
+        base_quote: BaseQuote,
+        date: datetime.date | None = None,
     ) -> Decimal | None:
         """Get the price for the given currency pair."""
         return self.get_price_point(base_quote, date)[1]
 
     def get_price_point(
-        self, base_quote: BaseQuote, date: datetime.date | None = None
+        self,
+        base_quote: BaseQuote,
+        date: datetime.date | None = None,
     ) -> PricePoint | tuple[None, Decimal] | tuple[None, None]:
         """Get the price point for the given currency pair."""
         base, quote = base_quote

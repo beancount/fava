@@ -14,7 +14,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def test_is_document_or_import_file(
-    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test/"])
     assert not is_document_or_import_file("/asdfasdf", example_ledger)
@@ -24,7 +25,8 @@ def test_is_document_or_import_file(
 
 
 def test_filepath_in_documents_folder(
-    example_ledger: FavaLedger, monkeypatch: pytest.MonkeyPatch
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setitem(example_ledger.options, "documents", ["/test"])
 
@@ -32,17 +34,29 @@ def test_filepath_in_documents_folder(
         return Path(start).joinpath(*args).resolve()
 
     assert filepath_in_document_folder(
-        "/test", "Assets:US:BofA:Checking", "filename", example_ledger
+        "/test",
+        "Assets:US:BofA:Checking",
+        "filename",
+        example_ledger,
     ) == _join("/test", "Assets", "US", "BofA", "Checking", "filename")
     assert filepath_in_document_folder(
-        "/test", "Assets:US:BofA:Checking", "file/name", example_ledger
+        "/test",
+        "Assets:US:BofA:Checking",
+        "file/name",
+        example_ledger,
     ) == _join("/test", "Assets", "US", "BofA", "Checking", "file name")
     assert filepath_in_document_folder(
-        "/test", "Assets:US:BofA:Checking", "/../file/name", example_ledger
+        "/test",
+        "Assets:US:BofA:Checking",
+        "/../file/name",
+        example_ledger,
     ) == _join("/test", "Assets", "US", "BofA", "Checking", " .. file name")
     with pytest.raises(FavaAPIError):
         filepath_in_document_folder(
-            "/test", "notanaccount", "filename", example_ledger
+            "/test",
+            "notanaccount",
+            "filename",
+            example_ledger,
         )
     with pytest.raises(FavaAPIError):
         filepath_in_document_folder(

@@ -8,5 +8,5 @@ application = create_app(
         "/home/favadev/example.beancount",
         "/home/favadev/budgets-example.beancount",
         "/home/favadev/huge-example.beancount",
-    ]
+    ],
 )

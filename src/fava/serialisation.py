@@ -76,7 +76,7 @@ def deserialise_posting(posting: Any) -> Posting:
     """Parse JSON to a Beancount Posting."""
     amount = posting.get("amount", "")
     entries, errors, _ = parse_string(
-        f'2000-01-01 * "" ""\n Assets:Account {amount}'
+        f'2000-01-01 * "" ""\n Assets:Account {amount}',
     )
     if errors:
         raise FavaAPIError(f"Invalid amount: {amount}")
@@ -115,15 +115,21 @@ def deserialise(json_entry: Any) -> Directive:
     if json_entry["type"] == "Balance":
         raw_amount = json_entry["amount"]
         amount = create.amount(
-            f"{raw_amount['number']} {raw_amount['currency']}"
+            f"{raw_amount['number']} {raw_amount['currency']}",
         )
 
         return create.balance(
-            json_entry["meta"], date, json_entry["account"], amount
+            json_entry["meta"],
+            date,
+            json_entry["account"],
+            amount,
         )
     if json_entry["type"] == "Note":
         comment = json_entry["comment"].replace('"', "")
         return create.note(
-            json_entry["meta"], date, json_entry["account"], comment
+            json_entry["meta"],
+            date,
+            json_entry["account"],
+            comment,
         )
     raise FavaAPIError("Unsupported entry type.")
