@@ -6,7 +6,7 @@
 
 {% macro indicator(ledger, account) %}
 {% set status=ledger.accounts[account].uptodate_status %}
-{% set balance_string=ledger.accounts[account].balance_string %}
+{% set balance_string=ledger.accounts[account].balance_string or "" %}
 {% if status %}
 <copyable-text class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
 
