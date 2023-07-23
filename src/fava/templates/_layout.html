@@ -13,15 +13,7 @@
     <!-- <header> and <aside> get inserted here -->
     <article>
       {%- endif %}
-      {% if not client_side_rendered %}
-        {% block content %}
-          {% if content %}
-            {{ content }}
-          {% else %}
-            {% include active_page + '.html' %}
-          {% endif %}
-        {% endblock %}
-      {% endif %}
+      {% block content %}{{ content }}{% endblock %}
       {% if page_title %}<script type="application/json" id="page-title">{{ page_title|tojson }}</script>{% endif %}
       {% if partial %}<script type="application/json" id="ledger-mtime">{{ ledger.mtime|tojson }}</script>{% endif %}
       {%- if not partial %}

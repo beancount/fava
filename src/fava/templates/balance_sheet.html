@@ -1,7 +1,10 @@
+{% extends "_layout.html" %}
+
 {% import '_tree_table.html' as tree_table with context %}
 
 {% set page_title = _('Balance Sheet') %}
 
+{% block content %}
 <svelte-component type="charts"><script type="application/json">{{
   [
     chart_api.net_worth(),
@@ -23,3 +26,4 @@
     {{ tree_table.tree(root_tree_closed.get(ledger.options['name_equity']), invert=invert) }}
   </div>
 </div>
+{% endblock %}

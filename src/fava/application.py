@@ -297,8 +297,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     ) -> str:
         """Get the holdings report."""
         return render_template(
-            "_layout.html",
-            active_page="holdings",
+            "holdings.html",
             aggregation_key=aggregation_key,
         )
 
@@ -306,13 +305,9 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     def report(report_name: str) -> str:
         """Endpoint for most reports."""
         if report_name in CLIENT_SIDE_REPORTS:
-            return render_template(
-                "_layout.html",
-                active_page=report_name,
-                client_side_rendered=True,
-            )
+            return render_template("_layout.html", content="")
         if report_name in SERVER_SIDE_REPORTS:
-            return render_template("_layout.html", active_page=report_name)
+            return render_template(f"{report_name}.html")
         return abort(404)
 
     @fava_app.route("/<bfile>/extension_js_module/<extension_name>.js")
@@ -369,8 +364,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             extras=["fenced-code-blocks", "tables", "header-ids"],
         )
         return render_template(
-            "_layout.html",
-            active_page="help",
+            "help.html",
             page_slug=page_slug,
             help_html=Markup(
                 render_template_string(

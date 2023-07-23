@@ -1,5 +1,8 @@
+{% extends "_layout.html" %}
+
 {% set page_title = _('Help') %}
 
+{% block content %}
 <div class="help">
   <div class="help-sidebar">
     <h3>{{ _('Help pages') }}</h3>
@@ -17,3 +20,4 @@
     {{ help_html }}
   </div>
 </div>
+{% endblock %}

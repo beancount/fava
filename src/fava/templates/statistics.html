@@ -1,9 +1,12 @@
+{% extends "_layout.html" %}
+
 {% import 'macros/_account_macros.html' as account_macros %}
 {% import 'macros/_commodity_macros.html' as commodity_macros %}
 {% import '_query_table.html' as querytable %}
 
 {% set page_title = _('Statistics') %}
 
+{% block content %}
 <div class="left">
   {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
   <h3>
@@ -82,3 +85,4 @@
     </tfoot>
   </table>
 </div>
+{% endblock %}

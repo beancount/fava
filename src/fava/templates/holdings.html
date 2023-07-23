@@ -1,3 +1,5 @@
+{% extends "_layout.html" %}
+
 {% import '_query_table.html' as querytable %}
 
 {% set page_title = _('Holdings') %}
@@ -45,6 +47,8 @@
   'cost_currency': 0,
 } %}
 
+
+{% block content %}
 <div class="headerline">
   <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">{{ _('Holdings') }}</a>{% else %}{{ _('Holdings') }}{% endif %}</h3>
   {% for key, label in [('account', _('Account')), ('currency', _('Currency')), ('cost_currency', _('Cost currency'))] %}
@@ -59,3 +63,4 @@
 </p>
 {% set contents, result_types, result_rows = ledger.query_shell.execute_query(g.filtered.entries, query_string) %}
 {{ querytable.querytable(ledger, contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
+{% endblock %}

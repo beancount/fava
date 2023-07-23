@@ -1,3 +1,5 @@
+{% extends "_layout.html" %}
+
 {% import '_tree_table.html' as tree_table with context %}
 
 {% set page_title = _('Income Statement') %}
@@ -5,6 +7,7 @@
 {% set options = ledger.options %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
+{% block content %}
 <svelte-component type="charts"><script type="application/json">{{
   [
     chart_api.interval_totals(g.interval, (options['name_income'], options['name_expenses']), label=_('Net Profit'), invert=invert),
@@ -26,3 +29,4 @@
     {{ tree_table.tree(root_tree.net_profit(options, _('Net Profit')), invert=invert) }}
   </div>
 </div>
+{% endblock %}
