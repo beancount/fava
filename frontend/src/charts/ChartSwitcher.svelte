@@ -1,9 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { getScriptTagValue } from "../lib/dom";
   import { log_error } from "../log";
-  import { notify } from "../notifications";
 
   import ChartSwitcherTyped from "./ChartSwitcherTyped.svelte";
   import { chartContext } from "./context";
@@ -16,16 +14,7 @@
   let charts: NamedFavaChart[] = [];
 
   onMount(() => {
-    const chartData = data
-      ? chart_data_validator(data)
-      : getScriptTagValue("#chart-data", chart_data_validator);
-
-    if (!data && chartData.success && chartData.value.length) {
-      notify(
-        "This page adds charts using a deprecated method which will be removed soon.",
-        "warning"
-      );
-    }
+    const chartData = chart_data_validator(data);
 
     const res = parseChartData(chartData, $chartContext);
     if (res.success) {
