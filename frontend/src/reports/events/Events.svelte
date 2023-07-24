@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ChartSwitcherTyped from "../../charts/ChartSwitcherTyped.svelte";
+  import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { day } from "../../format";
   import { _, format } from "../../i18n";
   import { sortableTable } from "../../sort";
@@ -11,7 +11,7 @@
 </script>
 
 {#if groups.length}
-  <ChartSwitcherTyped {charts} />
+  <ChartSwitcher {charts} />
 
   {#each groups as [type, events]}
     <div class="left">

@@ -37,14 +37,15 @@ const parsers: Partial<
 export type FavaChart = HierarchyChart | BarChart | ScatterPlot | LineChart;
 export type NamedFavaChart = FavaChart & { name?: string };
 
-export const chart_data_validator = array(
+const chart_data_validator = array(
   object({ label: string, type: string, data: unknown }),
 );
 
 export function parseChartData(
-  res: ReturnType<typeof chart_data_validator>,
+  data: unknown,
   ctx: ChartContext,
 ): Result<NamedFavaChart[], string> {
+  const res = chart_data_validator(data);
   if (!res.success) {
     return res;
   }

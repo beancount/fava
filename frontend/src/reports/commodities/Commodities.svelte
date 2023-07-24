@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ChartSwitcherTyped from "../../charts/ChartSwitcherTyped.svelte";
+  import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { day } from "../../format";
   import { _ } from "../../i18n";
   import { sortableTable } from "../../sort";
@@ -11,7 +11,7 @@
   export let commodities: PageData["commodities"];
 </script>
 
-<ChartSwitcherTyped {charts} />
+<ChartSwitcher {charts} />
 {#each commodities as { base, quote, prices }}
   <div class="left">
     <h3>{base} / {quote}</h3>

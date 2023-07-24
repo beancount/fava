@@ -3,11 +3,47 @@
  */
 
 import type { SvelteComponent } from "svelte";
+import { get as store_get } from "svelte/store";
 
+import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
+import { chartContext } from "./charts/context";
+import { ok, type Result } from "./lib/result";
 
-const components = new Map<string, typeof SvelteComponent<{ data?: unknown }>>([
-  ["charts", ChartSwitcher],
+/** This class pairs the components and their validation functions to use them in a type-safe way. */
+class SvelteCustomElementComponent<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> {
+  constructor(
+    private readonly Component: typeof SvelteComponent<T>,
+    private readonly validate: (data: unknown) => Result<T, string>,
+  ) {}
+
+  /** Load data and render the component for this route to the given target. */
+  render(target: HTMLElement, data: unknown): (() => void) | undefined {
+    const res = this.validate(data);
+    if (!res.success) {
+      target.innerHTML = `Rendering component failed: ${res.value}`;
+      return undefined;
+    }
+    const instance = new this.Component({ target, props: res.value });
+    return () => {
+      instance.$destroy();
+    };
+  }
+}
+
+const components = new Map<string, SvelteCustomElementComponent>([
+  [
+    "charts",
+    new SvelteCustomElementComponent(ChartSwitcher, (data) => {
+      const res = parseChartData(data, store_get(chartContext));
+      if (res.success) {
+        return ok({ charts: res.value });
+      }
+      return res;
+    }),
+  ],
 ]);
 
 /**
@@ -17,32 +53,33 @@ const components = new Map<string, typeof SvelteComponent<{ data?: unknown }>>([
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {
-  component?: SvelteComponent<{ data?: unknown }>;
+  private destroy?: () => void;
 
   connectedCallback(): void {
-    if (this.component) {
+    if (this.destroy) {
       return;
     }
     const type = this.getAttribute("type");
     if (!type) {
       throw new Error("Component is missing type");
     }
-    const Cls = components.get(type);
-    if (!Cls) {
+    const comp = components.get(type);
+    if (!comp) {
       throw new Error("Invalid component");
     }
-    const props: { data?: unknown } = {};
     const script = this.querySelector("script");
-    if (script && script.type === "application/json") {
-      props.data = JSON.parse(script.innerHTML);
-    }
-    this.component = new Cls({ target: this, props });
+    this.destroy = comp.render(
+      this,
+      script && script.type === "application/json"
+        ? JSON.parse(script.innerHTML)
+        : null,
+    );
   }
 
   disconnectedCallback(): void {
     try {
-      this.component?.$destroy();
-      this.component = undefined;
+      this.destroy?.();
+      this.destroy = undefined;
     } catch (e) {
       // pass
     }
