@@ -13,7 +13,9 @@ Extensions may also contain a report - this is detected when the extension's
 class has a `report_title` attribute. The template for the report should be in a
 `templates` subdirectory with a report matching the class's name. For example,
 check out `fava.ext.portfolio_list` which has its template located at
-`fava/ext/portfolio_list/templates/PortfolioList.html`.
+`fava/ext/portfolio_list/templates/PortfolioList.html`, or `fava.ext.batch_edit`
+which has its template located at
+`fava/ext/batch_edit/templates/BatchEdit.html`.
 
 Finally, extensions may contain a Javascript module to be loaded in the
 frontend. The module should be in a Javascript file matching the class's name

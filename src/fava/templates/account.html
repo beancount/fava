@@ -23,7 +23,7 @@
   {% endfor %}
 {% endif %}
 
-<svelte-component type="charts"><script type="application/json">{{ chart_list|tojson }}</script></svelte-component>
+<svelte-component type="charts"><script type="application/json">{{ {'data': chart_list}|tojson }}</script></svelte-component>
 
 <div class="droptarget" data-account-name="{{ account_name }}">
   <div class="headerline">
