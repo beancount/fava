@@ -21,9 +21,9 @@ const parsers: Partial<
   Record<
     string,
     (
+      label: string,
       json: unknown,
       ctx: ChartContext,
-      label: string,
     ) => Result<FavaChart, string>
   >
 > = {
@@ -34,7 +34,6 @@ const parsers: Partial<
 };
 
 export type FavaChart = HierarchyChart | BarChart | ScatterPlot | LineChart;
-export type NamedFavaChart = FavaChart & { name?: string };
 
 const chart_data_validator = array(
   object({ label: string, type: string, data: unknown }),
@@ -43,15 +42,15 @@ const chart_data_validator = array(
 export function parseChartData(
   data: unknown,
   ctx: ChartContext,
-): Result<NamedFavaChart[], string> {
+): Result<FavaChart[], string> {
   return chart_data_validator(data).map((chartData) => {
-    const result: NamedFavaChart[] = [];
+    const result: FavaChart[] = [];
     chartData.forEach((chart) => {
       const parser = parsers[chart.type];
       if (parser) {
-        const r = parser(chart.data, ctx, chart.label);
+        const r = parser(chart.label, chart.data, ctx);
         if (r.is_ok) {
-          result.push({ name: chart.label, ...r.value });
+          result.push(r.value);
         }
       }
     });

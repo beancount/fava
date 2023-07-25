@@ -3,7 +3,7 @@ import { derived, writable } from "svelte/store";
 import { _, format } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
-import { constant, union } from "../lib/validation";
+import { array, constant, string, union } from "../lib/validation";
 
 import {
   conversion_currencies,
@@ -13,8 +13,11 @@ import {
 
 /** Whether the charts should be shown - this applies globally to all charts. */
 export const showCharts = writable(true);
+
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
-export const lastActiveChartName = writable<string | undefined>(undefined);
+export const lastActiveChartName = writable<string | null>(null);
+
+/** The currently selected hierarchy chart mode. */
 export const hierarchyChartMode = localStorageSyncedStore<
   "treemap" | "sunburst"
 >(
@@ -22,16 +25,28 @@ export const hierarchyChartMode = localStorageSyncedStore<
   union(constant("treemap"), constant("sunburst")),
   () => "treemap",
 );
+
+/** The currently selected line chart mode. */
 export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   "line-chart-mode",
   union(constant("line"), constant("area")),
   () => "line",
 );
+
+/** The currently selected bar chart mode. */
 export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
   "bar-chart-mode",
   union(constant("stacked"), constant("single")),
   () => "stacked",
 );
+
+/** The currencies that are currently not shown in the bar and line charts. */
+export const chartToggledCurrencies = localStorageSyncedStore<string[]>(
+  "chart-toggled-currencies",
+  array(string),
+  () => [],
+);
+
 export const chartCurrency = writable("");
 
 const currencySuggestions = derived(

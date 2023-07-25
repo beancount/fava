@@ -22,7 +22,7 @@
   $: radius = Math.min(width, height) / 2;
 
   $: root = partition<AccountHierarchyDatum>()(data);
-  $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
+  $: nodes = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
   let current: AccountHierarchyNode | null = null;
   $: if (root) {
@@ -31,14 +31,10 @@
 
   function balanceText(d: AccountHierarchyNode): string {
     const val = d.value ?? 0;
-    const rootVal = root.value ?? 0;
-    return rootVal
-      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`
+    return root.value
+      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / root.value)})`
       : $ctx.amount(val, currency);
   }
-
-  $: currentAccount = current ? current.data.account : root.data.account;
-  $: currentBalance = current ? balanceText(current) : balanceText(root);
 
   const x = scaleLinear().range([0, 2 * Math.PI]);
   $: y = scaleSqrt().range([0, radius]);
@@ -60,10 +56,12 @@
 >
   <circle style="opacity:0" r={radius} />
   <text class="account" text-anchor="middle">
-    {currentAccount}
+    {(current ?? root).data.account}
   </text>
-  <text class="balance" dy="1.2em" text-anchor="middle">{currentBalance}</text>
-  {#each leaves as d}
+  <text class="balance" dy="1.2em" text-anchor="middle">
+    {balanceText(current ?? root)}
+  </text>
+  {#each nodes as d}
     <a href={urlForAccount(d.data.account)}>
       <path
         on:mouseover={() => {
@@ -72,10 +70,10 @@
         on:focus={() => {
           current = d;
         }}
-        class:half={current && !currentAccount.startsWith(d.data.account)}
+        class:half={current && !current.data.account.startsWith(d.data.account)}
         fill-rule="evenodd"
         fill={$sunburstScale(d.data.account)}
-        d={arcShape(d) ?? undefined}
+        d={arcShape(d)}
         role="img"
       />
     </a>

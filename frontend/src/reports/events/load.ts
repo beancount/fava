@@ -1,14 +1,15 @@
 import { group } from "d3-array";
 
 import { get } from "../../api";
-import type { NamedFavaChart } from "../../charts";
+import type { FavaChart } from "../../charts";
+import { ScatterPlot } from "../../charts/scatterplot";
 import { _, format } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 
 export const load = (
   url: URL,
 ): Promise<{
-  charts: NamedFavaChart[];
+  charts: FavaChart[];
   groups: [
     string,
     {
@@ -21,14 +22,11 @@ export const load = (
   get("events", getURLFilters(url)).then((events) => {
     const groups = [...group(events, (e) => e.type)];
 
-    const charts: NamedFavaChart[] = [
-      { name: _("Events"), type: "scatterplot", data: events },
+    const charts = [
+      new ScatterPlot(_("Events"), events),
       ...groups.map(
-        ([type, data]): NamedFavaChart => ({
-          name: format(_("Event: %(type)s"), { type }),
-          type: "scatterplot",
-          data,
-        }),
+        ([type, data]) =>
+          new ScatterPlot(format(_("Event: %(type)s"), { type }), data),
       ),
     ];
 

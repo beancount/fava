@@ -32,9 +32,13 @@ function addInternalNodesAsLeaves(node: AccountHierarchyDatum): void {
   }
 }
 
-export interface HierarchyChart {
-  type: "hierarchy";
-  data: Map<string, AccountHierarchyNode>;
+export class HierarchyChart {
+  readonly type = "hierarchy";
+
+  constructor(
+    readonly name: string | null,
+    readonly data: Map<string, AccountHierarchyNode>,
+  ) {}
 }
 
 const account_hierarchy_validator: Validator<AccountHierarchyDatum> = object({
@@ -49,6 +53,7 @@ const hierarchy_validator = object({
 });
 
 export function hierarchy(
+  label: string | null,
   json: unknown,
   { currencies }: ChartContext,
 ): Result<HierarchyChart, string> {
@@ -66,6 +71,6 @@ export function hierarchy(
       }
     });
 
-    return { type: "hierarchy", data };
+    return new HierarchyChart(label, data);
   });
 }

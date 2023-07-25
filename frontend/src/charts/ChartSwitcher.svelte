@@ -7,11 +7,11 @@
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
 
-  import type { NamedFavaChart } from ".";
+  import type { FavaChart } from ".";
 
-  export let charts: NamedFavaChart[];
+  export let charts: FavaChart[];
 
-  const setChart = (c: NamedFavaChart) => {
+  const setChart = (c: FavaChart) => {
     $lastActiveChartName = c.name;
   };
 

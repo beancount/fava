@@ -2,24 +2,24 @@ import { test } from "uvu";
 import assert from "uvu/assert";
 
 import { bar } from "../src/charts/bar";
-import { balances } from "../src/charts/line";
+import { balances, LineChart } from "../src/charts/line";
 import {
   parseGroupedQueryChart,
   parseQueryChart,
 } from "../src/charts/query-charts";
-import { scatterplot } from "../src/charts/scatterplot";
+import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
 
 const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
 
 test("handle data for balances chart", () => {
-  assert.ok(balances("").is_err);
+  assert.ok(balances("name", "").is_err);
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
     { date: "2000-02-01", balance: { EUR: 10 } },
   ];
-  const parsed = balances(data).unwrap();
-
-  assert.equal(parsed.data, [
+  const parsed = balances("name", data).unwrap();
+  assert.ok(parsed instanceof LineChart);
+  assert.equal(parsed.filter([]), [
     {
       name: "EUR",
       values: [
@@ -32,20 +32,23 @@ test("handle data for balances chart", () => {
       values: [{ date: new Date("2000-01-01"), name: "USD", value: 10 }],
     },
   ]);
-  const queryChart = parseQueryChart(data, ctx);
-  assert.equal(queryChart.unwrap().data, parsed.data);
+  const queryChart = parseQueryChart(data, ctx).unwrap();
+  assert.ok(queryChart instanceof LineChart);
+  assert.equal(queryChart.filter([]), parsed.filter([]));
 });
 
 test("handle data for scatterplot chart", () => {
-  assert.ok(scatterplot("").is_err);
+  assert.ok(scatterplot("name", "").is_err);
   const data: unknown = [
     { type: "test", date: "2000-01-01", description: "desc" },
   ];
-  const parsed = scatterplot(data).unwrap();
-  assert.equal(parsed, {
-    data: [{ date: new Date("2000-01-01"), description: "desc", type: "test" }],
-    type: "scatterplot",
-  });
+  const parsed = scatterplot("name", data).unwrap();
+  assert.equal(
+    parsed,
+    new ScatterPlot("name", [
+      { date: new Date("2000-01-01"), description: "desc", type: "test" },
+    ]),
+  );
 });
 
 test("handle data for query charts", () => {
@@ -90,15 +93,15 @@ test("handle data for bar chart with stacked data", () => {
     },
   ];
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart_data = bar(data, ctx2).unwrap().data;
-  assert.is(true, chart_data.hasStackedData);
-  assert.equal(chart_data.accounts, [
+  const chart = bar("name", data, ctx2).unwrap();
+  assert.is(true, chart.hasStackedData);
+  assert.equal(chart.accounts, [
     "Expenses:Dining",
     "Expenses:Shoes",
     "Expenses:Taxes",
     "Expenses:Transportation",
   ]);
-  assert.equal(chart_data.stacks, [
+  assert.equal(chart.filter([]).stacks, [
     [
       "EUR",
       [
@@ -142,7 +145,7 @@ test("handle data for bar chart with stacked data", () => {
       ],
     ],
   ]);
-  assert.equal(chart_data.bar_groups, [
+  assert.equal(chart.filter([]).bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
@@ -202,30 +205,27 @@ test("handle data for bar chart without stacked data", () => {
       account_balances: {},
     },
   ];
-  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart_data = bar(data, ctx2).unwrap().data;
-  assert.is(false, chart_data.hasStackedData);
-  assert.equal(chart_data.stacks, [
+  // even without the operating currencies, the two most popular ones will be selected
+  const ctx2 = { currencies: [], dateFormat: () => "DATE" };
+  const chart = bar("name", data, ctx2).unwrap();
+  assert.is(false, chart.hasStackedData);
+  assert.equal(chart.filter([]).stacks, [
     ["EUR", []],
     ["USD", []],
   ]);
-  assert.equal(chart_data.bar_groups, [
+  const without_usd = chart.filter(["USD"]);
+  assert.equal(without_usd.stacks, [["EUR", []]]);
+  assert.equal(without_usd.bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
-      values: [
-        { currency: "EUR", value: 10, budget: 0 },
-        { currency: "USD", value: 10, budget: 20 },
-      ],
+      values: [{ currency: "EUR", value: 10, budget: 0 }],
       account_balances: {},
     },
     {
       date: new Date("2000-02-01"),
       label: "DATE",
-      values: [
-        { currency: "EUR", value: 100, budget: 50 },
-        { currency: "USD", value: 0, budget: 0 },
-      ],
+      values: [{ currency: "EUR", value: 100, budget: 50 }],
       account_balances: {},
     },
   ]);
@@ -247,13 +247,13 @@ test("only use currencies in records for bar chart", () => {
     },
   ];
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart_data = bar(data, ctx2).unwrap().data;
-  assert.is(false, chart_data.hasStackedData);
-  assert.equal(chart_data.stacks, [
+  const chart = bar("name", data, ctx2).unwrap();
+  assert.is(false, chart.hasStackedData);
+  assert.equal(chart.filter([]).stacks, [
     ["USD", []],
     ["AUD", []],
   ]);
-  assert.equal(chart_data.bar_groups, [
+  assert.equal(chart.filter([]).bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
