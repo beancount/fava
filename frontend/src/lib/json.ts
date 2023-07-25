@@ -9,7 +9,7 @@ export function parseJSON(data: string): Result<unknown, "JSON syntax error"> {
     return ok(JSON.parse(data));
   } catch (error) {
     if (error instanceof SyntaxError) {
-      return err("JSON syntax error" as const);
+      return err("JSON syntax error");
     }
     throw error;
   }

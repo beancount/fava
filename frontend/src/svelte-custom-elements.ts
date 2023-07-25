@@ -8,7 +8,7 @@ import { get as store_get } from "svelte/store";
 import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import { chartContext } from "./charts/context";
-import { ok, type Result } from "./lib/result";
+import { type Result } from "./lib/result";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
 class SvelteCustomElementComponent<
@@ -22,8 +22,8 @@ class SvelteCustomElementComponent<
   /** Load data and render the component for this route to the given target. */
   render(target: HTMLElement, data: unknown): (() => void) | undefined {
     const res = this.validate(data);
-    if (!res.success) {
-      target.innerHTML = `Rendering component failed: ${res.value}`;
+    if (res.is_err) {
+      target.innerHTML = `Rendering component failed: ${res.error}`;
       return undefined;
     }
     const instance = new this.Component({ target, props: res.value });
@@ -36,13 +36,11 @@ class SvelteCustomElementComponent<
 const components = new Map<string, SvelteCustomElementComponent>([
   [
     "charts",
-    new SvelteCustomElementComponent(ChartSwitcher, (data) => {
-      const res = parseChartData(data, store_get(chartContext));
-      if (res.success) {
-        return ok({ charts: res.value });
-      }
-      return res;
-    }),
+    new SvelteCustomElementComponent(ChartSwitcher, (data) =>
+      parseChartData(data, store_get(chartContext)).map((charts) => ({
+        charts,
+      })),
+    ),
   ],
 ]);
 

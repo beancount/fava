@@ -1,4 +1,3 @@
-import { ok } from "./lib/result";
 import type { Validator } from "./lib/validation";
 import {
   array,
@@ -93,12 +92,10 @@ export class Balance extends EntryBase {
     amount: object({ number: string, currency: string }),
   });
 
-  static validator: Validator<Balance> = (json) => {
-    const res = Balance.raw_validator(json);
-    return res.success
-      ? ok(Object.assign(new Balance(res.value.date), res.value))
-      : res;
-  };
+  static validator: Validator<Balance> = (json) =>
+    Balance.raw_validator(json).map((value) =>
+      Object.assign(new Balance(value.date), value),
+    );
 }
 
 export class Note extends EntryBase {
@@ -119,12 +116,10 @@ export class Note extends EntryBase {
     comment: string,
   });
 
-  static validator: Validator<Note> = (json) => {
-    const res = Note.raw_validator(json);
-    return res.success
-      ? ok(Object.assign(new Note(res.value.date), res.value))
-      : res;
-  };
+  static validator: Validator<Note> = (json) =>
+    Note.raw_validator(json).map((value) =>
+      Object.assign(new Note(value.date), value),
+    );
 }
 
 export class Transaction extends EntryBase {
@@ -169,12 +164,10 @@ export class Transaction extends EntryBase {
     postings: array(postingValidator),
   });
 
-  static validator: Validator<Transaction> = (json) => {
-    const res = Transaction.raw_validator(json);
-    return res.success
-      ? ok(Object.assign(new Transaction(res.value.date), res.value))
-      : res;
-  };
+  static validator: Validator<Transaction> = (json) =>
+    Transaction.raw_validator(json).map((value) =>
+      Object.assign(new Transaction(value.date), value),
+    );
 }
 
 /** A Beancount entry, currently only support Balance, Note, and Transaction. */

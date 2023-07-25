@@ -19,18 +19,14 @@
     accounts_: string[],
     date_: string | undefined
   ): string[] {
-    const res = validate_date(date_);
-    if (!res.success) {
-      return accounts_;
-    }
-    const entry_date = res.value;
-    return accounts_.filter((account) => {
-      const details = $account_details[account];
-      if (!details) {
-        return true;
-      }
-      return details.close_date >= entry_date;
-    });
+    return validate_date(date_)
+      .map((entry_date) =>
+        accounts_.filter((account) => {
+          const details = $account_details[account];
+          return details ? details.close_date >= entry_date : true;
+        })
+      )
+      .unwrap_or(accounts_);
   }
 
   $: account_suggestions = suggestions ?? $accounts;

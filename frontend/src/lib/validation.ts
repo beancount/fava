@@ -27,7 +27,7 @@ export function defaultValue<T>(
 ): SafeValidator<T> {
   return (json) => {
     const res = validator(json);
-    return res.success ? res : ok(value);
+    return res.is_ok ? res : ok(value);
   };
 }
 
@@ -92,7 +92,7 @@ export function union<T extends unknown[]>(
   return (json) => {
     for (const validator of args) {
       const res = validator(json) as Result<TupleElement<T>, string>;
-      if (res.success) {
+      if (res.is_ok) {
         return res;
       }
     }
@@ -124,7 +124,7 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
       const result: T[] = [];
       for (const element of json) {
         const res = validator(element);
-        if (res.success) {
+        if (res.is_ok) {
           result.push(res.value);
         } else {
           return res;
@@ -148,7 +148,7 @@ export function tuple<A, B>(
       let i = 0;
       for (const decoder of decoders) {
         const res = decoder(json[i]);
-        if (res.success) {
+        if (res.is_ok) {
           result[i] = res.value;
         } else {
           return res;
@@ -184,11 +184,11 @@ export function object<T>(validators: {
       for (const key in validators) {
         if (hasOwnProperty.call(validators, key)) {
           const res = validators[key](json[key]);
-          if (res.success) {
+          if (res.is_ok) {
             obj[key] = res.value;
           } else {
             return err(
-              `Validating object failed at key '${key}': ${res.value}`,
+              `Validating object failed at key '${key}': ${res.error}`,
             );
           }
         }
@@ -208,10 +208,10 @@ export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
       const ret: Record<string, T> = {};
       for (const [key, value] of Object.entries(json)) {
         const res = decoder(value);
-        if (res.success) {
+        if (res.is_ok) {
           ret[key] = res.value;
         } else {
-          return err(`Validating record failed at key '${key}': ${res.value}`);
+          return err(`Validating record failed at key '${key}': ${res.error}`);
         }
       }
       return ok(ret);

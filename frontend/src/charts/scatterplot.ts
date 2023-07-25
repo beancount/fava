@@ -1,4 +1,3 @@
-import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
 import { array, date, object, string } from "../lib/validation";
 
@@ -18,9 +17,8 @@ const scatterplot_validator = array(
 );
 
 export function scatterplot(json: unknown): Result<ScatterPlot, string> {
-  const res = scatterplot_validator(json);
-  if (!res.success) {
-    return res;
-  }
-  return ok({ type: "scatterplot" as const, data: res.value });
+  return scatterplot_validator(json).map((value) => ({
+    type: "scatterplot",
+    data: value,
+  }));
 }

@@ -1,7 +1,6 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
-import { ok } from "../src/lib/result";
 import {
   boolean,
   constant,
@@ -14,39 +13,39 @@ import {
 } from "../src/lib/validation";
 
 test("validate boolean", () => {
-  assert.equal(boolean(true), ok(true));
-  assert.equal(boolean(false), ok(false));
-  assert.is(false, boolean({ a: 1 }).success);
-  assert.is(false, boolean("1").success);
+  assert.equal(boolean(true).unwrap(), true);
+  assert.equal(boolean(false).unwrap(), false);
+  assert.ok(boolean({ a: 1 }).is_err);
+  assert.ok(boolean("1").is_err);
 });
 
 test("validate constant", () => {
-  assert.ok(constant(true)(true));
-  assert.ok(constant(1)(1));
-  assert.is(false, constant(1)("1").success);
-  assert.is(false, constant(1)(4).success);
-  assert.is(false, constant("1")(1).success);
+  assert.is(constant(true)(true).unwrap(), true);
+  assert.is(constant(1)(1).unwrap(), 1);
+  assert.ok(constant(1)("1").is_err);
+  assert.ok(constant(1)(4).is_err);
+  assert.ok(constant("1")(1).is_err);
 });
 
 test("validate date", () => {
   const d = new Date("2012-12-12");
-  assert.is(+date("2012-12-12").value, +d);
-  assert.equal(date(d), ok(d));
-  assert.is(false, date("2-40").success);
-  assert.is(false, date("").success);
-  assert.is(false, date("2012-12-40").success);
+  assert.is(+date("2012-12-12").unwrap(), +d);
+  assert.equal(date(d).unwrap(), d);
+  assert.ok(date("2-40").is_err);
+  assert.ok(date("").is_err);
+  assert.ok(date("2012-12-40").is_err);
 });
 
 test("validate number", () => {
-  assert.equal(number(1), ok(1));
-  assert.is(false, number({ a: 1 }).success);
-  assert.is(false, number("1").success);
+  assert.equal(number(1).unwrap(), 1);
+  assert.ok(number({ a: 1 }).is_err);
+  assert.ok(number("1").is_err);
 });
 
 test("validate string", () => {
-  assert.equal(string("test"), ok("test"));
-  assert.is(false, string({ a: 1 }).success);
-  assert.is(false, string(1).success);
+  assert.equal(string("test").unwrap(), "test");
+  assert.ok(string({ a: 1 }).is_err);
+  assert.ok(string(1).is_err);
 });
 
 test("validate optional string", () => {
@@ -57,20 +56,20 @@ test("validate optional string", () => {
 
 test("validate Record<>", () => {
   const strRecord = record(string);
-  assert.equal(strRecord({}), ok({}));
-  assert.equal(strRecord({ a: "test" }), ok({ a: "test" }));
-  assert.is(false, strRecord({ a: 1 }).success);
+  assert.equal(strRecord({}).unwrap(), {});
+  assert.equal(strRecord({ a: "test" }).unwrap(), { a: "test" });
+  assert.ok(strRecord({ a: 1 }).is_err);
 });
 
 test("validate object", () => {
   const val = object({ str: string, num: number });
-  assert.equal(
-    val({ str: "str", num: 1, extra: 1 }),
-    ok({ str: "str", num: 1 }),
-  );
-  assert.equal(val({ str: "str", num: 1 }), ok({ str: "str", num: 1 }));
-  assert.is(false, val({ str: 1 }).success);
-  assert.is(false, val(1).success);
+  assert.equal(val({ str: "str", num: 1, extra: 1 }).unwrap(), {
+    str: "str",
+    num: 1,
+  });
+  assert.equal(val({ str: "str", num: 1 }).unwrap(), { str: "str", num: 1 });
+  assert.ok(val({ str: 1 }).is_err);
+  assert.ok(val(1).is_err);
 });
 
 test.run();

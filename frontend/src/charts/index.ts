@@ -5,7 +5,6 @@
  */
 
 import type { Result } from "../lib/result";
-import { ok } from "../lib/result";
 import { array, object, string, unknown } from "../lib/validation";
 
 import { bar } from "./bar";
@@ -45,20 +44,17 @@ export function parseChartData(
   data: unknown,
   ctx: ChartContext,
 ): Result<NamedFavaChart[], string> {
-  const res = chart_data_validator(data);
-  if (!res.success) {
-    return res;
-  }
-  const chartData = res.value;
-  const result: NamedFavaChart[] = [];
-  chartData.forEach((chart) => {
-    const parser = parsers[chart.type];
-    if (parser) {
-      const r = parser(chart.data, ctx, chart.label);
-      if (r.success) {
-        result.push({ name: chart.label, ...r.value });
+  return chart_data_validator(data).map((chartData) => {
+    const result: NamedFavaChart[] = [];
+    chartData.forEach((chart) => {
+      const parser = parsers[chart.type];
+      if (parser) {
+        const r = parser(chart.data, ctx, chart.label);
+        if (r.is_ok) {
+          result.push({ name: chart.label, ...r.value });
+        }
       }
-    }
+    });
+    return result;
   });
-  return ok(result);
 }

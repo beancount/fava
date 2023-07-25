@@ -1,7 +1,6 @@
 import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import type { HierarchyNode } from "d3-hierarchy";
 
-import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
 import { array, lazy, number, object, record, string } from "../lib/validation";
@@ -43,6 +42,7 @@ const account_hierarchy_validator: Validator<AccountHierarchyDatum> = object({
   balance: record(number),
   children: lazy(() => array(account_hierarchy_validator)),
 });
+
 const hierarchy_validator = object({
   root: account_hierarchy_validator,
   modifier: number,
@@ -52,22 +52,20 @@ export function hierarchy(
   json: unknown,
   { currencies }: ChartContext,
 ): Result<HierarchyChart, string> {
-  const res = hierarchy_validator(json);
-  if (!res.success) {
-    return res;
-  }
-  const { root, modifier } = res.value;
-  addInternalNodesAsLeaves(root);
-  const data = new Map<string, AccountHierarchyNode>();
+  return hierarchy_validator(json).map((value) => {
+    const { root, modifier } = value;
+    addInternalNodesAsLeaves(root);
+    const data = new Map<string, AccountHierarchyNode>();
 
-  currencies.forEach((currency) => {
-    const currencyHierarchy = d3Hierarchy(root)
-      .sum((d) => Math.max((d.balance[currency] ?? 0) * modifier, 0))
-      .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
-    if (currencyHierarchy.value) {
-      data.set(currency, currencyHierarchy);
-    }
+    currencies.forEach((currency) => {
+      const currencyHierarchy = d3Hierarchy(root)
+        .sum((d) => Math.max((d.balance[currency] ?? 0) * modifier, 0))
+        .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+      if (currencyHierarchy.value) {
+        data.set(currency, currencyHierarchy);
+      }
+    });
+
+    return { type: "hierarchy", data };
   });
-
-  return ok({ type: "hierarchy" as const, data });
 }

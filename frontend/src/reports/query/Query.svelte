@@ -69,8 +69,7 @@
     }
     get("query_result", { query_string: query, ...$filter_params }).then(
       (res) => {
-        const r = parseQueryChart(res.chart, $chartContext);
-        const chart = r.success ? r.value : null;
+        const chart = parseQueryChart(res.chart, $chartContext).unwrap_or(null);
         setResult(query, { result: { chart, table: res.table } }).catch(
           log_error
         );

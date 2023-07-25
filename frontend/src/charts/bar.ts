@@ -3,7 +3,6 @@ import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
 import type { FormatterContext } from "../format";
-import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
 import { array, date, number, object, record } from "../lib/validation";
 
@@ -101,70 +100,67 @@ export function bar(
   json: unknown,
   ctx: ChartContext,
 ): Result<BarChart, string> {
-  const res = bar_validator(json);
-  if (!res.success) {
-    return res;
-  }
-  const parsedData = res.value;
-  const currencies = calculateCurrenciesToShow(parsedData, ctx.currencies);
+  return bar_validator(json).map((parsedData) => {
+    const currencies = calculateCurrenciesToShow(parsedData, ctx.currencies);
 
-  const bar_groups = parsedData.map((interval) => ({
-    values: currencies.map((currency) => ({
-      currency,
-      value: interval.balance[currency] ?? 0,
-      budget: interval.budgets[currency] ?? 0,
-    })),
-    date: interval.date,
-    label: ctx.dateFormat(interval.date),
-    account_balances: interval.account_balances,
-  }));
-  const accounts = Array.from(
-    new Set(
-      parsedData.map((d) => [...Object.keys(d.account_balances)]).flat(2),
-    ),
-  ).sort();
-  const hasStackedData = accounts.length > 1;
+    const bar_groups = parsedData.map((interval) => ({
+      values: currencies.map((currency) => ({
+        currency,
+        value: interval.balance[currency] ?? 0,
+        budget: interval.budgets[currency] ?? 0,
+      })),
+      date: interval.date,
+      label: ctx.dateFormat(interval.date),
+      account_balances: interval.account_balances,
+    }));
+    const accounts = Array.from(
+      new Set(
+        parsedData.map((d) => [...Object.keys(d.account_balances)]).flat(2),
+      ),
+    ).sort();
+    const hasStackedData = accounts.length > 1;
 
-  const stacks = currencies.map(
-    (currency): [string, Series<BarChartDatum, string>[]] => [
-      currency,
-      stack<BarChartDatum>()
-        .keys(accounts)
-        .value((obj, key) => obj.account_balances[key]?.[currency] ?? 0)
-        .offset(stackOffsetDiverging)(bar_groups)
-        .filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
-    ],
-  );
+    const stacks = currencies.map(
+      (currency): [string, Series<BarChartDatum, string>[]] => [
+        currency,
+        stack<BarChartDatum>()
+          .keys(accounts)
+          .value((obj, key) => obj.account_balances[key]?.[currency] ?? 0)
+          .offset(stackOffsetDiverging)(bar_groups)
+          .filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
+      ],
+    );
 
-  return ok({
-    type: "barchart" as const,
-    data: { accounts, bar_groups, stacks, hasStackedData },
-    tooltipText: (c, d, e) => {
-      const content: TooltipContent = [];
-      if (e === "") {
-        d.values.forEach((a) => {
-          content.push(
-            domHelpers.t(
-              a.budget
-                ? `${c.amount(a.value, a.currency)} / ${c.amount(
-                    a.budget,
-                    a.currency,
-                  )}`
-                : c.amount(a.value, a.currency),
-            ),
-          );
-          content.push(domHelpers.br());
-        });
-      } else {
-        content.push(domHelpers.em(e));
-        d.values.forEach((a) => {
-          const value = d.account_balances[e]?.[a.currency] ?? 0;
-          content.push(domHelpers.t(`${c.amount(value, a.currency)}`));
-          content.push(domHelpers.br());
-        });
-      }
-      content.push(domHelpers.em(d.label));
-      return content;
-    },
+    return {
+      type: "barchart",
+      data: { accounts, bar_groups, stacks, hasStackedData },
+      tooltipText: (c, d, e) => {
+        const content: TooltipContent = [];
+        if (e === "") {
+          d.values.forEach((a) => {
+            content.push(
+              domHelpers.t(
+                a.budget
+                  ? `${c.amount(a.value, a.currency)} / ${c.amount(
+                      a.budget,
+                      a.currency,
+                    )}`
+                  : c.amount(a.value, a.currency),
+              ),
+            );
+            content.push(domHelpers.br());
+          });
+        } else {
+          content.push(domHelpers.em(e));
+          d.values.forEach((a) => {
+            const value = d.account_balances[e]?.[a.currency] ?? 0;
+            content.push(domHelpers.t(`${c.amount(value, a.currency)}`));
+            content.push(domHelpers.br());
+          });
+        }
+        content.push(domHelpers.em(d.label));
+        return content;
+      },
+    };
   });
 }

@@ -28,9 +28,5 @@ export function getScriptTagValue<T>(
   selector: string,
   validator: Validator<T>,
 ): Result<T, string> {
-  const res = getScriptTagJSON(selector);
-  if (!res.success) {
-    return res;
-  }
-  return validator(res.value);
+  return getScriptTagJSON(selector).and_then(validator);
 }

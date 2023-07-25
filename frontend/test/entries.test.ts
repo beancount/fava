@@ -40,8 +40,7 @@ test("create entries from JSON data", () => {
     ],
   });
 
-  assert.is(txn.success, true);
-  assert.instance(txn.value, Transaction);
+  assert.instance(txn.unwrap(), Transaction);
 
   const note = entryValidator({
     type: "Note",
@@ -54,8 +53,7 @@ test("create entries from JSON data", () => {
     comment: "Some note for the expenses account",
   });
 
-  assert.is(note.success, true);
-  assert.instance(note.value, Note);
+  assert.instance(note.unwrap(), Note);
 });
 
 test.run();

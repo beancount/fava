@@ -6,7 +6,6 @@
  * from `./package-lock.json` to `../.pre-commit-config.yaml`
  */
 
-import { ok } from "assert";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 
@@ -34,8 +33,7 @@ async function main() {
   const rawConfig = await readFile(preCommitConfigPath, "utf-8");
   let newConfig = rawConfig;
   const conf = confValidator(load(rawConfig));
-  ok(conf.success);
-  for (const { hooks } of conf.value.repos) {
+  for (const { hooks } of conf.unwrap().repos) {
     for (const { language, additional_dependencies } of hooks) {
       if (language === "node" && additional_dependencies) {
         for (const dep of additional_dependencies) {

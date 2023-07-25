@@ -3,6 +3,7 @@ const ON = "error";
 
 const airbnbConfigOverrides = {
   "max-classes-per-file": OFF,
+  "class-methods-use-this": OFF,
   "no-param-reassign": [ON, { props: false }],
   "no-restricted-syntax": [
     ON,

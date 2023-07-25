@@ -49,10 +49,9 @@ export function localStorageSyncedStore<T>(
     const stored_val = localStorage.getItem(fullKey);
     let initial: T | null = null;
     if (stored_val) {
-      const json = parseJSON(stored_val);
-      const parsed = json.success ? validator(json.value) : null;
-      if (parsed?.success) {
-        initial = parsed.value;
+      const val = parseJSON(stored_val).and_then(validator).unwrap_or(null);
+      if (val !== null) {
+        initial = val;
       }
     }
     set(initial ?? init());

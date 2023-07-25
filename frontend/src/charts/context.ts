@@ -4,8 +4,11 @@ import { derived } from "svelte/store";
 import { conversion, currencies, operating_currency } from "../stores";
 import { currentDateFormat } from "../stores/format";
 
+/** Context data for parsing and rendering of the charts. */
 export interface ChartContext {
+  /** The list of operating currencies, complemented by the current conversion currency. */
   currencies: string[];
+  /** The current date format as determined from the interval. */
   dateFormat: (date: Date) => string;
 }
 

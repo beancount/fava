@@ -15,10 +15,10 @@ export const ctx = derived(
   ([i, f, p]): FormatterContext => {
     const formatter = localeFormatter(f.locale);
     const currencyFormatters = Object.fromEntries(
-      Object.entries(p).map(
-        ([currency, prec]) =>
-          [currency, localeFormatter(f.locale, prec)] as const,
-      ),
+      Object.entries(p).map(([currency, prec]) => [
+        currency,
+        localeFormatter(f.locale, prec),
+      ]),
     );
     const formatWithCurrency = (n: number, c: string) => {
       const currencyFormatter = currencyFormatters[c];

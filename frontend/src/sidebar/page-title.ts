@@ -28,7 +28,7 @@ export const page_title = derived(raw_page_title, (raw): PageTitle => {
  */
 export function updatePageTitle(): void {
   const v = getScriptTagValue("#page-title", string);
-  if (v.success) {
+  if (v.is_ok) {
     raw_page_title.set(v.value);
   }
 }

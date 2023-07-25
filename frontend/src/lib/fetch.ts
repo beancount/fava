@@ -51,14 +51,14 @@ export async function fetchJSON(
   init?: RequestInit,
 ): Promise<unknown> {
   const res = await fetch(input, init).then(handleJSON);
-  const parsed = response_validator(res);
-  if (parsed.success) {
-    if (typeof parsed.value.mtime === "string") {
-      set_mtime(parsed.value.mtime);
+  const validated = response_validator(res).unwrap_or(null);
+  if (validated) {
+    if (typeof validated.mtime === "string") {
+      set_mtime(validated.mtime);
     }
-    return parsed.value.data;
+    return validated.data;
   }
-  log_error(res, parsed);
+  log_error(res);
   throw new FetchError("Invalid response: missing data or mtime key.");
 }
 

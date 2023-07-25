@@ -1,6 +1,5 @@
 import type { FormatterContext } from "../format";
 import { day } from "../format";
-import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
 import { array, date, number, object, record } from "../lib/validation";
 
@@ -27,34 +26,31 @@ export interface LineChart {
 const balances_validator = array(object({ date, balance: record(number) }));
 
 export function balances(json: unknown): Result<LineChart, string> {
-  const res = balances_validator(json);
-  if (!res.success) {
-    return res;
-  }
-  const parsedData = res.value;
-  const groups = new Map<string, LineChartDatum[]>();
-  for (const { date: date_val, balance } of parsedData) {
-    Object.entries(balance).forEach(([currency, value]) => {
-      const group = groups.get(currency);
-      const datum = { date: date_val, value, name: currency };
-      if (group) {
-        group.push(datum);
-      } else {
-        groups.set(currency, [datum]);
-      }
-    });
-  }
-  const data = [...groups.entries()].map(([name, values]) => ({
-    name,
-    values,
-  }));
+  return balances_validator(json).map((parsedData) => {
+    const groups = new Map<string, LineChartDatum[]>();
+    for (const { date: date_val, balance } of parsedData) {
+      Object.entries(balance).forEach(([currency, value]) => {
+        const group = groups.get(currency);
+        const datum = { date: date_val, value, name: currency };
+        if (group) {
+          group.push(datum);
+        } else {
+          groups.set(currency, [datum]);
+        }
+      });
+    }
+    const data = [...groups.entries()].map(([name, values]) => ({
+      name,
+      values,
+    }));
 
-  return ok({
-    type: "linechart" as const,
-    data,
-    tooltipText: (c, d) => [
-      domHelpers.t(c.amount(d.value, d.name)),
-      domHelpers.em(day(d.date)),
-    ],
+    return {
+      type: "linechart",
+      data,
+      tooltipText: (c, d) => [
+        domHelpers.t(c.amount(d.value, d.name)),
+        domHelpers.em(day(d.date)),
+      ],
+    };
   });
 }

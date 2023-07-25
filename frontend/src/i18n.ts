@@ -12,9 +12,9 @@ const validator = record(string);
 export function _(text: string): string {
   if (translations === undefined) {
     const res = getScriptTagValue("#translations", validator);
-    translations = res.success ? res.value : {};
-    if (!res.success) {
-      log_error(`Loading translations failed: ${res.value}`);
+    translations = res.unwrap_or({});
+    if (res.is_err) {
+      log_error(`Loading translations failed: ${res.error}`);
     }
   }
   return translations[text] ?? text;

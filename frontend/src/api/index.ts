@@ -42,11 +42,11 @@ export async function put<T extends keyof PutAPIInputs>(
   const url = urlFor(`api/${endpoint}`);
   const json = await fetchJSON(url, { method: "PUT", ...opts });
   const res = string(json);
-  if (res.success) {
+  if (res.is_ok) {
     return res.value;
   }
-  notify(`Invalid data returned in API request: ${res.value}`, "error");
-  throw new Error(res.value);
+  notify(`Invalid data returned in API request: ${res.error}`, "error");
+  throw new Error(res.error);
 }
 
 interface GetAPIParams {
@@ -81,11 +81,11 @@ export async function get<T extends keyof GetAPIParams>(
   const url = urlFor(`api/${endpoint}`, params, false);
   const json = await fetchJSON(url);
   const res = getAPIValidators[endpoint](json);
-  if (res.success) {
+  if (res.is_ok) {
     return res.value as ValidationT<GetAPITypes[T]>;
   }
-  notify(`Invalid data returned in API request: ${res.value}`, "error");
-  throw new Error(res.value);
+  notify(`Invalid data returned in API request: ${res.error}`, "error");
+  throw new Error(res.error);
 }
 
 interface DeleteAPIParams {
@@ -106,11 +106,11 @@ export async function doDelete<T extends keyof DeleteAPIParams>(
   const url = urlFor(`api/${endpoint}`, params, false);
   const json = await fetchJSON(url, { method: "DELETE" });
   const res = string(json);
-  if (res.success) {
+  if (res.is_ok) {
     return res.value;
   }
-  notify(`Invalid data returned in API request: ${res.value}`, "error");
-  throw new Error(res.value);
+  notify(`Invalid data returned in API request: ${res.error}`, "error");
+  throw new Error(res.error);
 }
 
 /**

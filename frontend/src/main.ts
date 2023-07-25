@@ -94,10 +94,10 @@ function pollForChanges(): void {
 
 function init(): void {
   const initial = getScriptTagValue("#ledger-data", ledgerDataValidator);
-  if (initial.success) {
+  if (initial.is_ok) {
     ledgerData.set(initial.value);
   } else {
-    log_error(initial.value);
+    log_error(initial.error);
   }
   read_mtime();
 
