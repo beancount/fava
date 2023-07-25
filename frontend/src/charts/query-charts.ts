@@ -5,14 +5,10 @@ import { stratify } from "../lib/tree";
 import { array, number, object, record, string } from "../lib/validation";
 
 import type { ChartContext } from "./context";
-import type {
-  AccountHierarchyDatum,
-  AccountHierarchyNode,
-  HierarchyChart,
-} from "./hierarchy";
+import type { AccountHierarchyDatum, AccountHierarchyNode } from "./hierarchy";
+import { HierarchyChart } from "./hierarchy";
+import type { LineChart } from "./line";
 import { balances } from "./line";
-
-import type { FavaChart } from "./index";
 
 const grouped_chart_validator = array(
   object({ group: string, balance: record(number) }),
@@ -42,7 +38,7 @@ export function parseGroupedQueryChart(
         }
       });
 
-      return { type: "hierarchy", data };
+      return new HierarchyChart(null, data);
     });
 }
 
@@ -53,11 +49,11 @@ export function parseGroupedQueryChart(
 export function parseQueryChart(
   json: unknown,
   ctx: ChartContext,
-): Result<FavaChart, string> {
+): Result<HierarchyChart | LineChart, string> {
   return (
     parseGroupedQueryChart(json, ctx)
       // Try balances chart if the grouped chart parse
-      .or_else(() => balances(json))
+      .or_else(() => balances(null, json))
       .map_err(() => "No query chart found.")
   );
 }

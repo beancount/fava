@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { extent, max, merge, min } from "d3-array";
+  import { extent, max, min } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
   import { scaleLinear, scaleUtc } from "d3-scale";
@@ -7,7 +7,7 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
-  import { lineChartMode } from "../stores/chart";
+  import { chartToggledCurrencies, lineChartMode } from "../stores/chart";
   import { ctx } from "../stores/format";
 
   import Axis from "./Axis.svelte";
@@ -16,31 +16,23 @@
   import type { TooltipFindNode } from "./tooltip";
   import { positionedTooltip } from "./tooltip";
 
-  export let data: LineChart["data"];
+  export let chart: LineChart;
   export let width: number;
-  export let tooltipText: LineChart["tooltipText"];
 
   const today = new Date();
-  const margin = {
-    top: 10,
-    right: 10,
-    bottom: 30,
-    left: 40,
-  };
+  const margin = { top: 10, right: 10, bottom: 30, left: 40 };
   const height = 250;
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
 
-  const legend: Writable<[string, string][]> = getContext("chart-legend");
-  $: legend.set(
-    data
-      .map((d) => d.name)
-      .sort()
-      .map((c) => [c, $currenciesScale(c)])
-  );
+  $: data = chart.filter($chartToggledCurrencies);
+  $: series_names = chart.series_names;
 
-  // Scales
-  $: allValues = merge<LineChartDatum>(data.map((d) => d.values));
+  const legend: Writable<[string, string][]> = getContext("chart-legend");
+  $: legend.set(series_names.map((c) => [c, $currenciesScale(c)]));
+
+  // Scales and quadtree
+  $: allValues = data.map((d) => d.values).flat(1);
 
   let xDomain: [Date, Date];
   $: xDomain = [
@@ -48,8 +40,6 @@
     max(data, (s) => s.values[s.values.length - 1]?.date) ?? today,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
-  let yMin: number;
-  let yMax: number;
   $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()
@@ -83,7 +73,7 @@
 
   const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
     const d = quad.find(xPos, yPos);
-    return d && [x(d.date), y(d.value), tooltipText($ctx, d)];
+    return d && [x(d.date), y(d.value), chart.tooltipText($ctx, d)];
   };
 
   $: futureFilter = xDomain[1] > today ? "url(#desaturateFuture)" : undefined;
@@ -103,19 +93,13 @@
     {#if $lineChartMode === "area"}
       <g class="area" filter={futureFilter}>
         {#each data as d}
-          <path
-            d={areaShape(d.values) ?? undefined}
-            fill={$currenciesScale(d.name)}
-          />
+          <path d={areaShape(d.values)} fill={$currenciesScale(d.name)} />
         {/each}
       </g>
     {/if}
     <g class="lines" filter={futureFilter}>
       {#each data as d}
-        <path
-          d={lineShape(d.values) ?? undefined}
-          stroke={$currenciesScale(d.name)}
-        />
+        <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
       {/each}
     </g>
     {#if $lineChartMode === "line"}

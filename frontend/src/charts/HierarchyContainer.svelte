@@ -11,8 +11,10 @@
 
   const context: Writable<string[]> = getContext("chart-currencies");
 
-  export let data: HierarchyChart["data"];
+  export let chart: HierarchyChart
   export let width: number;
+
+  $: data = chart.data;
 
   $: currencies = [...data.keys()];
   $: currency = $chartCurrency || currencies[0];

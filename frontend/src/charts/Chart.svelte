@@ -19,12 +19,12 @@
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
-  import type { NamedFavaChart } from ".";
+  import type { FavaChart } from ".";
 
   /**
    * The chart to render.
    */
-  export let chart: NamedFavaChart;
+  export let chart: FavaChart;
 
   /**
    * Width of the chart.
@@ -72,7 +72,7 @@
           ["area", _("Area chart")],
         ]}
       />
-    {:else if chart.type === "barchart" && chart.data.hasStackedData}
+    {:else if chart.type === "barchart" && chart.hasStackedData}
       <ModeSwitch
         bind:value={$barChartMode}
         options={[
@@ -95,13 +95,13 @@
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
     {#if chart.type === "barchart"}
-      <BarChart data={chart.data} tooltipText={chart.tooltipText} {width} />
+      <BarChart {chart} {width} />
     {:else if chart.type === "hierarchy"}
-      <HierarchyContainer data={chart.data} {width} />
+      <HierarchyContainer {chart} {width} />
     {:else if chart.type === "linechart"}
-      <LineChart data={chart.data} tooltipText={chart.tooltipText} {width} />
+      <LineChart {chart} {width} />
     {:else if chart.type === "scatterplot"}
-      <ScatterPlot data={chart.data} {width} />
+      <ScatterPlot {chart} {width} />
     {/if}
   {/if}
 </div>

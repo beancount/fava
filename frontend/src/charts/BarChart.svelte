@@ -6,7 +6,7 @@
   import type { Writable } from "svelte/store";
 
   import { urlForAccount } from "../helpers";
-  import { barChartMode } from "../stores/chart";
+  import { barChartMode, chartToggledCurrencies } from "../stores/chart";
   import { ctx } from "../stores/format";
 
   import Axis from "./Axis.svelte";
@@ -19,23 +19,20 @@
   } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
-  export let data: BarChart["data"];
+  export let chart: BarChart;
   export let width: number;
-  export let tooltipText: BarChart["tooltipText"];
 
   const today = new Date();
   const maxColumnWidth = 100;
-  const margin = {
-    top: 10,
-    right: 10,
-    bottom: 30,
-    left: 40,
-  };
+  const margin = { top: 10, right: 10, bottom: 30, left: 40 };
   const height = 250;
 
-  $: bar_groups = data.bar_groups;
-  $: accounts = data.accounts;
-  $: currencies = bar_groups[0]?.values.map((d) => d.currency) ?? [];
+  $: accounts = chart.accounts;
+
+  $: filtered = chart.filter($chartToggledCurrencies);
+  $: currencies = filtered.currencies;
+  $: bar_groups = filtered.bar_groups;
+  $: stacks = filtered.stacks;
 
   $: innerHeight = height - margin.top - margin.bottom;
   $: maxWidth = bar_groups.length * maxColumnWidth;
@@ -43,7 +40,7 @@
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
 
   /** Whether to display stacked bars. */
-  $: showStackedBars = $barChartMode === "stacked" && data.hasStackedData;
+  $: showStackedBars = $barChartMode === "stacked" && chart.hasStackedData;
   /** The currently hovered account. */
   let highlighted: string | null = null;
 
@@ -54,10 +51,8 @@
     .range([0, innerWidth]);
   $: x1 = scaleBand().domain(currencies).range([0, x0.bandwidth()]);
 
-  let yMin: number;
-  let yMax: number;
   $: [yMin = 0, yMax = 0] = showStackedBars
-    ? extent(data.stacks.flatMap(([, s]) => s.flat(2)))
+    ? extent(stacks.flatMap(([, s]) => s.flat(2)))
     : extent(bar_groups.map((d) => d.values).flat(), (d) => d.value);
   $: y = scaleLinear()
     .range([innerHeight, 0])
@@ -69,30 +64,31 @@
 
   const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
-    showStackedBars
-      ? []
-      : x1
-          .domain()
-          .sort()
-          .map((c) => [c, $currenciesScale(c)])
+    chart.currencies.map((c) => [
+      c,
+      showStackedBars ? "#bbb" : $currenciesScale(c),
+    ])
   );
 
   // Axes
   $: xAxis = axisBottom(x0)
     .tickSizeOuter(0)
     .tickValues(filterTicks(x0.domain(), innerWidth / 70));
-  $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat($ctx.short);
+  $: yAxis = axisLeft(y)
+    .tickPadding(6)
+    .tickSize(-innerWidth)
+    .tickFormat($ctx.short);
 </script>
 
 <svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
     <Axis x axis={xAxis} {innerHeight} />
-    <Axis y axis={yAxis} lineAtZero={true} />
+    <Axis y axis={yAxis} lineAtZero={y(0)} />
     {#each bar_groups as group}
       <g
         class="group"
         class:desaturate={group.date > today}
-        use:followingTooltip={() => tooltipText($ctx, group, "")}
+        use:followingTooltip={() => chart.tooltipText($ctx, group)}
         transform={`translate(${x0(group.label) ?? 0},0)`}
       >
         <rect
@@ -130,7 +126,7 @@
       </g>
     {/each}
     {#if showStackedBars}
-      {#each data.stacks as [currency, account_stacks]}
+      {#each stacks as [currency, account_stacks]}
         {#each account_stacks as stack}
           {@const account = stack.key}
           <a href={urlForAccount(account)}>
@@ -160,7 +156,7 @@
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={colorScale(account)}
                   use:followingTooltip={() =>
-                    tooltipText($ctx, bar.data, account)}
+                    chart.tooltipTextAccount($ctx, bar.data, account)}
                 />
               {/each}
             </g>
