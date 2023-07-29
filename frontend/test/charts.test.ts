@@ -1,17 +1,33 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
+import { parseChartData } from "../src/charts";
 import { bar } from "../src/charts/bar";
+import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
 import { balances, LineChart } from "../src/charts/line";
 import {
   parseGroupedQueryChart,
   parseQueryChart,
 } from "../src/charts/query-charts";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
+import { parseJSON } from "../src/lib/json";
 
-const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
+import { loadSnapshot } from "./end-to-end-validation.test";
+
+test("handle data for hierarchical chart", async () => {
+  const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
+  assert.ok(hierarchy("name", "", ctx).is_err);
+  const data = parseJSON(
+    await loadSnapshot("test_internal_api.py-test_chart_api"),
+  ).unwrap();
+  const parsed = parseChartData(data, ctx).unwrap()[0];
+  assert.ok(parsed instanceof HierarchyChart);
+  assert.equal([...parsed.data.keys()], ["USD"]);
+  assert.ok(parsed.data.get("USD"));
+});
 
 test("handle data for balances chart", () => {
+  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
   assert.ok(balances("name", "").is_err);
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
@@ -52,6 +68,7 @@ test("handle data for scatterplot chart", () => {
 });
 
 test("handle data for query charts", () => {
+  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
   const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
   const { data } = parseGroupedQueryChart(d, ctx).unwrap();
   assert.is(data.get("EUR")?.value, 10);
@@ -65,6 +82,7 @@ test("handle data for query charts", () => {
 });
 
 test("handle invalid data for query charts", () => {
+  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
   const d: unknown[] = [{}];
   const c = parseQueryChart(d, ctx);
   assert.ok(c.is_err);
@@ -92,8 +110,8 @@ test("handle data for bar chart with stacked data", () => {
       },
     },
   ];
-  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx2).unwrap();
+  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const chart = bar("name", data, ctx).unwrap();
   assert.is(true, chart.hasStackedData);
   assert.equal(chart.accounts, [
     "Expenses:Dining",
@@ -206,8 +224,8 @@ test("handle data for bar chart without stacked data", () => {
     },
   ];
   // even without the operating currencies, the two most popular ones will be selected
-  const ctx2 = { currencies: [], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx2).unwrap();
+  const ctx = { currencies: [], dateFormat: () => "DATE" };
+  const chart = bar("name", data, ctx).unwrap();
   assert.is(false, chart.hasStackedData);
   assert.equal(chart.filter([]).stacks, [
     ["EUR", []],
@@ -246,8 +264,8 @@ test("only use currencies in records for bar chart", () => {
       account_balances: {},
     },
   ];
-  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx2).unwrap();
+  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const chart = bar("name", data, ctx).unwrap();
   assert.is(false, chart.hasStackedData);
   assert.equal(chart.filter([]).stacks, [
     ["USD", []],

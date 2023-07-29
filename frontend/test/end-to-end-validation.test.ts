@@ -7,7 +7,7 @@ import assert from "uvu/assert";
 import { getAPIValidators, ledgerDataValidator } from "../src/api/validators";
 import { parseJSON } from "../src/lib/json";
 
-function loadSnapshot(name: string): Promise<string> {
+export function loadSnapshot(name: string): Promise<string> {
   const path = join(__dirname, "..", "..", "tests", "__snapshots__", name);
   return readFile(path, "utf8");
 }
