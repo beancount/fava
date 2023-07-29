@@ -6,6 +6,7 @@
 /pip-wheel-metadata/
 /dist/
 /docs/api/
+/frontend/coverage/
 /src/fava/static/*
 !/src/fava/static/favicon.ico
 /src/fava/translations/messages.pot

@@ -6,7 +6,7 @@
     "build": "node -r esbuild-register build.ts",
     "dev": "node -r esbuild-register build.ts --watch",
     "sync-pre-commit": "node -r esbuild-register sync-pre-commit.ts",
-    "test": "uvu -r esbuild-register test",
+    "test": "c8 --all --src src -r html uvu -r esbuild-register test",
     "test:watch": "watchlist --eager src test -- npm test"
   },
   "devDependencies": {
@@ -25,6 +25,7 @@
     "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "c8": "^8.0.1",
     "chokidar": "^3.5.1",
     "esbuild": "^0.18.9",
     "esbuild-register": "^3.0.0",

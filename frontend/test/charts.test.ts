@@ -3,6 +3,7 @@ import assert from "uvu/assert";
 
 import { parseChartData } from "../src/charts";
 import { bar } from "../src/charts/bar";
+import { colors10, colors15, filterTicks } from "../src/charts/helpers";
 import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
 import { balances, LineChart } from "../src/charts/line";
 import {
@@ -10,16 +11,21 @@ import {
   parseQueryChart,
 } from "../src/charts/query-charts";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
-import { parseJSON } from "../src/lib/json";
 
-import { loadSnapshot } from "./end-to-end-validation.test";
+import { loadJSONSnapshot } from "./end-to-end-validation.test";
+
+test("chart helpers (color scales)", () => {
+  assert.equal(filterTicks(["1", "2", "3"], 2), ["1", "3"]);
+  assert.equal(filterTicks(["1", "2", "3"], 4), ["1", "2", "3"]);
+
+  assert.equal(colors10[0], "rgb(126, 174, 253)");
+  assert.equal(colors15[0], "rgb(173, 200, 254)");
+});
 
 test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
   assert.ok(hierarchy("name", "", ctx).is_err);
-  const data = parseJSON(
-    await loadSnapshot("test_internal_api.py-test_chart_api"),
-  ).unwrap();
+  const data = await loadJSONSnapshot("test_internal_api.py-test_chart_api");
   const parsed = parseChartData(data, ctx).unwrap()[0];
   assert.ok(parsed instanceof HierarchyChart);
   assert.equal([...parsed.data.keys()], ["USD"]);

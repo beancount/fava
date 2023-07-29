@@ -1,4 +1,5 @@
 import { getScriptTagValue } from "./lib/dom";
+import { ok } from "./lib/result";
 import { record, string } from "./lib/validation";
 import { log_error } from "./log";
 
@@ -11,7 +12,12 @@ const validator = record(string);
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function _(text: string): string {
   if (translations === undefined) {
-    const res = getScriptTagValue("#translations", validator);
+    const res =
+      // The DOM is not available in tests
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      globalThis.document !== undefined
+        ? getScriptTagValue("#translations", validator)
+        : ok({});
     translations = res.unwrap_or({});
     if (res.is_err) {
       log_error(`Loading translations failed: ${res.error}`);
