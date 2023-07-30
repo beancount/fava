@@ -2,6 +2,7 @@
   import type { Axis } from "d3-axis";
   import type { NumberValue } from "d3-scale";
   import { select } from "d3-selection";
+  import type { Action } from "svelte/action";
 
   type Ax = Axis<string> | Axis<NumberValue>;
 
@@ -19,7 +20,7 @@
   $: transform = x ? `translate(0,${innerHeight})` : undefined;
 
   /** Svelte action to render the axis. */
-  function use(node: SVGGElement, ax: Ax): { update: (a: Ax) => void } {
+  const renderAxis: Action<SVGGElement, Ax> = (node: SVGGElement, ax) => {
     const selection = select(node);
     ax(selection);
 
@@ -28,10 +29,10 @@
         new_ax(selection);
       },
     };
-  }
+  };
 </script>
 
-<g class:y use:use={axis} {transform}>
+<g class:y use:renderAxis={axis} {transform}>
   {#if y && lineAtZero !== null}
     <g class="zero" transform={`translate(0,${lineAtZero})`}>
       <line x2={-axis.tickSizeInner()} />

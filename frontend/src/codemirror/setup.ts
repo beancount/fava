@@ -35,6 +35,7 @@ import {
   placeholder,
   rectangularSelection,
 } from "@codemirror/view";
+import type { Action } from "svelte/action";
 import { get } from "svelte/store";
 
 import { log_error } from "../log";
@@ -73,7 +74,7 @@ const baseExtensions = [
 ];
 
 /** An editor and a function to attach it to a DOM element. */
-type EditorAndAction = [EditorView, (el: HTMLElement) => void];
+type EditorAndAction = [EditorView, Action];
 
 function setup(
   value: string | undefined,
@@ -82,7 +83,12 @@ function setup(
   const view = new EditorView({
     state: EditorState.create({ doc: value, extensions }),
   });
-  return [view, (el) => el.appendChild(view.dom)];
+  return [
+    view,
+    (el) => {
+      el.appendChild(view.dom);
+    },
+  ];
 }
 
 /**

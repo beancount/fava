@@ -8,6 +8,7 @@
  *  - 'num': Clean and parse to float.
  */
 
+import type { Action } from "svelte/action";
 import { get } from "svelte/store";
 
 import { journalSortOrder } from "./stores/journal";
@@ -145,7 +146,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
 /**
  * A svelte action to turn a table into a sortable table.
  */
-export function sortableTable(el: HTMLTableElement): void {
+export const sortableTable: Action<HTMLTableElement> = (el) => {
   const body = el.tBodies.item(0);
   if (!el.tHead || !body) {
     return;
@@ -173,7 +174,7 @@ export function sortableTable(el: HTMLTableElement): void {
       );
     });
   });
-}
+};
 
 export class SortableTable extends HTMLTableElement {
   constructor() {
