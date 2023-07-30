@@ -74,7 +74,10 @@ const baseExtensions = [
 ];
 
 /** An editor and a function to attach it to a DOM element. */
-type EditorAndAction = [EditorView, Action];
+interface EditorAndAction {
+  editor: EditorView;
+  renderEditor: Action<HTMLDivElement | HTMLPreElement>;
+}
 
 function setup(
   value: string | undefined,
@@ -83,12 +86,12 @@ function setup(
   const view = new EditorView({
     state: EditorState.create({ doc: value, extensions }),
   });
-  return [
-    view,
-    (el) => {
+  return {
+    editor: view,
+    renderEditor: (el) => {
       el.appendChild(view.dom);
     },
-  ];
+  };
 }
 
 /**
@@ -110,12 +113,12 @@ export class BeancountTextarea extends HTMLTextAreaElement {
     super();
     getBeancountLanguageSupport()
       .then((beancount) => {
-        const [view] = setup(this.value, [
+        const { editor } = setup(this.value, [
           beancount,
           syntaxHighlighting(defaultHighlightStyle),
           EditorView.editable.of(false),
         ]);
-        this.parentNode?.insertBefore(view.dom, this);
+        this.parentNode?.insertBefore(editor.dom, this);
         this.style.display = "none";
       })
       .catch(log_error);

@@ -1,11 +1,12 @@
 <script lang="ts">
+  import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { base_url } from "../stores";
   import { pathname, synced_query_string } from "../stores/url";
 
   export let report: string;
   export let name: string;
-  export let key: string | undefined = undefined;
+  export let key: KeySpec | undefined = undefined;
   export let remote: true | undefined = undefined;
   export let bubble: [number, "error" | "info"] | undefined = undefined;
 

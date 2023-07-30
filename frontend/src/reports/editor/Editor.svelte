@@ -4,7 +4,6 @@
   import { onMount } from "svelte";
 
   import { get, put } from "../../api";
-  import { beancountFormat } from "../../codemirror/beancount-format";
   import {
     replaceContents,
     scrollToLine,
@@ -12,7 +11,6 @@
   } from "../../codemirror/editor-transactions";
   import { initBeancountEditor } from "../../codemirror/setup";
   import SaveButton from "../../editor/SaveButton.svelte";
-  import { bindKey } from "../../keyboard-shortcuts";
   import { log_error } from "../../log";
   import { notify_err } from "../../notifications";
   import router from "../../router";
@@ -58,7 +56,7 @@
     }
   }
 
-  const [editor, useEditor] = initBeancountEditor(
+  const { editor, renderEditor } = initBeancountEditor(
     "",
     onDocChanges,
     [
@@ -118,22 +116,6 @@
       : null;
 
   onMount(() => router.addInteruptHandler(checkEditorChanges));
-
-  // keybindings when the focus is outside the editor
-  onMount(() =>
-    bindKey({ key: "Control+s", mac: "Meta+s" }, (event) => {
-      event.preventDefault();
-      save(editor).catch(() => {
-        // save should catch all errors itself, see above
-      });
-    })
-  );
-  onMount(() =>
-    bindKey({ key: "Control+d", mac: "Meta+d" }, (event) => {
-      event.preventDefault();
-      beancountFormat(editor);
-    })
-  );
 </script>
 
 <form
@@ -143,7 +125,7 @@
   <EditorMenu {file_path} {editor}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
-  <div use:useEditor />
+  <div use:renderEditor />
 </form>
 
 <style>

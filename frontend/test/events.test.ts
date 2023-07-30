@@ -7,7 +7,7 @@ test("register and listen to events", () => {
   const e = new Events<"t">();
   let count = 0;
   let once = 0;
-  const inc = (): void => {
+  const inc = () => {
     count += 1;
   };
   e.on("t", inc);

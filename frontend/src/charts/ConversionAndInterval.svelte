@@ -1,9 +1,10 @@
 <script lang="ts">
   import { _ } from "../i18n";
+  import type { Interval } from "../lib/interval";
   import { conversion, interval } from "../stores";
   import { conversions } from "../stores/chart";
 
-  const intervals = [
+  const intervals: [Interval, string][] = [
     ["year", _("Yearly")],
     ["quarter", _("Quarterly")],
     ["month", _("Monthly")],

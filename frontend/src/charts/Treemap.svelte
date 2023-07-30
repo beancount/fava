@@ -44,6 +44,7 @@
     ];
   }
 
+  /** Hide account names that are too long. */
   const setVisibility: Action<
     SVGTextElement,
     HierarchyRectangularNode<AccountHierarchyDatum>
