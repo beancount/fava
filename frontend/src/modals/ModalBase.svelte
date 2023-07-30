@@ -1,9 +1,12 @@
+<!--
+  @component
+   A modal dialog.
+
+   This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
+-->
 <script lang="ts">
-  /**
-   * A modal dialog.
-   *
-   * This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
-   */
+  import type { Action } from "svelte/action";
+
   import { attemptFocus, getFocusableElements } from "../lib/focus";
   import { closeOverlay } from "../stores";
 
@@ -14,8 +17,8 @@
   /**
    * A Svelte action to handle focus within a modal.
    */
-  function handleFocus(el: HTMLElement) {
-    function keydown(ev: KeyboardEvent) {
+  const handleFocus: Action = (el) => {
+    const keydown = (ev: KeyboardEvent) => {
       if (ev.key === "Tab") {
         const focusable = getFocusableElements(el);
         const first = focusable[0];
@@ -31,7 +34,7 @@
         ev.preventDefault();
         closeHandler();
       }
-    }
+    };
     document.addEventListener("keydown", keydown);
 
     const selectorFocusEl = focus ? el.querySelector(focus) : undefined;
@@ -45,7 +48,7 @@
         document.removeEventListener("keydown", keydown);
       },
     };
-  }
+  };
 </script>
 
 {#if shown}

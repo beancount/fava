@@ -1,6 +1,7 @@
 <script lang="ts">
   import { treemap } from "d3-hierarchy";
   import type { HierarchyRectangularNode } from "d3-hierarchy";
+  import type { Action } from "svelte/action";
 
   import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
@@ -43,10 +44,10 @@
     ];
   }
 
-  function setVisibility(
-    node: SVGTextElement,
-    param: HierarchyRectangularNode<AccountHierarchyDatum>
-  ) {
+  const setVisibility: Action<
+    SVGTextElement,
+    HierarchyRectangularNode<AccountHierarchyDatum>
+  > = (node, param) => {
     function update(d: HierarchyRectangularNode<AccountHierarchyDatum>) {
       const length = node.getComputedTextLength();
       node.style.visibility =
@@ -54,7 +55,7 @@
     }
     update(param);
     return { update };
-  }
+  };
 </script>
 
 <svg {width} {height}>

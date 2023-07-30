@@ -1,4 +1,5 @@
 import { pointer } from "d3-selection";
+import type { Action } from "svelte/action";
 
 /** The tooltip div, lazily created. */
 const tooltip = (() => {
@@ -38,10 +39,10 @@ export type TooltipContent = (HTMLElement | Text)[];
  * The tooltip will be positioned at the cursor and is given a tooltip getter
  * per <g> element.
  */
-export function followingTooltip(
-  node: SVGElement,
-  text: () => TooltipContent,
-): { destroy: () => void; update: (t: () => TooltipContent) => void } {
+export const followingTooltip: Action<SVGElement, () => TooltipContent> = (
+  node,
+  text,
+) => {
   let getter = text;
   /** Event listener to have the tooltip follow the mouse. */
   function followMouse(event: MouseEvent): void {
@@ -59,11 +60,11 @@ export function followingTooltip(
 
   return {
     destroy: hide,
-    update(t: () => TooltipContent): void {
+    update(t) {
       getter = t;
     },
   };
-}
+};
 
 /** A function to find the closest node and the content to show in the tooltip. */
 export type TooltipFindNode = (
@@ -79,10 +80,10 @@ export type TooltipFindNode = (
  * i.e., the found node, again relative to the container and the desired
  * content of the tooltip.
  */
-export function positionedTooltip(
-  node: SVGGElement,
-  find: TooltipFindNode,
-): { destroy: () => void } {
+export const positionedTooltip: Action<SVGGElement, TooltipFindNode> = (
+  node,
+  find,
+) => {
   function mousemove(event: MouseEvent): void {
     const [xPointer, yPointer] = pointer(event);
     const res = find(xPointer, yPointer);
@@ -104,4 +105,4 @@ export function positionedTooltip(
   return {
     destroy: hide,
   };
-}
+};

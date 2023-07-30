@@ -1,3 +1,5 @@
+import type { Action } from "svelte/action";
+
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
  * @param target - The target element to show the tooltip on.
@@ -162,10 +164,10 @@ export function bindKey(
  * This listener will focus the given node if it is an <input> element and
  * trigger a click on it otherwise.
  */
-export function keyboardShortcut(
-  node: HTMLElement,
-  key?: string,
-): { destroy?: () => void } {
+export const keyboardShortcut: Action<HTMLElement, string | undefined> = (
+  node,
+  key,
+) => {
   if (!key) {
     return {};
   }
@@ -173,7 +175,7 @@ export function keyboardShortcut(
   const destroy = bindKey(key, node);
 
   return { destroy };
-}
+};
 
 /**
  * Register the keys to show/hide the tooltips
