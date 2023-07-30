@@ -11,7 +11,7 @@
   import { ctx } from "../stores/format";
 
   import Axis from "./Axis.svelte";
-  import { currenciesScale } from "./helpers";
+  import { currenciesScale, padExtent } from "./helpers";
   import type { LineChart, LineChartDatum } from "./line";
   import type { TooltipFindNode } from "./tooltip";
   import { positionedTooltip } from "./tooltip";
@@ -34,17 +34,14 @@
   // Scales and quadtree
   $: allValues = data.map((d) => d.values).flat(1);
 
-  let xDomain: [Date, Date];
-  $: xDomain = [
+  $: xExtent = [
     min(data, (s) => s.values[0]?.date) ?? today,
     max(data, (s) => s.values[s.values.length - 1]?.date) ?? today,
-  ];
-  $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
-  $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
+  ] as const;
+  $: x = scaleUtc([0, innerWidth]).domain(xExtent);
+  $: yExtent = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
-  $: y = scaleLinear()
-    .domain([yMin - (yMax - yMin) * 0.05, yMax + (yMax - yMin) * 0.05])
-    .range([innerHeight, 0]);
+  $: y = scaleLinear([innerHeight, 0]).domain(padExtent(yExtent));
 
   // Quadtree for hover.
   $: quad = quadtree(
@@ -76,7 +73,7 @@
     return d && [x(d.date), y(d.value), chart.tooltipText($ctx, d)];
   };
 
-  $: futureFilter = xDomain[1] > today ? "url(#desaturateFuture)" : undefined;
+  $: futureFilter = xExtent[1] > today ? "url(#desaturateFuture)" : undefined;
 </script>
 
 <svg {width} {height}>

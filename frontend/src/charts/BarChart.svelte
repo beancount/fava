@@ -15,6 +15,8 @@
     currenciesScale,
     filterTicks,
     hclColorRange,
+    includeZero,
+    padExtent,
     urlForTimeFilter,
   } from "./helpers";
   import { followingTooltip } from "./tooltip";
@@ -45,22 +47,17 @@
   let highlighted: string | null = null;
 
   // Scales
-  $: x0 = scaleBand()
-    .padding(0.1)
+  $: x0 = scaleBand([0, innerWidth])
     .domain(bar_groups.map((d) => d.label))
-    .range([0, innerWidth]);
-  $: x1 = scaleBand().domain(currencies).range([0, x0.bandwidth()]);
+    .padding(0.1);
+  $: x1 = scaleBand([0, x0.bandwidth()]).domain(currencies);
 
-  $: [yMin = 0, yMax = 0] = showStackedBars
+  $: yExtent = showStackedBars
     ? extent(stacks.flatMap(([, s]) => s.flat(2)))
     : extent(bar_groups.map((d) => d.values).flat(), (d) => d.value);
-  $: y = scaleLinear()
-    .range([innerHeight, 0])
-    .domain([Math.min(0, yMin), Math.max(0, yMax)]);
+  $: y = scaleLinear([innerHeight, 0]).domain(padExtent(includeZero(yExtent)));
 
-  $: colorScale = scaleOrdinal<string, string>()
-    .domain(accounts)
-    .range(hclColorRange(accounts.length));
+  $: colorScale = scaleOrdinal(hclColorRange(accounts.length)).domain(accounts);
 
   const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(

@@ -23,13 +23,10 @@
 
   // Scales
   $: dateExtent = extent(chart.data, (d) => d.date);
-  $: x = scaleUtc()
-    .domain(dateExtent[0] ? dateExtent : [0, 1])
-    .range([0, innerWidth]);
-  $: y = scalePoint()
-    .padding(1)
+  $: x = scaleUtc([0, innerWidth]).domain(dateExtent[0] ? dateExtent : [0, 1]);
+  $: y = scalePoint([innerHeight, 0])
     .domain(chart.data.map((d) => d.type))
-    .range([innerHeight, 0]);
+    .padding(1);
 
   // Axes
   $: xAxis = axisBottom(x).tickSizeOuter(0);
