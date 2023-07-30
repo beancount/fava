@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
-  import { bindKey } from "../keyboard-shortcuts";
+  import { _ } from "../i18n";
+  import type { KeySpec } from "../keyboard-shortcuts";
+  import { keyboardShortcut } from "../keyboard-shortcuts";
   import { lastActiveChartName, showCharts } from "../stores/chart";
 
   import Chart from "./Chart.svelte";
@@ -11,30 +11,20 @@
 
   export let charts: FavaChart[];
 
-  const setChart = (c: FavaChart) => {
-    $lastActiveChartName = c.name;
-  };
-
   $: active_chart =
     charts.find((c) => c.name === $lastActiveChartName) ?? charts?.[0];
 
-  const nextChart = () => {
-    const currentIndex = charts.findIndex((e) => e === active_chart);
-    const next = charts[(currentIndex + 1 + charts.length) % charts.length];
-    if (next) {
-      setChart(next);
+  // Get the shortcut key for jumping to the previous or next chart.
+  $: shortcut = (index: number): KeySpec | undefined => {
+    const current = charts.findIndex((e) => e === active_chart);
+    if (index === (current - 1 + charts.length) % charts.length) {
+      return { key: "C", note: _("Previous") };
     }
-  };
-  const previousChart = () => {
-    const currentIndex = charts.findIndex((e) => e === active_chart);
-    const prev = charts[(currentIndex - 1 + charts.length) % charts.length];
-    if (prev) {
-      setChart(prev);
+    if (index === (current + 1 + charts.length) % charts.length) {
+      return { key: "c", note: _("Next") };
     }
+    return undefined;
   };
-
-  onMount(() => bindKey("c", nextChart));
-  onMount(() => bindKey("C", previousChart));
 </script>
 
 {#if active_chart}
@@ -42,13 +32,14 @@
     <ConversionAndInterval />
   </Chart>
   <div hidden={!$showCharts}>
-    {#each charts as chart}
+    {#each charts as chart, index}
       <button
         type="button"
         class:selected={chart === active_chart}
         on:click={() => {
-          setChart(chart);
+          $lastActiveChartName = chart.name;
         }}
+        use:keyboardShortcut={shortcut(index)}
       >
         {chart.name}
       </button>

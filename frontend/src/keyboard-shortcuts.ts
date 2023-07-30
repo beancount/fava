@@ -1,4 +1,7 @@
+import { tick } from "svelte";
 import type { Action } from "svelte/action";
+
+import { log_error } from "./log";
 
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
@@ -111,7 +114,7 @@ function keydown(event: KeyboardEvent): void {
 document.addEventListener("keydown", keydown);
 
 /** A type to specify a platform-dependent keyboard shortcut. */
-export type KeySpec = string | { key: string; mac: string };
+export type KeySpec = string | { key: string; mac?: string; note?: string };
 
 const isMac =
   // This still seems to be the least bad way to check whether we are running on macOS or iOS
@@ -122,26 +125,38 @@ export const modKey = isMac ? "Cmd" : "Ctrl";
 
 /**
  * Get the keyboard key specifier string for the current platform.
- * @param keySpec - The key spec.
+ * @param spec - The key spec.
  */
-function getKeySpecKey(keySpec: KeySpec): string {
-  if (typeof keySpec === "string") {
-    return keySpec;
+function getKeySpecKey(spec: KeySpec): string {
+  if (typeof spec === "string") {
+    return spec;
   }
-  return isMac ? keySpec.mac : keySpec.key;
+  return isMac ? spec.mac ?? spec.key : spec.key;
+}
+
+/**
+ * Get the keyboard key description.
+ * @param spec - The key spec.
+ */
+function getKeySpecDescription(spec: KeySpec): string {
+  if (typeof spec === "string") {
+    return spec;
+  }
+  const key = isMac ? spec.mac ?? spec.key : spec.key;
+  return spec.note ? `${key} - ${spec.note}` : key;
 }
 
 /**
  * Bind an event handler to a key.
- * @param keySpec - The key to bind.
+ * @param spec - The key to bind.
  * @param handler - The callback to run on key press.
  * @returns A function to unbind the keyboard handler.
  */
 export function bindKey(
-  keySpec: KeySpec,
+  spec: KeySpec,
   handler: KeyboardShortcutAction,
 ): () => void {
-  const key = getKeySpecKey(keySpec);
+  const key = getKeySpecKey(spec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     // eslint-disable-next-line no-console
@@ -164,17 +179,33 @@ export function bindKey(
  * This listener will focus the given node if it is an <input> element and
  * trigger a click on it otherwise.
  */
-export const keyboardShortcut: Action<HTMLElement, string | undefined> = (
+export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
   node,
-  key,
+  spec,
 ) => {
-  if (!key) {
-    return {};
-  }
-  node.setAttribute("data-key", key);
-  const destroy = bindKey(key, node);
+  const setup = (s?: KeySpec) => {
+    if (s) {
+      node.setAttribute("data-key", getKeySpecDescription(s));
+      return bindKey(s, node);
+    }
+    node.removeAttribute("data-key");
+    return () => {};
+  };
+  let unbind = setup(spec);
 
-  return { destroy };
+  return {
+    destroy: unbind,
+    update(new_spec) {
+      unbind();
+      // Await tick so that key bindings that might have been removed from other
+      // elements in the same render are gone.
+      tick()
+        .then(() => {
+          unbind = setup(new_spec);
+        })
+        .catch(log_error);
+    },
+  };
 };
 
 /**

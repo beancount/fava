@@ -12,8 +12,7 @@ pages for the following topics:
 -   [Options](./options) - the available options.
 
 Fava comes with keyboard shortcuts - press <kbd>?</kbd> on any page to see the
-available ones. When charts are visible, <kbd>c</kbd> and <kbd>C</kbd> will show
-to the next and previous chart respectively.
+available ones.
 
 If you started Fava from the command line, you can run `fava --help` to see all
 the available command line options.
