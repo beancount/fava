@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import { _, format } from "../i18n";
+  import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { journalShow } from "../stores/journal";
 
@@ -14,7 +15,7 @@
     type: string,
     button_text: string,
     title: string | null,
-    shortcut: string,
+    shortcut: KeySpec,
     supertype?: string
   ][] = [
     ["open", "Open", null, "s o"],
@@ -46,7 +47,7 @@
 <script lang="ts">
   $: shownSet = new Set($journalShow);
 
-  function toggle(type: string): void {
+  function toggle(type: string) {
     journalShow.update((show) => {
       const set = new Set(show);
       const toggle_func = set.has(type)

@@ -7,7 +7,7 @@
   export let value: string;
   export let submit: () => void;
 
-  const [editor, useEditor] = initQueryEditor(
+  const { editor, renderEditor } = initQueryEditor(
     value,
     (state) => {
       value = state.sliceDoc();
@@ -22,7 +22,7 @@
 </script>
 
 <form on:submit|preventDefault={submit}>
-  <div use:useEditor />
+  <div use:renderEditor />
   <button type="submit" use:keyboardShortcut={"Control+Enter"}>
     {_("Submit")}
   </button>

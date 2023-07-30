@@ -45,7 +45,7 @@ export const followingTooltip: Action<SVGElement, () => TooltipContent> = (
 ) => {
   let getter = text;
   /** Event listener to have the tooltip follow the mouse. */
-  function followMouse(event: MouseEvent): void {
+  function followMouse(event: MouseEvent) {
     const t = tooltip();
     t.style.opacity = "1";
     t.style.left = `${event.pageX}px`;
@@ -84,7 +84,7 @@ export const positionedTooltip: Action<SVGGElement, TooltipFindNode> = (
   node,
   find,
 ) => {
-  function mousemove(event: MouseEvent): void {
+  function mousemove(event: MouseEvent) {
     const [xPointer, yPointer] = pointer(event);
     const res = find(xPointer, yPointer);
     const matrix = node.getScreenCTM();

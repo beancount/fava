@@ -26,7 +26,7 @@ export class Events<T = string> {
    * Register an event listener that will only be executed once.
    */
   once(event: T, callback: () => void): void {
-    const runOnce = (): void => {
+    const runOnce = () => {
       this.remove(event, runOnce);
       callback();
     };

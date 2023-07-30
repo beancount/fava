@@ -12,7 +12,7 @@
 
   let value = "";
 
-  const [editor, useEditor] = initDocumentPreviewEditor(value);
+  const { editor, renderEditor } = initDocumentPreviewEditor(value);
 
   $: fetch(url)
     .then(handleText)
@@ -28,7 +28,7 @@
   }
 </script>
 
-<div use:useEditor />
+<div use:renderEditor />
 
 <style>
   div {

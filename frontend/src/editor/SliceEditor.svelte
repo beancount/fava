@@ -61,7 +61,7 @@
     }
   }
 
-  const [, useEditor] = initBeancountEditor(
+  const { renderEditor } = initBeancountEditor(
     slice,
     (state) => {
       currentSlice = state.sliceDoc();
@@ -83,7 +83,7 @@
 </script>
 
 <form on:submit|preventDefault={save}>
-  <div class="editor" use:useEditor />
+  <div class="editor" use:renderEditor />
   <div class="flex-row">
     <span class="spacer" />
     <label>

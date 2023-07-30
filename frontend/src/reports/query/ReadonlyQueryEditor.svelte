@@ -4,10 +4,10 @@
   export let value: string;
   export let error = false;
 
-  const [, useEditor] = initReadonlyQueryEditor(value);
+  const { renderEditor } = initReadonlyQueryEditor(value);
 </script>
 
-<pre class:error use:useEditor />
+<pre class:error use:renderEditor />
 
 <style>
   .error {

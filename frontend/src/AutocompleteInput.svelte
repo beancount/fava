@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
+  import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
   import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy";
 
@@ -21,7 +22,7 @@
     | null = null;
   export let setSize = false;
   export let className: string | undefined = undefined;
-  export let key: string | undefined = undefined;
+  export let key: KeySpec | undefined = undefined;
   export let checkValidity: ((val: string) => string) | undefined = undefined;
   export let clearButton = false;
 

@@ -26,7 +26,7 @@ function showTooltip(target: HTMLElement): () => void {
     parentCoords.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top + window.scrollY}px`;
-  return (): void => {
+  return () => {
     tooltip.remove();
     if (isHidden) {
       target.classList.add("hidden");
@@ -44,7 +44,7 @@ function showTooltips(): () => void {
       removes.push(showTooltip(el));
     }
   });
-  return (): void => {
+  return () => {
     removes.forEach((r) => {
       r();
     });
@@ -67,6 +67,42 @@ function isEditableElement(element: EventTarget | null): boolean {
   );
 }
 
+type UppercaseLetter =
+  | "A"
+  | "B"
+  | "C"
+  | "D"
+  | "E"
+  | "F"
+  | "G"
+  | "H"
+  | "I"
+  | "J"
+  | "L"
+  | "M"
+  | "N"
+  | "O"
+  | "P"
+  | "Q"
+  | "R"
+  | "S"
+  | "T"
+  | "U"
+  | "V"
+  | "W"
+  | "X"
+  | "Y"
+  | "Z";
+type LowercaseLetter = Lowercase<UppercaseLetter>;
+type Letter = UppercaseLetter | LowercaseLetter;
+// This type can be extended as needed to support all the desired
+// key combinations
+type KeyCombo =
+  | "?"
+  | Letter
+  | `${"Control" | "Meta"}+${"d" | "s" | "Enter"}`
+  // d,s,t - journal filters; f - filters; g - reports
+  | `${"d" | "f" | "g" | "s" | "t"} ${Letter}`;
 /** A handler function or an element to click. */
 type KeyboardShortcutAction = ((event: KeyboardEvent) => void) | HTMLElement;
 const keyboardShortcuts = new Map<string, KeyboardShortcutAction>();
@@ -101,6 +137,7 @@ function keydown(event: KeyboardEvent): void {
       event.preventDefault();
       handler.focus();
     } else if (handler instanceof HTMLElement) {
+      event.preventDefault();
       handler.click();
     } else {
       handler(event);
@@ -114,7 +151,9 @@ function keydown(event: KeyboardEvent): void {
 document.addEventListener("keydown", keydown);
 
 /** A type to specify a platform-dependent keyboard shortcut. */
-export type KeySpec = string | { key: string; mac?: string; note?: string };
+export type KeySpec =
+  | KeyCombo
+  | { key: KeyCombo; mac?: KeyCombo; note?: string };
 
 const isMac =
   // This still seems to be the least bad way to check whether we are running on macOS or iOS
@@ -127,7 +166,7 @@ export const modKey = isMac ? "Cmd" : "Ctrl";
  * Get the keyboard key specifier string for the current platform.
  * @param spec - The key spec.
  */
-function getKeySpecKey(spec: KeySpec): string {
+function getKeySpecKey(spec: KeySpec): KeyCombo {
   if (typeof spec === "string") {
     return spec;
   }
@@ -152,10 +191,7 @@ function getKeySpecDescription(spec: KeySpec): string {
  * @param handler - The callback to run on key press.
  * @returns A function to unbind the keyboard handler.
  */
-export function bindKey(
-  spec: KeySpec,
-  handler: KeyboardShortcutAction,
-): () => void {
+function bindKey(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
   const key = getKeySpecKey(spec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
@@ -167,7 +203,7 @@ export function bindKey(
     console.warn("Duplicate keyboard shortcut: ", key, handler);
   }
   keyboardShortcuts.set(key, handler);
-  return (): void => {
+  return () => {
     keyboardShortcuts.delete(key);
   };
 }
