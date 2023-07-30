@@ -29,18 +29,25 @@ export function derived_array<S, T extends StrictEquality>(
   );
 }
 
+/** A store that has its value synced to localStorage. */
+export type LocalStoreSyncedStore<T> = Writable<T> & {
+  /** List all the values that this store can take. */
+  values: () => [T, string][];
+};
+
 /**
  * Create a store that syncs its value to localStorage.
  * @param key - The key to save this with in localStorage.
  * @param validator - A Validator to check the loaded value.
- * @param init - A default to initialise the store with if localStorage is
- *               empty.
+ * @param init - A default to initialise the store with if localStorage is empty.
+ * @param values - An optional enumerator of all possible values and descriptions.
  */
 export function localStorageSyncedStore<T>(
   key: string,
   validator: Validator<T>,
   init: () => T,
-): Writable<T> {
+  values: () => [T, string][] = () => [],
+): LocalStoreSyncedStore<T> {
   const fullKey = `fava-${key}`;
 
   // Create a store which is empty first but reads the value from
@@ -61,5 +68,5 @@ export function localStorageSyncedStore<T>(
     });
   });
 
-  return store;
+  return { ...store, values };
 }

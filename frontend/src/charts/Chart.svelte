@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import type { Writable } from "svelte/store";
 
-  import { _ } from "../i18n";
   import {
     barChartMode,
-    chartCurrency,
+    chartToggledCurrencies,
     hierarchyChartMode,
     lineChartMode,
     showCharts,
+    treemapCurrency,
   } from "../stores/chart";
 
   import BarChart from "./BarChart.svelte";
@@ -31,55 +29,28 @@
    */
   let width: number;
 
-  const currencies: Writable<string[]> = writable([]);
-  setContext("chart-currencies", currencies);
-
-  const legend: Writable<[string, string][]> = writable([]);
-  setContext("chart-legend", legend);
-
-  $: if (chart) {
-    // Reset the chart legend on chart change.
-    legend.set([]);
-  }
+  const treemap_currencies = writable<string[]>([]);
+  const legend = writable<[string, string | null][]>([]);
 </script>
 
 <div class="flex-row">
   {#if $showCharts}
-    <div>
-      <ChartLegend legend={$legend} />
-    </div>
+    {#if chart.type === "barchart" || chart.type === "linechart"}
+      <ChartLegend legend={$legend} toggled={chartToggledCurrencies} />
+    {/if}
+    {#if chart.type === "hierarchy" && $hierarchyChartMode === "treemap"}
+      <ChartLegend
+        legend={$treemap_currencies.map((c) => [c, null])}
+        active={treemapCurrency}
+      />
+    {/if}
     <span class="spacer" />
     {#if chart.type === "hierarchy"}
-      {#if $hierarchyChartMode === "treemap"}
-        <select bind:value={$chartCurrency}>
-          {#each $currencies as currency}
-            <option value={currency}>{currency}</option>
-          {/each}
-        </select>
-      {/if}
-      <ModeSwitch
-        bind:value={$hierarchyChartMode}
-        options={[
-          ["treemap", _("Treemap")],
-          ["sunburst", _("Sunburst")],
-        ]}
-      />
+      <ModeSwitch store={hierarchyChartMode} />
     {:else if chart.type === "linechart"}
-      <ModeSwitch
-        bind:value={$lineChartMode}
-        options={[
-          ["line", _("Line chart")],
-          ["area", _("Area chart")],
-        ]}
-      />
+      <ModeSwitch store={lineChartMode} />
     {:else if chart.type === "barchart" && chart.hasStackedData}
-      <ModeSwitch
-        bind:value={$barChartMode}
-        options={[
-          ["stacked", _("Stacked Bars")],
-          ["single", _("Single Bars")],
-        ]}
-      />
+      <ModeSwitch store={barChartMode} />
     {/if}
   {:else}<span class="spacer" />{/if}
   <slot />
@@ -95,11 +66,11 @@
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
     {#if chart.type === "barchart"}
-      <BarChart {chart} {width} />
+      <BarChart {chart} {width} {legend} />
     {:else if chart.type === "hierarchy"}
-      <HierarchyContainer {chart} {width} />
+      <HierarchyContainer {chart} {width} {treemap_currencies} />
     {:else if chart.type === "linechart"}
-      <LineChart {chart} {width} />
+      <LineChart {chart} {width} {legend} />
     {:else if chart.type === "scatterplot"}
       <ScatterPlot {chart} {width} />
     {/if}

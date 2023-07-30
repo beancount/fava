@@ -78,6 +78,7 @@ module.exports = {
       rules: {
         "svelte/button-has-type": ON,
         "no-self-assign": OFF,
+        "no-undef": OFF,
         "no-undef-init": OFF,
         "import/no-mutable-exports": OFF,
         "@typescript-eslint/no-unsafe-argument": OFF,

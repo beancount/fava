@@ -37,7 +37,7 @@
   onMount(() => bindKey("C", previousChart));
 </script>
 
-{#if charts.length > 0 && active_chart}
+{#if active_chart}
   <Chart chart={active_chart}>
     <ConversionAndInterval />
   </Chart>

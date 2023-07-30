@@ -4,7 +4,6 @@
   import { quadtree } from "d3-quadtree";
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { area, curveStepAfter, line } from "d3-shape";
-  import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
   import { chartToggledCurrencies, lineChartMode } from "../stores/chart";
@@ -18,6 +17,7 @@
 
   export let chart: LineChart;
   export let width: number;
+  export let legend: Writable<[string, string | null][]>;
 
   const today = new Date();
   const margin = { top: 10, right: 10, bottom: 30, left: 40 };
@@ -28,7 +28,6 @@
   $: data = chart.filter($chartToggledCurrencies);
   $: series_names = chart.series_names;
 
-  const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(series_names.map((c) => [c, $currenciesScale(c)]));
 
   // Scales and quadtree
