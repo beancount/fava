@@ -1,24 +1,26 @@
 <script lang="ts">
-  import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
   import { _ } from "../i18n";
-  import { chartCurrency, hierarchyChartMode } from "../stores/chart";
+  import { hierarchyChartMode, treemapCurrency } from "../stores/chart";
 
   import type { HierarchyChart } from "./hierarchy";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
-  const context: Writable<string[]> = getContext("chart-currencies");
-
-  export let chart: HierarchyChart
+  export let chart: HierarchyChart;
   export let width: number;
+  export let treemap_currencies: Writable<string[]>;
 
   $: data = chart.data;
-
   $: currencies = [...data.keys()];
-  $: currency = $chartCurrency || currencies[0];
-  $: context.set(currencies);
+  $: treemap_currencies.set(currencies);
+
+  $: if ($treemapCurrency === null) {
+    $treemapCurrency = $treemapCurrency ?? currencies[0] ?? null;
+  }
+
+  $: currency = $treemapCurrency;
 
   $: mode = $hierarchyChartMode;
   $: treemap = mode === "treemap" && data.get(currency ?? "");

@@ -1,12 +1,14 @@
-<script lang="ts">
-  export let value: string;
-  export let options: [string, string][];
+<script lang="ts" generics="T extends string">
+  import type { LocalStoreSyncedStore } from "../lib/store";
+
+  /** The store to show a switch for. */
+  export let store: LocalStoreSyncedStore<T>;
 </script>
 
 <span>
-  {#each options as [option, name]}
-    <label class="button" class:muted={value !== option}>
-      <input type="radio" bind:group={value} value={option} />
+  {#each store.values() as [option, name]}
+    <label class="button" class:muted={$store !== option}>
+      <input type="radio" bind:group={$store} value={option} />
       {name}
     </label>
   {/each}
@@ -18,6 +20,6 @@
   }
 
   label + label {
-    margin-left: 0.25rem;
+    margin-left: 0.125rem;
   }
 </style>

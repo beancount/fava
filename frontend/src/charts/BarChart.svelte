@@ -2,7 +2,6 @@
   import { extent } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
-  import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
   import { urlForAccount } from "../helpers";
@@ -23,6 +22,7 @@
 
   export let chart: BarChart;
   export let width: number;
+  export let legend: Writable<[string, string | null][]>;
 
   const today = new Date();
   const maxColumnWidth = 100;
@@ -59,11 +59,10 @@
 
   $: colorScale = scaleOrdinal(hclColorRange(accounts.length)).domain(accounts);
 
-  const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
     chart.currencies.map((c) => [
       c,
-      showStackedBars ? "#bbb" : $currenciesScale(c),
+      showStackedBars ? null : $currenciesScale(c),
     ])
   );
 

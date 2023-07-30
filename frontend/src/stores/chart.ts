@@ -24,6 +24,10 @@ export const hierarchyChartMode = localStorageSyncedStore<
   "hierarchy-chart-mode",
   union(constant("treemap"), constant("sunburst")),
   () => "treemap",
+  () => [
+    ["treemap", _("Treemap")],
+    ["sunburst", _("Sunburst")],
+  ],
 );
 
 /** The currently selected line chart mode. */
@@ -31,6 +35,10 @@ export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   "line-chart-mode",
   union(constant("line"), constant("area")),
   () => "line",
+  () => [
+    ["line", _("Line chart")],
+    ["area", _("Area chart")],
+  ],
 );
 
 /** The currently selected bar chart mode. */
@@ -38,6 +46,10 @@ export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
   "bar-chart-mode",
   union(constant("stacked"), constant("single")),
   () => "stacked",
+  () => [
+    ["stacked", _("Stacked Bars")],
+    ["single", _("Single Bars")],
+  ],
 );
 
 /** The currencies that are currently not shown in the bar and line charts. */
@@ -47,7 +59,8 @@ export const chartToggledCurrencies = localStorageSyncedStore<string[]>(
   () => [],
 );
 
-export const chartCurrency = writable("");
+/** The currency to show the treemap of. */
+export const treemapCurrency = writable<string | null>(null);
 
 const currencySuggestions = derived(
   [operating_currency, currencies_sorted, conversion_currencies],
