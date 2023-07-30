@@ -17,6 +17,35 @@ export function urlForTimeFilter(date: Date): string {
 }
 
 /**
+ * Include zero in the extent.
+ *
+ * For convenience this also turns a empty extent into [0,1].
+ */
+export function includeZero([from, to]:
+  | [number, number]
+  | [undefined, undefined]): [number, number] {
+  if (from === undefined) {
+    return [0, 1];
+  }
+  return [Math.min(0, from), Math.max(0, to)];
+}
+
+/**
+ * Pad the extent by a factor of 0.05.
+ *
+ * For convenience this also turns a empty extent into [0,1].
+ */
+export function padExtent([from, to]:
+  | [number, number]
+  | [undefined, undefined]): [number, number] {
+  if (from === undefined) {
+    return [0, 1];
+  }
+  const diff = to - from;
+  return [from - diff * 0.03, to + diff * 0.03];
+}
+
+/**
  * Filter ticks to have them not overlap.
  * @param domain - The domain of values to filter.
  * @param count - The number of ticks that should be returned.

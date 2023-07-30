@@ -36,8 +36,8 @@
       : $ctx.amount(val, currency);
   }
 
-  const x = scaleLinear().range([0, 2 * Math.PI]);
-  $: y = scaleSqrt().range([0, radius]);
+  const x = scaleLinear([0, 2 * Math.PI]);
+  $: y = scaleSqrt([0, radius]);
   $: arcShape = arc<HierarchyRectangularNode<AccountHierarchyDatum>>()
     .startAngle((d) => x(d.x0))
     .endAngle((d) => x(d.x1))

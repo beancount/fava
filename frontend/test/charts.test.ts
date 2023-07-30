@@ -3,7 +3,13 @@ import assert from "uvu/assert";
 
 import { parseChartData } from "../src/charts";
 import { bar } from "../src/charts/bar";
-import { colors10, colors15, filterTicks } from "../src/charts/helpers";
+import {
+  colors10,
+  colors15,
+  filterTicks,
+  includeZero,
+  padExtent,
+} from "../src/charts/helpers";
 import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
 import { balances, LineChart } from "../src/charts/line";
 import {
@@ -14,12 +20,26 @@ import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
 
 import { loadJSONSnapshot } from "./end-to-end-validation.test";
 
-test("chart helpers (color scales)", () => {
+test("chart helpers (filter ticks)", () => {
   assert.equal(filterTicks(["1", "2", "3"], 2), ["1", "3"]);
   assert.equal(filterTicks(["1", "2", "3"], 4), ["1", "2", "3"]);
+});
 
+test("chart helpers (color scales)", () => {
   assert.equal(colors10[0], "rgb(126, 174, 253)");
   assert.equal(colors15[0], "rgb(173, 200, 254)");
+});
+
+test("chart helpers (include zero in extent)", () => {
+  assert.equal(includeZero([2, 5]), [0, 5]);
+  assert.equal(includeZero([-12, -5]), [-12, 0]);
+  assert.equal(includeZero([-5, 5]), [-5, 5]);
+  assert.equal(includeZero([undefined, undefined]), [0, 1]);
+});
+
+test("chart helpers (pad extent)", () => {
+  assert.equal(padExtent([0, 1]), [-0.03, 1.03]);
+  assert.equal(padExtent([undefined, undefined]), [0, 1]);
 });
 
 test("handle data for hierarchical chart", async () => {
