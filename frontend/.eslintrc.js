@@ -43,10 +43,10 @@ const sortImports = {
 };
 
 module.exports = {
-  plugins: ["@typescript-eslint", "svelte", "deprecation"],
   extends: [
     "airbnb-base",
     "airbnb-typescript/base",
+    "plugin:deprecation/recommended",
     "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/strict-type-checked",
@@ -66,7 +66,6 @@ module.exports = {
     ...sortImports,
     "@typescript-eslint/consistent-type-imports": ON,
     "@typescript-eslint/explicit-module-boundary-types": ON,
-    "deprecation/deprecation": ON,
     curly: [ON, "all"],
   },
   overrides: [

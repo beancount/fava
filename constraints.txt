@@ -31,7 +31,7 @@ cachetools==5.3.1
     # via
     #   google-auth
     #   tox
-certifi==2023.5.7
+certifi==2023.7.22
     # via requests
 cffi==1.15.1
     # via cryptography
@@ -56,7 +56,7 @@ coverage==7.2.7
     # via pytest-cov
 cryptography==41.0.2
     # via secretstorage
-dill==0.3.6
+dill==0.3.7
     # via pylint
 distlib==0.3.7
     # via virtualenv
@@ -70,7 +70,7 @@ filelock==3.12.2
     # via
     #   tox
     #   virtualenv
-flake8==6.0.0
+flake8==6.1.0
     # via
     #   fava (pyproject.toml)
     #   flake8-pyi
@@ -84,7 +84,7 @@ flask-babel==3.1.0
     # via fava (pyproject.toml)
 google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.94.0
+google-api-python-client==2.95.0
     # via beancount
 google-auth==2.22.0
     # via
@@ -99,7 +99,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.5.25
+identify==2.5.26
     # via pre-commit
 idna==3.4
     # via requests
@@ -144,7 +144,7 @@ lxml==4.9.3
     #   pyexcel-ods3
 markdown-it-py==3.0.0
     # via rich
-markdown2==2.4.9
+markdown2==2.4.10
     # via fava (pyproject.toml)
 markupsafe==2.1.3
     # via
@@ -156,7 +156,7 @@ mccabe==0.7.0
     #   pylint
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==9.1.0
+more-itertools==10.0.0
     # via
     #   cheroot
     #   jaraco-classes
@@ -178,7 +178,7 @@ packaging==23.1
     #   tox
 pkginfo==1.9.6
     # via twine
-platformdirs==3.9.1
+platformdirs==3.10.0
     # via
     #   pylint
     #   tox
@@ -203,7 +203,7 @@ pyasn1==0.5.0
     #   rsa
 pyasn1-modules==0.3.0
     # via google-auth
-pycodestyle==2.10.0
+pycodestyle==2.11.0
     # via flake8
 pycparser==2.21
     # via cffi
@@ -223,7 +223,7 @@ pyexcel-xls==0.7.0
     # via fava (pyproject.toml)
 pyexcel-xlsx==0.6.0
     # via fava (pyproject.toml)
-pyflakes==3.0.1
+pyflakes==3.1.0
     # via
     #   flake8
     #   flake8-pyi
@@ -236,7 +236,7 @@ pyinstaller==5.13.0
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2023.6
     # via pyinstaller
-pylint==2.17.4
+pylint==2.17.5
     # via fava (pyproject.toml)
 pyparsing==3.1.0
     # via httplib2
@@ -272,7 +272,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.4.2
+rich==13.5.0
     # via twine
 rsa==4.9
     # via google-auth
@@ -291,7 +291,7 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.4.1
     # via beautifulsoup4
-sphinx==7.0.1
+sphinx==7.1.1
     # via fava (pyproject.toml)
 sphinxcontrib-applehelp==1.0.4
     # via sphinx
@@ -307,7 +307,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 texttable==1.6.7
     # via pyexcel
-tomlkit==0.11.8
+tomlkit==0.12.1
     # via pylint
 tox==4.6.4
     # via fava (pyproject.toml)
@@ -332,7 +332,7 @@ urllib3==1.26.16
     #   google-auth
     #   requests
     #   twine
-virtualenv==20.24.1
+virtualenv==20.24.2
     # via
     #   pre-commit
     #   tox

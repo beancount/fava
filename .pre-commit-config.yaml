@@ -18,7 +18,7 @@ repos:
             require_serial: true
             additional_dependencies:
                 - "prettier@3.0.0"
-                - "prettier-plugin-svelte@3.0.0"
+                - "prettier-plugin-svelte@3.0.3"
                 - "svelte@4.1.1"
           - id: stylelint
             name: stylelint
