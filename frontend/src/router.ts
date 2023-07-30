@@ -211,6 +211,7 @@ class Router extends Events<"page-loaded"> {
         this.updateState();
       }
       this.trigger("page-loaded");
+      setStoreValuesFromURL();
       const hash = window.location.hash.slice(1);
       urlHash.set(hash);
       if (hash) {
