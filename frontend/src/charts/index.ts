@@ -17,15 +17,9 @@ import type { LineChart } from "./line";
 import { scatterplot } from "./scatterplot";
 import type { ScatterPlot } from "./scatterplot";
 
-const parsers: Partial<
-  Record<
-    string,
-    (
-      label: string,
-      json: unknown,
-      ctx: ChartContext,
-    ) => Result<FavaChart, string>
-  >
+const parsers: Record<
+  string,
+  (label: string, json: unknown, ctx: ChartContext) => Result<FavaChart, string>
 > = {
   balances,
   bar,

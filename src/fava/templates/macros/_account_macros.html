@@ -24,9 +24,9 @@ Click to copy the balance directives to the clipboard:
 {% endif %}
 {% endmacro %}
 
-{% macro account_name(ledger, account_name, last_segment=False) -%}
+{% macro account_name(ledger, account_name) -%}
 <a href="{{ url_for('account', name=account_name) }}" class="account">
-  {{- account_name.split(':')[-1] if last_segment else account_name -}}
+  {{- account_name -}}
 </a>
 {%- if ledger.accounts[account_name].uptodate_status %}
 

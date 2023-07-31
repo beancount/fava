@@ -1,9 +1,5 @@
 /* stylelint-disable no-descending-specificity */
 
-.journal {
-  margin-top: 0.25rem;
-}
-
 .flex-table p,
 .flex-table li,
 .flex-table ul,
@@ -19,17 +15,11 @@
 .flex-table p > span {
   flex-shrink: 0;
   padding: 2px 4px;
-  margin: 0;
 }
 
 .flex-table .num {
   font-family: var(--font-family-monospaced);
-  color: var(--text-color);
   text-align: right;
-}
-
-.flex-table .number {
-  white-space: nowrap;
 }
 
 .flex-table .head p > span {
@@ -40,8 +30,10 @@
 
 .flex-table .head .num {
   font-family: var(--font-family);
-  color: var(--table-header-text);
-  background-color: var(--table-header-background);
+}
+
+.journal {
+  margin-top: 0.25rem;
 }
 
 .journal p,
@@ -56,7 +48,7 @@
 .journal .postings {
   font-size: 0.9em;
   background-color: var(--journal-postings);
-  opacity: 80%;
+  opacity: 0.8;
 }
 
 .journal .postings .num {

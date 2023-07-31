@@ -145,7 +145,7 @@ class ChartModule(FavaModule):
         self,
         filtered: FilteredLedger,
         interval: Interval,
-        accounts: str | tuple[str],
+        accounts: str | tuple[str, ...],
         conversion: str,
         invert: bool = False,
     ) -> Iterable[DateAndBalanceWithBudget]:

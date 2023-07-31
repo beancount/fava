@@ -1,5 +1,9 @@
 import { get } from "../../api";
 import { todayAsString } from "../../format";
+import { _ } from "../../i18n";
+import { Route } from "../route";
+
+import ImportSvelte from "./Import.svelte";
 
 /**
  * Construct the filename from date and basename.
@@ -49,11 +53,12 @@ export function preprocessData(
   });
 }
 
-export const load = (): Promise<{
-  data: ProcessedImportableFile[];
-}> =>
-  get("imports", undefined)
-    .then(preprocessData)
-    .then((data) => ({ data }));
-
-export type PageData = Awaited<ReturnType<typeof load>>;
+export const import_report = new Route(
+  "import",
+  ImportSvelte,
+  () =>
+    get("imports", undefined)
+      .then(preprocessData)
+      .then((data) => ({ data })),
+  () => _("Import"),
+);

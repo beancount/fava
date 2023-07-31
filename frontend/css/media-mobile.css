@@ -2,11 +2,11 @@
  * At resolutions smaller than 768px, hide the aside menu.
  * This means that ipads and larger will show the side menu.
  */
-@media (max-width: 767px) {
+@media (width <= 767px) {
   body {
     padding: 0;
-    transition: var(--transitions);
     font-size: 16px;
+    transition: var(--transitions);
   }
 
   header {

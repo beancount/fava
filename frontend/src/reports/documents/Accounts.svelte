@@ -48,18 +48,19 @@
     title={node.name}
     class="droptarget"
     data-account-name={node.name}
-    class:has-children={hasChildren}
     class:selected
     class:drag
   >
-    <button
-      type="button"
-      class="toggle"
-      on:click={(ev) => {
-        expanded = !expanded;
-        ev.stopPropagation();
-      }}>{expanded ? "▾" : "▸"}</button
-    >
+    {#if hasChildren}
+      <button
+        type="button"
+        class="toggle"
+        on:click={(ev) => {
+          expanded = !expanded;
+          ev.stopPropagation();
+        }}>{expanded ? "▾" : "▸"}</button
+      >
+    {/if}
     <button
       type="button"
       class="leaf"
@@ -110,15 +111,12 @@
 
   .leaf {
     flex-grow: 1;
+    margin-left: 1em;
   }
 
   .toggle {
+    position: absolute;
     margin: 0 0.25rem;
     color: var(--treetable-expander);
-    visibility: hidden;
-  }
-
-  .has-children > .toggle {
-    visibility: visible;
   }
 </style>

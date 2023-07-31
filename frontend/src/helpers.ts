@@ -1,7 +1,7 @@
-import { get } from "svelte/store";
+import { derived, get } from "svelte/store";
 
 import { base_url, fava_options } from "./stores";
-import { urlSyncedParams } from "./stores/url";
+import { searchParams, urlSyncedParams } from "./stores/url";
 
 /**
  * Get the URL path relative to the base url of the current ledger.
@@ -25,7 +25,7 @@ export function urlFor(
   const url = `${get(base_url)}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
-    const oldParams = new URL(window.location.href).searchParams;
+    const oldParams = get(searchParams);
     for (const name of urlSyncedParams) {
       const value = oldParams.get(name);
       if (value) {
@@ -51,7 +51,10 @@ export function urlForSource(file_path: string, line: string): string {
     : urlFor("editor/", { file_path, line });
 }
 
-/** URL for the account report. */
-export function urlForAccount(account: string): string {
-  return urlFor(`account/${account}/`);
-}
+/** URL for the account report (derived store to keep track of filter changes.). */
+export const urlForAccount = derived(
+  [searchParams],
+  () =>
+    (account: string, params?: Record<string, string>): string =>
+      urlFor(`account/${account}/`, params),
+);

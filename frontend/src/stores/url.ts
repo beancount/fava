@@ -19,11 +19,10 @@ export const search = writable<string>();
 export const searchParams = derived(search, (s) => new URLSearchParams(s));
 
 /** The query string containing all values that are synced to the URL. */
-export const synced_query_string = derived([search], ([s]) => {
-  const all_params = new URLSearchParams(s);
+export const synced_query_string = derived([searchParams], ([s]) => {
   const params = new URLSearchParams();
   for (const name of urlSyncedParams) {
-    const value = all_params.get(name);
+    const value = s.get(name);
     if (value) {
       params.set(name, value);
     } else {

@@ -55,6 +55,7 @@ class LedgerData:
     account_details: AccountDict
     base_url: str
     currencies: list[str]
+    currency_names: dict[str, str]
     errors: list[SerialisedError]
     fava_options: FavaOptions
     incognito: bool
@@ -77,6 +78,22 @@ def get_errors() -> list[SerialisedError]:
     return [SerialisedError.from_beancount_error(e) for e in g.ledger.errors]
 
 
+def _get_options() -> dict[str, Any]:
+    options = g.ledger.options
+    return {
+        "documents": options["documents"],
+        "filename": options["filename"],
+        "include": options["include"],
+        "operating_currency": options["operating_currency"],
+        "title": options["title"],
+        "name_assets": options["name_assets"],
+        "name_liabilities": options["name_liabilities"],
+        "name_equity": options["name_equity"],
+        "name_income": options["name_income"],
+        "name_expenses": options["name_expenses"],
+    }
+
+
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
     ledger = g.ledger
@@ -86,18 +103,13 @@ def get_ledger_data() -> LedgerData:
         ledger.accounts,
         url_for("index"),
         ledger.attributes.currencies,
+        ledger.commodities.names,
         get_errors(),
         ledger.fava_options,
         current_app.config["INCOGNITO"],
         HAVE_EXCEL,
         ledger.attributes.links,
-        {
-            "documents": ledger.options["documents"],
-            "filename": ledger.options["filename"],
-            "include": ledger.options["include"],
-            "operating_currency": ledger.options["operating_currency"],
-            "title": ledger.options["title"],
-        },
+        _get_options(),
         ledger.attributes.payees,
         ledger.format_decimal.precisions,
         ledger.attributes.tags,
@@ -125,13 +137,13 @@ class ChartData:
 
 def _chart_interval_totals(
     interval: Interval,
-    account_name: str,
+    account_name: str | tuple[str, ...],
     label: str | None = None,
     invert: bool = False,
 ) -> ChartData:
     return ChartData(
         "bar",
-        label or account_name,
+        label or str(account_name),
         g.ledger.charts.interval_totals(
             g.filtered,
             interval,

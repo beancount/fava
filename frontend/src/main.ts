@@ -45,7 +45,6 @@ import { SortableTable } from "./sort";
 import { errors, fava_options, ledgerData } from "./stores";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
-import { TreeTable } from "./tree-table";
 
 /**
  * Define the custom elements that Fava uses.
@@ -57,7 +56,6 @@ function defineCustomElements() {
   customElements.define("copyable-text", CopyableText);
   customElements.define("fava-journal", FavaJournal);
   customElements.define("sortable-table", SortableTable, { extends: "table" });
-  customElements.define("tree-table", TreeTable);
   customElements.define("svelte-component", SvelteCustomElement);
 }
 

@@ -14,7 +14,7 @@
   "account_details": {
     "Assets:Testing:MultipleCommodities": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2000-01-03",
         "entry_hash": "ENTRY_HASH"
@@ -27,7 +27,7 @@
     },
     "Assets:US:BayBook:Vacation": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -40,7 +40,7 @@
     },
     "Assets:US:BofA": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-01-01",
         "entry_hash": "ENTRY_HASH"
@@ -56,7 +56,7 @@
     },
     "Assets:US:BofA:Checking": {
       "balance_string": "TODAY balance Assets:US:BofA:Checking              1632.79 USD\n",
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -71,7 +71,7 @@
     },
     "Assets:US:ETrade:Cash": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-30",
         "entry_hash": "ENTRY_HASH"
@@ -84,7 +84,7 @@
     },
     "Assets:US:ETrade:GLD": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-30",
         "entry_hash": "ENTRY_HASH"
@@ -97,7 +97,7 @@
     },
     "Assets:US:ETrade:ITOT": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-11-23",
         "entry_hash": "ENTRY_HASH"
@@ -110,7 +110,7 @@
     },
     "Assets:US:ETrade:VEA": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-30",
         "entry_hash": "ENTRY_HASH"
@@ -123,7 +123,7 @@
     },
     "Assets:US:ETrade:VHT": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-12-20",
         "entry_hash": "ENTRY_HASH"
@@ -136,7 +136,7 @@
     },
     "Assets:US:Federal:PreTax401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -149,7 +149,7 @@
     },
     "Assets:US:Vanguard": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-01-01",
         "entry_hash": "ENTRY_HASH"
@@ -165,7 +165,7 @@
     },
     "Assets:US:Vanguard:Cash": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-09",
         "entry_hash": "ENTRY_HASH"
@@ -179,7 +179,7 @@
     },
     "Assets:US:Vanguard:RGAGX": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-09",
         "entry_hash": "ENTRY_HASH"
@@ -193,7 +193,7 @@
     },
     "Assets:US:Vanguard:VBMPX": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-09",
         "entry_hash": "ENTRY_HASH"
@@ -207,7 +207,7 @@
     },
     "Equity:Opening-Balances": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-01-01",
         "entry_hash": "ENTRY_HASH"
@@ -220,7 +220,7 @@
     },
     "Expenses:Financial:Commissions": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-30",
         "entry_hash": "ENTRY_HASH"
@@ -233,7 +233,7 @@
     },
     "Expenses:Financial:Fees": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-04",
         "entry_hash": "ENTRY_HASH"
@@ -246,7 +246,7 @@
     },
     "Expenses:Food:Alcohol": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-02-01",
         "entry_hash": "ENTRY_HASH"
@@ -259,7 +259,7 @@
     },
     "Expenses:Food:Coffee": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-14",
         "entry_hash": "ENTRY_HASH"
@@ -272,7 +272,7 @@
     },
     "Expenses:Food:Groceries": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-21",
         "entry_hash": "ENTRY_HASH"
@@ -285,7 +285,7 @@
     },
     "Expenses:Food:Restaurant": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-07",
         "entry_hash": "ENTRY_HASH"
@@ -298,7 +298,7 @@
     },
     "Expenses:Health:Dental:Insurance": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -311,7 +311,7 @@
     },
     "Expenses:Health:Life:GroupTermLife": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -324,7 +324,7 @@
     },
     "Expenses:Health:Medical:Insurance": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -337,7 +337,7 @@
     },
     "Expenses:Health:Vision:Insurance": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -350,7 +350,7 @@
     },
     "Expenses:Home:Electricity": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-09",
         "entry_hash": "ENTRY_HASH"
@@ -363,7 +363,7 @@
     },
     "Expenses:Home:Internet": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-21",
         "entry_hash": "ENTRY_HASH"
@@ -376,7 +376,7 @@
     },
     "Expenses:Home:Phone": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-20",
         "entry_hash": "ENTRY_HASH"
@@ -389,7 +389,7 @@
     },
     "Expenses:Home:Rent": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-06",
         "entry_hash": "ENTRY_HASH"
@@ -402,7 +402,7 @@
     },
     "Expenses:Taxes:Y2014:US:CityNYC": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-12-18",
         "entry_hash": "ENTRY_HASH"
@@ -415,7 +415,7 @@
     },
     "Expenses:Taxes:Y2014:US:Federal": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-03-22",
         "entry_hash": "ENTRY_HASH"
@@ -428,7 +428,7 @@
     },
     "Expenses:Taxes:Y2014:US:Federal:PreTax401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-07-17",
         "entry_hash": "ENTRY_HASH"
@@ -441,7 +441,7 @@
     },
     "Expenses:Taxes:Y2014:US:Medicare": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-12-18",
         "entry_hash": "ENTRY_HASH"
@@ -454,7 +454,7 @@
     },
     "Expenses:Taxes:Y2014:US:SDI": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-12-18",
         "entry_hash": "ENTRY_HASH"
@@ -467,7 +467,7 @@
     },
     "Expenses:Taxes:Y2014:US:SocSec": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2014-12-18",
         "entry_hash": "ENTRY_HASH"
@@ -480,7 +480,7 @@
     },
     "Expenses:Taxes:Y2014:US:State": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-03-22",
         "entry_hash": "ENTRY_HASH"
@@ -493,7 +493,7 @@
     },
     "Expenses:Taxes:Y2015:US:CityNYC": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-12-31",
         "entry_hash": "ENTRY_HASH"
@@ -506,7 +506,7 @@
     },
     "Expenses:Taxes:Y2015:US:Federal": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-03-22",
         "entry_hash": "ENTRY_HASH"
@@ -519,7 +519,7 @@
     },
     "Expenses:Taxes:Y2015:US:Federal:PreTax401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-07-16",
         "entry_hash": "ENTRY_HASH"
@@ -532,7 +532,7 @@
     },
     "Expenses:Taxes:Y2015:US:Medicare": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-12-31",
         "entry_hash": "ENTRY_HASH"
@@ -545,7 +545,7 @@
     },
     "Expenses:Taxes:Y2015:US:SDI": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-12-31",
         "entry_hash": "ENTRY_HASH"
@@ -558,7 +558,7 @@
     },
     "Expenses:Taxes:Y2015:US:SocSec": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2015-12-31",
         "entry_hash": "ENTRY_HASH"
@@ -571,7 +571,7 @@
     },
     "Expenses:Taxes:Y2015:US:State": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-03-22",
         "entry_hash": "ENTRY_HASH"
@@ -584,7 +584,7 @@
     },
     "Expenses:Taxes:Y2016:US:CityNYC": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -597,7 +597,7 @@
     },
     "Expenses:Taxes:Y2016:US:Federal": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -610,7 +610,7 @@
     },
     "Expenses:Taxes:Y2016:US:Federal:PreTax401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -623,7 +623,7 @@
     },
     "Expenses:Taxes:Y2016:US:Medicare": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -636,7 +636,7 @@
     },
     "Expenses:Taxes:Y2016:US:SDI": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -649,7 +649,7 @@
     },
     "Expenses:Taxes:Y2016:US:SocSec": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -662,7 +662,7 @@
     },
     "Expenses:Taxes:Y2016:US:State": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -675,7 +675,7 @@
     },
     "Expenses:Transport:Tram": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-27",
         "entry_hash": "ENTRY_HASH"
@@ -688,7 +688,7 @@
     },
     "Expenses:Vacation": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-04-15",
         "entry_hash": "ENTRY_HASH"
@@ -701,7 +701,7 @@
     },
     "Income:US:BayBook:GroupTermLife": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -714,7 +714,7 @@
     },
     "Income:US:BayBook:Match401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-06",
         "entry_hash": "ENTRY_HASH"
@@ -727,7 +727,7 @@
     },
     "Income:US:BayBook:Salary": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -740,7 +740,7 @@
     },
     "Income:US:BayBook:Vacation": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-05",
         "entry_hash": "ENTRY_HASH"
@@ -753,7 +753,7 @@
     },
     "Income:US:ETrade:Dividends": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-03-17",
         "entry_hash": "ENTRY_HASH"
@@ -766,7 +766,7 @@
     },
     "Income:US:ETrade:Gains": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-01-23",
         "entry_hash": "ENTRY_HASH"
@@ -779,7 +779,7 @@
     },
     "Income:US:Federal:PreTax401k": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-01-01",
         "entry_hash": "ENTRY_HASH"
@@ -792,7 +792,7 @@
     },
     "Liabilities:AccountsPayable": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-03-26",
         "entry_hash": "ENTRY_HASH"
@@ -805,7 +805,7 @@
     },
     "Liabilities:US:Chase:Slate": {
       "balance_string": null,
-      "close_date": "9999-12-31",
+      "close_date": null,
       "last_entry": {
         "date": "2016-05-19",
         "entry_hash": "ENTRY_HASH"
@@ -895,6 +895,17 @@
     "ABC",
     "XYZ"
   ],
+  "currency_names": {
+    "GLD": "SPDR Gold Trust (ETF)",
+    "IRAUSD": "US 401k and IRA Contributions",
+    "ITOT": "iShares Core S\u0026P Total U.S. Stock Market ETF",
+    "RGAGX": "American Funds The Growth Fund of America Class R-6",
+    "USD": "US Dollar",
+    "VACHR": "Employer Vacation Hours",
+    "VBMPX": "Vanguard Total Bond Market Index Fund Institutional Plus Shares",
+    "VEA": "Vanguard FTSE Developed Markets ETF",
+    "VHT": "Vanguard Health Care ETF"
+  },
   "errors": [],
   "extensions": [],
   "fava_options": {
@@ -936,6 +947,11 @@
     "include": [
       "TEST_DATA_DIR/long-example.beancount"
     ],
+    "name_assets": "Assets",
+    "name_equity": "Equity",
+    "name_expenses": "Expenses",
+    "name_income": "Income",
+    "name_liabilities": "Liabilities",
     "operating_currency": [
       "USD"
     ],

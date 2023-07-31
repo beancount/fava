@@ -85,7 +85,7 @@ class FilteredLedger:
         "__dict__",  # for the cached_property decorator
         "ledger",
         "entries",
-        "_date_range",
+        "date_range",
         "_date_first",
         "_date_last",
     )
@@ -100,7 +100,7 @@ class FilteredLedger:
         time: str | None = None,
     ) -> None:
         self.ledger = ledger
-        self._date_range: DateRange | None = None
+        self.date_range: DateRange | None = None
 
         entries = ledger.all_entries
         if account:
@@ -110,12 +110,12 @@ class FilteredLedger:
         if time:
             time_filter = TimeFilter(ledger.options, ledger.fava_options, time)
             entries = time_filter.apply(entries)
-            self._date_range = time_filter.date_range
+            self.date_range = time_filter.date_range
         self.entries = entries
 
-        if self._date_range:
-            self._date_first = self._date_range.begin
-            self._date_last = self._date_range.end
+        if self.date_range:
+            self._date_first = self.date_range.begin
+            self._date_last = self.date_range.end
             return
 
         self._date_first = None
@@ -140,7 +140,7 @@ class FilteredLedger:
     @property
     def end_date(self) -> date | None:
         """The date to use for prices."""
-        date_range = self._date_range
+        date_range = self.date_range
         if date_range:
             return date_range.end_inclusive
         return None
@@ -170,7 +170,7 @@ class FilteredLedger:
         if all_prices is None:
             return []
 
-        date_range = self._date_range
+        date_range = self.date_range
         if date_range:
             return [
                 price_point
@@ -189,12 +189,11 @@ class FilteredLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        date_range = self._date_range
-        if date_range:
-            return (
-                self.ledger.accounts[account_name].close_date < date_range.end
-            )
-        return self.ledger.accounts[account_name].close_date != date.max
+        date_range = self.date_range
+        close_date = self.ledger.accounts[account_name].close_date
+        if close_date is None:
+            return False
+        return close_date < date_range.end if date_range else True
 
 
 class FavaLedger:

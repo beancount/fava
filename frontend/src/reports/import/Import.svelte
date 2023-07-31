@@ -19,9 +19,10 @@
 
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-  import type { PageData, ProcessedImportableFile } from "./load";
 
-  export let data: PageData["data"];
+  import type { ProcessedImportableFile } from ".";
+
+  export let data: ProcessedImportableFile[];
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = [];

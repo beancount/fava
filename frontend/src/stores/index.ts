@@ -33,6 +33,14 @@ export const extensions = derived(ledgerData, (val) => val.extensions);
 /** The ranked array of all accounts. */
 export const accounts = derived_array(ledgerData, (val) => val.accounts);
 
+/** Get the name (as given per metadata) of a currency. */
+export const currency_name = derived(
+  ledgerData,
+  ({ currency_names }) =>
+    (c: string) =>
+      currency_names[c] ?? c,
+);
+
 export const account_details = derived(
   ledgerData,
   (val) => val.account_details,

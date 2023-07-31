@@ -1,14 +1,13 @@
 /* For the editor */
-@import "@fontsource/source-code-pro/400.css";
-@import "@fontsource/source-code-pro/500.css";
+@import url("@fontsource/source-code-pro/400.css");
+@import url("@fontsource/source-code-pro/500.css");
 
 /* Interface fonts */
-@import "@fontsource/fira-mono/400.css";
-@import "@fontsource/fira-mono/500.css";
-
-@import "@fontsource/fira-sans/400.css";
-@import "@fontsource/fira-sans/500.css";
+@import url("@fontsource/fira-mono/400.css");
+@import url("@fontsource/fira-mono/500.css");
+@import url("@fontsource/fira-sans/400.css");
+@import url("@fontsource/fira-sans/500.css");
 
 /* The help pages */
-@import "@fontsource/source-serif-pro/400.css";
-@import "@fontsource/source-serif-pro/600.css";
+@import url("@fontsource/source-serif-pro/400.css");
+@import url("@fontsource/source-serif-pro/600.css");

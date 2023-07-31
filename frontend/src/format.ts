@@ -33,8 +33,10 @@ export function formatPercentage(number: number): string {
 export interface FormatterContext {
   /** Render a number to a short string, for example for the y-axis of a line chart. */
   short: (number: number | { valueOf(): number }) => string;
-  /** Render an amount to a string like "2.00 USD" */
+  /** Render an amount to a string like "2.00 USD". */
   amount: (num: number, currency: string) => string;
+  /** Render an number for a currency like "2.00". */
+  num: (num: number, currency: string) => string;
 }
 
 type DateFormatter = (date: Date) => string;

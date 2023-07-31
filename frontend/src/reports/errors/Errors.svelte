@@ -17,7 +17,7 @@
           return el;
         }
         const el = document.createElement("a");
-        el.href = urlForAccount(s);
+        el.href = $urlForAccount(s);
         el.textContent = s;
         return el;
       })

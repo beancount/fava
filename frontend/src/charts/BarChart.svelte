@@ -125,7 +125,7 @@
       {#each stacks as [currency, account_stacks]}
         {#each account_stacks as stack}
           {@const account = stack.key}
-          <a href={urlForAccount(account)}>
+          <a href={$urlForAccount(account)}>
             <g
               class="category"
               class:faded={highlighted && account !== highlighted}
