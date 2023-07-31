@@ -1,7 +1,3 @@
-{% macro render_currency(ledger, currency) -%}
-<span title="{{ ledger.commodities.name(currency) }}">{{ currency }}</span>
-{%- endmacro %}
-
 {% macro render_amount(ledger, amount, class="num") %}
 {% if amount is none or amount.number is none -%}
   <span class="{{ class }}"></span>

@@ -62,7 +62,7 @@
     {balanceText(current ?? root)}
   </text>
   {#each nodes as d}
-    <a href={urlForAccount(d.data.account)}>
+    <a href={$urlForAccount(d.data.account)}>
       <path
         on:mouseover={() => {
           current = d;

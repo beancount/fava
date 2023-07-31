@@ -70,23 +70,23 @@ if TYPE_CHECKING:  # pragma: no cover
 setup_logging()
 
 SERVER_SIDE_REPORTS = [
-    "balance_sheet",
     "holdings",
-    "income_statement",
     "journal",
     "options",
     "statistics",
-    "trial_balance",
 ]
 
 CLIENT_SIDE_REPORTS = [
+    "balance_sheet",
     "commodities",
     "documents",
     "editor",
     "errors",
     "events",
     "import",
+    "income_statement",
     "query",
+    "trial_balance",
 ]
 
 
@@ -254,23 +254,10 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         ].fava_options.default_page
         return redirect(f"{index_url}{default_page}")
 
-    @fava_app.route(
-        "/<bfile>/account/<name>/",
-        defaults={"subreport": "journal"},
-    )
-    @fava_app.route(
-        "/<bfile>/account/<name>/<any(balances,changes):subreport>/",
-    )
-    def account(
-        name: str,
-        subreport: str,
-    ) -> str:
+    @fava_app.route("/<bfile>/account/<name>/")
+    def account(name: str) -> str:
         """Get the account report."""
-        return render_template(
-            "account.html",
-            account_name=name,
-            subreport=subreport,
-        )
+        return render_template("_layout.html", content="", name=name)
 
     @fava_app.route("/<bfile>/document/", methods=["GET"])
     def document() -> Response:

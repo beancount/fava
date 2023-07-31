@@ -4,7 +4,7 @@
   import type { Action } from "svelte/action";
 
   import { formatPercentage } from "../format";
-  import { urlForAccount } from "../helpers";
+  import {  urlForAccount } from "../helpers";
   import { ctx } from "../stores/format";
 
   import { treemapScale } from "./helpers";
@@ -66,7 +66,7 @@
       use:followingTooltip={() => tooltipText(d)}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
-      <a href={urlForAccount(d.data.account)}>
+      <a href={$urlForAccount(d.data.account)}>
         <text
           use:setVisibility={d}
           dy=".5em"

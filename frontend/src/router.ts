@@ -13,7 +13,7 @@ import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
 import { notify_err } from "./notifications";
-import type { Route } from "./reports/routes";
+import type { Route } from "./reports/route";
 import { raw_page_title } from "./sidebar/page-title";
 import { conversion, interval, urlHash } from "./stores";
 import { showCharts } from "./stores/chart";

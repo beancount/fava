@@ -1,0 +1,324 @@
+{
+  "budgets": {
+    "Assets": [
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      }
+    ],
+    "Assets:Cash": [
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      }
+    ],
+    "Assets:Commodity": [
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      },
+      {
+        "budget": {},
+        "budget_children": {}
+      }
+    ]
+  },
+  "charts": [
+    {
+      "data": [
+        {
+          "balance": {
+            "USD": 100
+          },
+          "date": "2022-01-01"
+        },
+        {
+          "balance": {
+            "USD": 101
+          },
+          "date": "2022-01-01"
+        }
+      ],
+      "label": "Account Balance",
+      "type": "balances"
+    },
+    {
+      "data": [
+        {
+          "account_balances": {
+            "Assets:Cash": {},
+            "Assets:Commodity": {
+              "USD": 101
+            }
+          },
+          "balance": {
+            "USD": 101
+          },
+          "budgets": {},
+          "date": "2022-01-01"
+        },
+        {
+          "account_balances": {},
+          "balance": {},
+          "budgets": {},
+          "date": "2022-01-02"
+        },
+        {
+          "account_balances": {},
+          "balance": {},
+          "budgets": {},
+          "date": "2022-01-03"
+        },
+        {
+          "account_balances": {},
+          "balance": {},
+          "budgets": {},
+          "date": "2022-01-04"
+        }
+      ],
+      "label": "Changes",
+      "type": "bar"
+    },
+    {
+      "data": {
+        "modifier": 1,
+        "root": {
+          "account": "Assets",
+          "balance": {},
+          "balance_children": {
+            "USD": 104
+          },
+          "children": [
+            {
+              "account": "Assets:Cash",
+              "balance": {},
+              "balance_children": {},
+              "children": [],
+              "has_txns": true
+            },
+            {
+              "account": "Assets:Commodity",
+              "balance": {
+                "USD": 104
+              },
+              "balance_children": {
+                "USD": 104
+              },
+              "children": [],
+              "has_txns": true
+            }
+          ],
+          "has_txns": false
+        }
+      },
+      "label": "Assets",
+      "type": "hierarchy"
+    },
+    {
+      "data": {
+        "modifier": 1,
+        "root": {
+          "account": "Assets",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": false
+        }
+      },
+      "label": "2022-01-04",
+      "type": "hierarchy"
+    },
+    {
+      "data": {
+        "modifier": 1,
+        "root": {
+          "account": "Assets",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": false
+        }
+      },
+      "label": "2022-01-03",
+      "type": "hierarchy"
+    },
+    {
+      "data": {
+        "modifier": 1,
+        "root": {
+          "account": "Assets",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": false
+        }
+      },
+      "label": "2022-01-02",
+      "type": "hierarchy"
+    }
+  ],
+  "dates": [
+    {
+      "begin": "2022-01-04",
+      "end": "2022-01-05"
+    },
+    {
+      "begin": "2022-01-03",
+      "end": "2022-01-04"
+    },
+    {
+      "begin": "2022-01-02",
+      "end": "2022-01-03"
+    },
+    {
+      "begin": "2022-01-01",
+      "end": "2022-01-02"
+    }
+  ],
+  "interval_balances": [
+    {
+      "account": "Assets",
+      "balance": {},
+      "balance_children": {
+        "USD": 104
+      },
+      "children": [
+        {
+          "account": "Assets:Cash",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": true
+        },
+        {
+          "account": "Assets:Commodity",
+          "balance": {
+            "USD": 104
+          },
+          "balance_children": {
+            "USD": 104
+          },
+          "children": [],
+          "has_txns": true
+        }
+      ],
+      "has_txns": false
+    },
+    {
+      "account": "Assets",
+      "balance": {},
+      "balance_children": {
+        "USD": 103
+      },
+      "children": [
+        {
+          "account": "Assets:Cash",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": true
+        },
+        {
+          "account": "Assets:Commodity",
+          "balance": {
+            "USD": 103
+          },
+          "balance_children": {
+            "USD": 103
+          },
+          "children": [],
+          "has_txns": true
+        }
+      ],
+      "has_txns": false
+    },
+    {
+      "account": "Assets",
+      "balance": {},
+      "balance_children": {
+        "USD": 102
+      },
+      "children": [
+        {
+          "account": "Assets:Cash",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": true
+        },
+        {
+          "account": "Assets:Commodity",
+          "balance": {
+            "USD": 102
+          },
+          "balance_children": {
+            "USD": 102
+          },
+          "children": [],
+          "has_txns": true
+        }
+      ],
+      "has_txns": false
+    },
+    {
+      "account": "Assets",
+      "balance": {},
+      "balance_children": {
+        "USD": 101
+      },
+      "children": [
+        {
+          "account": "Assets:Cash",
+          "balance": {},
+          "balance_children": {},
+          "children": [],
+          "has_txns": true
+        },
+        {
+          "account": "Assets:Commodity",
+          "balance": {
+            "USD": 101
+          },
+          "balance_children": {
+            "USD": 101
+          },
+          "children": [],
+          "has_txns": true
+        }
+      ],
+      "has_txns": false
+    }
+  ]
+}

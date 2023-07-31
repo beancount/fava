@@ -96,7 +96,7 @@ class AccountData:
     """Holds information about an account."""
 
     #: The date on which this account is closed (or datetime.date.max).
-    close_date: datetime.date = datetime.date.max
+    close_date: datetime.date | None = None
 
     #: The metadata of the Open entry of this account.
     meta: Meta = field(default_factory=dict)

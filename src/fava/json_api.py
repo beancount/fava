@@ -20,6 +20,7 @@ from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
+from flask_babel import gettext  # type: ignore[import]
 
 from fava.beans.abc import Document
 from fava.beans.abc import Event
@@ -29,6 +30,7 @@ from fava.core.documents import is_document_or_import_file
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
+from fava.internal_api import ChartApi
 from fava.internal_api import get_errors
 from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
@@ -41,6 +43,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
     from fava.core.ingest import FileImporters
+    from fava.core.tree import SerialisedTreeNode
+    from fava.internal_api import ChartData
+    from fava.util.date import DateRange
 
 
 json_api = Blueprint("json_api", __name__)
@@ -434,11 +439,7 @@ class CommodityPairWithPrices:
 
 @api_endpoint
 def get_commodities() -> list[CommodityPairWithPrices]:
-    """Get the prices for all commodity pairs.
-
-    Returns:
-        A list of CommodityPairWithPrices
-    """
+    """Get the prices for all commodity pairs."""
     g.ledger.changed()
     ret = []
     for base, quote in g.ledger.commodity_pairs():
@@ -447,3 +448,219 @@ def get_commodities() -> list[CommodityPairWithPrices]:
             ret.append(CommodityPairWithPrices(base, quote, prices))
 
     return ret
+
+
+@dataclass(frozen=True)
+class TreeReport:
+    """Data for the tree reports."""
+
+    date_range: DateRange | None
+    charts: list[ChartData]
+    trees: list[SerialisedTreeNode]
+
+
+@api_endpoint
+def get_income_statement() -> TreeReport:
+    """Get the data for the income statement."""
+    g.ledger.changed()
+    options = g.ledger.options
+    invert = g.ledger.fava_options.invert_income_liabilities_equity
+
+    charts = [
+        ChartApi.interval_totals(
+            g.interval,
+            (options["name_income"], options["name_expenses"]),
+            label=gettext("Net Profit"),
+            invert=invert,
+        ),
+        ChartApi.interval_totals(
+            g.interval,
+            options["name_income"],
+            label=f"{gettext('Income')} ({g.interval.label})",
+            invert=invert,
+        ),
+        ChartApi.interval_totals(
+            g.interval,
+            options["name_expenses"],
+            label=f"{gettext('Expenses')} ({g.interval.label})",
+        ),
+        ChartApi.hierarchy(options["name_income"]),
+        ChartApi.hierarchy(options["name_expenses"]),
+    ]
+    root_tree = g.filtered.root_tree
+    trees = [
+        root_tree.get(options["name_income"]),
+        root_tree.get(options["name_expenses"]),
+        root_tree.net_profit(options, gettext("Net Profit")),
+    ]
+
+    return TreeReport(
+        g.filtered.date_range,
+        charts,
+        trees=[tree.serialise_with_context() for tree in trees],
+    )
+
+
+@api_endpoint
+def get_balance_sheet() -> TreeReport:
+    """Get the data for the balance sheet."""
+    g.ledger.changed()
+    options = g.ledger.options
+
+    charts = [
+        ChartApi.net_worth(),
+        ChartApi.hierarchy(options["name_assets"]),
+        ChartApi.hierarchy(options["name_liabilities"]),
+        ChartApi.hierarchy(options["name_equity"]),
+    ]
+    root_tree_closed = g.filtered.root_tree_closed
+    trees = [
+        root_tree_closed.get(options["name_assets"]),
+        root_tree_closed.get(options["name_liabilities"]),
+        root_tree_closed.get(options["name_equity"]),
+    ]
+
+    return TreeReport(
+        g.filtered.date_range,
+        charts,
+        trees=[tree.serialise_with_context() for tree in trees],
+    )
+
+
+@api_endpoint
+def get_trial_balance() -> TreeReport:
+    """Get the data for the trial balance."""
+    g.ledger.changed()
+    options = g.ledger.options
+
+    charts = [
+        ChartApi.hierarchy(options["name_income"]),
+        ChartApi.hierarchy(options["name_expenses"]),
+        ChartApi.hierarchy(options["name_assets"]),
+        ChartApi.hierarchy(options["name_liabilities"]),
+        ChartApi.hierarchy(options["name_equity"]),
+    ]
+    trees = [g.filtered.root_tree.get("")]
+
+    return TreeReport(
+        g.filtered.date_range,
+        charts,
+        trees=[tree.serialise_with_context() for tree in trees],
+    )
+
+
+@dataclass(frozen=True)
+class AccountBudget:
+    """Budgets for an account."""
+
+    budget: dict[str, Decimal]
+    budget_children: dict[str, Decimal]
+
+
+@dataclass(frozen=True)
+class AccountReportJournal:
+    """Data for the journal account report."""
+
+    charts: list[ChartData]
+    journal: str
+
+
+@dataclass(frozen=True)
+class AccountReportTree:
+    """Data for the tree account reports."""
+
+    charts: list[ChartData]
+    interval_balances: list[SerialisedTreeNode]
+    budgets: dict[str, list[AccountBudget]]
+    dates: list[DateRange]
+
+
+@api_endpoint
+def get_account_report() -> AccountReportJournal | AccountReportTree:
+    """Get the data for the account report."""
+    g.ledger.changed()
+
+    account_name = request.args.get("a", "")
+    subreport = request.args.get("r")
+
+    charts = [
+        ChartApi.account_balance(account_name),
+        ChartApi.interval_totals(
+            g.interval,
+            account_name,
+            label=gettext("Changes"),
+        ),
+    ]
+
+    if subreport in {"changes", "balances"}:
+        accumulate = subreport == "balances"
+        interval_balances, dates = g.ledger.interval_balances(
+            g.filtered,
+            g.interval,
+            account_name,
+            accumulate,
+        )
+
+        charts.append(ChartApi.hierarchy(account_name))
+        charts.extend(
+            ChartApi.hierarchy(
+                account_name,
+                date_range.begin,
+                date_range.end,
+                label=g.interval.format_date(date_range.begin),
+            )
+            for date_range in dates[:3]
+        )
+
+        all_accounts = (
+            interval_balances[0].accounts if interval_balances else []
+        )
+        budget_accounts = [
+            a for a in all_accounts if a.startswith(account_name)
+        ]
+        budgets_mod = g.ledger.budgets
+        first_date_range = dates[-1]
+        budgets = {
+            account: [
+                AccountBudget(
+                    budgets_mod.calculate(
+                        account,
+                        (first_date_range if accumulate else date_range).begin,
+                        date_range.end,
+                    ),
+                    budgets_mod.calculate_children(
+                        account,
+                        (first_date_range if accumulate else date_range).begin,
+                        date_range.end,
+                    ),
+                )
+                for date_range in dates
+            ]
+            for account in budget_accounts
+        }
+
+        return AccountReportTree(
+            charts,
+            interval_balances=[
+                tree.get(account_name).serialise(
+                    g.conversion,
+                    g.ledger.prices,
+                    date_range.end_inclusive,
+                    with_cost=False,
+                )
+                for tree, date_range in zip(interval_balances, dates)
+            ],
+            dates=dates,
+            budgets=budgets,
+        )
+
+    journal = get_template_attribute("_journal_table.html", "journal_table")
+    entries = g.ledger.account_journal(
+        g.filtered,
+        account_name,
+        with_journal_children=g.ledger.fava_options.account_journal_include_children,
+    )
+    return AccountReportJournal(
+        charts,
+        journal=journal(entries, show_change_and_balance=True),
+    )

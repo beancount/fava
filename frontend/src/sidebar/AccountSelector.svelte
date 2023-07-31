@@ -9,7 +9,7 @@
 
   function select(ev: CustomEvent<HTMLInputElement>) {
     if (value) {
-      router.navigate(urlForAccount(value));
+      router.navigate($urlForAccount(value));
       ev.detail.blur();
       value = "";
     }

@@ -16,6 +16,14 @@ def test_tree() -> None:
     tree.get("account:name:a:b:c")
     assert len(tree) == 1
     node = tree.get("account:name:a:b:c", insert=True)
+    assert tree.accounts == [
+        "",
+        "account",
+        "account:name",
+        "account:name:a",
+        "account:name:a:b",
+        "account:name:a:b:c",
+    ]
     assert len(tree) == 6
     tree.get("account:name", insert=True)
     assert len(tree) == 6

@@ -91,9 +91,8 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
         "VACHR": Decimal("-82"),
     }
     assert data.balance == {}
-    # Assets:US:ETrade
-    etrade = data.children[0].children[2]
-    assert etrade.children[4].balance == {"USD": Decimal("4899.98")}
+    etrade = data.children[1].children[2]
+    assert etrade.account == "Assets:US:ETrade"
     assert etrade.balance_children == {"USD": Decimal("23137.54")}
 
 

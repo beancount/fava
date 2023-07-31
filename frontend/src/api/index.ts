@@ -5,9 +5,9 @@ import type { ValidationT } from "../lib/validation";
 import { string } from "../lib/validation";
 import { notify, notify_err } from "../notifications";
 import router from "../router";
-import type { Filters } from "../stores/filters";
+import type { Filters, FiltersConversionInterval } from "../stores/filters";
 
-import type { GetAPITypes } from "./validators";
+import type { GetAPIValidators } from "./validators";
 import { getAPIValidators } from "./validators";
 
 /** Required arguments for the various PUT API endpoints. */
@@ -50,20 +50,24 @@ export async function put<T extends keyof PutAPIInputs>(
 }
 
 interface GetAPIParams {
+  balance_sheet: FiltersConversionInterval;
+  account_report: FiltersConversionInterval & { a: string; r: string };
   changed: undefined;
   commodities: Filters;
   context: { entry_hash: string };
-  errors: undefined;
-  extract: { filename: string; importer: string };
-  events: Filters;
   documents: Filters;
-  ledger_data: undefined;
+  errors: undefined;
+  events: Filters;
+  extract: { filename: string; importer: string };
   imports: undefined;
-  source: { filename: string };
+  income_statement: FiltersConversionInterval;
+  trial_balance: FiltersConversionInterval;
+  ledger_data: undefined;
   move: { filename: string; account: string; new_name: string };
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
   query_result: Filters & { query_string: string };
+  source: { filename: string };
 }
 
 /**
@@ -77,12 +81,12 @@ export async function get<T extends keyof GetAPIParams>(
   ...[params]: GetAPIParams[T] extends undefined
     ? [undefined?, number?]
     : [GetAPIParams[T], number?]
-): Promise<ValidationT<GetAPITypes[T]>> {
+): Promise<ValidationT<GetAPIValidators[T]>> {
   const url = urlFor(`api/${endpoint}`, params, false);
   const json = await fetchJSON(url);
   const res = getAPIValidators[endpoint](json);
   if (res.is_ok) {
-    return res.value as ValidationT<GetAPITypes[T]>;
+    return res.value as ValidationT<GetAPIValidators[T]>;
   }
   notify(`Invalid data returned in API request: ${res.error}`, "error");
   throw new Error(res.error);

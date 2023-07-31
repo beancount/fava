@@ -555,3 +555,24 @@ def test_api_events(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
     response = test_client.get("/long-example/api/events")
     data = assert_api_success(response)
     snapshot(dumps(data))
+
+
+def test_api_income_statement(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+) -> None:
+    response = test_client.get("/long-example/api/income_statement")
+    data = assert_api_success(response)
+    snapshot(dumps(data))
+
+
+def test_api_account_report_off_by_one(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+) -> None:
+    response = test_client.get(
+        "/off-by-one/api/account_report"
+        "?interval=day&conversion=at_value&a=Assets&r=balances",
+    )
+    data = assert_api_success(response)
+    snapshot(dumps(data))

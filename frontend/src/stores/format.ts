@@ -20,7 +20,7 @@ export const ctx = derived(
         localeFormatter(f.locale, prec),
       ]),
     );
-    const formatWithCurrency = (n: number, c: string) => {
+    const num = (n: number, c: string) => {
       const currencyFormatter = currencyFormatters[c];
       return currencyFormatter ? currencyFormatter(n) : formatter(n);
     };
@@ -28,10 +28,12 @@ export const ctx = derived(
       ? {
           short: (n) => replaceNumbers(formatterShort(n)),
           amount: (n, c) => `${replaceNumbers(formatter(n))} ${c}`,
+          num: (n) => replaceNumbers(formatter(n)),
         }
       : {
           short: (n) => formatterShort(n),
-          amount: (n, c) => `${formatWithCurrency(n, c)} ${c}`,
+          amount: (n, c) => `${num(n, c)} ${c}`,
+          num,
         };
   },
 );

@@ -56,21 +56,6 @@ def test_client_side_reports(
     snapshot(result.get_data(True))
 
 
-@pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
-def test_account_page(
-    test_client: FlaskClient,
-    filters: dict[str, str],
-) -> None:
-    """Account page works without error."""
-    for url in [
-        "/long-example/account/Assets:US:BofA:Checking/",
-        "/long-example/account/Assets:US:BofA:Checking/balances/",
-        "/long-example/account/Assets:US:BofA:Checking/changes/",
-    ]:
-        result = test_client.get(url, query_string=filters)
-        assert result.status_code == 200
-
-
 @pytest.mark.parametrize(
     ("url", "return_code"),
     [

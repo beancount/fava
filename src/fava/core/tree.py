@@ -3,12 +3,14 @@ from __future__ import annotations
 
 import collections
 from dataclasses import dataclass
+from operator import attrgetter
 from typing import Dict
 from typing import Iterable
 from typing import TYPE_CHECKING
 
 from fava.beans.abc import Open
 from fava.beans.account import parent as account_parent
+from fava.context import g
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import get_cost
 from fava.core.inventory import CounterInventory
@@ -30,6 +32,15 @@ class SerialisedTreeNode:
     balance: SimpleCounterInventory
     balance_children: SimpleCounterInventory
     children: list[SerialisedTreeNode]
+    has_txns: bool
+
+
+@dataclass(frozen=True)
+class SerialisedTreeNodeWithCost(SerialisedTreeNode):
+    """A serialised TreeNode with cost."""
+
+    cost: SimpleCounterInventory
+    cost_children: SimpleCounterInventory
 
 
 class TreeNode:
@@ -54,22 +65,48 @@ class TreeNode:
         conversion: str,
         prices: FavaPriceMap,
         end: datetime.date | None,
-    ) -> SerialisedTreeNode:
+        with_cost: bool = False,
+    ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
         """Serialise the account.
 
         Args:
             conversion: The conversion to use.
             prices: The price map to use.
             end: A date to use for cost conversions.
+            with_cost: Additionally convert to cost.
         """
         children = [
-            child.serialise(conversion, prices, end) for child in self.children
+            child.serialise(conversion, prices, end, with_cost=with_cost)
+            for child in sorted(self.children, key=attrgetter("name"))
         ]
-        return SerialisedTreeNode(
-            self.name,
-            cost_or_value(self.balance, conversion, prices, end),
-            cost_or_value(self.balance_children, conversion, prices, end),
-            children,
+        return (
+            SerialisedTreeNodeWithCost(
+                self.name,
+                cost_or_value(self.balance, conversion, prices, end),
+                cost_or_value(self.balance_children, conversion, prices, end),
+                children,
+                self.has_txns,
+                self.balance.reduce(get_cost),
+                self.balance_children.reduce(get_cost),
+            )
+            if with_cost
+            else SerialisedTreeNode(
+                self.name,
+                cost_or_value(self.balance, conversion, prices, end),
+                cost_or_value(self.balance_children, conversion, prices, end),
+                children,
+                self.has_txns,
+            )
+        )
+
+    def serialise_with_context(
+        self,
+    ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
+        return self.serialise(
+            g.conversion,
+            g.ledger.prices,
+            g.filtered.end_date,
+            with_cost=g.conversion == "at_value",
         )
 
 
@@ -78,6 +115,7 @@ class Tree(Dict[str, TreeNode]):
 
     Args:
         entries: A list of entries to compute balances from.
+        create_accounts: A list of accounts that the tree should contain.
     """
 
     def __init__(
@@ -102,6 +140,11 @@ class Tree(Dict[str, TreeNode]):
 
             for name, balance in sorted(account_balances.items()):
                 self.insert(name, balance)
+
+    @property
+    def accounts(self) -> list[str]:
+        """The accounts in this tree."""
+        return sorted(self.keys())
 
     def ancestors(self, name: str) -> Iterable[TreeNode]:
         """Ancestors of an account.

@@ -8,7 +8,7 @@ export function parent(name: string): string {
 }
 
 /**
- * Obtain the leaf part of the account name.
+ * Obtain the leaf part of the account name, the last segment.
  * @param name - an account name.
  */
 export function leaf(name: string): string {
@@ -17,7 +17,7 @@ export function leaf(name: string): string {
 }
 
 /**
- * Obtain the leaf part of the account name.
+ * Check whether an account is a descendant of another.
  * @param name - an account name.
  * @param of - the possible ancestor
  */

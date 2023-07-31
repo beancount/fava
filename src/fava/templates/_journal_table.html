@@ -38,7 +38,8 @@
 {% for link_ in entry.links|sort %}<span class="link">^{{ link_ }}</span>{% endfor %}
 {%- endmacro %}
 
-{% macro journal_table(entries, show_change_and_balance=False) %}
+{% macro journal_table(entries, show_change_and_balance=False, ledger=None) %}
+{% set ledger = ledger or g.ledger %}
 {% autoescape false %}
 <fava-journal>
 <ol class="flex-table journal">

@@ -1,14 +1,14 @@
 <script lang="ts">
+  import type { Commodities } from "../../api/validators";
+  import type { FavaChart } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { day } from "../../format";
   import { _ } from "../../i18n";
   import { sortableTable } from "../../sort";
   import { ctx } from "../../stores/format";
 
-  import type { PageData } from "./load";
-
-  export let charts: PageData["charts"];
-  export let commodities: PageData["commodities"];
+  export let charts: FavaChart[];
+  export let commodities: Commodities;
 </script>
 
 <ChartSwitcher {charts} />

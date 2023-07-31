@@ -16,7 +16,7 @@
 <span class="droptarget" data-account-name={account}>
   {#each parts as part, index}
     {@const name = parts.slice(0, index + 1).join(":")}<a
-      href={urlForAccount(name)}
+      href={$urlForAccount(name)}
       title={name}>{part}</a
     >{#if index < parts.length - 1}:{/if}{/each}
   <AccountIndicator {account} />
