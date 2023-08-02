@@ -37,6 +37,7 @@ from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
+from flask import send_from_directory
 from flask_babel import Babel  # type: ignore[import]
 from flask_babel import get_translations
 from markupsafe import Markup
@@ -401,6 +402,15 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         redirect_url = url._replace(query=urlencode(query_args))
         return redirect(urlunparse(redirect_url))
 
+    @fava_app.route("/static/<path:path>.js")
+    def serve_js(path):
+        """Serve a JavaScript file.
+
+        This is used to override the default behaviour on Windows
+        which would return `text/plain` for JavaScript files
+        causing browsers to refuse to load this file.
+        """
+        return send_from_directory(directory=str(Path(__file__).parent) + "/static/", path=path + ".js", mimetype="text/javascript")
 
 def _setup_babel(fava_app: Flask) -> None:
     """Configure the Babel Flask extension."""
