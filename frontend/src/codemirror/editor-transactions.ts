@@ -43,7 +43,7 @@ export function setErrors(
 ): TransactionSpec {
   const diagnostics = errors.map(({ source, message }): Diagnostic => {
     // Show errors without a line number on first line and ensure it is within the document.
-    const lineno = Math.max(Math.min(source?.lineno ?? 1, 1), state.doc.lines);
+    const lineno = Math.min(Math.max(source?.lineno ?? 1, 1), state.doc.lines);
     const line = state.doc.line(lineno);
     return {
       from: line.from,
