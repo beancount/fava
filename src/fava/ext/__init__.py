@@ -5,9 +5,13 @@ import ast
 import importlib
 import inspect
 import sys
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 from typing import TYPE_CHECKING
+
+import jinja2
+from flask import current_app
 
 from fava.helpers import BeancountError
 
@@ -58,6 +62,15 @@ class FavaExtensionBase:
     def extension_dir(self) -> Path:
         """Directory to look for templates directory and Javascript code."""
         return Path(inspect.getfile(self.__class__)).parent
+
+    @cached_property
+    def jinja_env(self) -> jinja2.Environment:
+        """Jinja env for this extension."""
+        if not current_app.jinja_loader:
+            raise ValueError("Expected Flask app to have jinja_loader.")
+        ext_loader = jinja2.FileSystemLoader(self.extension_dir / "templates")
+        loader = jinja2.ChoiceLoader([ext_loader, current_app.jinja_loader])
+        return current_app.jinja_env.overlay(loader=loader)
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Run after an `entry` has been modified."""
