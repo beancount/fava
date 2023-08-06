@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
-ZERO = float()
+ZERO = 0.0
 DEFAULT_RATE = math.log(2) * 1 / 365
 
 
