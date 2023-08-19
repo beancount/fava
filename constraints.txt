@@ -35,7 +35,7 @@ certifi==2023.7.22
     # via requests
 cffi==1.15.1
     # via cryptography
-cfgv==3.3.1
+cfgv==3.4.0
     # via pre-commit
 chardet==5.2.0
     # via
@@ -46,7 +46,7 @@ charset-normalizer==3.2.0
     # via requests
 cheroot==9.0.0
     # via fava (pyproject.toml)
-click==8.1.6
+click==8.1.7
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -84,7 +84,7 @@ flask-babel==3.1.0
     # via fava (pyproject.toml)
 google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.96.0
+google-api-python-client==2.97.0
     # via beancount
 google-auth==2.22.0
     # via
@@ -161,7 +161,7 @@ more-itertools==10.1.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.5.0
+mypy==1.5.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -193,7 +193,7 @@ ply==3.11
     #   fava (pyproject.toml)
 pre-commit==3.3.3
     # via fava (pyproject.toml)
-protobuf==4.24.0
+protobuf==4.24.1
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -234,13 +234,13 @@ pygments==2.16.1
     #   sphinx
 pyinstaller==5.13.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.6
+pyinstaller-hooks-contrib==2023.7
     # via pyinstaller
 pylint==2.17.5
     # via fava (pyproject.toml)
 pyparsing==3.1.1
     # via httplib2
-pyproject-api==1.5.3
+pyproject-api==1.5.4
     # via tox
 pyproject-hooks==1.0.0
     # via build
@@ -259,7 +259,7 @@ pytz==2023.3
     # via flask-babel
 pyyaml==6.0.1
     # via pre-commit
-readme-renderer==40.0
+readme-renderer==41.0
     # via twine
 requests==2.31.0
     # via
@@ -291,7 +291,7 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.4.1
     # via beautifulsoup4
-sphinx==7.1.2
+sphinx==7.2.2
     # via
     #   fava (pyproject.toml)
     #   sphinxcontrib-applehelp
@@ -299,23 +299,23 @@ sphinx==7.1.2
     #   sphinxcontrib-htmlhelp
     #   sphinxcontrib-qthelp
     #   sphinxcontrib-serializinghtml
-sphinxcontrib-applehelp==1.0.6
+sphinxcontrib-applehelp==1.0.7
     # via sphinx
-sphinxcontrib-devhelp==1.0.4
+sphinxcontrib-devhelp==1.0.5
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.3
+sphinxcontrib-htmlhelp==2.0.4
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.5
+sphinxcontrib-qthelp==1.0.6
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.7
+sphinxcontrib-serializinghtml==1.1.8
     # via sphinx
 texttable==1.6.7
     # via pyexcel
 tomlkit==0.12.1
     # via pylint
-tox==4.8.0
+tox==4.9.0
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
@@ -323,9 +323,9 @@ types-babel==2.11.0.15
     # via fava (pyproject.toml)
 types-pkg-resources==0.1.3
     # via fava (pyproject.toml)
-types-pytz==2023.3.0.0
+types-pytz==2023.3.0.1
     # via types-babel
-types-setuptools==68.0.0.3
+types-setuptools==68.1.0.0
     # via types-babel
 types-simplejson==3.19.0.2
     # via fava (pyproject.toml)
@@ -344,7 +344,7 @@ virtualenv==20.24.3
     #   tox
 webencodings==0.5.1
     # via bleach
-werkzeug==2.3.6
+werkzeug==2.3.7
     # via
     #   fava (pyproject.toml)
     #   flask
