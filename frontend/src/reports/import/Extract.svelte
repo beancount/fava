@@ -14,6 +14,7 @@
   $: shown = entries.length > 0;
   $: entry = entries[currentIndex];
   $: duplicate = entry && isDuplicate(entry);
+  $: skipDuplicates = true;
   $: duplicates = entries.filter(isDuplicate).length;
   $: if (entries.length > 0 && currentIndex >= entries.length) {
     currentIndex = 0;
@@ -21,20 +22,47 @@
 
   function submitOrNext() {
     if (currentIndex < entries.length - 1) {
-      currentIndex += 1;
+      nextEntry();
     } else {
       save();
     }
   }
 
+  function nextEntry() {
+    if(skipDuplicates) {
+      for (let index = currentIndex+1; index < entries.length; index++) {
+        if (!isDuplicate(entries[index]!)) {
+          currentIndex = index;
+          return;
+        }
+      }
+      currentIndex = entries.length;
+    }else{
+      currentIndex += 1;
+    }
+  }
+
   function previousEntry() {
-    currentIndex = Math.max(currentIndex - 1, 0);
+    if(skipDuplicates) {
+      for (let index = currentIndex-1; index >= 0; index--) {
+        if (!isDuplicate(entries[index]!)) {
+          currentIndex = index;
+          return;
+        }
+      }
+      currentIndex = 0;
+    }else{
+      currentIndex = Math.max(currentIndex - 1, 0);
+    }
   }
 
   function toggleDuplicate() {
     if (entry) {
       entry.meta.__duplicate__ = !entry.meta.__duplicate__;
     }
+  }
+  function toggleSkipDuplicates() {
+    skipDuplicates = !skipDuplicates;
   }
 </script>
 
@@ -80,6 +108,14 @@
           </button>
         {/if}
         <span class="spacer" />
+          <label class="button muted">
+          <input
+            type="checkbox"
+            checked={skipDuplicates}
+            on:click={toggleSkipDuplicates}
+          />
+          skip duplicates
+        </label>
         {#if currentIndex < entries.length - 1}
           <button type="submit">{_("Next")}</button>
           <button
