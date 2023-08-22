@@ -20,18 +20,11 @@
     currentIndex = 0;
   }
 
-  function submitOrNext() {
-    if (currentIndex < entries.length - 1) {
-      nextEntry();
-    } else {
-      save();
-    }
-  }
-
   function nextEntry() {
     if(skipDuplicates) {
-      for (let index = currentIndex+1; index < entries.length; index++) {
-        if (!isDuplicate(entries[index]!)) {
+      for (let index = currentIndex+1; index < entries.length; index+=1) {
+        const newEntry = entries[index];
+        if (newEntry !== undefined && !isDuplicate(newEntry)) {
           currentIndex = index;
           return;
         }
@@ -41,11 +34,20 @@
       currentIndex += 1;
     }
   }
+  
+  function submitOrNext() {
+    if (currentIndex < entries.length - 1) {
+      nextEntry();
+    } else {
+      save();
+    }
+  }
 
   function previousEntry() {
     if(skipDuplicates) {
-      for (let index = currentIndex-1; index >= 0; index--) {
-        if (!isDuplicate(entries[index]!)) {
+      for (let index = currentIndex-1; index >= 0; index-=1) {
+        const newEntry = entries[index];
+        if (newEntry !== undefined && !isDuplicate(newEntry)) {
           currentIndex = index;
           return;
         }
