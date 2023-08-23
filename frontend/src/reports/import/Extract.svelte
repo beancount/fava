@@ -29,12 +29,12 @@
           return;
         }
       }
-      currentIndex = entries.length;
+      currentIndex = entries.length-1;
     }else{
       currentIndex += 1;
     }
   }
-  
+
   function submitOrNext() {
     if (currentIndex < entries.length - 1) {
       nextEntry();
