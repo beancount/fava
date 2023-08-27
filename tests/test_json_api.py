@@ -535,44 +535,52 @@ def test_api_query_result_charts(
     snapshot(data["chart"])
 
 
-def test_api_commodities(
+def test_api_commodities_empty(
     test_client: FlaskClient,
-    snapshot: SnapshotFunc,
 ) -> None:
-    response = test_client.get("/long-example/api/commodities")
-    data = assert_api_success(response)
-    snapshot(data)
-
     response = test_client.get(
-        "/long-example/api/commodities",
-        query_string={"time": "3000"},
+        "/long-example/api/commodities?time=3000",
     )
     data = assert_api_success(response)
     assert not data
 
 
-def test_api_events(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
-    response = test_client.get("/long-example/api/events")
-    data = assert_api_success(response)
-    snapshot(dumps(data))
-
-
-def test_api_income_statement(
+@pytest.mark.parametrize(
+    ("name", "url"),
+    [
+        ("commodities", "/long-example/api/commodities"),
+        ("documents", "/example/api/documents"),
+        ("events", "/long-example/api/events"),
+        ("income_statement", "/long-example/api/income_statement?time=2014"),
+        ("trial_balance", "/long-example/api/trial_balance?time=2014"),
+        ("balance_sheet", "/long-example/api/balance_sheet"),
+        (
+            "balance_sheet_with_cost",
+            "/long-example/api/balance_sheet?conversion=at_value",
+        ),
+        (
+            "account_report_off_by_one_journal",
+            (
+                "/off-by-one/api/account_report"
+                "?interval=day&conversion=at_value&a=Assets"
+            ),
+        ),
+        (
+            "account_report_off_by_one",
+            (
+                "/off-by-one/api/account_report"
+                "?interval=day&conversion=at_value&a=Assets&r=balances"
+            ),
+        ),
+    ],
+)
+def test_api(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
+    name: str,
+    url: str,
 ) -> None:
-    response = test_client.get("/long-example/api/income_statement")
+    response = test_client.get(url)
     data = assert_api_success(response)
-    snapshot(dumps(data))
-
-
-def test_api_account_report_off_by_one(
-    test_client: FlaskClient,
-    snapshot: SnapshotFunc,
-) -> None:
-    response = test_client.get(
-        "/off-by-one/api/account_report"
-        "?interval=day&conversion=at_value&a=Assets&r=balances",
-    )
-    data = assert_api_success(response)
-    snapshot(dumps(data))
+    assert data
+    snapshot(dumps(data), name)

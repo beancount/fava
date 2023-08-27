@@ -30,7 +30,7 @@ disable = [
 ]
 
 [tool.pytest.ini_options]
-filterwarnings = "ignore:.*pkg_resources.declare_namespace.*:DeprecationWarning"
+filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 
 [tool.ruff]
 target-version = "py38"

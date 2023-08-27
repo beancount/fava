@@ -23,6 +23,7 @@ from fava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Literal
+    from typing import Protocol
     from typing import TypeAlias
     from typing import TypeGuard
 
@@ -33,7 +34,11 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.types import LoaderResult
     from fava.core.budgets import BudgetDict
 
-    SnapshotFunc: TypeAlias = Callable[[Any], None]
+    class SnapshotFunc(Protocol):
+        """Callable protocol for the snapshot function."""
+
+        def __call__(self, data: Any, name: str = ..., /) -> None:
+            ...
 
 
 @pytest.fixture(scope="session")
@@ -76,18 +81,19 @@ def snapshot(
     fn_name = request.function.__name__
     module_name = module_path.name
 
-    def snapshot_data(data: Any) -> None:
+    def snapshot_data(data: Any, name: str | None = None) -> None:
         if os.environ.get("SNAPSHOT_IGNORE"):
             # For the tests with old dependencies, we avoid comparing the snapshots,
             # as they might change in subtle ways between dependency versions.
             return
 
         snap_count[fn_name] += 1
-        filename = (
-            f"{module_name}-{fn_name}"
-            if snap_count[fn_name] == 1
-            else (f"{module_name}-{fn_name}-{snap_count[fn_name]}")
-        )
+        filename = f"{module_name}-{fn_name}"
+        if name:
+            filename = f"{filename}-{name}"
+        elif snap_count[fn_name] > 1:
+            filename = f"{filename}-{snap_count[fn_name]}"
+
         snap_file = snap_dir / filename
 
         # print strings directly, otherwise try pretty-printing
@@ -97,7 +103,8 @@ def snapshot(
         # replace relative dates
         out = re.sub(r"\d+ days ago", "X days ago", out)
         # replace entry hashes
-        out = re.sub(r'"[0-9a-f]{32}"', '"ENTRY_HASH"', out)
+        out = re.sub(r'"[0-9a-f]{32}', '"ENTRY_HASH', out)
+        out = re.sub(r"context-[0-9a-f]{32}", "context-ENTRY_HASH", out)
         # replace mtimes
         out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
         out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)
