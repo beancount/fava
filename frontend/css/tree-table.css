@@ -13,22 +13,11 @@
 }
 
 .tree-table .num {
-  width: 10em;
+  /** Space for about 14 characters, so a number like 1234512345.123 fits. */
+  width: 9em;
 }
 
 .tree-table .other {
-  width: 13em;
-}
-
-/* For two or more operating currencies, set a slightly smaller size. */
-.two-currencies {
-  font-size: 0.9em;
-}
-
-.two-currencies .num {
-  width: 8em;
-}
-
-.two-currencies .other {
-  width: 11em;
+  /** Space for about 18 (four more) characters, so an amount like 1234512345.123 USD fits. */
+  width: 12em;
 }
