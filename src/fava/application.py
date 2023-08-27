@@ -11,10 +11,12 @@ To start a simple server::
 """
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import fields
 from datetime import date
 from datetime import datetime
 from functools import lru_cache
+from functools import reduce
 from io import BytesIO
 from pathlib import Path
 from threading import Lock
@@ -25,6 +27,7 @@ from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
 import markdown2  # type: ignore[import]
+from _decimal import Decimal
 from beancount import __version__ as beancount_version
 from beancount.utils.text_utils import replace_numbers
 from flask import abort
@@ -65,6 +68,9 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse
+
+    from fava.core.charts import DateAndBalanceWithBudget
+    from fava.internal_api import ChartData
 
 
 setup_logging()
@@ -163,9 +169,62 @@ def _setup_template_config(fava_app: Flask) -> None:
     fava_app.add_template_global(get_ledger_data, "get_ledger_data")
 
     @fava_app.context_processor
-    def _template_context() -> dict[str, FavaLedger | type[ChartApi]]:
+    def _template_context() -> (
+        dict[
+            str,
+            FavaLedger
+            | type[ChartApi]
+            | tuple[dict[str, Decimal], dict[str, Decimal]],
+        ]
+    ):
         """Inject variables into the template context."""
-        return {"ledger": g.ledger, "chart_api": ChartApi}
+        incomes_expenses_averages = _calculate_chart_average()
+
+        return {
+            "ledger": g.ledger,
+            "chart_api": ChartApi,
+            "incomes_expenses_averages": incomes_expenses_averages,
+        }
+
+
+def _calculate_chart_average() -> (
+    tuple[dict[str, Decimal], dict[str, Decimal]]
+):
+    income_interval_totals: ChartData = ChartApi.interval_totals(
+        g.interval, g.ledger.options["name_income"], ""
+    )
+    expense_interval_totals: ChartData = ChartApi.interval_totals(
+        g.interval, g.ledger.options["name_expenses"], ""
+    )
+
+    def sum_balances(
+        total_balances: dict[str, Decimal], d: DateAndBalanceWithBudget
+    ) -> dict[str, Decimal]:
+        for key, value in d.balance.items():
+            total_balances[key] = total_balances[key] + value
+        return total_balances
+
+    income_balances: dict[str, Decimal] = reduce(
+        sum_balances,
+        income_interval_totals.data,
+        defaultdict(lambda: Decimal(0)),
+    )
+    expense_balances: dict[str, Decimal] = reduce(
+        sum_balances,
+        expense_interval_totals.data,
+        defaultdict(lambda: Decimal(0)),
+    )
+
+    income_averages = {
+        ib[0]: ib[1] / len(income_interval_totals.data)
+        for ib in income_balances.items()
+    }
+    expense_averages = {
+        ib[0]: ib[1] / len(expense_interval_totals.data)
+        for ib in expense_balances.items()
+    }
+
+    return income_averages, expense_averages
 
 
 def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
