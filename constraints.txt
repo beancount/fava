@@ -76,7 +76,7 @@ flake8==6.1.0
     #   flake8-pyi
 flake8-pyi==23.6.0
     # via fava (pyproject.toml)
-flask==2.3.2
+flask==2.3.3
     # via
     #   fava (pyproject.toml)
     #   flask-babel
@@ -99,7 +99,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.5.26
+identify==2.5.27
     # via pre-commit
 idna==3.4
     # via requests
@@ -117,7 +117,7 @@ itsdangerous==2.1.2
     # via flask
 jaraco-classes==3.3.0
     # via keyring
-jaraco-functools==3.8.1
+jaraco-functools==3.9.0
     # via cheroot
 jeepney==0.8.0
     # via
@@ -183,7 +183,7 @@ platformdirs==3.10.0
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.2.0
+pluggy==1.3.0
     # via
     #   pytest
     #   tox
@@ -193,7 +193,7 @@ ply==3.11
     #   fava (pyproject.toml)
 pre-commit==3.3.3
     # via fava (pyproject.toml)
-protobuf==4.24.1
+protobuf==4.24.2
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -232,7 +232,7 @@ pygments==2.16.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==5.13.0
+pyinstaller==5.13.1
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2023.7
     # via pyinstaller
@@ -291,7 +291,7 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.4.1
     # via beautifulsoup4
-sphinx==7.2.2
+sphinx==7.2.3
     # via
     #   fava (pyproject.toml)
     #   sphinxcontrib-applehelp
@@ -309,13 +309,13 @@ sphinxcontrib-jsmath==1.0.1
     # via sphinx
 sphinxcontrib-qthelp==1.0.6
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.8
+sphinxcontrib-serializinghtml==1.1.9
     # via sphinx
 texttable==1.6.7
     # via pyexcel
 tomlkit==0.12.1
     # via pylint
-tox==4.9.0
+tox==4.10.0
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
