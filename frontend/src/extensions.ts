@@ -10,25 +10,19 @@ import { fetch } from "./lib/fetch";
 import { log_error } from "./log";
 import { extensions } from "./stores";
 
-class ExtensionApi {
-  extension_name: string;
+/** Helpers to make requests. */
+export class ExtensionApi {
+  constructor(private readonly name: string) {}
 
-  constructor(extension_name: string) {
-    this.extension_name = extension_name;
-  }
-
-  request(
+  /** Send a request to an extension endpoint. */
+  async request(
     endpoint: string,
-    method: string,
-    params: Record<string, string | number> | undefined,
-    body: object | undefined,
+    method: "GET" | "PUT" | "POST" | "DELETE",
+    params?: Record<string, string | number>,
+    body?: unknown,
     output: "json" | "string" | "raw" = "json",
-  ) {
-    const url = urlFor(
-      `extension/${this.extension_name}/${endpoint}`,
-      params,
-      false,
-    );
+  ): Promise<unknown> {
+    const url = urlFor(`extension/${this.name}/${endpoint}`, params, false);
     let opts = {};
     if (body) {
       opts =
@@ -39,78 +33,67 @@ class ExtensionApi {
               body: JSON.stringify(body),
             };
     }
-    const request = fetch(url, { method, ...opts });
+    const response = await fetch(url, { method, ...opts });
     if (output === "json") {
-      return request.then((res) => res.json());
+      return response.json();
     }
     if (output === "string") {
-      return request.then((res) => res.text());
+      return response.text();
     }
-    return request;
+    return response;
   }
 
-  get(
-    endpoint: string,
-    params: Record<string, string | number>,
-    output: "json" | "string" | "raw" = "json",
-  ) {
-    return this.request(endpoint, "GET", params, undefined, output);
+  /** GET an endpoint with parameters and return JSON. */
+  get(endpoint: string, params: Record<string, string>): Promise<unknown> {
+    return this.request(endpoint, "GET", params, undefined);
   }
 
-  put(
-    endpoint: string,
-    body: object | undefined,
-    output: "json" | "string" | "raw" = "json",
-  ) {
-    return this.request(endpoint, "PUT", undefined, body, output);
+  /** GET an endpoint with a body and return JSON. */
+  put(endpoint: string, body?: unknown): Promise<unknown> {
+    return this.request(endpoint, "PUT", undefined, body);
   }
 
-  post(
-    endpoint: string,
-    body: object | undefined,
-    output: "json" | "string" | "raw" = "json",
-  ) {
-    return this.request(endpoint, "POST", undefined, body, output);
+  /** POST to an endpoint with a body and return JSON. */
+  post(endpoint: string, body?: unknown): Promise<unknown> {
+    return this.request(endpoint, "POST", undefined, body);
   }
 
-  delete(
-    endpoint: string,
-    body: object | undefined,
-    output: "json" | "string" | "raw" = "json",
-  ) {
-    return this.request(endpoint, "DELETE", undefined, body, output);
+  /** DELETE an endpoint and return JSON. */
+  delete(endpoint: string): Promise<unknown> {
+    return this.request(endpoint, "DELETE");
   }
 }
 
+/** The context that an extensions handlers are called with. */
 export interface ExtensionContext {
+  /** Helpers to make requests. */
   api: ExtensionApi;
-  getExt: (name: string) => Promise<ExtensionData>;
 }
 
 /**
  * The Javascript code of a Fava extension should export an object of this type.
+ *
+ * The extension will be initialised when Fava loads by a call to init(). It can also
+ * provider handlers that are run on each subsequent page load (either all or just
+ * pages of the extension itself).
  */
 export interface ExtensionModule {
   /** Initialise this Javascript module / run some code on the initial load. */
-  init?: (c: ExtensionContext) => void;
+  init?: (c: ExtensionContext) => void | Promise<void>;
   /** Run some code after any Fava page has loaded. */
   onPageLoad?: (c: ExtensionContext) => void;
-  /** Run some code after the page for this extension has loaded. */
+  /** Run some code after a page for this extension has loaded. */
   onExtensionPageLoad?: (c: ExtensionContext) => void;
 }
 
-export class ExtensionData implements Required<ExtensionModule> {
-  context: ExtensionContext;
+class ExtensionData {
+  constructor(
+    private readonly extension: ExtensionModule,
+    private readonly context: ExtensionContext,
+  ) {}
 
-  extension: ExtensionModule;
-
-  constructor(context: ExtensionContext, extension: ExtensionModule) {
-    this.context = context;
-    this.extension = extension;
-  }
-
-  init(): void {
-    this.extension.init?.(this.context);
+  async init(): Promise<void> {
+    await this.extension.init?.(this.context);
   }
 
   onPageLoad(): void {
@@ -122,18 +105,11 @@ export class ExtensionData implements Required<ExtensionModule> {
   }
 }
 
-async function loadExtensionModule(
-  name: string,
-  getExtension: (name: string) => Promise<ExtensionData>,
-): Promise<ExtensionData> {
+async function loadExtensionModule(name: string): Promise<ExtensionData> {
   const url = urlFor(`extension_js_module/${name}.js`, undefined, false);
   const mod = await (import(url) as Promise<{ default?: ExtensionModule }>);
   if (typeof mod.default === "object") {
-    const context: ExtensionContext = {
-      api: new ExtensionApi(name),
-      getExt: getExtension,
-    };
-    return new ExtensionData(context, mod.default);
+    return new ExtensionData(mod.default, { api: new ExtensionApi(name) });
   }
   throw new Error(
     `Error importing module for extension ${name}: module must export "default" object`,
@@ -144,15 +120,15 @@ async function loadExtensionModule(
 const loaded_extensions = new Map<string, Promise<ExtensionData>>();
 
 /** Get the extensions module - if it has not been imported yet, initialise it. */
-async function getExt(name: string): Promise<ExtensionData> {
+async function getOrInitExtension(name: string): Promise<ExtensionData> {
   const loaded_ext = loaded_extensions.get(name);
   if (loaded_ext) {
     return loaded_ext;
   }
-  const ext = loadExtensionModule(name, getExt);
-  loaded_extensions.set(name, ext);
-  (await ext).init();
-  return ext;
+  const ext_promise = loadExtensionModule(name);
+  loaded_extensions.set(name, ext_promise);
+  await (await ext_promise).init();
+  return ext_promise;
 }
 
 /**
@@ -162,7 +138,7 @@ export function handleExtensionPageLoad(): void {
   const exts = store_get(extensions).filter((e) => e.has_js_module);
   for (const { name } of exts) {
     // Run the onPageLoad handler for all pages.
-    getExt(name)
+    getOrInitExtension(name)
       .then((m) => {
         m.onPageLoad();
       })
@@ -172,7 +148,7 @@ export function handleExtensionPageLoad(): void {
   if (path?.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {
-        getExt(name)
+        getOrInitExtension(name)
           .then((m) => {
             m.onExtensionPageLoad();
           })
