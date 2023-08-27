@@ -1,223 +1,220 @@
 [
   {
     "data": {
-      "modifier": 1,
-      "root": {
-        "account": "Assets",
-        "balance": {},
-        "balance_children": {
-          "IRAUSD": 7200.00,
-          "USD": 94320.27840,
-          "VACHR": -82
-        },
-        "children": [
-          {
-            "account": "Assets:Testing",
-            "balance": {},
-            "balance_children": {
-              "USD": 100
-            },
-            "children": [
-              {
-                "account": "Assets:Testing:MultipleCommodities",
-                "balance": {
-                  "USD": 100
-                },
-                "balance_children": {
-                  "USD": 100
-                },
-                "children": [],
-                "has_txns": true
-              }
-            ],
-            "has_txns": false
+      "account": "Assets",
+      "balance": {},
+      "balance_children": {
+        "IRAUSD": 7200.00,
+        "USD": 94320.27840,
+        "VACHR": -82
+      },
+      "children": [
+        {
+          "account": "Assets:Testing",
+          "balance": {},
+          "balance_children": {
+            "USD": 100
           },
-          {
-            "account": "Assets:US",
-            "balance": {},
-            "balance_children": {
-              "IRAUSD": 7200.00,
-              "USD": 94220.27840,
-              "VACHR": -82
+          "children": [
+            {
+              "account": "Assets:Testing:MultipleCommodities",
+              "balance": {
+                "USD": 100
+              },
+              "balance_children": {
+                "USD": 100
+              },
+              "children": [],
+              "has_txns": true
+            }
+          ],
+          "has_txns": false
+        },
+        {
+          "account": "Assets:US",
+          "balance": {},
+          "balance_children": {
+            "IRAUSD": 7200.00,
+            "USD": 94220.27840,
+            "VACHR": -82
+          },
+          "children": [
+            {
+              "account": "Assets:US:BayBook",
+              "balance": {},
+              "balance_children": {
+                "VACHR": -82
+              },
+              "children": [
+                {
+                  "account": "Assets:US:BayBook:Vacation",
+                  "balance": {
+                    "VACHR": -82
+                  },
+                  "balance_children": {
+                    "VACHR": -82
+                  },
+                  "children": [],
+                  "has_txns": true
+                }
+              ],
+              "has_txns": false
             },
-            "children": [
-              {
-                "account": "Assets:US:BayBook",
-                "balance": {},
-                "balance_children": {
-                  "VACHR": -82
-                },
-                "children": [
-                  {
-                    "account": "Assets:US:BayBook:Vacation",
-                    "balance": {
-                      "VACHR": -82
-                    },
-                    "balance_children": {
-                      "VACHR": -82
-                    },
-                    "children": [],
-                    "has_txns": true
-                  }
-                ],
-                "has_txns": false
+            {
+              "account": "Assets:US:BofA",
+              "balance": {},
+              "balance_children": {
+                "USD": 1632.79
               },
-              {
-                "account": "Assets:US:BofA",
-                "balance": {},
-                "balance_children": {
-                  "USD": 1632.79
-                },
-                "children": [
-                  {
-                    "account": "Assets:US:BofA:Checking",
-                    "balance": {
-                      "USD": 1632.79
-                    },
-                    "balance_children": {
-                      "USD": 1632.79
-                    },
-                    "children": [],
-                    "has_txns": true
-                  }
-                ],
-                "has_txns": false
+              "children": [
+                {
+                  "account": "Assets:US:BofA:Checking",
+                  "balance": {
+                    "USD": 1632.79
+                  },
+                  "balance_children": {
+                    "USD": 1632.79
+                  },
+                  "children": [],
+                  "has_txns": true
+                }
+              ],
+              "has_txns": false
+            },
+            {
+              "account": "Assets:US:ETrade",
+              "balance": {},
+              "balance_children": {
+                "USD": 23137.54
               },
-              {
-                "account": "Assets:US:ETrade",
-                "balance": {},
-                "balance_children": {
-                  "USD": 23137.54
+              "children": [
+                {
+                  "account": "Assets:US:ETrade:Cash",
+                  "balance": {
+                    "USD": 641.76
+                  },
+                  "balance_children": {
+                    "USD": 641.76
+                  },
+                  "children": [],
+                  "has_txns": true
                 },
-                "children": [
-                  {
-                    "account": "Assets:US:ETrade:Cash",
-                    "balance": {
-                      "USD": 641.76
-                    },
-                    "balance_children": {
-                      "USD": 641.76
-                    },
-                    "children": [],
-                    "has_txns": true
+                {
+                  "account": "Assets:US:ETrade:GLD",
+                  "balance": {
+                    "USD": 4899.98
                   },
-                  {
-                    "account": "Assets:US:ETrade:GLD",
-                    "balance": {
-                      "USD": 4899.98
-                    },
-                    "balance_children": {
-                      "USD": 4899.98
-                    },
-                    "children": [],
-                    "has_txns": true
+                  "balance_children": {
+                    "USD": 4899.98
                   },
-                  {
-                    "account": "Assets:US:ETrade:ITOT",
-                    "balance": {
-                      "USD": 4972.52
-                    },
-                    "balance_children": {
-                      "USD": 4972.52
-                    },
-                    "children": [],
-                    "has_txns": true
+                  "children": [],
+                  "has_txns": true
+                },
+                {
+                  "account": "Assets:US:ETrade:ITOT",
+                  "balance": {
+                    "USD": 4972.52
                   },
-                  {
-                    "account": "Assets:US:ETrade:VEA",
-                    "balance": {
-                      "USD": 7297.47
-                    },
-                    "balance_children": {
-                      "USD": 7297.47
-                    },
-                    "children": [],
-                    "has_txns": true
+                  "balance_children": {
+                    "USD": 4972.52
                   },
-                  {
-                    "account": "Assets:US:ETrade:VHT",
-                    "balance": {
-                      "USD": 5325.81
-                    },
-                    "balance_children": {
-                      "USD": 5325.81
-                    },
-                    "children": [],
-                    "has_txns": true
-                  }
-                ],
-                "has_txns": false
+                  "children": [],
+                  "has_txns": true
+                },
+                {
+                  "account": "Assets:US:ETrade:VEA",
+                  "balance": {
+                    "USD": 7297.47
+                  },
+                  "balance_children": {
+                    "USD": 7297.47
+                  },
+                  "children": [],
+                  "has_txns": true
+                },
+                {
+                  "account": "Assets:US:ETrade:VHT",
+                  "balance": {
+                    "USD": 5325.81
+                  },
+                  "balance_children": {
+                    "USD": 5325.81
+                  },
+                  "children": [],
+                  "has_txns": true
+                }
+              ],
+              "has_txns": false
+            },
+            {
+              "account": "Assets:US:Federal",
+              "balance": {},
+              "balance_children": {
+                "IRAUSD": 7200.00
               },
-              {
-                "account": "Assets:US:Federal",
-                "balance": {},
-                "balance_children": {
-                  "IRAUSD": 7200.00
-                },
-                "children": [
-                  {
-                    "account": "Assets:US:Federal:PreTax401k",
-                    "balance": {
-                      "IRAUSD": 7200.00
-                    },
-                    "balance_children": {
-                      "IRAUSD": 7200.00
-                    },
-                    "children": [],
-                    "has_txns": true
-                  }
-                ],
-                "has_txns": false
+              "children": [
+                {
+                  "account": "Assets:US:Federal:PreTax401k",
+                  "balance": {
+                    "IRAUSD": 7200.00
+                  },
+                  "balance_children": {
+                    "IRAUSD": 7200.00
+                  },
+                  "children": [],
+                  "has_txns": true
+                }
+              ],
+              "has_txns": false
+            },
+            {
+              "account": "Assets:US:Vanguard",
+              "balance": {},
+              "balance_children": {
+                "USD": 69449.94840
               },
-              {
-                "account": "Assets:US:Vanguard",
-                "balance": {},
-                "balance_children": {
-                  "USD": 69449.94840
+              "children": [
+                {
+                  "account": "Assets:US:Vanguard:Cash",
+                  "balance": {
+                    "USD": 0.02
+                  },
+                  "balance_children": {
+                    "USD": 0.02
+                  },
+                  "children": [],
+                  "has_txns": true
                 },
-                "children": [
-                  {
-                    "account": "Assets:US:Vanguard:Cash",
-                    "balance": {
-                      "USD": 0.02
-                    },
-                    "balance_children": {
-                      "USD": 0.02
-                    },
-                    "children": [],
-                    "has_txns": true
+                {
+                  "account": "Assets:US:Vanguard:RGAGX",
+                  "balance": {
+                    "USD": 41670.00757
                   },
-                  {
-                    "account": "Assets:US:Vanguard:RGAGX",
-                    "balance": {
-                      "USD": 41670.00757
-                    },
-                    "balance_children": {
-                      "USD": 41670.00757
-                    },
-                    "children": [],
-                    "has_txns": true
+                  "balance_children": {
+                    "USD": 41670.00757
                   },
-                  {
-                    "account": "Assets:US:Vanguard:VBMPX",
-                    "balance": {
-                      "USD": 27779.92083
-                    },
-                    "balance_children": {
-                      "USD": 27779.92083
-                    },
-                    "children": [],
-                    "has_txns": true
-                  }
-                ],
-                "has_txns": false
-              }
-            ],
-            "has_txns": false
-          }
-        ],
-        "has_txns": false
-      }
+                  "children": [],
+                  "has_txns": true
+                },
+                {
+                  "account": "Assets:US:Vanguard:VBMPX",
+                  "balance": {
+                    "USD": 27779.92083
+                  },
+                  "balance_children": {
+                    "USD": 27779.92083
+                  },
+                  "children": [],
+                  "has_txns": true
+                }
+              ],
+              "has_txns": false
+            }
+          ],
+          "has_txns": false
+        }
+      ],
+      "has_txns": false
     },
     "label": "Assets",
     "type": "hierarchy"

@@ -19,7 +19,11 @@ import type { ScatterPlot } from "./scatterplot";
 
 const parsers: Record<
   string,
-  (label: string, json: unknown, ctx: ChartContext) => Result<FavaChart, string>
+  (
+    label: string,
+    json: unknown,
+    $chartContext: ChartContext,
+  ) => Result<FavaChart, string>
 > = {
   balances,
   bar,
@@ -35,14 +39,14 @@ const chart_data_validator = array(
 
 export function parseChartData(
   data: unknown,
-  ctx: ChartContext,
+  $chartContext: ChartContext,
 ): Result<FavaChart[], string> {
   return chart_data_validator(data).map((chartData) => {
     const result: FavaChart[] = [];
     chartData.forEach((chart) => {
       const parser = parsers[chart.type];
       if (parser) {
-        const r = parser(chart.label, chart.data, ctx);
+        const r = parser(chart.label, chart.data, $chartContext);
         if (r.is_ok) {
           result.push(r.value);
         }

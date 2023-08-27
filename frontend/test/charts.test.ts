@@ -97,13 +97,12 @@ test("handle data for query charts", () => {
   const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
   const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
   const { data } = parseGroupedQueryChart(d, ctx).unwrap();
-  assert.is(data.get("EUR")?.value, 10);
+  const eur_hierarchy = data.get("EUR");
+  assert.ok(eur_hierarchy);
+  assert.is(eur_hierarchy.value, 10);
   assert.equal(
-    data
-      .get("EUR")
-      ?.descendants()
-      .map((n) => n.data.account),
-    ["(root)", "Assets", "Assets:Cash"],
+    eur_hierarchy.descendants().map((n) => n.data.account),
+    ["(root)", "Assets", "(root)", "Assets:Cash", "Assets"],
   );
 });
 

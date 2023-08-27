@@ -2,842 +2,827 @@
   "charts": [
     {
       "data": {
-        "modifier": -1,
-        "root": {
-          "account": "Income",
-          "balance": {},
-          "balance_children": {
-            "IRAUSD": -17500,
-            "USD": -129335.76,
-            "VACHR": -130
-          },
-          "children": [
-            {
-              "account": "Income:US",
-              "balance": {},
-              "balance_children": {
-                "IRAUSD": -17500,
-                "USD": -129335.76,
-                "VACHR": -130
+        "account": "Income",
+        "balance": {},
+        "balance_children": {
+          "IRAUSD": -17500,
+          "USD": -129335.76,
+          "VACHR": -130
+        },
+        "children": [
+          {
+            "account": "Income:US",
+            "balance": {},
+            "balance_children": {
+              "IRAUSD": -17500,
+              "USD": -129335.76,
+              "VACHR": -130
+            },
+            "children": [
+              {
+                "account": "Income:US:BayBook",
+                "balance": {},
+                "balance_children": {
+                  "USD": -129382.2,
+                  "VACHR": -130
+                },
+                "children": [
+                  {
+                    "account": "Income:US:BayBook:GroupTermLife",
+                    "balance": {
+                      "USD": -632.32
+                    },
+                    "balance_children": {
+                      "USD": -632.32
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Income:US:BayBook:Match401k",
+                    "balance": {
+                      "USD": -8750.0
+                    },
+                    "balance_children": {
+                      "USD": -8750.0
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Income:US:BayBook:Salary",
+                    "balance": {
+                      "USD": -119999.88
+                    },
+                    "balance_children": {
+                      "USD": -119999.88
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Income:US:BayBook:Vacation",
+                    "balance": {
+                      "VACHR": -130
+                    },
+                    "balance_children": {
+                      "VACHR": -130
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
               },
-              "children": [
-                {
-                  "account": "Income:US:BayBook",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": -129382.2,
-                    "VACHR": -130
-                  },
-                  "children": [
-                    {
-                      "account": "Income:US:BayBook:GroupTermLife",
-                      "balance": {
-                        "USD": -632.32
-                      },
-                      "balance_children": {
-                        "USD": -632.32
-                      },
-                      "children": [],
-                      "has_txns": true
-                    },
-                    {
-                      "account": "Income:US:BayBook:Match401k",
-                      "balance": {
-                        "USD": -8750.0
-                      },
-                      "balance_children": {
-                        "USD": -8750.0
-                      },
-                      "children": [],
-                      "has_txns": true
-                    },
-                    {
-                      "account": "Income:US:BayBook:Salary",
-                      "balance": {
-                        "USD": -119999.88
-                      },
-                      "balance_children": {
-                        "USD": -119999.88
-                      },
-                      "children": [],
-                      "has_txns": true
-                    },
-                    {
-                      "account": "Income:US:BayBook:Vacation",
-                      "balance": {
-                        "VACHR": -130
-                      },
-                      "balance_children": {
-                        "VACHR": -130
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+              {
+                "account": "Income:US:ETrade",
+                "balance": {},
+                "balance_children": {
+                  "USD": 46.44
                 },
-                {
-                  "account": "Income:US:ETrade",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 46.44
-                  },
-                  "children": [
-                    {
-                      "account": "Income:US:ETrade:Dividends",
-                      "balance": {
-                        "USD": -51.68
-                      },
-                      "balance_children": {
-                        "USD": -51.68
-                      },
-                      "children": [],
-                      "has_txns": true
+                "children": [
+                  {
+                    "account": "Income:US:ETrade:Dividends",
+                    "balance": {
+                      "USD": -51.68
                     },
-                    {
-                      "account": "Income:US:ETrade:Gains",
-                      "balance": {
-                        "USD": 98.12
-                      },
-                      "balance_children": {
-                        "USD": 98.12
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                },
-                {
-                  "account": "Income:US:Federal",
-                  "balance": {},
-                  "balance_children": {
-                    "IRAUSD": -17500
+                    "balance_children": {
+                      "USD": -51.68
+                    },
+                    "children": [],
+                    "has_txns": true
                   },
-                  "children": [
-                    {
-                      "account": "Income:US:Federal:PreTax401k",
-                      "balance": {
-                        "IRAUSD": -17500
-                      },
-                      "balance_children": {
-                        "IRAUSD": -17500
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                }
-              ],
-              "has_txns": false
-            }
-          ],
-          "has_txns": false
-        }
+                  {
+                    "account": "Income:US:ETrade:Gains",
+                    "balance": {
+                      "USD": 98.12
+                    },
+                    "balance_children": {
+                      "USD": 98.12
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Income:US:Federal",
+                "balance": {},
+                "balance_children": {
+                  "IRAUSD": -17500
+                },
+                "children": [
+                  {
+                    "account": "Income:US:Federal:PreTax401k",
+                    "balance": {
+                      "IRAUSD": -17500
+                    },
+                    "balance_children": {
+                      "IRAUSD": -17500
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              }
+            ],
+            "has_txns": false
+          }
+        ],
+        "has_txns": false
       },
       "label": "Income",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Expenses",
-          "balance": {},
-          "balance_children": {
-            "IRAUSD": 17500.0,
-            "USD": 93478.52
+        "account": "Expenses",
+        "balance": {},
+        "balance_children": {
+          "IRAUSD": 17500.0,
+          "USD": 93478.52
+        },
+        "children": [
+          {
+            "account": "Expenses:Financial",
+            "balance": {},
+            "balance_children": {
+              "USD": 137.5
+            },
+            "children": [
+              {
+                "account": "Expenses:Financial:Commissions",
+                "balance": {
+                  "USD": 89.5
+                },
+                "balance_children": {
+                  "USD": 89.5
+                },
+                "children": [],
+                "has_txns": true
+              },
+              {
+                "account": "Expenses:Financial:Fees",
+                "balance": {
+                  "USD": 48.0
+                },
+                "balance_children": {
+                  "USD": 48.0
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
           },
-          "children": [
-            {
-              "account": "Expenses:Financial",
-              "balance": {},
-              "balance_children": {
-                "USD": 137.5
-              },
-              "children": [
-                {
-                  "account": "Expenses:Financial:Commissions",
-                  "balance": {
-                    "USD": 89.5
-                  },
-                  "balance_children": {
-                    "USD": 89.5
-                  },
-                  "children": [],
-                  "has_txns": true
-                },
-                {
-                  "account": "Expenses:Financial:Fees",
-                  "balance": {
-                    "USD": 48.0
-                  },
-                  "balance_children": {
-                    "USD": 48.0
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
+          {
+            "account": "Expenses:Food",
+            "balance": {},
+            "balance_children": {
+              "USD": 6601.98
             },
-            {
-              "account": "Expenses:Food",
-              "balance": {},
-              "balance_children": {
-                "USD": 6601.98
+            "children": [
+              {
+                "account": "Expenses:Food:Alcohol",
+                "balance": {},
+                "balance_children": {},
+                "children": [],
+                "has_txns": false
               },
-              "children": [
-                {
-                  "account": "Expenses:Food:Alcohol",
-                  "balance": {},
-                  "balance_children": {},
-                  "children": [],
-                  "has_txns": false
+              {
+                "account": "Expenses:Food:Coffee",
+                "balance": {},
+                "balance_children": {},
+                "children": [],
+                "has_txns": false
+              },
+              {
+                "account": "Expenses:Food:Groceries",
+                "balance": {
+                  "USD": 2424.91
                 },
-                {
-                  "account": "Expenses:Food:Coffee",
-                  "balance": {},
-                  "balance_children": {},
-                  "children": [],
-                  "has_txns": false
+                "balance_children": {
+                  "USD": 2424.91
                 },
-                {
-                  "account": "Expenses:Food:Groceries",
-                  "balance": {
-                    "USD": 2424.91
-                  },
-                  "balance_children": {
-                    "USD": 2424.91
-                  },
-                  "children": [],
-                  "has_txns": true
+                "children": [],
+                "has_txns": true
+              },
+              {
+                "account": "Expenses:Food:Restaurant",
+                "balance": {
+                  "USD": 4177.07
                 },
-                {
-                  "account": "Expenses:Food:Restaurant",
-                  "balance": {
-                    "USD": 4177.07
-                  },
-                  "balance_children": {
-                    "USD": 4177.07
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
+                "balance_children": {
+                  "USD": 4177.07
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Expenses:Health",
+            "balance": {},
+            "balance_children": {
+              "USD": 2519.4
             },
-            {
-              "account": "Expenses:Health",
-              "balance": {},
-              "balance_children": {
-                "USD": 2519.4
+            "children": [
+              {
+                "account": "Expenses:Health:Dental",
+                "balance": {},
+                "balance_children": {
+                  "USD": 75.4
+                },
+                "children": [
+                  {
+                    "account": "Expenses:Health:Dental:Insurance",
+                    "balance": {
+                      "USD": 75.4
+                    },
+                    "balance_children": {
+                      "USD": 75.4
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
               },
-              "children": [
-                {
-                  "account": "Expenses:Health:Dental",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 75.4
-                  },
-                  "children": [
-                    {
-                      "account": "Expenses:Health:Dental:Insurance",
-                      "balance": {
-                        "USD": 75.4
-                      },
-                      "balance_children": {
-                        "USD": 75.4
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+              {
+                "account": "Expenses:Health:Life",
+                "balance": {},
+                "balance_children": {
+                  "USD": 632.32
                 },
-                {
-                  "account": "Expenses:Health:Life",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 632.32
-                  },
-                  "children": [
-                    {
-                      "account": "Expenses:Health:Life:GroupTermLife",
-                      "balance": {
-                        "USD": 632.32
-                      },
-                      "balance_children": {
-                        "USD": 632.32
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+                "children": [
+                  {
+                    "account": "Expenses:Health:Life:GroupTermLife",
+                    "balance": {
+                      "USD": 632.32
+                    },
+                    "balance_children": {
+                      "USD": 632.32
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Expenses:Health:Medical",
+                "balance": {},
+                "balance_children": {
+                  "USD": 711.88
                 },
-                {
-                  "account": "Expenses:Health:Medical",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 711.88
-                  },
-                  "children": [
-                    {
-                      "account": "Expenses:Health:Medical:Insurance",
-                      "balance": {
-                        "USD": 711.88
-                      },
-                      "balance_children": {
-                        "USD": 711.88
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+                "children": [
+                  {
+                    "account": "Expenses:Health:Medical:Insurance",
+                    "balance": {
+                      "USD": 711.88
+                    },
+                    "balance_children": {
+                      "USD": 711.88
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Expenses:Health:Vision",
+                "balance": {},
+                "balance_children": {
+                  "USD": 1099.8
                 },
-                {
-                  "account": "Expenses:Health:Vision",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 1099.8
-                  },
-                  "children": [
-                    {
-                      "account": "Expenses:Health:Vision:Insurance",
-                      "balance": {
-                        "USD": 1099.8
-                      },
-                      "balance_children": {
-                        "USD": 1099.8
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                }
-              ],
-              "has_txns": false
+                "children": [
+                  {
+                    "account": "Expenses:Health:Vision:Insurance",
+                    "balance": {
+                      "USD": 1099.8
+                    },
+                    "balance_children": {
+                      "USD": 1099.8
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Expenses:Home",
+            "balance": {},
+            "balance_children": {
+              "USD": 31302.44
             },
-            {
-              "account": "Expenses:Home",
-              "balance": {},
-              "balance_children": {
-                "USD": 31302.44
+            "children": [
+              {
+                "account": "Expenses:Home:Electricity",
+                "balance": {
+                  "USD": 780.0
+                },
+                "balance_children": {
+                  "USD": 780.0
+                },
+                "children": [],
+                "has_txns": true
               },
-              "children": [
-                {
-                  "account": "Expenses:Home:Electricity",
-                  "balance": {
-                    "USD": 780.0
-                  },
-                  "balance_children": {
-                    "USD": 780.0
-                  },
-                  "children": [],
-                  "has_txns": true
+              {
+                "account": "Expenses:Home:Internet",
+                "balance": {
+                  "USD": 959.79
                 },
-                {
-                  "account": "Expenses:Home:Internet",
-                  "balance": {
-                    "USD": 959.79
-                  },
-                  "balance_children": {
-                    "USD": 959.79
-                  },
-                  "children": [],
-                  "has_txns": true
+                "balance_children": {
+                  "USD": 959.79
                 },
-                {
-                  "account": "Expenses:Home:Phone",
-                  "balance": {
-                    "USD": 762.65
-                  },
-                  "balance_children": {
-                    "USD": 762.65
-                  },
-                  "children": [],
-                  "has_txns": true
+                "children": [],
+                "has_txns": true
+              },
+              {
+                "account": "Expenses:Home:Phone",
+                "balance": {
+                  "USD": 762.65
                 },
-                {
-                  "account": "Expenses:Home:Rent",
-                  "balance": {
-                    "USD": 28800.0
-                  },
-                  "balance_children": {
-                    "USD": 28800.0
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
+                "balance_children": {
+                  "USD": 762.65
+                },
+                "children": [],
+                "has_txns": true
+              },
+              {
+                "account": "Expenses:Home:Rent",
+                "balance": {
+                  "USD": 28800.0
+                },
+                "balance_children": {
+                  "USD": 28800.0
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Expenses:Taxes",
+            "balance": {},
+            "balance_children": {
+              "IRAUSD": 17500.0,
+              "USD": 51477.2
             },
-            {
-              "account": "Expenses:Taxes",
-              "balance": {},
-              "balance_children": {
-                "IRAUSD": 17500.0,
-                "USD": 51477.2
-              },
-              "children": [
-                {
-                  "account": "Expenses:Taxes:Y2014",
-                  "balance": {},
-                  "balance_children": {
-                    "IRAUSD": 17500.0,
-                    "USD": 51477.2
-                  },
-                  "children": [
-                    {
-                      "account": "Expenses:Taxes:Y2014:US",
-                      "balance": {},
-                      "balance_children": {
-                        "IRAUSD": 17500.0,
-                        "USD": 51477.2
-                      },
-                      "children": [
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:CityNYC",
-                          "balance": {
-                            "USD": 4547.92
-                          },
-                          "balance_children": {
-                            "USD": 4547.92
-                          },
-                          "children": [],
-                          "has_txns": true
+            "children": [
+              {
+                "account": "Expenses:Taxes:Y2014",
+                "balance": {},
+                "balance_children": {
+                  "IRAUSD": 17500.0,
+                  "USD": 51477.2
+                },
+                "children": [
+                  {
+                    "account": "Expenses:Taxes:Y2014:US",
+                    "balance": {},
+                    "balance_children": {
+                      "IRAUSD": 17500.0,
+                      "USD": 51477.2
+                    },
+                    "children": [
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:CityNYC",
+                        "balance": {
+                          "USD": 4547.92
                         },
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:Federal",
-                          "balance": {
-                            "USD": 27635.92
-                          },
-                          "balance_children": {
-                            "IRAUSD": 17500.0,
-                            "USD": 27635.92
-                          },
-                          "children": [
-                            {
-                              "account": "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
-                              "balance": {
-                                "IRAUSD": 17500.0
-                              },
-                              "balance_children": {
-                                "IRAUSD": 17500.0
-                              },
-                              "children": [],
-                              "has_txns": true
-                            }
-                          ],
-                          "has_txns": true
+                        "balance_children": {
+                          "USD": 4547.92
                         },
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:Medicare",
-                          "balance": {
-                            "USD": 2772.12
-                          },
-                          "balance_children": {
-                            "USD": 2772.12
-                          },
-                          "children": [],
-                          "has_txns": true
+                        "children": [],
+                        "has_txns": true
+                      },
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:Federal",
+                        "balance": {
+                          "USD": 27635.92
                         },
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:SDI",
-                          "balance": {
-                            "USD": 29.12
-                          },
-                          "balance_children": {
-                            "USD": 29.12
-                          },
-                          "children": [],
-                          "has_txns": true
+                        "balance_children": {
+                          "IRAUSD": 17500.0,
+                          "USD": 27635.92
                         },
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:SocSec",
-                          "balance": {
-                            "USD": 7000.04
-                          },
-                          "balance_children": {
-                            "USD": 7000.04
-                          },
-                          "children": [],
-                          "has_txns": true
+                        "children": [
+                          {
+                            "account": "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
+                            "balance": {
+                              "IRAUSD": 17500.0
+                            },
+                            "balance_children": {
+                              "IRAUSD": 17500.0
+                            },
+                            "children": [],
+                            "has_txns": true
+                          }
+                        ],
+                        "has_txns": true
+                      },
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:Medicare",
+                        "balance": {
+                          "USD": 2772.12
                         },
-                        {
-                          "account": "Expenses:Taxes:Y2014:US:State",
-                          "balance": {
-                            "USD": 9492.08
-                          },
-                          "balance_children": {
-                            "USD": 9492.08
-                          },
-                          "children": [],
-                          "has_txns": true
-                        }
-                      ],
-                      "has_txns": false
-                    }
-                  ],
-                  "has_txns": false
-                }
-              ],
-              "has_txns": false
+                        "balance_children": {
+                          "USD": 2772.12
+                        },
+                        "children": [],
+                        "has_txns": true
+                      },
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:SDI",
+                        "balance": {
+                          "USD": 29.12
+                        },
+                        "balance_children": {
+                          "USD": 29.12
+                        },
+                        "children": [],
+                        "has_txns": true
+                      },
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:SocSec",
+                        "balance": {
+                          "USD": 7000.04
+                        },
+                        "balance_children": {
+                          "USD": 7000.04
+                        },
+                        "children": [],
+                        "has_txns": true
+                      },
+                      {
+                        "account": "Expenses:Taxes:Y2014:US:State",
+                        "balance": {
+                          "USD": 9492.08
+                        },
+                        "balance_children": {
+                          "USD": 9492.08
+                        },
+                        "children": [],
+                        "has_txns": true
+                      }
+                    ],
+                    "has_txns": false
+                  }
+                ],
+                "has_txns": false
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Expenses:Transport",
+            "balance": {},
+            "balance_children": {
+              "USD": 1440.0
             },
-            {
-              "account": "Expenses:Transport",
-              "balance": {},
-              "balance_children": {
-                "USD": 1440.0
-              },
-              "children": [
-                {
-                  "account": "Expenses:Transport:Tram",
-                  "balance": {
-                    "USD": 1440.0
-                  },
-                  "balance_children": {
-                    "USD": 1440.0
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
-            },
-            {
-              "account": "Expenses:Vacation",
-              "balance": {},
-              "balance_children": {},
-              "children": [],
-              "has_txns": false
-            }
-          ],
-          "has_txns": false
-        }
+            "children": [
+              {
+                "account": "Expenses:Transport:Tram",
+                "balance": {
+                  "USD": 1440.0
+                },
+                "balance_children": {
+                  "USD": 1440.0
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Expenses:Vacation",
+            "balance": {},
+            "balance_children": {},
+            "children": [],
+            "has_txns": false
+          }
+        ],
+        "has_txns": false
       },
       "label": "Expenses",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Assets",
-          "balance": {},
-          "balance_children": {
-            "USD": 39800.70199,
-            "VACHR": 130
-          },
-          "children": [
-            {
-              "account": "Assets:Testing",
-              "balance": {},
-              "balance_children": {
-                "USD": 100
-              },
-              "children": [
-                {
-                  "account": "Assets:Testing:MultipleCommodities",
-                  "balance": {
-                    "USD": 100
-                  },
-                  "balance_children": {
-                    "USD": 100
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
+        "account": "Assets",
+        "balance": {},
+        "balance_children": {
+          "USD": 39800.70199,
+          "VACHR": 130
+        },
+        "children": [
+          {
+            "account": "Assets:Testing",
+            "balance": {},
+            "balance_children": {
+              "USD": 100
             },
-            {
-              "account": "Assets:US",
-              "balance": {},
-              "balance_children": {
-                "USD": 39700.70199,
-                "VACHR": 130
+            "children": [
+              {
+                "account": "Assets:Testing:MultipleCommodities",
+                "balance": {
+                  "USD": 100
+                },
+                "balance_children": {
+                  "USD": 100
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Assets:US",
+            "balance": {},
+            "balance_children": {
+              "USD": 39700.70199,
+              "VACHR": 130
+            },
+            "children": [
+              {
+                "account": "Assets:US:BayBook",
+                "balance": {},
+                "balance_children": {
+                  "VACHR": 130
+                },
+                "children": [
+                  {
+                    "account": "Assets:US:BayBook:Vacation",
+                    "balance": {
+                      "VACHR": 130
+                    },
+                    "balance_children": {
+                      "VACHR": 130
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
               },
-              "children": [
-                {
-                  "account": "Assets:US:BayBook",
-                  "balance": {},
-                  "balance_children": {
-                    "VACHR": 130
-                  },
-                  "children": [
-                    {
-                      "account": "Assets:US:BayBook:Vacation",
-                      "balance": {
-                        "VACHR": 130
-                      },
-                      "balance_children": {
-                        "VACHR": 130
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+              {
+                "account": "Assets:US:BofA",
+                "balance": {},
+                "balance_children": {
+                  "USD": 5086.65
                 },
-                {
-                  "account": "Assets:US:BofA",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 5086.65
-                  },
-                  "children": [
-                    {
-                      "account": "Assets:US:BofA:Checking",
-                      "balance": {
-                        "USD": 5086.65
-                      },
-                      "balance_children": {
-                        "USD": 5086.65
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
+                "children": [
+                  {
+                    "account": "Assets:US:BofA:Checking",
+                    "balance": {
+                      "USD": 5086.65
+                    },
+                    "balance_children": {
+                      "USD": 5086.65
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Assets:US:ETrade",
+                "balance": {},
+                "balance_children": {
+                  "USD": 8364.06
                 },
-                {
-                  "account": "Assets:US:ETrade",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 8364.06
+                "children": [
+                  {
+                    "account": "Assets:US:ETrade:Cash",
+                    "balance": {
+                      "USD": 342.85
+                    },
+                    "balance_children": {
+                      "USD": 342.85
+                    },
+                    "children": [],
+                    "has_txns": true
                   },
-                  "children": [
-                    {
-                      "account": "Assets:US:ETrade:Cash",
-                      "balance": {
-                        "USD": 342.85
-                      },
-                      "balance_children": {
-                        "USD": 342.85
-                      },
-                      "children": [],
-                      "has_txns": true
+                  {
+                    "account": "Assets:US:ETrade:GLD",
+                    "balance": {
+                      "USD": 1967.55
                     },
-                    {
-                      "account": "Assets:US:ETrade:GLD",
-                      "balance": {
-                        "USD": 1967.55
-                      },
-                      "balance_children": {
-                        "USD": 1967.55
-                      },
-                      "children": [],
-                      "has_txns": true
+                    "balance_children": {
+                      "USD": 1967.55
                     },
-                    {
-                      "account": "Assets:US:ETrade:ITOT",
-                      "balance": {
-                        "USD": 2039.8
-                      },
-                      "balance_children": {
-                        "USD": 2039.8
-                      },
-                      "children": [],
-                      "has_txns": true
-                    },
-                    {
-                      "account": "Assets:US:ETrade:VEA",
-                      "balance": {
-                        "USD": 1988.22
-                      },
-                      "balance_children": {
-                        "USD": 1988.22
-                      },
-                      "children": [],
-                      "has_txns": true
-                    },
-                    {
-                      "account": "Assets:US:ETrade:VHT",
-                      "balance": {
-                        "USD": 2025.64
-                      },
-                      "balance_children": {
-                        "USD": 2025.64
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                },
-                {
-                  "account": "Assets:US:Federal",
-                  "balance": {},
-                  "balance_children": {},
-                  "children": [
-                    {
-                      "account": "Assets:US:Federal:PreTax401k",
-                      "balance": {},
-                      "balance_children": {},
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                },
-                {
-                  "account": "Assets:US:Vanguard",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": 26249.99199
+                    "children": [],
+                    "has_txns": true
                   },
-                  "children": [
-                    {
-                      "account": "Assets:US:Vanguard:Cash",
-                      "balance": {
-                        "USD": 0.03
-                      },
-                      "balance_children": {
-                        "USD": 0.03
-                      },
-                      "children": [],
-                      "has_txns": true
+                  {
+                    "account": "Assets:US:ETrade:ITOT",
+                    "balance": {
+                      "USD": 2039.8
                     },
-                    {
-                      "account": "Assets:US:Vanguard:RGAGX",
-                      "balance": {
-                        "USD": 15750.02569
-                      },
-                      "balance_children": {
-                        "USD": 15750.02569
-                      },
-                      "children": [],
-                      "has_txns": true
+                    "balance_children": {
+                      "USD": 2039.8
                     },
-                    {
-                      "account": "Assets:US:Vanguard:VBMPX",
-                      "balance": {
-                        "USD": 10499.9363
-                      },
-                      "balance_children": {
-                        "USD": 10499.9363
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                }
-              ],
-              "has_txns": false
-            }
-          ],
-          "has_txns": false
-        }
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Assets:US:ETrade:VEA",
+                    "balance": {
+                      "USD": 1988.22
+                    },
+                    "balance_children": {
+                      "USD": 1988.22
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Assets:US:ETrade:VHT",
+                    "balance": {
+                      "USD": 2025.64
+                    },
+                    "balance_children": {
+                      "USD": 2025.64
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Assets:US:Federal",
+                "balance": {},
+                "balance_children": {},
+                "children": [
+                  {
+                    "account": "Assets:US:Federal:PreTax401k",
+                    "balance": {},
+                    "balance_children": {},
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              },
+              {
+                "account": "Assets:US:Vanguard",
+                "balance": {},
+                "balance_children": {
+                  "USD": 26249.99199
+                },
+                "children": [
+                  {
+                    "account": "Assets:US:Vanguard:Cash",
+                    "balance": {
+                      "USD": 0.03
+                    },
+                    "balance_children": {
+                      "USD": 0.03
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Assets:US:Vanguard:RGAGX",
+                    "balance": {
+                      "USD": 15750.02569
+                    },
+                    "balance_children": {
+                      "USD": 15750.02569
+                    },
+                    "children": [],
+                    "has_txns": true
+                  },
+                  {
+                    "account": "Assets:US:Vanguard:VBMPX",
+                    "balance": {
+                      "USD": 10499.9363
+                    },
+                    "balance_children": {
+                      "USD": 10499.9363
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              }
+            ],
+            "has_txns": false
+          }
+        ],
+        "has_txns": false
       },
       "label": "Assets",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": -1,
-        "root": {
-          "account": "Liabilities",
-          "balance": {},
-          "balance_children": {
-            "USD": -390.29
+        "account": "Liabilities",
+        "balance": {},
+        "balance_children": {
+          "USD": -390.29
+        },
+        "children": [
+          {
+            "account": "Liabilities:AccountsPayable",
+            "balance": {},
+            "balance_children": {},
+            "children": [],
+            "has_txns": false
           },
-          "children": [
-            {
-              "account": "Liabilities:AccountsPayable",
-              "balance": {},
-              "balance_children": {},
-              "children": [],
-              "has_txns": false
+          {
+            "account": "Liabilities:US",
+            "balance": {},
+            "balance_children": {
+              "USD": -390.29
             },
-            {
-              "account": "Liabilities:US",
-              "balance": {},
-              "balance_children": {
-                "USD": -390.29
-              },
-              "children": [
-                {
-                  "account": "Liabilities:US:Chase",
-                  "balance": {},
-                  "balance_children": {
-                    "USD": -390.29
-                  },
-                  "children": [
-                    {
-                      "account": "Liabilities:US:Chase:Slate",
-                      "balance": {
-                        "USD": -390.29
-                      },
-                      "balance_children": {
-                        "USD": -390.29
-                      },
-                      "children": [],
-                      "has_txns": true
-                    }
-                  ],
-                  "has_txns": false
-                }
-              ],
-              "has_txns": false
-            }
-          ],
-          "has_txns": false
-        }
+            "children": [
+              {
+                "account": "Liabilities:US:Chase",
+                "balance": {},
+                "balance_children": {
+                  "USD": -390.29
+                },
+                "children": [
+                  {
+                    "account": "Liabilities:US:Chase:Slate",
+                    "balance": {
+                      "USD": -390.29
+                    },
+                    "balance_children": {
+                      "USD": -390.29
+                    },
+                    "children": [],
+                    "has_txns": true
+                  }
+                ],
+                "has_txns": false
+              }
+            ],
+            "has_txns": false
+          }
+        ],
+        "has_txns": false
       },
       "label": "Liabilities",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": -1,
-        "root": {
-          "account": "Equity",
-          "balance": {},
-          "balance_children": {
-            "USD": -3553.17199
-          },
-          "children": [
-            {
-              "account": "Equity:Conversions",
-              "balance": {},
-              "balance_children": {
-                "USD": 0.00801
-              },
-              "children": [
-                {
-                  "account": "Equity:Conversions:Current",
-                  "balance": {
-                    "USD": 0.00801
-                  },
-                  "balance_children": {
-                    "USD": 0.00801
-                  },
-                  "children": [],
-                  "has_txns": true
-                }
-              ],
-              "has_txns": false
+        "account": "Equity",
+        "balance": {},
+        "balance_children": {
+          "USD": -3553.17199
+        },
+        "children": [
+          {
+            "account": "Equity:Conversions",
+            "balance": {},
+            "balance_children": {
+              "USD": 0.00801
             },
-            {
-              "account": "Equity:Opening-Balances",
-              "balance": {
-                "USD": -3553.18
-              },
-              "balance_children": {
-                "USD": -3553.18
-              },
-              "children": [],
-              "has_txns": true
-            }
-          ],
-          "has_txns": false
-        }
+            "children": [
+              {
+                "account": "Equity:Conversions:Current",
+                "balance": {
+                  "USD": 0.00801
+                },
+                "balance_children": {
+                  "USD": 0.00801
+                },
+                "children": [],
+                "has_txns": true
+              }
+            ],
+            "has_txns": false
+          },
+          {
+            "account": "Equity:Opening-Balances",
+            "balance": {
+              "USD": -3553.18
+            },
+            "balance_children": {
+              "USD": -3553.18
+            },
+            "children": [],
+            "has_txns": true
+          }
+        ],
+        "has_txns": false
       },
       "label": "Equity",
       "type": "hierarchy"

@@ -6,7 +6,7 @@ import { parent } from "./account";
  * The only base property this has is `.children`, all others are
  * passed in via the generic parameter.
  */
-export type TreeNode<S> = S & { children: TreeNode<S>[] };
+export type TreeNode<S> = S & { readonly children: TreeNode<S>[] };
 
 /**
  * Generate an account tree from an array.

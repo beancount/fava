@@ -113,77 +113,65 @@
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Assets",
-          "balance": {},
-          "balance_children": {
-            "USD": 104
+        "account": "Assets",
+        "balance": {},
+        "balance_children": {
+          "USD": 104
+        },
+        "children": [
+          {
+            "account": "Assets:Cash",
+            "balance": {},
+            "balance_children": {},
+            "children": [],
+            "has_txns": true
           },
-          "children": [
-            {
-              "account": "Assets:Cash",
-              "balance": {},
-              "balance_children": {},
-              "children": [],
-              "has_txns": true
+          {
+            "account": "Assets:Commodity",
+            "balance": {
+              "USD": 104
             },
-            {
-              "account": "Assets:Commodity",
-              "balance": {
-                "USD": 104
-              },
-              "balance_children": {
-                "USD": 104
-              },
-              "children": [],
-              "has_txns": true
-            }
-          ],
-          "has_txns": false
-        }
+            "balance_children": {
+              "USD": 104
+            },
+            "children": [],
+            "has_txns": true
+          }
+        ],
+        "has_txns": false
       },
       "label": "Assets",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Assets",
-          "balance": {},
-          "balance_children": {},
-          "children": [],
-          "has_txns": false
-        }
+        "account": "Assets",
+        "balance": {},
+        "balance_children": {},
+        "children": [],
+        "has_txns": false
       },
       "label": "2022-01-04",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Assets",
-          "balance": {},
-          "balance_children": {},
-          "children": [],
-          "has_txns": false
-        }
+        "account": "Assets",
+        "balance": {},
+        "balance_children": {},
+        "children": [],
+        "has_txns": false
       },
       "label": "2022-01-03",
       "type": "hierarchy"
     },
     {
       "data": {
-        "modifier": 1,
-        "root": {
-          "account": "Assets",
-          "balance": {},
-          "balance_children": {},
-          "children": [],
-          "has_txns": false
-        }
+        "account": "Assets",
+        "balance": {},
+        "balance_children": {},
+        "children": [],
+        "has_txns": false
       },
       "label": "2022-01-02",
       "type": "hierarchy"

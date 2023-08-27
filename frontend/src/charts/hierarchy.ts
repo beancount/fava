@@ -1,3 +1,4 @@
+import { sum } from "d3-array";
 import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import type { HierarchyNode } from "d3-hierarchy";
 
@@ -19,36 +20,46 @@ import type { ChartContext } from "./context";
 
 /** The data provided with a fava.core.tree.SerialisedTreeNode. */
 export type AccountTreeNode = TreeNode<{
-  account: string;
-  balance: Record<string, number>;
-  balance_children: Record<string, number>;
-  cost: Record<string, number> | null;
-  cost_children: Record<string, number> | null;
-  has_txns: boolean;
+  readonly account: string;
+  readonly balance: Record<string, number>;
+  readonly balance_children: Record<string, number>;
+  readonly cost: Record<string, number> | null;
+  readonly cost_children: Record<string, number> | null;
+  readonly has_txns: boolean;
 }>;
 
 /** The data for a single account in a d3-hierarchy. */
 export type AccountHierarchyDatum = TreeNode<{
-  account: string;
-  balance: Record<string, number>;
-  dummy?: boolean;
+  readonly account: string;
+  readonly balance: Record<string, number>;
+  readonly dummy: boolean;
+}>;
+
+export type AccountHierarchyInputDatum = TreeNode<{
+  readonly account: string;
+  readonly balance: Record<string, number>;
 }>;
 
 /** A d3-hierarchy node for an account. */
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
 /**
- * Add internal nodes as fake leaf nodes to their own children.
+ * Add internal nodes as dummy leaf nodes to their own children.
  *
  * In the treemap, we only render leaf nodes, so for accounts that have both
  * children and a balance, we want to duplicate them as leaf nodes.
  */
-function addInternalNodesAsLeaves(node: AccountHierarchyDatum): void {
-  if (node.children.length) {
-    node.children.forEach(addInternalNodesAsLeaves);
-    node.children.push({ ...node, children: [], dummy: true });
-    node.balance = {};
+export function addInternalNodesAsLeaves({
+  account,
+  balance,
+  children,
+}: AccountHierarchyInputDatum): AccountHierarchyDatum {
+  if (children.length) {
+    const c = children.map(addInternalNodesAsLeaves);
+    c.push({ account, balance, children: [], dummy: true });
+    return { account, balance: {}, children: c, dummy: false };
   }
+  return { account, balance, children: [], dummy: false };
 }
 
 export class HierarchyChart {
@@ -70,30 +81,41 @@ export const account_hierarchy_validator: Validator<AccountTreeNode> = object({
   has_txns: boolean,
 });
 
-const hierarchy_validator = object({
-  root: account_hierarchy_validator,
-  modifier: number,
-});
+export function hierarchy_from_parsed_data(
+  label: string | null,
+  data: AccountHierarchyInputDatum,
+  { currencies }: ChartContext,
+): HierarchyChart {
+  const root = addInternalNodesAsLeaves(data);
+  return new HierarchyChart(
+    label,
+    new Map(
+      currencies
+        .map((currency) => {
+          const r = d3Hierarchy<AccountHierarchyDatum>(root);
+          const root_balance = sum(
+            r.descendants(),
+            (n) => n.data.balance[currency] ?? 0,
+          );
+          // depending on the balance for this currency in the root,
+          // build the tree either for all positive values or all negative values
+          const sign = root_balance ? Math.sign(root_balance) : 1;
+          r.sum(
+            (d) => sign * Math.max(sign * (d.balance[currency] ?? 0), 0),
+          ).sort((a, b) => sign * ((b.value ?? 0) - (a.value ?? 0)));
+          return [currency, r] as const;
+        })
+        .filter(([, h]) => h.value),
+    ),
+  );
+}
 
 export function hierarchy(
   label: string | null,
   json: unknown,
-  { currencies }: ChartContext,
+  $chartContext: ChartContext,
 ): Result<HierarchyChart, string> {
-  return hierarchy_validator(json).map((value) => {
-    const { root, modifier } = value;
-    addInternalNodesAsLeaves(root);
-    const data = new Map<string, AccountHierarchyNode>();
-
-    currencies.forEach((currency) => {
-      const currencyHierarchy = d3Hierarchy<AccountHierarchyDatum>(root)
-        .sum((d) => Math.max((d.balance[currency] ?? 0) * modifier, 0))
-        .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
-      if (currencyHierarchy.value) {
-        data.set(currency, currencyHierarchy);
-      }
-    });
-
-    return new HierarchyChart(label, data);
-  });
+  return account_hierarchy_validator(json).map((r) =>
+    hierarchy_from_parsed_data(label, r, $chartContext),
+  );
 }

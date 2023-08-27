@@ -136,7 +136,7 @@ export class BarChart {
 /** Get the currencies to use for the bar chart. */
 function currencies_to_show(
   data: ParsedBarChartData,
-  ctx: ChartContext,
+  $chartContext: ChartContext,
 ): string[] {
   // Count the usage of each currency in the data.
   const counts = rollup(
@@ -149,7 +149,7 @@ function currencies_to_show(
   );
 
   // Show all operating currencies that are used in the data.
-  const to_show = ctx.currencies.filter((c) => counts.delete(c));
+  const to_show = $chartContext.currencies.filter((c) => counts.delete(c));
 
   // Also add some of the most common other currencies (up to 5 in total)
   to_show.push(
@@ -168,10 +168,10 @@ function currencies_to_show(
 export function bar(
   label: string | null,
   json: unknown,
-  ctx: ChartContext,
+  $chartContext: ChartContext,
 ): Result<BarChart, string> {
   return bar_validator(json).map((parsedData) => {
-    const currencies = currencies_to_show(parsedData, ctx);
+    const currencies = currencies_to_show(parsedData, $chartContext);
 
     const bar_groups = parsedData.map((interval) => ({
       values: currencies.map((currency) => ({
@@ -180,7 +180,7 @@ export function bar(
         budget: interval.budgets[currency] ?? 0,
       })),
       date: interval.date,
-      label: ctx.dateFormat(interval.date),
+      label: $chartContext.dateFormat(interval.date),
       account_balances: interval.account_balances,
     }));
 

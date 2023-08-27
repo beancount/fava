@@ -15,7 +15,6 @@ from flask import current_app
 from flask import url_for
 from flask_babel import gettext  # type: ignore[import]
 
-from fava.beans.account import root
 from fava.context import g
 from fava.util.excel import HAVE_EXCEL
 
@@ -160,28 +159,16 @@ def _chart_hierarchy(
     end_date: date | None = None,
     label: str | None = None,
 ) -> ChartData:
-    modifier = (
-        +1
-        if root(account_name)
-        in (
-            g.ledger.options["name_assets"],
-            g.ledger.options["name_expenses"],
-        )
-        else -1
-    )
     return ChartData(
         "hierarchy",
         label or account_name,
-        {
-            "modifier": modifier,
-            "root": g.ledger.charts.hierarchy(
-                g.filtered,
-                account_name,
-                g.conversion,
-                begin_date,
-                end_date or g.filtered.end_date,
-            ),
-        },
+        g.ledger.charts.hierarchy(
+            g.filtered,
+            account_name,
+            g.conversion,
+            begin_date,
+            end_date or g.filtered.end_date,
+        ),
     )
 
 
