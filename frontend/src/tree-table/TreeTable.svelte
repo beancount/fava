@@ -23,10 +23,7 @@
   $: $not_shown = $get_not_shown(tree, end);
 </script>
 
-<ol
-  class="flex-table tree-table"
-  class:two-currencies={$operating_currency.length > 1}
->
+<ol class="flex-table tree-table" class:wider={$operating_currency.length > 1}>
   <li class="head">
     <p>
       <AccountCellHeader />
@@ -40,3 +37,10 @@
     <TreeTableNode node={n} invert={$invert_account(n.account) ? -1 : 1} />
   {/each}
 </ol>
+
+<style>
+  /* For two or more operating currencies, set a slightly smaller size. */
+  .wider {
+    font-size: 0.9em;
+  }
+</style>
