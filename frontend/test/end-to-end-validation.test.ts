@@ -65,7 +65,7 @@ test("validate ledger data", async () => {
 });
 
 test("validate events", async () => {
-  const data = await loadJSONSnapshot("test_json_api.py-test_api_events");
+  const data = await loadJSONSnapshot("test_json_api.py-test_api-events");
   const res = getAPIValidators.events(data);
   assert.equal(res.unwrap()[0]?.type, "employer");
 });
