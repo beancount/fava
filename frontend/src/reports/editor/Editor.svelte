@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
 
   import { get, put } from "../../api";
+  import type { SourceFile } from "../../api/validators";
   import {
     replaceContents,
     scrollToLine,
@@ -18,9 +19,8 @@
   import { searchParams } from "../../stores/url";
 
   import EditorMenu from "./EditorMenu.svelte";
-  import type { PageData } from "./load";
 
-  export let source: PageData["source"];
+  export let source: SourceFile;
   export let beancount_language_support: LanguageSupport;
 
   $: file_path = source.file_path;

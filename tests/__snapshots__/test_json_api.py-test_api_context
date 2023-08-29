@@ -165,8 +165,8 @@
                          'amount': '15.957 VBMPX {30.08 USD, 2016-05-09}'},
                         {'account': 'Assets:US:Vanguard:Cash',
                          'amount': '-479.99 USD'}],
-           'tags': [],
-           'type': 'Transaction'},
+           't': 'Transaction',
+           'tags': []},
  'sha256sum': 'b8d184b8ffadddbdc915a9dbf7e4d94a045ed99d2af148ec815727c3b136906e',
  'slice': '2016-05-09 * "Investing 40% of cash in VBMPX"\n'
           '  Assets:US:Vanguard:VBMPX                         15.957 VBMPX '

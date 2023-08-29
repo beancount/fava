@@ -9,7 +9,7 @@
  */
 
 import type { Action } from "svelte/action";
-import { get } from "svelte/store";
+import { get as store_get } from "svelte/store";
 
 import { journalSortOrder } from "./stores/journal";
 
@@ -106,7 +106,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
     throw new Error("Journal is missing header.");
   }
   const headers = head.querySelectorAll("span[data-sort]");
-  const [initialColumn, initialOrder] = get(journalSortOrder);
+  const [initialColumn, initialOrder] = store_get(journalSortOrder);
   headers.forEach((header) => {
     const headerClass = header.classList[0];
     const name = header.getAttribute("data-sort-name");

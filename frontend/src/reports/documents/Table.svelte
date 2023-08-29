@@ -1,11 +1,11 @@
 <script lang="ts">
+  import type { Document } from "../../entries";
   import { _ } from "../../i18n";
   import { isDescendant } from "../../lib/account";
   import { basename } from "../../lib/paths";
   import { sortFunc } from "../../sort";
 
   import { selectedAccount } from "./stores";
-  import type { Document } from "./types";
 
   export let data: Document[];
   export let selected: Document | null = null;
@@ -15,7 +15,7 @@
    */
   function name(doc: Document) {
     const base = basename(doc.filename);
-    return `${doc.date}` === base.substring(0, 10) ? base.substring(11) : base;
+    return base.startsWith(doc.date) ? base.substring(11) : base;
   }
 
   const headers: [string, string] = [_("Date"), _("Name")];

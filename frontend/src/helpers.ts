@@ -1,4 +1,4 @@
-import { derived, get } from "svelte/store";
+import { derived, get as store_get } from "svelte/store";
 
 import { base_url, fava_options } from "./stores";
 import { searchParams, urlSyncedParams } from "./stores/url";
@@ -7,9 +7,9 @@ import { searchParams, urlSyncedParams } from "./stores/url";
  * Get the URL path relative to the base url of the current ledger.
  */
 export function getUrlPath(url: URL | Location): string | null {
-  const base_url_val = get(base_url);
-  if (base_url_val && url.pathname.startsWith(base_url_val)) {
-    return url.pathname.slice(base_url_val.length);
+  const $base_url = store_get(base_url);
+  if ($base_url && url.pathname.startsWith($base_url)) {
+    return url.pathname.slice($base_url.length);
   }
   return null;
 }
@@ -22,10 +22,10 @@ export function urlFor(
   params?: Record<string, string | number | undefined>,
   update = true,
 ): string {
-  const url = `${get(base_url)}${report}`;
+  const url = `${store_get(base_url)}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
-    const oldParams = get(searchParams);
+    const oldParams = store_get(searchParams);
     for (const name of urlSyncedParams) {
       const value = oldParams.get(name);
       if (value) {
@@ -46,7 +46,7 @@ export function urlFor(
 
 /** URL for the editor to the source location of an entry. */
 export function urlForSource(file_path: string, line: string): string {
-  return get(fava_options).use_external_editor
+  return store_get(fava_options).use_external_editor
     ? `beancount://${file_path}?lineno=${line}`
     : urlFor("editor/", { file_path, line });
 }

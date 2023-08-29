@@ -19,15 +19,19 @@ function newFilename(date: string | null, basename: string | null): string {
 }
 
 interface FileWithImporters<T> {
-  name: string;
-  basename: string;
-  importers: ({ account: string; importer_name: string } & T)[];
+  readonly name: string;
+  readonly basename: string;
+  readonly importers: readonly Readonly<
+    { account: string; importer_name: string } & T
+  >[];
 }
 
-export type ImportableFile = FileWithImporters<{
-  date: string | null;
-  name: string | null;
-}>;
+export type ImportableFile = Readonly<
+  FileWithImporters<{
+    date: string | null;
+    name: string | null;
+  }>
+>;
 export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
 
 /**

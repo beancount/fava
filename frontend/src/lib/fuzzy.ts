@@ -35,7 +35,10 @@ export function fuzzytest(pattern: string, text: string): number {
 /**
  * Filter a list of possible suggestions to only those that match the pattern
  */
-export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
+export function fuzzyfilter(
+  pattern: string,
+  suggestions: readonly string[],
+): readonly string[] {
   if (!pattern) {
     return suggestions;
   }

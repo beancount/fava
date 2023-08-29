@@ -105,7 +105,7 @@ export class BarChart {
     content.push(domHelpers.em(account));
     d.values.forEach((a) => {
       const value = d.account_balances[account]?.[a.currency] ?? 0;
-      content.push(domHelpers.t(`${c.amount(value, a.currency)}`));
+      content.push(domHelpers.t(c.amount(value, a.currency)));
       content.push(domHelpers.br());
     });
     content.push(domHelpers.em(d.label));

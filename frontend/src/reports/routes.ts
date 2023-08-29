@@ -1,15 +1,11 @@
-import { getUrlPath } from "../helpers";
 import { _ } from "../i18n";
 
 import { account_report } from "./accounts";
 import { commodities } from "./commodities";
-import DocumentsSvelte from "./documents/Documents.svelte";
-import { load as load_documents } from "./documents/load";
-import EditorSvelte from "./editor/Editor.svelte";
-import { load as load_editor } from "./editor/load";
+import { documents } from "./documents";
+import { editor } from "./editor";
 import ErrorsSvelte from "./errors/Errors.svelte";
-import EventsSvelte from "./events/Events.svelte";
-import { load as load_events } from "./events/load";
+import { events } from "./events";
 import { import_report } from "./import";
 import QuerySvelte from "./query/Query.svelte";
 import { noload, Route } from "./route";
@@ -27,20 +23,12 @@ export const frontend_routes: Route[] = [
   account_report,
   balance_sheet,
   commodities,
-  new Route("documents", DocumentsSvelte, load_documents, () => _("Documents")),
-  new Route("editor", EditorSvelte, load_editor, () => _("Editor")),
+  documents,
+  editor,
   new Route("errors", ErrorsSvelte, noload, () => _("Errors")),
-  new Route("events", EventsSvelte, load_events, () => _("Events")),
+  events,
   import_report,
   income_statement,
   new Route("query", QuerySvelte, noload, () => _("Query")),
   trial_balance,
 ];
-
-/** Find the `Route` to render this url with if it matches one of the routes. */
-export function shouldRenderInFrontend(url: URL): Route | undefined {
-  const report = getUrlPath(url);
-  return frontend_routes.find(
-    (route) => report?.startsWith(`${route.report}/`),
-  );
-}

@@ -67,7 +67,7 @@ export class HierarchyChart {
 
   constructor(
     readonly name: string | null,
-    readonly data: Map<string, AccountHierarchyNode>,
+    readonly data: ReadonlyMap<string, AccountHierarchyNode>,
   ) {}
 }
 

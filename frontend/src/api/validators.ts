@@ -1,10 +1,15 @@
 import { account_hierarchy_validator } from "../charts/hierarchy";
-import { entryBaseValidator, entryValidator, Transaction } from "../entries";
-import type { ValidationT, Validator } from "../lib/validation";
+import {
+  Document,
+  entryBaseValidator,
+  entryValidator,
+  Event,
+  Transaction,
+} from "../entries";
+import type { ValidationT } from "../lib/validation";
 import {
   array,
   boolean,
-  constant,
   date,
   number,
   object,
@@ -12,24 +17,26 @@ import {
   record,
   string,
   tuple,
-  union,
   unknown,
 } from "../lib/validation";
 import type { ImportableFile } from "../reports/import";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {
-  type: string;
-  message: string;
-  source: { filename: string; lineno: number } | null;
+  readonly type: string;
+  readonly message: string;
+  readonly source: {
+    readonly filename: string;
+    readonly lineno: number;
+  } | null;
 }
 
 /** Validator for a BeancountError. */
-const error_validator = object({
+const error_validator = object<BeancountError>({
   type: string,
   message: string,
   source: optional(object({ filename: string, lineno: number })),
-}) satisfies Validator<BeancountError>;
+});
 
 /** Validator for the details for a single account. */
 const account_details = record(
@@ -53,7 +60,7 @@ const fava_options = object({
   show_closed_accounts: boolean,
   show_accounts_with_zero_balance: boolean,
   show_accounts_with_zero_transactions: boolean,
-  locale: union(string, constant(null)),
+  locale: optional(string),
   uptodate_indicator_grey_lookback_days: number,
   insert_entry: array(
     object({ date: string, filename: string, lineno: number, re: string }),
@@ -108,7 +115,7 @@ export const ledgerDataValidator = object({
 
 export type LedgerData = ValidationT<typeof ledgerDataValidator>;
 
-const importable_files_validator: Validator<ImportableFile[]> = array(
+const importable_files_validator = array<ImportableFile>(
   object({
     name: string,
     basename: string,
@@ -125,18 +132,8 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
 
 const date_range = object({ begin: date, end: date });
 
-const tree_report = object({
-  charts: unknown,
-  trees: array(account_hierarchy_validator),
-  date_range: optional(date_range),
-});
-
 const commodities = array(
-  object({
-    base: string,
-    quote: string,
-    prices: array(tuple([date, number])),
-  }),
+  object({ base: string, quote: string, prices: array(tuple([date, number])) }),
 );
 
 export type Commodities = ValidationT<typeof commodities>;
@@ -155,6 +152,24 @@ const account_budget = object({
 });
 export type AccountBudget = ValidationT<typeof account_budget>;
 
+/** One of the Beancount source files. */
+export interface SourceFile {
+  readonly file_path: string;
+  readonly sha256sum: string;
+  readonly source: string;
+}
+const source = object<SourceFile>({
+  file_path: string,
+  sha256sum: string,
+  source: string,
+});
+
+const tree_report = object({
+  charts: unknown,
+  trees: array(account_hierarchy_validator),
+  date_range: optional(date_range),
+});
+
 export const getAPIValidators = {
   balance_sheet: tree_report,
   account_report: object({
@@ -167,9 +182,9 @@ export const getAPIValidators = {
   changed: boolean,
   commodities,
   context,
-  documents: array(object({ account: string, filename: string, date: string })),
+  documents: array(Document.validator),
   errors: array(error_validator),
-  events: array(object({ type: string, description: string, date })),
+  events: array(Event.validator),
   extract: array(entryValidator),
   imports: importable_files_validator,
   income_statement: tree_report,
@@ -178,7 +193,7 @@ export const getAPIValidators = {
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
   query_result: object({ chart: unknown, table: string }),
-  source: object({ source: string, sha256sum: string, file_path: string }),
+  source,
   trial_balance: tree_report,
 };
 

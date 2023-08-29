@@ -1,10 +1,11 @@
 import type { Result } from "../lib/result";
 import { array, date, object, string } from "../lib/validation";
 
+/** Data point for the scatterplot (events). */
 export interface ScatterPlotDatum {
-  date: Date;
-  type: string;
-  description: string;
+  readonly date: Date;
+  readonly type: string;
+  readonly description: string;
 }
 
 export class ScatterPlot {
@@ -12,11 +13,11 @@ export class ScatterPlot {
 
   constructor(
     readonly name: string | null,
-    readonly data: ScatterPlotDatum[],
+    readonly data: readonly ScatterPlotDatum[],
   ) {}
 }
 
-const scatterplot_validator = array(
+const scatterplot_validator = array<ScatterPlotDatum>(
   object({ type: string, date, description: string }),
 );
 

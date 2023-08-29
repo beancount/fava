@@ -15,4 +15,6 @@
   <NoteSvelte bind:entry />
 {:else if entry instanceof Transaction}
   <TransactionSvelte bind:entry />
+{:else}
+  Entry type unsupported for editing.
 {/if}

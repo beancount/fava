@@ -7,5 +7,5 @@
  'payee': 'EDISON POWER',
  'postings': [{'account': 'Assets:US:BofA:Checking', 'amount': '-65.00 USD'},
               {'account': 'Expenses:Home:Electricity', 'amount': '65.00 USD'}],
- 'tags': [],
- 'type': 'Transaction'}
+ 't': 'Transaction',
+ 'tags': []}

@@ -6,6 +6,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 3767
     },
+    "t": "Event",
     "type": "employer"
   },
   {
@@ -15,6 +16,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1548
     },
+    "t": "Event",
     "type": "location"
   },
   {
@@ -24,6 +26,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1628
     },
+    "t": "Event",
     "type": "location"
   },
   {
@@ -33,6 +36,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1914
     },
+    "t": "Event",
     "type": "location"
   },
   {
@@ -42,6 +46,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2078
     },
+    "t": "Event",
     "type": "location"
   },
   {
@@ -51,6 +56,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2560
     },
+    "t": "Event",
     "type": "location"
   },
   {
@@ -60,6 +66,7 @@
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2686
     },
+    "t": "Event",
     "type": "location"
   }
 ]

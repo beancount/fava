@@ -6,7 +6,7 @@
 
   import { urlForAccount } from "../helpers";
   import { barChartMode, chartToggledCurrencies } from "../stores/chart";
-  import { ctx } from "../stores/format";
+  import { ctx, short } from "../stores/format";
 
   import Axis from "./Axis.svelte";
   import type { BarChart } from "./bar";
@@ -73,7 +73,7 @@
   $: yAxis = axisLeft(y)
     .tickPadding(6)
     .tickSize(-innerWidth)
-    .tickFormat($ctx.short);
+    .tickFormat($short);
 </script>
 
 <svg {width} {height}>

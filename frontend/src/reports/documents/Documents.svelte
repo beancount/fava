@@ -2,6 +2,7 @@
   import { group } from "d3-array";
 
   import { moveDocument } from "../../api";
+  import type { Document } from "../../entries";
   import AccountInput from "../../entry-forms/AccountInput.svelte";
   import { _ } from "../../i18n";
   import { basename } from "../../lib/paths";
@@ -11,11 +12,9 @@
 
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
-  import type { PageData } from "./load";
   import Table from "./Table.svelte";
-  import type { Document } from "./types";
 
-  export let data: PageData["data"];
+  export let documents: Document[];
 
   interface MoveDetails {
     account: string;
@@ -23,7 +22,7 @@
     newName: string;
   }
 
-  $: grouped = group(data, (d) => d.account);
+  $: grouped = group(documents, (d) => d.account);
   $: node = stratify(
     grouped.entries(),
     ([s]) => s,
@@ -80,7 +79,7 @@
     }}
   />
   <div>
-    <Table bind:selected {data} />
+    <Table bind:selected data={documents} />
   </div>
   {#if selected}
     <DocumentPreview filename={selected.filename} />

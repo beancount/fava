@@ -37,7 +37,7 @@ import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
 import { getScriptTagValue } from "./lib/dom";
 import { log_error } from "./log";
 import { notify, notify_err } from "./notifications";
-import { shouldRenderInFrontend } from "./reports/routes";
+import { frontend_routes } from "./reports/routes";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar } from "./sidebar";
 import { has_changes, updatePageTitle } from "./sidebar/page-title";
@@ -114,7 +114,7 @@ function init(): void {
       });
   });
 
-  router.init(shouldRenderInFrontend);
+  router.init(frontend_routes);
   setStoreValuesFromURL();
   syncStoreValuesToURL();
   initSidebar();

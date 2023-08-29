@@ -1,29 +1,29 @@
 <script lang="ts">
   import { saveEntries } from "../api";
-  import { create } from "../entries";
-  import type { EntryTypeName } from "../entries";
+  import { Balance, Note, Transaction } from "../entries";
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format";
   import { _ } from "../i18n";
-  import { closeOverlay, urlHash } from "../stores";
   import { addEntryContinue } from "../stores/editor";
+  import { closeOverlay, urlHash } from "../stores/url";
 
   import ModalBase from "./ModalBase.svelte";
 
-  const entryTypes: [EntryTypeName, string][] = [
-    ["Transaction", _("Transaction")],
-    ["Balance", _("Balance")],
-    ["Note", _("Note")],
-  ];
+  /** The entry types which have support adding in the modal. */
+  const entryTypes = [
+    [Transaction, _("Transaction")],
+    [Balance, _("Balance")],
+    [Note, _("Note")],
+  ] as const;
 
   // For the first entry to be added, use today as the default date.
-  let entry = create("Transaction", todayAsString());
+  let entry: Transaction | Balance | Note = new Transaction(todayAsString());
 
   async function submit() {
     await saveEntries([entry]);
     const added_entry_date = entry.date;
     // Reuse the date of the entry that was just added.
-    entry = create(entry.type, added_entry_date);
+    entry = entry.constructor(added_entry_date);
     if (!$addEntryContinue) {
       closeOverlay();
     }
@@ -36,13 +36,13 @@
   <form on:submit|preventDefault={submit}>
     <h3>
       {_("Add")}
-      {#each entryTypes as [type, displayName]}
+      {#each entryTypes as [Cls, displayName]}
         <button
           type="button"
-          class:muted={entry.type !== type}
+          class:muted={!(entry instanceof Cls)}
           on:click={() => {
             // when switching between entry types, keep the date.
-            entry = create(type, entry.date);
+            entry = new Cls(entry.date);
           }}
         >
           {displayName}

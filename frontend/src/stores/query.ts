@@ -9,10 +9,7 @@ export const query_shell_history = localStorageSyncedStore(
 
 export function addToHistory(query: string): void {
   if (query) {
-    query_shell_history.update((hist) => {
-      hist.unshift(query);
-      return [...new Set(hist)];
-    });
+    query_shell_history.update((hist) => [...new Set([query, ...hist])]);
   }
 }
 

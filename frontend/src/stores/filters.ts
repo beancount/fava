@@ -23,7 +23,11 @@ export interface FiltersConversionInterval extends Filters {
 /** The current filters, can be used as URL parameters. */
 export const filter_params = derived(
   [time_filter, account_filter, fql_filter],
-  ([time, account, filter]): Filters => ({ time, account, filter }),
+  ([$time_filter, $account_filter, $fql_filter]): Filters => ({
+    time: $time_filter,
+    account: $account_filter,
+    filter: $fql_filter,
+  }),
 );
 
 export function getURLFilters(url: URL): FiltersConversionInterval {

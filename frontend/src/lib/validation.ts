@@ -14,12 +14,14 @@ import { err, ok } from "./result";
  * That is, a function that checks an unknown object to be of a specified type.
  */
 export type Validator<T> = (json: unknown) => Result<T, string>;
+/** A validtor that will never error. */
 export type SafeValidator<T> = (json: unknown) => Ok<T>;
 
+/** Extract the validated type. */
 export type ValidationT<R> = R extends Validator<infer T> ? T : never;
 
 /**
- * Validate as unknown (noop).
+ * Validate with a default value if validation fails.
  */
 export function defaultValue<T>(
   validator: Validator<T>,

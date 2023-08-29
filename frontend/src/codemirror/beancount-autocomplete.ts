@@ -4,7 +4,7 @@ import type {
   CompletionSource,
 } from "@codemirror/autocomplete";
 import { syntaxTree } from "@codemirror/language";
-import { get } from "svelte/store";
+import { get as store_get } from "svelte/store";
 
 import { accounts, currencies, links, payees, tags } from "../stores";
 
@@ -27,10 +27,11 @@ const datedDirectives = [
 ];
 
 /** Get Completion objects from strings. */
-const opts = (s: string[]): Completion[] => s.map((label) => ({ label }));
+const opts = (s: readonly string[]): Completion[] =>
+  s.map((label) => ({ label }));
 
 /** Generate completion result list for codemirror from strings. */
-const res = (s: string[], from: number): CompletionResult => ({
+const res = (s: readonly string[], from: number): CompletionResult => ({
   options: opts(s),
   from,
 });
@@ -39,7 +40,7 @@ export const beancountCompletion: CompletionSource = (context) => {
   const tag = context.matchBefore(/#[A-Za-z0-9\-_/.]*/);
   if (tag) {
     return {
-      options: opts(get(tags)),
+      options: opts(store_get(tags)),
       from: tag.from + 1,
       validFor: /\S+/,
     };
@@ -48,7 +49,7 @@ export const beancountCompletion: CompletionSource = (context) => {
   const link = context.matchBefore(/\^[A-Za-z0-9\-_/.]*/);
   if (link) {
     return {
-      options: opts(get(links)),
+      options: opts(store_get(links)),
       from: link.from + 1,
       validFor: /\S+/,
     };
@@ -58,7 +59,7 @@ export const beancountCompletion: CompletionSource = (context) => {
   if (indented) {
     const indentation = indented.text.length - indented.text.trimStart().length;
     return {
-      options: opts(get(accounts)),
+      options: opts(store_get(accounts)),
       from: indented.from + indentation,
       validFor: /\S+/,
     };
@@ -99,7 +100,7 @@ export const beancountCompletion: CompletionSource = (context) => {
 
   // complete payee after transaction flag.
   if (match("string", "flag")) {
-    return res(get(payees), before.from + 1);
+    return res(store_get(payees), before.from + 1);
   }
 
   // complete directive names after a date.
@@ -117,7 +118,7 @@ export const beancountCompletion: CompletionSource = (context) => {
     // padding account
     match(["ERROR", "account"], "account", "PAD", "date")
   ) {
-    return res(get(accounts), before.from);
+    return res(store_get(accounts), before.from);
   }
 
   if (
@@ -128,7 +129,7 @@ export const beancountCompletion: CompletionSource = (context) => {
     // price or commodity currency
     match(["ERROR", "currency"], ["COMMODITY", "PRICE"], "date")
   ) {
-    return res(get(currencies), before.from);
+    return res(store_get(currencies), before.from);
   }
 
   return null;

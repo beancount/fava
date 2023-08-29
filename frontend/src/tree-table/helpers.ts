@@ -11,9 +11,9 @@ const key = Symbol("tree-table");
 
 interface TreeTableContext {
   /** The accounts for which the decsendants are currently hidden. */
-  toggled: Writable<Set<string>>;
+  readonly toggled: Writable<ReadonlySet<string>>;
   /** The accounts that should not be shown. */
-  not_shown: Readable<Set<string>>;
+  readonly not_shown: Readable<ReadonlySet<string>>;
 }
 
 export const setTreeTableContext = (ctx: TreeTableContext): TreeTableContext =>

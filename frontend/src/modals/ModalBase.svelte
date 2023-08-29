@@ -8,7 +8,7 @@
   import type { Action } from "svelte/action";
 
   import { attemptFocus, getFocusableElements } from "../lib/focus";
-  import { closeOverlay } from "../stores";
+  import { closeOverlay } from "../stores/url";
 
   export let shown = false;
   export let focus: string | undefined = undefined;

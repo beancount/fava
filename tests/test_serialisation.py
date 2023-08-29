@@ -47,7 +47,7 @@ def test_serialise_txn() -> None:
         "tags": ["tag"],
         "links": ["link"],
         "payee": "Test3",
-        "type": "Transaction",
+        "t": "Transaction",
         "postings": [
             {"account": "Assets:ETrade:Cash", "amount": "100 USD"},
             {"account": "Assets:ETrade:GLD", "amount": "0 USD"},
@@ -202,7 +202,7 @@ def test_serialise_balance() -> None:
         "meta": {},
         "tolerance": None,
         "account": "Assets:ETrade:Cash",
-        "type": "Balance",
+        "t": "Balance",
     }
 
     serialised = loads(dumps(serialise(bal)))
@@ -216,7 +216,7 @@ def test_deserialise() -> None:
         {"account": "Assets:ETrade:GLD"},
     ]
     json_txn = {
-        "type": "Transaction",
+        "t": "Transaction",
         "date": "2017-12-12",
         "flag": "*",
         "payee": "Test3",
@@ -249,12 +249,12 @@ def test_deserialise() -> None:
         deserialise({})
 
     with pytest.raises(FavaAPIError):
-        deserialise({"type": "NoEntry"})
+        deserialise({"t": "NoEntry"})
 
 
 def test_deserialise_balance() -> None:
     json_bal = {
-        "type": "Balance",
+        "t": "Balance",
         "date": "2017-12-12",
         "account": "Assets:ETrade:Cash",
         "amount": {"number": "100", "currency": "USD"},
@@ -271,7 +271,7 @@ def test_deserialise_balance() -> None:
 
 def test_deserialise_note() -> None:
     json_note = {
-        "type": "Note",
+        "t": "Note",
         "date": "2017-12-12",
         "account": "Assets:ETrade:Cash",
         "comment": 'This is some comment or note""',

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
-  import { urlHash } from "../stores";
+  import { urlHash } from "../stores/url";
 
   import ModalBase from "./ModalBase.svelte";
 

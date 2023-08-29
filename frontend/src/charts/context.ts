@@ -1,4 +1,3 @@
-import type { Readable } from "svelte/store";
 import { derived } from "svelte/store";
 
 import { conversion, currencies, operating_currency } from "../stores";
@@ -7,9 +6,9 @@ import { currentDateFormat } from "../stores/format";
 /** Context data for parsing and rendering of the charts. */
 export interface ChartContext {
   /** The list of operating currencies, complemented by the current conversion currency. */
-  currencies: string[];
+  readonly currencies: readonly string[];
   /** The current date format as determined from the interval. */
-  dateFormat: (date: Date) => string;
+  readonly dateFormat: (date: Date) => string;
 }
 
 /**
@@ -17,17 +16,17 @@ export interface ChartContext {
  */
 const operatingCurrenciesWithConversion = derived(
   [operating_currency, currencies, conversion],
-  ([operating_currency_val, currencies_val, conversion_val]) =>
-    currencies_val.includes(conversion_val) &&
-    !operating_currency_val.includes(conversion_val)
-      ? [...operating_currency_val, conversion_val]
-      : operating_currency_val,
+  ([$operating_currency, $currencies, $conversion]) =>
+    $currencies.includes($conversion) &&
+    !$operating_currency.includes($conversion)
+      ? [...$operating_currency, $conversion]
+      : $operating_currency,
 );
 
-export const chartContext: Readable<ChartContext> = derived(
+export const chartContext = derived(
   [operatingCurrenciesWithConversion, currentDateFormat],
-  ([currencies_val, dateFormat]) => ({
-    currencies: currencies_val,
-    dateFormat,
+  ([$operatingCurrenciesWithConversion, $currentDateFormat]): ChartContext => ({
+    currencies: $operatingCurrenciesWithConversion,
+    dateFormat: $currentDateFormat,
   }),
 );

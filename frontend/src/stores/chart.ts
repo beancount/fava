@@ -53,7 +53,7 @@ export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
 );
 
 /** The currencies that are currently not shown in the bar and line charts. */
-export const chartToggledCurrencies = localStorageSyncedStore<string[]>(
+export const chartToggledCurrencies = localStorageSyncedStore(
   "chart-toggled-currencies",
   array(string),
   () => [],
@@ -62,31 +62,26 @@ export const chartToggledCurrencies = localStorageSyncedStore<string[]>(
 /** The currency to show the treemap of. */
 export const treemapCurrency = writable<string | null>(null);
 
-const currencySuggestions = derived(
+const currency_suggestions = derived(
   [operating_currency, currencies_sorted, conversion_currencies],
-  ([
-    operating_currency_val,
-    currencies_sorted_val,
-    conversion_currencies_val,
-  ]) =>
-    conversion_currencies_val.length
-      ? conversion_currencies_val
+  ([$operating_currency, $currencies_sorted, $conversion_currencies]) =>
+    $conversion_currencies.length
+      ? $conversion_currencies
       : [
-          ...operating_currency_val,
-          ...currencies_sorted_val.filter(
-            (c) =>
-              !operating_currency_val.includes(c) && iso4217currencies.has(c),
+          ...$operating_currency,
+          ...$currencies_sorted.filter(
+            (c) => !$operating_currency.includes(c) && iso4217currencies.has(c),
           ),
         ],
 );
 
 export const conversions = derived(
-  currencySuggestions,
-  (currencySuggestions_val) => [
+  currency_suggestions,
+  ($currency_suggestions) => [
     ["at_cost", _("At Cost")],
     ["at_value", _("At Market Value")],
     ["units", _("Units")],
-    ...currencySuggestions_val.map((currency) => [
+    ...$currency_suggestions.map((currency) => [
       currency,
       format(_("Converted to %(currency)s"), { currency }),
     ]),

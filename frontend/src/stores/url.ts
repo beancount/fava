@@ -1,5 +1,7 @@
 import { derived, writable } from "svelte/store";
 
+export const urlHash = writable("");
+
 export const urlSyncedParams = [
   "account",
   "charts",
@@ -16,7 +18,10 @@ export const pathname = writable<string>();
 export const search = writable<string>();
 
 /** The current URL searchParams. */
-export const searchParams = derived(search, (s) => new URLSearchParams(s));
+export const searchParams = derived(
+  search,
+  ($search) => new URLSearchParams($search),
+);
 
 /** The query string containing all values that are synced to the URL. */
 export const synced_query_string = derived([searchParams], ([s]) => {
@@ -32,3 +37,10 @@ export const synced_query_string = derived([searchParams], ([s]) => {
   const str = params.toString();
   return str ? `?${str}` : str;
 });
+
+export function closeOverlay(): void {
+  if (window.location.hash) {
+    window.history.pushState({}, "", "#");
+  }
+  urlHash.set("");
+}

@@ -1,37 +1,53 @@
-import type { Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
 import type { BeancountError, LedgerData } from "../api/validators";
-import type { Interval } from "../lib/interval";
 import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
 
-export const urlHash = writable("");
-
+/** The current conversion used for reports. */
 export const conversion = writable("");
-export const interval: Writable<Interval> = writable(DEFAULT_INTERVAL);
+/** The current interval used for reports. */
+export const interval = writable(DEFAULT_INTERVAL);
+
+/** The Beancount errors. */
+export const errors = writable<readonly BeancountError[]>([]);
 
 export const ledgerData = writable<LedgerData>();
 
 /** Fava's options */
-export const fava_options = derived(ledgerData, (val) => val.fava_options);
+export const fava_options = derived(ledgerData, (v) => v.fava_options);
+/** The customized currency conversion select list */
+export const conversion_currencies = derived_array(
+  fava_options,
+  ($fava_options) => $fava_options.conversion_currencies,
+);
+export const locale = derived(
+  fava_options,
+  ($fava_options) => $fava_options.locale,
+);
+
 /** Beancount's options */
-export const options = derived(ledgerData, (val) => val.options);
+export const options = derived(ledgerData, (v) => v.options);
 /** Beancount ledger title */
-export const ledger_title = derived(ledgerData, (val) => val.options.title);
+export const ledger_title = derived(options, ($options) => $options.title);
+/** The operating currencies (sorted). */
+export const operating_currency = derived_array(options, ($options) =>
+  [...$options.operating_currency].sort(),
+);
+
 /** Commodity display precisions. */
-export const precisions = derived(ledgerData, (val) => val.precisions);
+export const precisions = derived(ledgerData, (v) => v.precisions);
 /** Whether Fava supports exporting to Excel. */
-export const HAVE_EXCEL = derived(ledgerData, (val) => val.have_excel);
+export const HAVE_EXCEL = derived(ledgerData, (v) => v.have_excel);
 /** Whether Fava should obscure all numbers. */
-export const incognito = derived(ledgerData, (val) => val.incognito);
+export const incognito = derived(ledgerData, (v) => v.incognito);
 /** Base URL. */
-export const base_url = derived(ledgerData, (val) => val.base_url);
+export const base_url = derived(ledgerData, (v) => v.base_url);
 /** The Fava extensions. */
-export const extensions = derived(ledgerData, (val) => val.extensions);
+export const extensions = derived(ledgerData, (v) => v.extensions);
 
 /** The ranked array of all accounts. */
-export const accounts = derived_array(ledgerData, (val) => val.accounts);
+export const accounts = derived_array(ledgerData, (v) => v.accounts);
 
 /** Get the name (as given per metadata) of a currency. */
 export const currency_name = derived(
@@ -41,42 +57,20 @@ export const currency_name = derived(
       currency_names[c] ?? c,
 );
 
-export const account_details = derived(
-  ledgerData,
-  (val) => val.account_details,
-);
+/** Account information. */
+export const account_details = derived(ledgerData, (v) => v.account_details);
 /** The ranked array of all currencies. */
-export const currencies = derived_array(ledgerData, (val) => val.currencies);
+export const currencies = derived_array(ledgerData, (v) => v.currencies);
 /** The ranked array of all links. */
-export const links = derived_array(ledgerData, (val) => val.links);
+export const links = derived_array(ledgerData, (v) => v.links);
 /** The ranked array of all payees. */
-export const payees = derived_array(ledgerData, (val) => val.payees);
+export const payees = derived_array(ledgerData, (v) => v.payees);
 /** The ranked array of all tags. */
-export const tags = derived_array(ledgerData, (val) => val.tags);
+export const tags = derived_array(ledgerData, (v) => v.tags);
 /** The array of all years. */
-export const years = derived_array(ledgerData, (val) => val.years);
-
-/** The sorted array of operating currencies. */
-export const operating_currency = derived_array(ledgerData, (val) =>
-  val.options.operating_currency.sort(),
-);
-/** The customized currency conversion select list */
-export const conversion_currencies = derived_array(
-  ledgerData,
-  (val) => val.fava_options.conversion_currencies,
-);
+export const years = derived_array(ledgerData, (v) => v.years);
 
 /** The sorted array of all used currencies. */
-export const currencies_sorted = derived_array(currencies, (val) =>
-  [...val].sort(),
+export const currencies_sorted = derived_array(currencies, ($currencies) =>
+  [...$currencies].sort(),
 );
-
-/** The Beancount errors. */
-export const errors = writable<BeancountError[]>([]);
-
-export function closeOverlay(): void {
-  if (window.location.hash) {
-    window.history.pushState({}, "", "#");
-  }
-  urlHash.set("");
-}

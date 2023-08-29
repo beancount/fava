@@ -10,7 +10,7 @@
       "filename": "<string>",
       "lineno": 2
     },
-    "type": "Open"
+    "t": "Open"
   },
   {
     "date": "2017-12-12",
@@ -29,7 +29,8 @@
       "number-value": 20,
       "string-value": "value"
     },
-    "type": "Event"
+    "t": "Event",
+    "type": "event name"
   },
   {
     "account": "Assets:Cash",
@@ -46,8 +47,8 @@
       "filename": "<string>",
       "lineno": 3
     },
-    "tolerance": null,
-    "type": "Balance"
+    "t": "Balance",
+    "tolerance": null
   },
   {
     "account": "Assets:Cash",
@@ -61,8 +62,8 @@
       "filename": "<string>",
       "lineno": 4
     },
-    "tolerance": 1.0,
-    "type": "Balance"
+    "t": "Balance",
+    "tolerance": 1.0
   },
   {
     "account": "Assets:Cash",
@@ -75,10 +76,10 @@
       "filename": "<string>",
       "lineno": 5
     },
+    "t": "Document",
     "tags": [
       "tag"
-    ],
-    "type": "Document"
+    ]
   },
   {
     "account": "Assets:Cash",
@@ -88,7 +89,7 @@
       "filename": "<string>",
       "lineno": 14
     },
-    "type": "Note"
+    "t": "Note"
   },
   {
     "account": "Assets:Cash",
@@ -98,7 +99,7 @@
       "lineno": 15
     },
     "source_account": "Assets:OtherCash",
-    "type": "Pad"
+    "t": "Pad"
   },
   {
     "account": "Assets:Cash",
@@ -107,7 +108,7 @@
       "filename": "<string>",
       "lineno": 16
     },
-    "type": "Close"
+    "t": "Close"
   },
   {
     "currency": "USD",
@@ -116,7 +117,7 @@
       "filename": "<string>",
       "lineno": 18
     },
-    "type": "Commodity"
+    "t": "Commodity"
   },
   {
     "amount": {
@@ -129,7 +130,7 @@
       "filename": "<string>",
       "lineno": 19
     },
-    "type": "Price"
+    "t": "Price"
   },
   {
     "date": "2019-12-12",
@@ -139,6 +140,6 @@
     },
     "name": "query name",
     "query_string": "journal",
-    "type": "Query"
+    "t": "Query"
   }
 ]

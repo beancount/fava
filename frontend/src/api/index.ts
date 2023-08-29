@@ -7,7 +7,7 @@ import { notify, notify_err } from "../notifications";
 import router from "../router";
 import type { Filters, FiltersConversionInterval } from "../stores/filters";
 
-import type { GetAPIValidators } from "./validators";
+import type { GetAPIValidators, SourceFile } from "./validators";
 import { getAPIValidators } from "./validators";
 
 /** Required arguments for the various PUT API endpoints. */
@@ -17,7 +17,7 @@ interface PutAPIInputs {
   add_entries: { entries: Entry[] };
   attach_document: { filename: string; entry_hash: string };
   format_source: { source: string };
-  source: { file_path: string; source: string; sha256sum: string };
+  source: SourceFile;
   source_slice: { entry_hash: string; source: string; sha256sum: string };
 }
 

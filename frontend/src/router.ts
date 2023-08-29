@@ -8,6 +8,7 @@
 import type { Readable, Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
+import { getUrlPath } from "./helpers";
 import { delegate, Events } from "./lib/events";
 import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
@@ -15,10 +16,10 @@ import { log_error } from "./log";
 import { notify_err } from "./notifications";
 import type { Route } from "./reports/route";
 import { raw_page_title } from "./sidebar/page-title";
-import { conversion, interval, urlHash } from "./stores";
+import { conversion, interval } from "./stores";
 import { showCharts } from "./stores/chart";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
-import { pathname, search } from "./stores/url";
+import { pathname, search, urlHash } from "./stores/url";
 
 /**
  * Set a store's inital value from the URL.
@@ -37,7 +38,7 @@ const is_loading_internal = writable(false);
 /** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading: Readable<boolean> = is_loading_internal;
 
-class Router extends Events<"page-loaded"> {
+export class Router extends Events<"page-loaded"> {
   /** The URL hash. */
   private hash: string;
 
@@ -50,8 +51,8 @@ class Router extends Events<"page-loaded"> {
   /** The <article> element. */
   private article: HTMLElement;
 
-  /** A function to get the Route to render for the given URL. */
-  private shouldRenderInFrontend?: (url: URL) => Route | undefined;
+  /** The frontend rendered routes. */
+  private frontend_routes?: Route[];
 
   /** A possibly frontend rendered component. */
   private frontend_route?: Route;
@@ -84,7 +85,7 @@ class Router extends Events<"page-loaded"> {
    * Add an interrupt handler. Returns a function that removes it.
    * This can be used directly in a svelte onMount hook.
    */
-  addInteruptHandler(handler: () => string | null) {
+  addInteruptHandler(handler: () => string | null): () => void {
     this.interruptHandlers.add(handler);
 
     return () => {
@@ -107,7 +108,10 @@ class Router extends Events<"page-loaded"> {
   }
 
   private async frontendRender(url: URL): Promise<void> {
-    const route = this.shouldRenderInFrontend?.(url);
+    const report = getUrlPath(url);
+    const route = this.frontend_routes?.find(
+      (r) => report?.startsWith(`${r.report}/`),
+    );
     if (route) {
       is_loading_internal.set(true);
       try {
@@ -126,8 +130,8 @@ class Router extends Events<"page-loaded"> {
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(shouldRenderInFrontend: (url: URL) => Route | undefined): void {
-    this.shouldRenderInFrontend = shouldRenderInFrontend;
+  init(frontend_routes: Route[]): void {
+    this.frontend_routes = frontend_routes;
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
 

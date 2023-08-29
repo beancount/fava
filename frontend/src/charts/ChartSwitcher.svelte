@@ -9,7 +9,7 @@
 
   import type { FavaChart } from ".";
 
-  export let charts: FavaChart[];
+  export let charts: readonly FavaChart[];
 
   $: active_chart =
     charts.find((c) => c.name === $lastActiveChartName) ?? charts?.[0];

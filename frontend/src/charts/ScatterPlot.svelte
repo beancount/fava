@@ -37,7 +37,7 @@
 
   /** Quadtree for hover. */
   $: quad = quadtree(
-    chart.data,
+    [...chart.data],
     (d) => x(d.date),
     (d) => y(d.type) ?? 0
   );

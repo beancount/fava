@@ -1,11 +1,12 @@
-import { derived, writable } from "svelte/store";
+import type { Readable } from "svelte/store";
+import { writable } from "svelte/store";
 
 const ledger_mtime_writable = writable(BigInt("0"));
 
 /**
  * Last file change to one of the source files of the current ledger.
  */
-export const ledger_mtime = derived(ledger_mtime_writable, (v) => v);
+export const ledger_mtime: Readable<bigint> = ledger_mtime_writable;
 
 /**
  * Set the mtime from the given string value.

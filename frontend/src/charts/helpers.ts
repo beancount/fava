@@ -1,6 +1,6 @@
 import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
-import { derived, get } from "svelte/store";
+import { derived, get as store_get } from "svelte/store";
 
 import { accounts, currencies_sorted, operating_currency } from "../stores";
 import { currentTimeFilterDateFormat } from "../stores/format";
@@ -12,7 +12,7 @@ import { currentTimeFilterDateFormat } from "../stores/format";
  */
 export function urlForTimeFilter(date: Date): string {
   const url = new URL(window.location.href);
-  url.searchParams.set("time", get(currentTimeFilterDateFormat)(date));
+  url.searchParams.set("time", store_get(currentTimeFilterDateFormat)(date));
   return url.toString();
 }
 
@@ -92,19 +92,19 @@ export const colors15 = hclColorRange(15, 30, 80);
  */
 export const scatterplotScale = scaleOrdinal(colors10);
 
-export const treemapScale = derived(accounts, (accounts_val) =>
-  scaleOrdinal(colors15).domain(accounts_val),
+export const treemapScale = derived(accounts, ($accounts) =>
+  scaleOrdinal(colors15).domain($accounts),
 );
 
-export const sunburstScale = derived(accounts, (accounts_val) =>
-  scaleOrdinal(colors10).domain(accounts_val),
+export const sunburstScale = derived(accounts, ($accounts) =>
+  scaleOrdinal(colors10).domain($accounts),
 );
 
 export const currenciesScale = derived(
   [operating_currency, currencies_sorted],
-  ([operating_currency_val, currencies_sorted_val]) =>
+  ([$operating_currency, $currencies_sorted]) =>
     scaleOrdinal(colors10).domain([
-      ...operating_currency_val,
-      ...currencies_sorted_val,
+      ...$operating_currency,
+      ...$currencies_sorted,
     ]),
 );

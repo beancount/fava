@@ -4,37 +4,40 @@ import { derived } from "svelte/store";
 import type { FormatterContext } from "../format";
 import { dateFormat, localeFormatter, timeFilterDateFormat } from "../format";
 
-import { fava_options, incognito, interval, precisions } from ".";
+import { incognito, interval, locale, precisions } from ".";
 
 const replaceNumbers = (num: string) => num.replace(/[0-9]/g, "X");
 
-const formatterShort = format(".3s");
+const short_format = format(".3s");
+
+/** Render a number to a short string, for example for the y-axis of a line chart. */
+export const short = derived(
+  incognito,
+  ($incognito): ((number: number | { valueOf(): number }) => string) =>
+    $incognito ? (n) => replaceNumbers(short_format(n)) : short_format,
+);
 
 export const ctx = derived(
-  [incognito, fava_options, precisions],
-  ([i, f, p]): FormatterContext => {
-    const formatter = localeFormatter(f.locale);
+  [incognito, locale, precisions],
+  ([$incognito, $locale, $precisions]): FormatterContext => {
+    const formatter = localeFormatter($locale);
     const currencyFormatters = Object.fromEntries(
-      Object.entries(p).map(([currency, prec]) => [
+      Object.entries($precisions).map(([currency, prec]) => [
         currency,
-        localeFormatter(f.locale, prec),
+        localeFormatter($locale, prec),
       ]),
     );
-    const num = (n: number, c: string) => {
-      const currencyFormatter = currencyFormatters[c];
-      return currencyFormatter ? currencyFormatter(n) : formatter(n);
+    const num_raw = (n: number, c: string) =>
+      (currencyFormatters[c] ?? formatter)(n);
+
+    const num = $incognito
+      ? (n: number, c: string) => replaceNumbers(num_raw(n, c))
+      : num_raw;
+
+    return {
+      amount: (n, c) => `${num(n, c)} ${c}`,
+      num,
     };
-    return i
-      ? {
-          short: (n) => replaceNumbers(formatterShort(n)),
-          amount: (n, c) => `${replaceNumbers(formatter(n))} ${c}`,
-          num: (n) => replaceNumbers(formatter(n)),
-        }
-      : {
-          short: (n) => formatterShort(n),
-          amount: (n, c) => `${num(n, c)} ${c}`,
-          num,
-        };
   },
 );
 

@@ -10,6 +10,7 @@
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 78
     },
+    "t": "Document",
     "tags": [
       "tag"
     ]
@@ -23,6 +24,7 @@
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 79
     },
+    "t": "Document",
     "tags": [
       "discovered"
     ]

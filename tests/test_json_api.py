@@ -416,7 +416,7 @@ def test_api_add_entries(
 
         entries = [
             {
-                "type": "Transaction",
+                "t": "Transaction",
                 "date": "2017-12-12",
                 "flag": "*",
                 "payee": "Test3",
@@ -430,7 +430,7 @@ def test_api_add_entries(
                 ],
             },
             {
-                "type": "Transaction",
+                "t": "Transaction",
                 "date": "2017-01-12",
                 "flag": "*",
                 "payee": "Test1",
@@ -444,7 +444,7 @@ def test_api_add_entries(
                 ],
             },
             {
-                "type": "Transaction",
+                "t": "Transaction",
                 "date": "2017-02-12",
                 "flag": "*",
                 "payee": "Test",

@@ -18,7 +18,7 @@
   /** The currently entered value. */
   export let value: string;
   /** The suggestions for the value. */
-  export let suggestions: string[];
+  export let suggestions: readonly string[];
   /** A placeholder for the input field. */
   export let placeholder = "";
   /** A function to extract the string that should be used for suggestion filtering. */

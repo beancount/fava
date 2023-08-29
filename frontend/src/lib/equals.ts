@@ -5,8 +5,8 @@ export type StrictEquality = string | number | null;
  * Shallow equality of two arrays - the elements are compared strictly.
  */
 export function shallow_equal<T extends StrictEquality>(
-  a: T[],
-  b: T[],
+  a: readonly T[],
+  b: readonly T[],
 ): boolean {
   const l = a.length;
   if (l !== b.length) {

@@ -5,6 +5,8 @@
 import { format } from "d3-format";
 import { timeFormat, utcFormat } from "d3-time-format";
 
+import type { Interval } from "./lib/interval";
+
 /**
  * A number formatting function for a locale.
  * @param locale - The locale to use.
@@ -31,8 +33,6 @@ export function formatPercentage(number: number): string {
 }
 
 export interface FormatterContext {
-  /** Render a number to a short string, for example for the y-axis of a line chart. */
-  short: (number: number | { valueOf(): number }) => string;
   /** Render an amount to a string like "2.00 USD". */
   amount: (num: number, currency: string) => string;
   /** Render an number for a currency like "2.00". */
@@ -40,19 +40,12 @@ export interface FormatterContext {
 }
 
 type DateFormatter = (date: Date) => string;
-interface DateFormatters {
-  year: DateFormatter;
-  quarter: DateFormatter;
-  month: DateFormatter;
-  week: DateFormatter;
-  day: DateFormatter;
-}
 
 /** Format the date as a ISO-8601 date string. */
 export const day = utcFormat("%Y-%m-%d");
 
 /** Date formatters for human consumption. */
-export const dateFormat: DateFormatters = {
+export const dateFormat: Record<Interval, DateFormatter> = {
   year: utcFormat("%Y"),
   quarter: (date) =>
     `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
@@ -62,7 +55,7 @@ export const dateFormat: DateFormatters = {
 };
 
 /** Date formatters for the entry filter form. */
-export const timeFilterDateFormat: DateFormatters = {
+export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
   year: utcFormat("%Y"),
   quarter: (date) =>
     `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
@@ -71,7 +64,9 @@ export const timeFilterDateFormat: DateFormatters = {
   day,
 };
 
+const local_day = timeFormat("%Y-%m-%d");
+
 /** Today as a ISO-8601 date string. */
 export function todayAsString(): string {
-  return timeFormat("%Y-%m-%d")(new Date());
+  return local_day(new Date());
 }

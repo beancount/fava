@@ -411,7 +411,7 @@ def put_upload_import_file() -> str:
 def get_events() -> list[Event]:
     """Get all (filtered) events."""
     g.ledger.changed()
-    return [e for e in g.filtered.entries if isinstance(e, Event)]
+    return [serialise(e) for e in g.filtered.entries if isinstance(e, Event)]
 
 
 @api_endpoint
@@ -425,7 +425,9 @@ def get_imports() -> list[FileImporters]:
 def get_documents() -> list[Document]:
     """Get all (filtered) documents."""
     g.ledger.changed()
-    return [e for e in g.filtered.entries if isinstance(e, Document)]
+    return [
+        serialise(e) for e in g.filtered.entries if isinstance(e, Document)
+    ]
 
 
 @dataclass(frozen=True)

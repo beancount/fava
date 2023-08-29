@@ -13,9 +13,9 @@ import type { Validator } from "./validation";
  */
 export function derived_array<S, T extends StrictEquality>(
   store: Readable<S>,
-  getter: (values: S) => T[],
-): Readable<T[]> {
-  let val: T[] = [];
+  getter: (values: S) => readonly T[],
+): Readable<readonly T[]> {
+  let val: readonly T[] = [];
   return derived(
     store,
     (store_val, set) => {

@@ -7,7 +7,7 @@
   import type { Writable } from "svelte/store";
 
   import { chartToggledCurrencies, lineChartMode } from "../stores/chart";
-  import { ctx } from "../stores/format";
+  import { ctx, short } from "../stores/format";
 
   import Axis from "./Axis.svelte";
   import { currenciesScale, padExtent } from "./helpers";
@@ -65,7 +65,7 @@
   $: yAxis = axisLeft(y)
     .tickPadding(6)
     .tickSize(-innerWidth)
-    .tickFormat($ctx.short);
+    .tickFormat($short);
 
   const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
     const d = quad.find(xPos, yPos);

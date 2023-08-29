@@ -36,7 +36,7 @@ import {
   rectangularSelection,
 } from "@codemirror/view";
 import type { Action } from "svelte/action";
-import { get } from "svelte/store";
+import { get as store_get } from "svelte/store";
 
 import { log_error } from "../log";
 import { fava_options } from "../stores";
@@ -134,7 +134,7 @@ export function initBeancountEditor(
   commands: KeyBinding[],
   beancount: LanguageSupport,
 ): EditorAndAction {
-  const { indent, currency_column } = get(fava_options);
+  const { indent, currency_column } = store_get(fava_options);
   return setup(value, [
     beancount,
     indentUnit.of(" ".repeat(indent)),

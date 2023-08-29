@@ -12,17 +12,17 @@ import { domHelpers } from "./tooltip";
  * A single data point on a line or area chart.
  */
 export interface LineChartDatum {
-  name: string;
-  date: Date;
-  value: number;
+  readonly name: string;
+  readonly date: Date;
+  readonly value: number;
 }
 
 /**
  * A series of values for a line chart, e.g., for a single currency.
  */
 interface LineChartSeries {
-  name: string;
-  values: LineChartDatum[];
+  readonly name: string;
+  readonly values: readonly LineChartDatum[];
 }
 
 /**
@@ -34,11 +34,11 @@ interface LineChartSeries {
 export class LineChart {
   readonly type = "linechart";
 
-  readonly series_names: string[];
+  readonly series_names: readonly string[];
 
   constructor(
     readonly name: string | null,
-    private readonly data: LineChartSeries[],
+    private readonly data: readonly LineChartSeries[],
     readonly tooltipText: (
       c: FormatterContext,
       d: LineChartDatum,
@@ -49,7 +49,7 @@ export class LineChart {
   }
 
   /** Filter the data of this chart, excluding some series. */
-  filter(hidden_names: string[]): LineChartSeries[] {
+  filter(hidden_names: readonly string[]): LineChartSeries[] {
     const hidden_names_set = new Set(hidden_names);
     return this.data.filter((series) => !hidden_names_set.has(series.name));
   }
