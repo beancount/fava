@@ -52,7 +52,7 @@
 }
 
 .journal .postings .num {
-  overflow: scroll;
+  overflow: auto;
   line-height: 16px;
 }
 
