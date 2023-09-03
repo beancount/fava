@@ -25,7 +25,7 @@ blinker==1.6.2
     # via flask
 bottle==0.12.25
     # via beancount
-build==0.10.0
+build==1.0.0
     # via fava (pyproject.toml)
 cachetools==5.3.1
     # via
@@ -44,7 +44,7 @@ chardet==5.2.0
     #   tox
 charset-normalizer==3.2.0
     # via requests
-cheroot==9.0.0
+cheroot==10.0.0
     # via fava (pyproject.toml)
 click==8.1.7
     # via
@@ -66,7 +66,7 @@ docutils==0.20.1
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.12.2
+filelock==3.12.3
     # via
     #   tox
     #   virtualenv
@@ -191,7 +191,7 @@ ply==3.11
     # via
     #   beancount
     #   fava (pyproject.toml)
-pre-commit==3.3.3
+pre-commit==3.4.0
     # via fava (pyproject.toml)
 protobuf==4.24.2
     # via
@@ -215,11 +215,8 @@ pyexcel-io==0.6.6
     # via
     #   pyexcel
     #   pyexcel-ods3
-    #   pyexcel-xls
     #   pyexcel-xlsx
 pyexcel-ods3==0.6.1
-    # via fava (pyproject.toml)
-pyexcel-xls==0.7.0
     # via fava (pyproject.toml)
 pyexcel-xlsx==0.6.0
     # via fava (pyproject.toml)
@@ -232,19 +229,19 @@ pygments==2.16.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==5.13.1
+pyinstaller==5.13.2
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.7
+pyinstaller-hooks-contrib==2023.8
     # via pyinstaller
 pylint==2.17.5
     # via fava (pyproject.toml)
 pyparsing==3.1.1
     # via httplib2
-pyproject-api==1.5.4
+pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.0
+pytest==7.4.1
     # via
     #   beancount
     #   fava (pyproject.toml)
@@ -283,15 +280,14 @@ simplejson==3.19.1
 six==1.16.0
     # via
     #   bleach
-    #   cheroot
     #   google-auth
     #   google-auth-httplib2
     #   python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
-soupsieve==2.4.1
+soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.2.3
+sphinx==7.2.5
     # via
     #   fava (pyproject.toml)
     #   sphinxcontrib-applehelp
@@ -315,7 +311,7 @@ texttable==1.6.7
     # via pyexcel
 tomlkit==0.12.1
     # via pylint
-tox==4.10.0
+tox==4.11.1
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
@@ -325,7 +321,7 @@ types-pkg-resources==0.1.3
     # via fava (pyproject.toml)
 types-pytz==2023.3.0.1
     # via types-babel
-types-setuptools==68.1.0.0
+types-setuptools==68.1.0.1
     # via types-babel
 types-simplejson==3.19.0.2
     # via fava (pyproject.toml)
@@ -338,7 +334,7 @@ urllib3==1.26.16
     #   google-auth
     #   requests
     #   twine
-virtualenv==20.24.3
+virtualenv==20.24.4
     # via
     #   pre-commit
     #   tox
@@ -350,10 +346,6 @@ werkzeug==2.3.7
     #   flask
 wrapt==1.15.0
     # via astroid
-xlrd==2.0.1
-    # via pyexcel-xls
-xlwt==1.3.0
-    # via pyexcel-xls
 zipp==3.16.2
     # via importlib-metadata
 

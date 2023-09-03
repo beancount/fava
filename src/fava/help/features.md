@@ -32,8 +32,8 @@ inventory, then a line chart or treemap chart is shown on the query page.
     GROUP BY payee, account
 
 Fava supports downloading the result of these queries in various file formats.
-By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
-and `ods`, install Fava with the `excel` feature:
+By default, only exporting to `csv` is supported. For support of `xlsx` and
+`ods`, install Fava with the `excel` feature:
 
     pip3 install fava[excel]
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 import csv
 import datetime
 import io
-from collections import OrderedDict
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -31,22 +30,20 @@ def to_excel(
     Args:
         types: query result_types.
         rows: query result_rows.
-        result_format: One of 'xls', 'xlsx', or 'ods'.
+        result_format: 'xlsx' or 'ods'.
         query_string: The query string (is written to the document).
 
     Returns:
         The (binary) file contents.
     """
-    if result_format not in ("xls", "xlsx", "ods"):
+    if result_format not in ("xlsx", "ods"):
         raise ValueError(f"Invalid result format: {result_format}")
     resp = io.BytesIO()
     book = pyexcel.Book(
-        OrderedDict(
-            [
-                ("Results", _result_array(types, rows)),
-                ("Query", [["Query"], [query_string]]),
-            ],
-        ),
+        {
+            "Results": _result_array(types, rows),
+            "Query": [["Query"], [query_string]],
+        },
     )
     book.save_to_memory(result_format, resp)
     resp.seek(0)
