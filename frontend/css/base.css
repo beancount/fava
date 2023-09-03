@@ -211,7 +211,7 @@ input[type="text"]:placeholder-shown {
 
 button,
 .button {
-  padding: 6px 10px;
+  padding: 0.5em 0.75em;
   color: var(--button-color);
   cursor: pointer;
   background-color: var(--button-background);
@@ -222,7 +222,6 @@ button,
 
 h3 .button,
 h3 button {
-  padding: 4px 8px;
   font-size: 1rem;
   font-weight: normal;
 }
@@ -242,6 +241,23 @@ button:hover,
   box-shadow: 0 0 5px var(--border);
 }
 
+button.unset {
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  background: unset;
+}
+
+button.unset:active,
+button.unset:focus,
+button.unset:hover {
+  box-shadow: unset;
+}
+
+button.unset:focus-visible {
+  outline: var(--link-color) dotted 2px;
+}
+
 button:disabled,
 button.inactive,
 button.muted,
@@ -256,7 +272,7 @@ button.link,
 .button.link {
   padding: 0;
   color: var(--link-color);
-  background: none;
+  background: unset;
 }
 
 button.link:focus,
@@ -266,7 +282,7 @@ button.link:hover,
 .button.link:active,
 .button.link:hover {
   filter: brightness(90%);
-  box-shadow: none;
+  box-shadow: unset;
 }
 
 button.round,
@@ -276,14 +292,9 @@ button.round,
   border-radius: 15px;
 }
 
-.button:link,
 .button:visited {
   height: 100%;
   color: var(--background);
-}
-
-.hidden.hidden {
-  display: none;
 }
 
 /* Structural and generic elements */
@@ -298,12 +309,10 @@ button.round,
 .headerline {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   margin: 0 0 1em;
 }
 
 .headerline h3 {
-  display: inline-block;
   margin: 0 1.5em 0 0;
 }
 
@@ -369,6 +378,10 @@ kbd {
   float: right;
 }
 
+copyable-text {
+  cursor: pointer;
+}
+
 .status-indicator {
   display: inline-block;
   width: 6px;
@@ -379,12 +392,7 @@ kbd {
 
 td .status-indicator {
   float: right;
-  margin-top: 3px;
-  margin-left: 3px;
-}
-
-.status-indicator:hover {
-  cursor: pointer;
+  margin: 7px 0 0;
 }
 
 .status-indicator.status-red {
@@ -403,16 +411,8 @@ td .status-indicator {
   background-color: var(--gray);
 }
 
-.statistics-update-activity .indicator-header {
+.indicator-header {
   padding-left: 0;
-}
-
-.statistics-update-activity .uptodate-indicator {
-  text-align: center;
-}
-
-.statistics-update-activity .status-indicator {
-  margin: 0 auto;
 }
 
 [data-sort] {

@@ -56,7 +56,7 @@
 
 <span class="droptarget" data-account-name={account}>
   {#if children.length > 0}
-    <button type="button" on:click={on_click}>
+    <button type="button" class="unset" on:click={on_click}>
       {$toggled.has(account) ? "▸" : "▾"}
     </button>
   {/if}
@@ -71,18 +71,6 @@
     position: absolute;
     padding: 0 3px;
     color: var(--treetable-expander);
-    cursor: pointer;
-    background: unset;
-  }
-
-  button:active,
-  button:focus,
-  button:hover {
-    box-shadow: unset;
-  }
-
-  button:focus-visible {
-    outline: var(--link-color) dotted 2px;
   }
 
   a {

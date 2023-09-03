@@ -54,7 +54,7 @@
     {#if hasChildren}
       <button
         type="button"
-        class="toggle"
+        class="unset toggle"
         on:click={(ev) => {
           expanded = !expanded;
           ev.stopPropagation();
@@ -63,7 +63,7 @@
     {/if}
     <button
       type="button"
-      class="leaf"
+      class="unset leaf"
       on:click={() => {
         $selectedAccount = selected ? "" : node.name;
       }}>{leaf(node.name)}</button
@@ -73,9 +73,8 @@
     {/if}
   </p>
 {/if}
-
 {#if hasChildren}
-  <ul class="flex-table" hidden={!expanded}>
+  <ul hidden={!expanded}>
     {#each node.children as child}
       <li>
         <svelte:self node={child} {move} />
@@ -87,12 +86,21 @@
 <style>
   ul {
     padding: 0 0 0 0.5em;
+    margin: 0;
   }
 
   p {
-    margin-bottom: -1px;
+    position: relative;
+    display: flex;
+    padding-right: 0.5em;
+    margin: 0;
     overflow: hidden;
-    border: 1px solid var(--table-border);
+    border-bottom: 1px solid var(--table-border);
+    border-left: 1px solid var(--table-border);
+  }
+
+  p > * {
+    padding: 1px;
   }
 
   .count {
@@ -102,11 +110,6 @@
   .selected,
   .drag {
     background-color: var(--table-header-background);
-  }
-
-  button {
-    all: unset;
-    cursor: pointer;
   }
 
   .leaf {

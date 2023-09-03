@@ -35,6 +35,7 @@
     {#each charts as chart, index}
       <button
         type="button"
+        class="unset"
         class:selected={chart === active_chart}
         on:click={() => {
           $lastActiveChartName = chart.name;
@@ -56,9 +57,7 @@
   }
 
   button {
-    all: unset;
     padding: 0 0.5em;
-    cursor: pointer;
   }
 
   button + button {
