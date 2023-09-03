@@ -24,7 +24,7 @@ export const journalShow = localStorageSyncedStore(
 
 const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
 
-/** The types of entries to show in the journal. */
+/** The column and order that the journal should be sorted in. */
 export const journalSortOrder = localStorageSyncedStore(
   "journal-sort-order",
   tuple([string, union(constant("asc"), constant("desc"))]),

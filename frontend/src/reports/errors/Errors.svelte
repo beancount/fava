@@ -1,7 +1,9 @@
 <script lang="ts">
+  import type { BeancountError } from "../../api/validators";
   import { urlForAccount, urlForSource } from "../../helpers";
   import { _, format } from "../../i18n";
-  import { sortableTable } from "../../sort";
+  import { NumberColumn, Sorter, StringColumn } from "../../sort";
+  import SortHeader from "../../sort/SortHeader.svelte";
   import { accounts, errors } from "../../stores";
 
   $: account_re = new RegExp(`(${$accounts.join("|")})`);
@@ -24,19 +26,29 @@
       .map((el) => el.outerHTML)
       .join("");
   }
+
+  type T = BeancountError;
+  const columns = [
+    new StringColumn<T>(_("File"), (d) => d.source?.filename ?? ""),
+    new NumberColumn<T>(_("Line"), (d) => d.source?.lineno ?? 0),
+    new StringColumn<T>(_("Error"), (d) => d.message),
+  ] as const;
+  let sorter = new Sorter(columns[0], "desc");
+
+  $: sorted_errors = sorter.sort($errors);
 </script>
 
 {#if $errors.length}
-  <table use:sortableTable class="errors">
+  <table class="errors">
     <thead>
       <tr>
-        <th data-sort="string">{_("File")}</th>
-        <th data-sort="num">{_("Line")}</th>
-        <th data-sort="string">{_("Error")}</th>
+        {#each columns as column}
+          <SortHeader bind:sorter {column} />
+        {/each}
       </tr>
     </thead>
     <tbody>
-      {#each $errors as { message, source }}
+      {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
             {@const url = urlForSource(source.filename, `${source.lineno}`)}

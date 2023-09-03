@@ -5,7 +5,8 @@
   import { ScatterPlot } from "../../charts/scatterplot";
   import type { Event } from "../../entries";
   import { _, format } from "../../i18n";
-  import { sortableTable } from "../../sort";
+
+  import EventTable from "./EventTable.svelte";
 
   export let events: Event[];
 
@@ -26,26 +27,10 @@
 {#if groups.length}
   <ChartSwitcher {charts} />
 
-  {#each groups as [type, events_in_group]}
+  {#each groups as [type, events_in_group] (type)}
     <div class="left">
       <h3>{format(_("Event: %(type)s"), { type })}</h3>
-      <table use:sortableTable>
-        <thead>
-          <tr>
-            <th data-sort="string" data-order="asc">{_("Date")}</th>
-            <th data-sort="string">{_("Description")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each events_in_group as event}
-            <tr>
-              <!-- <td><a href="#context-{event|hash_entry }">{ event.date }</a></td> -->
-              <td>{event.date}</td>
-              <td>{event.description}</td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+      <EventTable events={events_in_group} />
     </div>
   {/each}
 {:else}
