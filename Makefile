@@ -82,7 +82,7 @@ run-example:
 
 .PHONY: bql-grammar
 bql-grammar:
-	contrib/scripts.py generate-bql-grammar-json
+	tox exec -e lint -- python contrib/scripts.py generate-bql-grammar-json
 
 dist: src/fava/static/app.js src/fava setup.cfg pyproject.toml MANIFEST.in
 	rm -rf build dist
@@ -109,12 +109,12 @@ translations-extract:
 # for POEditor.
 .PHONY: translations-push
 translations-push: translations-extract
-	contrib/scripts.py upload-translations
+	tox exec -e lint -- python contrib/scripts.py upload-translations
 
 # Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
 .PHONY: translations-fetch
 translations-fetch:
-	contrib/scripts.py download-translations
+	tox exec -e lint -- python contrib/scripts.py download-translations
 
 # Build and upload the website.
 .PHONY: gh-pages
