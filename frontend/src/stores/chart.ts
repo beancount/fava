@@ -62,10 +62,11 @@ export const chartToggledCurrencies = localStorageSyncedStore(
 /** The currency to show the treemap of. */
 export const treemapCurrency = writable<string | null>(null);
 
+/** The currencies to over as conversion options. */
 const currency_suggestions = derived(
   [operating_currency, currencies_sorted, conversion_currencies],
   ([$operating_currency, $currencies_sorted, $conversion_currencies]) =>
-    $conversion_currencies.length
+    $conversion_currencies.length > 0
       ? $conversion_currencies
       : [
           ...$operating_currency,
@@ -75,13 +76,14 @@ const currency_suggestions = derived(
         ],
 );
 
+/** The possible conversion options and their human-readable descriptions. */
 export const conversions = derived(
   currency_suggestions,
-  ($currency_suggestions) => [
+  ($currency_suggestions): [conversion: string, description: string][] => [
     ["at_cost", _("At Cost")],
     ["at_value", _("At Market Value")],
     ["units", _("Units")],
-    ...$currency_suggestions.map((currency) => [
+    ...$currency_suggestions.map((currency): [string, string] => [
       currency,
       format(_("Converted to %(currency)s"), { currency }),
     ]),

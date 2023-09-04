@@ -14,8 +14,8 @@
 </script>
 
 <select bind:value={$conversion}>
-  {#each $conversions as [conversion_, conversionName]}
-    <option value={conversion_}>{conversionName}</option>
+  {#each $conversions as [conversion_, description]}
+    <option value={conversion_}>{description}</option>
   {/each}
 </select>
 <select bind:value={$interval}>
