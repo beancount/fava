@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v1.26 (2023-09-04)
+------------------
+
+This release brings various improvements to the charts, like allowing the
+toggling of currencies by clicking on their names in the chart legend. The
+account balance trees in Fava are now rendered in the frontend, fixing some
+minor bugs in the process and easing maintenance. Fava extensions can now also
+provide their own endpoints.
+
 v1.25 (2023-07-17)
 ------------------
 
