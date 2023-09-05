@@ -2671,6 +2671,19 @@
       "has_txns": false
     },
     {
+      "account": "Net Profit",
+      "balance": {
+        "USD": -35857.24,
+        "VACHR": -130
+      },
+      "balance_children": {
+        "USD": -35857.24,
+        "VACHR": -130
+      },
+      "children": [],
+      "has_txns": true
+    },
+    {
       "account": "Expenses",
       "balance": {},
       "balance_children": {
@@ -3046,19 +3059,6 @@
         }
       ],
       "has_txns": false
-    },
-    {
-      "account": "Net Profit",
-      "balance": {
-        "USD": -35857.24,
-        "VACHR": -130
-      },
-      "balance_children": {
-        "USD": -35857.24,
-        "VACHR": -130
-      },
-      "children": [],
-      "has_txns": true
     }
   ]
 }
