@@ -17,9 +17,14 @@
 {/if}
 
 <div class="row">
-  {#each trees as tree}
-    <div class="column">
+  <div class="column">
+    {#each trees.slice(0, 2) as tree}
       <TreeTable {tree} end={date_range?.end ?? null} />
-    </div>
-  {/each}
+    {/each}
+  </div>
+  <div class="column">
+    {#each trees.slice(2) as tree}
+      <TreeTable {tree} end={date_range?.end ?? null} />
+    {/each}
+  </div>
 </div>

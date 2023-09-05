@@ -1,5 +1,7 @@
 import { derived } from "svelte/store";
 
+import { _ } from "../i18n";
+
 import { account_details, fava_options, options } from ".";
 
 /** Whether an account should be collapsed in the account trees. */
@@ -16,7 +18,8 @@ export const invert_account = derived(
       ? (name) =>
           name.startsWith($options.name_income) ||
           name.startsWith($options.name_liabilities) ||
-          name.startsWith($options.name_equity)
+          name.startsWith($options.name_equity) ||
+          name === _("Net Profit")
       : () => false,
 );
 

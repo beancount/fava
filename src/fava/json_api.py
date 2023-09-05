@@ -492,8 +492,8 @@ def get_income_statement() -> TreeReport:
     root_tree = g.filtered.root_tree
     trees = [
         root_tree.get(options["name_income"]),
-        root_tree.get(options["name_expenses"]),
         root_tree.net_profit(options, gettext("Net Profit")),
+        root_tree.get(options["name_expenses"]),
     ]
 
     return TreeReport(
