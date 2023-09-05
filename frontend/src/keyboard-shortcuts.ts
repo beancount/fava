@@ -8,28 +8,27 @@ import { log_error } from "./log";
  * @param target - The target element to show the tooltip on.
  * @returns A function to remove event handler.
  */
-function showTooltip(target: HTMLElement): () => void {
-  const tooltip = document.createElement("div");
-  const isHidden = target.classList.contains("hidden");
-  if (isHidden) {
-    target.classList.remove("hidden");
+function showTooltip(target: HTMLElement, description: string): () => void {
+  const { hidden } = target;
+  if (hidden) {
+    target.hidden = false;
   }
+  const tooltip = document.createElement("div");
   tooltip.className = "keyboard-tooltip";
-  tooltip.textContent = target.getAttribute("data-key") ?? "";
+  tooltip.textContent = description;
   document.body.appendChild(tooltip);
-  const parentCoords = target.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
   // Padded 10px to the left if there is space or centered otherwise
   const left =
-    parentCoords.left +
+    targetRect.left +
     Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
-  const top =
-    parentCoords.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
+  const top = targetRect.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top + window.scrollY}px`;
   return () => {
     tooltip.remove();
-    if (isHidden) {
-      target.classList.add("hidden");
+    if (hidden) {
+      target.hidden = true;
     }
   };
 }
@@ -40,8 +39,9 @@ function showTooltip(target: HTMLElement): () => void {
 function showTooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
-    if (el instanceof HTMLElement) {
-      removes.push(showTooltip(el));
+    const key = el.getAttribute("data-key");
+    if (el instanceof HTMLElement && key !== null) {
+      removes.push(showTooltip(el, key));
     }
   });
   return () => {
@@ -254,8 +254,10 @@ export function initGlobalKeyboardShortcuts(): void {
       hide();
       document.removeEventListener("mousedown", once);
       document.removeEventListener("keydown", once);
+      document.removeEventListener("scroll", once);
     };
     document.addEventListener("mousedown", once);
     document.addEventListener("keydown", once);
+    document.addEventListener("scroll", once);
   });
 }
