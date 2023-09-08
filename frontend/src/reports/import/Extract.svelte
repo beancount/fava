@@ -14,25 +14,24 @@
   $: shown = entries.length > 0;
   $: entry = entries[currentIndex];
   $: duplicate = entry && isDuplicate(entry);
-  $: skipDuplicates = true;
   $: duplicates = entries.filter(isDuplicate).length;
   $: if (entries.length > 0 && currentIndex >= entries.length) {
     currentIndex = 0;
   }
 
-  function nextEntry() {
-    if(skipDuplicates) {
-      for (let index = currentIndex+1; index < entries.length; index+=1) {
-        const newEntry = entries[index];
-        if (newEntry !== undefined && !isDuplicate(newEntry)) {
-          currentIndex = index;
-          return;
-        }
+  function nextNonDuplicateEntry() {
+    for (let index = currentIndex+1; index < entries.length; index+=1) {
+      const newEntry = entries[index];
+      if (newEntry !== undefined && !isDuplicate(newEntry)) {
+        currentIndex = index;
+        return;
       }
-      currentIndex = entries.length-1;
-    }else{
-      currentIndex += 1;
     }
+    currentIndex = entries.length-1;
+  }
+
+  function nextEntry() {
+    currentIndex += 1;
   }
 
   function submitOrNext() {
@@ -43,28 +42,25 @@
     }
   }
 
-  function previousEntry() {
-    if(skipDuplicates) {
-      for (let index = currentIndex-1; index >= 0; index-=1) {
-        const newEntry = entries[index];
-        if (newEntry !== undefined && !isDuplicate(newEntry)) {
-          currentIndex = index;
-          return;
-        }
+  function previousNonDuplicateEntry() {
+    for (let index = currentIndex-1; index >= 0; index-=1) {
+      const newEntry = entries[index];
+      if (newEntry !== undefined && !isDuplicate(newEntry)) {
+        currentIndex = index;
+        return;
       }
-      currentIndex = 0;
-    }else{
-      currentIndex = Math.max(currentIndex - 1, 0);
     }
+    currentIndex = 0;
+  }
+
+  function previousEntry() {
+      currentIndex = Math.max(currentIndex - 1, 0);
   }
 
   function toggleDuplicate() {
     if (entry) {
       entry.meta.__duplicate__ = !entry.meta.__duplicate__;
     }
-  }
-  function toggleSkipDuplicates() {
-    skipDuplicates = !skipDuplicates;
   }
 </script>
 
@@ -105,21 +101,19 @@
           >
             ⏮
           </button>
-          <button type="button" class="muted" on:click={previousEntry}>
-            {_("Previous")}
+          <button type="button" class="muted" on:click={previousNonDuplicateEntry} title="{_('Previous non-duplicate entry')}">
+            &lt;&lt;
+          </button>
+          <button type="button" class="muted" on:click={previousEntry} title="_('Previous entry')">
+            &lt;
           </button>
         {/if}
         <span class="spacer" />
-          <label class="button muted">
-          <input
-            type="checkbox"
-            checked={skipDuplicates}
-            on:click={toggleSkipDuplicates}
-          />
-          skip duplicates
-        </label>
         {#if currentIndex < entries.length - 1}
-          <button type="submit">{_("Next")}</button>
+          <button type="submit" class="muted" title="{_('Next entry')}">&gt;</button>
+          <button type="button" class="muted" on:click={nextNonDuplicateEntry} title="{_('Next non-duplicate entry')}">
+            &gt;&gt;
+          </button>
           <button
             type="button"
             class="muted"
