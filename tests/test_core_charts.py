@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core.charts import dumps
 from fava.util.date import Interval
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -27,7 +26,7 @@ def test_interval_totals(
             "Expenses",
             conversion,
         )
-        snapshot(dumps(data))
+        snapshot(data, json=True)
 
 
 def test_interval_totals_inverted(
@@ -43,7 +42,7 @@ def test_interval_totals_inverted(
             conversion,
             invert=True,
         )
-        snapshot(dumps(data))
+        snapshot(data, json=True)
 
 
 def test_linechart_data(
@@ -57,13 +56,13 @@ def test_linechart_data(
             "Assets:Testing:MultipleCommodities",
             conversion,
         )
-        snapshot(dumps(data))
+        snapshot(data, json=True)
 
 
 def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.net_worth(filtered, Interval.MONTH, "USD")
-    snapshot(dumps(data))
+    snapshot(data, json=True)
 
 
 def test_net_worth_off_by_one(
@@ -79,7 +78,7 @@ def test_net_worth_off_by_one(
             interval,
             "at_value",
         )
-        snapshot(dumps(data))
+        snapshot(data, json=True)
 
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
@@ -114,4 +113,4 @@ def test_query(
         query,
     )
     data = example_ledger.charts.query(types, rows)
-    snapshot(dumps(data))
+    snapshot(data, json=True)

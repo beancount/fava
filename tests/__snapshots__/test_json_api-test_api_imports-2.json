@@ -1,0 +1,78 @@
+[
+  {
+    "account": "Assets:Checking",
+    "comment": "Hinweis: Zinssatz auf 0,15% ge\u00e4ndert",
+    "date": "2017-02-12",
+    "meta": {
+      "__source__": ";;2017-02-12;;;;;;;Hinweis: Zinssatz auf 0,15% ge\u00e4ndert;",
+      "filename": "TEST_DATA_DIR/import.csv",
+      "lineno": 2
+    },
+    "t": "Note"
+  },
+  {
+    "date": "2017-02-13",
+    "flag": "*",
+    "links": [],
+    "meta": {
+      "__source__": "ATXYZ123400000;1;2017-02-13;2017-02-13;2017-02-13-11.12.14.754647;;EUR;-50,00;SEPA-Lastschrift;Payment to Company XYZ REF: 31000161205-6944556-0000463;4.567,89",
+      "filename": "TEST_DATA_DIR/import.csv",
+      "lineno": 1
+    },
+    "narration": "Payment to Company XYZ REF: 31000161205-6944556-0000463",
+    "payee": "",
+    "postings": [
+      {
+        "account": "",
+        "amount": "50.00 EUR"
+      },
+      {
+        "account": "Assets:Checking",
+        "amount": "-50.00 EUR"
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "date": "2017-02-14",
+    "flag": "*",
+    "links": [],
+    "meta": {
+      "__duplicate__": true,
+      "__source__": "ATXYZ123400000;1;2017-02-14;2017-02-14;2017-02-14-11.57.44.235044;;EUR;-100,00;Bankomat; BANKOMAT  00000483 K2 UM 11:56;4.467,89",
+      "filename": "TEST_DATA_DIR/import.csv",
+      "lineno": 0
+    },
+    "narration": " BANKOMAT  00000483 K2 UM 11:56",
+    "payee": "",
+    "postings": [
+      {
+        "account": "",
+        "amount": "100.00 EUR"
+      },
+      {
+        "account": "Assets:Checking",
+        "amount": "-100.00 EUR"
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "account": "Assets:Checking",
+    "amount": {
+      "currency": "USD",
+      "number": "10"
+    },
+    "date": "TODAY",
+    "diff_amount": null,
+    "meta": {
+      "__source__": "Balance",
+      "filename": "TEST_DATA_DIR/import.csv",
+      "lineno": 0
+    },
+    "t": "Balance",
+    "tolerance": null
+  }
+]

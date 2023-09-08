@@ -20,6 +20,7 @@ from fava.beans.abc import Custom
 from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.budgets import parse_budgets
+from fava.core.charts import dumps
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Literal
@@ -37,7 +38,13 @@ if TYPE_CHECKING:  # pragma: no cover
     class SnapshotFunc(Protocol):
         """Callable protocol for the snapshot function."""
 
-        def __call__(self, data: Any, name: str = ..., /) -> None:
+        def __call__(
+            self,
+            data: Any,
+            /,
+            name: str = ...,
+            json: bool = ...,
+        ) -> None:
             ...
 
 
@@ -79,12 +86,17 @@ def snapshot(
 ) -> SnapshotFunc:
     """Create a snaphot for some given data."""
     fn_name = request.function.__name__
-    module_name = module_path.name
+    module_name = module_path.stem
 
-    def snapshot_data(data: Any, name: str | None = None) -> None:
+    def snapshot_data(
+        data: Any,
+        name: str | None = None,
+        json: bool = False,
+    ) -> None:
         if os.environ.get("SNAPSHOT_IGNORE"):
-            # For the tests with old dependencies, we avoid comparing the snapshots,
-            # as they might change in subtle ways between dependency versions.
+            # For the tests runs with old dependencies, we avoid comparing
+            # the snapshots, as they might change in subtle ways between
+            # dependency versions.
             return
 
         snap_count[fn_name] += 1
@@ -94,14 +106,17 @@ def snapshot(
         elif snap_count[fn_name] > 1:
             filename = f"{filename}-{snap_count[fn_name]}"
 
+        if json:
+            if not isinstance(data, str):
+                data = dumps(data)
+            filename += ".json"
+
         snap_file = snap_dir / filename
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         # replace today
         out = out.replace(str(datetime.date.today()), "TODAY")
-        # replace relative dates
-        out = re.sub(r"\d+ days ago", "X days ago", out)
         # replace entry hashes
         out = re.sub(r'"[0-9a-f]{32}', '"ENTRY_HASH', out)
         out = re.sub(r"context-[0-9a-f]{32}", "context-ENTRY_HASH", out)

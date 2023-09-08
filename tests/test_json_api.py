@@ -12,7 +12,6 @@ import pytest
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
-from fava.core.charts import dumps
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
@@ -177,7 +176,7 @@ def test_api_context(
         query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
-    snapshot(data)
+    snapshot(data, json=True)
 
     entry_hash = hash_entry(example_ledger.all_entries[10])
     response = test_client.get(
@@ -185,7 +184,7 @@ def test_api_context(
         query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
-    snapshot(data)
+    snapshot(data, json=True)
     assert not data.get("balances_before")
 
 
@@ -202,7 +201,7 @@ def test_api_payee_accounts(
     data = assert_api_success(response)
     assert data[0] == "Assets:US:BofA:Checking"
     assert data[1] == "Expenses:Home:Electricity"
-    snapshot(data)
+    snapshot(data, json=True)
 
 
 def test_api_payee_transaction(
@@ -214,7 +213,7 @@ def test_api_payee_transaction(
         query_string={"payee": "EDISON POWER"},
     )
     data = assert_api_success(response)
-    snapshot(data)
+    snapshot(data, json=True)
 
 
 def test_api_imports(
@@ -224,7 +223,7 @@ def test_api_imports(
     response = test_client.get("/import/api/imports")
     data = assert_api_success(response)
     assert data
-    snapshot(data)
+    snapshot(data, json=True)
 
     importable = next(f for f in data if f["importers"])
     assert importable
@@ -237,7 +236,7 @@ def test_api_imports(
         },
     )
     data = assert_api_success(response)
-    snapshot(data)
+    snapshot(data, json=True)
 
 
 def test_api_move(test_client: FlaskClient) -> None:
@@ -532,7 +531,7 @@ def test_api_query_result_charts(
     )
     data = assert_api_success(response)
     assert data["chart"]
-    snapshot(data["chart"])
+    snapshot(data["chart"], json=True)
 
 
 def test_api_commodities_empty(
@@ -583,4 +582,4 @@ def test_api(
     response = test_client.get(url)
     data = assert_api_success(response)
     assert data
-    snapshot(dumps(data), name)
+    snapshot(data, name=name, json=True)

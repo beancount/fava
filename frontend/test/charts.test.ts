@@ -45,7 +45,7 @@ test("chart helpers (pad extent)", () => {
 test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
   assert.ok(hierarchy("name", "", ctx).is_err);
-  const data = await loadJSONSnapshot("test_internal_api.py-test_chart_api");
+  const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
   const parsed = parseChartData(data, ctx).unwrap()[0];
   assert.ok(parsed instanceof HierarchyChart);
   assert.equal([...parsed.data.keys()], ["USD"]);

@@ -91,7 +91,7 @@ def test_serialise_entry_types(
 
     2019-12-12 query "query name" "journal"
     """
-    snapshot(dumps([serialise(entry) for entry in load_doc_entries]))
+    snapshot([serialise(entry) for entry in load_doc_entries], json=True)
 
 
 @pytest.mark.parametrize(

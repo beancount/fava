@@ -1,0 +1,69 @@
+[
+  {
+    "basename": "errors.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/errors.beancount"
+  },
+  {
+    "basename": "example-balances.csv",
+    "importers": [],
+    "name": "TEST_DATA_DIR/example-balances.csv"
+  },
+  {
+    "basename": "example-utf8-\ud83e\udd81.txt",
+    "importers": [],
+    "name": "TEST_DATA_DIR/example-utf8-\ud83e\udd81.txt"
+  },
+  {
+    "basename": "example.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/example.beancount"
+  },
+  {
+    "basename": "extension-report-example.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/extension-report-example.beancount"
+  },
+  {
+    "basename": "import.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/import.beancount"
+  },
+  {
+    "basename": "import.csv",
+    "importers": [
+      {
+        "account": "Assets:Checking",
+        "date": "TODAY",
+        "importer_name": "<run_path>.TestImporter",
+        "name": "examplebank.import.csv"
+      }
+    ],
+    "name": "TEST_DATA_DIR/import.csv"
+  },
+  {
+    "basename": "import_config.py",
+    "importers": [],
+    "name": "TEST_DATA_DIR/import_config.py"
+  },
+  {
+    "basename": "invalid-unicode.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/invalid-unicode.beancount"
+  },
+  {
+    "basename": "long-example.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/long-example.beancount"
+  },
+  {
+    "basename": "off-by-one.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/off-by-one.beancount"
+  },
+  {
+    "basename": "query-example.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/query-example.beancount"
+  }
+]

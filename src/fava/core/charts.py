@@ -27,7 +27,7 @@ from fava.beans.abc import Position
 from fava.beans.abc import Transaction
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
-from fava.core.conversion import units
+from fava.core.conversion import simple_units
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
@@ -44,19 +44,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 ONE_DAY = timedelta(days=1)
-ZERO = Decimal("0")
-
-
-def inv_to_dict(inventory: Inventory) -> dict[str, Decimal]:
-    """Convert an inventory to a simple cost->number dict."""
-    return {
-        pos.units.currency: pos.units.number
-        for pos in inventory
-        if pos.units.number is not None
-    }
-
-
-Inventory.for_json = inv_to_dict  # type: ignore[attr-defined]
+ZERO = Decimal()
 
 
 def _json_default(o: Any) -> Any:
@@ -81,7 +69,6 @@ def dumps(obj: Any, **_kwargs: Any) -> str:
         indent="  ",
         sort_keys=True,
         default=_json_default,
-        for_json=True,
     )
 
 
@@ -97,7 +84,7 @@ class FavaJSONProvider(JSONProvider):
         return dumps(obj)
 
     def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
-        return loads(s)
+        return simplejson_loads(s)
 
 
 @dataclass(frozen=True)
@@ -254,13 +241,11 @@ class ChartModule(FavaModule):
             if change.is_empty():
                 continue
 
-            balance = inv_to_dict(
-                cost_or_value(
-                    balance_inventory,
-                    conversion,
-                    prices,
-                    entry.date,
-                ),
+            balance = cost_or_value(
+                CounterInventory.from_positions(balance_inventory),
+                conversion,
+                prices,
+                entry.date,
             )
 
             currencies = set(balance.keys())
@@ -341,7 +326,7 @@ class ChartModule(FavaModule):
         self,
         types: list[ResultType],
         rows: list[ResultRow],
-    ) -> list[dict[str, date | str | Inventory]]:
+    ) -> list[dict[str, date | str | SimpleCounterInventory]]:
         """Chart for a query.
 
         Args:
@@ -352,6 +337,10 @@ class ChartModule(FavaModule):
             raise FavaAPIError("Can not plot the given chart.")
         if types[0][1] is date:
             return [
-                {"date": date, "balance": units(inv)} for date, inv in rows
+                {"date": date, "balance": simple_units(inv)}
+                for date, inv in rows
             ]
-        return [{"group": group, "balance": units(inv)} for group, inv in rows]
+        return [
+            {"group": group, "balance": simple_units(inv)}
+            for group, inv in rows
+        ]

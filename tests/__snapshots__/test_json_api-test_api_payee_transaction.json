@@ -1,0 +1,23 @@
+{
+  "date": "2016-04-09",
+  "flag": "*",
+  "links": [],
+  "meta": {
+    "filename": "TEST_DATA_DIR/long-example.beancount",
+    "lineno": 729
+  },
+  "narration": "",
+  "payee": "EDISON POWER",
+  "postings": [
+    {
+      "account": "Assets:US:BofA:Checking",
+      "amount": "-65.00 USD"
+    },
+    {
+      "account": "Expenses:Home:Electricity",
+      "amount": "65.00 USD"
+    }
+  ],
+  "t": "Transaction",
+  "tags": []
+}

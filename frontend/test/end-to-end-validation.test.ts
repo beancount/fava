@@ -17,14 +17,16 @@ import { currencies, ledgerData } from "../src/stores";
 import { conversions } from "../src/stores/chart";
 
 /** Load the Python test snapshot output with the given name and parse as JSON. */
-export async function loadJSONSnapshot(name: string): Promise<unknown> {
+export async function loadJSONSnapshot(
+  name: `${string}.json`,
+): Promise<unknown> {
   const path = join(__dirname, "..", "..", "tests", "__snapshots__", name);
   return parseJSON(await readFile(path, "utf8")).unwrap();
 }
 
 test("validate ledger data", async () => {
   const data = await loadJSONSnapshot(
-    "test_internal_api.py-test_get_ledger_data",
+    "test_internal_api-test_get_ledger_data.json",
   );
   const res = ledgerDataValidator(data).unwrap();
   assert.equal(res.accounts[0], "Liabilities:US:Chase:Slate");
@@ -65,7 +67,7 @@ test("validate ledger data", async () => {
 });
 
 test("validate events", async () => {
-  const data = await loadJSONSnapshot("test_json_api.py-test_api-events");
+  const data = await loadJSONSnapshot("test_json_api-test_api-events.json");
   const res = getAPIValidators.events(data);
   assert.equal(res.unwrap()[0]?.type, "employer");
 });

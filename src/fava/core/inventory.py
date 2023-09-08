@@ -81,6 +81,13 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         else:
             self[key] = new_num
 
+    @staticmethod
+    def from_positions(positions: Iterable[Position]) -> CounterInventory:
+        inv = CounterInventory()
+        for position in positions:
+            inv.add_position(position)
+        return inv
+
     def reduce(
         self,
         reducer: Callable[Concatenate[Position, P], Amount],

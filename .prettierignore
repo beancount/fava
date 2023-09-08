@@ -1,2 +1,2 @@
 src/fava/**/*.html
-package-lock.json
+tests/__snapshots__/*

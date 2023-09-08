@@ -8,6 +8,7 @@ from typing import overload
 from typing import TYPE_CHECKING
 
 from fava.beans import create
+from fava.core.inventory import SimpleCounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -18,7 +19,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Position
     from fava.beans.prices import FavaPriceMap
     from fava.core.inventory import CounterInventory
-    from fava.core.inventory import SimpleCounterInventory
 
 
 def get_units(pos: Position) -> Amount:
@@ -112,42 +112,21 @@ def convert_position(
     return units_
 
 
-@overload
-def units(inventory: Inventory) -> Inventory:  # pragma: no cover
-    ...
+def simple_units(
+    inventory: Inventory,
+) -> SimpleCounterInventory:
+    """Get the units of an inventory."""
+    res = SimpleCounterInventory()
+    for pos in inventory:
+        res.add(pos.units.currency, pos.units.number)
+    return res
 
 
-@overload
 def units(
     inventory: CounterInventory,
-) -> SimpleCounterInventory:  # pragma: no cover
-    ...
-
-
-def units(
-    inventory: Inventory | CounterInventory,
-) -> Inventory | SimpleCounterInventory:
+) -> SimpleCounterInventory:
     """Get the units of an inventory."""
     return inventory.reduce(get_units)
-
-
-@overload
-def cost(inventory: Inventory) -> Inventory:  # pragma: no cover
-    ...
-
-
-@overload
-def cost(
-    inventory: CounterInventory,
-) -> SimpleCounterInventory:  # pragma: no cover
-    ...
-
-
-def cost(
-    inventory: Inventory | CounterInventory,
-) -> Inventory | SimpleCounterInventory:
-    """Get the cost of an inventory."""
-    return inventory.reduce(get_cost)
 
 
 @overload
