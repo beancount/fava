@@ -44,8 +44,7 @@ if TYPE_CHECKING:  # pragma: no cover
             /,
             name: str = ...,
             json: bool = ...,
-        ) -> None:
-            ...
+        ) -> None: ...
 
 
 @pytest.fixture(scope="session")
