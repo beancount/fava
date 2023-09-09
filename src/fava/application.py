@@ -228,8 +228,8 @@ def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
                 if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
                     abort(404)
             g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
-            g.conversion = request.args.get("conversion", "at_cost")
-            g.interval = Interval.get(request.args.get("interval", "month"))
+            g.conversion = request.args.get("conversion", "") or "at_cost"
+            g.interval = Interval.get(request.args.get("interval", ""))
 
     @fava_app.errorhandler(FavaAPIError)
     def fava_api_exception(error: FavaAPIError) -> str:

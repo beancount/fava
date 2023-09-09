@@ -660,7 +660,8 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     entries = g.ledger.account_journal(
         g.filtered,
         account_name,
-        with_journal_children=g.ledger.fava_options.account_journal_include_children,
+        g.conversion,
+        g.ledger.fava_options.account_journal_include_children,
     )
     return AccountReportJournal(
         charts,

@@ -73,10 +73,8 @@ def balance_string(tree_node: TreeNode) -> str:
     account = tree_node.name
     today = str(datetime.date.today())
     res = ""
-    for pos in units(tree_node.balance).amounts():
-        res += (
-            f"{today} balance {account:<28} {pos.number:>15} {pos.currency}\n"
-        )
+    for currency, number in units(tree_node.balance).items():
+        res += f"{today} balance {account:<28} {number:>15} {currency}\n"
     return res
 
 

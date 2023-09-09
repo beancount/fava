@@ -4,7 +4,6 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Callable
 from typing import Dict
-from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 from typing import TYPE_CHECKING
@@ -28,11 +27,6 @@ ZERO = Decimal()
 InventoryKey = Tuple[str, Optional[Cost]]
 
 
-class _Amount(NamedTuple):
-    currency: str
-    number: Decimal
-
-
 class SimpleCounterInventory(Dict[str, Decimal]):
     """A simple inventory mapping just strings to numbers."""
 
@@ -47,10 +41,6 @@ class SimpleCounterInventory(Dict[str, Decimal]):
             self.pop(key, None)
         else:
             self[key] = new_num
-
-    def amounts(self) -> Iterable[_Amount]:
-        """Get the amounts in this inventory."""
-        return (_Amount(currency, number) for currency, number in self.items())
 
     def __iter__(self) -> Iterator[str]:
         raise NotImplementedError

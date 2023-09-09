@@ -10,7 +10,6 @@ from typing import Iterable
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
-from beancount.core import realization
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
 from beancount.loader import _load  # type: ignore[attr-defined]
@@ -20,6 +19,7 @@ from beancount.utils.encryption import is_encrypted_file
 from fava.beans.abc import Balance
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
+from fava.beans.account import child_account_tester
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import hash_entry
 from fava.beans.prices import FavaPriceMap
@@ -29,6 +29,7 @@ from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.commodities import CommoditiesModule
+from fava.core.conversion import cost_or_value
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
@@ -38,6 +39,7 @@ from fava.core.filters import AdvancedFilter
 from fava.core.filters import TimeFilter
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import IngestModule
+from fava.core.inventory import CounterInventory
 from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
@@ -50,12 +52,11 @@ from fava.util.date import dateranges
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
-    from beancount.core.realization import RealAccount
-
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.core.fava_options import FavaOptions
     from fava.core.group_entries import EntriesByType
+    from fava.core.inventory import SimpleCounterInventory
     from fava.helpers import BeancountError
     from fava.util.date import DateRange
     from fava.util.date import Interval
@@ -128,14 +129,6 @@ class FilteredLedger:
             if isinstance(entry, (Transaction, Price)):
                 self._date_last = entry.date + timedelta(1)
                 break
-
-    @cached_property
-    def root_account(self) -> RealAccount:
-        """A realized account for the filtered entries."""
-        return realization.realize(
-            self.entries,  # type: ignore[arg-type]
-            self.ledger.root_accounts,
-        )
 
     @property
     def end_date(self) -> date | None:
@@ -418,45 +411,57 @@ class FavaLedger:
 
         return interval_balances, interval_ranges
 
+    @listify
     def account_journal(
         self,
         filtered: FilteredLedger,
         account_name: str,
-        with_journal_children: bool = False,
-    ) -> Iterable[tuple[Directive, Inventory, Inventory]]:
+        conversion: str,
+        with_children: bool,
+    ) -> Iterable[
+        tuple[Directive, SimpleCounterInventory, SimpleCounterInventory]
+    ]:
         """Journal for an account.
 
         Args:
             filtered: The currently filtered ledger.
             account_name: An account name.
-            with_journal_children: Whether to include postings of subaccounts
-                of the given account.
+            conversion: The conversion to use.
+            with_children: Whether to include postings of subaccounts of
+                           the account.
 
         Returns:
             A generator of ``(entry, change, balance)`` tuples.
-            change and balance have already been reduced to units.
         """
-        real_account = realization.get_or_create(
-            filtered.root_account,
-            account_name,
-        )
-        txn_postings = (
-            realization.get_postings(real_account)
-            if with_journal_children
-            else real_account.txn_postings
+
+        def is_account(a: str) -> bool:
+            return a == account_name
+
+        relevant_account = (
+            child_account_tester(account_name) if with_children else is_account
         )
 
-        return (
-            (entry, change, balance)
-            for (
-                entry,
-                _postings,
-                change,
-                balance,
-            ) in realization.iterate_with_balance(
-                txn_postings,  # type: ignore[arg-type]
-            )
-        )
+        prices = self.prices
+        balance = CounterInventory()
+        for entry in filtered.entries:
+            change = CounterInventory()
+            entry_is_relevant = False
+            postings = getattr(entry, "postings", None)
+            if postings is not None:
+                for posting in postings:
+                    if relevant_account(posting.account):
+                        entry_is_relevant = True
+                        balance.add_position(posting)
+                        change.add_position(posting)
+            elif any(relevant_account(a) for a in get_entry_accounts(entry)):
+                entry_is_relevant = True
+
+            if entry_is_relevant:
+                yield (
+                    entry,
+                    cost_or_value(change, conversion, prices, entry.date),
+                    cost_or_value(balance, conversion, prices, entry.date),
+                )
 
     def get_entry(self, entry_hash: str) -> Directive:
         """Find an entry.

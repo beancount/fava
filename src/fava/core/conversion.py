@@ -4,7 +4,6 @@ All functions in this module will be automatically added as template filters.
 """
 from __future__ import annotations
 
-from typing import overload
 from typing import TYPE_CHECKING
 
 from fava.beans import create
@@ -129,34 +128,14 @@ def units(
     return inventory.reduce(get_units)
 
 
-@overload
-def cost_or_value(
-    inventory: Inventory,
-    conversion: str,
-    prices: FavaPriceMap,
-    date: datetime.date | None,
-) -> Inventory:  # pragma: no cover
-    ...
-
-
-@overload
 def cost_or_value(
     inventory: CounterInventory,
     conversion: str,
     prices: FavaPriceMap,
-    date: datetime.date | None,
-) -> SimpleCounterInventory:  # pragma: no cover
-    ...
-
-
-def cost_or_value(
-    inventory: Inventory | CounterInventory,
-    conversion: str,
-    prices: FavaPriceMap,
     date: datetime.date | None = None,
-) -> Inventory | SimpleCounterInventory:
+) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
-    if not conversion or conversion == "at_cost":
+    if conversion == "at_cost":
         return inventory.reduce(get_cost)
     if conversion == "at_value":
         return inventory.reduce(get_market_value, prices, date)

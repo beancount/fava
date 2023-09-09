@@ -92,7 +92,7 @@ class DateAndBalance:
     """Balance at a date."""
 
     date: date
-    balance: dict[str, Decimal]
+    balance: SimpleCounterInventory
 
 
 @dataclass(frozen=True)

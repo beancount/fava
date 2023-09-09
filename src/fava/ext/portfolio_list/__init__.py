@@ -11,9 +11,9 @@ from typing import NamedTuple
 from typing import TYPE_CHECKING
 
 from fava.context import g
+from fava.core.conversion import cost_or_value
 from fava.ext import FavaExtensionBase
 from fava.helpers import FavaAPIError
-from fava.template_filters import cost_or_value
 
 if TYPE_CHECKING:
     from fava.beans.funcs import ResultType
@@ -139,7 +139,11 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         acct_balances: list[tuple[str, Decimal | None]] = []
         total = Decimal()
         for node in nodes:
-            balance = cost_or_value(node.balance)
+            balance = cost_or_value(
+                node.balance,
+                g.conversion,
+                g.ledger.prices,
+            )
             if operating_currency in balance:
                 balance_dec = balance[operating_currency]
                 total += balance_dec

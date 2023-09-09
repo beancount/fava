@@ -12,15 +12,11 @@ from unicodedata import normalize
 
 from fava.beans import funcs
 from fava.context import g
-from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
-
     from fava.beans.abc import Meta
     from fava.beans.abc import MetaValue
-    from fava.core.inventory import CounterInventory
     from fava.core.inventory import SimpleCounterInventory
 
 
@@ -36,19 +32,6 @@ def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
         for key, value in meta.items()
         if not (key == "filename" or key == "lineno" or key.startswith("__"))
     ]
-
-
-def cost_or_value(
-    inventory: CounterInventory,
-    date: datetime.date | None = None,
-) -> SimpleCounterInventory:
-    """Get the cost or value of an inventory."""
-    return cost_or_value_without_context(
-        inventory,
-        g.conversion,
-        g.ledger.prices,
-        date,
-    )
 
 
 def format_currency(
@@ -87,7 +70,6 @@ FILTERS: list[
     ]
 ] = [
     basename,
-    cost_or_value,
     flag_to_type,
     format_currency,
     funcs.hash_entry,
