@@ -11,6 +11,8 @@ To start a simple server::
 """
 from __future__ import annotations
 
+import logging
+import mimetypes
 from dataclasses import fields
 from datetime import date
 from datetime import datetime
@@ -88,6 +90,13 @@ CLIENT_SIDE_REPORTS = [
     "query",
     "trial_balance",
 ]
+
+
+if mimetypes.types_map.get(".js") == "application/javascript":
+    # This is sometimes broken on windows, see
+    # https://github.com/beancount/fava/issues/1446
+    logging.error("Invalid mimetype set for '.js', overriding")
+    mimetypes.add_type("application/javascript", ".js")
 
 
 def _ledger_slugs_dict(ledgers: Iterable[FavaLedger]) -> dict[str, FavaLedger]:
