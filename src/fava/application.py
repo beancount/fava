@@ -92,7 +92,7 @@ CLIENT_SIDE_REPORTS = [
 ]
 
 
-if mimetypes.types_map.get(".js") == "application/javascript":
+if mimetypes.types_map.get(".js") != "application/javascript":
     # This is sometimes broken on windows, see
     # https://github.com/beancount/fava/issues/1446
     logging.error("Invalid mimetype set for '.js', overriding")
