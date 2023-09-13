@@ -53,7 +53,7 @@ def test_client_side_reports(
     """The client-side rendered reports are generated."""
     result = test_client.get("/long-example/documents/")
     assert result.status_code == 200
-    snapshot(result.get_data(True))
+    snapshot(result.get_data(as_text=True))
 
 
 @pytest.mark.parametrize(
@@ -169,8 +169,8 @@ def test_help_ages(test_client: FlaskClient) -> None:
     """Help pages."""
     result = test_client.get("/long-example/help/")
     assert result.status_code == 200
-    assert f"Fava <code>{fava_version}</code>" in result.get_data(True)
-    assert f"<code>{beancount_version}</code>" in result.get_data(True)
+    assert f"Fava <code>{fava_version}</code>" in result.get_data(as_text=True)
+    assert f"<code>{beancount_version}</code>" in result.get_data(as_text=True)
     result = test_client.get("/long-example/help/filters")
     assert result.status_code == 200
     result = test_client.get("/long-example/help/asdfasdf")
@@ -191,11 +191,11 @@ def test_incognito(test_data_dir: Path) -> None:
     test_client = app.test_client()
     result = test_client.get("/example/balance_sheet/")
     assert result.status_code == 200
-    assert "XXX" in result.get_data(True)
+    assert "XXX" in result.get_data(as_text=True)
 
     result = test_client.get("/example/api/commodities")
     assert result.status_code == 200
-    assert "XXX" not in result.get_data(True)
+    assert "XXX" not in result.get_data(as_text=True)
 
 
 def test_read_only_mode(test_data_dir: Path) -> None:
@@ -224,7 +224,7 @@ def test_download_journal(
         "/long-example/download-journal/",
         query_string={"time": "2016-05-07"},
     )
-    snapshot(result.get_data(True))
+    snapshot(result.get_data(as_text=True))
     assert result.headers["Content-Disposition"].startswith(
         'attachment; filename="journal_',
     )

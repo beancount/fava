@@ -1,7 +1,7 @@
 """Account balance trees."""
 from __future__ import annotations
 
-import collections
+from collections import defaultdict
 from dataclasses import dataclass
 from operator import attrgetter
 from typing import Dict
@@ -65,6 +65,7 @@ class TreeNode:
         conversion: str,
         prices: FavaPriceMap,
         end: datetime.date | None,
+        *,
         with_cost: bool = False,
     ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
         """Serialise the account.
@@ -129,9 +130,8 @@ class Tree(Dict[str, TreeNode]):
             for account in create_accounts:
                 self.get(account, insert=True)
         if entries:
-            account_balances: dict[str, CounterInventory] = (
-                collections.defaultdict(CounterInventory)
-            )
+            account_balances: dict[str, CounterInventory]
+            account_balances = defaultdict(CounterInventory)
             for entry in entries:
                 if isinstance(entry, Open):
                     self.get(entry.account, insert=True)
@@ -179,6 +179,7 @@ class Tree(Dict[str, TreeNode]):
     def get(  # type: ignore[override]
         self,
         name: str,
+        *,
         insert: bool = False,
     ) -> TreeNode:
         """Get an account.

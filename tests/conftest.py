@@ -42,6 +42,7 @@ if TYPE_CHECKING:  # pragma: no cover
             self,
             data: Any,
             /,
+            *,
             name: str = ...,
             json: bool = ...,
         ) -> None: ...
@@ -90,6 +91,7 @@ def snapshot(
     def snapshot_data(
         data: Any,
         name: str | None = None,
+        *,
         json: bool = False,
     ) -> None:
         if os.environ.get("SNAPSHOT_IGNORE"):

@@ -218,7 +218,7 @@ class FilterSyntaxParser:
         left, right = p[1], p[3]
 
         def _or(entry: Directive) -> bool:
-            return left(entry) or right(entry)  #  type: ignore[no-any-return]
+            return left(entry) or right(entry)  # type: ignore[no-any-return]
 
         p[0] = _or
 

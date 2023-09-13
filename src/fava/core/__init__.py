@@ -263,7 +263,7 @@ class FavaLedger:
         #: A :class:`.QueryShell` instance.
         self.query_shell = QueryShell(self)
 
-        #: A :class:`.AccountDict` module - a dict with information about the accounts.
+        #: A :class:`.AccountDict` module - details about the accounts.
         self.accounts = AccountDict(self)
 
         self._watcher = Watcher()
@@ -376,6 +376,7 @@ class FavaLedger:
         filtered: FilteredLedger,
         interval: Interval,
         account_name: str,
+        *,
         accumulate: bool = False,
     ) -> tuple[list[Tree], list[DateRange]]:
         """Balances by interval.
@@ -417,6 +418,7 @@ class FavaLedger:
         filtered: FilteredLedger,
         account_name: str,
         conversion: str,
+        *,
         with_children: bool,
     ) -> Iterable[
         tuple[Directive, SimpleCounterInventory, SimpleCounterInventory]

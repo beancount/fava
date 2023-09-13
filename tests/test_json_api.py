@@ -70,7 +70,7 @@ def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
 
 def test_api_changed(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/changed")
-    assert_api_success(response, False)
+    assert_api_success(response, data=False)
 
 
 def test_api_add_document(
@@ -377,7 +377,7 @@ def test_api_source_slice_delete(
         and entry.date == datetime.date(2016, 5, 3)
     )
     entry_hash = hash_entry(entry)
-    entry_source, sha256sum = get_entry_slice(entry)
+    _entry_source, sha256sum = get_entry_slice(entry)
 
     # delete entry
     response = test_client.delete(
@@ -504,7 +504,7 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
         query_string={"query_string": "nononono"},
     )
     assert response.status_code == 200
-    assert "ERROR: Syntax error near" in response.get_data(True)
+    assert "ERROR: Syntax error near" in response.get_data(as_text=True)
 
 
 def test_api_query_result_filters(test_client: FlaskClient) -> None:

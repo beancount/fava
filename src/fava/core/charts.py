@@ -134,6 +134,7 @@ class ChartModule(FavaModule):
         interval: Interval,
         accounts: str | tuple[str, ...],
         conversion: str,
+        *,
         invert: bool = False,
     ) -> Iterable[DateAndBalanceWithBudget]:
         """Render totals for account (or accounts) in the intervals.

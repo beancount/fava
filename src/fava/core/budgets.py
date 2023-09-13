@@ -181,15 +181,11 @@ def calculate_budget(
 
     currency_dict: dict[str, Decimal] = defaultdict(Decimal)
 
-    for single_day in days_in_daterange(date_from, date_to):
-        matches = _matching_budgets(budget_list, single_day)
+    for day in days_in_daterange(date_from, date_to):
+        matches = _matching_budgets(budget_list, day)
         for budget in matches.values():
-            currency_dict[
-                budget.currency
-            ] += budget.number / number_of_days_in_period(
-                budget.period,
-                single_day,
-            )
+            days_in_period = number_of_days_in_period(budget.period, day)
+            currency_dict[budget.currency] += budget.number / days_in_period
     return dict(currency_dict)
 
 

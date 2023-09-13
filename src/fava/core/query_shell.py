@@ -45,7 +45,12 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
 
     def __init__(self, ledger: FavaLedger) -> None:
         self.buffer = io.StringIO()
-        BQLShell.__init__(self, True, None, self.buffer)
+        BQLShell.__init__(
+            self,
+            is_interactive=True,
+            loadfun=None,
+            outfile=self.buffer,
+        )
         FavaModule.__init__(self, ledger)
         self.result: QueryResult | None = None
         self.stdout = self.buffer

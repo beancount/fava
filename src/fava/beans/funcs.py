@@ -41,6 +41,7 @@ def run_query(
     entries: list[Directive],
     options_map: BeancountOptions,
     _query: str,
+    *,
     numberify: bool = False,
 ) -> QueryResult:
     """Run a query."""

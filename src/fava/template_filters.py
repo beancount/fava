@@ -37,17 +37,13 @@ def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
 def format_currency(
     value: Decimal,
     currency: str | None = None,
+    *,
     show_if_zero: bool = False,
-    invert: bool = False,
 ) -> str:
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ""
-    if value == ZERO:
-        return g.ledger.format_decimal(ZERO, currency)
-    if invert:
-        value = -value
-    return g.ledger.format_decimal(value, currency)
+    return g.ledger.format_decimal(value or ZERO, currency)
 
 
 FLAGS_TO_TYPES = {"*": "cleared", "!": "pending"}

@@ -68,7 +68,7 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
 def test_delete_entry_slice(example_ledger: FavaLedger) -> None:
     entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
 
-    entry_source, sha256sum = get_entry_slice(entry)
+    _entry_source, sha256sum = get_entry_slice(entry)
     filename = Path(entry.meta["filename"])
     contents = filename.read_text("utf-8")
 

@@ -14,6 +14,7 @@ def load_string(
     log_timings: Any | None = ...,
     log_errors: Any | None = ...,
     extra_validations: Any | None = ...,
+    *,
     dedent: bool = ...,
     encoding: Any | None = ...,
 ) -> LoaderResult: ...

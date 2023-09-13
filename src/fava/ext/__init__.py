@@ -177,9 +177,10 @@ def extension_endpoint(
     When used as @extension_endpoint, the endpoint name is the name of the
     function and methods is "GET".
 
-    When used as @extension_endpoint(endpoint_name, methods), the given endpoint
-    name and methods are used, but both are optional. If endpoint_name is None,
-    default to the function name, and if methods is None, default to "GET"
+    When used as @extension_endpoint(endpoint_name, methods), the given
+    endpoint name and methods are used, but both are optional. If
+    endpoint_name is None, default to the function name, and if methods
+    is None, default to "GET".
     """
     endpoint_name = (
         func_or_endpoint_name

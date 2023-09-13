@@ -147,7 +147,7 @@ def url_for(endpoint: str, **values: str) -> str:
 
 def translations() -> dict[str, str]:
     """Get translations catalog."""
-    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
+    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: E501,SLF001
 
 
 def _setup_template_config(fava_app: Flask) -> None:
@@ -177,7 +177,12 @@ def _setup_template_config(fava_app: Flask) -> None:
         return {"ledger": g.ledger, "chart_api": ChartApi}
 
 
-def _setup_filters(fava_app: Flask, read_only: bool, incognito: bool) -> None:
+def _setup_filters(
+    fava_app: Flask,
+    *,
+    read_only: bool,
+    incognito: bool,
+) -> None:
     """Setup request handlers/filters."""
     fava_app.url_defaults(_inject_filters)
 
@@ -436,6 +441,7 @@ def _setup_babel(fava_app: Flask) -> None:
 
 def create_app(
     files: Iterable[Path | str],
+    *,
     load: bool = False,
     incognito: bool = False,
     read_only: bool = False,

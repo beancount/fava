@@ -600,7 +600,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             g.filtered,
             g.interval,
             account_name,
-            accumulate,
+            accumulate=accumulate,
         )
 
         charts.append(ChartApi.hierarchy(account_name))
@@ -661,7 +661,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         g.filtered,
         account_name,
         g.conversion,
-        g.ledger.fava_options.account_journal_include_children,
+        with_children=g.ledger.fava_options.account_journal_include_children,
     )
     return AccountReportJournal(
         charts,

@@ -34,6 +34,7 @@ filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning
 
 [tool.ruff]
 target-version = "py38"
+line-length = 79
 extend-select = [
     "ALL",
 ]
@@ -48,7 +49,6 @@ extend-ignore = [
     "DTZ",      # allow naive dates (for now)
     "EM101",    # allow long strings as error messages
     "EM102",    # allow f-strings as error messages
-    "FBT",      # allow boolean positional arguments (for now)
     "PD",       # pandas-related, has false-positives
     "PERF203",  # allow try-except in loop; zero-cost since Python 3.11
     "PLR2004",  # allow magic constants in comparisons

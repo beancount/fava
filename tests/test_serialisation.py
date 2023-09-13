@@ -101,7 +101,7 @@ def test_serialise_entry_types(
         (
             (
                 "100 USD",
-                CostSpec(Decimal("10"), None, "EUR", None, None, False),
+                CostSpec(Decimal("10"), None, "EUR", None, None, merge=False),
                 None,
             ),
             "100 USD {10 EUR}",
@@ -109,7 +109,7 @@ def test_serialise_entry_types(
         (
             (
                 "100 USD",
-                CostSpec(Decimal("10"), None, "EUR", None, None, False),
+                CostSpec(Decimal("10"), None, "EUR", None, None, merge=False),
                 "11 EUR",
             ),
             "100 USD {10 EUR} @ 11 EUR",
@@ -124,7 +124,7 @@ def test_serialise_entry_types(
                     MISSING,  # type: ignore[arg-type]
                     None,
                     None,
-                    False,
+                    merge=False,
                 ),
                 None,
             ),
@@ -137,7 +137,7 @@ def test_serialise_posting(
     amount_string: str,
 ) -> None:
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]  # noqa: E501
     json = {"account": "Assets", "amount": amount_string}
     assert loads(dumps(serialise(pos))) == json
     assert deserialise_posting(json) == pos
@@ -163,7 +163,7 @@ def test_deserialise_posting(
 ) -> None:
     """Roundtrip is not possible here due to total price or calculation."""
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]
+    pos = create.posting("Assets", amount, cost, price)  # type: ignore[arg-type]  # noqa: E501
     json = {"account": "Assets", "amount": amount_string}
     assert deserialise_posting(json) == pos
 

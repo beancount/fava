@@ -14,7 +14,6 @@ def test_format_currency(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         assert format_currency(Decimal("2.12")) == "2.12"
-        assert format_currency(Decimal("2.13"), invert=True) == "-2.13"
 
 
 def test_basename() -> None:

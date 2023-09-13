@@ -7,7 +7,9 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from beancount.core import data
-from beancount.core.amount import A as BEANCOUNT_A  # type: ignore[attr-defined]
+from beancount.core.amount import (  # type: ignore[attr-defined]
+    A as BEANCOUNT_A,
+)
 from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Position as BeancountPosition
 
@@ -44,7 +46,7 @@ def amount(amt: Amount | tuple[Decimal, str] | str) -> Amount:
 
 def position(units: Amount, cost: Cost | None) -> Position:
     """Create a position."""
-    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
+    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]  # noqa: E501
 
 
 def posting(

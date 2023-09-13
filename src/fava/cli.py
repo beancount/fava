@@ -61,16 +61,17 @@ from fava.util import simple_wsgi
     help="Output directory for profiling data.",
 )
 @click.version_option(version=__version__, prog_name="fava")
-def main(  # noqa: PLR0912
-    filenames: tuple[str],
-    port: int,
-    host: str,
-    prefix: str,
-    incognito: bool,
-    read_only: bool,
-    debug: bool,
-    profile: bool,
-    profile_dir: str,
+def main(
+    *,
+    filenames: tuple[str] = ("",),
+    port: int = 5000,
+    host: str = "localhost",
+    prefix: str | None = None,
+    incognito: bool = False,
+    read_only: bool = False,
+    debug: bool = False,
+    profile: bool = False,
+    profile_dir: str | None = None,
 ) -> None:  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
@@ -81,9 +82,6 @@ def main(  # noqa: PLR0912
     For example, `--host=0.0.0.0` is equivalent to setting the environment
     variable `FAVA_HOST=0.0.0.0`.
     """
-    if profile:
-        debug = True
-
     env_filename = os.environ.get("BEANCOUNT_FILE")
     all_filenames = (
         filenames + tuple(env_filename.split()) if env_filename else filenames
@@ -104,9 +102,10 @@ def main(  # noqa: PLR0912
             {prefix: app.wsgi_app},
         )
 
-    if host == "localhost":
-        # ensure that cheroot does not use IP6 for localhost
-        host = "127.0.0.1"
+    # ensure that cheroot does not use IP6 for localhost
+    host = "127.0.0.1" if host == "localhost" else host
+    # Debug mode if profiling is active
+    debug = debug or profile
 
     click.echo(f"Starting Fava on http://{host}:{port}")
     if not debug:
@@ -146,5 +145,4 @@ def main(  # noqa: PLR0912
 
 # needed for pyinstaller:
 if __name__ == "__main__":  # pragma: no cover
-    # pylint: disable=no-value-for-parameter
     main()

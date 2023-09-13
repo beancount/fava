@@ -73,7 +73,7 @@ class LedgerData:
 
 
 def get_errors() -> list[SerialisedError]:
-    """Serialise errors (do not pass the entry as that might fail serialisation."""
+    """Serialise errors (do not pass entry as that might fail serialisation."""
     return [SerialisedError.from_beancount_error(e) for e in g.ledger.errors]
 
 
@@ -138,6 +138,7 @@ def _chart_interval_totals(
     interval: Interval,
     account_name: str | tuple[str, ...],
     label: str | None = None,
+    *,
     invert: bool = False,
 ) -> ChartData:
     return ChartData(
@@ -148,7 +149,7 @@ def _chart_interval_totals(
             interval,
             account_name,
             g.conversion,
-            invert,
+            invert=invert,
         ),
     )
 
