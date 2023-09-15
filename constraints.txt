@@ -64,7 +64,7 @@ docutils==0.20.1
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.12.3
+filelock==3.12.4
     # via
     #   tox
     #   virtualenv
@@ -82,14 +82,14 @@ flask-babel==3.1.0
     # via fava (pyproject.toml)
 google-api-core==2.11.1
     # via google-api-python-client
-google-api-python-client==2.98.0
+google-api-python-client==2.99.0
     # via beancount
-google-auth==2.22.0
+google-auth==2.23.0
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
-google-auth-httplib2==0.1.0
+google-auth-httplib2==0.1.1
     # via google-api-python-client
 googleapis-common-protos==1.60.0
     # via google-api-core
@@ -97,7 +97,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.5.27
+identify==2.5.28
     # via pre-commit
 idna==3.4
     # via requests
@@ -278,15 +278,12 @@ secretstorage==3.3.3
 simplejson==3.19.1
     # via fava (pyproject.toml)
 six==1.16.0
-    # via
-    #   google-auth
-    #   google-auth-httplib2
-    #   python-dateutil
+    # via python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.2.5
+sphinx==7.2.6
     # via
     #   fava (pyproject.toml)
     #   sphinxcontrib-applehelp
