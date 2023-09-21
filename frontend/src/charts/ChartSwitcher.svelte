@@ -14,12 +14,17 @@
   $: active_chart =
     charts.find((c) => c.name === $lastActiveChartName) ?? charts?.[0];
 
-  // Get the shortcut key for jumping to the previous or next chart.
-  $: shortcut = (index: number): KeySpec | undefined => {
+  // Get the shortcut key for jumping to the previous chart.
+  $: shortcutBackward = (index: number): KeySpec | undefined => {
     const current = charts.findIndex((e) => e === active_chart);
     if (index === (current - 1 + charts.length) % charts.length) {
       return { key: "C", note: _("Previous") };
     }
+    return undefined;
+  };
+  // Get the shortcut key for jumping to the previous chart.
+  $: shortcutForward = (index: number): KeySpec | undefined => {
+    const current = charts.findIndex((e) => e === active_chart);
     if (index === (current + 1 + charts.length) % charts.length) {
       return { key: "c", note: _("Next") };
     }
@@ -40,7 +45,8 @@
         on:click={() => {
           $lastActiveChartName = chart.name;
         }}
-        use:keyboardShortcut={shortcut(index)}
+        use:keyboardShortcut={shortcutBackward(index)}
+        use:keyboardShortcut={shortcutForward(index)}
       >
         {chart.name}
       </button>
