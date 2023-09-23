@@ -6,12 +6,13 @@ import { searchParams, urlSyncedParams } from "./stores/url";
 /**
  * Get the URL path relative to the base url of the current ledger.
  */
-export function getUrlPath(url: URL | Location): string | null {
+export function getUrlPath(
+  url: Pick<URL | Location, "pathname">,
+): string | null {
   const $base_url = store_get(base_url);
-  if ($base_url && url.pathname.startsWith($base_url)) {
-    return url.pathname.slice($base_url.length);
-  }
-  return null;
+  return $base_url && url.pathname.startsWith($base_url)
+    ? decodeURI(url.pathname.slice($base_url.length))
+    : null;
 }
 
 /**
