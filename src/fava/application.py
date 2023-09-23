@@ -203,6 +203,8 @@ def _setup_filters(
                 time=request.args.get("time"),
             )
 
+            ledger.extensions.before_request()
+
     if read_only:
         # Prevent any request that isn't a GET if read-only mode is active
         @fava_app.before_request

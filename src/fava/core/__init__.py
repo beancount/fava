@@ -303,6 +303,8 @@ class FavaLedger:
         for mod in MODULES:
             getattr(self, mod).load_file()
 
+        self.extensions.after_load_file()
+
     @lru_cache(maxsize=16)  # noqa: B019
     def get_filtered(
         self,

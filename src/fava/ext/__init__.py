@@ -89,6 +89,12 @@ class FavaExtensionBase:
         loader = jinja2.ChoiceLoader([ext_loader, current_app.jinja_loader])
         return current_app.jinja_env.overlay(loader=loader)
 
+    def after_load_file(self) -> None:
+        """Run after a ledger file has been loaded."""
+
+    def before_request(self) -> None:
+        """Run before each client request."""
+
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Run after an `entry` has been modified."""
 
