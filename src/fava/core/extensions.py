@@ -70,6 +70,14 @@ class ExtensionModule(FavaModule):
         """Get the extension with the given name."""
         return self._instances.get(name, None)
 
+    def after_load_file(self) -> None:
+        for ext in self._exts:
+            ext.after_load_file()
+
+    def before_request(self) -> None:
+        for ext in self._exts:
+            ext.before_request()
+
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         for ext in self._exts:
             ext.after_entry_modified(entry, new_lines)

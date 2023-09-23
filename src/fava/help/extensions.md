@@ -57,6 +57,20 @@ is specified by the individual extension.
 
 Below is a list of all current hooks.
 
+### `after_load_file()`
+
+Called after a ledger file has been loaded. Use the `self.ledger` object to
+access the ledger data.
+
+---
+
+### `before_request()`
+
+Called when starting to process a request. Use Flask’s `request` object to
+access the request being processed (`from flask import request`).
+
+---
+
 ### `after_write_source(path: str, source: str)`
 
 Called after the string `source` has been written to the Beancount file at
