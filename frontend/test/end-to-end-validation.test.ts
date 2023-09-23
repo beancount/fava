@@ -12,8 +12,9 @@ import {
   sunburstScale,
   treemapScale,
 } from "../src/charts/helpers";
+import { getUrlPath } from "../src/helpers";
 import { parseJSON } from "../src/lib/json";
-import { currencies, ledgerData } from "../src/stores";
+import { base_url, currencies, ledgerData } from "../src/stores";
 import { conversions } from "../src/stores/chart";
 
 /** Load the Python test snapshot output with the given name and parse as JSON. */
@@ -40,6 +41,13 @@ test("validate ledger data", async () => {
   assert.equal(
     store_get(sunburstScale)("Liabilities:US:Chase:Slate"),
     "rgb(126, 174, 253)",
+  );
+
+  const base = store_get(base_url);
+  assert.equal(getUrlPath({ pathname: `${base}/asdf` }), "/asdf");
+  assert.equal(
+    getUrlPath({ pathname: `${base}/${encodeURI("Ä€/asdf")}` }),
+    "/Ä€/asdf",
   );
 
   const all_currencies = [
