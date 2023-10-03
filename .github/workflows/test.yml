@@ -30,6 +30,7 @@ jobs:
                   cache: "pip"
                   cache-dependency-path: "constraints*.txt"
             - run: python -m pip install -c constraints.txt tox
+            - run: touch src/fava/static/app.js
             - run: tox -e ${{ matrix.toxenv }}
     test-js:
         runs-on: ${{ matrix.os }}

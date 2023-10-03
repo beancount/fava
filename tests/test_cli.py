@@ -40,14 +40,14 @@ def test_cli(monkeypatch: pytest.MonkeyPatch, test_data_dir: Path) -> None:
     monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
     args = ("fava", str(test_data_dir / "example.beancount"), "-p", port)
     with Popen(
-        args,  # noqa: S603
+        args,
         stdout=PIPE,
         stderr=STDOUT,
         universal_newlines=True,
     ) as process:
         assert output_contains(process, "Starting Fava on", 20)
         with Popen(
-            args,  # noqa: S603
+            args,
             stdout=PIPE,
             stderr=STDOUT,
             universal_newlines=True,

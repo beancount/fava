@@ -66,8 +66,6 @@ excel =[
 # Extra dependencies that are used in tests or for linting.
 dev = [
     "build",
-    "flake8",
-    "flake8-pyi",
     "mypy",
     "pre-commit",
     "pyinstaller",
@@ -77,14 +75,14 @@ dev = [
     "sphinx",
     "tox",
     "twine",
-    "types-babel",
-    "types-pkg_resources",
+    "types-setuptools",
     "types-simplejson",
 ]
 
 [build-system]
-requires = ["setuptools>=60", "setuptools_scm>=8.0"]
-build-backend = "setuptools.build_meta"
+requires = ["setuptools>=60", "setuptools_scm>=8.0", "Babel>=2.7,<3"]
+build-backend = "_build_backend"
+backend-path = ["."]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -139,6 +137,7 @@ extend-ignore = [
     "PD",       # pandas-related, has false-positives
     "PERF203",  # allow try-except in loop; zero-cost since Python 3.11
     "PLR2004",  # allow magic constants in comparisons
+    "S603",     # This is a bit over-zelous on subprocess.run
     "TRY003",   # allow long string constants as error messages
 ]
 

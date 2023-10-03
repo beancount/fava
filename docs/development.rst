@@ -12,13 +12,11 @@ system package manager):
 - `Node.js`_ - with `npm`, to install the Javascript dependencies,
 - `tox`_ - to run the Python tests,
 - `pre-commit`_ - to lint changes with a git pre-commit hook.
-- `Babel`_ - to compile translation files.
 
 .. _Python 3: https://www.python.org/
 .. _Node.js: https://nodejs.org/
 .. _tox: https://tox.wiki/en/latest/
 .. _pre-commit: https://pre-commit.com/
-.. _Babel: https://babel.pocoo.org/en/latest/index.html/
 
 Then this will get you up and running:
 
@@ -29,17 +27,18 @@ Then this will get you up and running:
     # using a virtual environment is optional, but recommended
     python -m venv venv
     . venv/bin/activate
-    make
     pre-commit install  # add a git pre-commit hook to run linters
     pip install --editable .
 
 You can start Fava in the virtual environment as usual by running ``fava``.
 Running in debug mode with ``fava --debug`` is useful for development.
 
-You can run the tests with ``make test``. After any changes to the Javascript
-code, you will need to re-run `make`, or, if you are working on the frontend
-code, running ``npm run dev`` in the ``frontend`` folder will watch for file
-changes and rebuild the Javascript bundle continuously.
+You can run the tests with ``make test`` and the linters by running ``make
+lint``. There are further make targets defined, see the `Makefile` for details.
+After any changes to the Javascript code, you will need to re-build the
+frontend, which you can do by running ``make``. If you are working on the
+frontend code, running ``npm run dev`` in the ``frontend`` folder will watch
+for file changes and rebuild the Javascript bundle continuously.
 
 If you need a newer version of Beancount than the latest released one, you can
 install from source like so (more details `here
