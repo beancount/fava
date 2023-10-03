@@ -12,11 +12,13 @@ system package manager):
 - `Node.js`_ - with `npm`, to install the Javascript dependencies,
 - `tox`_ - to run the Python tests,
 - `pre-commit`_ - to lint changes with a git pre-commit hook.
+- `Babel`_ - to compile translation files.
 
 .. _Python 3: https://www.python.org/
 .. _Node.js: https://nodejs.org/
 .. _tox: https://tox.wiki/en/latest/
 .. _pre-commit: https://pre-commit.com/
+.. _Babel: https://babel.pocoo.org/en/latest/index.html/
 
 Then this will get you up and running:
 
