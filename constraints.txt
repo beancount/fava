@@ -15,7 +15,7 @@ babel==2.13.0
     #   fava (pyproject.toml)
     #   flask-babel
     #   sphinx
-beancount==2.3.5
+beancount==2.3.6
     # via fava (pyproject.toml)
 beautifulsoup4==4.12.2
     # via beancount
@@ -76,7 +76,7 @@ flask-babel==3.1.0
     # via fava (pyproject.toml)
 google-api-core==2.12.0
     # via google-api-python-client
-google-api-python-client==2.101.0
+google-api-python-client==2.102.0
     # via beancount
 google-auth==2.23.2
     # via
@@ -167,6 +167,8 @@ packaging==23.2
     #   pytest
     #   sphinx
     #   tox
+pdfminer2==20151206
+    # via beancount
 pkginfo==1.9.6
     # via twine
 platformdirs==3.11.0
@@ -184,7 +186,7 @@ ply==3.11
     #   fava (pyproject.toml)
 pre-commit==3.4.0
     # via fava (pyproject.toml)
-protobuf==4.24.3
+protobuf==4.24.4
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -218,7 +220,7 @@ pyinstaller==6.0.0
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2023.9
     # via pyinstaller
-pylint==3.0.0
+pylint==3.0.1
     # via fava (pyproject.toml)
 pyparsing==3.1.1
     # via httplib2
@@ -260,10 +262,12 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-simplejson==3.19.1
+simplejson==3.19.2
     # via fava (pyproject.toml)
 six==1.16.0
-    # via python-dateutil
+    # via
+    #   pdfminer2
+    #   python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5

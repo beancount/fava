@@ -8,8 +8,8 @@ Flask-Babel==1.0.0
 Flask==2.2.0
 Jinja2==3.0.0
 Werkzeug==2.2.0
-beancount==2.3.5
+beancount==2.3.6
 cheroot==8.0.0
-click==7.0.0
+click==8.0.0
 markdown2==2.3.0
 simplejson==3.16.0
