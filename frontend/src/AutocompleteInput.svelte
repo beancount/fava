@@ -4,6 +4,7 @@
 -->
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import type { Action } from "svelte/action";
 
   import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
@@ -39,6 +40,7 @@
   export let checkValidity: ((val: string) => string) | undefined = undefined;
   /** Whether to show a button to clear the input. */
   export let clearButton = false;
+  export let use: Action = () => ({update: () => {}})
 
   let filteredSuggestions: { suggestion: string; innerHTML: string }[] = [];
   let hidden = true;
@@ -126,6 +128,7 @@
     on:keydown={keydown}
     {placeholder}
     {size}
+    use:use
   />
   {#if clearButton && value}
     <button

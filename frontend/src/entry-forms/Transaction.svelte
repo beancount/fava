@@ -91,6 +91,17 @@
       entry.postings = entry.postings;
     }
   }
+
+  function addPostingIfUnbalanced() {
+    const sum = entry.postings.reduce((agg: number, cur: Posting) => +cur.amount + agg, 0);
+    if (entry.postings.every((it: Posting) => it.amount !== "") && sum !== 0) {
+      addPosting();
+    }
+  }
+
+  function init(node: HTMLElement) {
+    node.focus()
+  }
 </script>
 
 <div>
@@ -144,6 +155,8 @@
       remove={() => {
         removePosting(posting);
       }}
+      onBlur={addPostingIfUnbalanced}
+      use={init}
     />
   {/each}
 </div>

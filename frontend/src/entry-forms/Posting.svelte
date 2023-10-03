@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Action } from "svelte/action";
+
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import type { Posting } from "../entries";
   import { _ } from "../i18n";
@@ -13,6 +15,8 @@
   export let move: (arg: { from: number; to: number }) => void;
   export let remove: () => void;
   export let add: () => void;
+  export let onBlur: () => void;
+  export let use: Action = () => ({update: () => {}})
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
   $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
@@ -69,12 +73,14 @@
     bind:value={posting.account}
     {suggestions}
     {date}
+    use={use}
   />
   <AutocompleteInput
     className="amount"
     placeholder={_("Amount")}
     suggestions={amountSuggestions}
     bind:value={posting.amount}
+    on:blur={onBlur}
   />
   <button
     type="button"

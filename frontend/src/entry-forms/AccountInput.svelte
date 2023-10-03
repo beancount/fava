@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Action } from "svelte/action";
+
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { date as validate_date } from "../lib/validation";
@@ -13,6 +15,7 @@
   export let date: string | undefined = undefined;
   /** An optional class name to assign to the input element. */
   export let className: string | undefined = undefined;
+  export let use: Action = () => ({update: () => {}})
 
   $: checkValidity = (val: string) =>
     !$accounts.length || $accounts.includes(val)
@@ -34,4 +37,5 @@
   {className}
   {checkValidity}
   suggestions={filtered_suggestions}
+  use={use}
 />
