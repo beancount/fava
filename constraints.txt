@@ -6,9 +6,9 @@
 #
 alabaster==0.7.13
     # via sphinx
-altgraph==0.17.3
+altgraph==0.17.4
     # via pyinstaller
-astroid==2.15.6
+astroid==3.0.0
     # via pylint
 babel==2.12.1
     # via
@@ -31,7 +31,7 @@ cachetools==5.3.1
     #   tox
 certifi==2023.7.22
     # via requests
-cffi==1.15.1
+cffi==1.16.0
     # via cryptography
 cfgv==3.4.0
     # via pre-commit
@@ -40,7 +40,7 @@ chardet==5.2.0
     #   beancount
     #   pyexcel
     #   tox
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via requests
 cheroot==10.0.0
     # via fava (pyproject.toml)
@@ -50,7 +50,7 @@ click==8.1.7
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.3.1
+coverage==7.3.2
     # via pytest-cov
 cryptography==41.0.4
     # via secretstorage
@@ -80,11 +80,11 @@ flask==2.3.3
     #   flask-babel
 flask-babel==3.1.0
     # via fava (pyproject.toml)
-google-api-core==2.11.1
+google-api-core==2.12.0
     # via google-api-python-client
-google-api-python-client==2.100.0
+google-api-python-client==2.101.0
     # via beancount
-google-auth==2.23.0
+google-auth==2.23.2
     # via
     #   google-api-core
     #   google-api-python-client
@@ -97,7 +97,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.5.29
+identify==2.5.30
     # via pre-commit
 idna==3.4
     # via requests
@@ -129,8 +129,6 @@ jinja2==3.1.2
     #   sphinx
 keyring==24.2.0
     # via twine
-lazy-object-proxy==1.9.0
-    # via astroid
 lml==0.1.0
     # via
     #   pyexcel
@@ -169,7 +167,7 @@ nodeenv==1.8.0
     # via pre-commit
 openpyxl==3.1.2
     # via pyexcel-xlsx
-packaging==23.1
+packaging==23.2
     # via
     #   build
     #   pyinstaller
@@ -179,7 +177,7 @@ packaging==23.1
     #   tox
 pkginfo==1.9.6
     # via twine
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   pylint
     #   tox
@@ -232,9 +230,9 @@ pygments==2.16.1
     #   sphinx
 pyinstaller==6.0.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.8
+pyinstaller-hooks-contrib==2023.9
     # via pyinstaller
-pylint==2.17.5
+pylint==3.0.0
     # via fava (pyproject.toml)
 pyparsing==3.1.1
     # via httplib2
@@ -270,7 +268,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.5.3
+rich==13.6.0
     # via twine
 rsa==4.9
     # via google-auth
@@ -326,9 +324,8 @@ typing-extensions==4.8.0
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
-urllib3==1.26.16
+urllib3==2.0.6
     # via
-    #   google-auth
     #   requests
     #   twine
 virtualenv==20.24.5
@@ -339,8 +336,6 @@ werkzeug==2.3.7
     # via
     #   fava (pyproject.toml)
     #   flask
-wrapt==1.15.0
-    # via astroid
 zipp==3.17.0
     # via importlib-metadata
 
