@@ -46,7 +46,7 @@ def amount(amt: Amount | tuple[Decimal, str] | str) -> Amount:
 
 def position(units: Amount, cost: Cost | None) -> Position:
     """Create a position."""
-    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]  # noqa: E501
+    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
 
 
 def posting(

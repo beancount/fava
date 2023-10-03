@@ -147,7 +147,7 @@ def url_for(endpoint: str, **values: str) -> str:
 
 def translations() -> dict[str, str]:
     """Get translations catalog."""
-    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: E501,SLF001
+    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
 
 
 def _setup_template_config(fava_app: Flask) -> None:
