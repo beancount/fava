@@ -1,6 +1,93 @@
+[project]
+name = "fava"
+dynamic = ["version"]
+description = "Web interface for the accounting tool Beancount."
+readme = "README.rst"
+requires-python = ">=3.8"
+license = {text = "MIT License"}
+authors = [
+  {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
+]
+maintainers = [
+  {name = "Jakob Schnitzer", email = "mail@jakobschnitzer.de"}
+]
+keywords = ["fava", "beancount", "accounting",]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: JavaScript",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = [
+    "Babel>=2.7,<3",
+    "Flask-Babel>=1,<4",
+    "Flask>=2.2,<3",
+    "Jinja2>=3,<4",
+    "Werkzeug>=2.2,<3",
+    "beancount>=2.3.5,<3",
+    "cheroot>=8,<11",
+    "click>=7,<9",
+    "markdown2>=2.3.0,<3",
+    "ply",
+    "simplejson>=3.16.0,<4",
+]
+
+[project.urls]
+Homepage = "https://beancount.github.io/fava/"
+Changelog = "https://beancount.github.io/fava/changelog.html"
+Source = "https://github.com/beancount/fava/"
+Issues = "https://github.com/beancount/fava/issues/"
+Chat = "https://gitter.im/beancount/fava"
+
+[project.scripts]
+fava = "fava.cli:main"
+
+[project.optional-dependencies]
+# Extra dependencies that are needed for the export to excel.
+excel =[
+    "pyexcel>=0.5",
+    "pyexcel-ods3>=0.5",
+    "pyexcel-xlsx>=0.5",
+]
+# Extra dependencies that are used in tests or for linting.
+dev = [
+    "build",
+    "flake8",
+    "flake8-pyi",
+    "mypy",
+    "pre-commit",
+    "pyinstaller",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "tox",
+    "twine",
+    "types-babel",
+    "types-pkg_resources",
+    "types-simplejson",
+]
+
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+requires = ["setuptools>=60", "setuptools_scm>=8.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools_scm]
 
