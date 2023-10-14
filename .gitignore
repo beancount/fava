@@ -13,6 +13,8 @@
 /src/fava.egg-info
 /htmlcov
 /venv
+/.pdm-python
+/.pdm.lock
 
 /.idea/
 /.vscode/
