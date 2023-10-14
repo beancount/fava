@@ -6,6 +6,7 @@ from bisect import bisect
 from collections import Counter
 from collections import defaultdict
 from decimal import Decimal
+from itertools import groupby
 from typing import Iterable
 from typing import Sequence
 from typing import TYPE_CHECKING
@@ -144,3 +145,121 @@ class FavaPriceMap:
         if index == 0:
             return (None, None)
         return price_list[index - 1]
+
+    def get_nested_price(
+        self,
+        base_quote: BaseQuote,
+        date: datetime.date | None = None,
+    ) -> Decimal | None:
+        all_commodity = [tuple[0] for tuple in list(self._map.keys())]
+        groups = groupby(self._map.keys(), key=lambda x: x[0])
+        conversions: dict[str, set[str]] = {}
+        # Iterate over the groups
+        for key, group in groups:
+            # Extract the second element of each tuple in the group and add it to the dictionary as the value for the key
+            if key not in conversions:
+                conversions[key] = set()
+            conversions[key].update((tuple[1] for tuple in group))
+
+        bellman_ford = BellmanFord(
+            all_commodity,
+            conversions,
+            lambda x: self.get_price(x, date),
+            start=base_quote[1],
+        )
+        r = bellman_ford.search()
+
+        if base_quote[0] not in r:
+            return None
+        if r[base_quote[0]][1] is None:
+            if base_quote[0] == base_quote[1]:
+                return Decimal("1.00")
+            return None
+        return Decimal(1) / r[base_quote[0]][0]
+
+
+class BellmanFord:
+    def __init__(
+        self,
+        all_nodes: list[str],
+        edges: dict[str, set[str]],
+        get_widget,
+        start,
+    ):
+        self.searched = False
+        self.get_widget = get_widget
+        self.start = start
+        self.all_nodes = all_nodes
+        self.edges = edges
+
+        table: dict[str, (Decimal, str | None)] = {}
+        # init table
+        for n in all_nodes:
+            table[n] = (Decimal("Infinity"), None)
+        self.table = table
+
+    def _get_path(self, end_node):
+        if self.searched is False:
+            self.search()
+        r = [end_node]
+        from_record = self.table.get(end_node)
+        if from_record is None:
+            return r
+        while from_record[1] is not None and from_record[1] is not self.start:
+            if from_record[1] in r:
+                return reversed(r)
+            r.append(from_record[1])
+            from_record = self.table.get(from_record[1])
+        return reversed(r)
+
+    def update_table(self):
+        updated = False
+        for from_node in self.all_nodes:
+            if self.table[from_node][0] == Decimal("Infinity"):
+                continue
+            edges = self.edges[from_node]
+            for to in edges:
+                widget = self.get_widget((from_node, to))
+                if widget is None:
+                    continue
+                target_value = self.table[from_node][0] * widget
+                # print(
+                #     (
+                #         # target_value,
+                #         from_node,
+                #         to,
+                #         self.get_widget((from_node, to)),
+                #     )
+                # )
+                if to == self.start:
+                    continue
+                if target_value.compare(self.table[to][0]) < 0 and (
+                    self.table[to][0] - target_value
+                ) > Decimal("0.00001"):
+                    existed_path = list(self._get_path(to))
+                    if from_node in existed_path:
+                        continue
+                    self.table[to] = (target_value, from_node)
+
+                    # print(
+                    #     f"from {from_node} to {to} m"
+                    #     f" {target_value} {self.table[to][0]} {(target_value - self.table[to][0]).compare(Decimal(0.001)) == 1}"
+                    # )
+                    updated = True
+
+        return updated
+
+    def print_table(self):
+        heads = sorted(self.table.keys())
+        print("\n".join([str([t, self.table[t]]) for t in heads]))
+        print("+++++++++++++++++++++++++")
+
+    def search(self):
+        if self.searched is True:
+            return self.table
+        self.searched = True
+        self.table[self.start] = (Decimal("1"), None)
+        updated = True
+        while updated:
+            updated = self.update_table()
+        return self.table

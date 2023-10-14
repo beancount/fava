@@ -91,7 +91,8 @@ def convert_position(
 
     # try the direct conversion
     base_quote = (units_.currency, target_currency)
-    price_number = prices.get_price(base_quote, date)
+    price_number = prices.get_nested_price(base_quote, date)
+    print("=====PRICE====", base_quote, price_number)
     if price_number is not None:
         return create.amount((units_.number * price_number, target_currency))
 
@@ -141,4 +142,5 @@ def cost_or_value(
         return inventory.reduce(get_market_value, prices, date)
     if conversion == "units":
         return inventory.reduce(get_units)
+    print("========conversion", conversion)
     return inventory.reduce(convert_position, conversion, prices, date)
