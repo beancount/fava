@@ -46,6 +46,7 @@ def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
     """
 
     price_entries = [e for e in load_doc_entries if isinstance(e, Price)]
+    print(load_doc_entries)
     assert len(price_entries) == 4
 
     prices = FavaPriceMap(price_entries)
@@ -85,3 +86,31 @@ def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
     assert prices.get_price(usd_chf, datetime.date(2022, 12, 20)) == Decimal(
         "0.9288",
     )
+
+
+def test_fava_chain_prices(load_doc_entries) -> None:
+    """
+    option "operating_currency" "KB"
+    option "operating_currency" "MB"
+    option "operating_currency" "GB"
+
+    2023-01-01 commodity KB
+    2023-01-01 commodity MB
+    2023-01-01 commodity GB
+    2023-01-01 commodity ALWAYS_1
+
+    2023-10-09 price GB 1024.00 MB
+    2023-10-13 price MB 1024.00 KB
+    2023-10-14 price GB 1 ALWAYS_1
+    2023-10-14 price KB 1 ALWAYS_1
+
+
+    """
+    price_entries = [e for e in load_doc_entries if isinstance(e, Price)]
+    assert len(price_entries) == 4
+
+    prices = FavaPriceMap(price_entries)
+    assert prices.get_nested_price(("CO", "HKD")) == None
+
+    # always find the largest conversion using BellmanFord algorithm
+    assert prices.get_nested_price(("GB", "KB")) == 1024 * 1024
