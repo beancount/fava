@@ -152,6 +152,10 @@ class FavaPriceMap:
         base_quote: BaseQuote,
         date: datetime.date | None = None,
     ) -> Decimal | None:
+        prices_number = self.get_price(base_quote, date)
+        if prices_number is not None:
+            # fast path
+            return prices_number
         all_commodity = [
             commodity_pairs[0] for commodity_pairs in list(self._map.keys())
         ]
