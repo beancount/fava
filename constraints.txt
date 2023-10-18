@@ -8,9 +8,9 @@ alabaster==0.7.13
     # via sphinx
 altgraph==0.17.4
     # via pyinstaller
-astroid==3.0.0
+astroid==3.0.1
     # via pylint
-babel==2.13.0
+babel==2.13.1
     # via
     #   fava (pyproject.toml)
     #   flask-babel
@@ -19,13 +19,13 @@ beancount==2.3.6
     # via fava (pyproject.toml)
 beautifulsoup4==4.12.2
     # via beancount
-blinker==1.6.2
+blinker==1.6.3
     # via flask
 bottle==0.12.25
     # via beancount
 build==1.0.3
     # via fava (pyproject.toml)
-cachetools==5.3.1
+cachetools==5.3.2
     # via
     #   google-auth
     #   tox
@@ -40,7 +40,7 @@ chardet==5.2.0
     #   beancount
     #   pyexcel
     #   tox
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via requests
 cheroot==10.0.0
     # via fava (pyproject.toml)
@@ -51,8 +51,10 @@ click==8.1.7
 colorama==0.4.6
     # via tox
 coverage==7.3.2
-    # via pytest-cov
-cryptography==41.0.4
+    # via
+    #   coverage
+    #   pytest-cov
+cryptography==41.0.5
     # via secretstorage
 dill==0.3.7
     # via pylint
@@ -68,24 +70,24 @@ filelock==3.12.4
     # via
     #   tox
     #   virtualenv
-flask==2.3.3
+flask==3.0.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
-flask-babel==3.1.0
+flask-babel==4.0.0
     # via fava (pyproject.toml)
 google-api-core==2.12.0
     # via google-api-python-client
-google-api-python-client==2.102.0
+google-api-python-client==2.105.0
     # via beancount
-google-auth==2.23.2
+google-auth==2.23.3
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
 google-auth-httplib2==0.1.1
     # via google-api-python-client
-googleapis-common-protos==1.60.0
+googleapis-common-protos==1.61.0
     # via google-api-core
 httplib2==0.22.0
     # via
@@ -149,7 +151,7 @@ more-itertools==10.1.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.5.1
+mypy==1.6.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -184,7 +186,7 @@ ply==3.11
     # via
     #   beancount
     #   fava (pyproject.toml)
-pre-commit==3.4.0
+pre-commit==3.5.0
     # via fava (pyproject.toml)
 protobuf==4.24.4
     # via
@@ -216,11 +218,11 @@ pygments==2.16.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.0.0
+pyinstaller==6.1.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.9
+pyinstaller-hooks-contrib==2023.10
     # via pyinstaller
-pylint==3.0.1
+pylint==3.0.2
     # via fava (pyproject.toml)
 pyparsing==3.1.1
     # via httplib2
@@ -228,7 +230,7 @@ pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.2
+pytest==7.4.3
     # via
     #   beancount
     #   fava (pyproject.toml)
@@ -308,15 +310,15 @@ typing-extensions==4.8.0
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
-urllib3==2.0.6
+urllib3==2.0.7
     # via
     #   requests
     #   twine
-virtualenv==20.24.5
+virtualenv==20.24.6
     # via
     #   pre-commit
     #   tox
-werkzeug==2.3.7
+werkzeug==3.0.1
     # via
     #   fava (pyproject.toml)
     #   flask
