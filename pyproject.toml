@@ -35,10 +35,10 @@ classifiers = [
 ]
 dependencies = [
     "Babel>=2.7,<3",
-    "Flask-Babel>=1,<4",
-    "Flask>=2.2,<3",
+    "Flask-Babel>=1,<5",
+    "Flask>=2.2,<4",
     "Jinja2>=3,<4",
-    "Werkzeug>=2.2,<3",
+    "Werkzeug>=2.2,<4",
     "beancount>=2.3.5,<3",
     "cheroot>=8,<11",
     "click>=7,<9",
@@ -73,6 +73,7 @@ dev = [
     "pylint",
     "pytest",
     "pytest-cov",
+    "setuptools",
     "sphinx",
     "tox",
     "twine",
