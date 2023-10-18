@@ -1,4 +1,5 @@
 """Account close date and metadata."""
+
 from __future__ import annotations
 
 import datetime

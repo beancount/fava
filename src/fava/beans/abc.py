@@ -1,4 +1,5 @@
 """Abstract base classes for Beancount types."""
+
 from __future__ import annotations
 
 from abc import ABC

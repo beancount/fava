@@ -1,4 +1,5 @@
 """Various functions to deal with Beancount data."""
+
 from __future__ import annotations
 
 from typing import Any

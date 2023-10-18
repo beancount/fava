@@ -1,4 +1,5 @@
 """A simple file and folder watcher."""
+
 from __future__ import annotations
 
 from os import walk

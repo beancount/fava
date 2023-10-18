@@ -171,8 +171,7 @@
   ul {
     position: absolute;
     z-index: var(--z-index-autocomplete);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     background-color: var(--background);
     border: 1px solid var(--border-darker);
     box-shadow: 0 3px 3px var(--border);

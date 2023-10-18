@@ -4,6 +4,7 @@ Note:
     Date ranges are always tuples (start, end) from the (inclusive) start date
     to the (exclusive) end date.
 """
+
 from __future__ import annotations
 
 import datetime
@@ -15,7 +16,7 @@ from itertools import tee
 from typing import Iterable
 from typing import Iterator
 
-from flask_babel import gettext  # type: ignore[import]
+from flask_babel import gettext  # type: ignore[import-untyped]
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
 

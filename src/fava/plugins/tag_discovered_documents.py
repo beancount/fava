@@ -3,6 +3,7 @@
 It looks through all Document entries that were added by Beancount
 automatically through file discovery and adds the tag "#discovered".
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

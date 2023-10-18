@@ -1,4 +1,5 @@
 """Entry filters."""
+
 from __future__ import annotations
 
 import re
@@ -9,9 +10,9 @@ from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
 
-import ply.yacc  # type: ignore[import]
+import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
-from beancount.ops.summarize import clamp_opt  # type: ignore[import]
+from beancount.ops.summarize import clamp_opt  # type: ignore[import-untyped]
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
@@ -86,7 +87,7 @@ class FilterSyntaxLexer:
         return token, token
 
     def STRING(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
-        if value[0] in ['"', "'"]:
+        if value[0] in {'"', "'"}:
             return token, value[1:-1]
         return token, value
 

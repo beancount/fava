@@ -1,4 +1,5 @@
 """Fava extensions."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -47,11 +48,7 @@ class ExtensionModule(FavaModule):
 
         for cls in all_extensions:
             module = cls.__module__
-            ext_config = (
-                _extension_entries[module]
-                if (module in _extension_entries)
-                else None
-            )
+            ext_config = _extension_entries.get(module, None)
             if cls not in self._loaded_extensions:
                 self._loaded_extensions.add(cls)
                 ext = cls(self.ledger, ext_config)

@@ -4,6 +4,7 @@ It goes through all entries with a `document` metadata-key, and tries to
 associate them to Document entries. For transactions, it then also adds a link
 from the transaction to documents, as well as the "#linked" tag.
 """
+
 from __future__ import annotations
 
 from collections import defaultdict

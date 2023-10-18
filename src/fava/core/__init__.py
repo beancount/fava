@@ -1,4 +1,5 @@
 """This module provides the data required by Fava's reports."""
+
 from __future__ import annotations
 
 from datetime import date

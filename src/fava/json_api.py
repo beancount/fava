@@ -3,6 +3,7 @@
 This module contains the url endpoints of the JSON API that is used by the web
 interface for asynchronous functionality.
 """
+
 from __future__ import annotations
 
 import shutil
@@ -20,7 +21,7 @@ from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
-from flask_babel import gettext  # type: ignore[import]
+from flask_babel import gettext  # type: ignore[import-untyped]
 
 from fava.beans.abc import Document
 from fava.beans.abc import Event

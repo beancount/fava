@@ -1,4 +1,5 @@
 """Build backend that also compiles translations and frontend."""
+
 # pylint: disable=wildcard-import,function-redefined,unused-wildcard-import
 
 from __future__ import annotations
