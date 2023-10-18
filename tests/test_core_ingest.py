@@ -6,7 +6,9 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.ingest.importer import ImporterProtocol  # type: ignore[import]
+from beancount.ingest.importer import (  # type: ignore[import-untyped]
+    ImporterProtocol,
+)
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Note

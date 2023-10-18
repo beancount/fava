@@ -9,6 +9,7 @@ To start a simple server::
     app.run('localhost', 5000)
 
 """
+
 from __future__ import annotations
 
 import logging
@@ -26,7 +27,7 @@ from urllib.parse import urlencode
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
-import markdown2  # type: ignore[import]
+import markdown2  # type: ignore[import-untyped]
 from beancount import __version__ as beancount_version
 from beancount.utils.text_utils import replace_numbers
 from flask import abort
@@ -38,7 +39,7 @@ from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
-from flask_babel import Babel  # type: ignore[import]
+from flask_babel import Babel  # type: ignore[import-untyped]
 from flask_babel import get_translations
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
@@ -130,9 +131,9 @@ def _inject_filters(endpoint: str, values: dict[str, str]) -> None:
         and g.beancount_file_slug is not None
     ):
         values["bfile"] = g.beancount_file_slug
-    if endpoint in ["static", "index"]:
+    if endpoint in {"static", "index"}:
         return
-    for name in ["conversion", "interval", "account", "filter", "time"]:
+    for name in ("conversion", "interval", "account", "filter", "time"):
         if name not in values:
             val = request.args.get(name)
             if val is not None:
@@ -188,7 +189,7 @@ def _setup_filters(
 
     @fava_app.before_request
     def _perform_global_filters() -> None:
-        if request.endpoint in ("json_api.get_changed", "json_api.get_errors"):
+        if request.endpoint in {"json_api.get_changed", "json_api.get_errors"}:
             return
         ledger = getattr(g, "ledger", None)
         if ledger:

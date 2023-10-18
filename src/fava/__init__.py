@@ -1,4 +1,5 @@
 """Fava - A web interface for Beancount."""
+
 from __future__ import annotations
 
 from contextlib import suppress

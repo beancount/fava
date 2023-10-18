@@ -1,4 +1,5 @@
 """Entries grouped by type."""
+
 from __future__ import annotations
 
 from collections import defaultdict

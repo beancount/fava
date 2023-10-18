@@ -2,6 +2,7 @@
 
 sphinx-apidoc is not customizeable enough to do this.
 """
+
 from __future__ import annotations
 
 import pkgutil

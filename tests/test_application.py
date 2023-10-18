@@ -1,4 +1,5 @@
 """Tests for Fava's main Flask app."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -130,7 +131,7 @@ def test_default_path_redirection(
         # pre Werkzeug 2.1:
         expect_url = urljoin("http://localhost/", expect)
         assert result.status_code == 302
-        assert get_url in (expect, expect_url)
+        assert get_url in {expect, expect_url}
 
 
 @pytest.mark.parametrize(
@@ -162,7 +163,7 @@ def test_jump_handler(
         # pre Werkzeug 2.1:
         expect_url = urljoin("http://localhost/", expect)
         assert result.status_code == 302
-        assert get_url in (expect, expect_url)
+        assert get_url in {expect, expect_url}
 
 
 def test_help_ages(test_client: FlaskClient) -> None:

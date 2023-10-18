@@ -1,4 +1,5 @@
 """Ingest helper functions."""
+
 from __future__ import annotations
 
 import datetime
@@ -12,7 +13,7 @@ from runpy import run_path
 from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.ingest import cache  # type: ignore[import]
+from beancount.ingest import cache  # type: ignore[import-untyped]
 from beancount.ingest import extract
 from beancount.ingest import identify
 

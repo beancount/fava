@@ -4,6 +4,7 @@ This is used to pre-process some data that is used in the templates, allowing
 this part of the functionality to be tested and allowing some end-to-end tests
 for the frontend data validation.
 """
+
 from __future__ import annotations
 
 from copy import copy
@@ -13,7 +14,7 @@ from typing import TYPE_CHECKING
 
 from flask import current_app
 from flask import url_for
-from flask_babel import gettext  # type: ignore[import]
+from flask_babel import gettext  # type: ignore[import-untyped]
 
 from fava.context import g
 from fava.util.excel import HAVE_EXCEL

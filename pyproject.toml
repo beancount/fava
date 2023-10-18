@@ -121,6 +121,7 @@ filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning
 
 [tool.ruff]
 target-version = "py38"
+preview = true
 line-length = 79
 extend-select = [
     "ALL",
@@ -130,15 +131,18 @@ extend-ignore = [
     "ANN101",   # allow `self` to be untyped
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
+    "CPY",      # no copyright notices in all files
     "D102",     # allow undocumented methods
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
     "DTZ",      # allow naive dates (for now)
+    "E203",     # black
     "EM101",    # allow long strings as error messages
     "EM102",    # allow f-strings as error messages
     "PD",       # pandas-related, has false-positives
     "PERF203",  # allow try-except in loop; zero-cost since Python 3.11
     "PLR2004",  # allow magic constants in comparisons
+    "PLR6301",  # allow methods that do not use self
     "S603",     # This is a bit over-zelous on subprocess.run
     "TRY003",   # allow long string constants as error messages
 ]

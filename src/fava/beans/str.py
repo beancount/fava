@@ -1,11 +1,14 @@
 """Convert Beancount types to string."""
+
 from __future__ import annotations
 
 from decimal import Decimal
 from functools import singledispatch
 
 from beancount.core.position import CostSpec
-from beancount.parser.printer import format_entry  # type: ignore[import]
+from beancount.parser.printer import (  # type: ignore[import-untyped]
+    format_entry,
+)
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Cost
@@ -51,8 +54,7 @@ def _(cost: CostSpec) -> str:
         if isinstance(cost.number_per, Decimal):
             amountlist.append(f"{cost.number_per}")
         if isinstance(cost.number_total, Decimal):
-            amountlist.append("#")
-            amountlist.append(f"{cost.number_total}")
+            amountlist.extend(("#", f"{cost.number_total}"))
         if cost.currency:
             amountlist.append(cost.currency)
         strs.append(" ".join(amountlist))

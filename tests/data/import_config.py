@@ -1,4 +1,5 @@
 """Test importer for Fava."""
+
 from __future__ import annotations
 
 import csv

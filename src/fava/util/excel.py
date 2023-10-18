@@ -1,4 +1,5 @@
 """Writing query results to CSV and spreadsheet documents."""
+
 from __future__ import annotations
 
 import csv
@@ -12,7 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.funcs import ResultType
 
 try:
-    import pyexcel  # type: ignore[import]
+    import pyexcel  # type: ignore[import-not-found]
 
     HAVE_EXCEL = True
 except ImportError:  # pragma: no cover
@@ -36,7 +37,7 @@ def to_excel(
     Returns:
         The (binary) file contents.
     """
-    if result_format not in ("xlsx", "ods"):
+    if result_format not in {"xlsx", "ods"}:
         raise ValueError(f"Invalid result format: {result_format}")
     resp = io.BytesIO()
     book = pyexcel.Book(
@@ -83,13 +84,13 @@ def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
             result.append(value)
             continue
         type_ = column[1]
-        if type_ == Decimal:
+        if type_ is Decimal:
             result.append(float(value))
-        elif type_ == int:
+        elif type_ is int:
             result.append(value)
-        elif type_ == set:
+        elif type_ is set:
             result.append(" ".join(value))
-        elif type_ == datetime.date:
+        elif type_ is datetime.date:
             result.append(str(value))
         else:
             if not isinstance(value, str):

@@ -1,4 +1,5 @@
 """fava wsgi application"""
+
 from __future__ import annotations
 
 from fava.application import create_app

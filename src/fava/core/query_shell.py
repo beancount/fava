@@ -1,4 +1,5 @@
 """For using the Beancount shell from Fava."""
+
 from __future__ import annotations
 
 import contextlib
@@ -12,7 +13,7 @@ from beancount.query import query_compile
 from beancount.query.query_compile import CompilationError
 from beancount.query.query_parser import ParseError
 from beancount.query.query_parser import RunCustom
-from beancount.query.shell import BQLShell  # type: ignore[import]
+from beancount.query.shell import BQLShell  # type: ignore[import-untyped]
 from beancount.utils import pager  # type: ignore[attr-defined]
 
 from fava.beans.funcs import execute_query

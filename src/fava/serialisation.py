@@ -7,6 +7,7 @@ representation of the entry is provided.
 
 This is not intended to work well enough for full roundtrips yet.
 """
+
 from __future__ import annotations
 
 import datetime

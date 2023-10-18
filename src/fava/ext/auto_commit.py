@@ -3,6 +3,7 @@
 This mainly serves as an example how Fava's extension systems, which only
 really does hooks at the moment, works.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
