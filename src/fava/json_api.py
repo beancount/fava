@@ -3,6 +3,7 @@
 This module contains the url endpoints of the JSON API that is used by the web
 interface for asynchronous functionality.
 """
+
 from __future__ import annotations
 
 import shutil

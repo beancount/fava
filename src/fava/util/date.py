@@ -4,6 +4,7 @@ Note:
     Date ranges are always tuples (start, end) from the (inclusive) start date
     to the (exclusive) end date.
 """
+
 from __future__ import annotations
 
 import datetime

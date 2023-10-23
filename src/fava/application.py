@@ -9,6 +9,7 @@ To start a simple server::
     app.run('localhost', 5000)
 
 """
+
 from __future__ import annotations
 
 import logging

@@ -1,4 +1,5 @@
 """Fava's extension system."""
+
 from __future__ import annotations
 
 import ast
@@ -158,9 +159,9 @@ def find_extensions(
 
 
 def extension_endpoint(
-    func_or_endpoint_name: Callable[[FavaExtensionBase], Any]
-    | str
-    | None = None,
+    func_or_endpoint_name: (
+        Callable[[FavaExtensionBase], Any] | str | None
+    ) = None,
     methods: list[str] | None = None,
 ) -> (
     Callable[[FavaExtensionBase], Response]

@@ -1,4 +1,5 @@
 """For using the Beancount shell from Fava."""
+
 from __future__ import annotations
 
 import contextlib

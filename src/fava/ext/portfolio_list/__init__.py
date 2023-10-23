@@ -2,6 +2,7 @@
 
 This is a simple example of Fava's extension reports system.
 """
+
 from __future__ import annotations
 
 import re

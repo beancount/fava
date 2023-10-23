@@ -1,4 +1,5 @@
 """Reading/writing Beancount files."""
+
 from __future__ import annotations
 
 import re

@@ -5,6 +5,7 @@ This module contains a list of possible options, the defaults and the code for
 parsing the options.
 
 """
+
 from __future__ import annotations
 
 import re

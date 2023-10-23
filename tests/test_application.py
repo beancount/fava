@@ -1,4 +1,5 @@
 """Tests for Fava's main Flask app."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

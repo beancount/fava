@@ -1,4 +1,5 @@
 """Writing query results to CSV and spreadsheet documents."""
+
 from __future__ import annotations
 
 import csv

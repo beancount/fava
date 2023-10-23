@@ -1,4 +1,5 @@
 """Alternative implementation of Beancount's Inventory."""
+
 from __future__ import annotations
 
 from decimal import Decimal
