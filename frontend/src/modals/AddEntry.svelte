@@ -23,7 +23,9 @@
     await saveEntries([entry]);
     const added_entry_date = entry.date;
     // Reuse the date of the entry that was just added.
-    entry = entry.constructor(added_entry_date);
+    // @ts-expect-error entry.constructor is only typed as "Function" but the
+    //                  new is required here to avoid a runtime error.
+    entry = new entry.constructor(added_entry_date);
     if (!$addEntryContinue) {
       closeOverlay();
     }
