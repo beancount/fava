@@ -15,9 +15,9 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from beancount.core.inventory import Inventory
 
-    from fava.beans.abc import Amount
-    from fava.beans.abc import Position
     from fava.beans.prices import FavaPriceMap
+    from fava.beans.protocols import Amount
+    from fava.beans.protocols import Position
     from fava.core.inventory import CounterInventory
 
 

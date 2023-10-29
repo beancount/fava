@@ -5,12 +5,12 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Callable
 from typing import Dict
+from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 from typing import TYPE_CHECKING
 
-from fava.beans import create
-from fava.beans.abc import Cost
+from fava.beans.protocols import Cost
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Concatenate
@@ -18,14 +18,24 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Iterator
     from typing import ParamSpec
 
-    from fava.beans.abc import Amount
-    from fava.beans.abc import Position
+    from fava.beans.protocols import Amount
+    from fava.beans.protocols import Position
 
     P = ParamSpec("P")
 
 
 ZERO = Decimal()
 InventoryKey = Tuple[str, Optional[Cost]]
+
+
+class _Amount(NamedTuple):
+    currency: str
+    number: Decimal
+
+
+class _Position(NamedTuple):
+    units: Amount
+    cost: Cost | None
 
 
 class SimpleCounterInventory(Dict[str, Decimal]):
@@ -92,7 +102,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         """
         counter = SimpleCounterInventory()
         for (currency, cost), number in self.items():
-            pos = create.position(create.amount((number, currency)), cost)
+            pos = _Position(_Amount(currency, number), cost)
             amount = reducer(pos, *args)
             counter.add(amount.currency, amount.number)
         return counter
