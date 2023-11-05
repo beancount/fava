@@ -64,7 +64,7 @@ from fava.util import simple_wsgi
 @click.version_option(version=__version__, prog_name="fava")
 def main(
     *,
-    filenames: tuple[str] = ("",),
+    filenames: tuple[str, ...] = (),
     port: int = 5000,
     host: str = "localhost",
     prefix: str | None = None,
