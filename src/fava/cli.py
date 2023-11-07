@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import errno
 import os
+from pathlib import Path
 
 import click
 from cheroot.wsgi import Server
@@ -83,10 +84,10 @@ def main(
     For example, `--host=0.0.0.0` is equivalent to setting the environment
     variable `FAVA_HOST=0.0.0.0`.
     """
-    env_filename = os.environ.get("BEANCOUNT_FILE")
-    all_filenames = (
-        filenames + tuple(env_filename.split()) if env_filename else filenames
+    env_filenames = tuple(
+        Path(x).resolve() for x in os.environ.get("BEANCOUNT_FILE", "").split()
     )
+    all_filenames = filenames + env_filenames if env_filenames else filenames
 
     if not all_filenames:
         raise click.UsageError("No file specified")
