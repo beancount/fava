@@ -4,6 +4,7 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
 ]
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
@@ -22,6 +23,7 @@ autodoc_default_options = {
     "members": True,
     "undoc-members": True,
 }
+typehints_use_rtype = False
 
 
 def skip_namedtuples(_app, _what, _name, obj, _options, _lines):
@@ -36,25 +38,18 @@ def setup(app):
 
 
 desc = 'Web interface for <a href="http://furius.ca/beancount/">Beancount</a>'
+
+# Set templates path to add extra links to navigation
+# (in templates/sidebar/navigation.html)
+templates_path = ["templates"]
+
 # Options for HTML output
-html_theme = "alabaster"
+html_theme = "furo"
+html_title = "Fava"
 html_static_path = ["static"]
+html_logo = "static/logo.png"
 html_theme_options = {
-    "logo": "logo.png",
-    "logo_name": True,
-    "logo_text_align": "center",
-    "description": desc,
-    "github_user": "beancount",
-    "github_repo": "fava",
-    "github_button": "false",
-    "show_powered_by": "false",
-    "extra_nav_links": {
-        "fava @ GitHub": "https://github.com/beancount/fava",
-        "Chat": "https://gitter.im/beancount/fava",
-        "Issue Tracker": "https://github.com/beancount/fava/issues",
-    },
-    "link": "#3572b0",
-    "link_hover": "#1A2F59",
+    "source_repository": "https://github.com/beancount/fava/",
+    "source_branch": "main",
+    "source_directory": "docs/",
 }
-html_sidebars = {"**": ["about.html", "navigation.html"]}
-htmlhelp_basename = "favadoc"

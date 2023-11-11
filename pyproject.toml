@@ -67,6 +67,7 @@ excel =[
 # Extra dependencies that are used in tests or for linting.
 dev = [
     "build",
+    "furo",
     "mypy",
     "pre-commit",
     "pyinstaller",
@@ -75,6 +76,7 @@ dev = [
     "pytest-cov",
     "setuptools",
     "sphinx",
+    "sphinx-autodoc-typehints",
     "tox",
     "twine",
     "types-setuptools",

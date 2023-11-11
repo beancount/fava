@@ -18,7 +18,9 @@ babel==2.14.0
 beancount==2.3.6
     # via fava (pyproject.toml)
 beautifulsoup4==4.12.2
-    # via beancount
+    # via
+    #   beancount
+    #   furo
 blinker==1.7.0
     # via flask
 bottle==0.12.25
@@ -75,6 +77,8 @@ flask==3.0.0
     #   fava (pyproject.toml)
     #   flask-babel
 flask-babel==4.0.0
+    # via fava (pyproject.toml)
+furo==2023.9.10
     # via fava (pyproject.toml)
 google-api-core==2.15.0
     # via google-api-python-client
@@ -215,6 +219,7 @@ pyexcel-xlsx==0.6.0
     # via fava (pyproject.toml)
 pygments==2.17.2
     # via
+    #   furo
     #   readme-renderer
     #   rich
     #   sphinx
@@ -277,11 +282,18 @@ soupsieve==2.5
 sphinx==7.2.6
     # via
     #   fava (pyproject.toml)
+    #   furo
+    #   sphinx-autodoc-typehints
+    #   sphinx-basic-ng
     #   sphinxcontrib-applehelp
     #   sphinxcontrib-devhelp
     #   sphinxcontrib-htmlhelp
     #   sphinxcontrib-qthelp
     #   sphinxcontrib-serializinghtml
+sphinx-autodoc-typehints==1.25.2
+    # via fava (pyproject.toml)
+sphinx-basic-ng==1.0.0b2
+    # via furo
 sphinxcontrib-applehelp==1.0.7
     # via sphinx
 sphinxcontrib-devhelp==1.0.5
