@@ -15,8 +15,11 @@ test("locale number formatting", () => {
   assert.is(de(10), "10,00");
   assert.is(ind(10), "10.00");
   assert.is(f(1000000), "1000000.00");
-  assert.is(de(1000000), "1.000.000,00");
-  assert.is(ind(1000000), "10,00,000.00");
+  assert.is(de(1000000.000002), "1.000.000,00");
+  assert.is(ind(1000000.00000001), "10,00,000.00");
+
+  const es_ar = localeFormatter("es_AR", 2);
+  assert.is(es_ar(1234.1234), "1.234,12");
 
   // it silently clamps large or negative precisions
   const de_large = localeFormatter("de_DE", 100);

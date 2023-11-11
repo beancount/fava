@@ -19,11 +19,12 @@ export function localeFormatter(
   if (!locale) {
     return format(`.${precision}f`);
   }
-  const opts = {
-    // this needs to be between 0 and 20
-    minimumFractionDigits: Math.max(0, Math.min(precision, 20)),
-  };
-  const fmt = new Intl.NumberFormat(locale.replace("_", "-"), opts);
+  // this needs to be between 0 and 20
+  const digits = Math.max(0, Math.min(precision, 20));
+  const fmt = new Intl.NumberFormat(locale.replace("_", "-"), {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
   return fmt.format.bind(fmt);
 }
 
