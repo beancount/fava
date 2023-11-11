@@ -16,6 +16,14 @@ from fava.application import create_app
 from fava.util import simple_wsgi
 
 
+class AddressInUse(click.ClickException):  # noqa: D101
+    def __init__(self, port: int) -> None:
+        super().__init__(
+            f"Cannot start Fava because port {port} is already in use."
+            "\nPlease choose a different port with the '-p' option.",
+        )
+
+
 def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
     """Read additional filenames from BEANCOUNT_FILE."""
     env_filename = os.environ.get("BEANCOUNT_FILE")
@@ -123,7 +131,7 @@ def main(
     # Debug mode if profiling is active
     debug = debug or profile
 
-    click.echo(f"Starting Fava on http://{host}:{port}")
+    click.secho(f"Starting Fava on http://{host}:{port}", fg="green")
     if not debug:
         server = Server((host, port), app)
         try:
@@ -133,10 +141,7 @@ def main(
             server.stop()
         except OSError as error:
             if "No socket could be created" in str(error):
-                click.echo(
-                    f"Cannot start Fava because port {port} is already in use."
-                    "\nPlease choose a different port with the '-p' option.",
-                )
+                raise AddressInUse(port) from error
             raise click.Abort from error
     else:
         if profile:
@@ -151,11 +156,7 @@ def main(
             app.run(host, port, debug)
         except OSError as error:
             if error.errno == errno.EADDRINUSE:
-                click.echo(
-                    f"Cannot start Fava because port {port} is already in use."
-                    "\nPlease choose a different port with the '-p' option.",
-                )
-                raise click.Abort from error
+                raise AddressInUse(port) from error
             raise
 
 
