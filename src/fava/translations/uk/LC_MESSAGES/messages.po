@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Налаштовані посилання"
 
-#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:66
+#: frontend/src/reports/routes.ts:28 frontend/src/sidebar/Aside.svelte:66
 msgid "Errors"
 msgstr "Помилки"
 
@@ -49,7 +49,7 @@ msgstr "Оборотно-сальдова відомість"
 msgid "Journal"
 msgstr "Журнал"
 
-#: frontend/src/reports/routes.ts:36 frontend/src/sidebar/Aside.svelte:30
+#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:30
 msgid "Query"
 msgstr "Запит"
 
@@ -63,12 +63,12 @@ msgstr "Запаси"
 msgid "Commodities"
 msgstr "Цінності"
 
-#: frontend/src/reports/events/load.ts:26 frontend/src/reports/routes.ts:33
-#: frontend/src/sidebar/Aside.svelte:49
+#: frontend/src/reports/events/Events.svelte:17
+#: frontend/src/reports/events/index.ts:16 frontend/src/sidebar/Aside.svelte:49
 msgid "Events"
 msgstr "Події"
 
-#: frontend/src/reports/routes.ts:31 frontend/src/sidebar/Aside.svelte:56
+#: frontend/src/reports/editor/index.ts:27 frontend/src/sidebar/Aside.svelte:56
 msgid "Editor"
 msgstr "Редактор"
 
@@ -84,9 +84,9 @@ msgstr "Статистика"
 msgid "Help"
 msgstr "Допомога"
 
-#: frontend/src/reports/commodities/Commodities.svelte:21
-#: frontend/src/reports/documents/Table.svelte:21
-#: frontend/src/reports/events/Events.svelte:22
+#: frontend/src/reports/commodities/CommodityTable.svelte:13
+#: frontend/src/reports/documents/Table.svelte:23
+#: frontend/src/reports/events/EventTable.svelte:10
 #: src/fava/templates/_journal_table.html:48
 msgid "Date"
 msgstr "Дата"
@@ -103,7 +103,7 @@ msgstr "Опис/Отримувач"
 msgid "Position"
 msgstr "Позиція"
 
-#: frontend/src/reports/commodities/Commodities.svelte:23
+#: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:52
 msgid "Price"
 msgstr "Ціна"
@@ -124,7 +124,7 @@ msgid "Balance"
 msgstr "Баланс"
 
 #: frontend/src/editor/SaveButton.svelte:8
-#: frontend/src/modals/AddEntry.svelte:60
+#: frontend/src/modals/AddEntry.svelte:62
 #: frontend/src/reports/import/Extract.svelte:94
 msgid "Save"
 msgstr "Зберегти"
@@ -159,7 +159,7 @@ msgstr "Журнал Рахунку"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:51
 #: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:591
+#: src/fava/json_api.py:594
 msgid "Changes"
 msgstr "Зміни"
 
@@ -168,34 +168,33 @@ msgstr "Зміни"
 msgid "Balances"
 msgstr "Баланс"
 
-#: frontend/src/reports/errors/Errors.svelte:43
+#: frontend/src/reports/errors/Errors.svelte:55
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Перейти до файлу %(file)s:%(lineno)s"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:40
-#: frontend/src/reports/errors/Errors.svelte:33
+#: frontend/src/reports/errors/Errors.svelte:32
 msgid "File"
 msgstr "Файл"
 
-#: frontend/src/reports/errors/Errors.svelte:34
+#: frontend/src/reports/errors/Errors.svelte:33
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Line"
 msgstr "Строка"
 
-#: frontend/src/reports/errors/Errors.svelte:35
+#: frontend/src/reports/errors/Errors.svelte:34
 msgid "Error"
 msgstr "Помилка"
 
-#: frontend/src/reports/errors/Errors.svelte:63
+#: frontend/src/reports/errors/Errors.svelte:75
 msgid "No errors."
 msgstr "Помилок не знайдено."
 
-#: frontend/src/reports/events/Events.svelte:18
-#: frontend/src/reports/events/load.ts:29
+#: frontend/src/reports/events/Events.svelte:32
 msgid "Event: %(type)s"
 msgstr "Подія: %(type)s"
 
-#: frontend/src/reports/events/Events.svelte:23
+#: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Опис"
 
@@ -224,7 +223,8 @@ msgstr "Курс валюти"
 msgid "Holdings by"
 msgstr "Запаси у"
 
-#: src/fava/json_api.py:473 src/fava/json_api.py:494
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:476
+#: src/fava/json_api.py:496
 msgid "Net Profit"
 msgstr "Чистий дохід"
 
@@ -315,7 +315,7 @@ msgid "Add posting"
 msgstr "Додати проведення"
 
 #: frontend/src/reports/import/Extract.svelte:43
-#: frontend/src/reports/import/index.ts:63
+#: frontend/src/reports/import/index.ts:67
 msgid "Import"
 msgstr "Імпортувати"
 
@@ -355,7 +355,7 @@ msgstr "Дублікат"
 msgid "Importer"
 msgstr "Імпортер"
 
-#: frontend/src/reports/import/FileList.svelte:52
+#: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
 msgstr "Витягти"
 
@@ -482,27 +482,27 @@ msgid "Import entries"
 msgstr "Імпортувати записи"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:8
-#: frontend/src/lib/interval.ts:16 src/fava/util/date.py:70
+#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
 msgid "Yearly"
 msgstr "Щорічно"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:9
-#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
+#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
 msgid "Quarterly"
 msgstr "Щоквартально"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:10
-#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
+#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
 msgid "Monthly"
 msgstr "Щомісячно"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:11
-#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
+#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
 msgid "Weekly"
 msgstr "Щотижнево"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:12
-#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
+#: frontend/src/lib/interval.ts:21 src/fava/util/date.py:75
 msgid "Daily"
 msgstr "Щоденно"
 
@@ -522,15 +522,15 @@ msgstr "Документи з #linked тегом"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Ви маєте встановити опцію Beancount \"documents\" щоб завантажувати файли."
 
-#: frontend/src/stores/chart.ts:86
+#: frontend/src/stores/chart.ts:83
 msgid "At Cost"
 msgstr "За вартістю"
 
-#: frontend/src/stores/chart.ts:87
+#: frontend/src/stores/chart.ts:84
 msgid "At Market Value"
 msgstr "За ринковою вартістю"
 
-#: frontend/src/stores/chart.ts:88
+#: frontend/src/stores/chart.ts:85
 msgid "Units"
 msgstr "Одиниці"
 
@@ -555,7 +555,7 @@ msgstr "Подія"
 msgid "Previous"
 msgstr "Попередній"
 
-#: frontend/src/charts/ChartSwitcher.svelte:24
+#: frontend/src/charts/ChartSwitcher.svelte:28
 #: frontend/src/reports/import/Extract.svelte:84
 msgid "Next"
 msgstr "Наступний"
@@ -564,24 +564,25 @@ msgstr "Наступний"
 msgid "Transaction"
 msgstr "Транзакція"
 
-#: frontend/src/modals/AddEntry.svelte:38
+#: frontend/src/modals/AddEntry.svelte:40
 msgid "Add"
 msgstr "Додати"
 
-#: frontend/src/reports/documents/Documents.svelte:65
+#: frontend/src/reports/documents/Documents.svelte:64
 msgid "Move or rename document"
 msgstr "Перемістити чи пеерйменувати документ"
 
-#: frontend/src/reports/documents/Table.svelte:21
+#: frontend/src/reports/documents/Table.svelte:24
 msgid "Name"
 msgstr "Ім'я"
 
-#: frontend/src/reports/routes.ts:30 frontend/src/sidebar/Aside.svelte:46
+#: frontend/src/reports/documents/index.ts:16
+#: frontend/src/sidebar/Aside.svelte:46
 msgid "Documents"
 msgstr "Документи"
 
 #: frontend/src/editor/DeleteButton.svelte:7
-#: frontend/src/reports/import/FileList.svelte:28
+#: frontend/src/reports/import/FileList.svelte:29
 msgid "Delete"
 msgstr "Видалити"
 
@@ -597,11 +598,11 @@ msgstr "Лінійна діаграма"
 msgid "Area chart"
 msgstr "Діаграма з областями"
 
-#: frontend/src/reports/import/FileList.svelte:51
+#: frontend/src/reports/import/FileList.svelte:52
 msgid "Continue"
 msgstr "Продовжити"
 
-#: frontend/src/reports/import/FileList.svelte:62
+#: frontend/src/reports/import/FileList.svelte:63
 msgid "Clear"
 msgstr "Очистити"
 
@@ -621,7 +622,7 @@ msgstr ""
 msgid "Toggle %(type)s entries"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:91
+#: frontend/src/stores/chart.ts:88
 msgid "Converted to %(currency)s"
 msgstr ""
 
@@ -645,11 +646,11 @@ msgstr ""
 msgid "Toggle postings"
 msgstr ""
 
-#: src/fava/internal_api.py:178
+#: src/fava/internal_api.py:180
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/internal_api.py:186
+#: src/fava/internal_api.py:188
 msgid "Account Balance"
 msgstr ""
 
@@ -657,7 +658,7 @@ msgstr ""
 msgid "reload"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:58
+#: frontend/src/modals/AddEntry.svelte:60
 msgid "continue"
 msgstr ""
 

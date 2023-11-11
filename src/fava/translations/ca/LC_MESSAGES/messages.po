@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Enllaços personalitzats"
 
-#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:66
+#: frontend/src/reports/routes.ts:28 frontend/src/sidebar/Aside.svelte:66
 msgid "Errors"
 msgstr "Errors"
 
@@ -49,7 +49,7 @@ msgstr "Balanç de comprovació"
 msgid "Journal"
 msgstr "Llibre diari"
 
-#: frontend/src/reports/routes.ts:36 frontend/src/sidebar/Aside.svelte:30
+#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:30
 msgid "Query"
 msgstr "Consulta"
 
@@ -63,12 +63,12 @@ msgstr "Cartera de valors"
 msgid "Commodities"
 msgstr "Productes"
 
-#: frontend/src/reports/events/load.ts:26 frontend/src/reports/routes.ts:33
-#: frontend/src/sidebar/Aside.svelte:49
+#: frontend/src/reports/events/Events.svelte:17
+#: frontend/src/reports/events/index.ts:16 frontend/src/sidebar/Aside.svelte:49
 msgid "Events"
 msgstr "Esdeveniments"
 
-#: frontend/src/reports/routes.ts:31 frontend/src/sidebar/Aside.svelte:56
+#: frontend/src/reports/editor/index.ts:27 frontend/src/sidebar/Aside.svelte:56
 msgid "Editor"
 msgstr "Editor"
 
@@ -84,9 +84,9 @@ msgstr "Estadístiques"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/reports/commodities/Commodities.svelte:21
-#: frontend/src/reports/documents/Table.svelte:21
-#: frontend/src/reports/events/Events.svelte:22
+#: frontend/src/reports/commodities/CommodityTable.svelte:13
+#: frontend/src/reports/documents/Table.svelte:23
+#: frontend/src/reports/events/EventTable.svelte:10
 #: src/fava/templates/_journal_table.html:48
 msgid "Date"
 msgstr "Data"
@@ -103,7 +103,7 @@ msgstr "Descripció/beneficiari"
 msgid "Position"
 msgstr "Situació"
 
-#: frontend/src/reports/commodities/Commodities.svelte:23
+#: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:52
 msgid "Price"
 msgstr "Preu"
@@ -124,7 +124,7 @@ msgid "Balance"
 msgstr "Balanç"
 
 #: frontend/src/editor/SaveButton.svelte:8
-#: frontend/src/modals/AddEntry.svelte:60
+#: frontend/src/modals/AddEntry.svelte:62
 #: frontend/src/reports/import/Extract.svelte:94
 msgid "Save"
 msgstr "Desa"
@@ -159,7 +159,7 @@ msgstr "Llibre diari del compte"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:51
 #: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:591
+#: src/fava/json_api.py:594
 msgid "Changes"
 msgstr "Canvis"
 
@@ -168,34 +168,33 @@ msgstr "Canvis"
 msgid "Balances"
 msgstr "Balanços"
 
-#: frontend/src/reports/errors/Errors.svelte:43
+#: frontend/src/reports/errors/Errors.svelte:55
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostra la font %(file)s:%(lineno)s"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:40
-#: frontend/src/reports/errors/Errors.svelte:33
+#: frontend/src/reports/errors/Errors.svelte:32
 msgid "File"
 msgstr "Fitxer"
 
-#: frontend/src/reports/errors/Errors.svelte:34
+#: frontend/src/reports/errors/Errors.svelte:33
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Line"
 msgstr "Línia"
 
-#: frontend/src/reports/errors/Errors.svelte:35
+#: frontend/src/reports/errors/Errors.svelte:34
 msgid "Error"
 msgstr "Error"
 
-#: frontend/src/reports/errors/Errors.svelte:63
+#: frontend/src/reports/errors/Errors.svelte:75
 msgid "No errors."
 msgstr "No hi ha cap error."
 
-#: frontend/src/reports/events/Events.svelte:18
-#: frontend/src/reports/events/load.ts:29
+#: frontend/src/reports/events/Events.svelte:32
 msgid "Event: %(type)s"
 msgstr "Esdeveniment: %(type)s"
 
-#: frontend/src/reports/events/Events.svelte:23
+#: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Descripció"
 
@@ -224,7 +223,8 @@ msgstr "Moneda de cost"
 msgid "Holdings by"
 msgstr "Cartera de valors per"
 
-#: src/fava/json_api.py:473 src/fava/json_api.py:494
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:476
+#: src/fava/json_api.py:496
 msgid "Net Profit"
 msgstr "Benefici net"
 
@@ -315,7 +315,7 @@ msgid "Add posting"
 msgstr "Afegeix una comptabilització"
 
 #: frontend/src/reports/import/Extract.svelte:43
-#: frontend/src/reports/import/index.ts:63
+#: frontend/src/reports/import/index.ts:67
 msgid "Import"
 msgstr "Importa"
 
@@ -355,7 +355,7 @@ msgstr "Duplicada"
 msgid "Importer"
 msgstr "Importador"
 
-#: frontend/src/reports/import/FileList.svelte:52
+#: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
 msgstr "Extreu"
 
@@ -482,27 +482,27 @@ msgid "Import entries"
 msgstr "Importa les entrades"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:8
-#: frontend/src/lib/interval.ts:16 src/fava/util/date.py:70
+#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
 msgid "Yearly"
 msgstr "Per any"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:9
-#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
+#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
 msgid "Quarterly"
 msgstr "Per trimestre"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:10
-#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
+#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
 msgid "Monthly"
 msgstr "Per mes"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:11
-#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
+#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
 msgid "Weekly"
 msgstr "Per setmana"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:12
-#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
+#: frontend/src/lib/interval.ts:21 src/fava/util/date.py:75
 msgid "Daily"
 msgstr "Per dia"
 
@@ -522,15 +522,15 @@ msgstr "Documents amb una etiqueta #linked"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Heu de definir l'opció «documents» del Beancount per pujar fitxers."
 
-#: frontend/src/stores/chart.ts:86
+#: frontend/src/stores/chart.ts:83
 msgid "At Cost"
 msgstr "Cost"
 
-#: frontend/src/stores/chart.ts:87
+#: frontend/src/stores/chart.ts:84
 msgid "At Market Value"
 msgstr "Valor de mercat"
 
-#: frontend/src/stores/chart.ts:88
+#: frontend/src/stores/chart.ts:85
 msgid "Units"
 msgstr "Unitats"
 
@@ -555,7 +555,7 @@ msgstr "Esdeveniment"
 msgid "Previous"
 msgstr "Anterior"
 
-#: frontend/src/charts/ChartSwitcher.svelte:24
+#: frontend/src/charts/ChartSwitcher.svelte:28
 #: frontend/src/reports/import/Extract.svelte:84
 msgid "Next"
 msgstr "Següent"
@@ -564,24 +564,25 @@ msgstr "Següent"
 msgid "Transaction"
 msgstr "Transacció"
 
-#: frontend/src/modals/AddEntry.svelte:38
+#: frontend/src/modals/AddEntry.svelte:40
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/reports/documents/Documents.svelte:65
+#: frontend/src/reports/documents/Documents.svelte:64
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
-#: frontend/src/reports/documents/Table.svelte:21
+#: frontend/src/reports/documents/Table.svelte:24
 msgid "Name"
 msgstr "Nom"
 
-#: frontend/src/reports/routes.ts:30 frontend/src/sidebar/Aside.svelte:46
+#: frontend/src/reports/documents/index.ts:16
+#: frontend/src/sidebar/Aside.svelte:46
 msgid "Documents"
 msgstr "Documents"
 
 #: frontend/src/editor/DeleteButton.svelte:7
-#: frontend/src/reports/import/FileList.svelte:28
+#: frontend/src/reports/import/FileList.svelte:29
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -597,11 +598,11 @@ msgstr "Diagrama de línies"
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
-#: frontend/src/reports/import/FileList.svelte:51
+#: frontend/src/reports/import/FileList.svelte:52
 msgid "Continue"
 msgstr "Continua"
 
-#: frontend/src/reports/import/FileList.svelte:62
+#: frontend/src/reports/import/FileList.svelte:63
 msgid "Clear"
 msgstr "Esborra"
 
@@ -621,7 +622,7 @@ msgstr ""
 msgid "Toggle %(type)s entries"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:91
+#: frontend/src/stores/chart.ts:88
 msgid "Converted to %(currency)s"
 msgstr ""
 
@@ -645,11 +646,11 @@ msgstr ""
 msgid "Toggle postings"
 msgstr ""
 
-#: src/fava/internal_api.py:178
+#: src/fava/internal_api.py:180
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/internal_api.py:186
+#: src/fava/internal_api.py:188
 msgid "Account Balance"
 msgstr ""
 
@@ -657,7 +658,7 @@ msgstr ""
 msgid "reload"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:58
+#: frontend/src/modals/AddEntry.svelte:60
 msgid "continue"
 msgstr ""
 
