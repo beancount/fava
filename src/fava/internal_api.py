@@ -7,7 +7,6 @@ for the frontend data validation.
 
 from __future__ import annotations
 
-from copy import copy
 from dataclasses import dataclass
 from typing import Any
 from typing import TYPE_CHECKING
@@ -41,7 +40,7 @@ class SerialisedError:
     @staticmethod
     def from_beancount_error(err: BeancountError) -> SerialisedError:
         """Get a serialisable error from a Beancount error."""
-        source = copy(err.source)
+        source = dict(err.source) if err.source is not None else None
         if source is not None:
             source.pop("__tolerances__", None)
         return SerialisedError(err.__class__.__name__, source, err.message)

@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans import create
+from fava.beans.funcs import get_position
 from fava.beans.helpers import replace
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import delete_entry_slice
@@ -52,7 +53,7 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     entry_source, sha256sum = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
-    filename = Path(entry.meta["filename"])
+    filename = Path(get_position(entry)[0])
     contents = filename.read_text("utf-8")
 
     with pytest.raises(ExternallyChangedError):
@@ -69,24 +70,25 @@ def test_delete_entry_slice(example_ledger: FavaLedger) -> None:
     entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
 
     _entry_source, sha256sum = get_entry_slice(entry)
-    filename = Path(entry.meta["filename"])
-    contents = filename.read_text("utf-8")
+    filename, lineno = get_position(entry)
+    path = Path(filename)
+    contents = path.read_text("utf-8")
 
     with pytest.raises(ExternallyChangedError):
         delete_entry_slice(entry, "wrong hash")
-    assert filename.read_text("utf-8") == contents
+    assert path.read_text("utf-8") == contents
 
     delete_entry_slice(entry, sha256sum)
-    assert filename.read_text("utf-8") != contents
+    assert path.read_text("utf-8") != contents
 
     insert_option = InsertEntryOption(
         date(1, 1, 1),
         re.compile(".*"),
-        entry.meta["filename"],
-        entry.meta["lineno"],
+        filename,
+        lineno,
     )
-    insert_entry(entry, entry.meta["filename"], [insert_option], 59, 2)
-    assert filename.read_text("utf-8") == contents
+    insert_entry(entry, filename, [insert_option], 59, 2)
+    assert path.read_text("utf-8") == contents
 
 
 def test_insert_metadata_in_file(tmp_path: Path) -> None:

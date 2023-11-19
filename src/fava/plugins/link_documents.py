@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 from fava.beans.abc import Document
 from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
+from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.helpers import BeancountError
@@ -53,7 +54,7 @@ def link_documents(
         disk_docs = [
             value
             for key, value in entry.meta.items()
-            if key.startswith("document")
+            if key.startswith("document") and isinstance(value, str)
         ]
 
         if not disk_docs:
@@ -61,6 +62,7 @@ def link_documents(
 
         hash_ = hash_entry(entry)[:8]
         entry_accounts = get_entry_accounts(entry)
+        entry_filename, _ = get_position(entry)
         for disk_doc in disk_docs:
             documents = [
                 j
@@ -68,7 +70,7 @@ def link_documents(
                 if document.account in entry_accounts
             ]
             disk_doc_path = normpath(
-                Path(entry.meta["filename"]).parent / disk_doc,
+                Path(entry_filename).parent / disk_doc,
             )
             if disk_doc_path in by_fullname:
                 documents.append(by_fullname[disk_doc_path])

@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 from babel.core import Locale
 from babel.core import UnknownLocaleError
 
+from fava.beans.funcs import get_position
 from fava.helpers import BeancountError
 from fava.util.date import END_OF_YEAR
 from fava.util.date import parse_fye_string
@@ -94,7 +95,8 @@ def parse_option_custom_entry(  # noqa: PLR0912
         raise ValueError(f"unknown option `{key}`")
 
     if key == "default_file":
-        options.default_file = entry.meta["filename"]
+        filename, _lineno = get_position(entry)
+        options.default_file = filename
         return
 
     value = entry.values[1].value
@@ -108,12 +110,8 @@ def parse_option_custom_entry(  # noqa: PLR0912
             raise TypeError(
                 f"Should be a regular expression: '{value}'.",
             ) from err
-        opt = InsertEntryOption(
-            entry.date,
-            pattern,
-            entry.meta["filename"],
-            entry.meta["lineno"],
-        )
+        filename, lineno = get_position(entry)
+        opt = InsertEntryOption(entry.date, pattern, filename, lineno)
         options.insert_entry.append(opt)
     elif key == "collapse_pattern":
         try:

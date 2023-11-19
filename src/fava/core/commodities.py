@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import suppress
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
@@ -25,9 +26,9 @@ class CommoditiesModule(FavaModule):
         for commodity in self.ledger.all_entries_by_type.Commodity:
             name = commodity.meta.get("name")
             if name:
-                self.names[commodity.currency] = name
+                self.names[commodity.currency] = str(name)
             precision = commodity.meta.get("precision")
-            if precision is not None:
+            if isinstance(precision, (str, int, Decimal)):
                 with suppress(ValueError):
                     self.precisions[commodity.currency] = int(precision)
 

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.fava_options import InsertEntryOption
@@ -391,13 +392,14 @@ def test_api_source_slice_delete(
 
     assert path.read_text("utf-8") != contents
 
+    filename, lineno = get_position(entry)
     insert_option = InsertEntryOption(
         datetime.date(1, 1, 1),
         re.compile(".*"),
-        entry.meta["filename"],
-        entry.meta["lineno"],
+        filename,
+        lineno,
     )
-    insert_entry(entry, entry.meta["filename"], [insert_option], 59, 2)
+    insert_entry(entry, filename, [insert_option], 59, 2)
     assert path.read_text("utf-8") == contents
 
 

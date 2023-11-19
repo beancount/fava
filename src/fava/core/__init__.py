@@ -22,6 +22,7 @@ from fava.beans.abc import Price
 from fava.beans.abc import Transaction
 from fava.beans.account import child_account_tester
 from fava.beans.account import get_entry_accounts
+from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.beans.prices import FavaPriceMap
 from fava.beans.str import to_string
@@ -555,9 +556,12 @@ class FavaLedger:
         """Get the path for a statement found in the specified entry."""
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
+        if not isinstance(value, str):
+            raise FavaAPIError("Statement path needs to be a string.")
 
         accounts = set(get_entry_accounts(entry))
-        full_path = Path(entry.meta["filename"]).parent / value
+        filename, _ = get_position(entry)
+        full_path = Path(filename).parent / value
         for document in self.all_entries_by_type.Document:
             if document.filename == str(full_path):
                 return document.filename

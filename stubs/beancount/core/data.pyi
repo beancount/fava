@@ -1,6 +1,7 @@
 import datetime
 import enum
 from collections.abc import Iterable
+from collections.abc import Mapping
 from decimal import Decimal
 from typing import Any
 from typing import NamedTuple
@@ -16,7 +17,7 @@ from fava.beans import abc
 Account: TypeAlias = str
 Currency: TypeAlias = str
 Flag: TypeAlias = str
-Meta: TypeAlias = dict[str, Any]
+Meta: TypeAlias = Mapping[str, Any]
 Tags: TypeAlias = set[str] | frozenset[str]
 Links: TypeAlias = Tags
 

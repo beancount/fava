@@ -19,6 +19,7 @@ from flask import abort
 from flask import send_file
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Mapping
     from typing import ParamSpec
 
     from _typeshed.wsgi import StartResponse
@@ -72,7 +73,7 @@ def timefunc(
     return _wrapper
 
 
-def next_key(basekey: str, keys: dict[str, Any]) -> str:
+def next_key(basekey: str, keys: Mapping[str, Any]) -> str:
     """Return the next unused key for basekey in the supplied dictionary.
 
     The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc

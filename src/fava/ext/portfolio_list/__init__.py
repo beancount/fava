@@ -118,7 +118,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
             tree[entry.account]
             for entry in self.ledger.all_entries_by_type.Open
             if metadata_key in entry.meta
-            and regexer.match(entry.meta[metadata_key])
+            and regexer.match(str(entry.meta[metadata_key]))
         ]
         return Portfolio(
             f"Accounts with '{metadata_key}' metadata matching: '{pattern }'",

@@ -104,6 +104,7 @@ disable = [
     "too-few-public-methods",
     "too-many-branches",
     "too-many-instance-attributes",
+    "duplicate-code",
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives
     "unsubscriptable-object",        # type-checking like, had false-positives

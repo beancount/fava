@@ -28,6 +28,7 @@ from fava.beans.flags import FLAG_RETURNS
 from fava.beans.flags import FLAG_SUMMARIZE
 from fava.beans.flags import FLAG_TRANSFER
 from fava.beans.flags import FLAG_UNREALIZED
+from fava.beans.funcs import get_position
 from fava.beans.str import to_string
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIError
@@ -158,9 +159,10 @@ class FileModule(FavaModule):
             entry: Directive = self.ledger.get_entry(entry_hash)
             key = next_key(basekey, entry.meta)
             indent = self.ledger.fava_options.indent
+            filename, lineno = get_position(entry)
             insert_metadata_in_file(
-                Path(entry.meta["filename"]),
-                entry.meta["lineno"],
+                Path(filename),
+                lineno,
                 indent,
                 key,
                 value,
@@ -319,11 +321,12 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
     """
-    path = Path(entry.meta["filename"])
+    filename, lineno = get_position(entry)
+    path = Path(filename)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
-    entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
+    entry_lines = find_entry_lines(lines, lineno - 1)
     entry_source = "".join(entry_lines).rstrip("\n")
 
     return entry_source, sha256_str(entry_source)
@@ -348,11 +351,12 @@ def save_entry_slice(
         FavaAPIError: If the file at `path` is not one of the
             source files.
     """
-    path = Path(entry.meta["filename"])
+    filename, lineno = get_position(entry)
+    path = Path(filename)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
-    first_entry_line = entry.meta["lineno"] - 1
+    first_entry_line = lineno - 1
     entry_lines = find_entry_lines(lines, first_entry_line)
     entry_source = "".join(entry_lines).rstrip("\n")
     if sha256_str(entry_source) != sha256sum:
@@ -363,7 +367,6 @@ def save_entry_slice(
         + [source_slice + "\n"]
         + lines[first_entry_line + len(entry_lines) :]
     )
-    path = Path(entry.meta["filename"])
     with path.open("w", encoding="utf-8") as file:
         file.writelines(lines)
 
@@ -381,11 +384,12 @@ def delete_entry_slice(entry: Directive, sha256sum: str) -> None:
         FavaAPIError: If the file at `path` is not one of the
             source files.
     """
-    path = Path(entry.meta["filename"])
+    filename, lineno = get_position(entry)
+    path = Path(filename)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
-    first_entry_line = entry.meta["lineno"] - 1
+    first_entry_line = lineno - 1
     entry_lines = find_entry_lines(lines, first_entry_line)
     entry_source = "".join(entry_lines).rstrip("\n")
     if sha256_str(entry_source) != sha256sum:
@@ -402,7 +406,6 @@ def delete_entry_slice(entry: Directive, sha256sum: str) -> None:
             break
         last_entry_line += 1
     lines = lines[:first_entry_line] + lines[last_entry_line:]
-    path = Path(entry.meta["filename"])
     with path.open("w", encoding="utf-8") as file:
         file.writelines(lines)
 
