@@ -54,7 +54,7 @@ coverage==7.3.2
     # via
     #   coverage
     #   pytest-cov
-cryptography==41.0.5
+cryptography==41.0.7
     # via secretstorage
 dill==0.3.7
     # via pylint
@@ -78,9 +78,9 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 google-api-core==2.14.0
     # via google-api-python-client
-google-api-python-client==2.108.0
+google-api-python-client==2.109.0
     # via beancount
-google-auth==2.23.4
+google-auth==2.24.0
     # via
     #   google-api-core
     #   google-api-python-client
@@ -99,7 +99,7 @@ idna==3.6
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.8.0
+importlib-metadata==6.9.0
     # via
     #   keyring
     #   twine
@@ -298,11 +298,11 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.3
     # via pylint
-tox==4.11.3
+tox==4.11.4
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
-types-setuptools==68.2.0.2
+types-setuptools==69.0.0.0
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.2
     # via fava (pyproject.toml)
@@ -314,7 +314,7 @@ urllib3==2.1.0
     # via
     #   requests
     #   twine
-virtualenv==20.24.7
+virtualenv==20.25.0
     # via
     #   pre-commit
     #   tox
