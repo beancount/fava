@@ -103,11 +103,19 @@
     "postings": [
       {
         "account": "Assets:US:Vanguard:VBMPX",
-        "amount": "15.957 VBMPX {30.08 USD, 2016-05-09}"
+        "amount": "15.957 VBMPX {30.08 USD, 2016-05-09}",
+        "meta": {
+          "filename": "TEST_DATA_DIR/long-example.beancount",
+          "lineno": 3738
+        }
       },
       {
         "account": "Assets:US:Vanguard:Cash",
-        "amount": "-479.99 USD"
+        "amount": "-479.99 USD",
+        "meta": {
+          "filename": "TEST_DATA_DIR/long-example.beancount",
+          "lineno": 3739
+        }
       }
     ],
     "t": "Transaction",

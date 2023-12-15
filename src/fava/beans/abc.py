@@ -112,7 +112,7 @@ class Posting(Position):
 
     @property
     @abstractmethod
-    def meta(self) -> Meta | None:
+    def meta(self) -> Meta:
         """Metadata of the posting."""
 
     @property

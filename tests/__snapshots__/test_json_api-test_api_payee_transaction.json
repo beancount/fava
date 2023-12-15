@@ -11,11 +11,19 @@
   "postings": [
     {
       "account": "Assets:US:BofA:Checking",
-      "amount": "-65.00 USD"
+      "amount": "-65.00 USD",
+      "meta": {
+        "filename": "TEST_DATA_DIR/long-example.beancount",
+        "lineno": 730
+      }
     },
     {
       "account": "Expenses:Home:Electricity",
-      "amount": "65.00 USD"
+      "amount": "65.00 USD",
+      "meta": {
+        "filename": "TEST_DATA_DIR/long-example.beancount",
+        "lineno": 731
+      }
     }
   ],
   "t": "Transaction",

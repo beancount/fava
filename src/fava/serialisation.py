@@ -70,7 +70,11 @@ def _(posting: Posting) -> Any:
 
     if posting.price is not None:
         position_str += f" @ {to_string(posting.price)}"
-    return {"account": posting.account, "amount": position_str}
+
+    ret = {"account": posting.account, "amount": position_str}
+    if posting.meta:
+        ret["meta"] = posting.meta
+    return ret
 
 
 def deserialise_posting(posting: Any) -> Posting:
@@ -85,7 +89,11 @@ def deserialise_posting(posting: Any) -> Posting:
     if not isinstance(txn, Transaction):
         raise TypeError("Expected transaction")
     pos = txn.postings[0]
-    return replace(pos, account=posting["account"], meta=None)
+    return replace(
+        pos,
+        account=posting["account"],
+        meta=posting.get("meta", {}) or None,
+    )
 
 
 def deserialise(json_entry: Any) -> Directive:
