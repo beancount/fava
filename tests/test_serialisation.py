@@ -19,6 +19,8 @@ from fava.serialisation import deserialise_posting
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any
+
     from beancount.core.data import Meta
 
     from fava.beans.abc import Directive
@@ -144,8 +146,15 @@ def test_serialise_posting(
     meta: Meta | None,
 ) -> None:
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price, flag=None, meta=meta)  # type: ignore[arg-type]
-    json = {"account": "Assets", "amount": amount_string}
+    pos = create.posting(
+        "Assets",
+        amount,
+        cost,  # type: ignore[arg-type]
+        price,
+        flag=None,
+        meta=meta,
+    )
+    json: dict[str, Any] = {"account": "Assets", "amount": amount_string}
     if meta:
         json["meta"] = meta
     assert loads(dumps(serialise(pos))) == json
@@ -174,8 +183,15 @@ def test_deserialise_posting(
 ) -> None:
     """Roundtrip is not possible here due to total price or calculation."""
     amount, cost, price = amount_cost_price
-    pos = create.posting("Assets", amount, cost, price, flag=None, meta=meta)  # type: ignore[arg-type]
-    json = {"account": "Assets", "amount": amount_string}
+    pos = create.posting(
+        "Assets",
+        amount,
+        cost,  # type: ignore[arg-type]
+        price,
+        flag=None,
+        meta=meta,
+    )
+    json: dict[str, Any] = {"account": "Assets", "amount": amount_string}
     if meta is not None:
         json["meta"] = meta
     assert deserialise_posting(json) == pos
