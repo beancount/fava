@@ -7,11 +7,6 @@
   $: buttonContent = deleting ? _("Deleting...") : _("Delete");
 </script>
 
-<button
-  type="button"
-  class="muted"
-  on:click={onDelete}
-  title={`${_("Delete")}`}
->
+<button type="button" class="muted" on:click={onDelete} title={_("Delete")}>
   {buttonContent}
 </button>

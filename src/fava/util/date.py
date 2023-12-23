@@ -224,7 +224,10 @@ def dateranges(
         yield DateRange(interval_begin, interval_end)
 
 
-def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
+def substitute(  # noqa: PLR0914
+    string: str,
+    fye: FiscalYearEnd | None = None,
+) -> str:
     """Replace variables referring to the current day.
 
     Args:
