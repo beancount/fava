@@ -46,10 +46,6 @@ export const beancountHighlight = HighlightStyle.define([
     // Invalid token
     tag: tags.invalid,
     color: "var(--editor-invalid)",
-  },
-  {
-    // Trailing whitespace
-    tag: tags.special(tags.invalid),
-    backgroundColor: "var(--editor-trailing-whitespace)",
+    backgroundColor: "var(--editor-invalid-background)",
   },
 ]);
