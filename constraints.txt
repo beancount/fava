@@ -52,7 +52,7 @@ click==8.1.7
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.3.4
+coverage==7.4.0
     # via
     #   coverage
     #   pytest-cov
@@ -133,7 +133,7 @@ lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==4.9.4
+lxml==5.0.0
     # via
     #   beancount
     #   pyexcel-ezodf
