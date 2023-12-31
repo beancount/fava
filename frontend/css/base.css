@@ -220,6 +220,10 @@ button,
   outline: 0;
 }
 
+.button {
+  display: inline-block;
+}
+
 h3 .button,
 h3 button {
   font-size: 1rem;
@@ -238,7 +242,7 @@ button:hover,
 .button:active,
 .button:hover {
   filter: brightness(90%);
-  box-shadow: 0 0 5px var(--border);
+  box-shadow: var(--box-shadow-button);
 }
 
 button.unset {
@@ -326,7 +330,7 @@ kbd {
   border: solid 1px var(--border);
   border-bottom-color: var(--border-darker);
   border-radius: 3px;
-  box-shadow: inset 0 -1px 0 var(--border-darker);
+  box-shadow: var(--box-shadow-kbd);
 }
 
 .keyboard-tooltip {

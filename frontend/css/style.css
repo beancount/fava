@@ -33,6 +33,12 @@
   --border: hsl(0deg 0% 85%);
   --border-darker: hsl(0deg 0% 80%);
 
+  /* Box shadows */
+  --box-shadow-button: 0 0 5px hsl(0deg 0% 50% / 50%);
+  --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 50% / 50%);
+  --box-shadow-kbd: inset 0 -1px 0 var(--border-darker);
+  --box-shadow-overlay: 0 0 20px var(--overlay-wrapper-background);
+
   /* Buttons */
   --button-color: #fff;
   --button-background: hsl(203deg 100% 32%);

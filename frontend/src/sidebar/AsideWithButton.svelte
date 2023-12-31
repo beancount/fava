@@ -95,7 +95,7 @@
     button.active {
       left: var(--aside-width);
       background-color: var(--sidebar-background);
-      box-shadow: none;
+      box-shadow: unset;
     }
   }
 

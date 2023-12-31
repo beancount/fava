@@ -69,7 +69,7 @@ class FavaPriceMap:
         price_entries: A sorted list of price entries.
     """
 
-    def __init__(self, price_entries: list[Price]) -> None:
+    def __init__(self, price_entries: Iterable[Price]) -> None:
         raw_map: dict[BaseQuote, list[PricePoint]] = defaultdict(list)
         counts: Counter[BaseQuote] = Counter()
 

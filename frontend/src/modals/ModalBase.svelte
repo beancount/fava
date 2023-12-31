@@ -100,7 +100,7 @@
     margin: 0.5em;
     margin-top: 10vh;
     background: var(--background);
-    box-shadow: 0 0 20px var(--overlay-wrapper-background);
+    box-shadow: var(--box-shadow-overlay);
   }
 
   .close {
@@ -133,7 +133,7 @@
     .content {
       height: 100%;
       margin: 0;
-      box-shadow: none;
+      box-shadow: unset;
     }
   }
 </style>

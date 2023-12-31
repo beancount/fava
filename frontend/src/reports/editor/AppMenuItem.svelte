@@ -52,7 +52,7 @@
     overflow-y: auto;
     background-color: var(--background);
     border: 1px solid var(--border);
-    box-shadow: 0 3px 6px var(--transparent-black);
+    box-shadow: var(--box-shadow-dropdown);
   }
 
   span.open > ul,

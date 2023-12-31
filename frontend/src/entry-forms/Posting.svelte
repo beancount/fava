@@ -92,7 +92,7 @@
 
 <style>
   .drag {
-    box-shadow: 0 0 5px var(--text-color);
+    box-shadow: var(--box-shadow-button);
   }
 
   div {

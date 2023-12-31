@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 from fava.beans.protocols import Cost
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
     from typing import Concatenate
     from typing import Iterable
     from typing import Iterator
@@ -29,8 +30,15 @@ InventoryKey = Tuple[str, Optional[Cost]]
 
 
 class _Amount(NamedTuple):
-    currency: str
     number: Decimal
+    currency: str
+
+
+class _Cost(NamedTuple):
+    number: Decimal
+    currency: str
+    date: datetime.date
+    label: str | None
 
 
 class _Position(NamedTuple):
@@ -59,6 +67,20 @@ class SimpleCounterInventory(Dict[str, Decimal]):
     def __neg__(self) -> SimpleCounterInventory:
         return SimpleCounterInventory({key: -num for key, num in self.items()})
 
+    def reduce(
+        self,
+        reducer: Callable[Concatenate[Position, P], Amount],
+        *args: P.args,
+        **_kwargs: P.kwargs,
+    ) -> SimpleCounterInventory:
+        """Reduce inventory."""
+        counter = SimpleCounterInventory()
+        for currency, number in self.items():
+            pos = _Position(_Amount(number, currency), None)
+            amount = reducer(pos, *args)
+            counter.add(amount.currency, amount.number)
+        return counter
+
 
 class CounterInventory(Dict[InventoryKey, Decimal]):
     """A lightweight inventory.
@@ -82,6 +104,9 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         else:
             self[key] = new_num
 
+    def __iter__(self) -> Iterator[InventoryKey]:
+        raise NotImplementedError
+
     @staticmethod
     def from_positions(positions: Iterable[Position]) -> CounterInventory:
         inv = CounterInventory()
@@ -102,7 +127,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         """
         counter = SimpleCounterInventory()
         for (currency, cost), number in self.items():
-            pos = _Position(_Amount(currency, number), cost)
+            pos = _Position(_Amount(number, currency), cost)
             amount = reducer(pos, *args)
             counter.add(amount.currency, amount.number)
         return counter

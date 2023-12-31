@@ -81,7 +81,7 @@
     border: 1px solid var(--border);
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    box-shadow: 0 3px 6px var(--transparent-black);
+    box-shadow: var(--box-shadow-dropdown);
   }
 
   .beancount-files a {

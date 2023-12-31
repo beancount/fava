@@ -34,7 +34,7 @@ test("validate ledger data", async () => {
 
   ledgerData.set(res);
 
-  assert.equal(store_get(conversions)[0], ["at_cost", "At Cost"]);
+  assert.equal(store_get(conversions)[0], "at_cost");
 
   assert.equal(store_get(treemapScale).domain(), res.accounts);
   assert.equal(store_get(sunburstScale).domain(), res.accounts);

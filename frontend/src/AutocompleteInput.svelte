@@ -174,7 +174,7 @@
     overflow: hidden auto;
     background-color: var(--background);
     border: 1px solid var(--border-darker);
-    box-shadow: 0 3px 3px var(--border);
+    box-shadow: var(--box-shadow-dropdown);
   }
 
   :global(aside) ul {

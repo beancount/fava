@@ -148,7 +148,7 @@ def _chart_interval_totals(
             g.filtered,
             interval,
             account_name,
-            g.conversion,
+            g.conv,
             invert=invert,
         ),
     )
@@ -166,7 +166,7 @@ def _chart_hierarchy(
         g.ledger.charts.hierarchy(
             g.filtered,
             account_name,
-            g.conversion,
+            g.conv,
             begin_date,
             end_date or g.filtered.end_date,
         ),
@@ -177,7 +177,7 @@ def _chart_net_worth() -> ChartData:
     return ChartData(
         "balances",
         gettext("Net Worth"),
-        g.ledger.charts.net_worth(g.filtered, g.interval, g.conversion),
+        g.ledger.charts.net_worth(g.filtered, g.interval, g.conv),
     )
 
 
@@ -185,7 +185,11 @@ def _chart_account_balance(account_name: str) -> ChartData:
     return ChartData(
         "balances",
         gettext("Account Balance"),
-        g.ledger.charts.linechart(g.filtered, account_name, g.conversion),
+        g.ledger.charts.linechart(
+            g.filtered,
+            account_name,
+            g.conv,
+        ),
     )
 
 

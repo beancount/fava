@@ -142,7 +142,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         for node in nodes:
             balance = cost_or_value(
                 node.balance,
-                g.conversion,
+                g.conv,
                 g.ledger.prices,
             )
             if operating_currency in balance:

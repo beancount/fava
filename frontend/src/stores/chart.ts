@@ -1,6 +1,6 @@
 import { derived, writable } from "svelte/store";
 
-import { _, format } from "../i18n";
+import { _ } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
 import { array, constant, string, union } from "../lib/validation";
@@ -79,13 +79,10 @@ const currency_suggestions = derived(
 /** The possible conversion options and their human-readable descriptions. */
 export const conversions = derived(
   currency_suggestions,
-  ($currency_suggestions): [conversion: string, description: string][] => [
-    ["at_cost", _("At Cost")],
-    ["at_value", _("At Market Value")],
-    ["units", _("Units")],
-    ...$currency_suggestions.map((currency): [string, string] => [
-      currency,
-      format(_("Converted to %(currency)s"), { currency }),
-    ]),
+  ($currency_suggestions): readonly string[] => [
+    "at_cost",
+    "at_value",
+    "units",
+    ...$currency_suggestions,
   ],
 );

@@ -39,6 +39,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.funcs import ResultRow
     from fava.beans.funcs import ResultType
     from fava.core import FilteredLedger
+    from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.tree import SerialisedTreeNode
     from fava.util.date import Interval
@@ -113,7 +114,7 @@ class ChartModule(FavaModule):
         self,
         filtered: FilteredLedger,
         account_name: str,
-        conversion: str,
+        conversion: str | Conversion,
         begin: date | None = None,
         end: date | None = None,
     ) -> SerialisedTreeNode:
@@ -134,7 +135,7 @@ class ChartModule(FavaModule):
         filtered: FilteredLedger,
         interval: Interval,
         accounts: str | tuple[str, ...],
-        conversion: str,
+        conversion: str | Conversion,
         *,
         invert: bool = False,
     ) -> Iterable[DateAndBalanceWithBudget]:
@@ -212,7 +213,7 @@ class ChartModule(FavaModule):
         self,
         filtered: FilteredLedger,
         account_name: str,
-        conversion: str,
+        conversion: str | Conversion,
     ) -> Iterable[DateAndBalance]:
         """Get the balance of an account as a line chart.
 
@@ -264,7 +265,7 @@ class ChartModule(FavaModule):
         self,
         filtered: FilteredLedger,
         interval: Interval,
-        conversion: str,
+        conversion: str | Conversion,
     ) -> Iterable[DateAndBalance]:
         """Compute net worth.
 

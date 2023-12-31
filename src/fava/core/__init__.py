@@ -56,6 +56,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
+    from fava.core.conversion import Conversion
     from fava.core.fava_options import FavaOptions
     from fava.core.group_entries import EntriesByType
     from fava.core.inventory import SimpleCounterInventory
@@ -421,7 +422,7 @@ class FavaLedger:
         self,
         filtered: FilteredLedger,
         account_name: str,
-        conversion: str,
+        conversion: str | Conversion,
         *,
         with_children: bool,
     ) -> Iterable[

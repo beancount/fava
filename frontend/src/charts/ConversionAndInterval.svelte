@@ -1,25 +1,37 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import type { Interval } from "../lib/interval";
+  import { _, format } from "../i18n";
+  import { getInterval, intervalLabel, INTERVALS } from "../lib/interval";
   import { conversion, interval } from "../stores";
   import { conversions } from "../stores/chart";
 
-  const intervals: [Interval, string][] = [
-    ["year", _("Yearly")],
-    ["quarter", _("Quarterly")],
-    ["month", _("Monthly")],
-    ["week", _("Weekly")],
-    ["day", _("Daily")],
-  ];
+  import SelectCombobox from "./SelectCombobox.svelte";
+
+  const conversion_description = (option: string) => {
+    switch (option) {
+      case "at_cost":
+        return _("At Cost");
+      case "at_value":
+        return _("At Market Value");
+      case "units":
+        return _("Units");
+      default:
+        return format(_("Converted to %(currency)s"), { currency: option });
+    }
+  };
+
+  const is_currency_conversion = (option: string) =>
+    !["at_cost", "at_value", "units"].includes(option);
 </script>
 
-<select bind:value={$conversion}>
-  {#each $conversions as [conversion_, description]}
-    <option value={conversion_}>{description}</option>
-  {/each}
-</select>
-<select bind:value={$interval}>
-  {#each intervals as [interval_, name]}
-    <option value={interval_}>{name}</option>
-  {/each}
-</select>
+<SelectCombobox
+  bind:value={$conversion}
+  options={$conversions}
+  description={conversion_description}
+  multiple_select={is_currency_conversion}
+/>
+
+<SelectCombobox
+  bind:value={$interval}
+  options={INTERVALS}
+  description={(o) => intervalLabel(getInterval(o))}
+/>

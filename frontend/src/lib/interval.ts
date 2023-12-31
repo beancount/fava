@@ -4,8 +4,16 @@ export type Interval = "year" | "quarter" | "month" | "week" | "day";
 
 export const DEFAULT_INTERVAL: Interval = "month";
 
+export const INTERVALS: Interval[] = [
+  "year",
+  "quarter",
+  "month",
+  "week",
+  "day",
+];
+
 export function getInterval(s: string | null): Interval {
-  if (s && ["year", "quarter", "month", "week", "day"].includes(s)) {
+  if (s && INTERVALS.includes(s as Interval)) {
     return s as Interval;
   }
   return DEFAULT_INTERVAL;

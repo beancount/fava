@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 from fava.beans.abc import Open
 from fava.beans.account import parent as account_parent
 from fava.context import g
+from fava.core.conversion import AT_VALUE
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import get_cost
 from fava.core.inventory import CounterInventory
@@ -22,6 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.beans.prices import FavaPriceMap
     from fava.beans.types import BeancountOptions
+    from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
 
 
@@ -63,7 +65,7 @@ class TreeNode:
 
     def serialise(
         self,
-        conversion: str,
+        conversion: str | Conversion,
         prices: FavaPriceMap,
         end: datetime.date | None,
         *,
@@ -105,10 +107,10 @@ class TreeNode:
         self,
     ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
         return self.serialise(
-            g.conversion,
+            g.conv,
             g.ledger.prices,
             g.filtered.end_date,
-            with_cost=g.conversion == "at_value",
+            with_cost=g.conv == AT_VALUE,
         )
 
 

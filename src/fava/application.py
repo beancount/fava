@@ -50,6 +50,7 @@ from fava import template_filters
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
+from fava.core.conversion import conversion_from_str
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIError
@@ -246,6 +247,7 @@ def _setup_filters(
                     abort(404)
             g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
             g.conversion = request.args.get("conversion", "") or "at_cost"
+            g.conv = conversion_from_str(g.conversion)
             g.interval = Interval.get(request.args.get("interval", ""))
 
     @fava_app.errorhandler(FavaAPIError)
