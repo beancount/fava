@@ -1,3 +1,5 @@
+# Filters
+
 With the text inputs at the top right of the page, you can filter the entries
 that are displayed in Fava's reports. If you use multiple filters, the entries
 matching all of them will be selected.

@@ -1,10 +1,12 @@
+# Options
+
 To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
 <pre><textarea is="beancount-textarea">
 2016-06-14 custom "fava-option" "default-file"
 2016-04-14 custom "fava-option" "auto-reload" "true"
-2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
+2016-04-14 custom "fava-option" "currency-column" "100"</textarea></pre>
 
 Below is a list of all possible options for Fava.
 

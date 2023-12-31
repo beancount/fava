@@ -1,3 +1,5 @@
+# Budgets
+
 Budgets on a per-account basis can be added via `custom` directives in the
 Beancount file:
 
@@ -20,10 +22,10 @@ This makes the budgets very flexible, allowing for a monthly budget, being taken
 over by a weekly budget, and so on.
 
 Fava displays budgets in both charts and reports. You can find a visualization
-of the global budget in the `Net Profit` and `Expenses` charts for the
-`Income Statement` report.
+of the global budget in the `Net Profit` and `Expenses` charts for the Income
+Statement report.
 
-The `Expenses` `Income Statement` report is a good starting point for getting
-access to the full budget information in Fava. The `Changes` charts visualize
-the data. The `Changes (monthly)` and `Balances (monthly)` reports show,
-respectively, the monthly and cumulative (over the selected period) budgets.
+The Income Statement report is a good starting point for getting access to the
+full budget information in Fava. The `Changes` charts visualize the data. The
+`Changes (monthly)` and `Balances (monthly)` reports show, respectively, the
+monthly and cumulative (over the selected period) budgets.

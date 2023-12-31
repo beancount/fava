@@ -1,3 +1,5 @@
+# Beancount Syntax
+
 Below is a short reference of the Beancount language syntax. Also see the full
 [Syntax Documentation](http://furius.ca/beancount/doc/syntax) and the
 [Syntax Cheat Sheet](http://furius.ca/beancount/doc/cheatsheet).
@@ -54,7 +56,8 @@ To open or close an account use the `open` and `close` directives:
 
 <pre><textarea is="beancount-textarea" is="beancount-textarea">
 2015-05-29 open Expenses:Restaurant
-2015-05-29 open Assets:Checking     USD,EUR  ; Currency constraints
+; Account with some currency constraints:
+2015-05-29 open Assets:Checking     USD,EUR
 ; ...
 2016-02-23 close Assets:Checking</textarea></pre>
 
@@ -98,19 +101,20 @@ You can use this directive to fill the historical price database:
   Expenses:Restaurant       101.23 USD
 
 2015-05-30 ! "Cable Co" "Phone Bill" #tag ^link
-  id: "TW378743437"               ; Meta-data
+  id: "TW378743437"
   Expenses:Home:Phone  87.45 USD
   Assets:Checking                 ; You may leave one amount out</textarea></pre>
 
 ### Postings
 
 <pre><textarea is="beancount-textarea">
-...    123.45 USD                             ; simple
-...        10 GOOG {502.12 USD}               ; with cost
-...   1000.00 USD   @ 1.10 CAD                ; with price
-...        10 GOOG {502.12 USD} @ 1.10 CAD    ; with cost & price
-...        10 GOOG {502.12 USD / 2014-05-12}  ; with date
-! ...   123.45 USD ...                        ; with flag</textarea></pre>
+2015-05-30 * "Example transaction with various postings"
+  Account:Name   123.45 USD                           ; simple units
+  Account:Name      10 GOOG {502.12 USD}              ; with cost
+  Account:Name  1000.00 USD  @ 1.10 CAD               ; with price
+  Account:Name      10 GOOG {502.12 USD} @ 1.10 CAD   ; with cost & price
+  Account:Name      10 GOOG {502.12 USD, 2014-05-12}  ; with cost date
+  ! Account:Name 123.45 USD                           ; with flag</textarea></pre>
 
 ### Balance Assertions and Padding
 
@@ -142,8 +146,10 @@ option "title" "My Personal Ledger"</textarea></pre>
 
 <pre><textarea is="beancount-textarea">
 pushtag #trip-to-peru
-...
+; ... the given tag will be added to all entries in between the pushtag and poptag
 poptag  #trip-to-peru</textarea></pre>
+
+### Comments
 
 <pre><textarea is="beancount-textarea">
 ; inline comments begin with a semi-colon

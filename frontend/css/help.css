@@ -8,14 +8,16 @@
 
 .help-text {
   max-width: var(--help-max-width);
-  font: 16px var(--font-family-alternative);
+  font-size: 16px;
 }
 
-.help-text h2,
-.help-text h3,
-.help-text h4,
-.help-text h5 {
-  font-family: var(--font-family);
+.help-text .cm-editor {
+  font-size: 14px;
+}
+
+.help-text h1 {
+  margin: 0 0 1rem;
+  font-weight: 500;
 }
 
 .help-text > div {

@@ -37,7 +37,7 @@ async function runBuild(dev: boolean) {
     external: ["fs", "path"], // for web-tree-sitter
     loader: {
       ".wasm": "file",
-      ".woff": "file",
+      ".woff": "empty",
       ".woff2": "file",
     },
     plugins: [svelte({ preprocess: typescript() })],
