@@ -6,7 +6,6 @@ import {
   defaultValue,
   number,
   object,
-  optional,
   optional_string,
   record,
   string,
@@ -16,19 +15,17 @@ import {
 export interface Posting {
   account: string;
   amount: string;
-  meta: EntryMetadata | null;
+  meta: EntryMetadata;
 }
 
 const entry_meta_validator = record(
   defaultValue(union(boolean, number, string), "Unsupported metadata value"),
 );
 
-const posting_meta_validator = optional(entry_meta_validator);
-
 const postingValidator = object({
   account: string,
   amount: string,
-  meta: posting_meta_validator,
+  meta: entry_meta_validator,
 });
 
 interface Amount {
