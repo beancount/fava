@@ -1,12 +1,14 @@
 Changelog
 =========
 
-Unreleased
-----------
+v1.27 (2024-01-06)
+------------------
 
 It is now possible to convert to a sequence of currencies. Posting metadata is
 now supported in the entry forms. The editor should now be a bit more
-performant as the previous parses will be reused better.
+performant as the previous parses will be reused better. For compatibility with
+extensions using them, the Javascript and CSS for the "old" account trees has
+been re-added.
 
 v1.26 (2023-09-04)
 ------------------
