@@ -46,7 +46,7 @@
   $: quad = quadtree(
     allValues,
     (d) => x(d.date),
-    (d) => y(d.value)
+    (d) => y(d.value),
   );
 
   $: lineShape = line<LineChartDatum>()

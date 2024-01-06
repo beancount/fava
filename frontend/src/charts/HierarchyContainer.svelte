@@ -36,7 +36,7 @@
   <Treemap data={treemap} {currency} {width} />
 {:else if mode === "sunburst"}
   <svg {width} height={500}>
-    {#each [...data] as [chart_currency, d], i (currency)}
+    {#each [...data] as [chart_currency, d], i (chart_currency)}
       <g transform={`translate(${(width * i) / currencies.length},0)`}>
         <Sunburst
           data={d}

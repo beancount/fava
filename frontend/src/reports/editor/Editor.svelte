@@ -71,7 +71,7 @@
         },
       },
     ],
-    beancount_language_support
+    beancount_language_support,
   );
 
   // update editor contents
@@ -85,7 +85,7 @@
   // go to line on file changes
   $: if (file_path) {
     const opts = $fava_options.insert_entry.filter(
-      (f) => f.filename === file_path
+      (f) => f.filename === file_path,
     );
     const line = parseInt($searchParams.get("line") ?? "0", 10);
     const last_insert_opt = opts[opts.length - 1];
@@ -105,7 +105,7 @@
   $: {
     // Only show errors for this file, or general errors (AKA no source)
     const errorsForFile = $errors.filter(
-      (err) => err.source === null || err.source.filename === file_path
+      (err) => err.source === null || err.source.filename === file_path,
     );
     editor.dispatch(setErrors(editor.state, errorsForFile));
   }

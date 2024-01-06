@@ -4,7 +4,7 @@
   import type { Action } from "svelte/action";
 
   import { formatPercentage } from "../format";
-  import {  urlForAccount } from "../helpers";
+  import { urlForAccount } from "../helpers";
   import { ctx } from "../stores/format";
 
   import { treemapScale } from "./helpers";
@@ -38,7 +38,7 @@
 
     return [
       domHelpers.t(
-        `${$ctx.amount(val, currency)} (${formatPercentage(val / rootValue)})`
+        `${$ctx.amount(val, currency)} (${formatPercentage(val / rootValue)})`,
       ),
       domHelpers.em(d.data.account),
     ];

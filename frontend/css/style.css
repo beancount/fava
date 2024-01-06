@@ -1,7 +1,6 @@
 :root {
   /* Fonts */
   --font-family: "Fira Sans", sans-serif;
-  --font-family-alternative: "Source Serif Pro", sans-serif;
   --font-family-monospaced: "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
 
@@ -67,13 +66,13 @@
 
   /* Editor */
   --editor-comment: #998;
-  --editor-trailing-whitespace: rgb(255 199 199 / 50%);
   --editor-directive: #333;
   --editor-class: #b84;
   --editor-date: #099;
   --editor-constant: #008080;
   --editor-account: var(--link-color);
   --editor-invalid: #333;
+  --editor-invalid-background: rgb(255 199 199 / 50%);
   --editor-activeline: #ffc;
 
   /* Misc */

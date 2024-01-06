@@ -39,7 +39,7 @@
   $: quad = quadtree(
     [...chart.data],
     (d) => x(d.date),
-    (d) => y(d.type) ?? 0
+    (d) => y(d.type) ?? 0,
   );
 
   function tooltipText(d: ScatterPlotDatum) {

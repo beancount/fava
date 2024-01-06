@@ -3,13 +3,13 @@ Welcome to the help pages for Fava! You are running Beancount version
 ([changelog](https://beancount.github.io/fava/changelog.html)). There are help
 pages for the following topics:
 
--   [Beancount Syntax](./beancount_syntax) - short overview of the syntax.
--   [Budgets](./budgets) - how to use Fava's budgeting feature.
--   [Fava's Features](./features) - the features in detail.
--   [Filtering entries](./filters) - how to filter the entries.
--   [Extensions](./extensions) - how Fava can be extended.
--   [Import](./import) - the import system.
--   [Options](./options) - the available options.
+- [Beancount Syntax](./beancount_syntax) - short overview of the syntax.
+- [Budgets](./budgets) - how to use Fava's budgeting feature.
+- [Fava's Features](./features) - the features in detail.
+- [Filtering entries](./filters) - how to filter the entries.
+- [Extensions](./extensions) - how Fava can be extended.
+- [Import](./import) - the import system.
+- [Options](./options) - the available options.
 
 Fava comes with keyboard shortcuts - press <kbd>?</kbd> on any page to see the
 available ones.
@@ -22,11 +22,11 @@ If you discover a bug in Fava, or have some ideas for improvement, please open a
 
 ### Related websites
 
--   Fava's [website](https://beancount.github.io/fava/),
-    [chat](https://gitter.im/beancount/fava) and Fava on
-    [GitHub](https://github.com/beancount/fava),
--   Beancount's [documentation](http://furius.ca/beancount/doc/index),
-    [mailing list](https://groups.google.com/forum/#!forum/beancount), and
-    [bug tracker](https://bitbucket.org/blais/beancount/issues),
--   An overview of other implementations of command-line accounting:
-    [Plain Text Accounting](http://plaintextaccounting.org).
+- Fava's [website](https://beancount.github.io/fava/),
+  [chat](https://gitter.im/beancount/fava) and Fava on
+  [GitHub](https://github.com/beancount/fava),
+- Beancount's [documentation](http://furius.ca/beancount/doc/index),
+  [mailing list](https://groups.google.com/forum/#!forum/beancount), and
+  [bug tracker](https://bitbucket.org/blais/beancount/issues),
+- An overview of other implementations of command-line accounting:
+  [Plain Text Accounting](http://plaintextaccounting.org).

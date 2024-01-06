@@ -78,7 +78,7 @@
         },
       },
     ],
-    beancount_language_support
+    beancount_language_support,
   );
 </script>
 

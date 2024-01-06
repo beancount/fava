@@ -15,7 +15,7 @@
     <a
       href={urlForSource(
         entry.meta.filename?.toString() ?? "",
-        entry.meta.lineno?.toString() ?? ""
+        entry.meta.lineno?.toString() ?? "",
       )}
     >
       {entry.meta.filename}:{entry.meta.lineno}

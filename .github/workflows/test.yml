@@ -1,101 +1,90 @@
 name: Test
 
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-    test-py:
-        runs-on: ${{ matrix.os }}
-        strategy:
-            matrix:
-                os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-                py: ["3.12", "3.8"]
-                toxenv: ["py", "old_deps"]
-                exclude:
-                    - os: "macos-latest"
-                      toxenv: "old_deps"
-                    - os: "windows-latest"
-                      toxenv: "old_deps"
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-              with:
-                  python-version: ${{ matrix.py }}
-                  cache: "pip"
-                  cache-dependency-path: "constraints*.txt"
-            - run: python -m pip install -c constraints.txt tox
-            - run: touch src/fava/static/app.js
-            - run: tox -e ${{ matrix.toxenv }}
-    test-js:
-        runs-on: ${{ matrix.os }}
-        strategy:
-            matrix:
-                os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "lts/*"
-                  cache: "npm"
-                  cache-dependency-path: frontend/package-lock.json
-            - run: cd frontend && npm ci
-            - run: cd frontend && npm run build
-            - run: cd frontend && npm test
-    lint-js:
-        runs-on: "ubuntu-latest"
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-              with:
-                  python-version: "3.12"
-                  cache: "pip"
-                  cache-dependency-path: "constraints*.txt"
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "lts/*"
-                  cache: "npm"
-                  cache-dependency-path: frontend/package-lock.json
-            - run: python -m pip install -c constraints.txt pre-commit
-            - run: cd frontend && npm ci
-            - run: pre-commit run -a eslint
-            - run: cd frontend; npx tsc
-            - run: cd frontend; npx svelte-check
-    lint-python:
-        runs-on: "ubuntu-latest"
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-              with:
-                  python-version: "3.12"
-                  cache: "pip"
-                  cache-dependency-path: "constraints*.txt"
-            - run: python -m pip install -c constraints.txt tox
-            - run: tox -e lint
-    build-docs:
-        runs-on: "ubuntu-latest"
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-              with:
-                  python-version: "3.12"
-                  cache: "pip"
-                  cache-dependency-path: "constraints*.txt"
-            - run: python -m pip install -c constraints.txt tox
-            - run: tox -e docs
-    build-pyinstaller:
-        runs-on: "ubuntu-latest"
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-              with:
-                  python-version: "3.12"
-                  cache: "pip"
-                  cache-dependency-path: "constraints*.txt"
-            - run: python -m pip install -c constraints.txt tox
-            - run: tox -e pyinstaller
+  test-py:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        py: ["3.12", "3.8"]
+        toxenv: ["py", "old_deps"]
+        exclude:
+          - os: "macos-latest"
+            toxenv: "old_deps"
+          - os: "windows-latest"
+            toxenv: "old_deps"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+          cache: "pip"
+          cache-dependency-path: "constraints*.txt"
+      - run: python -m pip install -c constraints.txt tox
+      - run: touch src/fava/static/app.js
+      - run: tox -e ${{ matrix.toxenv }}
+  test-js:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - run: cd frontend && npm ci
+      - run: cd frontend && npm run build
+      - run: cd frontend && npm test
+  lint-js:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "constraints*.txt"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - run: python -m pip install -c constraints.txt pre-commit
+      - run: cd frontend && npm ci
+      - run: pre-commit run -a eslint
+      - run: cd frontend; npx tsc
+      - run: cd frontend; npx svelte-check
+  lint-python:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "constraints*.txt"
+      - run: python -m pip install -c constraints.txt tox
+      - run: tox -e lint
+  build-pyinstaller:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "constraints*.txt"
+      - run: python -m pip install -c constraints.txt tox
+      - run: tox -e pyinstaller

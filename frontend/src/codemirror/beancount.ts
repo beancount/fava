@@ -5,7 +5,7 @@ import {
   LanguageSupport,
   syntaxHighlighting,
 } from "@codemirror/language";
-import { keymap } from "@codemirror/view";
+import { highlightTrailingWhitespace, keymap } from "@codemirror/view";
 import { styleTags, tags } from "@lezer/highlight";
 import TSParser from "web-tree-sitter";
 import ts_wasm from "web-tree-sitter/tree-sitter.wasm";
@@ -41,6 +41,7 @@ const beancountLanguageSupportExtensions = [
     commentTokens: { line: ";" },
     indentOnInput: /^\s+\d\d\d\d/,
   }),
+  highlightTrailingWhitespace(),
 ];
 
 /** The node props that allow for highlighting/coloring of the code. */

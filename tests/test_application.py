@@ -166,7 +166,7 @@ def test_jump_handler(
         assert get_url in {expect, expect_url}
 
 
-def test_help_ages(test_client: FlaskClient) -> None:
+def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     result = test_client.get("/long-example/help/")
     assert result.status_code == 200

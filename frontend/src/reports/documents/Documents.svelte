@@ -26,7 +26,7 @@
   $: node = stratify(
     grouped.entries(),
     ([s]) => s,
-    (name, d) => ({ name, count: d?.[1].length ?? 0 })
+    (name, d) => ({ name, count: d?.[1].length ?? 0 }),
   );
 
   let selected: Document;

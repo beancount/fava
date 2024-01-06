@@ -23,7 +23,7 @@
     return matchLength !== undefined
       ? `${input.value.slice(
           0,
-          selectionStart - matchLength
+          selectionStart - matchLength,
         )}${value}${input.value.slice(selectionStart)}`
       : value;
   }

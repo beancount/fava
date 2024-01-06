@@ -36,7 +36,7 @@
   let extractCache = new Map<string, Entry[]>();
 
   $: importableFiles = files.filter(
-    (i) => i.importers[0]?.importer_name !== ""
+    (i) => i.importers[0]?.importer_name !== "",
   );
   $: otherFiles = files.filter((i) => i.importers[0]?.importer_name === "");
 
@@ -48,7 +48,7 @@
   onMount(() => router.addInteruptHandler(preventNavigation));
   $: {
     const existingFiles = Object.fromEntries(
-      files.map((file) => [file.name, file])
+      files.map((file) => [file.name, file]),
     );
     files = data.map((file) => {
       // Use existing importers if we found any, since the user might have changed these before a reload happens
@@ -129,7 +129,7 @@
         return put("upload_import_file", formData).then(notify, (error) => {
           notify_err(error, (err) => `Upload error: ${err.message}`);
         });
-      })
+      }),
     );
     fileUpload.value = "";
     router.reload();

@@ -1,10 +1,12 @@
+# Options
+
 To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
 <pre><textarea is="beancount-textarea">
 2016-06-14 custom "fava-option" "default-file"
 2016-04-14 custom "fava-option" "auto-reload" "true"
-2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
+2016-04-14 custom "fava-option" "currency-column" "100"</textarea></pre>
 
 Below is a list of all possible options for Fava.
 
@@ -18,20 +20,20 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
--   Bulgarian (`bg`)
--   Catalan (`ca`)
--   Chinese (`zh_CN` and `zh_TW`)
--   Dutch (`nl`)
--   English (`en`)
--   French (`fr`)
--   German (`de`)
--   Persian (`fa`)
--   Portuguese (`pt`)
--   Russian (`ru`)
--   Slovak (`sk`)
--   Spanish (`es`)
--   Swedish (`sv`)
--   Ukrainian (`uk`)
+- Bulgarian (`bg`)
+- Catalan (`ca`)
+- Chinese (`zh_CN` and `zh_TW`)
+- Dutch (`nl`)
+- English (`en`)
+- French (`fr`)
+- German (`de`)
+- Persian (`fa`)
+- Portuguese (`pt`)
+- Russian (`ru`)
+- Slovak (`sk`)
+- Spanish (`es`)
+- Swedish (`sv`)
+- Ukrainian (`uk`)
 
 ---
 
@@ -80,9 +82,9 @@ or both dates in a date range in the time filter.
 
 Examples are:
 
--   `09-30` - US federal government
--   `06-30` - Australia / NZ
--   `04-05` - UK
+- `09-30` - US federal government
+- `06-30` - Australia / NZ
+- `04-05` - UK
 
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.

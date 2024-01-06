@@ -7,11 +7,7 @@ import re
 import time
 from functools import wraps
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Iterable
 from typing import TYPE_CHECKING
-from typing import TypeVar
 from unicodedata import normalize
 from urllib.parse import quote
 
@@ -20,14 +16,15 @@ from flask import send_file
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Mapping
+    from typing import Any
+    from typing import Callable
+    from typing import Iterable
     from typing import ParamSpec
+    from typing import TypeVar
 
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
     from flask.wrappers import Response
-
-
-BASEPATH = Path(__file__).parent.parent
 
 
 def filter_api_changed(record: logging.LogRecord) -> bool:

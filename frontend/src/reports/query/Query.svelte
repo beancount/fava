@@ -32,7 +32,7 @@
   const query_results: Record<string, ResultType> = {};
 
   $: query_result_array = $query_shell_history.map(
-    (item): [string, ResultType] => [item, query_results[item] ?? {}]
+    (item): [string, ResultType] => [item, query_results[item] ?? {}],
   );
 
   async function setResult(query: string, res: ResultType) {
@@ -71,7 +71,7 @@
       (res) => {
         const chart = parseQueryChart(res.chart, $chartContext).unwrap_or(null);
         setResult(query, { result: { chart, table: res.table } }).catch(
-          log_error
+          log_error,
         );
         window.scroll(0, 0);
       },
@@ -84,7 +84,7 @@
             error: "Received invalid data as query error.",
           }).catch(log_error);
         }
-      }
+      },
     );
   }
 
@@ -110,7 +110,7 @@
       if (query_string) {
         submit();
       }
-    })
+    }),
   );
 </script>
 
