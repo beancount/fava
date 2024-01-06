@@ -8,6 +8,7 @@ pages for the following topics:
 - [Fava's Features](./features) - the features in detail.
 - [Filtering entries](./filters) - how to filter the entries.
 - [Extensions](./extensions) - how Fava can be extended.
+- [Conversion](./conversion) - how to convert between currencies.
 - [Import](./import) - the import system.
 - [Options](./options) - the available options.
 
