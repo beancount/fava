@@ -82,9 +82,9 @@ furo==2023.9.10
     # via fava (pyproject.toml)
 google-api-core==2.15.0
     # via google-api-python-client
-google-api-python-client==2.111.0
+google-api-python-client==2.112.0
     # via beancount
-google-auth==2.25.2
+google-auth==2.26.1
     # via
     #   google-api-core
     #   google-api-python-client
@@ -133,7 +133,7 @@ lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.0.0
+lxml==5.0.1
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -169,6 +169,7 @@ packaging==23.2
     # via
     #   build
     #   pyinstaller
+    #   pyinstaller-hooks-contrib
     #   pyproject-api
     #   pytest
     #   sphinx
@@ -225,7 +226,7 @@ pygments==2.17.2
     #   sphinx
 pyinstaller==6.3.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.11
+pyinstaller-hooks-contrib==2023.12
     # via pyinstaller
 pylint==3.0.3
     # via fava (pyproject.toml)
@@ -235,7 +236,7 @@ pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.3
+pytest==7.4.4
     # via
     #   beancount
     #   fava (pyproject.toml)
@@ -314,7 +315,7 @@ tox==4.11.4
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
-types-setuptools==69.0.0.0
+types-setuptools==69.0.0.20240106
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.2
     # via fava (pyproject.toml)
