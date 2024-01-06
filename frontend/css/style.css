@@ -5,12 +5,10 @@
   --font-family-editor: "Source Code Pro", monospace;
 
   /* Scale of z-index values */
-  --z-index-aside: 1;
-  --z-index-header: 2;
-  --z-index-floating-ui: 3;
-  --z-index-keyboard-overlays: 10;
-  --z-index-autocomplete: 8;
-  --z-index-overlay: 4;
+  --z-index-floating-ui: 1;
+  --z-index-autocomplete: 2;
+  --z-index-overlay: 3;
+  --z-index-keyboard-overlays: 4;
 
   /* Base colors */
   --error: hsl(0deg 100% 30%);

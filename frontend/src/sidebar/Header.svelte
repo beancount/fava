@@ -21,9 +21,7 @@
       hidden={!$has_changes}
       class="reload-page"
       use:keyboardShortcut={"r"}
-      on:click={() => {
-        router.reload();
-      }}
+      on:click={router.reload.bind(router)}
     >
       &#8635;
     </button>
@@ -44,23 +42,19 @@
 
 <style>
   .reload-page {
-    padding-right: 12px;
-    padding-left: 12px;
     margin-top: -8px;
     margin-left: 20px;
     background-color: var(--warning);
   }
 
   h1 {
-    display: block;
-    flex: 1;
-    max-height: var(--header-height);
-    padding: calc((var(--header-height) - 24px) / 2) 10px;
+    display: inline-block;
+    flex: 1 0 content;
+    padding: 0.25em 0.5em;
     margin: 0;
     overflow: hidden;
     font-size: 16px;
     font-weight: normal;
-    color: var(--header-color);
   }
 
   a:hover,
@@ -71,16 +65,13 @@
 
   .beancount-files {
     position: absolute;
-    top: var(--header-height);
-    left: 19px;
     z-index: var(--z-index-floating-ui);
     display: none;
     width: 20em;
+    margin-top: 0.25em;
     color: var(--link-color);
     background-color: var(--background);
     border: 1px solid var(--border);
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
     box-shadow: var(--box-shadow-dropdown);
   }
 
@@ -103,5 +94,11 @@
   .beancount-files a:hover {
     color: var(--background);
     background-color: var(--link-color);
+  }
+
+  @media print {
+    header > :global(:not(h1)) {
+      display: none;
+    }
   }
 </style>

@@ -17,8 +17,6 @@ import "../css/grid.css";
 import "../css/fonts.css";
 import "../css/help.css";
 import "../css/journal-table.css";
-import "../css/media-mobile.css";
-import "../css/media-print.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
 

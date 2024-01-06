@@ -1,42 +1,86 @@
+/*
+There are three main layout components.
+
+The header (<header>), the left sidebar (<aside>) and the main content (<article>).
+In the HTML markup, they are all direct children of the <body>.
+
+These elements are arranged as follows:
+
+     header
+  ------------
+  aside | main
+
+On mobile at resolutions smaller than 768px, we hide the aside menu,
+having it slide in from the left side. This means that iPads and larger will show the side menu.
+
+For most reports, we want the header to scroll on mobile but for some
+like the editor we need to have a fixed size filling the whole screen.
+For those reports, the .fixed-fullsize-container be used.
+*/
+
 :root {
-  --header-height: 50px;
   --aside-width: 160px;
 }
 
 body {
-  padding: var(--header-height) 0 0 var(--aside-width);
+  display: grid;
+  grid:
+    "header header" auto
+    "aside main" 1fr
+    /
+    var(--aside-width) 1fr;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
 }
 
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: var(--z-index-header);
   display: flex;
+  flex-wrap: wrap;
+  grid-area: header;
   align-items: center;
-  width: 100%;
-  height: var(--header-height);
-  padding: 0 7px 0 10px;
+  padding: 0.5em;
   color: var(--header-color);
   background-color: var(--header-background);
 }
 
 article {
   position: relative;
-  width: 100%;
-  max-width: 100vw;
-  height: 100%;
+  grid-area: main;
   padding: 1.5em;
-  overflow-x: scroll;
+  overflow-x: auto;
+}
+
+article:has(> .fixed-fullsize-container) {
+  padding: 0;
 }
 
 .fixed-fullsize-container {
-  position: fixed;
-  inset: var(--header-height) 0 0 var(--aside-width);
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  max-height: 100vh;
 }
 
 @media (width <= 767px) {
-  .fixed-fullsize-container {
-    left: 0;
+  body {
+    display: block;
+    font-size: 16px;
+    transition: var(--transitions);
+  }
+
+  body:has(> article > .fixed-fullsize-container) {
+    display: grid;
+    grid-template: "header" max-content "main" 1fr;
+  }
+
+  header {
+    padding-left: 50px;
+  }
+}
+
+@media print {
+  body {
+    grid-template: "header" max-content "main" 1fr;
   }
 }
