@@ -18,7 +18,7 @@
           active.set(item);
         } else if (toggled) {
           toggled.update((v) =>
-            v.includes(item) ? v.filter((i) => i !== item) : [...v, item]
+            v.includes(item) ? v.filter((i) => i !== item) : [...v, item],
           );
         }
       }}

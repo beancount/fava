@@ -8,9 +8,9 @@ Beancount defines a language in which financial transactions are entered into a
 text-file, which then can be processed by Beancount. There are a few building
 blocks that are important to understand Beancount's syntax:
 
--   Commodities,
--   Accounts,
--   Directives.
+- Commodities,
+- Accounts,
+- Directives.
 
 ## Commodities
 

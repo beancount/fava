@@ -16,7 +16,7 @@
     button_text: string,
     title: string | null,
     shortcut: KeySpec,
-    supertype?: string
+    supertype?: string,
   ][] = [
     ["open", "Open", null, "s o"],
     ["close", "Close", null, "s c"],

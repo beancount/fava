@@ -31,24 +31,24 @@ the account name, or a regular expression matching the account name, e.g.
 
 This final filter allows you to filter entries by various attributes.
 
--   Filter by `#tag` or `^link`.
--   Filter by any entry attribute, such as payee `payee:"restaurant"` or
-    narration `narration:'Dinner with Joe'`. The argument is a regular
-    expression which needs to be quoted (with `'` or `"`) if it contains spaces
-    or special characters. If the argument is not a valid regular expression,
-    Fava will look for an exact match instead.
--   Search in payee and narration if no specific entry attribute is given, e.g.
-    `"Cash withdrawal"`. For Note directives, the comment will be searched.
--   Filter for entries having certain metadata values: `document:"\.pdf$"`. Note
-    that if the entry has an attribute of the same name as the metadata key, the
-    filter will apply to the entry attribute, not the metadata value.
--   Exclude entries that match a filter by prepending a `-` to it, e.g. `-#tag`
-    or `-(^link #tag)`.
--   To match entries by posting attributes, you can use `any()` and `all()`,
-    e.g., `any(id:'12', account:"Cash$")` for all entries that have at least one
-    posting with metadata `id: 12` or account ending in `Cash`, or
-    `all(-account:"^Expenses:Food")` to exclude all transactions having a
-    posting to the Expenses:Food account.
+- Filter by `#tag` or `^link`.
+- Filter by any entry attribute, such as payee `payee:"restaurant"` or narration
+  `narration:'Dinner with Joe'`. The argument is a regular expression which
+  needs to be quoted (with `'` or `"`) if it contains spaces or special
+  characters. If the argument is not a valid regular expression, Fava will look
+  for an exact match instead.
+- Search in payee and narration if no specific entry attribute is given, e.g.
+  `"Cash withdrawal"`. For Note directives, the comment will be searched.
+- Filter for entries having certain metadata values: `document:"\.pdf$"`. Note
+  that if the entry has an attribute of the same name as the metadata key, the
+  filter will apply to the entry attribute, not the metadata value.
+- Exclude entries that match a filter by prepending a `-` to it, e.g. `-#tag` or
+  `-(^link #tag)`.
+- To match entries by posting attributes, you can use `any()` and `all()`, e.g.,
+  `any(id:'12', account:"Cash$")` for all entries that have at least one posting
+  with metadata `id: 12` or account ending in `Cash`, or
+  `all(-account:"^Expenses:Food")` to exclude all transactions having a posting
+  to the Expenses:Food account.
 
 These filters can be combined by separating them by spaces to match all entries
 satisfying all given filters or by commas to match all entries satisfying at

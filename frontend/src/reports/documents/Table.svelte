@@ -26,7 +26,7 @@
   let sorter = new Sorter(columns[0], "desc");
 
   $: filtered_documents = data.filter((doc) =>
-    isDescendant(doc.account, $selectedAccount)
+    isDescendant(doc.account, $selectedAccount),
   );
   $: sorted_documents = sorter.sort(filtered_documents);
 </script>

@@ -11,7 +11,7 @@
 
   const help_title = _(
     "Hold Shift while clicking to expand all children.\n" +
-      "Hold Ctrl or Cmd while clicking to expand one level."
+      "Hold Ctrl or Cmd while clicking to expand one level.",
   );
 </script>
 

@@ -24,10 +24,10 @@ module can define functions to be called when different events happen. Take a
 look at `fava/ext/portfolio_list/PortfolioList.js` for an example. Currently,
 the following events/functions can be specified:
 
--   `init`: is called when a Fava report is first opened
--   `onPageLoad`: Is called when any page in Fava is loaded (so on first open
-    and on any further navigation).
--   `onExtensionPageLoad`: Is called when the extension report is loaded.
+- `init`: is called when a Fava report is first opened
+- `onPageLoad`: Is called when any page in Fava is loaded (so on first open and
+  on any further navigation).
+- `onExtensionPageLoad`: Is called when the extension report is loaded.
 
 The whole extension system should be considered unstable and it might change
 drastically.

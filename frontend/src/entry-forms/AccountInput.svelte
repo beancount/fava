@@ -23,7 +23,7 @@
   $: account_suggestions = suggestions ?? $accounts;
   $: filtered_suggestions = parsed_date
     ? account_suggestions.filter(
-        (account) => !$is_closed_account(account, parsed_date)
+        (account) => !$is_closed_account(account, parsed_date),
       )
     : account_suggestions;
 </script>

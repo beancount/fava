@@ -7,7 +7,7 @@
   export let meta: EntryMetadata;
 
   $: metakeys = Object.keys(meta).filter(
-    (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno"
+    (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno",
   );
 
   function removeMetadata(metakey: string) {

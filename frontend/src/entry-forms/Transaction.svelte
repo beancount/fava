@@ -39,7 +39,7 @@
           notify_err(
             error,
             (err) =>
-              `Fetching account suggestions for payee ${payee} failed: ${err.message}`
+              `Fetching account suggestions for payee ${payee} failed: ${err.message}`,
           );
         });
     }

@@ -37,7 +37,7 @@
         return put("add_document", formData).then(notify, (error) => {
           notify_err(error, (err) => `Upload error: ${err.message}`);
         });
-      })
+      }),
     );
     closeHandler();
     router.reload();

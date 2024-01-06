@@ -63,7 +63,7 @@
     chart.currencies.map((c) => [
       c,
       showStackedBars ? null : $currenciesScale(c),
-    ])
+    ]),
   );
 
   // Axes

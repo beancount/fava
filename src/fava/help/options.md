@@ -20,20 +20,20 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
--   Bulgarian (`bg`)
--   Catalan (`ca`)
--   Chinese (`zh_CN` and `zh_TW`)
--   Dutch (`nl`)
--   English (`en`)
--   French (`fr`)
--   German (`de`)
--   Persian (`fa`)
--   Portuguese (`pt`)
--   Russian (`ru`)
--   Slovak (`sk`)
--   Spanish (`es`)
--   Swedish (`sv`)
--   Ukrainian (`uk`)
+- Bulgarian (`bg`)
+- Catalan (`ca`)
+- Chinese (`zh_CN` and `zh_TW`)
+- Dutch (`nl`)
+- English (`en`)
+- French (`fr`)
+- German (`de`)
+- Persian (`fa`)
+- Portuguese (`pt`)
+- Russian (`ru`)
+- Slovak (`sk`)
+- Spanish (`es`)
+- Swedish (`sv`)
+- Ukrainian (`uk`)
 
 ---
 
@@ -82,9 +82,9 @@ or both dates in a date range in the time filter.
 
 Examples are:
 
--   `09-30` - US federal government
--   `06-30` - Australia / NZ
--   `04-05` - UK
+- `09-30` - US federal government
+- `06-30` - Australia / NZ
+- `04-05` - UK
 
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.

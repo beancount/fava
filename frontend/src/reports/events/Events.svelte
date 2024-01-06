@@ -19,7 +19,7 @@
         date: new Date(date),
         type,
         description,
-      }))
+      })),
     ),
   ];
 </script>
