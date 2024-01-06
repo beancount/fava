@@ -222,22 +222,25 @@ export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
   const setup = (s?: KeySpec) => {
     if (s) {
       node.setAttribute("data-key", getKeySpecDescription(s));
-      return bindKey(s, node);
+      const unbind = bindKey(s, node);
+      return () => {
+        unbind();
+        node.removeAttribute("data-key");
+      };
     }
-    node.removeAttribute("data-key");
     return () => {};
   };
-  let unbind = setup(spec);
+  let destroy = setup(spec);
 
   return {
-    destroy: unbind,
+    destroy,
     update(new_spec) {
-      unbind();
+      destroy();
       // Await tick so that key bindings that might have been removed from other
       // elements in the same render are gone.
       tick()
         .then(() => {
-          unbind = setup(new_spec);
+          destroy = setup(new_spec);
         })
         .catch(log_error);
     },
