@@ -38,8 +38,8 @@ test("create entries from JSON data", () => {
     tags: [],
     links: [],
     postings: [
-      { account: "Expenses:Food", amount: "" },
-      { account: "Assets:Cash", amount: "-5.15 EUR" },
+      { account: "Expenses:Food", amount: "", meta: {} },
+      { account: "Assets:Cash", amount: "-5.15 EUR", meta: {} },
     ],
   }).unwrap();
   assert.instance(transaction, Transaction);

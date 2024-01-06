@@ -15,11 +15,17 @@ import {
 export interface Posting {
   account: string;
   amount: string;
+  meta: EntryMetadata;
 }
+
+const entry_meta_validator = record(
+  defaultValue(union(boolean, number, string), "Unsupported metadata value"),
+);
 
 const postingValidator = object({
   account: string,
   amount: string,
+  meta: entry_meta_validator,
 });
 
 interface Amount {
@@ -31,6 +37,7 @@ export function emptyPosting(): Posting {
   return {
     account: "",
     amount: "",
+    meta: {},
   };
 }
 
@@ -41,10 +48,6 @@ export type EntryTypeName =
   | "Event"
   | "Note"
   | "Transaction";
-
-const entry_meta_validator = record(
-  defaultValue(union(boolean, number, string), "Unsupported metadata value"),
-);
 
 const validatorBase = {
   t: string,

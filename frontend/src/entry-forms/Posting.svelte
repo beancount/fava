@@ -5,6 +5,8 @@
   import { currencies } from "../stores";
 
   import AccountInput from "./AccountInput.svelte";
+  import AddMetadataButton from "./AddMetadataButton.svelte";
+  import EntryMetadata from "./EntryMetadata.svelte";
 
   export let posting: Posting;
   export let index: number;
@@ -76,6 +78,7 @@
     suggestions={amountSuggestions}
     bind:value={posting.amount}
   />
+  <AddMetadataButton bind:meta={posting.meta} />
   <button
     type="button"
     class="muted round add-row"
@@ -84,6 +87,7 @@
   >
     +
   </button>
+  <EntryMetadata bind:meta={posting.meta} />
 </div>
 
 <style>
