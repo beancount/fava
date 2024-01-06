@@ -45,6 +45,7 @@ import { SortableTable } from "./sort";
 import { errors, fava_options, ledgerData } from "./stores";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
+import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element";
 
 /**
  * Define the custom elements that Fava uses.
@@ -57,6 +58,9 @@ function defineCustomElements() {
   customElements.define("fava-journal", FavaJournal);
   customElements.define("sortable-table", SortableTable, { extends: "table" });
   customElements.define("svelte-component", SvelteCustomElement);
+
+  // for extension compatibility
+  customElements.define("tree-table", TreeTableCustomElement);
 }
 
 router.on("page-loaded", () => {

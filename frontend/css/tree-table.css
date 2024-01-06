@@ -1,7 +1,35 @@
 /* Collapsible trees
  *
- * some of the shared styles are in `journal-table.css`
+ * some of the shared styles are in `journal-table.css`.
+ *
+ * The styles for .tree-table are not used in Fava anymore but are again provided
+ * for extensions for the near future.
  */
+
+.tree-table-new p {
+  margin-top: -1px;
+}
+
+.tree-table-new p > span {
+  margin-right: -1px;
+  border: 1px solid var(--table-border);
+}
+
+.tree-table-new .num {
+  /** Space for about 14 characters, so a number like 1234512345.123 fits. */
+  width: 9em;
+}
+
+.tree-table-new .other {
+  /** Space for about 18 (four more) characters, so an amount like 1234512345.123 USD fits. */
+  width: 12em;
+}
+
+.tree-table.fullwidth {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 .tree-table p {
   margin-top: -1px;
@@ -12,12 +40,163 @@
   border: 1px solid var(--table-border);
 }
 
+.tree-table .account-cell {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 14em;
+  max-width: 30em;
+}
+
+.tree-table .account-cell.depth-1 {
+  min-width: 13em;
+  max-width: 29em;
+  margin-left: 1em;
+}
+
+.tree-table .account-cell.depth-2 {
+  min-width: 12em;
+  max-width: 28em;
+  margin-left: 2em;
+}
+
+.tree-table .account-cell.depth-3 {
+  min-width: 11em;
+  max-width: 27em;
+  margin-left: 3em;
+}
+
+.tree-table .account-cell.depth-4 {
+  min-width: 10em;
+  max-width: 26em;
+  margin-left: 4em;
+}
+
+.tree-table .account-cell.depth-5 {
+  min-width: 9em;
+  max-width: 25em;
+  margin-left: 5em;
+}
+
+.tree-table .account-cell.depth-6 {
+  min-width: 8em;
+  max-width: 24em;
+  margin-left: 6em;
+}
+
+.tree-table .account-cell.depth-7 {
+  min-width: 7em;
+  max-width: 23em;
+  margin-left: 7em;
+}
+
+.tree-table .account-cell.depth-8 {
+  min-width: 6em;
+  max-width: 22em;
+  margin-left: 8em;
+}
+
+.tree-table .account-cell.depth-9 {
+  min-width: 5em;
+  max-width: 21em;
+  margin-left: 9em;
+}
+
+.tree-table .account-cell a {
+  margin-left: 1em;
+}
+
+.tree-table .has-children {
+  cursor: pointer;
+}
+
+.tree-table .has-children::before {
+  margin: 0 -10px 0 0;
+  content: "";
+  border-top: 5px solid var(--treetable-expander);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+
 .tree-table .num {
-  /** Space for about 14 characters, so a number like 1234512345.123 fits. */
-  width: 9em;
+  width: 10em;
+}
+
+.tree-table .num a {
+  display: block;
+  color: inherit;
 }
 
 .tree-table .other {
-  /** Space for about 18 (four more) characters, so an amount like 1234512345.123 USD fits. */
-  width: 12em;
+  width: 13em;
+}
+
+.tree-table .other a {
+  display: block;
+  color: inherit;
+}
+
+.tree-table .balance-children {
+  display: block;
+  opacity: 0.7;
+}
+
+.tree-table .has-balance .balance {
+  display: block;
+}
+
+.tree-table .has-balance .balance-children {
+  display: none;
+}
+
+.tree-table .toggled ol {
+  display: none;
+}
+
+.tree-table .toggled .balance {
+  display: none;
+}
+
+.tree-table .toggled .balance-children {
+  display: block;
+  color: var(--text-color);
+}
+
+.tree-table .toggled .has-children::before {
+  transform: rotate(270deg);
+}
+
+.tree-table .expand-all {
+  margin-left: 15px;
+  font-weight: normal;
+  color: inherit;
+  opacity: 0.5;
+}
+
+.tree-table .diff {
+  margin-right: 3px;
+  font-size: 0.9em;
+  color: var(--budget-zero);
+  white-space: nowrap;
+}
+
+.tree-table .diff.negative {
+  color: var(--budget-negative);
+}
+
+.tree-table .diff.positive {
+  color: var(--budget-positive);
+}
+
+/* For two or more operating currencies, set a slightly smaller size. */
+.two-currencies {
+  font-size: 0.9em;
+}
+
+.two-currencies .num {
+  width: 8em;
+}
+
+.two-currencies .other {
+  width: 11em;
 }

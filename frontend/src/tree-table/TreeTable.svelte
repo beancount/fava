@@ -23,7 +23,10 @@
   $: $not_shown = $get_not_shown(tree, end);
 </script>
 
-<ol class="flex-table tree-table" class:wider={$operating_currency.length > 1}>
+<ol
+  class="flex-table tree-table-new"
+  class:wider={$operating_currency.length > 1}
+>
   <li class="head">
     <p>
       <AccountCellHeader />

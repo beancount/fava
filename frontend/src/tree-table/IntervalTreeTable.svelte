@@ -44,7 +44,7 @@
   });
 </script>
 
-<ol class="flex-table tree-table">
+<ol class="flex-table tree-table-new">
   <li class="head">
     <p>
       <AccountCellHeader />
