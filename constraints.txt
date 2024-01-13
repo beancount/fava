@@ -4,7 +4,7 @@
 #
 #    pip-compile --all-extras --output-file=constraints.txt --strip-extras pyproject.toml
 #
-alabaster==0.7.13
+alabaster==0.7.16
     # via sphinx
 altgraph==0.17.4
     # via pyinstaller
@@ -82,9 +82,9 @@ furo==2023.9.10
     # via fava (pyproject.toml)
 google-api-core==2.15.0
     # via google-api-python-client
-google-api-python-client==2.112.0
+google-api-python-client==2.113.0
     # via beancount
-google-auth==2.26.1
+google-auth==2.26.2
     # via
     #   google-api-core
     #   google-api-python-client
@@ -121,7 +121,7 @@ jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
-jinja2==3.1.2
+jinja2==3.1.3
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -133,7 +133,7 @@ lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.0.1
+lxml==5.1.0
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -150,7 +150,7 @@ mccabe==0.7.0
     # via pylint
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.1.0
+more-itertools==10.2.0
     # via
     #   cheroot
     #   jaraco-classes
@@ -193,7 +193,7 @@ ply==3.11
     #   fava (pyproject.toml)
 pre-commit==3.6.0
     # via fava (pyproject.toml)
-protobuf==4.25.1
+protobuf==4.25.2
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -286,36 +286,31 @@ sphinx==7.2.6
     #   furo
     #   sphinx-autodoc-typehints
     #   sphinx-basic-ng
-    #   sphinxcontrib-applehelp
-    #   sphinxcontrib-devhelp
-    #   sphinxcontrib-htmlhelp
-    #   sphinxcontrib-qthelp
-    #   sphinxcontrib-serializinghtml
 sphinx-autodoc-typehints==1.25.2
     # via fava (pyproject.toml)
 sphinx-basic-ng==1.0.0b2
     # via furo
-sphinxcontrib-applehelp==1.0.7
+sphinxcontrib-applehelp==1.0.8
     # via sphinx
-sphinxcontrib-devhelp==1.0.5
+sphinxcontrib-devhelp==1.0.6
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.4
+sphinxcontrib-htmlhelp==2.0.5
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.6
+sphinxcontrib-qthelp==1.0.7
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.9
+sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
 texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.3
     # via pylint
-tox==4.11.4
+tox==4.12.0
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
-types-setuptools==69.0.0.20240106
+types-setuptools==69.0.0.20240115
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.2
     # via fava (pyproject.toml)

@@ -45,7 +45,7 @@ def get_active_years(
         date = entry.date
         year = (
             entry.date.year + 1
-            if date.month > month or date.month == month and date.day > day
+            if date.month > month or (date.month == month and date.day > day)
             else entry.date.year
         )
         if year != prev_year:

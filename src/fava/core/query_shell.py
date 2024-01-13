@@ -52,7 +52,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
             loadfun=None,
             outfile=self.buffer,
         )
-        FavaModule.__init__(self, ledger)
+        FavaModule.__init__(self, ledger)  # noqa: PLC2801
         self.result: QueryResult | None = None
         self.stdout = self.buffer
         self.entries: list[Directive] = []

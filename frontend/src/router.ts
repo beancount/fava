@@ -109,8 +109,8 @@ export class Router extends Events<"page-loaded"> {
 
   private async frontendRender(url: URL): Promise<void> {
     const report = getUrlPath(url);
-    const route = this.frontend_routes?.find(
-      (r) => report?.startsWith(`${r.report}/`),
+    const route = this.frontend_routes?.find((r) =>
+      report?.startsWith(`${r.report}/`),
     );
     if (route) {
       is_loading_internal.set(true);
