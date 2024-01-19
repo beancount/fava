@@ -6,6 +6,7 @@ import {
   defaultValue,
   number,
   object,
+  optional,
   optional_string,
   record,
   string,
@@ -15,7 +16,7 @@ import {
 export interface Posting {
   account: string;
   amount: string;
-  meta: EntryMetadata;
+  meta: EntryMetadata | null;
 }
 
 const entry_meta_validator = record(
@@ -25,7 +26,7 @@ const entry_meta_validator = record(
 const postingValidator = object({
   account: string,
   amount: string,
-  meta: entry_meta_validator,
+  meta: optional(entry_meta_validator),
 });
 
 interface Amount {
