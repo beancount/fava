@@ -43,6 +43,22 @@ test("create entries from JSON data", () => {
     ],
   }).unwrap();
   assert.instance(transaction, Transaction);
+
+  const transactionWithoutPostingMeta = entryValidator({
+    t: "Transaction",
+    meta: { filename: "/home/test/test.beancount", lineno: 1 },
+    date: "2022-12-12",
+    flag: "*",
+    payee: "Some Store",
+    narration: "Bought food",
+    tags: [],
+    links: [],
+    postings: [
+      { account: "Expenses:Food", amount: "" },
+      { account: "Assets:Cash", amount: "-5.15 EUR" },
+    ],
+  }).unwrap();
+  assert.instance(transactionWithoutPostingMeta, Transaction);
 });
 
 test.run();
