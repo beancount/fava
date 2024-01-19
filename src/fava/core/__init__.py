@@ -13,7 +13,9 @@ from typing import TypeVar
 
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
-from beancount.loader import _load  # type: ignore[attr-defined]
+from beancount.loader import (  # type: ignore[attr-defined]
+    _load,  # noqa: PLC2701
+)
 from beancount.loader import load_file
 from beancount.utils.encryption import is_encrypted_file
 

@@ -118,8 +118,6 @@
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
     <details bind:this={resultElems[history_item]}>
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <summary
         class:inactive={!result && !error}
         on:click={() => {
