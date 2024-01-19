@@ -53,8 +53,12 @@ def test_serialise_txn() -> None:
         "payee": "Test3",
         "t": "Transaction",
         "postings": [
-            {"account": "Assets:ETrade:Cash", "amount": "100 USD"},
-            {"account": "Assets:ETrade:GLD", "amount": "0 USD"},
+            {
+                "account": "Assets:ETrade:Cash",
+                "amount": "100 USD",
+                "meta": None,
+            },
+            {"account": "Assets:ETrade:GLD", "amount": "0 USD", "meta": None},
         ],
     }
 
@@ -154,7 +158,11 @@ def test_serialise_posting(
         flag=None,
         meta=meta,
     )
-    json: dict[str, Any] = {"account": "Assets", "amount": amount_string}
+    json: dict[str, Any] = {
+        "account": "Assets",
+        "amount": amount_string,
+        "meta": None,
+    }
     if meta:
         json["meta"] = meta
     assert loads(dumps(serialise(pos))) == json
