@@ -24,11 +24,13 @@
     "postings": [
       {
         "account": "",
-        "amount": "50.00 EUR"
+        "amount": "50.00 EUR",
+        "meta": null
       },
       {
         "account": "Assets:Checking",
-        "amount": "-50.00 EUR"
+        "amount": "-50.00 EUR",
+        "meta": null
       }
     ],
     "t": "Transaction",
@@ -49,11 +51,13 @@
     "postings": [
       {
         "account": "",
-        "amount": "100.00 EUR"
+        "amount": "100.00 EUR",
+        "meta": null
       },
       {
         "account": "Assets:Checking",
-        "amount": "-100.00 EUR"
+        "amount": "-100.00 EUR",
+        "meta": null
       }
     ],
     "t": "Transaction",
