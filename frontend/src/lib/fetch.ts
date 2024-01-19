@@ -43,7 +43,7 @@ async function handleJSON(response: Response): Promise<unknown> {
 
 const response_validator = object({
   data: unknown,
-  mtime: defaultValue(string, null),
+  mtime: defaultValue(string, () => null),
 });
 
 export async function fetchJSON(

@@ -19,13 +19,16 @@ export interface Posting {
 }
 
 const entry_meta_validator = record(
-  defaultValue(union(boolean, number, string), "Unsupported metadata value"),
+  defaultValue(
+    union(boolean, number, string),
+    () => "Unsupported metadata value",
+  ),
 );
 
 const postingValidator = object({
   account: string,
   amount: string,
-  meta: entry_meta_validator,
+  meta: defaultValue(entry_meta_validator, () => ({})),
 });
 
 interface Amount {

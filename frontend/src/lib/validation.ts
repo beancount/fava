@@ -14,7 +14,7 @@ import { err, ok } from "./result";
  * That is, a function that checks an unknown object to be of a specified type.
  */
 export type Validator<T> = (json: unknown) => Result<T, string>;
-/** A validtor that will never error. */
+/** A validator that will never error. */
 export type SafeValidator<T> = (json: unknown) => Ok<T>;
 
 /** Extract the validated type. */
@@ -25,11 +25,11 @@ export type ValidationT<R> = R extends Validator<infer T> ? T : never;
  */
 export function defaultValue<T>(
   validator: Validator<T>,
-  value: T,
+  value: () => T,
 ): SafeValidator<T> {
   return (json) => {
     const res = validator(json);
-    return res.is_ok ? res : ok(value);
+    return res.is_ok ? res : ok(value());
   };
 }
 
@@ -45,7 +45,7 @@ export const string: Validator<string> = (json) =>
   typeof json === "string" ? ok(json) : err("string validation failed.");
 
 /** Validate a string and return the empty string on failure. */
-export const optional_string = defaultValue(string, "");
+export const optional_string = defaultValue(string, () => "");
 
 /**
  * Validate a boolean.

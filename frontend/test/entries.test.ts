@@ -39,7 +39,8 @@ test("create entries from JSON data", () => {
     links: [],
     postings: [
       { account: "Expenses:Food", amount: "", meta: {} },
-      { account: "Assets:Cash", amount: "-5.15 EUR", meta: {} },
+      { account: "Assets:Cash", amount: "-5.15 EUR", meta: null },
+      { account: "Assets:Cash", amount: "-5.15 EUR" },
     ],
   }).unwrap();
   assert.instance(transaction, Transaction);
