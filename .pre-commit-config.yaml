@@ -6,7 +6,7 @@ repos:
     hooks:
       - id: black
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.13
+    rev: v0.1.14
     hooks:
       - id: ruff
   - repo: local
@@ -17,9 +17,9 @@ repos:
         entry: prettier --write --list-different --ignore-unknown
         require_serial: true
         additional_dependencies:
-          - "prettier@3.2.2"
+          - "prettier@3.2.4"
           - "prettier-plugin-svelte@3.1.2"
-          - "svelte@4.2.8"
+          - "svelte@4.2.9"
       - id: stylelint
         name: stylelint
         language: node
@@ -27,7 +27,7 @@ repos:
         files: \.(css|svelte)$
         require_serial: true
         additional_dependencies:
-          - "stylelint@16.1.0"
+          - "stylelint@16.2.0"
           - "stylelint-config-recess-order@4.4.0"
           - "stylelint-config-standard@36.0.0"
           - "postcss-html@1.6.0"

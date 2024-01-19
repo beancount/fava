@@ -17,7 +17,7 @@ babel==2.14.0
     #   sphinx
 beancount==2.3.6
     # via fava (pyproject.toml)
-beautifulsoup4==4.12.2
+beautifulsoup4==4.12.3
     # via
     #   beancount
     #   furo
@@ -72,7 +72,7 @@ filelock==3.13.1
     # via
     #   tox
     #   virtualenv
-flask==3.0.0
+flask==3.0.1
     # via
     #   fava (pyproject.toml)
     #   flask-babel
@@ -82,7 +82,7 @@ furo==2023.9.10
     # via fava (pyproject.toml)
 google-api-core==2.15.0
     # via google-api-python-client
-google-api-python-client==2.113.0
+google-api-python-client==2.114.0
     # via beancount
 google-auth==2.26.2
     # via
@@ -142,7 +142,7 @@ markdown-it-py==3.0.0
     # via rich
 markdown2==2.4.12
     # via fava (pyproject.toml)
-markupsafe==2.1.3
+markupsafe==2.1.4
     # via
     #   jinja2
     #   werkzeug
@@ -226,7 +226,7 @@ pygments==2.17.2
     #   sphinx
 pyinstaller==6.3.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2023.12
+pyinstaller-hooks-contrib==2024.0
     # via pyinstaller
 pylint==3.0.3
     # via fava (pyproject.toml)
@@ -306,7 +306,7 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.3
     # via pylint
-tox==4.12.0
+tox==4.12.1
     # via fava (pyproject.toml)
 twine==4.0.2
     # via fava (pyproject.toml)
