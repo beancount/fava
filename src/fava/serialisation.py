@@ -71,9 +71,11 @@ def _(posting: Posting) -> Any:
     if posting.price is not None:
         position_str += f" @ {to_string(posting.price)}"
 
-    ret: dict[str, Any] = {"account": posting.account, "amount": position_str}
-    if posting.meta:
-        ret["meta"] = copy(posting.meta)
+    ret: dict[str, Any] = {
+        "account": posting.account,
+        "amount": position_str,
+        "meta": posting.meta if posting.meta else None,
+    }
     return ret
 
 
