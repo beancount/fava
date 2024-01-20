@@ -162,7 +162,8 @@ transaction and can be filtered in the Journal:
 
     plugin "fava.plugins.link_documents"
 
-### Exporting a Journal view
+### Exporting
 
-When displaying a Journal, including a filtered Journal, the entries displayed
-can be downloaded in Beancount format by clicking the `Export` button.
+The entries that are currently shown in Fava, with filters applied, can be
+downloaded in Beancount format by clicking the ⬇ (Export) button in the
+sidebar.
