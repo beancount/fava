@@ -130,16 +130,12 @@ extend-select = [
     "ALL",
 ]
 extend-ignore = [
-    "A003",     # allow class attributes to shadow builtins
     "ANN101",   # allow `self` to be untyped
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
     "CPY",      # no copyright notices in all files
-    "D102",     # allow undocumented methods
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
-    "DTZ",      # allow naive dates (for now)
-    "E203",     # black
     "EM101",    # allow long strings as error messages
     "EM102",    # allow f-strings as error messages
     "PD",       # pandas-related, has false-positives
@@ -171,7 +167,6 @@ max-args = 9
 "docs/**" = ["D", "ANN", "INP"]
 "tests/conftest.py" = ["S101"]
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
-"tests/data/import_config.py" = ["ANN", "INP"]
-"src/fava/ext/portfolio_list/__init__.py" = ["ANN"]
+"tests/data/import_config.py" = ["D", "INP"]
 "stubs/**" = ["D"]
 "src/fava/core/filters.py" = ["D"]

@@ -60,7 +60,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         self.options_map = OPTIONS_DEFAULTS
         self.queries: list[Query] = []
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         self.queries = self.ledger.all_entries_by_type.Query
 
     def add_help(self) -> None:
@@ -96,7 +96,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
     do_quit = noop
     do_EOF = noop  # noqa: N815
 
-    def on_Select(self, statement: str) -> None:  # noqa: N802
+    def on_Select(self, statement: str) -> None:  # noqa: D102, N802
         try:
             c_query = query_compile.compile(  # type: ignore[attr-defined]
                 statement,

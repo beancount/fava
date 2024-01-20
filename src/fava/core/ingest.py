@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import datetime
 import sys
 import traceback
 from dataclasses import dataclass
@@ -17,11 +16,15 @@ from beancount.ingest import cache  # type: ignore[import-untyped]
 from beancount.ingest import extract
 from beancount.ingest import identify
 
+from fava.beans.ingest import BeanImporterProtocol
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
@@ -49,7 +52,10 @@ class FileImporters:
     importers: list[FileImportInfo]
 
 
-def file_import_info(filename: str, importer: Any) -> FileImportInfo:
+def file_import_info(
+    filename: str,
+    importer: BeanImporterProtocol,
+) -> FileImportInfo:
     """Generate info about a file with an importer."""
     file = cache.get_file(filename)
     try:
@@ -62,7 +68,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
     return FileImportInfo(
         importer.name(),
         account or "",
-        date or datetime.date.today(),
+        date or local_today(),
         name or Path(filename).name,
     )
 
@@ -73,7 +79,7 @@ class IngestModule(FavaModule):
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.config: list[Any] = []
-        self.importers: dict[str, Any] = {}
+        self.importers: dict[str, BeanImporterProtocol] = {}
         self.hooks: list[Any] = []
         self.mtime: int | None = None
 
@@ -86,9 +92,15 @@ class IngestModule(FavaModule):
         return self.ledger.join_path(config_path)
 
     def _error(self, msg: str) -> None:
-        self.ledger.errors.append(IngestError(None, msg, None))
+        self.ledger.errors.append(
+            IngestError(
+                {"filename": str(self.module_path), "lineno": 0},
+                msg,
+                None,
+            ),
+        )
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         if self.module_path is None:
             return
         module_path = self.module_path
@@ -119,9 +131,16 @@ class IngestModule(FavaModule):
                 self._error(f"Error in importer '{module_path}': {message}")
             else:
                 self.hooks = hooks
-        self.importers = {
-            importer.name(): importer for importer in self.config
-        }
+        self.importers = {}
+        for importer in self.config:
+            if not isinstance(importer, BeanImporterProtocol):
+                name = importer.__class__.__name__
+                self._error(
+                    f"Importer class '{name}' in '{module_path}' does "
+                    "not satisfy importer protocol",
+                )
+            else:
+                self.importers[importer.name()] = importer
 
     def import_data(self) -> list[FileImporters]:
         """Identify files and importers that can be imported.
@@ -132,7 +151,7 @@ class IngestModule(FavaModule):
         if not self.config:
             return []
 
-        ret: list[FileImporters] = []
+        ret = []
 
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)

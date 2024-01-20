@@ -20,7 +20,7 @@ class CommoditiesModule(FavaModule):
         self.names: dict[str, str] = {}
         self.precisions: dict[str, int] = {}
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         self.names = {}
         self.precisions = {}
         for commodity in self.ledger.all_entries_by_type.Commodity:

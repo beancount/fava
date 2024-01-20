@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import datetime
 import io
 import re
 from typing import TYPE_CHECKING
@@ -11,6 +10,7 @@ from beancount.core.amount import CURRENCY_RE
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
@@ -34,7 +34,7 @@ class FavaMisc(FavaModule):
         #: Upcoming events in the next few days.
         self.upcoming_events: list[Event] = []
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         custom_entries = self.ledger.all_entries_by_type.Custom
         self.sidebar_links = sidebar_links(custom_entries)
 
@@ -81,7 +81,7 @@ def upcoming_events(events: list[Event], max_delta: int) -> list[Event]:
         A list of the Events in entries that are less than `max_delta` days
         away.
     """
-    today = datetime.date.today()
+    today = local_today()
     upcoming = []
 
     for event in events:

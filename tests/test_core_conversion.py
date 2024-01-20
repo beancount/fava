@@ -23,6 +23,7 @@ from fava.core.inventory import _Cost
 from fava.core.inventory import _Position
 from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -37,7 +38,7 @@ def _amt(s: str) -> _Amount:
 def _cost(s: str) -> _Cost:
     num, currency = s.split(" ")
     assert num, currency
-    return _Cost(Decimal(num), currency, date.today(), "label")
+    return _Cost(Decimal(num), currency, local_today(), "label")
 
 
 def _pos(s: str) -> _Position:

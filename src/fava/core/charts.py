@@ -82,10 +82,10 @@ def loads(s: str | bytes) -> Any:
 class FavaJSONProvider(JSONProvider):
     """Use custom JSON encoder and decoder."""
 
-    def dumps(self, obj: Any, **_kwargs: Any) -> str:
+    def dumps(self, obj: Any, **_kwargs: Any) -> str:  # noqa: D102
         return dumps(obj)
 
-    def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
+    def loads(self, s: str | bytes, **_kwargs: Any) -> Any:  # noqa: D102
         return simplejson_loads(s)
 
 

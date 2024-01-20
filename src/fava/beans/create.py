@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from decimal import Decimal
+from typing import overload
 from typing import TYPE_CHECKING
 
 from beancount.core import data
@@ -16,6 +16,7 @@ from fava.beans.abc import Amount
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from decimal import Decimal
 
     from fava.beans.abc import Balance
     from fava.beans.abc import Cost
@@ -27,20 +28,27 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.flags import Flag
 
 
-def decimal(num: Decimal | str) -> Decimal:
-    """Decimal from a string."""
-    if isinstance(num, str):
-        return Decimal(num)
-    return num
+@overload
+def amount(amt: Amount) -> Amount: ...
 
 
-def amount(amt: Amount | tuple[Decimal, str] | str) -> Amount:
-    """Amount from a string."""
+@overload
+def amount(amt: str) -> Amount: ...
+
+
+@overload
+def amount(amt: Decimal, currency: str) -> Amount: ...
+
+
+def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
+    """Amount from a string or tuple."""
     if isinstance(amt, Amount):
         return amt
     if isinstance(amt, str):
         return BEANCOUNT_A(amt)  # type: ignore[no-any-return]
-    return BeancountAmount(*amt)  # type: ignore[return-value]
+    if not isinstance(currency, str):
+        raise TypeError
+    return BeancountAmount(amt, currency)  # type: ignore[return-value]
 
 
 def position(units: Amount, cost: Cost | None) -> Position:

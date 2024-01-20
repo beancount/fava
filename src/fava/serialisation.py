@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import datetime
 from copy import copy
+from decimal import Decimal
 from functools import singledispatch
 from typing import Any
 
@@ -124,7 +125,8 @@ def deserialise(json_entry: Any) -> Directive:
     if json_entry["t"] == "Balance":
         raw_amount = json_entry["amount"]
         amount = create.amount(
-            f"{raw_amount['number']} {raw_amount['currency']}",
+            Decimal(raw_amount["number"]),
+            raw_amount["currency"],
         )
 
         return create.balance(

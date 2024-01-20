@@ -224,6 +224,11 @@ def dateranges(
         yield DateRange(interval_begin, interval_end)
 
 
+def local_today() -> datetime.date:
+    """Today as a date in the local timezone."""
+    return datetime.date.today()  # noqa: DTZ011
+
+
 def substitute(  # noqa: PLR0914
     string: str,
     fye: FiscalYearEnd | None = None,
@@ -240,7 +245,7 @@ def substitute(  # noqa: PLR0914
         :func:`parse_date`.  Can compute addition and subtraction.
     """
     # pylint: disable=too-many-locals
-    today = datetime.date.today()
+    today = local_today()
 
     for match in VARIABLE_RE.finditer(string):
         complete_match, interval, plusminus_, mod_ = match.group(0, 1, 2, 3)
@@ -356,9 +361,8 @@ def parse_date(  # noqa: PLR0911
     match = WEEK_RE.match(string)
     if match:
         year, week = map(int, match.group(1, 2))
-        date_str = f"{year}{week}1"
-        first_week_day = datetime.datetime.strptime(date_str, "%Y%W%w").date()
-        return first_week_day, get_next_interval(first_week_day, Interval.WEEK)
+        start = datetime.date.fromisocalendar(year, week + 1, 1)
+        return start, get_next_interval(start, Interval.WEEK)
 
     match = QUARTER_RE.match(string)
     if match:
@@ -401,7 +405,7 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
         fye: The end of the fiscal year to parse.
     """
     try:
-        date = datetime.datetime.strptime(f"2001-{fye}", "%Y-%m-%d")
+        date = datetime.date.fromisoformat(f"2001-{fye}")
     except ValueError:
         return None
     return FiscalYearEnd(date.month, date.day)

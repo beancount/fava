@@ -2,54 +2,58 @@ from __future__ import annotations
 
 import datetime
 from pathlib import Path
-from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.ingest.importer import (  # type: ignore[import-untyped]
-    ImporterProtocol,
-)
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
+from fava.beans.ingest import BeanImporterProtocol
 from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImporters
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.helpers import FavaAPIError
+from fava.serialisation import serialise
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
 
     from .conftest import GetFavaLedger
+    from .conftest import SnapshotFunc
 
 
 def test_ingest_file_import_info(
     test_data_dir: Path,
     get_ledger: GetFavaLedger,
 ) -> None:
-    class Imp(ImporterProtocol):  # type: ignore[misc]
+    class Imp(BeanImporterProtocol):
         def __init__(self, acc: str) -> None:
             self.acc = acc
 
         def name(self) -> str:
             return self.acc
 
-        def identify(self, file: Any) -> bool:
+        def identify(self, file: FileMemo) -> bool:
             return self.acc in file.name
 
-    class Invalid(ImporterProtocol):  # type: ignore[misc]
+        def file_account(self, _file: FileMemo) -> str:
+            return self.acc
+
+    class Invalid(BeanImporterProtocol):
         def __init__(self, acc: str) -> None:
             self.acc = acc
 
         def name(self) -> str:
             return self.acc
 
-        def identify(self, file: Any) -> bool:
+        def identify(self, file: FileMemo) -> bool:
             return self.acc in file.name
 
-        def file_account(self, _file: Any) -> bool:
+        def file_account(self, _file: FileMemo) -> str:
             raise ValueError("Some error reason...")
 
     ingest_ledger = get_ledger("import")
@@ -63,8 +67,8 @@ def test_ingest_file_import_info(
     assert isinstance(info2.account, str)
     assert info2 == FileImportInfo(
         "rawfile",
-        "",
-        datetime.date.today(),
+        "rawfile",
+        local_today(),
         "basename",
     )
 
@@ -74,7 +78,7 @@ def test_ingest_file_import_info(
 
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
-    assert not small_example_ledger.ingest.import_data()
+    assert small_example_ledger.ingest.import_data() == []
     with pytest.raises(FavaAPIError):
         small_example_ledger.ingest.extract("import.csv", "import_name")
 
@@ -82,6 +86,7 @@ def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
 def test_ingest_examplefile(
     test_data_dir: Path,
     get_ledger: GetFavaLedger,
+    snapshot: SnapshotFunc,
 ) -> None:
     ingest_ledger = get_ledger("import")
 
@@ -96,7 +101,7 @@ def test_ingest_examplefile(
                 FileImportInfo(
                     "<run_path>.TestImporter",
                     "Assets:Checking",
-                    datetime.date.today(),
+                    local_today(),
                     "examplebank.import.csv",
                 ),
             ],
@@ -107,6 +112,7 @@ def test_ingest_examplefile(
         str(test_data_dir / "import.csv"),
         "<run_path>.TestImporter",
     )
+    snapshot([serialise(e) for e in entries], json=True)
     assert len(entries) == 4
     assert entries[0].date == datetime.date(2017, 2, 12)
     assert isinstance(entries[0], Note)

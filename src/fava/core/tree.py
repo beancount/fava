@@ -106,6 +106,7 @@ class TreeNode:
     def serialise_with_context(
         self,
     ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
+        """Serialise, getting all parameters from Flask context."""
         return self.serialise(
             g.conv,
             g.ledger.prices,

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
 from fava.helpers import FavaAPIError
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -86,7 +86,7 @@ def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
 
 
 def test_account_balance_directive(example_ledger: FavaLedger) -> None:
-    today = datetime.date.today()
+    today = local_today()
     bal = f"{today} balance Assets:US:BofA:Checking              1632.79 USD\n"
 
     assert (

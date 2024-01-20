@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import datetime
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Dict
@@ -17,8 +16,11 @@ from fava.core.group_entries import group_entries_by_account
 from fava.core.group_entries import TransactionPosting
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    import datetime
+
     from fava.beans.abc import Directive
     from fava.beans.abc import Meta
     from fava.core.tree import TreeNode
@@ -72,7 +74,7 @@ def uptodate_status(
 def balance_string(tree_node: TreeNode) -> str:
     """Balance directive for the given account for today."""
     account = tree_node.name
-    today = str(datetime.date.today())
+    today = str(local_today())
     res = ""
     for currency, number in units(tree_node.balance).items():
         res += f"{today} balance {account:<28} {number:>15} {currency}\n"
@@ -129,7 +131,7 @@ class AccountDict(FavaModule, Dict[str, AccountData]):
             self[key] = AccountData()
         return self[key]
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         self.clear()
         entries_by_account = group_entries_by_account(self.ledger.all_entries)
         tree = Tree(self.ledger.all_entries)

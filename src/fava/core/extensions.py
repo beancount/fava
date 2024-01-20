@@ -33,7 +33,7 @@ class ExtensionModule(FavaModule):
         self._instances: dict[str, FavaExtensionBase] = {}
         self._loaded_extensions: set[type[FavaExtensionBase]] = set()
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         all_extensions = []
         custom_entries = self.ledger.all_entries_by_type.Custom
         _extension_entries = extension_entries(custom_entries)
@@ -71,22 +71,27 @@ class ExtensionModule(FavaModule):
         return self._instances.get(name, None)
 
     def after_load_file(self) -> None:
+        """Run all `after_load_file` hooks."""
         for ext in self._exts:
             ext.after_load_file()
 
     def before_request(self) -> None:
+        """Run all `before_request` hooks."""
         for ext in self._exts:
             ext.before_request()
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
+        """Run all `after_entry_modified` hooks."""
         for ext in self._exts:
             ext.after_entry_modified(entry, new_lines)
 
     def after_insert_entry(self, entry: Directive) -> None:
+        """Run all `after_insert_entry` hooks."""
         for ext in self._exts:
             ext.after_insert_entry(entry)
 
     def after_delete_entry(self, entry: Directive) -> None:
+        """Run all `after_delete_entry` hooks."""
         for ext in self._exts:
             ext.after_delete_entry(entry)
 
@@ -96,10 +101,12 @@ class ExtensionModule(FavaModule):
         key: str,
         value: str,
     ) -> None:
+        """Run all `after_insert_metadata` hooks."""
         for ext in self._exts:
             ext.after_insert_metadata(entry, key, value)
 
     def after_write_source(self, path: str, source: str) -> None:
+        """Run all `after_write_source` hooks."""
         for ext in self._exts:
             ext.after_write_source(path, source)
 

@@ -48,7 +48,7 @@ class BudgetModule(FavaModule):
         super().__init__(ledger)
         self.budget_entries: BudgetDict = {}
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         self.budget_entries, errors = parse_budgets(
             self.ledger.all_entries_by_type.Custom,
         )

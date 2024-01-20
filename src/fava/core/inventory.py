@@ -109,6 +109,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
 
     @staticmethod
     def from_positions(positions: Iterable[Position]) -> CounterInventory:
+        """Create an inventory from an iterable of Positions."""
         inv = CounterInventory()
         for position in positions:
             inv.add_position(position)

@@ -6,87 +6,95 @@ import csv
 import datetime
 from decimal import Decimal
 from pathlib import Path
-
-from beancount.core import amount
-from beancount.core import data
-from beancount.ingest import importer
-from dateutil.parser import parse
+from typing import TYPE_CHECKING
 
 from fava.beans import create
+from fava.beans.ingest import BeanImporterProtocol
 
-# mypy: ignore-errors
+if TYPE_CHECKING:
+    from typing import Any
+
+    from fava.beans.abc import Directive
+    from fava.beans.abc import Meta
+    from fava.beans.ingest import FileMemo
 
 
-class TestImporter(importer.ImporterProtocol):
+class TestImporter(BeanImporterProtocol):
     """Test importer for Fava."""
 
     account = "Assets:Checking"
     currency = "EUR"
 
-    def identify(self, file):
+    def identify(self, file: FileMemo) -> bool:
         return Path(file.name).name == "import.csv"
 
-    def file_name(self, file):
+    def file_name(self, file: FileMemo) -> str:
         return f"examplebank.{Path(file.name).name}"
 
-    def file_account(self, _):
+    def file_account(self, _file: FileMemo) -> str:
         return self.account
 
-    def file_date(self, _file):
-        return datetime.date.today()
+    def file_date(self, _file: FileMemo) -> datetime.date:
+        return datetime.date.today()  # noqa: DTZ011
 
-    def extract(self, file):
-        entries = []
-        index = 0
+    def extract(
+        self,
+        file: FileMemo,
+        **_kwargs: Any,
+    ) -> list[Directive]:
+        entries: list[Directive] = []
         with Path(file.name).open(encoding="utf-8") as file_:
             csv_reader = csv.DictReader(file_, delimiter=";")
             for index, row in enumerate(csv_reader):
-                meta = data.new_metadata(file.name, index)
-                meta["__source__"] = ";".join(list(row.values()))
-                date = parse(row["Buchungsdatum"]).date()
-                desc = f"{row['Umsatztext']}"
+                meta: Meta = {
+                    "filename": file.name,
+                    "lineno": index,
+                    "__source__": ";".join(list(row.values())),
+                }
+                date = datetime.date.fromisoformat(row["Buchungsdatum"])
+                desc = row["Umsatztext"]
 
                 if not row["IBAN"]:
-                    entries.append(data.Note(meta, date, self.account, desc))
-                else:
-                    units_d = round(
-                        Decimal(row["Betrag"].replace(",", ".")),
-                        2,
-                    )
-                    units = amount.Amount(units_d, self.currency)
+                    entries.append(create.note(meta, date, self.account, desc))
+                    continue
 
-                    posting1 = data.Posting("", -units, None, None, None, None)
-                    posting2 = data.Posting(
-                        self.account,
-                        units,
-                        None,
-                        None,
-                        None,
-                        None,
-                    )
-                    txn = data.Transaction(
-                        meta,
-                        date,
-                        self.FLAG,
-                        "",
-                        desc,
-                        set(),
-                        set(),
-                        [posting1, posting2],
-                    )
-                    entries.append(txn)
-
-        if index:
-            meta = data.new_metadata(file.name, 0)
-            meta["__source__"] = "Balance"
-            entries.append(
-                create.balance(
+                units_d = round(
+                    Decimal(row["Betrag"].replace(",", ".")),
+                    2,
+                )
+                txn = create.transaction(
                     meta,
-                    datetime.date.today(),
-                    self.account,
-                    create.amount("10 USD"),
-                ),
+                    date,
+                    "*",
+                    "",
+                    desc,
+                    set(),
+                    set(),
+                    [
+                        create.posting(
+                            "",
+                            create.amount(-units_d, self.currency),
+                        ),
+                        create.posting(
+                            self.account,
+                            create.amount(units_d, self.currency),
+                        ),
+                    ],
+                )
+                entries.append(txn)
+
+        if entries:
+            bal = create.balance(
+                {
+                    "filename": file.name,
+                    "lineno": 0,
+                    "__source__": "Balance",
+                },
+                self.file_date(file),
+                self.account,
+                create.amount("10 USD"),
             )
+            entries.append(bal)
         return entries
 
 

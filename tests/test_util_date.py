@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import date
-from datetime import datetime
 from unittest import mock
 
 import pytest
@@ -28,7 +27,7 @@ def test_interval() -> None:
 
 def _to_date(string: str) -> date:
     """Convert a string in ISO 8601 format into a datetime.date object."""
-    return datetime.strptime(string, "%Y-%m-%d").date()
+    return date.fromisoformat(string)
 
 
 @pytest.mark.parametrize(

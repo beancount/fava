@@ -66,7 +66,7 @@ class AttributesModule(FavaModule):
         self.tags: list[str] = []
         self.years: list[str] = []
 
-    def load_file(self) -> None:
+    def load_file(self) -> None:  # noqa: D102
         all_entries = self.ledger.all_entries
 
         all_links = set()

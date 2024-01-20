@@ -17,6 +17,7 @@ import mimetypes
 from dataclasses import fields
 from datetime import date
 from datetime import datetime
+from datetime import timezone
 from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
@@ -372,7 +373,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/download-journal/")
     def download_journal() -> Response:
         """Download a Journal file."""
-        now = datetime.now().replace(microsecond=0)
+        now = datetime.now(tz=timezone.utc).replace(microsecond=0)
         filename = f"journal_{now.isoformat()}.beancount"
         data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
         return send_file(data, as_attachment=True, download_name=filename)

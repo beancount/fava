@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import datetime
 import os
 import re
 from pathlib import Path
@@ -23,6 +22,7 @@ from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.budgets import parse_budgets
 from fava.core.charts import dumps
+from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Literal
@@ -47,7 +47,8 @@ if TYPE_CHECKING:  # pragma: no cover
             *,
             name: str = ...,
             json: bool = ...,
-        ) -> None: ...
+        ) -> None:
+            """Check snapshot."""
 
 
 @pytest.fixture(scope="session")
@@ -119,7 +120,8 @@ def snapshot(
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         # replace today
-        out = out.replace(str(datetime.date.today()), "TODAY")
+        today = local_today()
+        out = out.replace(str(today), "TODAY")
         # replace entry hashes
         out = re.sub(r'"[0-9a-f]{32}', '"ENTRY_HASH', out)
         out = re.sub(r"context-[0-9a-f]{32}", "context-ENTRY_HASH", out)
