@@ -16,15 +16,6 @@
   <HeaderIcon />
   <h1>
     {$ledger_title}{#if has_dropdown}&nbsp;▾{/if}<PageTitle />
-    <button
-      type="button"
-      hidden={!$has_changes}
-      class="reload-page"
-      use:keyboardShortcut={"r"}
-      on:click={router.reload.bind(router)}
-    >
-      &#8635;
-    </button>
     {#if has_dropdown}
       <div class="beancount-files">
         <ul>
@@ -37,20 +28,27 @@
       </div>
     {/if}
   </h1>
+  <button
+    type="button"
+    hidden={false && !$has_changes}
+    class="reload-page"
+    use:keyboardShortcut={"r"}
+    on:click={router.reload.bind(router)}
+  >
+    &#8635;
+  </button>
+  <span class="spacer" />
   <FilterForm />
 </header>
 
 <style>
   .reload-page {
-    margin-top: -8px;
-    margin-left: 20px;
     background-color: var(--warning);
   }
 
   h1 {
     display: inline-block;
-    flex: 1 0 content;
-    padding: 0.25em 0.5em;
+    padding: 0.5rem;
     margin: 0;
     overflow: hidden;
     font-size: 16px;

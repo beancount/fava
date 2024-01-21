@@ -38,6 +38,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   grid-area: header;
+  gap: 0.5em;
   align-items: center;
   padding: 0.5em;
   color: var(--header-color);
