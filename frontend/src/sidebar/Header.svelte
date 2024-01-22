@@ -30,7 +30,7 @@
   </h1>
   <button
     type="button"
-    hidden={false && !$has_changes}
+    hidden={!$has_changes}
     class="reload-page"
     use:keyboardShortcut={"r"}
     on:click={router.reload.bind(router)}
