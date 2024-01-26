@@ -26,7 +26,7 @@
   export let filename: string;
 
   $: extension = ext(filename).toLowerCase();
-  $: url = `${$base_url}document/?filename=${filename}`;
+  $: url = `${$base_url}document/?filename=${encodeURIComponent(filename)}`;
 </script>
 
 {#if extension === "pdf"}
