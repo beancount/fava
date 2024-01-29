@@ -1,6 +1,7 @@
 """Commodity conversion helpers for Fava.
 
 All functions in this module will be automatically added as template filters.
+
 """
 
 from __future__ import annotations
