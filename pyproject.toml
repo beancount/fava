@@ -134,10 +134,12 @@ extend-ignore = [
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
     "CPY",      # no copyright notices in all files
+    "COM812",   # handled by formatter
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
     "EM101",    # allow long strings as error messages
     "EM102",    # allow f-strings as error messages
+    "ISC001",   # handled by formatter
     "PD",       # pandas-related, has false-positives
     "PERF203",  # allow try-except in loop; zero-cost since Python 3.11
     "PLR2004",  # allow magic constants in comparisons

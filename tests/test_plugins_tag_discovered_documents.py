@@ -20,7 +20,9 @@ def test_tag_discovered_plugin(tmp_path: Path) -> None:
     assets_cash_rel = Path("documents") / "Assets" / "Cash"
 
     beancount_file = tmp_path / "example-tag-discovered.beancount"
-    beancount_file.write_text(dedent(f"""
+    beancount_file.write_text(
+        dedent(
+            f"""
         option "title" "Test tag discovered documents"
         option "operating_currency" "EUR"
         option "documents" "{tmp_path / "documents"}"
@@ -30,7 +32,9 @@ def test_tag_discovered_plugin(tmp_path: Path) -> None:
         2016-10-31 open Assets:Cash
 
         2016-11-06 document Assets:Cash "{assets_cash_rel / non_discovered}"
-        """.replace("\\", "\\\\")))
+        """.replace("\\", "\\\\")
+        )
+    )
 
     entries, errors, _ = load_file(str(beancount_file))
 

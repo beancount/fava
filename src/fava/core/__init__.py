@@ -89,11 +89,11 @@ class FilteredLedger:
 
     __slots__ = (
         "__dict__",  # for the cached_property decorator
-        "ledger",
-        "entries",
-        "date_range",
         "_date_first",
         "_date_last",
+        "date_range",
+        "entries",
+        "ledger",
     )
     _date_first: date | None
     _date_last: date | None
@@ -202,17 +202,27 @@ class FavaLedger:
     """
 
     __slots__ = (
+        "_is_encrypted",
+        "_watcher",
+        "accounts",
         "accounts",
         "all_entries",
         "all_entries_by_type",
+        "attributes",
         "beancount_file_path",
+        "budgets",
+        "charts",
+        "commodities",
         "errors",
+        "extensions",
         "fava_options",
-        "_is_encrypted",
+        "file",
+        "format_decimal",
+        "ingest",
+        "misc",
         "options",
         "prices",
-        "_watcher",
-        *MODULES,
+        "query_shell",
     )
 
     #: List of all (unfiltered) entries.

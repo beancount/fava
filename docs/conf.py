@@ -19,10 +19,7 @@ extlinks = {
     "user": ("https://github.com/%s", "@%s"),
 }
 
-autodoc_default_options = {
-    "members": True,
-    "undoc-members": True,
-}
+autodoc_default_options = {"members": True, "undoc-members": True}
 typehints_use_rtype = False
 
 

@@ -43,7 +43,7 @@ class Token:
     error.
     """
 
-    __slots__ = ("type", "value", "lexer")
+    __slots__ = ("lexer", "type", "value")
 
     def __init__(self, type_: str, value: str) -> None:
         self.type = type_
@@ -302,7 +302,7 @@ class EntryFilter(ABC):
 class TimeFilter(EntryFilter):
     """Filter by dates."""
 
-    __slots__ = ("date_range", "_options")
+    __slots__ = ("_options", "date_range")
 
     def __init__(
         self,
@@ -362,7 +362,7 @@ class AccountFilter(EntryFilter):
     The filter string can either be a regular expression or a parent account.
     """
 
-    __slots__ = ("_value", "_match")
+    __slots__ = ("_match", "_value")
 
     def __init__(self, value: str) -> None:
         self._value = value

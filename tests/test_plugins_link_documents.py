@@ -31,7 +31,9 @@ def test_plugins(tmp_path: Path) -> None:
     assets_cash_rel = Path("documents") / "Assets" / "Cash"
 
     beancount_file = tmp_path / "example.beancount"
-    beancount_file.write_text(dedent(f"""
+    beancount_file.write_text(
+        dedent(
+            f"""
         option "title" "Test"
         option "operating_currency" "EUR"
         option "documents" "{tmp_path / "documents"}"
@@ -56,7 +58,9 @@ def test_plugins(tmp_path: Path) -> None:
         2016-11-06 document Assets:Cash "{assets_cash_rel / "Test 5.pdf"}"
         2017-11-06 balance Assets:Cash   -200 EUR
             document: "{assets_cash_rel / "Test 5.pdf"}"
-        """.replace("\\", "\\\\")))
+        """.replace("\\", "\\\\")
+        )
+    )
 
     entries, errors, _ = load_file(str(beancount_file))
 
@@ -99,7 +103,8 @@ def test_link_documents_error(load_doc: LoaderResult) -> None:
 
 
 def test_link_documents_missing(tmp_path: Path) -> None:
-    bfile = dedent(f"""
+    bfile = dedent(
+        f"""
         option "documents" "{tmp_path}"
         plugin "fava.plugins.link_documents"
 
@@ -110,7 +115,8 @@ def test_link_documents_missing(tmp_path: Path) -> None:
             document: "{Path("test") / "Foobar.pdf"}"
             Expenses:Foo                100 EUR
             Assets:Cash
-        """.replace("\\", "\\\\"))
+        """.replace("\\", "\\\\")
+    )
 
     entries, errors, _ = load_string(bfile)
 
