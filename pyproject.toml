@@ -126,11 +126,12 @@ filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning
 target-version = "py38"
 preview = true
 line-length = 79
+
+[tool.ruff.lint]
 extend-select = [
     "ALL",
 ]
 extend-ignore = [
-    "ANN101",   # allow `self` to be untyped
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
     "CPY",      # no copyright notices in all files
@@ -149,22 +150,22 @@ extend-ignore = [
     "TRY003",   # allow long string constants as error messages
 ]
 
-[tool.ruff.flake8-type-checking]
+[tool.ruff.lint.flake8-type-checking]
 strict = true  # always move type-only imports to TYPE_CHECKING-if blocks
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = true
 order-by-type = false
 known-first-party = ["fava"]
 required-imports = ["from __future__ import annotations"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.pylint]
+[tool.ruff.lint.pylint]
 max-args = 9
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "contrib/**" = ["D", "INP"]
 "docs/**" = ["D", "ANN", "INP"]
 "tests/conftest.py" = ["S101"]
