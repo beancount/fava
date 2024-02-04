@@ -52,7 +52,7 @@
   };
 </script>
 
-<svg {width} {height}>
+<svg viewBox={`0 0 ${width} ${height}`}>
   <g
     use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}

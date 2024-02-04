@@ -59,7 +59,7 @@
   };
 </script>
 
-<svg {width} {height}>
+<svg viewBox={`0 0 ${width} ${height}`}>
   {#each leaves as d}
     <g
       transform={`translate(${d.x0},${d.y0})`}

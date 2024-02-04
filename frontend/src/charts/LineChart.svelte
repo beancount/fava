@@ -75,7 +75,7 @@
   $: futureFilter = xExtent[1] > today ? "url(#desaturateFuture)" : undefined;
 </script>
 
-<svg {width} {height}>
+<svg viewBox={`0 0 ${width} ${height}`}>
   <filter id="desaturateFuture">
     <feColorMatrix type="saturate" values="0.5" x={x(today)} />
     <feBlend in2="SourceGraphic" />
