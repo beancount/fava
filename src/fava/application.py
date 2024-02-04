@@ -43,6 +43,7 @@ from flask import url_for as flask_url_for
 from flask_babel import Babel  # type: ignore[import-untyped]
 from flask_babel import get_translations
 from markupsafe import Markup
+from werkzeug.local import LocalProxy
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
@@ -70,6 +71,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse
+
+    from fava.core import FilteredLedger
 
 
 setup_logging()
@@ -199,11 +202,16 @@ def _setup_filters(
             if request.blueprint != "json_api":
                 ledger.changed()
 
-            g.filtered = ledger.get_filtered(
-                account=request.args.get("account"),
-                filter=request.args.get("filter"),
-                time=request.args.get("time"),
-            )
+            def _lazy_get_filtered() -> FilteredLedger:
+                filtered: FilteredLedger = ledger.get_filtered(
+                    account=request.args.get("account", ""),
+                    filter=request.args.get("filter", ""),
+                    time=request.args.get("time", ""),
+                )
+                g.filtered = filtered
+                return filtered
+
+            g.filtered = LocalProxy(_lazy_get_filtered)  # type: ignore[assignment]
 
             ledger.extensions.before_request()
 
