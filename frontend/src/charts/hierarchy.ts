@@ -4,17 +4,20 @@ import type { HierarchyNode } from "d3-hierarchy";
 
 import type { Result } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
+import type { Validator } from "../lib/validation";
 import {
   array,
   boolean,
+  defaultValue,
   lazy,
   number,
   object,
   optional,
   record,
   string,
+  unknown,
 } from "../lib/validation";
-import type { Validator } from "../lib/validation";
+import { notify_warn } from "../notifications";
 
 import type { ChartContext } from "./context";
 
@@ -78,7 +81,7 @@ export const account_hierarchy_validator: Validator<AccountTreeNode> = object({
   children: lazy(() => array(account_hierarchy_validator)),
   cost: optional(record(number)),
   cost_children: optional(record(number)),
-  has_txns: boolean,
+  has_txns: defaultValue(boolean, () => false),
 });
 
 export function hierarchy_from_parsed_data(
@@ -110,12 +113,25 @@ export function hierarchy_from_parsed_data(
   );
 }
 
+const hierarchy_data_with_modifier = object({
+  modifier: number,
+  root: unknown,
+});
+
 export function hierarchy(
   label: string | null,
   json: unknown,
   $chartContext: ChartContext,
 ): Result<HierarchyChart, string> {
-  return account_hierarchy_validator(json).map((r) =>
+  const with_modifier = hierarchy_data_with_modifier(json);
+  if (with_modifier.is_ok) {
+    notify_warn(
+      "Tree for the hierarchy chart should now be specified at the top-level directly.\n" +
+        "{ modifier: 1, root: { ...children } } -> { ...children }",
+    );
+  }
+  const root = with_modifier.is_ok ? with_modifier.value.root : json;
+  return account_hierarchy_validator(root).map((r) =>
     hierarchy_from_parsed_data(label, r, $chartContext),
   );
 }

@@ -1,3 +1,11 @@
+svelte-component.error {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
 details {
   display: block;
   min-width: 400px;

@@ -22,13 +22,22 @@ const hide = (): void => {
 
 /** Some small utilities to create tooltip contents. */
 export const domHelpers = {
+  /** Create a <br> element. */
   br: (): HTMLBRElement => document.createElement("br"),
+  /** Create a <em> element with the given content. */
   em: (content: string): HTMLElement => {
     const em = document.createElement("em");
     em.textContent = content;
     return em;
   },
+  /** Create a text node for the given text. */
   t: (text: string): Text => document.createTextNode(text),
+  /** Create a <pre> element with the given content. */
+  pre: (content: string): HTMLPreElement => {
+    const pre = document.createElement("pre");
+    pre.textContent = content;
+    return pre;
+  },
 };
 
 export type TooltipContent = (HTMLElement | Text)[];

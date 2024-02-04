@@ -4,7 +4,7 @@
  * The charts heavily use d3 libraries.
  */
 
-import type { Result } from "../lib/result";
+import { collect, err, type Result } from "../lib/result";
 import { array, object, string, unknown } from "../lib/validation";
 
 import { bar } from "./bar";
@@ -41,17 +41,17 @@ export function parseChartData(
   data: unknown,
   $chartContext: ChartContext,
 ): Result<FavaChart[], string> {
-  return chart_data_validator(data).map((chartData) => {
-    const result: FavaChart[] = [];
-    chartData.forEach((chart) => {
-      const parser = parsers[chart.type];
-      if (parser) {
-        const r = parser(chart.label, chart.data, $chartContext);
-        if (r.is_ok) {
-          result.push(r.value);
-        }
-      }
-    });
-    return result;
-  });
+  return chart_data_validator(data).and_then((chartData) =>
+    collect(
+      chartData.map((chart) => {
+        const parser = parsers[chart.type];
+        return parser
+          ? parser(chart.label, chart.data, $chartContext).map_err(
+              (msg) =>
+                `Parsing of data for ${chart.type} chart failed:\n${msg}`,
+            )
+          : err(`Unknown chart type ${chart.type}`);
+      }),
+    ),
+  );
 }

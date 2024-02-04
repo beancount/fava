@@ -8,7 +8,9 @@ import { get as store_get } from "svelte/store";
 import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import { chartContext } from "./charts/context";
+import { domHelpers } from "./charts/tooltip";
 import { type Result } from "./lib/result";
+import { log_error } from "./log";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
 class SvelteCustomElementComponent<
@@ -23,7 +25,16 @@ class SvelteCustomElementComponent<
   render(target: HTMLElement, data: unknown): (() => void) | undefined {
     const res = this.validate(data);
     if (res.is_err) {
-      target.innerHTML = `Rendering component failed: ${res.error}`;
+      const type = target.getAttribute("type");
+      target.classList.add("error");
+      target.replaceChildren(
+        domHelpers.t(
+          `Rendering component '${type}' failed due to invalid JSON data:`,
+        ),
+        domHelpers.br(),
+        domHelpers.pre(res.error),
+      );
+      log_error("Invalid JSON for component:", data);
       return undefined;
     }
     const instance = new this.Component({ target, props: res.value });

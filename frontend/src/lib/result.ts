@@ -115,3 +115,16 @@ export function ok<T>(value: T): Ok<T> {
 export function err<E>(error: E): Err<E> {
   return new Err(error);
 }
+
+/** Collect an array of results into a single result. */
+export function collect<T, E>(items: Result<T, E>[]): Result<T[], E> {
+  const ok_values: T[] = [];
+  for (const r of items) {
+    if (r.is_ok) {
+      ok_values.push(r.value);
+    } else {
+      return r;
+    }
+  }
+  return ok(ok_values);
+}
