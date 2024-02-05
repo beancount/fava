@@ -43,16 +43,15 @@ from flask import url_for as flask_url_for
 from flask_babel import Babel  # type: ignore[import-untyped]
 from flask_babel import get_translations
 from markupsafe import Markup
-from werkzeug.local import LocalProxy
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
 from fava import LANGUAGES
 from fava import template_filters
+from fava._ctx_globals_class import Context
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
-from fava.core.conversion import conversion_from_str
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIError
@@ -63,7 +62,6 @@ from fava.util import next_key
 from fava.util import send_file_inline
 from fava.util import setup_logging
 from fava.util import slugify
-from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -71,8 +69,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse
-
-    from fava.core import FilteredLedger
 
 
 setup_logging()
@@ -106,7 +102,7 @@ if not mimetypes.types_map.get(".js", "").endswith("/javascript"):
 
 
 def _ledger_slugs_dict(ledgers: Iterable[FavaLedger]) -> dict[str, FavaLedger]:
-    """Get  dictionary mapping URL slugs to ledgers."""
+    """Get dictionary mapping URL slugs to ledgers."""
     ledgers_by_slug: dict[str, FavaLedger] = {}
     for ledger in ledgers:
         title_slug = slugify(ledger.options["title"])
@@ -202,17 +198,6 @@ def _setup_filters(
             if request.blueprint != "json_api":
                 ledger.changed()
 
-            def _lazy_get_filtered() -> FilteredLedger:
-                filtered: FilteredLedger = ledger.get_filtered(
-                    account=request.args.get("account", ""),
-                    filter=request.args.get("filter", ""),
-                    time=request.args.get("time", ""),
-                )
-                g.filtered = filtered
-                return filtered
-
-            g.filtered = LocalProxy(_lazy_get_filtered)  # type: ignore[assignment]
-
             ledger.extensions.before_request()
 
     if read_only:
@@ -255,9 +240,6 @@ def _setup_filters(
                 if g.beancount_file_slug not in fava_app.config["LEDGERS"]:
                     abort(404)
             g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
-            g.conversion = request.args.get("conversion", "") or "at_cost"
-            g.conv = conversion_from_str(g.conversion)
-            g.interval = Interval.get(request.args.get("interval", ""))
 
     @fava_app.errorhandler(FavaAPIError)
     def fava_api_exception(error: FavaAPIError) -> str:
@@ -471,6 +453,7 @@ def create_app(
     fava_app = Flask("fava")
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
     fava_app.json = FavaJSONProvider(fava_app)
+    fava_app.app_ctx_globals_class = Context  # type: ignore[assignment]
     _setup_template_config(fava_app)
     _setup_babel(fava_app)
     _setup_filters(fava_app, read_only=read_only, incognito=incognito)
