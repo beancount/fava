@@ -72,4 +72,19 @@
   button:hover {
     color: var(--text-color-lighter);
   }
+
+  @media print {
+    button {
+      display: none;
+      border-left: none;
+    }
+
+    button + button {
+      border-left: none;
+    }
+
+    button.selected {
+      display: inline;
+    }
+  }
 </style>

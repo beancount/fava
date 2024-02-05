@@ -22,4 +22,10 @@
   label + label {
     margin-left: 0.125rem;
   }
+
+  @media print {
+    label {
+      display: none;
+    }
+  }
 </style>

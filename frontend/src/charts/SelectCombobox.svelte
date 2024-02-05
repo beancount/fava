@@ -207,4 +207,10 @@
     color: var(--background);
     background-color: var(--link-color);
   }
+
+  @media print {
+    span {
+      display: none;
+    }
+  }
 </style>
