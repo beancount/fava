@@ -117,6 +117,7 @@ disable = [
     "protected-access",              # is checked by ruff (SLF001)
     "invalid-name",                  # is checked by ruff (N)
     "missing-docstring",             # is checked by ruff (D)
+    "redefined-outer-name",          # false positives for pytest fixtures
 ]
 
 [tool.pytest.ini_options]

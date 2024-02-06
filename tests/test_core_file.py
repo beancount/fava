@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import os
 import re
+import shutil
 from datetime import date
+from hashlib import sha256
 from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
@@ -10,45 +13,124 @@ import pytest
 
 from fava.beans import create
 from fava.beans.funcs import get_position
+from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
+from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
-from fava.core.file import delete_entry_slice
+from fava.core.file import _file_newline_character
 from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
+from fava.core.file import InvalidUnicodeError
+from fava.core.file import NonSourceFileError
 from fava.core.file import save_entry_slice
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Transaction
-    from fava.core import FavaLedger
-
     from .conftest import SnapshotFunc
 
 
-def _get_entry(ledger: FavaLedger, payee: str, date_: str) -> Transaction:
-    """Fetch a transaction with the given payee and date."""
-    return next(
-        e
-        for e in ledger.all_entries_by_type.Transaction
-        if e.payee == payee and str(e.date) == date_
-    )
+@pytest.fixture()
+def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
+    """Create a FavaLedger 'edit-example.beancount' in a tmp_path."""
+    ledger_path = tmp_path / "edit-example.beancount"
+    shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
+    ledger_path.chmod(tmp_path.stat().st_mode)
+    return FavaLedger(str(ledger_path))
 
 
-def test_get_entry_slice(example_ledger: FavaLedger) -> None:
-    entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
+def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+    entry = ledger_in_tmp_path.all_entries[-1]
+    entry_hash = hash_entry(entry)
+    path = Path(ledger_in_tmp_path.beancount_file_path)
 
-    assert get_entry_slice(entry) == (
-        """2016-05-03 * "Chichipotle" "Eating out with Joe"
+    slice_string, sha256sum = get_entry_slice(entry)
+    assert (
+        slice_string
+        == """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Liabilities:US:Chase:Slate                       -21.70 USD
-  Expenses:Food:Restaurant                          21.70 USD""",
-        "d60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477",
+  Expenses:Food:Restaurant                          21.70 USD"""
+    )
+    assert (
+        sha256sum
+        == "d60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477"
+    )
+
+    new_slice = """2016-05-03 * "Chichipotle" "Eating out with Joe"
+  document: "doc"
+  Liabilities:US:Chase:Slate                       -21.70 USD
+  Expenses:Food:Restaurant                          21.70 USD
+"""
+    ledger_in_tmp_path.file.save_entry_slice(entry_hash, new_slice, sha256sum)
+    assert new_slice in path.read_text("utf-8")
+
+
+def test_windows_newlines(ledger_in_tmp_path: FavaLedger) -> None:
+    path = Path(ledger_in_tmp_path.beancount_file_path)
+    contents = path.read_text("utf-8")
+    assert "\r\n" not in contents
+    source, sha256sum = ledger_in_tmp_path.file.get_source(path)
+
+    # unix newlines are used if already present
+    with path.open("w", encoding="utf-8", newline="\n") as file:
+        file.write(contents)
+    ledger_in_tmp_path.file.set_source(path, source, sha256sum)
+    assert _file_newline_character(path) == "\n"
+    assert "\r\n" not in path.read_text("utf-8")
+
+    # write empty file
+    path.write_bytes(b"")
+    assert _file_newline_character(path) == os.linesep
+
+    # write to file with windows newlines
+    with path.open("w", encoding="utf-8", newline="\r\n") as file:
+        file.write(contents)
+    assert _file_newline_character(path) == "\r\n"
+    assert b"\r\n" in path.read_bytes()
+    source, _sha256sum = ledger_in_tmp_path.file.get_source(path)
+    assert "\r\n" not in source
+    assert source == contents
+
+
+def test_get_and_set_source(ledger_in_tmp_path: FavaLedger) -> None:
+    with pytest.raises(NonSourceFileError):
+        ledger_in_tmp_path.file.get_source(Path("asdf"))
+
+    path = Path(ledger_in_tmp_path.beancount_file_path)
+    source, sha256sum = ledger_in_tmp_path.file.get_source(path)
+    assert source == path.read_text("utf-8")
+
+    with pytest.raises(ExternallyChangedError):
+        ledger_in_tmp_path.file.set_source(path, "test", "notasha256sum")
+
+    new_sha256sum = ledger_in_tmp_path.file.set_source(path, "test", sha256sum)
+    assert path.read_text("utf-8") == "test"
+    assert new_sha256sum == sha256(b"test").hexdigest()
+
+    path.write_bytes(b"\xc3\x28")
+    with pytest.raises(InvalidUnicodeError):
+        ledger_in_tmp_path.file.get_source(path)
+
+
+def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
+    entry = ledger_in_tmp_path.all_entries[-1]
+    entry_hash = hash_entry(entry)
+    path = Path(ledger_in_tmp_path.beancount_file_path)
+
+    ledger_in_tmp_path.file.insert_metadata(entry_hash, "document", "doc")
+    assert ledger_in_tmp_path.watcher.check()
+    assert path.read_text("utf-8").endswith(
+        """2016-05-03 * "Chichipotle" "Eating out with Joe"
+  document: "doc"
+  Liabilities:US:Chase:Slate                       -21.70 USD
+  Expenses:Food:Restaurant                          21.70 USD
+"""
     )
 
 
-def test_save_entry_slice(example_ledger: FavaLedger) -> None:
-    entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
+def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+    entry = ledger_in_tmp_path.all_entries[-1]
 
     entry_source, sha256sum = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
@@ -66,29 +148,26 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     assert filename.read_text("utf-8") == contents
 
 
-def test_delete_entry_slice(example_ledger: FavaLedger) -> None:
-    entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
+def test_delete_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+    entry = ledger_in_tmp_path.all_entries[-1]
+    entry_hash = hash_entry(entry)
 
     _entry_source, sha256sum = get_entry_slice(entry)
-    filename, lineno = get_position(entry)
-    path = Path(filename)
+    path = Path(get_position(entry)[0])
     contents = path.read_text("utf-8")
 
     with pytest.raises(ExternallyChangedError):
-        delete_entry_slice(entry, "wrong hash")
+        ledger_in_tmp_path.file.delete_entry_slice(entry_hash, "wrong hash")
+    assert not ledger_in_tmp_path.watcher.check()
     assert path.read_text("utf-8") == contents
+    assert '2016-05-03 * "Chichipotle" "Eating out with Joe"' in contents
 
-    delete_entry_slice(entry, sha256sum)
-    assert path.read_text("utf-8") != contents
-
-    insert_option = InsertEntryOption(
-        date(1, 1, 1),
-        re.compile(".*"),
-        filename,
-        lineno,
+    ledger_in_tmp_path.file.delete_entry_slice(entry_hash, sha256sum)
+    assert ledger_in_tmp_path.watcher.check()
+    assert (
+        '2016-05-03 * "Chichipotle" "Eating out with Joe"'
+        not in path.read_text("utf-8")
     )
-    insert_entry(entry, filename, [insert_option], 59, 2)
-    assert path.read_text("utf-8") == contents
 
 
 def test_insert_metadata_in_file(tmp_path: Path) -> None:
@@ -159,10 +238,7 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     samplefile.write_text(file_content)
 
     postings = [
-        create.posting(
-            "Liabilities:US:Chase:Slate",
-            "-10.00 USD",
-        ),
+        create.posting("Liabilities:US:Chase:Slate", "-10.00 USD"),
         create.posting("Expenses:Food", "10.00 USD"),
     ]
 
@@ -193,31 +269,23 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # transaction dates are ignored.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1),
-            re.compile(".*:Food"),
-            str(samplefile),
-            1,
+            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 1
         ),
         InsertEntryOption(
-            date(2015, 1, 2),
-            re.compile(".*:FOOO"),
-            str(samplefile),
-            1,
+            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1
         ),
         InsertEntryOption(
-            date(2017, 1, 1),
-            re.compile(".*:Food"),
-            str(samplefile),
-            6,
+            date(2017, 1, 1), re.compile(".*:Food"), str(samplefile), 6
         ),
     ]
-    new_options = insert_entry(
+    path, new_options = insert_entry(
         replace(transaction, narration="narr1"),
         str(samplefile),
         options,
         61,
         4,
     )
+    assert path == samplefile
     assert new_options[0].lineno == 5
     assert new_options[1].lineno == 5
     assert new_options[2].lineno == 10
@@ -239,26 +307,21 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # the last posting doesn't match.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1),
-            re.compile(".*:Slate"),
-            str(samplefile),
-            5,
+            date(2015, 1, 1), re.compile(".*:Slate"), str(samplefile), 5
         ),
         InsertEntryOption(
-            date(2015, 1, 2),
-            re.compile(".*:FOOO"),
-            str(samplefile),
-            1,
+            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1
         ),
     ]
     new_transaction = replace(transaction, narration="narr2")
-    new_options = insert_entry(
+    path, new_options = insert_entry(
         new_transaction,
         str(samplefile),
         options,
         61,
         4,
     )
+    assert path == samplefile
     assert new_options[0].lineno == 9
     assert new_options[1].lineno == 1
     assert samplefile.read_text("utf-8") == dedent("""\
@@ -283,16 +346,10 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # case several of them match a posting.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1),
-            re.compile(".*:Food"),
-            str(samplefile),
-            5,
+            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 5
         ),
         InsertEntryOption(
-            date(2015, 1, 2),
-            re.compile(".*:Food"),
-            str(samplefile),
-            1,
+            date(2015, 1, 2), re.compile(".*:Food"), str(samplefile), 1
         ),
     ]
     new_transaction = replace(transaction, narration="narr3")
@@ -330,10 +387,7 @@ def test_insert_entry_align(tmp_path: Path) -> None:
     samplefile.write_text(file_content)
 
     postings = [
-        create.posting(
-            "Liabilities:US:Chase:Slate",
-            "-10.00 USD",
-        ),
+        create.posting("Liabilities:US:Chase:Slate", "-10.00 USD"),
         create.posting("Expenses:Food", "10.00 USD"),
     ]
 
@@ -370,10 +424,7 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
     samplefile.write_text(file_content)
 
     postings = [
-        create.posting(
-            "Liabilities:US:Chase:Slate",
-            "-10.00 USD",
-        ),
+        create.posting("Liabilities:US:Chase:Slate", "-10.00 USD"),
         create.posting("Expenses:Food", "10.00 USD"),
     ]
 
@@ -402,14 +453,12 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
 
 
 def test_render_entries(
-    example_ledger: FavaLedger,
+    small_example_ledger: FavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
-    entry1 = _get_entry(example_ledger, "Uncle Boons", "2016-04-09")
-    entry2 = _get_entry(example_ledger, "BANK FEES", "2016-05-04")
-    postings = [
-        create.posting("Expenses:Food", "10.00 USD"),
-    ]
+    all_transactions = small_example_ledger.all_entries_by_type.Transaction
+    entry1 = all_transactions[2]
+    entry2 = all_transactions[3]
     transaction = create.transaction(
         {},
         date(2016, 1, 1),
@@ -418,21 +467,12 @@ def test_render_entries(
         "narr",
         frozenset(),
         frozenset(),
-        postings,
+        [
+            create.posting("Expenses:Food", "10.00 USD"),
+        ],
     )
-    entries = example_ledger.file.render_entries([entry1, entry2, transaction])
+    entries = list(
+        small_example_ledger.file.render_entries([entry1, entry2, transaction])
+    )
+    assert len(entries) == 3
     snapshot("\n".join(entries))
-
-    file_content = dedent("""\
-        2016-04-09 * "Uncle Boons" "" #trip-new-york-2016
-          Liabilities:US:Chase:Slate                       -52.22 USD
-          Expenses:Food:Restaurant                          52.22 USD
-
-        2016-05-04 * "BANK FEES" "Monthly bank fee"
-          Assets:US:BofA:Checking                           -4.00 USD
-          Expenses:Financial:Fees                            4.00 USD
-        """)
-
-    assert file_content == "\n".join(
-        example_ledger.file.render_entries([entry1, entry2]),
-    )

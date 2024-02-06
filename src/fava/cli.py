@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import errno
+import logging
 import os
 from pathlib import Path
 
@@ -144,6 +145,7 @@ def main(
                 raise AddressInUse(port) from error
             raise click.Abort from error
     else:
+        logging.getLogger("fava").setLevel(logging.DEBUG)
         if profile:
             app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
                 app.wsgi_app,

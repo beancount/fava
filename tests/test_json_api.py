@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import datetime
-import hashlib
-import re
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -10,12 +8,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.context import g
-from fava.core.fava_options import InsertEntryOption
+from fava.core.file import _sha256_str
 from fava.core.file import get_entry_slice
-from fava.core.file import insert_entry
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
@@ -282,46 +278,46 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     assert "Trying to read a non-source file" in err_msg
 
 
-def test_api_source_put(
-    test_client: FlaskClient,
-    example_ledger: FavaLedger,
-) -> None:
-    path = Path(example_ledger.beancount_file_path)
+def test_api_source_put(app_in_tmp_dir: Flask) -> None:
+    test_client = app_in_tmp_dir.test_client()
+    ledger = app_in_tmp_dir.config["LEDGERS"]["edit-example"]
+    path = Path(ledger.beancount_file_path)
 
-    url = "/long-example/api/source"
+    url = "/edit-example/api/source"
     # test bad request
     response = test_client.put(url)
     assert_api_error(response, "Invalid JSON request.")
 
-    payload = path.read_text("utf-8")
-    sha256sum = hashlib.sha256(path.read_bytes()).hexdigest()
+    source = path.read_text("utf-8")
+    changed_source = source + "\n;comment"
+    sha256sum = _sha256_str(source)
 
     # change source
     response = test_client.put(
         url,
         json={
-            "source": "asdf" + payload,
+            "source": changed_source,
             "sha256sum": sha256sum,
             "file_path": str(path),
         },
     )
-    sha256sum = hashlib.sha256(path.read_bytes()).hexdigest()
+    sha256sum = _sha256_str(changed_source)
     assert_api_success(response, sha256sum)
 
     # check if the file has been written
-    assert path.read_text("utf-8") == "asdf" + payload
+    assert path.read_text("utf-8") == changed_source
 
     # write original source file
     result = test_client.put(
         url,
         json={
-            "source": payload,
+            "source": source,
             "sha256sum": sha256sum,
             "file_path": str(path),
         },
     )
     assert result.status_code == 200
-    assert path.read_text("utf-8") == payload
+    assert path.read_text("utf-8") == source
 
 
 def test_api_format_source(
@@ -356,51 +352,35 @@ def test_api_format_source_options(
         assert_api_success(response, align(payload, 90))
 
 
-def test_api_source_slice_delete(
-    test_client: FlaskClient,
-    example_ledger: FavaLedger,
-) -> None:
-    path = Path(example_ledger.beancount_file_path)
-    contents = path.read_text("utf-8")
+def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
+    test_client = app_in_tmp_dir.test_client()
+    ledger = app_in_tmp_dir.config["LEDGERS"]["edit-example"]
+    path = Path(ledger.beancount_file_path)
 
-    url = "/long-example/api/source_slice"
+    contents = path.read_text("utf-8")
+    assert '2016-05-03 * "Chichipotle" "Eating out with Joe"' in contents
+
+    url = "/edit-example/api/source_slice"
     # test bad request
     response = test_client.delete(url)
     assert_api_error(
-        response,
-        "Invalid API request: Parameter `entry_hash` is missing.",
+        response, "Invalid API request: Parameter `entry_hash` is missing."
     )
 
-    entry = next(
-        entry
-        for entry in example_ledger.all_entries_by_type.Transaction
-        if entry.payee == "Chichipotle"
-        and entry.date == datetime.date(2016, 5, 3)
-    )
+    entry = ledger.all_entries[-1]
     entry_hash = hash_entry(entry)
     _entry_source, sha256sum = get_entry_slice(entry)
 
     # delete entry
     response = test_client.delete(
         url,
-        query_string={
-            "entry_hash": entry_hash,
-            "sha256sum": sha256sum,
-        },
+        query_string={"entry_hash": entry_hash, "sha256sum": sha256sum},
     )
     assert_api_success(response, f"Deleted entry {entry_hash}.")
-
-    assert path.read_text("utf-8") != contents
-
-    filename, lineno = get_position(entry)
-    insert_option = InsertEntryOption(
-        datetime.date(1, 1, 1),
-        re.compile(".*"),
-        filename,
-        lineno,
+    assert (
+        '2016-05-03 * "Chichipotle" "Eating out with Joe"'
+        not in path.read_text("utf-8")
     )
-    insert_entry(entry, filename, [insert_option], 59, 2)
-    assert path.read_text("utf-8") == contents
 
 
 def test_api_add_entries(

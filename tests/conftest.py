@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
@@ -173,6 +174,17 @@ def app(test_data_dir: Path) -> Flask:
         ],
         load=True,
     )
+    fava_app.testing = True
+    return fava_app
+
+
+@pytest.fixture()
+def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
+    """Get a Fava Flask app in a tmp_dir."""
+    ledger_path = tmp_path / "edit-example.beancount"
+    shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
+    ledger_path.chmod(tmp_path.stat().st_mode)
+    fava_app = create_app([str(ledger_path)], load=True)
     fava_app.testing = True
     return fava_app
 

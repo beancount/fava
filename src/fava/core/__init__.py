@@ -185,7 +185,6 @@ class FavaLedger:
 
     __slots__ = (
         "_is_encrypted",
-        "_watcher",
         "accounts",
         "accounts",
         "all_entries",
@@ -205,6 +204,7 @@ class FavaLedger:
         "options",
         "prices",
         "query_shell",
+        "watcher",
     )
 
     #: List of all (unfiltered) entries.
@@ -263,7 +263,7 @@ class FavaLedger:
         #: A :class:`.AccountDict` module - details about the accounts.
         self.accounts = AccountDict(self)
 
-        self._watcher = Watcher()
+        self.watcher = Watcher()
 
         self.load_file()
 
@@ -294,7 +294,7 @@ class FavaLedger:
         self.errors.extend(errors)
 
         if not self._is_encrypted:
-            self._watcher.update(*self.paths_to_watch())
+            self.watcher.update(*self.paths_to_watch())
 
         # Call load_file of all modules.
         self.accounts.load_file()
@@ -329,7 +329,7 @@ class FavaLedger:
     @property
     def mtime(self) -> int:
         """The timestamp to the latest change of the underlying files."""
-        return self._watcher.last_checked
+        return self.watcher.last_checked
 
     @property
     def root_accounts(self) -> tuple[str, str, str, str, str]:
@@ -375,7 +375,7 @@ class FavaLedger:
         # We can't reload an encrypted file, so act like it never changes.
         if self._is_encrypted:
             return False
-        changed = self._watcher.check()
+        changed = self.watcher.check()
         if changed:
             self.load_file()
         return changed

@@ -1,5 +1,10 @@
 [
   {
+    "basename": "edit-example.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/edit-example.beancount"
+  },
+  {
     "basename": "errors.beancount",
     "importers": [],
     "name": "TEST_DATA_DIR/errors.beancount"

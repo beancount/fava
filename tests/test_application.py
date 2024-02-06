@@ -190,7 +190,7 @@ def test_incognito(test_data_dir: Path) -> None:
     """Numbers get obfuscated in incognito mode."""
     app = create_app([test_data_dir / "example.beancount"], incognito=True)
     test_client = app.test_client()
-    result = test_client.get("/example/balance_sheet/")
+    result = test_client.get("/example/journal/")
     assert result.status_code == 200
     assert "XXX" in result.get_data(as_text=True)
 

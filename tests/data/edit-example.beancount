@@ -1,0 +1,23 @@
+option "title" "Edit Example"
+option "operating_currency" "USD"
+plugin "beancount.plugins.auto_accounts"
+
+2014-01-04 * "Kin Soy" "Eating out with Sue"
+  Liabilities:US:Chase:Slate                       -38.48 USD
+  Expenses:Food:Restaurant                          38.48 USD
+
+2014-01-08 * "Chichipotle" "Eating out with Dan"
+  Liabilities:US:Chase:Slate                       -23.57 USD
+  Expenses:Food:Restaurant                          23.57 USD
+
+2014-01-10 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -73.28 USD
+  Expenses:Food:Groceries                           73.28 USD
+
+2014-01-11 * "Goba Goba" "Eating out with Bob"
+  Liabilities:US:Chase:Slate                       -30.94 USD
+  Expenses:Food:Restaurant                          30.94 USD
+
+2016-05-03 * "Chichipotle" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -21.70 USD
+  Expenses:Food:Restaurant                          21.70 USD
