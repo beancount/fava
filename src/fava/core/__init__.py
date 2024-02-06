@@ -44,7 +44,7 @@ from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
-from fava.core.watcher import Watcher
+from fava.core.watcher import WatchfilesWatcher
 from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import dateranges
@@ -260,7 +260,7 @@ class FavaLedger:
         #: A :class:`.AccountDict` module - details about the accounts.
         self.accounts = AccountDict(self)
 
-        self.watcher = Watcher()
+        self.watcher = WatchfilesWatcher()
 
         self.load_file()
 

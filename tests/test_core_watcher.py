@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.core.watcher import Watcher
+from fava.core.watcher import WatchfilesWatcher
 
 if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path
@@ -65,3 +66,46 @@ def test_watcher_folder(watcher_paths: WatcherTestSet) -> None:
     (watcher_paths.folder / "bar2").mkdir()
 
     assert watcher.check()
+
+
+def _watcher_check_within_one_second(watcher: WatchfilesWatcher) -> bool:
+    for _ in range(200):
+        if watcher.check():
+            return True
+        time.sleep(0.005)
+
+    return False
+
+
+def test_watchfiles_watcher(watcher_paths: WatcherTestSet) -> None:
+    watcher = WatchfilesWatcher()
+    with watcher:
+        assert not watcher.check()  # No thread set up yet.
+
+    with watcher:
+        watcher.update([watcher_paths.file1, watcher_paths.file2], [])
+        assert not watcher.check()
+        watcher_paths.file1.write_text("test2")
+        assert _watcher_check_within_one_second(watcher)
+
+        watcher.update([watcher_paths.file1, watcher_paths.file2], [])
+        assert not watcher.check()
+        watcher_paths.file1.write_text("test2")
+        assert _watcher_check_within_one_second(watcher)
+
+        watcher.update([watcher_paths.file1], [])
+        assert not watcher.check()
+        watcher_paths.file1.write_text("test2")
+        assert _watcher_check_within_one_second(watcher)
+
+        # notify of change we already detected
+        watcher.notify(watcher_paths.file1)
+        assert not watcher.check()
+
+        # delete
+        watcher_paths.file1.unlink()
+        assert _watcher_check_within_one_second(watcher)
+
+        # notify of deleted file
+        watcher.notify(watcher_paths.file1)
+        assert watcher.check()

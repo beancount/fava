@@ -3,13 +3,49 @@
 from __future__ import annotations
 
 import abc
+import atexit
 import logging
+import threading
+from itertools import chain
 from os import walk
 from pathlib import Path
 from time import time_ns
 from typing import Iterable
+from typing import TYPE_CHECKING
+
+from watchfiles import watch
+
+if TYPE_CHECKING:  # pragma: no cover
+    import types
+
 
 log = logging.getLogger(__name__)
+
+
+class _WatchfilesThread(threading.Thread):
+    def __init__(self, paths: list[Path], mtime: int) -> None:
+        super().__init__(daemon=True)
+        self._stop_event = threading.Event()
+        self.paths = paths
+        self.mtime = mtime
+
+    def stop(self) -> None:
+        """Set the stop event for watchfiles and join the thread."""
+        self._stop_event.set()
+        self.join()
+
+    def run(self) -> None:
+        """Watch for changes."""
+        atexit.register(self.stop)
+
+        for changes in watch(*self.paths, stop_event=self._stop_event):
+            for _, path in changes:
+                try:
+                    change_mtime = Path(path).stat().st_mtime_ns
+                except FileNotFoundError:
+                    change_mtime = time_ns()
+                self.mtime = max(change_mtime, self.mtime)
+            log.debug("new mtime: %s", self.mtime)
 
 
 class WatcherBase(abc.ABC):
@@ -54,6 +90,44 @@ class WatcherBase(abc.ABC):
     @abc.abstractmethod
     def _get_latest_mtime(self) -> int:
         """Get the latest change mtime."""
+
+
+class WatchfilesWatcher(WatcherBase):
+    """A file and folder watcher using the watchfiles library."""
+
+    def __init__(self) -> None:
+        self.last_checked = 0
+        self.last_notified = 0
+        self._paths: list[Path] = []
+        self._thread: _WatchfilesThread | None = None
+
+    def update(self, files: Iterable[Path], folders: Iterable[Path]) -> None:
+        """Update the folders/files to watch."""
+        new_paths = [p for p in chain(files, folders) if p.exists()]
+        if self._thread and new_paths == self._paths:
+            self.check()
+            return
+        self._paths = new_paths
+        if self._thread is not None:
+            self._thread.stop()
+        self._thread = _WatchfilesThread(self._paths, self.last_checked)
+        self._thread.start()
+        self.check()
+
+    def __enter__(self) -> None:
+        pass
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: types.TracebackType | None,
+    ) -> None:
+        if self._thread:
+            self._thread.stop()
+
+    def _get_latest_mtime(self) -> int:
+        return self._thread.mtime if self._thread else 0
 
 
 class Watcher(WatcherBase):

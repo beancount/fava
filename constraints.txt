@@ -4,6 +4,8 @@ alabaster==0.7.16
     # via sphinx
 altgraph==0.17.4
     # via pyinstaller
+anyio==4.3.0
+    # via watchfiles
 astroid==3.1.0
     # via pylint
 babel==2.14.0
@@ -84,7 +86,9 @@ httplib2==0.22.0
 identify==2.5.35
     # via pre-commit
 idna==3.6
-    # via requests
+    # via
+    #   anyio
+    #   requests
 imagesize==1.4.1
     # via sphinx
 importlib-metadata==7.0.2
@@ -252,6 +256,8 @@ six==1.16.0
     # via
     #   pdfminer2
     #   python-dateutil
+sniffio==1.3.1
+    # via anyio
 snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5
@@ -300,6 +306,7 @@ virtualenv==20.25.1
     # via
     #   pre-commit
     #   tox
+watchfiles==0.21.0
 werkzeug==3.0.1
     # via flask
 zipp==3.17.0
