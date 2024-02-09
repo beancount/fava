@@ -53,6 +53,7 @@ def test_format_decimal_locale(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fmt = example_ledger.format_decimal
+    assert fmt(Decimal("1111111.333"), "USD") == "1111111.33"
 
     monkeypatch.setattr(example_ledger.fava_options, "locale", "en_IN")
     fmt.load_file()
@@ -64,4 +65,6 @@ def test_format_decimal_locale(
     fmt.load_file()
     assert fmt(Decimal("1111111.333"), "USD") == "1.111.111,33"
 
+    monkeypatch.undo()
     fmt.load_file()
+    assert fmt(Decimal("1111111.333"), "USD") == "1111111.33"

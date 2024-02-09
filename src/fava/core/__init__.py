@@ -9,7 +9,6 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Iterable
 from typing import TYPE_CHECKING
-from typing import TypeVar
 
 from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
@@ -65,23 +64,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.helpers import BeancountError
     from fava.util.date import DateRange
     from fava.util.date import Interval
-
-
-MODULES = [
-    "accounts",
-    "attributes",
-    "budgets",
-    "charts",
-    "commodities",
-    "extensions",
-    "file",
-    "format_decimal",
-    "misc",
-    "query_shell",
-    "ingest",
-]
-
-T = TypeVar("T")
 
 
 class FilteredLedger:
@@ -314,8 +296,18 @@ class FavaLedger:
         if not self._is_encrypted:
             self._watcher.update(*self.paths_to_watch())
 
-        for mod in MODULES:
-            getattr(self, mod).load_file()
+        # Call load_file of all modules.
+        self.accounts.load_file()
+        self.attributes.load_file()
+        self.budgets.load_file()
+        self.charts.load_file()
+        self.commodities.load_file()
+        self.extensions.load_file()
+        self.file.load_file()
+        self.format_decimal.load_file()
+        self.misc.load_file()
+        self.query_shell.load_file()
+        self.ingest.load_file()
 
         self.extensions.after_load_file()
 
