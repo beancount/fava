@@ -37,6 +37,11 @@ def test_get_active_years(load_doc_entries: list[Directive]) -> None:
         "FY2012",
         "FY2011",
     ]
+    assert get_active_years(load_doc_entries, FiscalYearEnd(15, 31)) == [
+        "FY2012",
+        "FY2011",
+        "FY2010",
+    ]
 
 
 def test_payee_accounts(example_ledger: FavaLedger) -> None:
