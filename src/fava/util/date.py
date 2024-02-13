@@ -229,7 +229,7 @@ def local_today() -> datetime.date:
     return datetime.date.today()  # noqa: DTZ011
 
 
-def substitute(  # noqa: PLR0914
+def substitute(  # noqa: PLR0912 PLR0914
     string: str,
     fye: FiscalYearEnd | None = None,
 ) -> str:
@@ -245,6 +245,7 @@ def substitute(  # noqa: PLR0914
         :func:`parse_date`.  Can compute addition and subtraction.
     """
     # pylint: disable=too-many-locals
+    # pylint: disable=too-many-branches
     today = local_today()
 
     for match in VARIABLE_RE.finditer(string):
@@ -256,6 +257,8 @@ def substitute(  # noqa: PLR0914
             start, end = get_fiscal_period(year, fye)
             if end and today >= end:
                 year += 1
+            elif start and today < start:
+                year -= 1
             year += plusminus * mod
             string = string.replace(complete_match, f"FY{year}")
         if interval == "year":
@@ -272,10 +275,15 @@ def substitute(  # noqa: PLR0914
             if end and target >= end:
                 start = end
             if start:
+                if target < start:
+                    start = start.replace(year=start.year - 1)
+                fiscal_year = (
+                    start.year if fye and fye.month > 12 else start.year + 1
+                )
                 quarter = int(((target.month - start.month) % 12) / 3)
                 string = string.replace(
                     complete_match,
-                    f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
+                    f"FY{fiscal_year}-Q{(quarter % 4) + 1}",
                 )
         if interval == "quarter":
             quarter_today = (today.month - 1) // 3 + 1
@@ -407,8 +415,21 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
     try:
         date = datetime.date.fromisoformat(f"2001-{fye}")
     except ValueError:
+        pass
+    else:
+        return FiscalYearEnd(date.month, date.day)
+
+    try:
+        match = re.match(r"^(\d{2})-(\d{2})$", fye)
+        if not match:
+            return None
+        month, day = match.groups()
+        month_int = int(month)
+        real_month = str(month_int - 12).zfill(2) if month_int > 12 else month
+        date = datetime.date.fromisoformat(f"2001-{real_month}-{day}")
+    except ValueError:
         return None
-    return FiscalYearEnd(date.month, date.day)
+    return FiscalYearEnd(month_int, date.day)
 
 
 def get_fiscal_period(
@@ -433,9 +454,15 @@ def get_fiscal_period(
     if fye is None:
         start_date = datetime.date(year=year, month=1, day=1)
     else:
+        if fye.month > 12:
+            real_month = fye.month - 12
+            start_year = year
+        else:
+            real_month = fye.month
+            start_year = year - 1
         start_date = datetime.date(
-            year=year - 1,
-            month=fye.month,
+            year=start_year,
+            month=real_month,
             day=fye.day,
         ) + timedelta(days=1)
         # Special case 02-28 because of leap years
