@@ -206,7 +206,7 @@ def test_fiscal_substitute(
         if output is None:
             with pytest.raises(
                 ValueError,
-                match="Cannot use fiscal_quarter if fiscal year",
+                match="Cannot use fiscal quarter if fiscal year",
             ):
                 substitute(string, fye)
         else:
@@ -370,6 +370,7 @@ def test_get_fiscal_period(
         ("12-31", 12, 31),
         ("06-30", 6, 30),
         ("02-28", 2, 28),
+        ("15-31", 15, 31),
     ],
 )
 def test_parse_fye_string(fye_str: str, month: int, day: int) -> None:

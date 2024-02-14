@@ -78,13 +78,15 @@ Default: `12-31`
 The last day of the fiscal (financial or tax) period for accounting purposes in
 `%m-%d` format. Allows for the use of `FY2018`, `FY2018-Q3`, `fiscal_year` and
 `fiscal_quarter` in the time filter, and `FY2018` as the start date, end date,
-or both dates in a date range in the time filter.
+or both dates in a date range in the time filter. Month can be a value larger
+than `12` to have `FY2018` end in 2019 for example.
 
 Examples are:
 
-- `09-30` - US federal government
-- `06-30` - Australia / NZ
 - `04-05` - UK
+- `06-30` - Australia / NZ
+- `09-30` - US federal government
+- `15-31` - Japan
 
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.
