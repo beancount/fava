@@ -109,7 +109,7 @@ class FilteredLedger:
         self._date_first = None
         self._date_last = None
         for entry in self.entries:
-            if isinstance(entry, (Transaction,)):
+            if isinstance(entry, Transaction):
                 self._date_first = entry.date
                 break
         for entry in reversed(self.entries):
