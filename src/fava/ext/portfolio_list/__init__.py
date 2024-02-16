@@ -121,7 +121,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
             and regexer.match(str(entry.meta[metadata_key]))
         ]
         return Portfolio(
-            f"Accounts with '{metadata_key}' metadata matching: '{pattern }'",
+            f"Accounts with '{metadata_key}' metadata matching: '{pattern}'",
             self._portfolio_data(selected_nodes),
         )
 

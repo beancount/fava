@@ -141,6 +141,9 @@ extend-ignore = [
     "COM812",   # handled by formatter
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
+    "E301",     # handled by formatter
+    "E302",     # handled by formatter
+    "E305",     # handled by formatter
     "EM101",    # allow long strings as error messages
     "EM102",    # allow f-strings as error messages
     "ISC001",   # handled by formatter
