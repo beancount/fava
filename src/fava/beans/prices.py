@@ -45,13 +45,13 @@ def _keep_last_per_day(
     prices: list[PricePoint],
 ) -> Iterable[PricePoint]:
     """In a sorted non-empty list of prices, keep the last one for each day."""
-    last: PricePoint | None = None
-    for price in prices:
-        if last is not None and price[0] > last[0]:
+    prices_iter = iter(prices)
+    last = next(prices_iter)
+    for price in prices_iter:
+        if price[0] > last[0]:
             yield last
         last = price
-    if last is not None:
-        yield last
+    yield last
 
 
 class FavaPriceMap:

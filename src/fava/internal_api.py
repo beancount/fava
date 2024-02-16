@@ -156,7 +156,7 @@ class HierarchyChart:
     type: Literal["hierarchy"] = "hierarchy"
 
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     ChartData = BalancesChart | BarChart | HierarchyChart
 
 

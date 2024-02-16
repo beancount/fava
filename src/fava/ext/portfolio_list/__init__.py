@@ -16,7 +16,7 @@ from fava.core.conversion import cost_or_value
 from fava.ext import FavaExtensionBase
 from fava.helpers import FavaAPIError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.funcs import ResultType
     from fava.core.tree import Tree
     from fava.core.tree import TreeNode

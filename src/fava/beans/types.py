@@ -8,7 +8,7 @@ from typing import TypedDict
 from fava.beans.abc import Directive
 from fava.helpers import BeancountError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.display_context import DisplayContext
 
 

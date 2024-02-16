@@ -38,7 +38,7 @@ def setup_logging() -> None:
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     Item = TypeVar("Item")
     P = ParamSpec("P")
     T = TypeVar("T")

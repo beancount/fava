@@ -104,9 +104,11 @@ strict = true
 [tool.pylint.'messages control']
 disable = [
     "too-few-public-methods",
-    "too-many-branches",
+    "too-many-branches",              # is checked by ruff (PLR0912)
     "too-many-instance-attributes",
+    "too-many-locals",                # is checked by ruff (PLR0914)
     "duplicate-code",
+    "stop-iteration-return",
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives
     "unsubscriptable-object",        # type-checking like, had false-positives

@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 from fava.beans import create
 from fava.beans.ingest import BeanImporterProtocol
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
     from fava.beans.abc import Directive

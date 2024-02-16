@@ -13,10 +13,15 @@ from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum
 from itertools import tee
-from typing import Iterable
-from typing import Iterator
+from typing import TYPE_CHECKING
 
 from flask_babel import gettext  # type: ignore[import-untyped]
+
+if TYPE_CHECKING:  # pragma: no cover
+    from typing import Iterable
+    from typing import Iterator
+    from typing import Never
+
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
 
@@ -162,6 +167,10 @@ def get_prev_interval(
     return date
 
 
+def _assert_never(_: Never) -> Never:  # pragma: no cover
+    raise AssertionError("Expected code to be unreachable")
+
+
 def get_next_interval(  # noqa: PLR0911
     date: datetime.date,
     interval: Interval,
@@ -191,9 +200,9 @@ def get_next_interval(  # noqa: PLR0911
             return date + timedelta(7 - date.weekday())
         if interval is Interval.DAY:
             return date + timedelta(1)
+        return _assert_never(interval)  # pragma: no cover
     except (ValueError, OverflowError):
         return datetime.date.max
-    raise NotImplementedError
 
 
 def interval_ends(
@@ -270,7 +279,6 @@ def substitute(
         'week' have been replaced by the corresponding string understood by
         :func:`parse_date`.  Can compute addition and subtraction.
     """
-    # pylint: disable=too-many-locals
     today = local_today()
     fye = fye or END_OF_YEAR
 
@@ -514,4 +522,4 @@ def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
     if interval is Interval.YEAR:
         date = datetime.date(date.year, 1, 1)
         return (get_next_interval(date, Interval.YEAR) - date).days
-    raise NotImplementedError
+    return _assert_never(interval)  # pragma: no cover

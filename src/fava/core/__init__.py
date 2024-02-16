@@ -271,7 +271,6 @@ class FavaLedger:
         """Load the main file and all included files and set attributes."""
         # use the internal function to disable cache
         if not self._is_encrypted:
-            # pylint: disable=protected-access
             self.all_entries, self.errors, self.options = _load(
                 [(self.beancount_file_path, True)],
                 None,

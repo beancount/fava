@@ -148,7 +148,6 @@ class ChartModule(FavaModule):
             conversion: The conversion to use.
             invert: invert all numbers.
         """
-        # pylint: disable=too-many-locals
         prices = self.ledger.prices
 
         # limit the bar charts to 100 intervals

@@ -7,7 +7,7 @@ from typing import runtime_checkable
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Callable
 

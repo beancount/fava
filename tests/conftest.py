@@ -1,7 +1,5 @@
 """Test fixtures."""
 
-# pylint: disable=redefined-outer-name
-
 from __future__ import annotations
 
 import os
@@ -229,7 +227,7 @@ def budgets_doc(load_doc_custom_entries: list[Custom]) -> BudgetDict:
     return budgets
 
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     #: Slugs of the ledgers that are loaded for the test cases.
     LedgerSlug: TypeAlias = Literal[
         "example",
