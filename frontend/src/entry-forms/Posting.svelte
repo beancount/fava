@@ -14,7 +14,6 @@
   export let date: string | undefined;
   export let move: (arg: { from: number; to: number }) => void;
   export let remove: () => void;
-  export let add: () => void;
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
   $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
@@ -79,14 +78,6 @@
     bind:value={posting.amount}
   />
   <AddMetadataButton bind:meta={posting.meta} />
-  <button
-    type="button"
-    class="muted round add-row"
-    on:click={add}
-    title={_("Add posting")}
-  >
-    +
-  </button>
   <EntryMetadata bind:meta={posting.meta} />
 </div>
 
@@ -104,12 +95,8 @@
     cursor: initial;
   }
 
-  div .add-row {
-    display: none;
-  }
-
-  div:last-child .add-row {
-    display: initial;
+  div:last-child .remove-row {
+    visibility: hidden;
   }
 
   div :global(.amount) {

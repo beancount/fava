@@ -119,15 +119,6 @@
       />
       <AddMetadataButton bind:meta={entry.meta} />
     </label>
-    <button
-      type="button"
-      class="muted round"
-      on:click={addPosting}
-      title={_("Add posting")}
-      tabindex={-1}
-    >
-      p
-    </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
   <div class="flex-row">
@@ -139,7 +130,6 @@
       {index}
       {suggestions}
       date={entry.date}
-      add={addPosting}
       move={movePosting}
       remove={() => {
         removePosting(posting);
