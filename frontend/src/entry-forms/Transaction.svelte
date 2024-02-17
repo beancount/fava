@@ -91,6 +91,17 @@
       entry.postings = entry.postings;
     }
   }
+
+  $: {
+    const isEmpty = (posting: Posting | undefined) =>
+      posting !== undefined &&
+      posting.account.length === 0 &&
+      posting.amount.length === 0 &&
+      Object.keys(posting.meta).length === 0;
+    if (!isEmpty(entry.postings.at(entry.postings.length - 1))) {
+      addPosting();
+    }
+  }
 </script>
 
 <div>
