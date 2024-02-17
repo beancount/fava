@@ -204,7 +204,7 @@ export class Transaction extends EntryBase {
     this.narration = "";
     this.tags = [];
     this.links = [];
-    this.postings = [emptyPosting(), emptyPosting()];
+    this.postings = [emptyPosting()];
   }
 
   toString(): string {
