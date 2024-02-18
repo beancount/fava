@@ -1,3 +1,4 @@
+import { is_empty } from "./lib/objects";
 import type { Validator } from "./lib/validation";
 import {
   array,
@@ -12,12 +13,6 @@ import {
   union,
 } from "./lib/validation";
 
-export interface Posting {
-  account: string;
-  amount: string;
-  meta: EntryMetadata;
-}
-
 const entry_meta_validator = record(
   defaultValue(
     union(boolean, number, string),
@@ -25,23 +20,37 @@ const entry_meta_validator = record(
   ),
 );
 
-const postingValidator = object({
-  account: string,
-  amount: string,
-  meta: defaultValue(entry_meta_validator, () => ({})),
-});
+/** A posting. */
+export class Posting {
+  account: string;
+  amount: string;
+  meta: EntryMetadata;
+
+  constructor() {
+    this.account = "";
+    this.amount = "";
+    this.meta = {};
+  }
+
+  is_empty(): boolean {
+    return !this.account && !this.amount && is_empty(this.meta);
+  }
+
+  private static raw_validator = object({
+    account: string,
+    amount: string,
+    meta: defaultValue(entry_meta_validator, () => ({})),
+  });
+
+  static validator: Validator<Posting> = (json) =>
+    Posting.raw_validator(json).map((value) =>
+      Object.assign(new Posting(), value),
+    );
+}
 
 interface Amount {
   number: string;
   currency: string;
-}
-
-export function emptyPosting(): Posting {
-  return {
-    account: "",
-    amount: "",
-    meta: {},
-  };
 }
 
 export type EntryMetadata = Record<string, string | boolean | number>;
@@ -204,7 +213,7 @@ export class Transaction extends EntryBase {
     this.narration = "";
     this.tags = [];
     this.links = [];
-    this.postings = [emptyPosting(), emptyPosting()];
+    this.postings = [];
   }
 
   toString(): string {
@@ -215,7 +224,16 @@ export class Transaction extends EntryBase {
     );
   }
 
-  private static raw_validator = object<Omit<Transaction, "toString">>({
+  toJSON(): this {
+    return {
+      ...this,
+      postings: this.postings.filter((p) => !p.is_empty()),
+    };
+  }
+
+  private static raw_validator = object<
+    Omit<Transaction, "toString" | "toJSON">
+  >({
     ...validatorBase,
     t: constant("Transaction"),
     flag: string,
@@ -223,7 +241,7 @@ export class Transaction extends EntryBase {
     narration: optional_string,
     tags: array(string),
     links: array(string),
-    postings: array(postingValidator),
+    postings: array(Posting.validator),
   });
 
   static validator: Validator<Transaction> = (json) =>

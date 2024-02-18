@@ -6,8 +6,8 @@
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { emptyPosting } from "../entries";
-  import type { Posting, Transaction } from "../entries";
+  import { Posting } from "../entries";
+  import type { Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { payees } from "../stores";
@@ -21,10 +21,6 @@
 
   function removePosting(posting: Posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
-  }
-
-  function addPosting() {
-    entry.postings = entry.postings.concat(emptyPosting());
   }
 
   $: payee = entry.payee;
@@ -91,6 +87,11 @@
       entry.postings = entry.postings;
     }
   }
+
+  // Always have one empty posting at the end.
+  $: if (!entry.postings.some((p) => p.is_empty())) {
+    entry.postings = entry.postings.concat(new Posting());
+  }
 </script>
 
 <div>
@@ -119,15 +120,6 @@
       />
       <AddMetadataButton bind:meta={entry.meta} />
     </label>
-    <button
-      type="button"
-      class="muted round"
-      on:click={addPosting}
-      title={_("Add posting")}
-      tabindex={-1}
-    >
-      p
-    </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
   <div class="flex-row">
@@ -139,7 +131,6 @@
       {index}
       {suggestions}
       date={entry.date}
-      add={addPosting}
       move={movePosting}
       remove={() => {
         removePosting(posting);
