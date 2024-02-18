@@ -1,18 +1,20 @@
 const OFF = 0;
 const ON = "error";
 
-const airbnbConfigOverrides = {
-  "max-classes-per-file": OFF,
-  "class-methods-use-this": OFF,
-  "no-param-reassign": [ON, { props: false }],
+const misc = {
+  "no-param-reassign": ON,
   "no-restricted-syntax": [
     ON,
     "ForInStatement",
     "LabelStatement",
     "WithStatement",
   ],
-  "no-underscore-dangle": OFF,
-  "import/prefer-default-export": OFF,
+  "@typescript-eslint/consistent-type-imports": ON,
+  "@typescript-eslint/explicit-module-boundary-types": ON,
+  curly: [ON, "all"],
+};
+
+const namingConvention = {
   "@typescript-eslint/naming-convention": [
     ON,
     {
@@ -44,8 +46,6 @@ const sortImports = {
 
 module.exports = {
   extends: [
-    "airbnb-base",
-    "airbnb-typescript/base",
     "plugin:deprecation/recommended",
     "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
@@ -54,6 +54,7 @@ module.exports = {
     "plugin:svelte/prettier",
     "prettier",
   ],
+  plugins: ["import"],
   env: { browser: true },
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -62,11 +63,9 @@ module.exports = {
     extraFileExtensions: [".svelte"],
   },
   rules: {
-    ...airbnbConfigOverrides,
+    ...misc,
+    ...namingConvention,
     ...sortImports,
-    "@typescript-eslint/consistent-type-imports": ON,
-    "@typescript-eslint/explicit-module-boundary-types": ON,
-    curly: [ON, "all"],
   },
   overrides: [
     {
@@ -77,13 +76,9 @@ module.exports = {
       },
       rules: {
         "svelte/button-has-type": ON,
-        "no-self-assign": OFF,
-        "no-undef": OFF,
-        "no-undef-init": OFF,
-        "import/no-mutable-exports": OFF,
+        // These need to be disabled since some template parts are not fully typed.
         "@typescript-eslint/no-unsafe-argument": OFF,
         "@typescript-eslint/no-unsafe-assignment": OFF,
-        "@typescript-eslint/no-unsafe-call": OFF,
         "@typescript-eslint/no-unsafe-member-access": OFF,
         // Has some false positives in Svelte files were we have if()
         // checks to trigger re-computations:

@@ -228,7 +228,9 @@ export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
         node.removeAttribute("data-key");
       };
     }
-    return () => {};
+    return () => {
+      // pass
+    };
   };
   let destroy = setup(spec);
 
