@@ -56,6 +56,7 @@
   <slot />
   <button
     type="button"
+    class="show-charts"
     on:click={() => {
       showCharts.update((v) => !v);
     }}
@@ -76,3 +77,11 @@
     {/if}
   {/if}
 </div>
+
+<style>
+  @media print {
+    button.show-charts {
+      display: none;
+    }
+  }
+</style>
