@@ -6,8 +6,8 @@
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { emptyPosting, isEmptyPosting } from "../entries";
-  import type { Posting, Transaction } from "../entries";
+  import { Posting } from "../entries";
+  import type { Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { payees } from "../stores";
@@ -89,8 +89,8 @@
   }
 
   // Always have one empty posting at the end.
-  $: if (!entry.postings.some(isEmptyPosting)) {
-    entry.postings = entry.postings.concat(emptyPosting());
+  $: if (!entry.postings.some((p) => p.is_empty())) {
+    entry.postings = entry.postings.concat(new Posting());
   }
 </script>
 
