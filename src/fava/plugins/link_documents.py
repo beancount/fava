@@ -14,10 +14,8 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 from fava.beans.abc import Document
-from fava.beans.abc import Transaction
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import get_position
-from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
@@ -60,7 +58,10 @@ def link_documents(
         if not disk_docs:
             continue
 
-        hash_ = hash_entry(entry)[:8]
+        # Link the documents by using the entry date. This means that this will
+        # not necessarily be unique, but it shows which date the linked entry
+        # is on (and it will probably narrow it down enough)
+        entry_link = f"dok-{entry.date}"
         entry_accounts = get_entry_accounts(entry)
         entry_filename, _ = get_position(entry)
         for disk_doc in disk_docs:
@@ -91,16 +92,16 @@ def link_documents(
                 doc: Document = entries[j]  # type: ignore[assignment]
                 entries[j] = replace(
                     doc,
-                    links=add_to_set(doc.links, hash_),
+                    links=add_to_set(doc.links, entry_link),
                     tags=add_to_set(doc.tags, "linked"),
                 )
 
             # The other entry types do not support links, so only add links for
             # txns.
-            if isinstance(entry, Transaction):
+            if hasattr(entry, "links"):
                 entries[index] = replace(
                     entry,
-                    links=add_to_set(entry.links, hash_),
+                    links=add_to_set(entry.links, entry_link),
                 )
 
     return entries, errors
