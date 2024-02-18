@@ -15,7 +15,7 @@
   export let className: string | undefined = undefined;
 
   $: checkValidity = (val: string) =>
-    !$accounts.length || $accounts.includes(val) || val.length === 0
+    !$accounts.length || $accounts.includes(val) || !val
       ? ""
       : _("Should be one of the declared accounts");
 

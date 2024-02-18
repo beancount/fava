@@ -1,3 +1,4 @@
+import { is_empty } from "./lib/objects";
 import type { Validator } from "./lib/validation";
 import {
   array,
@@ -42,6 +43,10 @@ export function emptyPosting(): Posting {
     amount: "",
     meta: {},
   };
+}
+
+export function isEmptyPosting(posting: Posting): boolean {
+  return !posting.account && !posting.amount && is_empty(posting.meta);
 }
 
 export type EntryMetadata = Record<string, string | boolean | number>;
@@ -204,7 +209,7 @@ export class Transaction extends EntryBase {
     this.narration = "";
     this.tags = [];
     this.links = [];
-    this.postings = [emptyPosting()];
+    this.postings = [];
   }
 
   toString(): string {
@@ -215,7 +220,16 @@ export class Transaction extends EntryBase {
     );
   }
 
-  private static raw_validator = object<Omit<Transaction, "toString">>({
+  toJSON(): this {
+    return {
+      ...this,
+      postings: this.postings.filter((p) => !isEmptyPosting(p)),
+    };
+  }
+
+  private static raw_validator = object<
+    Omit<Transaction, "toString" | "toJSON">
+  >({
     ...validatorBase,
     t: constant("Transaction"),
     flag: string,

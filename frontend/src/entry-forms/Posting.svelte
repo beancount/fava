@@ -103,10 +103,6 @@
     width: 220px;
   }
 
-  div:last-child :global(.amount) {
-    width: 192px;
-  }
-
   @media (width <= 767px) {
     div {
       padding-left: 0;

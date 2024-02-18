@@ -6,7 +6,7 @@
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { emptyPosting } from "../entries";
+  import { emptyPosting, isEmptyPosting } from "../entries";
   import type { Posting, Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
@@ -21,10 +21,6 @@
 
   function removePosting(posting: Posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
-  }
-
-  function addPosting() {
-    entry.postings = entry.postings.concat(emptyPosting());
   }
 
   $: payee = entry.payee;
@@ -92,15 +88,9 @@
     }
   }
 
-  $: {
-    const isEmpty = (posting: Posting | undefined) =>
-      posting !== undefined &&
-      posting.account.length === 0 &&
-      posting.amount.length === 0 &&
-      Object.keys(posting.meta).length === 0;
-    if (!isEmpty(entry.postings.at(entry.postings.length - 1))) {
-      addPosting();
-    }
+  // Always have one empty posting at the end.
+  $: if (!entry.postings.some(isEmptyPosting)) {
+    entry.postings = entry.postings.concat(emptyPosting());
   }
 </script>
 
