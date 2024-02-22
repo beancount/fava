@@ -17,7 +17,7 @@ repos:
         additional_dependencies:
           - "prettier@3.2.5"
           - "prettier-plugin-svelte@3.2.1"
-          - "svelte@4.2.11"
+          - "svelte@4.2.12"
       - id: stylelint
         name: stylelint
         language: node

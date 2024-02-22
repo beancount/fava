@@ -23,8 +23,8 @@
     "@types/d3-time-format": "^4.0.0",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^20.2.5",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
     "c8": "^9.0.0",
     "chokidar": "^3.5.1",
     "esbuild": "^0.20.0",
@@ -74,6 +74,6 @@
     "d3-time": "^3.0.0",
     "d3-time-format": "^4.1.0",
     "svelte": "^4.0.0",
-    "web-tree-sitter": "^0.20.8"
+    "web-tree-sitter": "^0.21.0"
   }
 }
