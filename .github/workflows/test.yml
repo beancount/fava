@@ -29,7 +29,7 @@ jobs:
           python-version: ${{ matrix.py }}
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
-      - run: python -m pip install -c constraints.txt tox
+      - run: python -m pip install -c constraints.txt tox tox-uv
       - run: touch src/fava/static/app.js
       - run: tox -e ${{ matrix.toxenv }}
   test-js:
@@ -75,7 +75,7 @@ jobs:
           python-version: "3.12"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
-      - run: python -m pip install -c constraints.txt tox
+      - run: python -m pip install -c constraints.txt tox tox-uv
       - run: tox -e lint
   build-pyinstaller:
     runs-on: "ubuntu-latest"
@@ -86,5 +86,5 @@ jobs:
           python-version: "3.12"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
-      - run: python -m pip install -c constraints.txt tox
+      - run: python -m pip install -c constraints.txt tox tox-uv
       - run: tox -e pyinstaller

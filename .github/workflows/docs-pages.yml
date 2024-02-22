@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
-      - run: python -m pip install -c constraints.txt tox
+      - run: python -m pip install -c constraints.txt tox tox-uv
       - run: tox -e docs
       - if: github.repository == 'beancount/fava'
         uses: actions/configure-pages@v4

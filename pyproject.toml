@@ -78,13 +78,14 @@ dev = [
     "sphinx",
     "sphinx-autodoc-typehints",
     "tox",
+    "tox-uv",
     "twine",
     "types-setuptools",
     "types-simplejson",
 ]
 
 [build-system]
-requires = ["setuptools>=60", "setuptools_scm>=8.0", "Babel>=2.7,<3"]
+requires = ["setuptools>=60", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
 build-backend = "_build_backend"
 backend-path = ["."]
 

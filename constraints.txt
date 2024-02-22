@@ -280,8 +280,10 @@ texttable==1.7.0
 tomlkit==0.12.4
     # via pylint
 tox==4.13.0
+    # via tox-uv
+tox-uv==1.4.0
 twine==5.0.0
-types-setuptools==69.1.0.20240217
+types-setuptools==69.1.0.20240223
 types-simplejson==3.19.0.20240218
 typing-extensions==4.10.0
     # via mypy
@@ -291,6 +293,8 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
+uv==0.1.11
+    # via tox-uv
 virtualenv==20.25.1
     # via
     #   pre-commit
