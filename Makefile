@@ -50,7 +50,8 @@ update-snapshots:
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints
 update-constraints:
-	pip-compile --quiet --resolver=backtracking --all-extras --strip-extras --upgrade --output-file constraints.txt pyproject.toml
+	uv pip compile --quiet --all-extras --upgrade --output-file constraints.txt pyproject.toml
+	uv pip compile --quiet --resolution=lowest --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
