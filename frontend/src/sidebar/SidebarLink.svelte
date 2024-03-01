@@ -1,40 +1,35 @@
 <script lang="ts">
+  import Link from "../components/Link.svelte";
   import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { base_url } from "../stores";
-  import { pathname, synced_query_string } from "../stores/url";
 
   export let report: string;
   export let name: string;
   export let key: KeySpec | undefined = undefined;
   export let remote: true | undefined = undefined;
   export let bubble: [number, "error" | "info"] | undefined = undefined;
-
-  $: href = remote ? report : `${$base_url}${report}/${$synced_query_string}`;
-  $: selected = remote ? false : href.includes($pathname);
 </script>
 
-<li>
-  <a class:selected {href} use:keyboardShortcut={key} data-remote={remote}>
+<li class="sidebar-link">
+  <Link {report} {key} {remote}>
     {name}
     {#if bubble && bubble[0] > 0}
       <span class="bubble" class:error={bubble[1] === "error"}>
         {bubble[0]}
       </span>
     {/if}
-  </a>
+  </Link>
   <slot />
 </li>
 
 <style>
-  a {
+  .sidebar-link :global(a) {
     display: block;
     padding: 0.25em 0.5em 0.25em 1em;
     color: inherit;
   }
 
-  a.selected,
-  a:hover {
+  .sidebar-link :global(a.selected),
+  :global(a:hover) {
     color: var(--sidebar-hover-color);
     background-color: var(--sidebar-border);
   }
@@ -49,7 +44,7 @@
     border: none;
   }
 
-  li a:first-child {
+  .sidebar-link :global(a:first-child) {
     flex: 1;
   }
 
