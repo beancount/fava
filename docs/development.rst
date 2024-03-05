@@ -28,6 +28,7 @@ Then this will get you up and running:
     python -m venv venv
     . venv/bin/activate
     pre-commit install  # add a git pre-commit hook to run linters
+    make src/fava/static/app.js # build the static frontend code
     pip install --editable .
 
 You can start Fava in the virtual environment as usual by running ``fava``.
