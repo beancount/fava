@@ -140,7 +140,7 @@ export class Router extends Events<"page-loaded"> {
     window.addEventListener("beforeunload", (event) => {
       const leaveMessage = this.shouldInterrupt();
       if (leaveMessage) {
-        event.returnValue = leaveMessage;
+        event.preventDefault();
       }
     });
 

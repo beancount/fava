@@ -19,7 +19,7 @@ blinker==1.7.0
     # via flask
 bottle==0.12.25
     # via beancount
-build==1.0.3
+build==1.1.1
 cachetools==5.3.3
     # via
     #   google-auth
@@ -66,9 +66,9 @@ flask-babel==4.0.0
 furo==2024.1.29
 google-api-core==2.17.1
     # via google-api-python-client
-google-api-python-client==2.119.0
+google-api-python-client==2.121.0
     # via beancount
-google-auth==2.28.1
+google-auth==2.28.2
     # via
     #   google-api-core
     #   google-api-python-client
@@ -87,7 +87,7 @@ idna==3.6
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.0.1
+importlib-metadata==7.0.2
     # via
     #   keyring
     #   twine
@@ -137,7 +137,7 @@ more-itertools==10.2.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.8.0
+mypy==1.9.0
 mypy-extensions==1.0.0
     # via mypy
 nh3==0.2.15
@@ -146,7 +146,7 @@ nodeenv==1.8.0
     # via pre-commit
 openpyxl==3.1.2
     # via pyexcel-xlsx
-packaging==23.2
+packaging==24.0
     # via
     #   build
     #   pyinstaller
@@ -155,9 +155,10 @@ packaging==23.2
     #   pytest
     #   sphinx
     #   tox
+    #   tox-uv
 pdfminer2==20151206
     # via beancount
-pkginfo==1.9.6
+pkginfo==1.10.0
     # via twine
 platformdirs==4.2.0
     # via
@@ -199,22 +200,22 @@ pygments==2.17.2
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.4.0
-pyinstaller-hooks-contrib==2024.1
+pyinstaller==6.5.0
+pyinstaller-hooks-contrib==2024.3
     # via pyinstaller
 pylint==3.1.0
-pyparsing==3.1.1
+pyparsing==3.1.2
     # via httplib2
 pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==8.0.2
+pytest==8.1.1
     # via
     #   beancount
     #   pytest-cov
 pytest-cov==4.1.0
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
     # via beancount
 python-magic==0.4.27
     # via beancount
@@ -235,7 +236,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.7.0
+rich==13.7.1
     # via twine
 rsa==4.9
     # via google-auth
@@ -279,12 +280,12 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.4
     # via pylint
-tox==4.13.0
+tox==4.14.1
     # via tox-uv
-tox-uv==1.4.0
+tox-uv==1.5.1
 twine==5.0.0
-types-setuptools==69.1.0.20240223
-types-simplejson==3.19.0.20240218
+types-setuptools==69.1.0.20240310
+types-simplejson==3.19.0.20240310
 typing-extensions==4.10.0
     # via mypy
 uritemplate==4.1.1
@@ -293,7 +294,7 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.11
+uv==0.1.17
     # via tox-uv
 virtualenv==20.25.1
     # via
