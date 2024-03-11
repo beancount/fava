@@ -18,7 +18,7 @@ import {
 } from "../src/charts/query-charts";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
 
-import { loadJSONSnapshot } from "./end-to-end-validation.test";
+import { loadJSONSnapshot } from "./helpers";
 
 test("chart helpers (filter ticks)", () => {
   assert.equal(filterTicks(["1", "2", "3"], 2), ["1", "3"]);

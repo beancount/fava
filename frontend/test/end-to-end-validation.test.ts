@@ -1,6 +1,3 @@
-import { readFile } from "fs/promises";
-import { join } from "path";
-
 import { get as store_get } from "svelte/store";
 import { test } from "uvu";
 import assert from "uvu/assert";
@@ -13,17 +10,10 @@ import {
   treemapScale,
 } from "../src/charts/helpers";
 import { getUrlPath } from "../src/helpers";
-import { parseJSON } from "../src/lib/json";
 import { base_url, currencies, ledgerData } from "../src/stores";
 import { conversions } from "../src/stores/chart";
 
-/** Load the Python test snapshot output with the given name and parse as JSON. */
-export async function loadJSONSnapshot(
-  name: `${string}.json`,
-): Promise<unknown> {
-  const path = join(__dirname, "..", "..", "tests", "__snapshots__", name);
-  return parseJSON(await readFile(path, "utf8")).unwrap();
-}
+import { loadJSONSnapshot } from "./helpers";
 
 test("validate ledger data", async () => {
   const data = await loadJSONSnapshot(
