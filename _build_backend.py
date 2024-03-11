@@ -64,6 +64,20 @@ def _compile_translations() -> None:
             write_mo(target.open("wb"), catalog)
 
 
+def build_wheel(  # type: ignore[no-redef]
+    wheel_directory: str,
+    config_settings: dict[str, str] | None = None,
+    metadata_directory: str | None = None,
+) -> str:
+    _compile_frontend()
+    _compile_translations()
+    return _build_meta_orig.build_wheel(
+        wheel_directory,
+        config_settings=config_settings,
+        metadata_directory=metadata_directory,
+    )
+
+
 def build_sdist(  # type: ignore[no-redef]
     sdist_directory: str,
     config_settings: dict[str, str] | None = None,
