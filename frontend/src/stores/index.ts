@@ -47,7 +47,7 @@ export const base_url = derived(ledgerData, (v) => v.base_url);
 export const extensions = derived(ledgerData, (v) => v.extensions);
 
 /** The ranked array of all accounts. */
-export const accounts = derived_array(ledgerData, (v) => v.accounts);
+export const accounts = derived_array(ledgerData, (v) => v.accounts.sort());
 
 /** Get the name (as given per metadata) of a currency. */
 export const currency_name = derived(
