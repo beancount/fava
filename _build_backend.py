@@ -1,7 +1,5 @@
 """Build backend that also compiles translations and frontend."""
 
-# pylint: disable=wildcard-import,function-redefined,unused-wildcard-import
-
 from __future__ import annotations
 
 import shutil
@@ -13,8 +11,23 @@ from typing import Iterable
 
 from babel.messages.mofile import write_mo
 from babel.messages.pofile import read_po
-from setuptools import build_meta as _build_meta_orig
-from setuptools.build_meta import *  # noqa: F403
+from setuptools import build_meta
+from setuptools.build_meta import get_requires_for_build_editable
+from setuptools.build_meta import get_requires_for_build_sdist
+from setuptools.build_meta import get_requires_for_build_wheel
+from setuptools.build_meta import prepare_metadata_for_build_editable
+from setuptools.build_meta import prepare_metadata_for_build_wheel
+
+__all__ = [
+    "build_editable",
+    "build_sdist",
+    "build_wheel",
+    "get_requires_for_build_editable",
+    "get_requires_for_build_sdist",
+    "get_requires_for_build_wheel",
+    "prepare_metadata_for_build_editable",
+    "prepare_metadata_for_build_wheel",
+]
 
 
 def _frontend_sources() -> Iterable[Path]:
@@ -64,27 +77,44 @@ def _compile_translations() -> None:
             write_mo(target.open("wb"), catalog)
 
 
-def build_wheel(  # type: ignore[no-redef]
+def _build_fava() -> None:
+    """Run the build steps for Fava."""
+    _compile_frontend()
+    _compile_translations()
+
+
+def build_wheel(
     wheel_directory: str,
     config_settings: dict[str, str] | None = None,
     metadata_directory: str | None = None,
 ) -> str:
-    _compile_frontend()
-    _compile_translations()
-    return _build_meta_orig.build_wheel(
+    _build_fava()
+    return build_meta.build_wheel(
         wheel_directory,
         config_settings=config_settings,
         metadata_directory=metadata_directory,
     )
 
 
-def build_sdist(  # type: ignore[no-redef]
+def build_editable(
+    wheel_directory: str,
+    config_settings: dict[str, str] | None = None,
+    metadata_directory: str | None = None,
+) -> str:
+    _build_fava()
+    return build_meta.build_editable(
+        wheel_directory,
+        config_settings=config_settings,
+        metadata_directory=metadata_directory,
+    )
+
+
+def build_sdist(
     sdist_directory: str,
     config_settings: dict[str, str] | None = None,
 ) -> str:
-    _compile_frontend()
-    _compile_translations()
-    return _build_meta_orig.build_sdist(
+    _build_fava()
+    return build_meta.build_sdist(
         sdist_directory,
         config_settings=config_settings,
     )
