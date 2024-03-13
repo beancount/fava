@@ -57,6 +57,7 @@
     <a
       href="#add-transaction"
       class="secondary add-transaction"
+      title={_("Add Journal Entry")}
       use:keyboardShortcut={"n"}>+</a
     >
   </Link>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Link from "../components/Link.svelte";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import router from "../router";
   import { ledger_title, ledgerData } from "../stores";
@@ -15,7 +16,9 @@
 <header>
   <HeaderIcon />
   <h1>
-    {$ledger_title}{#if has_dropdown}&nbsp;▾{/if}<PageTitle />
+    <Link report={"income_statement"}>{$ledger_title}</Link>
+    {#if has_dropdown}&nbsp;▾{/if}
+    <PageTitle />
     {#if has_dropdown}
       <div class="beancount-files">
         <ul>
@@ -53,6 +56,13 @@
     overflow: hidden;
     font-size: 16px;
     font-weight: normal;
+  }
+
+  h1 :global(a) {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background-color: inherit;
   }
 
   a:hover,
