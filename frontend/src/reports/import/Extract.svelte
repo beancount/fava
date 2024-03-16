@@ -19,16 +19,42 @@
     currentIndex = 0;
   }
 
+  function nextNonDuplicateEntry() {
+    for (let index = currentIndex+1; index < entries.length; index+=1) {
+      const newEntry = entries[index];
+      if (newEntry !== undefined && !isDuplicate(newEntry)) {
+        currentIndex = index;
+        return;
+      }
+    }
+    currentIndex = entries.length-1;
+  }
+
+  function nextEntry() {
+    currentIndex += 1;
+  }
+
   function submitOrNext() {
     if (currentIndex < entries.length - 1) {
-      currentIndex += 1;
+      nextEntry();
     } else {
       save();
     }
   }
 
+  function previousNonDuplicateEntry() {
+    for (let index = currentIndex-1; index >= 0; index-=1) {
+      const newEntry = entries[index];
+      if (newEntry !== undefined && !isDuplicate(newEntry)) {
+        currentIndex = index;
+        return;
+      }
+    }
+    currentIndex = 0;
+  }
+
   function previousEntry() {
-    currentIndex = Math.max(currentIndex - 1, 0);
+      currentIndex = Math.max(currentIndex - 1, 0);
   }
 
   function toggleDuplicate() {
@@ -75,13 +101,19 @@
           >
             ⏮
           </button>
-          <button type="button" class="muted" on:click={previousEntry}>
-            {_("Previous")}
+          <button type="button" class="muted" on:click={previousNonDuplicateEntry} title="{_('Previous non-duplicate entry')}">
+            &lt;&lt;
+          </button>
+          <button type="button" class="muted" on:click={previousEntry} title="_('Previous entry')">
+            &lt;
           </button>
         {/if}
         <span class="spacer" />
         {#if currentIndex < entries.length - 1}
-          <button type="submit">{_("Next")}</button>
+          <button type="submit" class="muted" title="{_('Next entry')}">&gt;</button>
+          <button type="button" class="muted" on:click={nextNonDuplicateEntry} title="{_('Next non-duplicate entry')}">
+            &gt;&gt;
+          </button>
           <button
             type="button"
             class="muted"
