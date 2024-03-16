@@ -117,7 +117,7 @@
 }
 
 .journal p > .num {
-  width: 9rem;
+  width: 14rem;
   border-left: 1px solid var(--table-border);
 }
 
