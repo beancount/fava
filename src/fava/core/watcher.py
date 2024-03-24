@@ -6,7 +6,6 @@ import abc
 import atexit
 import logging
 import threading
-from itertools import chain
 from os import walk
 from pathlib import Path
 from time import time_ns
@@ -18,28 +17,45 @@ from watchfiles import watch
 if TYPE_CHECKING:  # pragma: no cover
     import types
 
+    from watchfiles.main import Change
+
 
 log = logging.getLogger(__name__)
 
 
 class _WatchfilesThread(threading.Thread):
-    def __init__(self, paths: list[Path], mtime: int) -> None:
+    def __init__(
+        self, files: list[Path], folders: list[Path], mtime: int
+    ) -> None:
         super().__init__(daemon=True)
         self._stop_event = threading.Event()
-        self.paths = paths
         self.mtime = mtime
+        self._file_set = {f.absolute() for f in files}
+        self._folder_set = {f.absolute() for f in folders}
 
     def stop(self) -> None:
         """Set the stop event for watchfiles and join the thread."""
         self._stop_event.set()
         self.join()
 
+    def _is_relevant(self, _c: Change, path: str) -> bool:
+        return Path(path) in self._file_set or any(
+            Path(path).is_relative_to(d) for d in self._folder_set
+        )
+
     def run(self) -> None:
         """Watch for changes."""
         atexit.register(self.stop)
 
-        for changes in watch(*self.paths, stop_event=self._stop_event):
-            for _, path in changes:
+        watch_paths = {f.parent for f in self._file_set} | self._folder_set
+
+        for changes in watch(
+            *watch_paths,
+            stop_event=self._stop_event,
+            ignore_permission_denied=True,
+            watch_filter=self._is_relevant,
+        ):
+            for path in {change[1] for change in changes}:
                 try:
                     change_mtime = Path(path).stat().st_mtime_ns
                 except FileNotFoundError:
@@ -98,19 +114,23 @@ class WatchfilesWatcher(WatcherBase):
     def __init__(self) -> None:
         self.last_checked = 0
         self.last_notified = 0
-        self._paths: list[Path] = []
+        self._paths: tuple[list[Path], list[Path]] = ([], [])
         self._thread: _WatchfilesThread | None = None
 
     def update(self, files: Iterable[Path], folders: Iterable[Path]) -> None:
         """Update the folders/files to watch."""
-        new_paths = [p for p in chain(files, folders) if p.exists()]
+        existing_files = [p for p in files if p.exists()]
+        existing_folders = [p for p in folders if p.is_dir()]
+        new_paths = (existing_files, existing_folders)
         if self._thread and new_paths == self._paths:
             self.check()
             return
         self._paths = new_paths
         if self._thread is not None:
             self._thread.stop()
-        self._thread = _WatchfilesThread(self._paths, self.last_checked)
+        self._thread = _WatchfilesThread(
+            existing_files, existing_folders, self.last_checked
+        )
         self._thread.start()
         self.check()
 
