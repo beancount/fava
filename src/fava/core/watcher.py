@@ -16,6 +16,7 @@ from watchfiles import watch
 
 if TYPE_CHECKING:  # pragma: no cover
     import types
+
     from watchfiles.main import Change
 
 
