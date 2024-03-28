@@ -21,7 +21,7 @@ blinker==1.7.0
     # via flask
 bottle==0.12.25
     # via beancount
-build==1.1.1
+build==1.2.1
 cachetools==5.3.3
     # via
     #   google-auth
@@ -44,7 +44,7 @@ click==8.1.7
     # via flask
 colorama==0.4.6
     # via tox
-coverage==7.4.3
+coverage==7.4.4
     # via pytest-cov
 cryptography==42.0.5
     # via secretstorage
@@ -58,7 +58,7 @@ docutils==0.20.1
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.13.1
+filelock==3.13.3
     # via
     #   tox
     #   virtualenv
@@ -66,18 +66,18 @@ flask==3.0.2
     # via flask-babel
 flask-babel==4.0.0
 furo==2024.1.29
-google-api-core==2.17.1
+google-api-core==2.18.0
     # via google-api-python-client
-google-api-python-client==2.121.0
+google-api-python-client==2.124.0
     # via beancount
-google-auth==2.28.2
+google-auth==2.29.0
     # via
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
 google-auth-httplib2==0.2.0
     # via google-api-python-client
-googleapis-common-protos==1.62.0
+googleapis-common-protos==1.63.0
     # via google-api-core
 httplib2==0.22.0
     # via
@@ -91,7 +91,7 @@ idna==3.6
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.0.2
+importlib-metadata==7.1.0
     # via
     #   keyring
     #   twine
@@ -101,10 +101,14 @@ isort==5.13.2
     # via pylint
 itsdangerous==2.1.2
     # via flask
-jaraco-classes==3.3.1
+jaraco-classes==3.4.0
+    # via keyring
+jaraco-context==4.3.0
     # via keyring
 jaraco-functools==4.0.0
-    # via cheroot
+    # via
+    #   cheroot
+    #   keyring
 jeepney==0.8.0
     # via
     #   keyring
@@ -114,13 +118,13 @@ jinja2==3.1.3
     #   flask
     #   flask-babel
     #   sphinx
-keyring==24.3.1
+keyring==25.0.0
     # via twine
 lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.1.0
+lxml==5.2.0
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -144,7 +148,7 @@ more-itertools==10.2.0
 mypy==1.9.0
 mypy-extensions==1.0.0
     # via mypy
-nh3==0.2.15
+nh3==0.2.17
     # via readme-renderer
 nodeenv==1.8.0
     # via pre-commit
@@ -175,18 +179,21 @@ pluggy==1.4.0
     #   tox
 ply==3.11
     # via beancount
-pre-commit==3.6.2
+pre-commit==3.7.0
+proto-plus==1.23.0
+    # via google-api-core
 protobuf==4.25.3
     # via
     #   google-api-core
     #   googleapis-common-protos
-pyasn1==0.5.1
+    #   proto-plus
+pyasn1==0.6.0
     # via
     #   pyasn1-modules
     #   rsa
-pyasn1-modules==0.3.0
+pyasn1-modules==0.4.0
     # via google-auth
-pycparser==2.21
+pycparser==2.22
     # via cffi
 pyexcel==0.7.0
 pyexcel-ezodf==0.3.4
@@ -218,7 +225,7 @@ pytest==8.1.1
     # via
     #   beancount
     #   pytest-cov
-pytest-cov==4.1.0
+pytest-cov==5.0.0
 python-dateutil==2.9.0.post0
     # via beancount
 python-magic==0.4.27
@@ -246,7 +253,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==69.1.1
+setuptools==69.2.0
     # via
     #   nodeenv
     #   pyinstaller
@@ -286,11 +293,11 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.4
     # via pylint
-tox==4.14.1
+tox==4.14.2
     # via tox-uv
-tox-uv==1.5.1
+tox-uv==1.7.0
 twine==5.0.0
-types-setuptools==69.1.0.20240310
+types-setuptools==69.2.0.20240317
 types-simplejson==3.19.0.20240310
 typing-extensions==4.10.0
     # via mypy
@@ -300,7 +307,7 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.17
+uv==0.1.26
     # via tox-uv
 virtualenv==20.25.1
     # via
@@ -309,5 +316,5 @@ virtualenv==20.25.1
 watchfiles==0.21.0
 werkzeug==3.0.1
     # via flask
-zipp==3.17.0
+zipp==3.18.1
     # via importlib-metadata
