@@ -2,7 +2,7 @@ ci:
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.2
+    rev: v0.3.4
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -25,7 +25,7 @@ repos:
         files: \.(css|svelte)$
         require_serial: true
         additional_dependencies:
-          - "stylelint@16.2.1"
+          - "stylelint@16.3.1"
           - "stylelint-config-recess-order@5.0.0"
           - "stylelint-config-standard@36.0.0"
           - "postcss-html@1.6.0"
