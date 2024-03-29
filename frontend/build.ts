@@ -77,5 +77,7 @@ async function runBuild(dev: boolean) {
 
 if (require.main === module) {
   const dev = process.argv.includes("--watch");
-  runBuild(dev).catch(console.error);
+  runBuild(dev).catch((e: unknown) => {
+    console.error(e);
+  });
 }

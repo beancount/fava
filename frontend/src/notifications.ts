@@ -13,7 +13,7 @@ const notificationList = (() => {
     // always update the distance to top to account for the current header height
     const headerHeight =
       document.querySelector("header")?.getBoundingClientRect().height ?? 50;
-    value.style.top = `${headerHeight + 10}px`;
+    value.style.top = `${(headerHeight + 10).toString()}px`;
     return value;
   };
 })();

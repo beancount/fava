@@ -29,7 +29,7 @@ export const rulerPlugin = (
         const gutterWidth = contentDOMRect.x - domRect.x;
         const offset = column * view.defaultCharacterWidth + gutterWidth;
         ruler.style.width = paddingLeft;
-        ruler.style.left = `${offset}px`;
+        ruler.style.left = `${offset.toString()}px`;
       }
     };
 

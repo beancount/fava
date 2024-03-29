@@ -37,7 +37,7 @@ export function urlFor(
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined) {
-        urlParams.set(key, `${value}`);
+        urlParams.set(key, value.toString());
       }
     });
   }

@@ -29,7 +29,7 @@ class SvelteCustomElementComponent<
       target.classList.add("error");
       target.replaceChildren(
         domHelpers.t(
-          `Rendering component '${type}' failed due to invalid JSON data:`,
+          `Rendering component '${type ?? "null"}' failed due to invalid JSON data:`,
         ),
         domHelpers.br(),
         domHelpers.pre(res.error),

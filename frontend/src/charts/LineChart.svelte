@@ -75,14 +75,14 @@
   $: futureFilter = xExtent[1] > today ? "url(#desaturateFuture)" : undefined;
 </script>
 
-<svg viewBox={`0 0 ${width} ${height}`}>
+<svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
   <filter id="desaturateFuture">
     <feColorMatrix type="saturate" values="0.5" x={x(today)} />
     <feBlend in2="SourceGraphic" />
   </filter>
   <g
     use:positionedTooltip={tooltipFindNode}
-    transform={`translate(${margin.left},${margin.top})`}
+    transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} />

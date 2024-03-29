@@ -71,7 +71,7 @@
       <AppMenuItem name={`'insert-entry' ${_("Options")}`}>
         {#each insertEntryOptions as opt}
           <AppMenuSubItem
-            title={`${opt.filename}:${opt.lineno}`}
+            title={`${opt.filename}:${opt.lineno.toString()}`}
             action={() => {
               goToFileAndLine(opt.filename, opt.lineno - 1);
             }}

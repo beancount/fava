@@ -51,10 +51,13 @@
       {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
-            {@const url = urlForSource(source.filename, `${source.lineno}`)}
+            {@const url = urlForSource(
+              source.filename,
+              source.lineno.toString(),
+            )}
             {@const title = format(_("Show source %(file)s:%(lineno)s"), {
               file: source.filename,
-              lineno: `${source.lineno}`,
+              lineno: source.lineno.toString(),
             })}
             <td>{source.filename}</td>
             <td class="num">
