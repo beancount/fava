@@ -17,7 +17,7 @@ export function localeFormatter(
   precision = 2,
 ): (num: number) => string {
   if (!locale) {
-    return format(`.${precision}f`);
+    return format(`.${precision.toString()}f`);
   }
   // this needs to be between 0 and 20
   const digits = Math.max(0, Math.min(precision, 20));
@@ -49,7 +49,7 @@ export const day = utcFormat("%Y-%m-%d");
 export const dateFormat: Record<Interval, DateFormatter> = {
   year: utcFormat("%Y"),
   quarter: (date) =>
-    `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
+    `${date.getUTCFullYear().toString()}Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%b %Y"),
   week: utcFormat("%YW%W"),
   day,
@@ -59,7 +59,7 @@ export const dateFormat: Record<Interval, DateFormatter> = {
 export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
   year: utcFormat("%Y"),
   quarter: (date) =>
-    `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
+    `${date.getUTCFullYear().toString()}-Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%Y-%m"),
   week: utcFormat("%Y-W%W"),
   day,

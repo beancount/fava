@@ -59,10 +59,10 @@
   };
 </script>
 
-<svg viewBox={`0 0 ${width} ${height}`}>
+<svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
   {#each leaves as d}
     <g
-      transform={`translate(${d.x0},${d.y0})`}
+      transform={`translate(${d.x0.toString()},${d.y0.toString()})`}
       use:followingTooltip={() => tooltipText(d)}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />

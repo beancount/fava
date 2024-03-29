@@ -27,7 +27,7 @@
 </script>
 
 {#if currencies.length === 0}
-  <svg viewBox={`0 0 ${width} 160`}>
+  <svg viewBox={`0 0 ${width.toString()} 160`}>
     <text x={width / 2} y={80} text-anchor="middle">
       {_("Chart is empty.")}
     </text>
@@ -35,9 +35,11 @@
 {:else if treemap && currency}
   <Treemap data={treemap} {currency} {width} />
 {:else if mode === "sunburst"}
-  <svg viewBox={`0 0 ${width} 500`}>
+  <svg viewBox={`0 0 ${width.toString()} 500`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}
-      <g transform={`translate(${(width * i) / currencies.length},0)`}>
+      <g
+        transform={`translate(${((width * i) / currencies.length).toString()},0)`}
+      >
         <Sunburst
           data={d}
           currency={chart_currency}

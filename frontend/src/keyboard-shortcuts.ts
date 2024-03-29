@@ -23,8 +23,8 @@ function showTooltip(target: HTMLElement, description: string): () => void {
     targetRect.left +
     Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
   const top = targetRect.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
-  tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${top + window.scrollY}px`;
+  tooltip.style.left = `${left.toString()}px`;
+  tooltip.style.top = `${(top + window.scrollY).toString()}px`;
   return () => {
     tooltip.remove();
     if (hidden) {

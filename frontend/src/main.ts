@@ -111,7 +111,7 @@ function init(): void {
       .then((v) => {
         ledgerData.set(v);
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
       });
   });

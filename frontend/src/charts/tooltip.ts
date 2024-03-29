@@ -57,8 +57,8 @@ export const followingTooltip: Action<SVGElement, () => TooltipContent> = (
   function followMouse(event: MouseEvent) {
     const t = tooltip();
     t.style.opacity = "1";
-    t.style.left = `${event.pageX}px`;
-    t.style.top = `${event.pageY - 15}px`;
+    t.style.left = `${event.pageX.toString()}px`;
+    t.style.top = `${(event.pageY - 15).toString()}px`;
   }
   node.addEventListener("mouseenter", () => {
     const t = tooltip();
@@ -102,8 +102,8 @@ export const positionedTooltip: Action<SVGGElement, TooltipFindNode> = (
       const t = tooltip();
       t.style.opacity = "1";
       t.replaceChildren(...content);
-      t.style.left = `${window.scrollX + x + matrix.e}px`;
-      t.style.top = `${window.scrollY + y + matrix.f - 15}px`;
+      t.style.left = `${(window.scrollX + x + matrix.e).toString()}px`;
+      t.style.top = `${(window.scrollY + y + matrix.f - 15).toString()}px`;
     } else {
       hide();
     }

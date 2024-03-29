@@ -31,7 +31,7 @@
         .then((s) => {
           suggestions = s;
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           notify_err(
             error,
             (err) =>

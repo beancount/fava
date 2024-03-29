@@ -38,7 +38,7 @@
   let ul: HTMLUListElement;
 
   id += 1;
-  const listbox_id = `combobox-listbox-${id}`;
+  const listbox_id = `combobox-listbox-${id.toString()}`;
 
   const SEPARATOR = ",";
   $: values = value.split(SEPARATOR);

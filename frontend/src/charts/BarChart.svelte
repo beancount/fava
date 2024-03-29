@@ -76,8 +76,8 @@
     .tickFormat($short);
 </script>
 
-<svg viewBox={`0 0 ${width} ${height}`}>
-  <g transform={`translate(${offset},${margin.top})`}>
+<svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
+  <g transform={`translate(${offset.toString()},${margin.top.toString()})`}>
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} lineAtZero={y(0)} />
     {#each bar_groups as group}
@@ -85,7 +85,7 @@
         class="group"
         class:desaturate={group.date > today}
         use:followingTooltip={() => chart.tooltipText($ctx, group)}
-        transform={`translate(${x0(group.label) ?? 0},0)`}
+        transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
         <rect
           class="group-box"
@@ -96,7 +96,7 @@
         <a href={urlForTimeFilter(group.date)}>
           <rect
             class="axis-group-box"
-            transform={`translate(0,${innerHeight})`}
+            transform={`translate(0,${innerHeight.toString()})`}
             width={x0.bandwidth()}
             height={margin.bottom}
           />

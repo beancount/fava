@@ -25,7 +25,7 @@
     draggable = !(event.target instanceof HTMLInputElement);
   }
   function dragstart(event: DragEvent) {
-    event.dataTransfer?.setData("fava/posting", `${index}`);
+    event.dataTransfer?.setData("fava/posting", index.toString());
   }
   function dragenter(event: DragEvent) {
     if (event.dataTransfer?.types.includes("fava/posting")) {

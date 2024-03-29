@@ -17,7 +17,7 @@
   /** Height of the chart (needed for the correct offset of an x axis) */
   export let innerHeight = 0;
 
-  $: transform = x ? `translate(0,${innerHeight})` : undefined;
+  $: transform = x ? `translate(0,${innerHeight.toString()})` : undefined;
 
   /** Svelte action to render the axis. */
   const renderAxis: Action<SVGGElement, Ax> = (node: SVGGElement, ax) => {
@@ -34,7 +34,7 @@
 
 <g class:y use:renderAxis={axis} {transform}>
   {#if y && lineAtZero !== null}
-    <g class="zero" transform={`translate(0,${lineAtZero})`}>
+    <g class="zero" transform={`translate(0,${lineAtZero.toString()})`}>
       <line x2={-axis.tickSizeInner()} />
     </g>
   {/if}

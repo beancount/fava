@@ -30,7 +30,7 @@ export const account_report = new Route(
   (route) => {
     if (route.url) {
       const [, account] = getUrlPath(route.url)?.split("/") ?? [];
-      return `account:${account}`;
+      return `account:${account ?? "ERROR"}`;
     }
     throw new Error("Internal error: Expected route to have URL.");
   },

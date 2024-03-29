@@ -48,7 +48,7 @@
 <g
   {width}
   {height}
-  transform={`translate(${width / 2},${height / 2})`}
+  transform={`translate(${(width / 2).toString()},${(height / 2).toString()})`}
   on:mouseleave={() => {
     current = null;
   }}
