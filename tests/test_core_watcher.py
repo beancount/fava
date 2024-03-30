@@ -109,3 +109,29 @@ def test_watchfiles_watcher(watcher_paths: WatcherTestSet) -> None:
         # notify of deleted file
         watcher.notify(watcher_paths.file1)
         assert watcher.check()
+
+
+def test_watchfiles_watcher_recognises_change_to_previously_deleted_file(
+    watcher_paths: WatcherTestSet,
+) -> None:
+    watcher = WatchfilesWatcher()
+    with watcher:
+        assert not watcher.check()  # No thread set up yet.
+
+    with watcher:
+        watcher.update([watcher_paths.file1], [])
+
+        watcher_paths.file1.unlink()
+        assert _watcher_check_within_one_second(watcher)
+        # notify of deleted file
+        watcher.notify(watcher_paths.file1)
+        # True because time_ns() used when file is absent
+        assert watcher.check()
+
+        # Recreate deleted file
+        # sleep to ensure file stamp is greater than time_ns() taken on
+        #  previous FileNotFoundError
+        time.sleep(0.25)
+        watcher_paths.file1.write_text("test-value-2")
+        assert _watcher_check_within_one_second(watcher)
+        assert not watcher.check()
