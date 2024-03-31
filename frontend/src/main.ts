@@ -69,27 +69,38 @@ router.on("page-loaded", () => {
 });
 
 /**
- * Check the `changed` API endpoint and fire the appropriate events if some
+ * Update the ledger data and errors; Reload if automatic reloading is configured.
+ */
+function onChanges() {
+  get("ledger_data")
+    .then((v) => {
+      ledgerData.set(v);
+    })
+    .catch((e: unknown) => {
+      notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
+    });
+  if (store_get(fava_options).auto_reload) {
+    router.reload();
+  } else {
+    get("errors").then((v) => {
+      errors.set(v);
+    }, log_error);
+    notify(_("File change detected. Click to reload."), "warning", () => {
+      router.reload();
+    });
+  }
+}
+
+/**
+ * Check the `changed` API endpoint.
+ *
+ * Updates of the mtime returned by this endpoint will fire the appropriate events if some
  * file changed.
  *
  * This will be scheduled every 5 seconds.
  */
 function pollForChanges(): void {
-  get("changed").then((changed) => {
-    if (changed) {
-      has_changes.set(true);
-      if (store_get(fava_options).auto_reload) {
-        router.reload();
-      } else {
-        get("errors").then((v) => {
-          errors.set(v);
-        }, log_error);
-        notify(_("File change detected. Click to reload."), "warning", () => {
-          router.reload();
-        });
-      }
-    }
-  }, log_error);
+  get("changed").catch(log_error);
 }
 
 function init(): void {
@@ -107,13 +118,8 @@ function init(): void {
       initial_mtime = false;
       return;
     }
-    get("ledger_data")
-      .then((v) => {
-        ledgerData.set(v);
-      })
-      .catch((e: unknown) => {
-        notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
-      });
+    has_changes.set(true);
+    onChanges();
   });
 
   router.init(frontend_routes);

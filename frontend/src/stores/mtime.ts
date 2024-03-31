@@ -14,7 +14,7 @@ export const ledger_mtime: Readable<bigint> = ledger_mtime_writable;
 export function set_mtime(text: string): void {
   const new_value = text.startsWith("X")
     ? // the timestamp is replaced by a sequence of `X` in incognito mode.
-      BigInt(Date.now())
+      BigInt(text.replaceAll("X", "1"))
     : BigInt(text);
   ledger_mtime_writable.update((v) => (new_value > v ? new_value : v));
 }
