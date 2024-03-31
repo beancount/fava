@@ -8,7 +8,6 @@ import logging
 import threading
 from os import walk
 from pathlib import Path
-from time import time_ns
 from typing import Iterable
 from typing import TYPE_CHECKING
 
@@ -59,7 +58,9 @@ class _WatchfilesThread(threading.Thread):
                 try:
                     change_mtime = Path(path).stat().st_mtime_ns
                 except FileNotFoundError:
-                    change_mtime = time_ns()
+                    # set the change time to an artificial timestamp one
+                    # nanosecond after the latest mtime.
+                    change_mtime = self.mtime + 1
                 self.mtime = max(change_mtime, self.mtime)
             log.debug("new mtime: %s", self.mtime)
 
@@ -100,7 +101,7 @@ class WatcherBase(abc.ABC):
         try:
             change_mtime = Path(path).stat().st_mtime_ns
         except FileNotFoundError:
-            change_mtime = time_ns()
+            change_mtime = max(self.last_notified, self.last_checked) + 1
         self.last_notified = max(self.last_notified, change_mtime)
 
     @abc.abstractmethod
@@ -157,8 +158,6 @@ class Watcher(WatcherBase):
     So a file change won't be noticed, but only new/deleted files.
     """
 
-    __slots__ = ("_files", "_folders", "last_checked")
-
     def __init__(self) -> None:
         self.last_checked = 0
         self.last_notified = 0
@@ -176,7 +175,7 @@ class Watcher(WatcherBase):
             try:
                 yield path.stat().st_mtime_ns
             except FileNotFoundError:
-                yield time_ns()
+                yield max(self.last_notified, self.last_checked) + 1
         for path in self._folders:
             for dirpath, _, _ in walk(path):
                 yield Path(dirpath).stat().st_mtime_ns
