@@ -115,6 +115,6 @@ uritemplate==4.1.1
     # via google-api-python-client
 urllib3==2.2.1
     # via requests
-watchfiles==0.19.0
+watchfiles==0.20.0
 werkzeug==2.2.0
     # via flask
