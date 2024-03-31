@@ -131,7 +131,7 @@ def test_watchfiles_watcher_recognises_change_to_previously_deleted_file(
         # Recreate deleted file
         # sleep to ensure file stamp is greater than time_ns() taken on
         #  previous FileNotFoundError
-        time.sleep(0.25)
+        time.sleep(0.005)
         watcher_paths.file1.write_text("test-value-2")
         assert _watcher_check_within_one_second(watcher)
         assert not watcher.check()
