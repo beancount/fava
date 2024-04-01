@@ -11,7 +11,8 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Vlastné odkazy"
 
-#: frontend/src/reports/routes.ts:28 frontend/src/sidebar/Aside.svelte:66
+#: frontend/src/reports/routes.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:66
 msgid "Errors"
 msgstr "Chyby"
 
@@ -26,8 +27,8 @@ msgstr "Čas"
 msgid "Account"
 msgstr "Účet"
 
-#: frontend/src/entry-forms/Transaction.svelte:102
-#: frontend/src/entry-forms/Transaction.svelte:105
+#: frontend/src/entry-forms/Transaction.svelte:103
+#: frontend/src/entry-forms/Transaction.svelte:106
 msgid "Payee"
 msgstr "Príjemca"
 
@@ -36,54 +37,60 @@ msgid "Income Statement"
 msgstr "Výkaz ziskov a strát"
 
 #: frontend/src/reports/tree_reports/index.ts:21
-#: frontend/src/sidebar/Aside.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Balance Sheet"
 msgstr "Súvaha"
 
 #: frontend/src/reports/tree_reports/index.ts:28
-#: frontend/src/sidebar/Aside.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:28
 #, fuzzy
 msgid "Trial Balance"
 msgstr "Hrubá súvaha"
 
-#: frontend/src/sidebar/Aside.svelte:29 src/fava/templates/journal.html:5
+#: frontend/src/sidebar/AsideContents.svelte:29
+#: src/fava/templates/journal.html:5
 msgid "Journal"
 msgstr "Účtovná kniha"
 
-#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:30
+#: frontend/src/reports/routes.ts:32
+#: frontend/src/sidebar/AsideContents.svelte:30
 #, fuzzy
 msgid "Query"
 msgstr "Dotaz"
 
-#: frontend/src/sidebar/Aside.svelte:44 src/fava/templates/holdings.html:5
-#: src/fava/templates/holdings.html:53
+#: frontend/src/sidebar/AsideContents.svelte:44
+#: src/fava/templates/holdings.html:5 src/fava/templates/holdings.html:53
 #, fuzzy
 msgid "Holdings"
 msgstr "Vlastníctvo"
 
 #: frontend/src/reports/commodities/index.ts:35
-#: frontend/src/sidebar/Aside.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Commodities"
 msgstr "Komodity"
 
 #: frontend/src/reports/events/Events.svelte:17
-#: frontend/src/reports/events/index.ts:16 frontend/src/sidebar/Aside.svelte:49
+#: frontend/src/reports/events/index.ts:16
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Events"
 msgstr "Udalosti"
 
-#: frontend/src/reports/editor/index.ts:27 frontend/src/sidebar/Aside.svelte:56
+#: frontend/src/reports/editor/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:56
 msgid "Editor"
 msgstr "Editor"
 
-#: frontend/src/sidebar/Aside.svelte:73 src/fava/templates/options.html:3
+#: frontend/src/sidebar/AsideContents.svelte:73
+#: src/fava/templates/options.html:3
 msgid "Options"
 msgstr "Možnosti"
 
-#: frontend/src/sidebar/Aside.svelte:53 src/fava/templates/statistics.html:7
+#: frontend/src/sidebar/AsideContents.svelte:53
+#: src/fava/templates/statistics.html:7
 msgid "Statistics"
 msgstr "Štatistiky"
 
-#: frontend/src/sidebar/Aside.svelte:74 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:74 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "Pomoc"
 
@@ -137,7 +144,7 @@ msgstr "Uložiť"
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: frontend/src/main.ts:85
+#: frontend/src/main.ts:88
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -173,7 +180,7 @@ msgstr "Zmeny"
 msgid "Balances"
 msgstr "Zostatky"
 
-#: frontend/src/reports/errors/Errors.svelte:55
+#: frontend/src/reports/errors/Errors.svelte:58
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Ukázať zdroj %(file)s:%(lineno)s"
 
@@ -191,7 +198,7 @@ msgstr "Riadok"
 msgid "Error"
 msgstr "Chyba"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:78
 msgid "No errors."
 msgstr "Žiadne chyby."
 
@@ -242,12 +249,12 @@ msgstr "Príjem"
 msgid "Expenses"
 msgstr "Výdavky"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:56
+#: frontend/src/entry-forms/EntryMetadata.svelte:57
 #: src/fava/templates/options.html:10 src/fava/templates/options.html:27
 msgid "Key"
 msgstr "Kľúč"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:66
+#: frontend/src/entry-forms/EntryMetadata.svelte:67
 #: src/fava/templates/options.html:11 src/fava/templates/options.html:28
 msgid "Value"
 msgstr "Hodnota"
@@ -302,8 +309,8 @@ msgstr "zavrieť"
 msgid "New transaction"
 msgstr "Nová transakcia"
 
-#: frontend/src/entry-forms/Transaction.svelte:112
-#: frontend/src/entry-forms/Transaction.svelte:116
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Popis"
 
@@ -374,7 +381,7 @@ msgid "Metadata"
 msgstr "Metadáta"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:78
 msgid "Add metadata"
 msgstr "Pridať metadáta"
 
@@ -415,7 +422,7 @@ msgstr "Ostatné transakcie"
 msgid "Documents with a #discovered tag"
 msgstr "Dokumenty s tagom #discovered (objavené)"
 
-#: frontend/src/entry-forms/Transaction.svelte:134
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "Položky"
@@ -486,28 +493,23 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 msgid "Import entries"
 msgstr "Importovať zápisy"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:8
-#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Ročne"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:9
-#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:103
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:10
-#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
+#: frontend/src/lib/interval.ts:27 src/fava/util/date.py:104
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
-#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
+#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:12
-#: frontend/src/lib/interval.ts:21 src/fava/util/date.py:75
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:106
 msgid "Daily"
 msgstr "Denne"
 
@@ -515,7 +517,7 @@ msgstr "Denne"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: frontend/src/entry-forms/Posting.svelte:75
+#: frontend/src/entry-forms/Posting.svelte:76
 msgid "Amount"
 msgstr "Suma"
 
@@ -527,15 +529,15 @@ msgstr "Dokumenty s tagom #linked"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: frontend/src/stores/chart.ts:83
+#: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:84
+#: frontend/src/charts/ConversionAndInterval.svelte:14
 msgid "At Market Value"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:85
+#: frontend/src/charts/ConversionAndInterval.svelte:16
 msgid "Units"
 msgstr ""
 
@@ -582,11 +584,12 @@ msgid "Name"
 msgstr ""
 
 #: frontend/src/reports/documents/index.ts:16
-#: frontend/src/sidebar/Aside.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Documents"
 msgstr ""
 
 #: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:10
 #: frontend/src/reports/import/FileList.svelte:29
 msgid "Delete"
 msgstr ""
@@ -627,7 +630,7 @@ msgstr ""
 msgid "Toggle %(type)s entries"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:88
+#: frontend/src/charts/ConversionAndInterval.svelte:18
 msgid "Converted to %(currency)s"
 msgstr ""
 
@@ -651,11 +654,11 @@ msgstr ""
 msgid "Toggle postings"
 msgstr ""
 
-#: src/fava/internal_api.py:180
+#: src/fava/internal_api.py:221
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/internal_api.py:188
+#: src/fava/internal_api.py:170
 msgid "Account Balance"
 msgstr ""
 

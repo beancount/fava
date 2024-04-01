@@ -11,13 +11,14 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Liens personnalisés"
 
-#: frontend/src/reports/routes.ts:28 frontend/src/sidebar/Aside.svelte:66
+#: frontend/src/reports/routes.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:66
 msgid "Errors"
 msgstr "Erreurs"
 
 #: frontend/src/sidebar/FilterForm.svelte:62
 msgid "Time"
-msgstr "Année"
+msgstr "Période"
 
 #: frontend/src/entry-forms/AccountInput.svelte:32
 #: frontend/src/modals/DocumentUpload.svelte:68
@@ -26,8 +27,8 @@ msgstr "Année"
 msgid "Account"
 msgstr "Compte"
 
-#: frontend/src/entry-forms/Transaction.svelte:102
-#: frontend/src/entry-forms/Transaction.svelte:105
+#: frontend/src/entry-forms/Transaction.svelte:103
+#: frontend/src/entry-forms/Transaction.svelte:106
 msgid "Payee"
 msgstr "Bénéficiaire"
 
@@ -36,51 +37,57 @@ msgid "Income Statement"
 msgstr "Compte de résultat"
 
 #: frontend/src/reports/tree_reports/index.ts:21
-#: frontend/src/sidebar/Aside.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Balance Sheet"
 msgstr "Bilan"
 
 #: frontend/src/reports/tree_reports/index.ts:28
-#: frontend/src/sidebar/Aside.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:28
 msgid "Trial Balance"
 msgstr "Balance générale"
 
-#: frontend/src/sidebar/Aside.svelte:29 src/fava/templates/journal.html:5
+#: frontend/src/sidebar/AsideContents.svelte:29
+#: src/fava/templates/journal.html:5
 msgid "Journal"
 msgstr "Journal"
 
-#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:30
+#: frontend/src/reports/routes.ts:32
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Query"
 msgstr "Requête"
 
-#: frontend/src/sidebar/Aside.svelte:44 src/fava/templates/holdings.html:5
-#: src/fava/templates/holdings.html:53
+#: frontend/src/sidebar/AsideContents.svelte:44
+#: src/fava/templates/holdings.html:5 src/fava/templates/holdings.html:53
 msgid "Holdings"
-msgstr "Fonds"
+msgstr "Comptes"
 
 #: frontend/src/reports/commodities/index.ts:35
-#: frontend/src/sidebar/Aside.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Commodities"
-msgstr "Unités de compte"
+msgstr "Valeurs"
 
 #: frontend/src/reports/events/Events.svelte:17
-#: frontend/src/reports/events/index.ts:16 frontend/src/sidebar/Aside.svelte:49
+#: frontend/src/reports/events/index.ts:16
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Events"
 msgstr "Événements"
 
-#: frontend/src/reports/editor/index.ts:27 frontend/src/sidebar/Aside.svelte:56
+#: frontend/src/reports/editor/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:56
 msgid "Editor"
 msgstr "Éditeur"
 
-#: frontend/src/sidebar/Aside.svelte:73 src/fava/templates/options.html:3
+#: frontend/src/sidebar/AsideContents.svelte:73
+#: src/fava/templates/options.html:3
 msgid "Options"
 msgstr "Options"
 
-#: frontend/src/sidebar/Aside.svelte:53 src/fava/templates/statistics.html:7
+#: frontend/src/sidebar/AsideContents.svelte:53
+#: src/fava/templates/statistics.html:7
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: frontend/src/sidebar/Aside.svelte:74 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:74 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "Aide"
 
@@ -133,7 +140,7 @@ msgstr "Sauvegarder"
 msgid "Saving..."
 msgstr "Sauvegarde…"
 
-#: frontend/src/main.ts:85
+#: frontend/src/main.ts:88
 msgid "File change detected. Click to reload."
 msgstr "Changement de fichier détecté. Cliquez pour recharger."
 
@@ -168,7 +175,7 @@ msgstr "Opérations"
 msgid "Balances"
 msgstr "Balances"
 
-#: frontend/src/reports/errors/Errors.svelte:55
+#: frontend/src/reports/errors/Errors.svelte:58
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Afficher la source %(file)s:%(lineno)s"
 
@@ -186,7 +193,7 @@ msgstr "Ligne"
 msgid "Error"
 msgstr "Erreur"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:78
 msgid "No errors."
 msgstr "Aucune erreur."
 
@@ -221,7 +228,7 @@ msgstr "Devise pour les coûts"
 
 #: src/fava/templates/holdings.html:55
 msgid "Holdings by"
-msgstr "Fonds par"
+msgstr "Comptes par"
 
 #: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:476
 #: src/fava/json_api.py:496
@@ -236,12 +243,12 @@ msgstr "Revenus"
 msgid "Expenses"
 msgstr "Dépenses"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:56
+#: frontend/src/entry-forms/EntryMetadata.svelte:57
 #: src/fava/templates/options.html:10 src/fava/templates/options.html:27
 msgid "Key"
 msgstr "Clé"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:66
+#: frontend/src/entry-forms/EntryMetadata.svelte:67
 #: src/fava/templates/options.html:11 src/fava/templates/options.html:28
 msgid "Value"
 msgstr "Valeur"
@@ -253,7 +260,7 @@ msgstr "Télécharger en tant que"
 
 #: src/fava/templates/statistics.html:13
 msgid "Postings per Account"
-msgstr "Enregistrements par compte"
+msgstr "Opérations par compte"
 
 #: src/fava/templates/statistics.html:82
 msgid "Total"
@@ -296,8 +303,8 @@ msgstr "Fermer"
 msgid "New transaction"
 msgstr "Nouvelle transaction"
 
-#: frontend/src/entry-forms/Transaction.svelte:112
-#: frontend/src/entry-forms/Transaction.svelte:116
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Description"
 
@@ -312,7 +319,7 @@ msgstr "Nombre"
 #: frontend/src/entry-forms/Posting.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:126
 msgid "Add posting"
-msgstr "Ajouter un enregistrement"
+msgstr "Ajouter une opération"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -368,7 +375,7 @@ msgid "Metadata"
 msgstr "Métadonnées"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:78
 msgid "Add metadata"
 msgstr "Ajouter une métadonnée"
 
@@ -409,7 +416,7 @@ msgstr "Autres transactions"
 msgid "Documents with a #discovered tag"
 msgstr "Documents avec une étiquette #discovered"
 
-#: frontend/src/entry-forms/Transaction.svelte:134
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "Affectations"
@@ -481,28 +488,23 @@ msgstr "Télécharger ces entrées filtrées comme fichier Beancount"
 msgid "Import entries"
 msgstr "Importer des entrées"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:8
-#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Annuel"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:9
-#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:103
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:10
-#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
+#: frontend/src/lib/interval.ts:27 src/fava/util/date.py:104
 msgid "Monthly"
 msgstr "Mensuel"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
-#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
+#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "Hebdomadaire"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:12
-#: frontend/src/lib/interval.ts:21 src/fava/util/date.py:75
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:106
 msgid "Daily"
 msgstr "Journalier"
 
@@ -510,7 +512,7 @@ msgstr "Journalier"
 msgid "Edit"
 msgstr "Éditer"
 
-#: frontend/src/entry-forms/Posting.svelte:75
+#: frontend/src/entry-forms/Posting.svelte:76
 msgid "Amount"
 msgstr "Montant"
 
@@ -522,15 +524,15 @@ msgstr "Documents avec une étiquette #linked"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Vous devez définir l’option Beancount « documents » pour pouvoir téléverser un fichier."
 
-#: frontend/src/stores/chart.ts:83
+#: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "Coût"
 
-#: frontend/src/stores/chart.ts:84
+#: frontend/src/charts/ConversionAndInterval.svelte:14
 msgid "At Market Value"
 msgstr "Valeur de marché"
 
-#: frontend/src/stores/chart.ts:85
+#: frontend/src/charts/ConversionAndInterval.svelte:16
 msgid "Units"
 msgstr "Unités"
 
@@ -577,11 +579,12 @@ msgid "Name"
 msgstr "Nom"
 
 #: frontend/src/reports/documents/index.ts:16
-#: frontend/src/sidebar/Aside.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Documents"
 msgstr "Documents"
 
 #: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:10
 #: frontend/src/reports/import/FileList.svelte:29
 msgid "Delete"
 msgstr "Supprimer"
@@ -620,53 +623,53 @@ msgstr "Aucun fichier à importer n'a été trouvé."
 
 #: frontend/src/journal/JournalFilters.svelte:7
 msgid "Toggle %(type)s entries"
-msgstr ""
+msgstr "Basculer %(type)s entrées"
 
-#: frontend/src/stores/chart.ts:88
+#: frontend/src/charts/ConversionAndInterval.svelte:18
 msgid "Converted to %(currency)s"
-msgstr ""
+msgstr "Converti en %(currency)s"
 
 #: frontend/src/stores/chart.ts:50
 msgid "Stacked Bars"
-msgstr ""
+msgstr "Barres empilées"
 
 #: frontend/src/stores/chart.ts:51
 msgid "Single Bars"
-msgstr ""
+msgstr "Barres simples"
 
 #: frontend/src/charts/HierarchyContainer.svelte:32
 msgid "Chart is empty."
-msgstr ""
+msgstr "Le graphique est vide."
 
 #: frontend/src/journal/JournalFilters.svelte:42
 msgid "Toggle metadata"
-msgstr ""
+msgstr "Basculer les métadonnées"
 
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Toggle postings"
-msgstr ""
+msgstr "Basculer les opérations"
 
-#: src/fava/internal_api.py:180
+#: src/fava/internal_api.py:221
 msgid "Net Worth"
-msgstr ""
+msgstr "Valeur nette"
 
-#: src/fava/internal_api.py:188
+#: src/fava/internal_api.py:170
 msgid "Account Balance"
-msgstr ""
+msgstr "Solde du compte"
 
 #: frontend/src/editor/SliceEditor.svelte:91
 msgid "reload"
-msgstr ""
+msgstr "Recharger"
 
 #: frontend/src/modals/AddEntry.svelte:60
 msgid "continue"
-msgstr ""
+msgstr "Continuer"
 
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee/Narration"
-msgstr ""
+msgstr "Bénéficiaire / Désignation"
 
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
-msgstr ""
+msgstr "Suppression..."
 

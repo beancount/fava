@@ -11,7 +11,8 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Персонализирани Връзки"
 
-#: frontend/src/reports/routes.ts:28 frontend/src/sidebar/Aside.svelte:66
+#: frontend/src/reports/routes.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:66
 msgid "Errors"
 msgstr "Грешки"
 
@@ -26,8 +27,8 @@ msgstr "Време"
 msgid "Account"
 msgstr "Сметка"
 
-#: frontend/src/entry-forms/Transaction.svelte:102
-#: frontend/src/entry-forms/Transaction.svelte:105
+#: frontend/src/entry-forms/Transaction.svelte:103
+#: frontend/src/entry-forms/Transaction.svelte:106
 msgid "Payee"
 msgstr "Бенефициент"
 
@@ -36,51 +37,57 @@ msgid "Income Statement"
 msgstr "Отчет за Доходи"
 
 #: frontend/src/reports/tree_reports/index.ts:21
-#: frontend/src/sidebar/Aside.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Balance Sheet"
 msgstr "Баланси"
 
 #: frontend/src/reports/tree_reports/index.ts:28
-#: frontend/src/sidebar/Aside.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:28
 msgid "Trial Balance"
 msgstr "Оборотна Ведомост"
 
-#: frontend/src/sidebar/Aside.svelte:29 src/fava/templates/journal.html:5
+#: frontend/src/sidebar/AsideContents.svelte:29
+#: src/fava/templates/journal.html:5
 msgid "Journal"
 msgstr "Архив"
 
-#: frontend/src/reports/routes.ts:32 frontend/src/sidebar/Aside.svelte:30
+#: frontend/src/reports/routes.ts:32
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Query"
 msgstr "Търсене"
 
-#: frontend/src/sidebar/Aside.svelte:44 src/fava/templates/holdings.html:5
-#: src/fava/templates/holdings.html:53
+#: frontend/src/sidebar/AsideContents.svelte:44
+#: src/fava/templates/holdings.html:5 src/fava/templates/holdings.html:53
 msgid "Holdings"
 msgstr "Стопанства"
 
 #: frontend/src/reports/commodities/index.ts:35
-#: frontend/src/sidebar/Aside.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Commodities"
 msgstr "Стоки"
 
 #: frontend/src/reports/events/Events.svelte:17
-#: frontend/src/reports/events/index.ts:16 frontend/src/sidebar/Aside.svelte:49
+#: frontend/src/reports/events/index.ts:16
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Events"
 msgstr "Събития"
 
-#: frontend/src/reports/editor/index.ts:27 frontend/src/sidebar/Aside.svelte:56
+#: frontend/src/reports/editor/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:56
 msgid "Editor"
 msgstr "Редактор"
 
-#: frontend/src/sidebar/Aside.svelte:73 src/fava/templates/options.html:3
+#: frontend/src/sidebar/AsideContents.svelte:73
+#: src/fava/templates/options.html:3
 msgid "Options"
 msgstr "Настройки"
 
-#: frontend/src/sidebar/Aside.svelte:53 src/fava/templates/statistics.html:7
+#: frontend/src/sidebar/AsideContents.svelte:53
+#: src/fava/templates/statistics.html:7
 msgid "Statistics"
 msgstr "Статистика"
 
-#: frontend/src/sidebar/Aside.svelte:74 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:74 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "Помощ"
 
@@ -133,7 +140,7 @@ msgstr "Запази"
 msgid "Saving..."
 msgstr "Запазване..."
 
-#: frontend/src/main.ts:85
+#: frontend/src/main.ts:88
 msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 
@@ -168,7 +175,7 @@ msgstr "Промени"
 msgid "Balances"
 msgstr "Баланс"
 
-#: frontend/src/reports/errors/Errors.svelte:55
+#: frontend/src/reports/errors/Errors.svelte:58
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Показване на %(file)s:%(lineno)s на източника"
 
@@ -186,7 +193,7 @@ msgstr "Ред"
 msgid "Error"
 msgstr "Грешка"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:78
 msgid "No errors."
 msgstr "Няма грешки."
 
@@ -236,12 +243,12 @@ msgstr "Доход"
 msgid "Expenses"
 msgstr "Разходи"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:56
+#: frontend/src/entry-forms/EntryMetadata.svelte:57
 #: src/fava/templates/options.html:10 src/fava/templates/options.html:27
 msgid "Key"
 msgstr "Ключ"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:66
+#: frontend/src/entry-forms/EntryMetadata.svelte:67
 #: src/fava/templates/options.html:11 src/fava/templates/options.html:28
 msgid "Value"
 msgstr "Стойност"
@@ -296,8 +303,8 @@ msgstr "затвори"
 msgid "New transaction"
 msgstr "Нова транзакция"
 
-#: frontend/src/entry-forms/Transaction.svelte:112
-#: frontend/src/entry-forms/Transaction.svelte:116
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Основание"
 
@@ -368,7 +375,7 @@ msgid "Metadata"
 msgstr "Метаданни"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:78
 msgid "Add metadata"
 msgstr "Добави метаданни"
 
@@ -409,7 +416,7 @@ msgstr "Други транзакции"
 msgid "Documents with a #discovered tag"
 msgstr "Документи с #discovered таг"
 
-#: frontend/src/entry-forms/Transaction.svelte:134
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "Публикации"
@@ -481,28 +488,23 @@ msgstr "Изтеглете филтрираните в момента запис
 msgid "Import entries"
 msgstr "Внасяне на записи"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:8
-#: frontend/src/lib/interval.ts:17 src/fava/util/date.py:71
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Годишен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:9
-#: frontend/src/lib/interval.ts:18 src/fava/util/date.py:72
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:103
 msgid "Quarterly"
 msgstr "Тримесечен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:10
-#: frontend/src/lib/interval.ts:19 src/fava/util/date.py:73
+#: frontend/src/lib/interval.ts:27 src/fava/util/date.py:104
 msgid "Monthly"
 msgstr "Месечен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
-#: frontend/src/lib/interval.ts:20 src/fava/util/date.py:74
+#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "Седмичен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:12
-#: frontend/src/lib/interval.ts:21 src/fava/util/date.py:75
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:106
 msgid "Daily"
 msgstr "Дневен"
 
@@ -510,7 +512,7 @@ msgstr "Дневен"
 msgid "Edit"
 msgstr "Редактиране"
 
-#: frontend/src/entry-forms/Posting.svelte:75
+#: frontend/src/entry-forms/Posting.svelte:76
 msgid "Amount"
 msgstr "Сума"
 
@@ -522,15 +524,15 @@ msgstr "Документи с #linked таг"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Трябва да зададете Beancount опцията \"documents\" за качване на файлове."
 
-#: frontend/src/stores/chart.ts:83
+#: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "На Цена"
 
-#: frontend/src/stores/chart.ts:84
+#: frontend/src/charts/ConversionAndInterval.svelte:14
 msgid "At Market Value"
 msgstr "По Пазарна Стойност"
 
-#: frontend/src/stores/chart.ts:85
+#: frontend/src/charts/ConversionAndInterval.svelte:16
 msgid "Units"
 msgstr "Единици"
 
@@ -577,11 +579,12 @@ msgid "Name"
 msgstr "Име"
 
 #: frontend/src/reports/documents/index.ts:16
-#: frontend/src/sidebar/Aside.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Documents"
 msgstr "Документи"
 
 #: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:10
 #: frontend/src/reports/import/FileList.svelte:29
 msgid "Delete"
 msgstr "Изтрий"
@@ -622,7 +625,7 @@ msgstr "Не бяха намерени файлове за внасяне."
 msgid "Toggle %(type)s entries"
 msgstr "Превключи %(type)s записи"
 
-#: frontend/src/stores/chart.ts:88
+#: frontend/src/charts/ConversionAndInterval.svelte:18
 msgid "Converted to %(currency)s"
 msgstr "Преобразуване в %(currency)s"
 
@@ -646,11 +649,11 @@ msgstr "Превключи метаданни"
 msgid "Toggle postings"
 msgstr "Превключи публикации"
 
-#: src/fava/internal_api.py:180
+#: src/fava/internal_api.py:221
 msgid "Net Worth"
 msgstr "Нетна Стойност"
 
-#: src/fava/internal_api.py:188
+#: src/fava/internal_api.py:170
 msgid "Account Balance"
 msgstr "Баланс по сметката"
 
