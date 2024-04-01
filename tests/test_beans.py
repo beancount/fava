@@ -59,7 +59,7 @@ def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
     assert prices.get_all_prices(("NO", "PRICES")) is None
     assert prices.get_all_prices(("USD", "PRICES")) is None
 
-    assert prices.get_price(("SAME", "SAME")) == Decimal("1")
+    assert prices.get_price(("SAME", "SAME")) == Decimal(1)
     usd_chf = ("USD", "CHF")
     assert prices.get_all_prices(usd_chf) == [
         (datetime.date(2020, 12, 18), Decimal("0.88")),
@@ -67,8 +67,8 @@ def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
     ]
 
     assert prices.get_all_prices(("CHF", "USD")) == [
-        (datetime.date(2020, 12, 18), Decimal("1") / Decimal("0.88")),
-        (datetime.date(2022, 12, 19), Decimal("1") / Decimal("0.9288")),
+        (datetime.date(2020, 12, 18), Decimal(1) / Decimal("0.88")),
+        (datetime.date(2022, 12, 19), Decimal(1) / Decimal("0.9288")),
     ]
 
     assert prices.get_price_point(usd_chf) == (
