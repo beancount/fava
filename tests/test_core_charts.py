@@ -87,7 +87,7 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
     assert data.balance_children == {
         "IRAUSD": Decimal("7200.00"),
         "USD": Decimal("94320.27840"),
-        "VACHR": Decimal("-82"),
+        "VACHR": Decimal(-82),
     }
     assert data.balance == {}
     etrade = data.children[1].children[2]

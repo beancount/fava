@@ -9,9 +9,9 @@ from fava.core.inventory import CounterInventory
 def test_add() -> None:
     inv = CounterInventory()
     key = ("KEY", None)
-    inv.add(key, Decimal("10"))
+    inv.add(key, Decimal(10))
     assert len(inv) == 1
-    inv.add(key, Decimal("-10"))
+    inv.add(key, Decimal(-10))
     assert inv.is_empty()
 
 

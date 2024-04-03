@@ -20,7 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover
     PricePoint: TypeAlias = tuple[datetime.date, Decimal]
 
 ZERO = Decimal()
-ONE = Decimal("1")
+ONE = Decimal(1)
 
 
 class DateKeyWrapper(Sequence[datetime.date]):
