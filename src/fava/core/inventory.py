@@ -11,11 +11,11 @@ from typing import Tuple
 from typing import TYPE_CHECKING
 
 from fava.beans.protocols import Cost
+from fava.beans.str import cost_to_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from typing import Concatenate
-    from typing import Iterable
     from typing import Iterator
     from typing import ParamSpec
 
@@ -107,13 +107,16 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
     def __iter__(self) -> Iterator[InventoryKey]:
         raise NotImplementedError
 
-    @staticmethod
-    def from_positions(positions: Iterable[Position]) -> CounterInventory:
-        """Create an inventory from an iterable of Positions."""
-        inv = CounterInventory()
-        for position in positions:
-            inv.add_position(position)
-        return inv
+    def to_strings(self) -> list[str]:
+        """Print as a list of strings (e.g. for snapshot tests)."""
+        strings = []
+        for (currency, cost), number in self.items():
+            if cost is None:
+                strings.append(f"{number} {currency}")
+            else:
+                cost_str = cost_to_string(cost)
+                strings.append(f"{number} {currency} {{{cost_str}}}")
+        return strings
 
     def reduce(
         self,

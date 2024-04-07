@@ -2,8 +2,22 @@ from __future__ import annotations
 
 from decimal import Decimal
 
+import pytest
+
 from fava.beans import create
 from fava.core.inventory import CounterInventory
+from fava.core.inventory import SimpleCounterInventory
+
+
+def test_no_iter_possible() -> None:
+    inv = CounterInventory()
+    assert inv.is_empty()
+    with pytest.raises(NotImplementedError):
+        iter(inv)
+    simple_inv = SimpleCounterInventory()
+    assert simple_inv.is_empty()
+    with pytest.raises(NotImplementedError):
+        iter(simple_inv)
 
 
 def test_add() -> None:
@@ -39,6 +53,7 @@ def test_add_inventory() -> None:
     inv2.add_amount(create.amount("30 USD"))
     inv3.add_amount(create.amount("-40 USD"))
     inv.add_inventory(inv2)
+    assert inv.to_strings() == ["40 USD"]
     assert len(inv) == 1
     inv.add_inventory(inv3)
     assert inv.is_empty()

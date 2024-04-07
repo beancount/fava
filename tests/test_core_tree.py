@@ -46,12 +46,12 @@ def test_tree_from_entries(
 ) -> None:
     tree = Tree(example_ledger.all_entries)
 
-    snapshot({n.name: n.balance for n in tree.values()})
-    snapshot(tree["Assets"].balance_children)
+    snapshot({n.name: n.balance.to_strings() for n in tree.values()})
+    snapshot(tree["Assets"].balance_children.to_strings())
 
 
 def test_tree_cap(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     tree = Tree(example_ledger.all_entries)
     tree.cap(example_ledger.options, "Unrealized")
 
-    snapshot({n.name: n.balance for n in tree.values()})
+    snapshot({n.name: n.balance.to_strings() for n in tree.values()})
