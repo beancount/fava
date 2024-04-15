@@ -150,7 +150,7 @@ def main(
             app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
                 app.wsgi_app,
                 restrictions=(30,),
-                profile_dir=profile_dir if profile_dir else None,
+                profile_dir=profile_dir or None,
             )
 
         app.jinja_env.auto_reload = True
