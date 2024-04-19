@@ -348,7 +348,7 @@ class AdvancedFilter(EntryFilter):
                 tokenfunc=lambda toks=tokens: next(toks, None),
             )
         except FilterError as exception:
-            exception.message = exception.message + value
+            exception.message += value
             raise
 
     def apply(self, entries: list[Directive]) -> list[Directive]:

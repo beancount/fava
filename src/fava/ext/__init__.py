@@ -200,7 +200,7 @@ def extension_endpoint(
     ) -> Callable[[FavaExtensionBase], Response]:
         f: Any = func
         f.endpoint_key = (
-            endpoint_name if endpoint_name else func.__name__,
+            endpoint_name or func.__name__,
             methods or ["GET"],
         )
         return func

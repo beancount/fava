@@ -12,6 +12,8 @@ babel==2.14.0
     # via
     #   flask-babel
     #   sphinx
+backports-tarfile==1.1.0
+    # via jaraco-context
 beancount==2.3.6
 beautifulsoup4==4.12.3
     # via
@@ -52,23 +54,23 @@ dill==0.3.8
     # via pylint
 distlib==0.3.8
     # via virtualenv
-docutils==0.20.1
+docutils==0.21.1
     # via
     #   readme-renderer
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.13.3
+filelock==3.13.4
     # via
     #   tox
     #   virtualenv
-flask==3.0.2
+flask==3.0.3
     # via flask-babel
 flask-babel==4.0.0
 furo==2024.1.29
 google-api-core==2.18.0
     # via google-api-python-client
-google-api-python-client==2.124.0
+google-api-python-client==2.126.0
     # via beancount
 google-auth==2.29.0
     # via
@@ -85,7 +87,7 @@ httplib2==0.22.0
     #   google-auth-httplib2
 identify==2.5.35
     # via pre-commit
-idna==3.6
+idna==3.7
     # via
     #   anyio
     #   requests
@@ -99,13 +101,13 @@ iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via pylint
-itsdangerous==2.1.2
+itsdangerous==2.2.0
     # via flask
 jaraco-classes==3.4.0
     # via keyring
-jaraco-context==4.3.0
+jaraco-context==5.3.0
     # via keyring
-jaraco-functools==4.0.0
+jaraco-functools==4.0.1
     # via
     #   cheroot
     #   keyring
@@ -118,13 +120,13 @@ jinja2==3.1.3
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.0.0
+keyring==25.1.0
     # via twine
 lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.2.0
+lxml==5.2.1
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -211,8 +213,8 @@ pygments==2.17.2
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.5.0
-pyinstaller-hooks-contrib==2024.3
+pyinstaller==6.6.0
+pyinstaller-hooks-contrib==2024.4
     # via pyinstaller
 pylint==3.1.0
 pyparsing==3.1.2
@@ -253,7 +255,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==69.2.0
+setuptools==69.5.1
     # via
     #   nodeenv
     #   pyinstaller
@@ -269,12 +271,12 @@ snowballstemmer==2.2.0
     # via sphinx
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.2.6
+sphinx==7.3.7
     # via
     #   furo
     #   sphinx-autodoc-typehints
     #   sphinx-basic-ng
-sphinx-autodoc-typehints==2.0.0
+sphinx-autodoc-typehints==2.1.0
 sphinx-basic-ng==1.0.0b2
     # via furo
 sphinxcontrib-applehelp==1.0.8
@@ -297,9 +299,9 @@ tox==4.14.2
     # via tox-uv
 tox-uv==1.7.0
 twine==5.0.0
-types-setuptools==69.2.0.20240317
+types-setuptools==69.5.0.20240415
 types-simplejson==3.19.0.20240310
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
@@ -307,14 +309,14 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.26
+uv==0.1.34
     # via tox-uv
-virtualenv==20.25.1
+virtualenv==20.25.3
     # via
     #   pre-commit
     #   tox
 watchfiles==0.21.0
-werkzeug==3.0.1
+werkzeug==3.0.2
     # via flask
 zipp==3.18.1
     # via importlib-metadata

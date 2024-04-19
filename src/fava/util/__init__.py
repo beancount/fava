@@ -80,7 +80,7 @@ def next_key(basekey: str, keys: Mapping[str, Any]) -> str:
         return basekey
     i = 2
     while f"{basekey}-{i}" in keys:
-        i = i + 1
+        i += 1
     return f"{basekey}-{i}"
 
 
