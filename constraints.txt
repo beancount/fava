@@ -12,7 +12,7 @@ babel==2.14.0
     # via
     #   flask-babel
     #   sphinx
-backports-tarfile==1.1.0
+backports-tarfile==1.1.1
     # via jaraco-context
 beancount==2.3.6
 beautifulsoup4==4.12.3
@@ -41,12 +41,12 @@ chardet==5.2.0
     #   tox
 charset-normalizer==3.3.2
     # via requests
-cheroot==10.0.0
+cheroot==10.0.1
 click==8.1.7
     # via flask
 colorama==0.4.6
     # via tox
-coverage==7.4.4
+coverage==7.5.0
     # via pytest-cov
 cryptography==42.0.5
     # via secretstorage
@@ -54,7 +54,7 @@ dill==0.3.8
     # via pylint
 distlib==0.3.8
     # via virtualenv
-docutils==0.21.1
+docutils==0.21.2
     # via
     #   readme-renderer
     #   sphinx
@@ -70,7 +70,7 @@ flask-babel==4.0.0
 furo==2024.1.29
 google-api-core==2.18.0
     # via google-api-python-client
-google-api-python-client==2.126.0
+google-api-python-client==2.127.0
     # via beancount
 google-auth==2.29.0
     # via
@@ -85,7 +85,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.5.35
+identify==2.5.36
     # via pre-commit
 idna==3.7
     # via
@@ -147,7 +147,7 @@ more-itertools==10.2.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.9.0
+mypy==1.10.0
 mypy-extensions==1.0.0
     # via mypy
 nh3==0.2.17
@@ -170,12 +170,12 @@ pdfminer2==20151206
     # via beancount
 pkginfo==1.10.0
     # via twine
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   pytest
     #   tox
@@ -214,7 +214,7 @@ pygments==2.17.2
     #   rich
     #   sphinx
 pyinstaller==6.6.0
-pyinstaller-hooks-contrib==2024.4
+pyinstaller-hooks-contrib==2024.5
     # via pyinstaller
 pylint==3.1.0
 pyparsing==3.1.2
@@ -299,7 +299,7 @@ tox==4.14.2
     # via tox-uv
 tox-uv==1.7.0
 twine==5.0.0
-types-setuptools==69.5.0.20240415
+types-setuptools==69.5.0.20240423
 types-simplejson==3.19.0.20240310
 typing-extensions==4.11.0
     # via mypy
@@ -309,9 +309,9 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.34
+uv==0.1.37
     # via tox-uv
-virtualenv==20.25.3
+virtualenv==20.26.0
     # via
     #   pre-commit
     #   tox
