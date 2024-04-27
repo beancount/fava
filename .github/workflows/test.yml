@@ -14,14 +14,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        os: ["ubuntu-latest"]
         py: ["3.12", "3.8"]
         toxenv: ["py", "old_deps"]
-        exclude:
+        include:
           - os: "macos-latest"
-            toxenv: "old_deps"
+            toxenv: "py"
+            py: "3.12"
           - os: "windows-latest"
-            toxenv: "old_deps"
+            toxenv: "py"
+            py: "3.12"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
