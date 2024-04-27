@@ -62,7 +62,7 @@ def file_import_info(
         account = importer.file_account(file)
         date = importer.file_date(file)
         name = importer.file_name(file)
-    except Exception as err:  # noqa: BLE001
+    except Exception as err:
         raise FavaAPIError(f"Error calling importer method: {err}") from err
 
     return FileImportInfo(

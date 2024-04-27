@@ -67,7 +67,7 @@ filelock==3.13.4
 flask==3.0.3
     # via flask-babel
 flask-babel==4.0.0
-furo==2024.1.29
+furo==2024.4.27
 google-api-core==2.18.0
     # via google-api-python-client
 google-api-python-client==2.127.0
@@ -120,7 +120,7 @@ jinja2==3.1.3
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.1.0
+keyring==25.2.0
     # via twine
 lml==0.1.0
     # via
@@ -223,7 +223,7 @@ pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==8.1.1
+pytest==8.1.2
     # via
     #   beancount
     #   pytest-cov
@@ -295,7 +295,7 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.4
     # via pylint
-tox==4.14.2
+tox==4.15.0
     # via tox-uv
 tox-uv==1.7.0
 twine==5.0.0
@@ -309,7 +309,7 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.37
+uv==0.1.39
     # via tox-uv
 virtualenv==20.26.0
     # via
