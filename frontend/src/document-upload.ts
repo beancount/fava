@@ -20,7 +20,7 @@ import { notify, notify_err } from "./notifications";
  */
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   if (
-    event.dataTransfer?.types.includes("Files") ??
+    event.dataTransfer?.types.includes("Files") || // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing
     event.dataTransfer?.types.includes("text/uri-list")
   ) {
     closestTarget.classList.add("dragover");
