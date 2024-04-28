@@ -24,11 +24,12 @@ Then this will get you up and running:
 
     git clone https://github.com/beancount/fava.git
     cd fava
-    # using a virtual environment is optional, but recommended
-    python -m venv venv
-    . venv/bin/activate
-    pre-commit install  # add a git pre-commit hook to run linters
+    # setup a virtual environment (at .venv) and install Fava into it
+    # alternatively, run `make dev` to do these next two steps with `uv` instead
+    python -m venv .venv
     pip install --editable .
+    # add a git pre-commit hook to run linters
+    pre-commit install
 
 You can start Fava in the virtual environment as usual by running ``fava``.
 Running in debug mode with ``fava --debug`` is useful for development.

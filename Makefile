@@ -9,6 +9,13 @@ frontend/node_modules: frontend/package-lock.json
 	cd frontend; npm install --no-progress
 	touch -m frontend/node_modules
 
+.PHONY: dev
+dev: .venv
+	uv pip sync requirements.txt
+
+.venv:
+	uv venv
+
 # Remove the generated frontend and translations in addition to mostlyclean (see below).
 .PHONY: clean
 clean: mostlyclean
@@ -21,7 +28,10 @@ mostlyclean:
 	rm -rf .*cache
 	rm -rf .eggs
 	rm -rf .tox
+	rm -rf .venv
+	rm -rf build
 	rm -rf dist
+	rm -rf htmlcov
 	rm -rf frontend/node_modules
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
