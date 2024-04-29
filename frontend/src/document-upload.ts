@@ -19,10 +19,8 @@ import { notify, notify_err } from "./notifications";
  * dragged from a file manager or a URL (as dragged from a document link in Fava).
  */
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
-  if (
-    event.dataTransfer?.types.includes("Files") ??
-    event.dataTransfer?.types.includes("text/uri-list")
-  ) {
+  const types = event.dataTransfer?.types ?? [];
+  if (types.includes("Files") || types.includes("text/uri-list")) {
     closestTarget.classList.add("dragover");
     event.preventDefault();
   }
