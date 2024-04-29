@@ -5,6 +5,7 @@
     barChartMode,
     chartToggledCurrencies,
     hierarchyChartMode,
+    includeZeroToggle,
     lineChartMode,
     showCharts,
     treemapCurrency,
@@ -48,6 +49,15 @@
     {#if chart.type === "hierarchy"}
       <ModeSwitch store={hierarchyChartMode} />
     {:else if chart.type === "linechart"}
+      <button
+        type="button"
+        class:muted={!$includeZeroToggle}
+        on:click={() => {
+          includeZeroToggle.update((v) => !v);
+        }}
+      >
+        Include zero
+      </button>
       <ModeSwitch store={lineChartMode} />
     {:else if chart.type === "barchart" && chart.hasStackedData}
       <ModeSwitch store={barChartMode} />

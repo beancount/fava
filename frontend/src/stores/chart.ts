@@ -41,6 +41,9 @@ export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   ],
 );
 
+/** Whether to include zero in line charts or not. */
+export const includeZeroToggle = writable(false);
+
 /** The currently selected bar chart mode. */
 export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
   "bar-chart-mode",
