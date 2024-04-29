@@ -31,7 +31,7 @@
       {@const account_budget = account_budgets?.[index]}
       {@const has_balance =
         !is_empty(n.balance) ||
-        (account_budget && !is_empty(account_budget.budget))}
+        (account_budget != null && !is_empty(account_budget.budget))}
       {@const show_balance = !is_toggled && has_balance}
       {@const shown_balance = show_balance ? n.balance : n.balance_children}
       {@const shown_budget = show_balance
@@ -49,7 +49,7 @@
           <br />
         {/each}
         {#if shown_budget}
-          {#each Object.entries(shown_budget).filter(([c]) => !shown_balance[c]) as [currency, budget]}
+          {#each Object.entries(shown_budget).filter(([c]) => !(shown_balance[c] ?? 0)) as [currency, budget]}
             <span title={$currency_name(currency)}>
               {$ctx.amount(0, currency)}
             </span>

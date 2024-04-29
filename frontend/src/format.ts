@@ -16,7 +16,7 @@ export function localeFormatter(
   locale: string | null,
   precision = 2,
 ): (num: number) => string {
-  if (!locale) {
+  if (locale == null) {
     return format(`.${precision.toString()}f`);
   }
   // this needs to be between 0 and 20

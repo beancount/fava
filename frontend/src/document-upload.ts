@@ -76,8 +76,11 @@ function drop(event: DragEvent, target: HTMLElement): void {
     const url = event.dataTransfer.getData("URL");
     // Try to extract the filename from the URL.
     let filename = new URL(url).searchParams.get("filename");
-    if (filename && targetEntry) {
-      if (targetAccount && documentHasAccount(filename, targetAccount)) {
+    if (filename != null && targetEntry != null) {
+      if (
+        targetAccount != null &&
+        documentHasAccount(filename, targetAccount)
+      ) {
         filename = basename(filename);
       }
       put("attach_document", { filename, entry_hash: targetEntry }).then(

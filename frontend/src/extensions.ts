@@ -24,7 +24,7 @@ export class ExtensionApi {
   ): Promise<unknown> {
     const url = urlFor(`extension/${this.name}/${endpoint}`, params, false);
     let opts = {};
-    if (body) {
+    if (body != null) {
       opts =
         body instanceof FormData
           ? { body }
@@ -144,8 +144,8 @@ export function handleExtensionPageLoad(): void {
       })
       .catch(log_error);
   }
-  const path = getUrlPath(window.location);
-  if (path?.startsWith("extension/")) {
+  const path = getUrlPath(window.location) ?? "";
+  if (path.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {
         getOrInitExtension(name)

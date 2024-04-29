@@ -25,14 +25,18 @@
   $: nodes = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
   let current: AccountHierarchyNode | null = null;
+
+  // if-expression to run labelled statement on each change of root
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   $: if (root) {
     current = null;
   }
 
   function balanceText(d: AccountHierarchyNode): string {
     const val = d.value ?? 0;
-    return root.value
-      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / root.value)})`
+    const total = root.value ?? 0;
+    return total
+      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / total)})`
       : $ctx.amount(val, currency);
   }
 

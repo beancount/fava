@@ -25,7 +25,7 @@
         }
       } else {
         const val = meta[key];
-        if (val) {
+        if (val != null) {
           m[key] = val;
         }
       }

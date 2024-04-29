@@ -9,7 +9,7 @@ import ImportSvelte from "./Import.svelte";
  * Construct the filename from date and basename.
  */
 function newFilename(date: string | null, basename: string | null): string {
-  if (!date || !basename) {
+  if (date == null || basename == null) {
     return "";
   }
   if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {

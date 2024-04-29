@@ -35,7 +35,7 @@
     <AccountCell {node} />
     {#each $operating_currency as currency}
       {@const num = shown_balance[currency]}
-      {@const cost_num = shown_cost?.[currency]}
+      {@const cost_num = shown_cost?.[currency] ?? 0}
       <span class="num" class:dimmed>
         {#if num}
           {$ctx.num(invert * num, currency)}
@@ -48,7 +48,7 @@
     {/each}
     <span class="num other" class:dimmed>
       {#each shown_balance_other as [currency, num]}
-        {@const cost_num = shown_cost?.[currency]}
+        {@const cost_num = shown_cost?.[currency] ?? 0}
         <span title={$currency_name(currency)}>
           {$ctx.amount(invert * num, currency)}
         </span>

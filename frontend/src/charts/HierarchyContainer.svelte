@@ -23,7 +23,7 @@
   $: currency = $treemapCurrency;
 
   $: mode = $hierarchyChartMode;
-  $: treemap = mode === "treemap" && data.get(currency ?? "");
+  $: treemap = mode === "treemap" ? data.get(currency ?? "") : undefined;
 </script>
 
 {#if currencies.length === 0}

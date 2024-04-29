@@ -33,7 +33,7 @@
 
   function toggleDuplicate() {
     if (entry) {
-      entry.meta.__duplicate__ = !entry.meta.__duplicate__;
+      entry.meta.__duplicate__ = !isDuplicate(entry);
     }
   }
 </script>

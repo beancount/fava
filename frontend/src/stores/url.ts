@@ -28,7 +28,7 @@ export const synced_query_string = derived([searchParams], ([s]) => {
   const params = new URLSearchParams();
   for (const name of urlSyncedParams) {
     const value = s.get(name);
-    if (value) {
+    if (value != null && value) {
       params.set(name, value);
     } else {
       params.delete(name);

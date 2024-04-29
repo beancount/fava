@@ -108,7 +108,7 @@
   async function save() {
     const withoutDuplicates = entries.filter((e) => !isDuplicate(e));
     const key = [...extractCache].find(([, e]) => e === entries)?.[0];
-    if (key) {
+    if (key != null) {
       extractCache.delete(key);
       extractCache = extractCache;
     }
@@ -136,7 +136,7 @@
   }
 </script>
 
-{#if !$fava_options.import_config}
+{#if $fava_options.import_config == null}
   <p>
     No importers configured. See <a href={urlFor("help/import")}
       >Help (Import)</a

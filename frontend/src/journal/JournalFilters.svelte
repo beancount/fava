@@ -61,7 +61,7 @@
   }
 
   $: active = (type: string, supertype?: string): boolean =>
-    supertype
+    supertype != null
       ? shownSet.has(type) && shownSet.has(supertype)
       : shownSet.has(type);
 </script>

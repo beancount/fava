@@ -25,8 +25,8 @@ export function set_mtime(text: string): void {
 export function read_mtime(): void {
   const el = document.getElementById("ledger-mtime");
   const text = el?.textContent;
-  if (text) {
-    el.remove();
+  if (text != null) {
+    el?.remove();
     set_mtime(text);
   }
 }

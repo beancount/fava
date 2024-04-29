@@ -18,7 +18,8 @@
    * @param event - The drag event that is passed to the event handler.
    */
   function dragenter(event: DragEvent) {
-    if (event.dataTransfer?.types.includes("fava/filename")) {
+    const types = event.dataTransfer?.types ?? [];
+    if (types.includes("fava/filename")) {
       event.preventDefault();
       drag = true;
     }
@@ -30,7 +31,7 @@
    */
   function drop(event: DragEvent) {
     const filename = event.dataTransfer?.getData("fava/filename");
-    if (filename) {
+    if (filename != null) {
       move({ account: node.name, filename });
       drag = false;
     }

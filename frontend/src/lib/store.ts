@@ -55,7 +55,7 @@ export function localStorageSyncedStore<T>(
   const store = writable<T>(undefined, (set) => {
     const stored_val = localStorage.getItem(fullKey);
     let initial: T | null = null;
-    if (stored_val) {
+    if (stored_val != null) {
       const val = parseJSON(stored_val).and_then(validator).unwrap_or(null);
       if (val !== null) {
         initial = val;

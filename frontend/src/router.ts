@@ -100,7 +100,7 @@ export class Router extends Events<"page-loaded"> {
   private shouldInterrupt(): string | null {
     for (const handler of this.interruptHandlers) {
       const ret = handler();
-      if (ret) {
+      if (ret != null) {
         return ret;
       }
     }
@@ -139,7 +139,7 @@ export class Router extends Events<"page-loaded"> {
 
     window.addEventListener("beforeunload", (event) => {
       const leaveMessage = this.shouldInterrupt();
-      if (leaveMessage) {
+      if (leaveMessage != null) {
         event.preventDefault();
       }
     });
@@ -185,7 +185,7 @@ export class Router extends Events<"page-loaded"> {
    */
   private async loadURL(url: string, historyState = true): Promise<void> {
     const leaveMessage = this.shouldInterrupt();
-    if (leaveMessage) {
+    if (leaveMessage != null) {
       // eslint-disable-next-line no-alert
       if (!window.confirm(leaveMessage)) {
         return;

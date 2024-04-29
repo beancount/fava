@@ -182,7 +182,7 @@ function getKeySpecDescription(spec: KeySpec): string {
     return spec;
   }
   const key = isMac ? spec.mac ?? spec.key : spec.key;
-  return spec.note ? `${key} - ${spec.note}` : key;
+  return spec.note != null ? `${key} - ${spec.note}` : key;
 }
 
 /**
@@ -220,7 +220,7 @@ export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
   spec,
 ) => {
   const setup = (s?: KeySpec) => {
-    if (s) {
+    if (s != null) {
       node.setAttribute("data-key", getKeySpecDescription(s));
       const unbind = bindKey(s, node);
       return () => {

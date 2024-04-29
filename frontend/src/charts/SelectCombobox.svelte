@@ -91,8 +91,12 @@
     /** Select the given or the focused element in the options list. */
     select: (o?: string) => {
       const option = o ?? options[index];
-      if (option) {
-        if (multiple_select?.(option) && values.every(multiple_select)) {
+      if (option != null) {
+        if (
+          multiple_select != null &&
+          multiple_select(option) &&
+          values.every(multiple_select)
+        ) {
           value = values.includes(option)
             ? values.filter((v) => v !== option).join(SEPARATOR)
             : [...values, option].join(SEPARATOR);

@@ -74,7 +74,8 @@
     beancount_language_support,
   );
 
-  // update editor contents
+  // update editor contents if source changes
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   $: if (source) {
     editor.dispatch(replaceContents(editor.state, source.source));
     sha256sum = source.sha256sum;

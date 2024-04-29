@@ -29,7 +29,7 @@
     (name, d) => ({ name, count: d?.[1].length ?? 0 }),
   );
 
-  let selected: Document;
+  let selected: Document | null = null;
   let moving: MoveDetails | null = null;
 
   /**
@@ -42,12 +42,16 @@
   }
 
   async function move() {
-    const moved =
-      moving &&
-      (await moveDocument(moving.filename, moving.account, moving.newName));
-    if (moved) {
-      moving = null;
-      router.reload();
+    if (moving) {
+      const moved = await moveDocument(
+        moving.filename,
+        moving.account,
+        moving.newName,
+      );
+      if (moved) {
+        moving = null;
+        router.reload();
+      }
     }
   }
 </script>

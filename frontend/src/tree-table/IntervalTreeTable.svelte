@@ -38,7 +38,7 @@
     : undefined;
   $: time_filters = dates.map((date_range): [string, string] => {
     const title = $currentTimeFilterDateFormat(date_range.begin);
-    return start_date_filter
+    return start_date_filter != null
       ? [title, `${start_date_filter}-${title}`]
       : [title, title];
   });

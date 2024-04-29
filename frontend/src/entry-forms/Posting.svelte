@@ -28,7 +28,8 @@
     event.dataTransfer?.setData("fava/posting", index.toString());
   }
   function dragenter(event: DragEvent) {
-    if (event.dataTransfer?.types.includes("fava/posting")) {
+    const types = event.dataTransfer?.types ?? [];
+    if (types.includes("fava/posting")) {
       event.preventDefault();
       drag = true;
     }
@@ -38,7 +39,7 @@
   }
   function drop(event: DragEvent) {
     const from = event.dataTransfer?.getData("fava/posting");
-    if (from) {
+    if (from != null) {
       move({ from: +from, to: index });
       drag = false;
     }

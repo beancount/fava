@@ -37,7 +37,7 @@
     };
     document.addEventListener("keydown", keydown);
 
-    const selectorFocusEl = focus ? el.querySelector(focus) : undefined;
+    const selectorFocusEl = focus != null ? el.querySelector(focus) : undefined;
     const focusEl = selectorFocusEl ?? getFocusableElements(el)[0];
     if (focusEl) {
       attemptFocus(focusEl);

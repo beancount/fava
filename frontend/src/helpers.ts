@@ -29,7 +29,7 @@ export function urlFor(
     const oldParams = store_get(searchParams);
     for (const name of urlSyncedParams) {
       const value = oldParams.get(name);
-      if (value) {
+      if (value != null) {
         urlParams.set(name, value);
       }
     }

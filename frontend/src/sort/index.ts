@@ -166,7 +166,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
     const headerClass = header.classList[0];
     const name = header.getAttribute("data-sort-name");
     const type = header.getAttribute("data-sort");
-    if (!headerClass || !name || !type) {
+    if (headerClass == null || name == null || type == null) {
       throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
     }
 

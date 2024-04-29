@@ -31,7 +31,7 @@ async function handleJSON(response: Response): Promise<unknown> {
   if (!isJsonObject(data)) {
     throw new FetchError("Invalid response: not an object");
   }
-  if (!data.success) {
+  if (data.success !== true) {
     throw new FetchError(
       typeof data.error === "string"
         ? data.error

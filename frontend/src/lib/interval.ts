@@ -13,10 +13,7 @@ export const INTERVALS: Interval[] = [
 ];
 
 export function getInterval(s: string | null): Interval {
-  if (s && INTERVALS.includes(s as Interval)) {
-    return s as Interval;
-  }
-  return DEFAULT_INTERVAL;
+  return INTERVALS.includes(s as Interval) ? (s as Interval) : DEFAULT_INTERVAL;
 }
 
 /** Get the translateable label for an interval. */

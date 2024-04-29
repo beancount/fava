@@ -28,7 +28,7 @@
   function goToFileAndLine(filename: string, line?: number) {
     const url = urlFor("editor/", { file_path: filename, line });
     router.navigate(url);
-    if (filename === file_path && line) {
+    if (filename === file_path && line != null) {
       editor.dispatch(scrollToLine(editor.state, line));
       editor.focus();
     }

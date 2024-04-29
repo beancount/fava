@@ -128,7 +128,7 @@
           <a href={$urlForAccount(account)}>
             <g
               class="category"
-              class:faded={highlighted && account !== highlighted}
+              class:faded={highlighted != null && account !== highlighted}
               on:mouseover={() => {
                 highlighted = account;
               }}

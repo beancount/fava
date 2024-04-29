@@ -69,7 +69,7 @@ export class SvelteCustomElement extends HTMLElement {
       return;
     }
     const type = this.getAttribute("type");
-    if (!type) {
+    if (type == null) {
       throw new Error("Component is missing type");
     }
     const comp = components.get(type);

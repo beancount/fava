@@ -49,12 +49,13 @@
     ? Math.max(value.length, placeholder.length) + 1
     : undefined;
 
-  $: if (input && checkValidity) {
+  $: if (input != null && checkValidity) {
     input.setCustomValidity(checkValidity(value));
   }
 
   $: {
-    const val = input && valueExtractor ? valueExtractor(value, input) : value;
+    const val =
+      input != null && valueExtractor ? valueExtractor(value, input) : value;
     const filtered = fuzzyfilter(val, suggestions)
       .slice(0, 30)
       .map((suggestion) => ({
@@ -68,7 +69,9 @@
 
   function select(suggestion: string) {
     value =
-      input && valueSelector ? valueSelector(suggestion, input) : suggestion;
+      input != null && valueSelector != null
+        ? valueSelector(suggestion, input)
+        : suggestion;
     dispatch("select", input);
     hidden = true;
   }
@@ -82,7 +85,7 @@
   function keydown(event: KeyboardEvent) {
     if (event.key === "Enter") {
       const suggestion = filteredSuggestions[index]?.suggestion;
-      if (index > -1 && !hidden && suggestion) {
+      if (index > -1 && !hidden && suggestion != null) {
         event.preventDefault();
         select(suggestion);
       } else {
