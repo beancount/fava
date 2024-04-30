@@ -48,13 +48,9 @@
         <span class="datecell" data-sort="num" data-sort-name="date" data-order="asc">{{ _('Date') }}</span>
         <span class="flag" data-sort="string" data-sort-name="flag">{{ _('F') }}</span>
         <span class="description" data-sort="string" data-sort-name="narration">{{ _('Payee/Narration') }}</span>
-        <span class="num">{{ _('Position') }}</span>
-        <span class="num">{{ _('Price') }}</span>
-        <span class="num">{{ _('Cost') }}</span>
-        {% if show_change_and_balance %}
-        <span class="num">{{ _('Change') }}</span>
-        <span class="num">{{ _('Balance') }}</span>
-        {% endif %}
+        <span class="num">{{ _('Units') }}</span>
+        <span class="cost num">{{ _('Cost') }}{% if show_change_and_balance %} / {{ _('Change') }}{% endif %}</span>
+        <span class="num">{{ _('Price') }}{% if show_change_and_balance %} / {{ _('Balance') }}{% endif %}</span>
         </p>
     </li>
 {% for entry in entries %}
@@ -111,11 +107,23 @@
         </span>
         {% if type == 'balance' %}
           {{ commodity_macros.render_amount(ledger, entry.amount, 'num bal' + (' pending' if entry.diff_amount else '')) }}
+            {% if entry.diff_amount %}
+              <span class="change num bal pending">
+              {{ commodity_macros.render_num(ledger, entry.diff_amount.currency, entry.diff_amount.number) }}
+              </span>
+            {% else %}
+              <span class="change num"></span>
+            {% endif %}
+            {% if not show_change_and_balance %}
+              <span class="change num"></span>
+            {% endif %}
         {% endif %}
         {% if show_change_and_balance %}
-          <span class="change num">
-          {%- for currency, number in change.items() %}{{ commodity_macros.render_num(ledger, currency, number) }}<br>{% endfor -%}
-          </span>
+          {% if type == 'transaction' %}
+            <span class="change num">
+            {%- for currency, number in change.items() %}{{ commodity_macros.render_num(ledger, currency, number) }}<br>{% endfor -%}
+            </span>
+          {% endif %}
           <span class="num">
           {%- for currency, number in balance.items() %}{{ commodity_macros.render_num(ledger, currency, number) }}<br>{% endfor -%}
           </span>
@@ -133,14 +141,10 @@
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>
-                {{ commodity_macros.render_amount(ledger, posting.price) }}
                 <span class="num">{{ posting.cost.number }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
-                {% if show_change_and_balance %}
-                <span class="change num"></span>
-                <span class="num"></span>
-                {% endif %}
+                {{ commodity_macros.render_amount(ledger, posting.price) }}
             </p>
             {{ render_metadata(posting.meta|meta_items) }}
         </li>

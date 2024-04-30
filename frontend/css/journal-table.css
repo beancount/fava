@@ -116,8 +116,10 @@
   cursor: pointer;
 }
 
+/* There's three number columns (units, cost, price).
+ * They should add about to about half of the width */
 .journal p > .num {
-  width: 9rem;
+  width: min(calc(15%), 20rem);
   border-left: 1px solid var(--table-border);
 }
 
