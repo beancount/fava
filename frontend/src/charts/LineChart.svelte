@@ -40,7 +40,8 @@
   $: x = scaleUtc([0, innerWidth]).domain(xExtent);
   $: valueExtent = extent(allValues, (v) => v.value);
   // Include zero in area charts so the entire area is shown, not a cropped part of it
-  $: yExtent = $lineChartMode === "area" ? includeZero(valueExtent) : valueExtent;
+  $: yExtent =
+    $lineChartMode === "area" ? includeZero(valueExtent) : valueExtent;
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear([innerHeight, 0]).domain(padExtent(yExtent));
 
