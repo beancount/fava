@@ -1,3 +1,4 @@
+import type { Readable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
 export const urlHash = writable("");
@@ -18,7 +19,7 @@ export const pathname = writable<string>();
 export const search = writable<string>();
 
 /** The current URL searchParams. */
-export const searchParams = derived(
+export const searchParams: Readable<Readonly<URLSearchParams>> = derived(
   search,
   ($search) => new URLSearchParams($search),
 );
@@ -40,7 +41,7 @@ export const synced_query_string = derived([searchParams], ([s]) => {
 
 export function closeOverlay(): void {
   if (window.location.hash) {
-    window.history.pushState({}, "", "#");
+    window.history.pushState(null, "", "#");
   }
   urlHash.set("");
 }

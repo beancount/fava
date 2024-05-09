@@ -39,7 +39,7 @@ import { frontend_routes } from "./reports/routes";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar } from "./sidebar";
 import { has_changes, updatePageTitle } from "./sidebar/page-title";
-import { SortableTable } from "./sort";
+import { SortableTable } from "./sort/sortable-table";
 import { errors, fava_options, ledgerData } from "./stores";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";

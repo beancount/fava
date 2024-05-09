@@ -1,0 +1,14 @@
+{
+  "rows": [
+    [
+      43558
+    ]
+  ],
+  "t": "table",
+  "types": [
+    {
+      "dtype": "int",
+      "name": "sum_day"
+    }
+  ]
+}

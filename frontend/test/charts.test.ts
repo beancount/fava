@@ -12,10 +12,6 @@ import {
 } from "../src/charts/helpers";
 import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
 import { balances, LineChart } from "../src/charts/line";
-import {
-  parseGroupedQueryChart,
-  parseQueryChart,
-} from "../src/charts/query-charts";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
 
 import { loadJSONSnapshot } from "./helpers";
@@ -53,7 +49,6 @@ test("handle data for hierarchical chart", async () => {
 });
 
 test("handle data for balances chart", () => {
-  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
   assert.ok(balances("name", "").is_err);
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
@@ -74,9 +69,6 @@ test("handle data for balances chart", () => {
       values: [{ date: new Date("2000-01-01"), name: "USD", value: 10 }],
     },
   ]);
-  const queryChart = parseQueryChart(data, ctx).unwrap();
-  assert.ok(queryChart instanceof LineChart);
-  assert.equal(queryChart.filter([]), parsed.filter([]));
 });
 
 test("handle data for scatterplot chart", () => {
@@ -91,26 +83,6 @@ test("handle data for scatterplot chart", () => {
       { date: new Date("2000-01-01"), description: "desc", type: "test" },
     ]),
   );
-});
-
-test("handle data for query charts", () => {
-  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
-  const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
-  const { data } = parseGroupedQueryChart(d, ctx).unwrap();
-  const eur_hierarchy = data.get("EUR");
-  assert.ok(eur_hierarchy);
-  assert.is(eur_hierarchy.value, 10);
-  assert.equal(
-    eur_hierarchy.descendants().map((n) => n.data.account),
-    ["(root)", "Assets", "(root)", "Assets:Cash", "Assets"],
-  );
-});
-
-test("handle invalid data for query charts", () => {
-  const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
-  const d: unknown[] = [{}];
-  const c = parseQueryChart(d, ctx);
-  assert.ok(c.is_err);
 });
 
 test("handle data for bar chart with stacked data", () => {

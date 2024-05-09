@@ -1,0 +1,253 @@
+{
+  "rows": [
+    [
+      "Assets:US:BayBook:Vacation",
+      {
+        "VACHR": 130
+      }
+    ],
+    [
+      "Assets:US:BofA:Checking",
+      {
+        "USD": 5086.65
+      }
+    ],
+    [
+      "Assets:US:ETrade:Cash",
+      {
+        "USD": 342.85
+      }
+    ],
+    [
+      "Assets:US:ETrade:GLD",
+      {
+        "GLD": 18
+      }
+    ],
+    [
+      "Assets:US:ETrade:ITOT",
+      {
+        "ITOT": 25
+      }
+    ],
+    [
+      "Assets:US:ETrade:VEA",
+      {
+        "VEA": 27
+      }
+    ],
+    [
+      "Assets:US:ETrade:VHT",
+      {
+        "VHT": 20
+      }
+    ],
+    [
+      "Assets:US:Federal:PreTax401k",
+      {}
+    ],
+    [
+      "Assets:US:Vanguard:Cash",
+      {
+        "USD": 0.03
+      }
+    ],
+    [
+      "Assets:US:Vanguard:RGAGX",
+      {
+        "RGAGX": 163.632
+      }
+    ],
+    [
+      "Assets:US:Vanguard:VBMPX",
+      {
+        "VBMPX": 324.492
+      }
+    ],
+    [
+      "Liabilities:US:Chase:Slate",
+      {
+        "USD": -390.29
+      }
+    ],
+    [
+      "Equity:Opening-Balances",
+      {
+        "USD": -3453.18
+      }
+    ],
+    [
+      "Income:US:BayBook:GroupTermLife",
+      {
+        "USD": -632.32
+      }
+    ],
+    [
+      "Income:US:BayBook:Match401k",
+      {
+        "USD": -8750.0
+      }
+    ],
+    [
+      "Income:US:BayBook:Salary",
+      {
+        "USD": -119999.88
+      }
+    ],
+    [
+      "Income:US:BayBook:Vacation",
+      {
+        "VACHR": -130
+      }
+    ],
+    [
+      "Income:US:ETrade:Dividends",
+      {
+        "USD": -51.68
+      }
+    ],
+    [
+      "Income:US:ETrade:Gains",
+      {
+        "USD": 98.12
+      }
+    ],
+    [
+      "Income:US:Federal:PreTax401k",
+      {
+        "IRAUSD": -17500
+      }
+    ],
+    [
+      "Expenses:Financial:Commissions",
+      {
+        "USD": 89.5
+      }
+    ],
+    [
+      "Expenses:Financial:Fees",
+      {
+        "USD": 48.0
+      }
+    ],
+    [
+      "Expenses:Food:Groceries",
+      {
+        "USD": 2424.91
+      }
+    ],
+    [
+      "Expenses:Food:Restaurant",
+      {
+        "USD": 4177.07
+      }
+    ],
+    [
+      "Expenses:Health:Dental:Insurance",
+      {
+        "USD": 75.4
+      }
+    ],
+    [
+      "Expenses:Health:Life:GroupTermLife",
+      {
+        "USD": 632.32
+      }
+    ],
+    [
+      "Expenses:Health:Medical:Insurance",
+      {
+        "USD": 711.88
+      }
+    ],
+    [
+      "Expenses:Health:Vision:Insurance",
+      {
+        "USD": 1099.8
+      }
+    ],
+    [
+      "Expenses:Home:Electricity",
+      {
+        "USD": 780.0
+      }
+    ],
+    [
+      "Expenses:Home:Internet",
+      {
+        "USD": 959.79
+      }
+    ],
+    [
+      "Expenses:Home:Phone",
+      {
+        "USD": 762.65
+      }
+    ],
+    [
+      "Expenses:Home:Rent",
+      {
+        "USD": 28800.0
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:CityNYC",
+      {
+        "USD": 4547.92
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:Federal",
+      {
+        "USD": 27635.92
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
+      {
+        "IRAUSD": 17500.0
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:Medicare",
+      {
+        "USD": 2772.12
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:SDI",
+      {
+        "USD": 29.12
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:SocSec",
+      {
+        "USD": 7000.04
+      }
+    ],
+    [
+      "Expenses:Taxes:Y2014:US:State",
+      {
+        "USD": 9492.08
+      }
+    ],
+    [
+      "Expenses:Transport:Tram",
+      {
+        "USD": 1440.0
+      }
+    ]
+  ],
+  "t": "table",
+  "types": [
+    {
+      "dtype": "str",
+      "name": "account"
+    },
+    {
+      "dtype": "Inventory",
+      "name": "sum_position"
+    }
+  ]
+}

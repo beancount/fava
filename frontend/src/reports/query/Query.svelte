@@ -1,173 +1,85 @@
 <script lang="ts">
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
 
   import { get } from "../../api";
-  import type { FavaChart } from "../../charts";
-  import Chart from "../../charts/Chart.svelte";
-  import { chartContext } from "../../charts/context";
-  import { parseQueryChart } from "../../charts/query-charts";
+  import { err, ok, type Result } from "../../lib/result";
   import { log_error } from "../../log";
   import router from "../../router";
   import { filter_params } from "../../stores/filters";
-  import {
-    addToHistory,
-    clearHistory,
-    query_shell_history,
-    removeFromHistory,
-  } from "../../stores/query";
+  import { query_shell_history } from "../../stores/query";
+  import { searchParams } from "../../stores/url";
 
+  import type { QueryResult } from "./query_table";
+  import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
-  import QueryLinks from "./QueryLinks.svelte";
-  import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";
 
   let query_string = "";
 
-  const resultElems: Record<string, HTMLElement> = {};
+  /** The currently loaded results. */
+  const results: Record<string, Result<QueryResult, string>> = {};
+  const is_open: Record<string, boolean> = {};
 
-  interface ResultType {
-    result?: { table: string; chart: FavaChart | null };
-    error?: string;
-  }
-
-  const query_results: Record<string, ResultType> = {};
-
-  $: query_result_array = $query_shell_history.map(
-    (item): [string, ResultType] => [item, query_results[item] ?? {}],
+  onMount(() =>
+    searchParams.subscribe((s) => {
+      const search_query_string = s.get("query_string") ?? "";
+      // Set the query string to the value from the URL query if that changes (e.g. on navigation).
+      if (search_query_string !== query_string) {
+        query_string = search_query_string;
+        submit();
+      }
+    }),
   );
 
-  async function setResult(query: string, res: ResultType) {
-    addToHistory(query);
-    query_results[query] = res;
-    await tick();
-    const url = new URL(window.location.href);
-    url.searchParams.set("query_string", query);
-    window.history.replaceState(null, "", url.toString());
-    resultElems[query]?.setAttribute("open", "true");
-  }
-
-  function clearQueryString() {
-    const url = new URL(window.location.href);
-    query_string = "";
-    url.searchParams.set("query_string", query_string);
-    window.history.replaceState(null, "", url.toString());
-  }
-
-  async function clearResults() {
-    clearHistory();
-    await tick();
-    clearQueryString();
-  }
-
+  /** Submit the current query and load the result for it. */
   function submit() {
     const query = query_string;
     if (!query) {
       return;
     }
     if (query.trim().toUpperCase() === "CLEAR") {
-      clearResults().catch(log_error);
+      query_shell_history.clear();
+      query_string = "";
+      router.set_search_param("query_string", "");
       return;
     }
-    get("query_result", { query_string: query, ...$filter_params }).then(
-      (res) => {
-        const chart = parseQueryChart(res.chart, $chartContext).unwrap_or(null);
-        setResult(query, { result: { chart, table: res.table } }).catch(
-          log_error,
-        );
-        window.scroll(0, 0);
-      },
-      (error: unknown) => {
-        if (error instanceof Error) {
-          setResult(query, { error: error.message }).catch(log_error);
-          window.scroll(0, 0);
-        } else {
-          setResult(query, {
-            error: "Received invalid data as query error.",
-          }).catch(log_error);
-        }
-      },
-    );
+    query_shell_history.add(query);
+    router.set_search_param("query_string", query);
+    get("query", { query_string: query, ...$filter_params })
+      .then(
+        (res) => ok(res),
+        (error: unknown) =>
+          err(error instanceof Error ? error.message : "INTERNAL ERROR"),
+      )
+      .then((res) => {
+        results[query] = res;
+        is_open[query] = true;
+        document.querySelector("article")?.scroll(0, 0);
+      })
+      .catch(log_error);
   }
 
-  function click(query: string) {
-    if (!query_results[query]) {
-      query_string = query;
-      submit();
-    }
-  }
-
-  async function deleteItem(query: string) {
-    removeFromHistory(query);
+  /** Delete the given query from the history and potentially clear it from the form. */
+  function delete_item(query: string) {
+    query_shell_history.remove(query);
     if (query_string === query) {
-      await tick();
-      clearQueryString();
+      query_string = "";
+      router.set_search_param("query_string", "");
     }
   }
-
-  onMount(() =>
-    router.on("page-loaded", () => {
-      const url = new URL(window.location.href);
-      query_string = url.searchParams.get("query_string") ?? "";
-      if (query_string) {
-        submit();
-      }
-    }),
-  );
 </script>
 
 <QueryEditor bind:value={query_string} {submit} />
-<div>
-  {#each query_result_array as [history_item, { result, error }] (history_item)}
-    <details bind:this={resultElems[history_item]}>
-      <summary
-        class:inactive={!result && error == null}
-        on:click={() => {
-          click(history_item);
-        }}
-      >
-        <ReadonlyQueryEditor value={history_item} error={error != null} />
-        <span class="spacer" />
-        {#if result}
-          <QueryLinks query={history_item} />
-        {/if}
-        <button
-          type="button"
-          on:click|stopPropagation={async () => deleteItem(history_item)}
-        >
-          x
-        </button>
-      </summary>
-      <div>
-        {#if result}
-          {#if result.chart}
-            <Chart chart={result.chart} />
-          {/if}
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html result.table}
-        {:else if error}
-          <pre>{error}</pre>
-        {/if}
-      </div>
-    </details>
-  {/each}
-</div>
-
-<style>
-  details > div {
-    max-height: 80vh;
-    overflow: auto;
-  }
-
-  .inactive {
-    filter: opacity(0.5);
-  }
-
-  summary > button {
-    margin-left: 10px;
-  }
-
-  div :global(.query-error) {
-    font-family: var(--font-family-monospaced);
-    color: var(--background);
-    background: var(--error);
-  }
-</style>
+{#each $query_shell_history as query (query)}
+  <QueryBox
+    {query}
+    result={results[query]}
+    bind:open={is_open[query]}
+    onselect={() => {
+      query_string = query;
+      submit();
+    }}
+    ondelete={() => {
+      delete_item(query);
+    }}
+  />
+{/each}

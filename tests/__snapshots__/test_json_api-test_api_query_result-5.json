@@ -1,0 +1,4 @@
+{
+  "contents": "\nShell utility commands (type help <topic>):\n===========================================\nEOF  clear  exit  help  history  lex  parse  quit  set  tokenize\n\nBeancount query commands:\n=========================\nattributes  errors   from     print   runcustom  targets\nbalances    explain  journal  reload  select     where",
+  "t": "string"
+}

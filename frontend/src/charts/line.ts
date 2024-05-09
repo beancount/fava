@@ -58,31 +58,38 @@ export class LineChart {
 
 const balances_validator = array(object({ date, balance: record(number) }));
 
+export function balances_from_parsed_data(
+  label: string | null,
+  parsed_data: { date: Date; balance: Record<string, number> }[],
+): LineChart {
+  const groups = new Map<string, LineChartDatum[]>();
+  for (const { date: date_val, balance } of parsed_data) {
+    Object.entries(balance).forEach(([currency, value]) => {
+      const group = groups.get(currency);
+      const datum = { date: date_val, value, name: currency };
+      if (group) {
+        group.push(datum);
+      } else {
+        groups.set(currency, [datum]);
+      }
+    });
+  }
+  const data = [...groups.entries()].map(([name, values]) => ({
+    name,
+    values,
+  }));
+
+  return new LineChart(label, data, (c, d) => [
+    domHelpers.t(c.amount(d.value, d.name)),
+    domHelpers.em(day(d.date)),
+  ]);
+}
+
 export function balances(
   label: string | null,
   json: unknown,
 ): Result<LineChart, ValidationError> {
-  return balances_validator(json).map((parsedData) => {
-    const groups = new Map<string, LineChartDatum[]>();
-    for (const { date: date_val, balance } of parsedData) {
-      Object.entries(balance).forEach(([currency, value]) => {
-        const group = groups.get(currency);
-        const datum = { date: date_val, value, name: currency };
-        if (group) {
-          group.push(datum);
-        } else {
-          groups.set(currency, [datum]);
-        }
-      });
-    }
-    const data = [...groups.entries()].map(([name, values]) => ({
-      name,
-      values,
-    }));
-
-    return new LineChart(label, data, (c, d) => [
-      domHelpers.t(c.amount(d.value, d.name)),
-      domHelpers.em(day(d.date)),
-    ]);
-  });
+  return balances_validator(json).map((parsedData) =>
+    balances_from_parsed_data(label, parsedData),
+  );
 }

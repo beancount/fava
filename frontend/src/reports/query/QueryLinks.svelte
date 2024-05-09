@@ -1,8 +1,14 @@
+<!--
+  @component
+  Renders the links to download the query result in CSV and possibly
+  other formats.
+-->
 <script lang="ts">
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { HAVE_EXCEL } from "../../stores";
 
+  /** The query string. */
   export let query: string;
 
   /**

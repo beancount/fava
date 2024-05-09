@@ -20,6 +20,7 @@ import {
   unknown,
 } from "../lib/validation";
 import type { ImportableFile } from "../reports/import";
+import { query_validator } from "../reports/query/query_table";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {
@@ -192,6 +193,7 @@ export const getAPIValidators = {
   move: string,
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
+  query: query_validator,
   query_result: object({ chart: unknown, table: string }),
   source,
   trial_balance: tree_report,

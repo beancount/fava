@@ -20,8 +20,9 @@ details.inactive {
 details summary {
   position: relative;
   display: flex;
+  gap: 0.5em;
   align-items: center;
-  padding: 5px 10px 5px 30px;
+  padding: 0.25em 0.5em 0.25em 30px;
   cursor: pointer;
   background-color: var(--summary-background);
 }

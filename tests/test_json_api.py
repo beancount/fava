@@ -443,6 +443,13 @@ def test_api_add_entries(
 
         url = "/long-example/api/add_entries"
 
+        err = test_client.put(url, json={"entries": "string"})
+        assert_api_error(
+            err,
+            "Invalid API request: Parameter `entries`"
+            " of incorrect type - expected <class 'list'>.",
+        )
+
         response = test_client.put(url, json={"entries": entries})
         assert_api_success(response, "Stored 3 entries.")
 
@@ -469,12 +476,20 @@ def test_api_add_entries(
     [
         ("balances from year = 2014", "5086.65 USD"),
         ("select sum(day)", "43558"),
+        ("journal from year = 2014 and month = 1", "BayBook"),
+        (
+            "select day, position, units(position), balance, payee, tags"
+            " from year = 2014 and month = 1",
+            "",
+        ),
+        ("help", ""),
     ],
 )
 def test_api_query_result(
     query_string: str,
     result_str: str,
     test_client: FlaskClient,
+    snapshot: SnapshotFunc,
 ) -> None:
     response = test_client.get(
         "/long-example/api/query_result",
@@ -483,10 +498,24 @@ def test_api_query_result(
     data = assert_api_success(response)
     assert result_str in data["table"]
 
+    response = test_client.get(
+        "/long-example/api/query",
+        query_string={"query_string": query_string},
+    )
+    data = assert_api_success(response)
+    snapshot(data, json=True)
+
 
 def test_api_query_result_error(test_client: FlaskClient) -> None:
     response = test_client.get(
         "/long-example/api/query_result",
+        query_string={"query_string": "nononono"},
+    )
+    assert response.status_code == 200
+    assert "ERROR: Syntax error near" in response.get_data(as_text=True)
+
+    response = test_client.get(
+        "/long-example/api/query",
         query_string={"query_string": "nononono"},
     )
     assert response.status_code == 200

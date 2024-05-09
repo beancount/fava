@@ -19,7 +19,8 @@ import { journalSortOrder } from "../stores/journal";
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
 
-const get_direction = (o: SortOrder) => (o === "asc" ? 1 : -1);
+export const get_direction = (o: SortOrder): SortDirection =>
+  o === "asc" ? 1 : -1;
 
 const collator = Intl.Collator();
 /** A compare function for strings using the default browser locale. */
@@ -78,6 +79,15 @@ function sort_internal<T, U>(
   return permute(data, indices);
 }
 
+/** A SortColumn that does no sorting. */
+export class UnsortedColumn<T> implements SortColumn<T> {
+  constructor(readonly name: string) {}
+
+  sort(data: readonly T[]): readonly T[] {
+    return data;
+  }
+}
+
 /** A SortColumn for numbers. */
 export class NumberColumn<T> implements SortColumn<T> {
   private compare = (a: number, b: number): number => a - b;
@@ -131,7 +141,7 @@ function compare_numbers(a: string, b: string): number {
  * @param order - The sort order.
  * @param type - The type of the value that should be sorted by.
  */
-function sortElements<T extends Element>(
+export function sortElements<T extends Element>(
   parent: Element,
   elements: T[],
   selector: (e: T) => Element | null,
@@ -196,37 +206,4 @@ export function sortableJournal(ol: HTMLOListElement): void {
       journalSortOrder.set([name, order]);
     });
   });
-}
-
-export class SortableTable extends HTMLTableElement {
-  constructor() {
-    super();
-    const body = this.tBodies.item(0);
-    if (!this.tHead || !body) {
-      return;
-    }
-    const headers = [...this.tHead.querySelectorAll("th[data-sort]")];
-
-    headers.forEach((header, index) => {
-      header.addEventListener("click", () => {
-        const order =
-          header.getAttribute("data-order") === "asc" ? "desc" : "asc";
-        const type = header.getAttribute("data-sort");
-
-        // update sort order
-        headers.forEach((e) => {
-          e.removeAttribute("data-order");
-        });
-        header.setAttribute("data-order", order);
-
-        sortElements<HTMLTableRowElement>(
-          body,
-          [...body.querySelectorAll("tr")],
-          (tr) => tr.cells.item(index),
-          get_direction(order),
-          type,
-        );
-      });
-    });
-  }
 }

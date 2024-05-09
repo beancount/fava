@@ -1,12 +1,24 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
-import { Balance, entryValidator, Note, Transaction } from "../src/entries";
+import {
+  Amount,
+  Balance,
+  entryValidator,
+  Note,
+  Transaction,
+} from "../src/entries";
 
 test("create entries from scratch", () => {
   assert.instance(new Balance("2012-12-12"), Balance);
   assert.instance(new Note("2012-12-12"), Note);
   assert.instance(new Transaction("2012-12-12"), Transaction);
+});
+
+test("create amounts, cost, and positions from JSON data", () => {
+  const amt = Amount.validator({ number: 10, currency: "EUR" }).unwrap();
+  assert.is(amt.number, 10);
+  assert.instance(amt, Amount);
 });
 
 test("create entries from JSON data", () => {

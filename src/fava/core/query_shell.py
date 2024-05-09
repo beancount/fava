@@ -3,21 +3,26 @@
 from __future__ import annotations
 
 import contextlib
+import datetime
 import io
 import textwrap
-from typing import Any
+from dataclasses import dataclass
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from beancount.core.amount import Amount
+from beancount.core.inventory import Inventory
+from beancount.core.position import Position
 from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.query import query_compile
 from beancount.query.query_compile import CompilationError
 from beancount.query.query_parser import ParseError
 from beancount.query.query_parser import RunCustom
 from beancount.query.shell import BQLShell  # type: ignore[import-untyped]
-from beancount.utils import pager  # type: ignore[attr-defined]
 
 from fava.beans.funcs import execute_query
 from fava.beans.funcs import run_query
+from fava.core.conversion import simple_units
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIError
 from fava.util.excel import HAVE_EXCEL
@@ -25,11 +30,31 @@ from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import TypeVar
+
     from fava.beans.abc import Directive
     from fava.beans.abc import Query
     from fava.beans.funcs import QueryResult
+    from fava.beans.funcs import ResultRow
+    from fava.beans.funcs import ResultType
     from fava.core import FavaLedger
+    from fava.core.inventory import SimpleCounterInventory
     from fava.helpers import BeancountError
+
+    T = TypeVar("T")
+
+    QueryRowValue = (
+        bool | int | str | datetime.date | Decimal | Position | Inventory
+    )
+    SerialisedQueryRowValue = (
+        bool
+        | int
+        | str
+        | datetime.date
+        | Decimal
+        | Position
+        | SimpleCounterInventory
+    )
 
 # This is to limit the size of the history file. Fava is not using readline at
 # all, but Beancount somehow still is...
@@ -37,7 +62,7 @@ try:
     import readline
 
     readline.set_history_length(1000)
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 
@@ -48,7 +73,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         self.buffer = io.StringIO()
         BQLShell.__init__(
             self,
-            is_interactive=True,
+            is_interactive=False,
             loadfun=None,
             outfile=self.buffer,
         )
@@ -58,10 +83,11 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         self.entries: list[Directive] = []
         self.errors: list[BeancountError] = []
         self.options_map = OPTIONS_DEFAULTS
-        self.queries: list[Query] = []
 
-    def load_file(self) -> None:  # noqa: D102
-        self.queries = self.ledger.all_entries_by_type.Query
+    @property
+    def queries(self) -> list[Query]:
+        """All queries in the ledger."""
+        return self.ledger.all_entries_by_type.Query
 
     def add_help(self) -> None:
         """Attach help functions for each of the parsed token handlers."""
@@ -78,16 +104,12 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                 ),
             )
 
-    def _loadfun(self) -> None:
-        self.entries = self.ledger.all_entries
-        self.errors = self.ledger.errors
-        self.options_map = self.ledger.options
+    def get_pager(self) -> io.StringIO:
+        """No real pager, just self.buffer to print to."""
+        raise NotImplementedError
+        # maybe we should return self.buffer
 
-    def get_pager(self) -> Any:
-        """No real pager, just a wrapper that doesn't close self.buffer."""
-        return pager.flush_only(self.buffer)
-
-    def noop(self, _: Any) -> None:
+    def noop(self, _: T) -> None:
         """Doesn't do anything in Fava's query shell."""
         print(self.noop.__doc__, file=self.buffer)
 
@@ -114,7 +136,11 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
 
         self.result = rtypes, rrows
 
-    def execute_query(self, entries: list[Directive], query: str) -> Any:
+    def execute_query(
+        self, entries: list[Directive], query: str
+    ) -> (
+        tuple[str, None, None] | tuple[None, list[ResultType], list[ResultRow]]
+    ):
         """Run a query.
 
         Arguments:
@@ -127,8 +153,9 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
             contained in ``types`` and ``rows``, otherwise the result will be
             contained in ``contents`` (as a string).
         """
-        self._loadfun()
         self.entries = entries
+        self.errors = self.ledger.errors
+        self.options_map = self.ledger.options
         with contextlib.redirect_stdout(self.buffer):
             self.onecmd(query)
         contents = self.buffer.getvalue()
@@ -139,20 +166,20 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         self.result = None
         return (None, types, rows)
 
-    def on_RunCustom(self, run_stmt: RunCustom) -> Any:  # noqa: N802
+    def on_RunCustom(self, run_stmt: RunCustom) -> None:  # noqa: N802
         """Run a custom query."""
         name = run_stmt.query_name
         if name is None:
             # List the available queries.
             for query in self.queries:
-                print(query.name)  # noqa: T201
+                print(query.name, file=self.buffer)
         else:
             try:
                 query = next(
                     query for query in self.queries if query.name == name
                 )
             except StopIteration:
-                print(f"ERROR: Query '{name}' not found")  # noqa: T201
+                print(f"ERROR: Query '{name}' not found", file=self.buffer)
             else:
                 statement = self.parser.parse(query.query_string)
                 self.dispatch(statement)
@@ -162,7 +189,7 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         entries: list[Directive],
         query_string: str,
         result_format: str,
-    ) -> Any:
+    ) -> tuple[str, io.BytesIO]:
         """Get query result as file.
 
         Arguments:
@@ -219,3 +246,125 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
 
 
 QueryShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
+
+
+@dataclass(frozen=True)
+class BaseColumn:
+    """A query column."""
+
+    name: str
+    dtype: str
+
+    @staticmethod
+    def serialise(
+        val: QueryRowValue,
+    ) -> SerialisedQueryRowValue:
+        """Serialiseable version of the column value."""
+        return val  # type: ignore[return-value]
+
+
+@dataclass(frozen=True)
+class BoolColumn(BaseColumn):
+    """A boolean query column."""
+
+    dtype: str = "bool"
+
+
+@dataclass(frozen=True)
+class DecimalColumn(BaseColumn):
+    """A Decimal query column."""
+
+    dtype: str = "Decimal"
+
+
+@dataclass(frozen=True)
+class IntColumn(BaseColumn):
+    """A int query column."""
+
+    dtype: str = "int"
+
+
+@dataclass(frozen=True)
+class StrColumn(BaseColumn):
+    """A str query column."""
+
+    dtype: str = "str"
+
+
+@dataclass(frozen=True)
+class DateColumn(BaseColumn):
+    """A date query column."""
+
+    dtype: str = "date"
+
+
+@dataclass(frozen=True)
+class PositionColumn(BaseColumn):
+    """A Position query column."""
+
+    dtype: str = "Position"
+
+
+@dataclass(frozen=True)
+class SetColumn(BaseColumn):
+    """A set query column."""
+
+    dtype: str = "set"
+
+
+@dataclass(frozen=True)
+class AmountColumn(BaseColumn):
+    """An amount query column."""
+
+    dtype: str = "Amount"
+
+
+@dataclass(frozen=True)
+class ObjectColumn(BaseColumn):
+    """An object query column."""
+
+    dtype: str = "object"
+
+    @staticmethod
+    def serialise(val: object) -> str:
+        """Serialise an object of unknown type to a string."""
+        return str(val)
+
+
+@dataclass(frozen=True)
+class InventoryColumn(BaseColumn):
+    """A str query column."""
+
+    dtype: str = "Inventory"
+
+    @staticmethod
+    def serialise(val: Inventory) -> SimpleCounterInventory:  # type: ignore[override]
+        """Serialise an inventory."""
+        return simple_units(val)
+
+
+COLUMNS = {
+    Amount: AmountColumn,
+    Decimal: DecimalColumn,
+    Inventory: InventoryColumn,
+    Position: PositionColumn,
+    bool: BoolColumn,
+    datetime.date: DateColumn,
+    int: IntColumn,
+    set: SetColumn,
+    str: StrColumn,
+    object: ObjectColumn,
+}
+
+
+def serialise_query_result(
+    types: list[ResultType], rows: list[ResultRow]
+) -> tuple[list[BaseColumn], list[tuple[SerialisedQueryRowValue, ...]]]:
+    """Serialise the query result."""
+    dtypes = [COLUMNS[dtype](name) for name, dtype in types]
+    mappers = [d.serialise for d in dtypes]
+    mapped_rows = [
+        tuple(mapper(row[i]) for i, mapper in enumerate(mappers))
+        for row in rows
+    ]
+    return dtypes, mapped_rows

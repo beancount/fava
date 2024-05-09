@@ -1,0 +1,2556 @@
+{
+  "rows": [
+    [
+      1,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 3453.18
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 3453.18
+      },
+      {
+        "USD": 3453.18
+      },
+      "",
+      []
+    ],
+    [
+      1,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -3453.18
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -3453.18
+      },
+      {},
+      "",
+      []
+    ],
+    [
+      1,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": -17500
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": -17500
+      },
+      {
+        "IRAUSD": -17500
+      },
+      "",
+      []
+    ],
+    [
+      1,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": 17500
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": 17500
+      },
+      {},
+      "",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1350.6
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1350.6
+      },
+      {
+        "USD": 1350.6
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1200.0
+      },
+      {
+        "USD": 2550.6
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -4615.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -4615.38
+      },
+      {
+        "USD": -2064.78
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -24.32
+      },
+      {
+        "USD": -2089.1
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 24.32
+      },
+      {
+        "USD": -2064.78
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 2.9
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 2.9
+      },
+      {
+        "USD": -2061.88
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 27.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 27.38
+      },
+      {
+        "USD": -2034.5
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 42.3
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 42.3
+      },
+      {
+        "USD": -1992.2
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 106.62
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 106.62
+      },
+      {
+        "USD": -1885.58
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1062.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1062.92
+      },
+      {
+        "USD": -822.66
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 365.08
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 365.08
+      },
+      {
+        "USD": -457.58
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 174.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 174.92
+      },
+      {
+        "USD": -282.66
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1.12
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1.12
+      },
+      {
+        "USD": -281.54
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 281.54
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 281.54
+      },
+      {},
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": -1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": -1200.0
+      },
+      {
+        "IRAUSD": -1200.0
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": 1200.0
+      },
+      {},
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": 5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": 5
+      },
+      {
+        "VACHR": 5
+      },
+      "BayBook",
+      []
+    ],
+    [
+      2,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": -5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": -5
+      },
+      {},
+      "BayBook",
+      []
+    ],
+    [
+      3,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 600.0
+      },
+      {
+        "USD": 600.0
+      },
+      "",
+      []
+    ],
+    [
+      3,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -600.0
+      },
+      {},
+      "",
+      []
+    ],
+    [
+      4,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -4.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -4.0
+      },
+      {
+        "USD": -4.0
+      },
+      "BANK FEES",
+      []
+    ],
+    [
+      4,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 4.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 4.0
+      },
+      {},
+      "BANK FEES",
+      []
+    ],
+    [
+      4,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -38.48
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -38.48
+      },
+      {
+        "USD": -38.48
+      },
+      "Kin Soy",
+      []
+    ],
+    [
+      4,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 38.48
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 38.48
+      },
+      {},
+      "Kin Soy",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -2400.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -2400.0
+      },
+      {
+        "USD": -2400.0
+      },
+      "RiverBank Properties",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 2400.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 2400.0
+      },
+      {},
+      "RiverBank Properties",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-06",
+          "label": null,
+          "number": 32.78
+        },
+        "units": {
+          "currency": "VBMPX",
+          "number": 14.643
+        }
+      },
+      {
+        "currency": "VBMPX",
+        "number": 14.643
+      },
+      {
+        "VBMPX": 14.643
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -480.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -480.0
+      },
+      {
+        "USD": -480.0,
+        "VBMPX": 14.643
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-06",
+          "label": null,
+          "number": 92.75
+        },
+        "units": {
+          "currency": "RGAGX",
+          "number": 7.763
+        }
+      },
+      {
+        "currency": "RGAGX",
+        "number": 7.763
+      },
+      {
+        "RGAGX": 7.763,
+        "USD": -480.0,
+        "VBMPX": 14.643
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -720.02
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -720.02
+      },
+      {
+        "RGAGX": 7.763,
+        "USD": -1200.02,
+        "VBMPX": 14.643
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-06",
+          "label": null,
+          "number": 32.78
+        },
+        "units": {
+          "currency": "VBMPX",
+          "number": 7.321
+        }
+      },
+      {
+        "currency": "VBMPX",
+        "number": 7.321
+      },
+      {
+        "RGAGX": 7.763,
+        "USD": -1200.02,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -239.98
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -239.98
+      },
+      {
+        "RGAGX": 7.763,
+        "USD": -1440.0,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-06",
+          "label": null,
+          "number": 92.75
+        },
+        "units": {
+          "currency": "RGAGX",
+          "number": 3.881
+        }
+      },
+      {
+        "currency": "RGAGX",
+        "number": 3.881
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1440.0,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      6,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -359.96
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -359.96
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      8,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -23.57
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -23.57
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1823.53,
+        "VBMPX": 21.964
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      8,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 23.57
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 23.57
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      9,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -65.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -65.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1864.96,
+        "VBMPX": 21.964
+      },
+      "EDISON POWER",
+      []
+    ],
+    [
+      9,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 65.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 65.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "EDISON POWER",
+      []
+    ],
+    [
+      10,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -73.28
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -73.28
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1873.24,
+        "VBMPX": 21.964
+      },
+      "Corner Deli",
+      []
+    ],
+    [
+      10,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 73.28
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 73.28
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Corner Deli",
+      []
+    ],
+    [
+      11,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -30.94
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -30.94
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1830.9,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      11,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 30.94
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 30.94
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      11,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 166.27
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 166.27
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1633.69,
+        "VBMPX": 21.964
+      },
+      "Chase:Slate",
+      []
+    ],
+    [
+      11,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -166.27
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -166.27
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Chase:Slate",
+      []
+    ],
+    [
+      12,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -24.94
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -24.94
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1824.9,
+        "VBMPX": 21.964
+      },
+      "China Garden",
+      []
+    ],
+    [
+      12,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 24.94
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 24.94
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "China Garden",
+      []
+    ],
+    [
+      14,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -34.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -34.92
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1834.88,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      14,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 34.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 34.92
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      15,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -37.13
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -37.13
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1837.09,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      15,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 37.13
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 37.13
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -22.21
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -22.21
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1822.17,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 22.21
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 22.21
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1350.6
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1350.6
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -449.36,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1200.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": 750.64,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -4615.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -4615.38
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3864.74,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -24.32
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3889.06,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 24.32
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3864.74,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 2.9
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 2.9
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3861.84,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 27.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 27.38
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3834.46,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 42.3
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 42.3
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3792.16,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 106.62
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 106.62
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -3685.54,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1062.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1062.92
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -2622.62,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 365.08
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 365.08
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -2257.54,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 174.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 174.92
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -2082.62,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1.12
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1.12
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -2081.5,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 281.54
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 281.54
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": -1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": -1200.0
+      },
+      {
+        "IRAUSD": -1200.0,
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": 1200.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": 5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": 5
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VACHR": 5,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      16,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": -5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": -5
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "BayBook",
+      []
+    ],
+    [
+      17,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 600.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1199.96,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      17,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -600.0
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "",
+      []
+    ],
+    [
+      19,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -85.14
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -85.14
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1885.1,
+        "VBMPX": 21.964
+      },
+      "Verizon Wireless",
+      []
+    ],
+    [
+      19,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 85.14
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 85.14
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Verizon Wireless",
+      []
+    ],
+    [
+      19,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -31.71
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -31.71
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1831.67,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      19,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 31.71
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 31.71
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 21.964
+      },
+      "Goba Goba",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-20",
+          "label": null,
+          "number": 33.15
+        },
+        "units": {
+          "currency": "VBMPX",
+          "number": 14.48
+        }
+      },
+      {
+        "currency": "VBMPX",
+        "number": 14.48
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -1799.96,
+        "VBMPX": 36.444
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -480.01
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -480.01
+      },
+      {
+        "RGAGX": 11.644,
+        "USD": -2279.97,
+        "VBMPX": 36.444
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-20",
+          "label": null,
+          "number": 92.12
+        },
+        "units": {
+          "currency": "RGAGX",
+          "number": 7.816
+        }
+      },
+      {
+        "currency": "RGAGX",
+        "number": 7.816
+      },
+      {
+        "RGAGX": 19.46,
+        "USD": -2279.97,
+        "VBMPX": 36.444
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -720.01
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -720.01
+      },
+      {
+        "RGAGX": 19.46,
+        "USD": -2999.98,
+        "VBMPX": 36.444
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-20",
+          "label": null,
+          "number": 33.15
+        },
+        "units": {
+          "currency": "VBMPX",
+          "number": 7.24
+        }
+      },
+      {
+        "currency": "VBMPX",
+        "number": 7.24
+      },
+      {
+        "RGAGX": 19.46,
+        "USD": -2999.98,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -240.01
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -240.01
+      },
+      {
+        "RGAGX": 19.46,
+        "USD": -3239.99,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": {
+          "currency": "USD",
+          "date": "2014-01-20",
+          "label": null,
+          "number": 92.12
+        },
+        "units": {
+          "currency": "RGAGX",
+          "number": 3.908
+        }
+      },
+      {
+        "currency": "RGAGX",
+        "number": 3.908
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3239.99,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ],
+    [
+      20,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -360.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -360.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ],
+    [
+      21,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -60.79
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -60.79
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3660.78,
+        "VBMPX": 43.684
+      },
+      "Good Moods Market",
+      []
+    ],
+    [
+      21,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 60.79
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 60.79
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Good Moods Market",
+      []
+    ],
+    [
+      22,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -79.83
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -79.83
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3679.82,
+        "VBMPX": 43.684
+      },
+      "Wine-Tarner Cable",
+      []
+    ],
+    [
+      22,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 79.83
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 79.83
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Wine-Tarner Cable",
+      []
+    ],
+    [
+      23,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -22.64
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -22.64
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3622.63,
+        "VBMPX": 43.684
+      },
+      "Jewel of Morroco",
+      []
+    ],
+    [
+      23,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 22.64
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 22.64
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Jewel of Morroco",
+      []
+    ],
+    [
+      25,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -48.63
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -48.63
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3648.62,
+        "VBMPX": 43.684
+      },
+      "Uncle Boons",
+      []
+    ],
+    [
+      25,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 48.63
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 48.63
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Uncle Boons",
+      []
+    ],
+    [
+      28,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -120.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -120.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3719.99,
+        "VBMPX": 43.684
+      },
+      "Metro Transport Authority",
+      []
+    ],
+    [
+      28,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 120.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 120.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Metro Transport Authority",
+      []
+    ],
+    [
+      29,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -23.39
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -23.39
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3623.38,
+        "VBMPX": 43.684
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      29,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 23.39
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 23.39
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -38.56
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -38.56
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3638.55,
+        "VBMPX": 43.684
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 38.56
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 38.56
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "Chichipotle",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1350.6
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1350.6
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -2249.39,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1200.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -1049.39,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -4615.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -4615.38
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5664.77,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -24.32
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5689.09,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 24.32
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 24.32
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5664.77,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 2.9
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 2.9
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5661.87,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 27.38
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 27.38
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5634.49,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 42.3
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 42.3
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5592.19,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 106.62
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 106.62
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -5485.57,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1062.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1062.92
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -4422.65,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 365.08
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 365.08
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -4057.57,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 174.92
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 174.92
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3882.65,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 1.12
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 1.12
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3881.53,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 281.54
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 281.54
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": -1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": -1200.0
+      },
+      {
+        "IRAUSD": -1200.0,
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "IRAUSD",
+          "number": 1200.0
+        }
+      },
+      {
+        "currency": "IRAUSD",
+        "number": 1200.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": 5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": 5
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VACHR": 5,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      30,
+      {
+        "cost": null,
+        "units": {
+          "currency": "VACHR",
+          "number": -5
+        }
+      },
+      {
+        "currency": "VACHR",
+        "number": -5
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "BayBook",
+      []
+    ],
+    [
+      31,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": 600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": 600.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -2999.99,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ],
+    [
+      31,
+      {
+        "cost": null,
+        "units": {
+          "currency": "USD",
+          "number": -600.0
+        }
+      },
+      {
+        "currency": "USD",
+        "number": -600.0
+      },
+      {
+        "RGAGX": 23.368,
+        "USD": -3599.99,
+        "VBMPX": 43.684
+      },
+      "",
+      []
+    ]
+  ],
+  "t": "table",
+  "types": [
+    {
+      "dtype": "int",
+      "name": "day"
+    },
+    {
+      "dtype": "Position",
+      "name": "position"
+    },
+    {
+      "dtype": "Amount",
+      "name": "units_position"
+    },
+    {
+      "dtype": "Inventory",
+      "name": "balance"
+    },
+    {
+      "dtype": "str",
+      "name": "payee"
+    },
+    {
+      "dtype": "set",
+      "name": "tags"
+    }
+  ]
+}

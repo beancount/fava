@@ -1,11 +1,15 @@
+import { day, type FormatterContext } from "./format";
 import { is_empty } from "./lib/objects";
 import { ok } from "./lib/result";
 import type { SafeValidator, Validator } from "./lib/validation";
 import {
   array,
   constant,
+  date,
   defaultValue,
+  number,
   object,
+  optional,
   optional_string,
   record,
   string,
@@ -24,6 +28,79 @@ const entry_meta_item: SafeValidator<string | number | boolean> = (json) => {
 };
 
 const entry_meta_validator = record(entry_meta_item);
+
+/** An amount is a pair of number and currency. */
+export class Amount {
+  constructor(
+    readonly number: number,
+    readonly currency: string,
+  ) {}
+
+  /** Render to a string. */
+  str($ctx: FormatterContext): string {
+    return $ctx.amount(this.number, this.currency);
+  }
+
+  private static raw_validator = object({ number, currency: string });
+
+  static validator: Validator<Amount> = (json) =>
+    Amount.raw_validator(json).map(
+      ({ number, currency }) => new Amount(number, currency),
+    );
+}
+
+/** A cost is a pair of number and currency with date and an optional label. */
+export class Cost {
+  constructor(
+    readonly number: number,
+    readonly currency: string,
+    readonly date: Date | null,
+    readonly label: string | null,
+  ) {}
+
+  /** Render to a string. */
+  str($ctx: FormatterContext): string {
+    const strs = [$ctx.amount(this.number, this.currency)];
+    if (this.date) {
+      strs.push(day(this.date));
+    }
+    if (this.label != null && this.label) {
+      strs.push(`"${this.label}"`);
+    }
+    return strs.join(", ");
+  }
+
+  private static raw_validator = object({
+    number,
+    currency: string,
+    date: optional(date),
+    label: optional_string,
+  });
+
+  static validator: Validator<Cost> = (json) =>
+    Cost.raw_validator(json).map(
+      ({ number, currency, date, label }) =>
+        new Cost(number, currency, date, label),
+    );
+}
+
+/** A position, a pair of units and cost. */
+export class Position {
+  constructor(
+    readonly units: Amount,
+    readonly cost: Cost | null,
+  ) {}
+
+  private static raw_validator = object({
+    units: Amount.validator,
+    cost: optional(Cost.validator),
+  });
+
+  static validator: Validator<Position> = (json) =>
+    Position.raw_validator(json).map(
+      ({ units, cost }) => new Position(units, cost),
+    );
+}
 
 /** A posting. */
 export class Posting {
@@ -51,11 +128,6 @@ export class Posting {
     Posting.raw_validator(json).map((value) =>
       Object.assign(new Posting(), value),
     );
-}
-
-interface Amount {
-  number: string;
-  currency: string;
 }
 
 export type EntryMetadata = Record<string, string | boolean | number>;
@@ -101,7 +173,10 @@ abstract class EntryBase {
 export class Balance extends EntryBase {
   account: string;
 
-  amount: Amount;
+  amount: {
+    number: string;
+    currency: string;
+  };
 
   constructor(date: string) {
     super("Balance", date);

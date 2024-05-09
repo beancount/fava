@@ -112,5 +112,7 @@ def test_query(
         example_ledger.all_entries,
         query,
     )
+    assert types
+    assert rows
     data = example_ledger.charts.query(types, rows)
     snapshot(data, json=True)

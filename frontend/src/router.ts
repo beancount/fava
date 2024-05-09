@@ -185,6 +185,23 @@ export class Router extends Events<"page-loaded"> {
     }
   }
 
+  /**
+   * Set the URL parameter and push a history state for it if changed.
+   */
+  set_search_param(key: string, value: string): void {
+    const url = new URL(window.location.href);
+    const current_value = url.searchParams.get(key) ?? "";
+    if (value !== current_value) {
+      if (value) {
+        url.searchParams.set(key, value);
+      } else {
+        url.searchParams.delete(key);
+      }
+      window.history.pushState(null, "", url);
+      this.updateState();
+    }
+  }
+
   /*
    * Replace <article> contents with the page at `url`.
    *

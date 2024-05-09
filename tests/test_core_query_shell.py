@@ -31,6 +31,8 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
         return contents
 
     assert run_text("help")
+    assert run_text("print")
+    assert run_text("exit") == "Doesn't do anything in Fava's query shell."
     assert (
         run_text("help exit") == "Doesn't do anything in Fava's query shell."
     )
@@ -44,6 +46,13 @@ def test_query(snapshot: SnapshotFunc, get_ledger: GetFavaLedger) -> None:
     assert run_text("run") == "custom_query\ncustom query with space"
     bal = run("balances")
     snapshot(bal)
+
+    various_types = run(
+        "select date, payee, weight, change, balance, "
+        "cost_number, coalesce(cost_number, 1), tags"
+    )
+    assert len(various_types[1]) == 8
+
     assert run("run custom_query") == bal
     assert run("run 'custom query with space'") == bal
     assert run("balances")[1:] == run_query(

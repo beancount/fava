@@ -85,8 +85,4 @@
   svg {
     shape-rendering: crispedges;
   }
-
-  text {
-    cursor: pointer;
-  }
 </style>

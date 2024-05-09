@@ -17,6 +17,10 @@ export const short = derived(
     $incognito ? (n) => replaceNumbers(short_format(n)) : short_format,
 );
 
+/** Format a number for which the currency is not known. */
+export const num = derived(locale, ($locale) => localeFormatter($locale));
+
+/** Formatting context for currencies. */
 export const ctx = derived(
   [incognito, locale, precisions],
   ([$incognito, $locale, $precisions]): FormatterContext => {
