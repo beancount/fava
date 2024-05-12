@@ -8,18 +8,16 @@ anyio==4.3.0
     # via watchfiles
 astroid==3.1.0
     # via pylint
-babel==2.14.0
+babel==2.15.0
     # via
     #   flask-babel
     #   sphinx
-backports-tarfile==1.1.1
-    # via jaraco-context
 beancount==2.3.6
 beautifulsoup4==4.12.3
     # via
     #   beancount
     #   furo
-blinker==1.7.0
+blinker==1.8.2
     # via flask
 bottle==0.12.25
     # via beancount
@@ -46,9 +44,9 @@ click==8.1.7
     # via flask
 colorama==0.4.6
     # via tox
-coverage==7.5.0
+coverage==7.5.1
     # via pytest-cov
-cryptography==42.0.5
+cryptography==42.0.7
     # via secretstorage
 dill==0.3.8
     # via pylint
@@ -60,17 +58,17 @@ docutils==0.21.2
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.13.4
+filelock==3.14.0
     # via
     #   tox
     #   virtualenv
 flask==3.0.3
     # via flask-babel
 flask-babel==4.0.0
-furo==2024.4.27
-google-api-core==2.18.0
+furo==2024.5.6
+google-api-core==2.19.0
     # via google-api-python-client
-google-api-python-client==2.127.0
+google-api-python-client==2.129.0
     # via beancount
 google-auth==2.29.0
     # via
@@ -94,9 +92,7 @@ idna==3.7
 imagesize==1.4.1
     # via sphinx
 importlib-metadata==7.1.0
-    # via
-    #   keyring
-    #   twine
+    # via twine
 iniconfig==2.0.0
     # via pytest
 isort==5.13.2
@@ -115,7 +111,7 @@ jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   flask
     #   flask-babel
@@ -181,7 +177,7 @@ pluggy==1.5.0
     #   tox
 ply==3.11
     # via beancount
-pre-commit==3.7.0
+pre-commit==3.7.1
 proto-plus==1.23.0
     # via google-api-core
 protobuf==4.25.3
@@ -207,23 +203,23 @@ pyexcel-io==0.6.6
     #   pyexcel-xlsx
 pyexcel-ods3==0.6.1
 pyexcel-xlsx==0.6.0
-pygments==2.17.2
+pygments==2.18.0
     # via
     #   furo
     #   readme-renderer
     #   rich
     #   sphinx
 pyinstaller==6.6.0
-pyinstaller-hooks-contrib==2024.5
+pyinstaller-hooks-contrib==2024.6
     # via pyinstaller
 pylint==3.1.0
 pyparsing==3.1.2
     # via httplib2
 pyproject-api==1.6.1
     # via tox
-pyproject-hooks==1.0.0
+pyproject-hooks==1.1.0
     # via build
-pytest==8.1.2
+pytest==8.2.0
     # via
     #   beancount
     #   pytest-cov
@@ -293,11 +289,11 @@ sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
 texttable==1.7.0
     # via pyexcel
-tomlkit==0.12.4
+tomlkit==0.12.5
     # via pylint
 tox==4.15.0
     # via tox-uv
-tox-uv==1.7.0
+tox-uv==1.8.2
 twine==5.0.0
 types-setuptools==69.5.0.20240423
 types-simplejson==3.19.0.20240310
@@ -309,14 +305,14 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.39
+uv==0.1.42
     # via tox-uv
-virtualenv==20.26.0
+virtualenv==20.26.1
     # via
     #   pre-commit
     #   tox
 watchfiles==0.21.0
-werkzeug==3.0.2
+werkzeug==3.0.3
     # via flask
 zipp==3.18.1
     # via importlib-metadata
