@@ -89,17 +89,22 @@
    */
   async function extract(filename: string, importer: string) {
     const extractCacheKey = `${filename}:${importer}`;
-    let cached = extractCache.get(extractCacheKey);
-    if (!cached) {
-      cached = await get("extract", { filename, importer });
-      if (!cached.length) {
-        notify("No entries to import from this file.", "warning");
-        return;
-      }
-      extractCache.set(extractCacheKey, cached);
-      extractCache = extractCache;
+    const cached = extractCache.get(extractCacheKey);
+    if (cached) {
+      entries = cached;
+      return;
     }
-    entries = cached;
+    try {
+      entries = await get("extract", { filename, importer });
+      if (entries.length) {
+        extractCache.set(extractCacheKey, entries);
+        extractCache = extractCache;
+      } else {
+        notify("No entries to import from this file.", "warning");
+      }
+    } catch (error) {
+      notify_err(error, (e) => e.message);
+    }
   }
 
   /**

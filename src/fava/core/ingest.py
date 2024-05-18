@@ -33,6 +33,34 @@ class IngestError(BeancountError):
     """An error with one of the importers."""
 
 
+class ImporterMethodCallError(FavaAPIError):
+    """Error calling one of the importer methods."""
+
+    def __init__(self, err: Exception) -> None:
+        super().__init__(f"Error calling importer method: {err}")
+
+
+class ImporterExtractError(FavaAPIError):
+    """Error calling extract for importer."""
+
+    def __init__(self, name: str, err: Exception) -> None:
+        super().__init__(f"Error calling extract for importer {name}: {err}")
+
+
+class MissingImporterConfigError(FavaAPIError):
+    """Missing import-config option."""
+
+    def __init__(self) -> None:
+        super().__init__("Missing import-config option")
+
+
+class MissingImporterDirsError(FavaAPIError):
+    """You need to set at least one imports-dir."""
+
+    def __init__(self) -> None:
+        super().__init__("You need to set at least one imports-dir.")
+
+
 @dataclass(frozen=True)
 class FileImportInfo:
     """Info about one file/importer combination."""
@@ -63,7 +91,7 @@ def file_import_info(
         date = importer.file_date(file)
         name = importer.file_name(file)
     except Exception as err:
-        raise FavaAPIError(f"Error calling importer method: {err}") from err
+        raise ImporterMethodCallError(err) from err
 
     return FileImportInfo(
         importer.name(),
@@ -177,7 +205,7 @@ class IngestModule(FavaModule):
             A list of new imported entries.
         """
         if not self.module_path:
-            raise FavaAPIError("Missing import-config option")
+            raise MissingImporterConfigError
 
         if (
             self.mtime is None
@@ -185,11 +213,14 @@ class IngestModule(FavaModule):
         ):
             self.load_file()
 
-        new_entries = extract.extract_from_file(
-            filename,
-            self.importers.get(importer_name),
-            existing_entries=self.ledger.all_entries,
-        )
+        try:
+            new_entries = extract.extract_from_file(
+                filename,
+                self.importers.get(importer_name),
+                existing_entries=self.ledger.all_entries,
+            )
+        except Exception as exc:
+            raise ImporterExtractError(importer_name, exc) from exc
 
         new_entries_list: list[tuple[str, list[Directive]]] = [
             (filename, new_entries),
@@ -218,7 +249,7 @@ def filepath_in_primary_imports_folder(
     """
     primary_imports_folder = next(iter(ledger.fava_options.import_dirs), None)
     if primary_imports_folder is None:
-        raise FavaAPIError("You need to set at least one imports-dir.")
+        raise MissingImporterDirsError
 
     for separator in sep, altsep:
         if separator:
