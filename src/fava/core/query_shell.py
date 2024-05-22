@@ -194,7 +194,8 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                     query for query in self.queries if query.name == name
                 )
             except StopIteration as exc:
-                raise FavaAPIError(f'Query "{name}" not found.') from exc
+                msg = f'Query "{name}" not found.'
+                raise FavaAPIError(msg) from exc
             query_string = query.query_string
 
         try:
@@ -211,7 +212,8 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
             data = to_csv(types, rows)
         else:
             if not HAVE_EXCEL:
-                raise FavaAPIError("Result format not supported.")
+                msg = "Result format not supported."
+                raise FavaAPIError(msg)
             data = to_excel(types, rows, result_format, query_string)
         return name, data
 

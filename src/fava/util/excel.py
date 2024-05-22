@@ -20,6 +20,11 @@ except ImportError:  # pragma: no cover
     HAVE_EXCEL = False
 
 
+class InvalidResultFormatError(ValueError):  # noqa: D101
+    def __init__(self, result_format: str) -> None:
+        super().__init__(f"Invalid result format: {result_format}")
+
+
 def to_excel(
     types: list[ResultType],
     rows: list[ResultRow],
@@ -38,14 +43,12 @@ def to_excel(
         The (binary) file contents.
     """
     if result_format not in {"xlsx", "ods"}:
-        raise ValueError(f"Invalid result format: {result_format}")
+        raise InvalidResultFormatError(result_format)
     resp = io.BytesIO()
-    book = pyexcel.Book(
-        {
-            "Results": _result_array(types, rows),
-            "Query": [["Query"], [query_string]],
-        },
-    )
+    book = pyexcel.Book({
+        "Results": _result_array(types, rows),
+        "Query": [["Query"], [query_string]],
+    })
     book.save_to_memory(result_format, resp)
     resp.seek(0)
     return resp
@@ -94,6 +97,7 @@ def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
             result.append(str(value))
         else:
             if not isinstance(value, str):
-                raise TypeError(f"unexpected type {type(value)}")
+                msg = f"unexpected type {type(value)}"
+                raise TypeError(msg)
             result.append(value)
     return result

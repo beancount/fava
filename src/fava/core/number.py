@@ -40,7 +40,8 @@ def get_locale_format(locale: Locale | None, precision: int) -> Formatter:
 
     pattern = copy.copy(locale.decimal_formats.get(None))
     if not pattern:
-        raise ValueError("Expected Locale to have a decimal format pattern")
+        msg = "Expected Locale to have a decimal format pattern"
+        raise ValueError(msg)
     pattern.frac_prec = (precision, precision)
 
     def locale_fmt(num: Decimal) -> str:

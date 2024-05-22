@@ -73,7 +73,8 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
                         option[1][1],
                     )
                 else:
-                    raise FavaAPIError("Portfolio List: Invalid option.")
+                    msg = "Portfolio List: Invalid option."
+                    raise FavaAPIError(msg)
                 portfolios.append(portfolio)
 
         return portfolios

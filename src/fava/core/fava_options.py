@@ -85,6 +85,31 @@ TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
 STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
 
 
+class UnknownOptionError(ValueError):  # noqa: D101
+    def __init__(self, key: str) -> None:
+        super().__init__(f"Unknown option `{key}`")
+
+
+class NotARegularExpressionError(TypeError):  # noqa: D101
+    def __init__(self, value: str) -> None:
+        super().__init__(f"Should be a regular expression: '{value}'.")
+
+
+class NotAStringOptionError(TypeError):  # noqa: D101
+    def __init__(self, key: str) -> None:
+        super().__init__(f"Expected string value for option `{key}`")
+
+
+class UnknownLocaleOptionError(ValueError):  # noqa: D101
+    def __init__(self, value: str) -> None:
+        super().__init__(f"Unknown locale: '{value}'.")
+
+
+class InvalidFiscalYearEndOptionError(ValueError):  # noqa: D101
+    def __init__(self, value: str) -> None:
+        super().__init__(f"Invalid 'fiscal_year_end' option: '{value}'.")
+
+
 def parse_option_custom_entry(  # noqa: PLR0912
     entry: Custom,
     options: FavaOptions,
@@ -92,7 +117,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
     """Parse a single custom fava-option entry and set option accordingly."""
     key = entry.values[0].value.replace("-", "_")
     if key not in All_OPTS:
-        raise ValueError(f"unknown option `{key}`")
+        raise UnknownOptionError(key)
 
     if key == "default_file":
         filename, _lineno = get_position(entry)
@@ -101,15 +126,13 @@ def parse_option_custom_entry(  # noqa: PLR0912
 
     value = entry.values[1].value
     if not isinstance(value, str):
-        raise TypeError(f"expected string value for option `{key}`")
+        raise NotAStringOptionError(key)
 
     if key == "insert_entry":
         try:
             pattern = re.compile(value)
         except re.error as err:
-            raise TypeError(
-                f"Should be a regular expression: '{value}'.",
-            ) from err
+            raise NotARegularExpressionError(value) from err
         filename, lineno = get_position(entry)
         opt = InsertEntryOption(entry.date, pattern, filename, lineno)
         options.insert_entry.append(opt)
@@ -117,20 +140,18 @@ def parse_option_custom_entry(  # noqa: PLR0912
         try:
             pattern = re.compile(value)
         except re.error as err:
-            raise TypeError(
-                f"Should be a regular expression: '{value}'.",
-            ) from err
+            raise NotARegularExpressionError(value) from err
         options.collapse_pattern.append(pattern)
     elif key == "locale":
         try:
             Locale.parse(value)
             options.locale = value
         except UnknownLocaleError as err:
-            raise ValueError(f"Unknown locale: '{value}'.") from err
+            raise UnknownLocaleOptionError(value) from err
     elif key == "fiscal_year_end":
         fye = parse_fye_string(value)
         if fye is None:
-            raise ValueError("Invalid 'fiscal_year_end' option.")
+            raise InvalidFiscalYearEndOptionError(value)
         options.fiscal_year_end = fye
     elif key in STR_OPTS:
         setattr(options, key, value)

@@ -13,6 +13,20 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 
+class NotADocumentsFolderError(FavaAPIError):
+    """Not a documents folder."""
+
+    def __init__(self, folder: str) -> None:
+        super().__init__(f"Not a documents folder: {folder}.")
+
+
+class NotAValidAccountError(FavaAPIError):
+    """Not a valid account."""
+
+    def __init__(self, account: str) -> None:
+        super().__init__(f"Not a valid account: '{account}'")
+
+
 def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
     """Check whether the filename is a document or in an import directory.
 
@@ -52,10 +66,10 @@ def filepath_in_document_folder(
         The path that the document should be saved at.
     """
     if documents_folder not in ledger.options["documents"]:
-        raise FavaAPIError(f"Not a documents folder: {documents_folder}.")
+        raise NotADocumentsFolderError(documents_folder)
 
     if account not in ledger.attributes.accounts:
-        raise FavaAPIError(f"Not a valid account: '{account}'")
+        raise NotAValidAccountError(account)
 
     for separator in sep, altsep:
         if separator:

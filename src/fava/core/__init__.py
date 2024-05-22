@@ -480,9 +480,8 @@ class FavaLedger:
                 if entry_hash == hash_entry(entry)
             )
         except StopIteration as exc:
-            raise FavaAPIError(
-                f'No entry found for hash "{entry_hash}"',
-            ) from exc
+            msg = f'No entry found for hash "{entry_hash}"'
+            raise FavaAPIError(msg) from exc
 
     def context(
         self,
@@ -549,7 +548,8 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
         if not isinstance(value, str):
-            raise FavaAPIError("Statement path needs to be a string.")
+            msg = "Statement path needs to be a string."
+            raise FavaAPIError(msg)
 
         accounts = set(get_entry_accounts(entry))
         filename, _ = get_position(entry)
@@ -563,6 +563,7 @@ class FavaLedger:
             ):
                 return document.filename
 
-        raise FavaAPIError("Statement not found.")
+        msg = "Statement not found."
+        raise FavaAPIError(msg)
 
     group_entries_by_type = staticmethod(group_entries_by_type)

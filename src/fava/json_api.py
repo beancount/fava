@@ -56,6 +56,22 @@ class ValidationError(Exception):
     """Validation of data failed."""
 
 
+class MissingParameterValidationError(ValidationError):
+    """Validation failed due to missing parameter."""
+
+    def __init__(self, param: str) -> None:
+        super().__init__(f"Parameter `{param}` is missing.")
+
+
+class IncorrectTypeValidationError(ValidationError):
+    """Validation failed due to incorrect type of parameter."""
+
+    def __init__(self, param: str, expected: type) -> None:
+        super().__init__(
+            f"Parameter `{param}` of incorrect type - expected {expected}.",
+        )
+
+
 def json_err(msg: str) -> Response:
     """Jsonify the error message."""
     return jsonify({"success": False, "error": msg})
@@ -103,11 +119,11 @@ def validate_func_arguments(
     params: list[tuple[str, Any]] = []
     for param in sig.parameters.values():
         if param.annotation not in {"str", "list[Any]"}:  # pragma: no cover
-            raise ValueError(
-                f"Type of param {param.name} needs to str or list",
-            )
+            msg = (f"Type of param {param.name} needs to str or list",)
+            raise ValueError(msg)
         if param.kind != Parameter.POSITIONAL_OR_KEYWORD:  # pragma: no cover
-            raise ValueError(f"Param {param.name} should be positional")
+            msg2 = f"Param {param.name} should be positional"
+            raise ValueError(msg2)
         params.append((param.name, str if param.annotation == "str" else list))
 
     if not params:
@@ -118,11 +134,9 @@ def validate_func_arguments(
         for param, type_ in params:
             val = mapping.get(param, None)
             if val is None:
-                raise ValidationError(f"Parameter `{param}` is missing.")
+                raise MissingParameterValidationError(param)
             if not isinstance(val, type_):
-                raise ValidationError(
-                    f"Parameter `{param}` of incorrect type.",
-                )
+                raise IncorrectTypeValidationError(param, type_)
             args.append(val)
         return args
 
@@ -139,7 +153,8 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     """
     method, _, name = func.__name__.partition("_")
     if method not in {"get", "delete", "put"}:  # pragma: no cover
-        raise ValueError(f"Invalid endpoint function name: {func.__name__}")
+        msg = f"Invalid endpoint function name: {func.__name__}"
+        raise ValueError(msg)
     validator = validate_func_arguments(func)
 
     @json_api.route(f"/{name}", methods=[method])
@@ -149,7 +164,8 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
             if method == "put":
                 request_json = request.get_json(silent=True)
                 if request_json is None:
-                    raise FavaAPIError("Invalid JSON request.")
+                    msg = "Invalid JSON request."
+                    raise FavaAPIError(msg)
                 data = request_json
             else:
                 data = request.args
@@ -173,6 +189,34 @@ class DocumentDirectoryMissingError(FavaAPIError):
 
     def __init__(self) -> None:
         super().__init__("You need to set a documents folder.")
+
+
+class NoFileUploadedError(FavaAPIError):
+    """No file uploaded."""
+
+    def __init__(self) -> None:
+        super().__init__("No file uploaded.")
+
+
+class UploadedFileIsMissingFilenameError(FavaAPIError):
+    """Uploaded file is missing filename."""
+
+    def __init__(self) -> None:
+        super().__init__("Uploaded file is missing filename.")
+
+
+class NotAValidDocumentOrImportFileError(FavaAPIError):
+    """Not valid document or import file."""
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not valid document or import file: '{filename}'.")
+
+
+class NotAFileError(FavaAPIError):
+    """Not a file."""
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not a file: '{filename}'")
 
 
 @api_endpoint
@@ -256,7 +300,7 @@ def get_move(account: str, new_name: str, filename: str) -> str:
     file_path = Path(filename)
 
     if not file_path.is_file():
-        raise FavaAPIError(f"Not a file: '{filename}'")
+        raise NotAFileError(filename)
     if new_path.exists():
         raise TargetPathAlreadyExistsError(new_path)
 
@@ -311,15 +355,22 @@ def put_format_source(source: str) -> str:
     return align(source, g.ledger.fava_options.currency_column)
 
 
+class FileDoesNotExistError(FavaAPIError):
+    """The given file does not exist."""
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"{filename} does not exist.")
+
+
 @api_endpoint
 def delete_document(filename: str) -> str:
     """Delete a document."""
     if not is_document_or_import_file(filename, g.ledger):
-        raise FavaAPIError("No valid document or import file.")
+        raise NotAValidDocumentOrImportFileError(filename)
 
     file_path = Path(filename)
     if not file_path.exists():
-        raise FavaAPIError(f"{filename} does not exist.")
+        raise FileDoesNotExistError(filename)
 
     file_path.unlink()
     return f"Deleted {filename}."
@@ -334,9 +385,9 @@ def put_add_document() -> str:
     upload = request.files.get("file", None)
 
     if not upload:
-        raise FavaAPIError("No file uploaded.")
+        raise NoFileUploadedError
     if not upload.filename:
-        raise FavaAPIError("Uploaded file is missing filename.")
+        raise UploadedFileIsMissingFilenameError
 
     filepath = filepath_in_document_folder(
         request.form["folder"],
@@ -375,7 +426,8 @@ def put_add_entries(entries: list[Any]) -> str:
     try:
         entries = [deserialise(entry) for entry in entries]
     except KeyError as error:
-        raise FavaAPIError(f"KeyError: {error}") from error
+        msg = f"KeyError: {error}"
+        raise FavaAPIError(msg) from error
 
     g.ledger.file.insert_entries(entries)
 
@@ -388,9 +440,9 @@ def put_upload_import_file() -> str:
     upload = request.files.get("file", None)
 
     if not upload:
-        raise FavaAPIError("No file uploaded.")
+        raise NoFileUploadedError
     if not upload.filename:
-        raise FavaAPIError("Uploaded file is missing filename.")
+        raise UploadedFileIsMissingFilenameError
     filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
 
     if filepath.exists():

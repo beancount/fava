@@ -52,7 +52,8 @@ def _compile_frontend() -> None:
 
     npm = shutil.which("npm")
     if npm is None:
-        raise RuntimeError("npm is missing")
+        msg = "npm is missing"
+        raise RuntimeError(msg)
 
     # Clean outpute directory before building
     for p in Path("src/fava/static").iterdir():

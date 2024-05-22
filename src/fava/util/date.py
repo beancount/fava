@@ -167,8 +167,15 @@ def get_prev_interval(
     return date
 
 
+class UnreachableCodeAssertionError(AssertionError):
+    """Expected code to be unreachable."""
+
+    def __init__(self) -> None:
+        super().__init__("Expected code to be unreachable")
+
+
 def _assert_never(_: Never) -> Never:  # pragma: no cover
-    raise AssertionError("Expected code to be unreachable")
+    raise UnreachableCodeAssertionError
 
 
 def get_next_interval(  # noqa: PLR0911

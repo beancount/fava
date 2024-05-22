@@ -25,6 +25,18 @@ class AddressInUse(click.ClickException):  # noqa: D101
         )
 
 
+class NonAbsolutePathError(click.UsageError):  # noqa: D101
+    def __init__(self, path: str) -> None:
+        super().__init__(
+            f"Paths in BEANCOUNT_FILE need to be absolute: {path}"
+        )
+
+
+class NoFileSpecifiedError(click.UsageError):  # noqa: D101
+    def __init__(self) -> None:
+        super().__init__("No file specified")
+
+
 def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
     """Read additional filenames from BEANCOUNT_FILE."""
     env_filename = os.environ.get("BEANCOUNT_FILE")
@@ -34,9 +46,7 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
     env_names = env_filename.split(os.pathsep)
     for name in env_names:
         if not Path(name).is_absolute():
-            raise click.UsageError(
-                "Paths in BEANCOUNT_FILE need to be absolute",
-            )
+            raise NonAbsolutePathError(name)
 
     return set(filenames + tuple(env_names))
 
@@ -113,7 +123,7 @@ def main(
     all_filenames = _add_env_filenames(filenames)
 
     if not all_filenames:
-        raise click.UsageError("No file specified")
+        raise NoFileSpecifiedError
 
     app = create_app(
         all_filenames,

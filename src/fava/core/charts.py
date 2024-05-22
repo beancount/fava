@@ -337,7 +337,8 @@ class ChartModule(FavaModule):
             rows: The result rows.
         """
         if not self.can_plot_query(types):
-            raise FavaAPIError("Can not plot the given chart.")
+            msg = "Can not plot the given chart."
+            raise FavaAPIError(msg)
         if types[0][1] is date:
             return [
                 {"date": date, "balance": simple_units(inv)}

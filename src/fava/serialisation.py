@@ -34,7 +34,8 @@ from fava.util.date import parse_date
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
     if not isinstance(entry, Directive):
-        raise TypeError(f"Unsupported object {entry}")
+        msg = f"Unsupported object {entry}"
+        raise TypeError(msg)
     ret = entry._asdict()  # type: ignore[attr-defined]
     ret["t"] = entry.__class__.__name__
     return ret
@@ -85,10 +86,12 @@ def deserialise_posting(posting: Any) -> Posting:
         f'2000-01-01 * "" ""\n Assets:Account {amount}',
     )
     if errors:
-        raise FavaAPIError(f"Invalid amount: {amount}")
+        msg = f"Invalid amount: {amount}"
+        raise FavaAPIError(msg)
     txn = entries[0]
     if not isinstance(txn, Transaction):
-        raise TypeError("Expected transaction")
+        msg = "Expected transaction"
+        raise TypeError(msg)
     pos = txn.postings[0]
     return replace(
         pos,
@@ -109,7 +112,8 @@ def deserialise(json_entry: Any) -> Directive:
     """
     date = parse_date(json_entry.get("date", ""))[0]
     if not isinstance(date, datetime.date):
-        raise FavaAPIError("Invalid entry date.")
+        msg = "Invalid entry date."
+        raise FavaAPIError(msg)
     if json_entry["t"] == "Transaction":
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
         return create.transaction(
@@ -143,4 +147,5 @@ def deserialise(json_entry: Any) -> Directive:
             json_entry["account"],
             comment,
         )
-    raise FavaAPIError("Unsupported entry type.")
+    msg = "Unsupported entry type."
+    raise FavaAPIError(msg)

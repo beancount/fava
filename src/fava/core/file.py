@@ -109,8 +109,8 @@ class FileModule(FavaModule):
             A string with the file contents and the `sha256sum` of the file.
 
         Raises:
-            FavaAPIError: If the file at `path` is not one of the
-                source files or it contains invalid unicode.
+            NonSourceFileError: If the file is not one of the source files.
+            UnicodeDecodeError: If the file contains invalid unicode.
         """
         if str(path) not in self.ledger.options["include"]:
             raise NonSourceFileError(path)
@@ -134,8 +134,9 @@ class FileModule(FavaModule):
             The `sha256sum` of the updated file.
 
         Raises:
-            FavaAPIError: If the file at `path` is not one of the
-                source files or if the file was changed externally.
+            NonSourceFileError: If the file is not one of the source files.
+            UnicodeDecodeError: If the file contains invalid unicode.
+            ExternallyChangedError: If the file was changed externally.
         """
         with self._lock:
             _, original_sha256sum = self.get_source(path)
@@ -361,8 +362,7 @@ def save_entry_slice(
         The `sha256sum` of the new lines of the entry.
 
     Raises:
-        FavaAPIError: If the file at `path` is not one of the
-            source files.
+        ExternallyChangedError: If the file was changed externally.
     """
     filename, lineno = get_position(entry)
     path = Path(filename)
@@ -398,8 +398,7 @@ def delete_entry_slice(
         sha256sum: The sha256sum of the current lines of the entry.
 
     Raises:
-        FavaAPIError: If the file at `path` is not one of the
-            source files.
+        ExternallyChangedError: If the file was changed externally.
     """
     filename, lineno = get_position(entry)
     path = Path(filename)

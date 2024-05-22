@@ -15,7 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def test_apiexception() -> None:
     with pytest.raises(FavaAPIError) as exception:
-        raise FavaAPIError("error")
+        raise FavaAPIError("error")  # noqa: EM101
     assert str(exception.value) == "error"
 
 

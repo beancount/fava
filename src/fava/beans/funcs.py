@@ -34,7 +34,8 @@ def get_position(entry: Directive) -> tuple[str, int]:
     lineno = meta["lineno"]
     if isinstance(filename, str) and isinstance(lineno, int):
         return (filename, lineno)
-    raise ValueError("Invalid filename or lineno in entry metadata.")
+    msg = "Invalid filename or lineno in entry metadata."
+    raise ValueError(msg)
 
 
 def execute_query(

@@ -364,7 +364,8 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
     # test bad request
     response = test_client.delete(url)
     assert_api_error(
-        response, "Invalid API request: Parameter `entry_hash` is missing."
+        response,
+        "Invalid API request: Parameter `entry_hash` is missing.",
     )
 
     entry = ledger.all_entries[-1]

@@ -140,22 +140,15 @@ extend-ignore = [
     "ANN401",   # allow `typing.Any`
     "C901",     # ignore mccabe complecity for now
     "CPY",      # no copyright notices in all files
-    "COM812",   # handled by formatter
+    "COM812",   # better handled by formatter - avoid having trailing commas everywhere
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
-    "E301",     # handled by formatter
-    "E302",     # handled by formatter
-    "E305",     # handled by formatter
-    "EM101",    # allow long strings as error messages
-    "EM102",    # allow f-strings as error messages
-    "ISC001",   # handled by formatter
     "PD",       # pandas-related, has false-positives
     "PERF203",  # allow try-except in loop; zero-cost since Python 3.11
     "PLR2004",  # allow magic constants in comparisons
     "PLR6301",  # allow methods that do not use self
     "S404",     # This is a bit over-zelous on subprocess
     "S603",     # This is a bit over-zelous on subprocess.run
-    "TRY003",   # allow long string constants as error messages
 ]
 
 [tool.ruff.lint.flake8-type-checking]

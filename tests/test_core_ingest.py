@@ -54,7 +54,8 @@ def test_ingest_file_import_info(
             return self.acc in file.name
 
         def file_account(self, _file: FileMemo) -> str:
-            raise ValueError("Some error reason...")
+            msg = "Some error reason..."
+            raise ValueError(msg)
 
     ingest_ledger = get_ledger("import")
     importer = next(iter(ingest_ledger.ingest.importers.values()))

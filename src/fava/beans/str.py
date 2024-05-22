@@ -29,7 +29,8 @@ def to_string(
     _indent: int | None = None,
 ) -> str:
     """Convert to a string."""
-    raise TypeError(f"Unsupported object of type {type(obj)}")
+    msg = f"Unsupported object of type {type(obj)}"
+    raise TypeError(msg)
 
 
 @to_string.register(Amount)
