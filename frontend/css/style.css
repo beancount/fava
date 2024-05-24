@@ -94,6 +94,98 @@
   --help-sidebar-border: #eaeaea;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Base colors */
+    --heading-color: #d7dce2;
+    --text-color: hsl(0, 0%, 75%);
+    --text-color-darker: hsl(0, 0%, 25%);
+    --text-color-lighter: hsl(0deg 0% 85%);
+    --link-color: hsl(203deg 100% 45%);
+    --link-hover-color: hsl(0deg 0% 45%);
+    --code-background: hsl(0deg 0% 25%);
+    --background: hsl(200, 6%, 15%);
+    --background-darker: hsl(200, 5%, 30%);
+    --border: hsl(0deg 0% 35%);
+    --border-darker: hsl(0deg 0% 30%);
+
+    /* Box shadows */
+    --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 25% / 50%);
+
+    /* Sidebar */
+    --sidebar-background: hsl(200, 5%, 18%);
+    --sidebar-color: hsl(0, 0%, 73%);
+    --sidebar-border: hsl(200, 5%, 25%);
+
+    /* Details */
+    --summary-background: hsl(0deg 0% 45%);
+    --summary-background-darker: hsl(0deg 0% 40%);
+
+    /* Header */
+    --header-color: #fff;
+    --header-background: hsl(203deg 100% 25%);
+
+    /* Tables */
+    --table-header-text: hsl(0deg 0% 80%);
+    --table-header-background: var(--sidebar-background);
+    --table-border: var(--sidebar-border);
+    --table-background-even: hsl(0deg 0% 18%);
+
+    /* Editor */
+    --editor-comment: #998;
+    --editor-directive: #bcbcbc;
+    --editor-class: #e1a759;
+    --editor-date: #0ad3d3;
+    --editor-constant: #02a0a0;
+    --editor-account: var(--link-color);
+    --editor-invalid: #d5c5c5;
+    --editor-invalid-background: rgba(176, 82, 82, 0.5);
+    --editor-activeline: #ffc;
+
+    /* Misc */
+    --placeholder-color: var(--text-color-lighter);
+    --placeholder-background: hsl(222, 7%, 29%);
+    --mobile-button-text: #cacaca;
+
+    /* Help pages */
+    --help-sidebar-background: #3b3b3b;
+    --help-sidebar-border: #2a2a2a;
+
+    .journal .balance {
+      --entry-background: #175817;
+    }
+
+    .journal .pending {
+      --entry-background: #952445;
+
+      a:link {
+        color: var(--text-color);
+      }
+    }
+
+    .journal .custom {
+      --entry-background: #e8bd00;
+
+      p .flag {
+        color: var(--text-color-darker);
+      }
+      a:link {
+        color: var(--text-color-darker);
+      }
+
+    }
+
+    .journal {
+      --journal-postings: hsl(0deg 0% 10%);
+      --journal-hover-highlight: #4e4e4e9c;
+    }
+
+    button, input, textarea{
+      background: var(--placeholder-background);
+    }
+  }
+}
+
 .journal .balance {
   --entry-background: #cfc;
 }
