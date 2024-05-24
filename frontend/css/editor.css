@@ -12,3 +12,28 @@
 .cm-editor .cm-placeholder {
   color: var(--placeholder-color);
 }
+
+.cm-editor .cm-tooltip {
+  background-color: var(--sidebar-border);
+}
+
+/* stylelint-disable selector-class-pattern */
+.cm-editor .cm-activeLine {
+  background-color: var(--editor-activeline);
+}
+
+.cm-editor .cm-selectionBackground {
+  background-color: var(--editor-activeline);
+}
+
+.cm-editor.cm-focused
+  > .cm-scroller
+  > .cm-selectionLayer
+  .cm-selectionBackground {
+  background-color: var(--editor-activeline);
+}
+
+.cm-editor .cm-selectionMatch {
+  background-color: var(--editor-selectionmatch);
+}
+/* stylelint-enable selector-class-pattern */

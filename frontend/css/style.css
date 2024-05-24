@@ -68,16 +68,29 @@
   --budget-negative: #af3d3d;
   --budget-positive: #3daf46;
 
-  /* Editor */
-  --editor-comment: #998;
-  --editor-directive: #333;
-  --editor-class: #b84;
-  --editor-date: #099;
-  --editor-constant: #008080;
+  /* Editor elements. */
+  --editor-activeline: #cef4;
+  --editor-selectionmatch: hsl(105deg 100% 73% / 50%);
+
+  /* Editor contents */
   --editor-account: var(--link-color);
-  --editor-invalid: #333;
+  --editor-class: #b84;
+  --editor-comment: #998;
+  --editor-constant: #008080;
+  --editor-currencies: #708;
+  --editor-date: #099;
+  --editor-directive: #333;
   --editor-invalid-background: rgb(255 199 199 / 50%);
-  --editor-activeline: #ffc;
+  --editor-invalid: #333;
+  --editor-label-name: #221198;
+  --editor-number: #116543;
+  --editor-string: #a91111;
+
+  /* Query Editor */
+  --bql-keywords: #708;
+  --bql-values: #085;
+  --bql-string: #a11;
+  --bql-errors: #000;
 
   /* Misc */
   --notification-color: #fff;
@@ -94,8 +107,87 @@
   --help-sidebar-border: #eaeaea;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Base colors */
+    --heading-color: #d7dce2;
+    --text-color: hsl(0deg 0% 75%);
+    --text-color-darker: hsl(0deg 0% 25%);
+    --text-color-lighter: hsl(0deg 0% 85%);
+    --link-color: hsl(203deg 100% 70%);
+    --link-hover-color: hsl(0deg 0% 45%);
+    --code-background: hsl(0deg 0% 25%);
+    --background: hsl(200deg 6% 15%);
+    --background-darker: hsl(200deg 5% 30%);
+    --border: hsl(0deg 0% 35%);
+    --border-darker: hsl(0deg 0% 30%);
+
+    /* Box shadows */
+    --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 25% / 50%);
+
+    /* Sidebar */
+    --sidebar-background: hsl(200deg 5% 18%);
+    --sidebar-color: hsl(0deg 0% 73%);
+    --sidebar-border: hsl(200deg 5% 25%);
+
+    /* Details */
+    --summary-background: hsl(0deg 0% 25%);
+    --summary-background-darker: hsl(0deg 0% 20%);
+
+    /* Header */
+    --header-color: #fff;
+    --header-background: hsl(203deg 100% 25%);
+
+    /* Tables */
+    --table-header-text: hsl(0deg 0% 80%);
+    --table-header-background: var(--sidebar-background);
+    --table-border: var(--sidebar-border);
+    --table-background-even: hsl(0deg 0% 18%);
+
+    /* Editor elements. */
+    --editor-activeline: #44535b44;
+    --editor-selectionmatch: hsl(105deg 100% 30% / 50%);
+
+    /* Editor */
+    --editor-account: var(--link-color);
+    --editor-class: #e1a759;
+    --editor-comment: #998;
+    --editor-constant: #02a0a0;
+    --editor-currencies: #cd00e8;
+    --editor-date: #0ad3d3;
+    --editor-directive: #c6c6c6;
+    --editor-invalid-background: rgb(176 82 82 / 50%);
+    --editor-invalid: #d5c5c5;
+    --editor-label-name: #9c90f6;
+    --editor-number: #00b672;
+    --editor-string: #e87f7f;
+
+    /* Query Editor */
+    --bql-keywords: #c678dd;
+    --bql-values: #98c379;
+    --bql-string: #ee5e5e; /* #e5c07b; */
+    --bql-errors: var(--text-color-lighter);
+
+    /* Misc */
+    --placeholder-color: var(--text-color-lighter);
+    --placeholder-background: hsl(222deg 7% 29%);
+    --mobile-button-text: #cacaca;
+
+    /* Help pages */
+    --help-sidebar-background: #3b3b3b;
+    --help-sidebar-border: #2a2a2a;
+
+    input,
+    textarea {
+      background: var(--placeholder-background);
+    }
+  }
+}
+
 .journal .balance {
-  --entry-background: #cfc;
+  --entry-background: hsl(120deg 100% 90%);
 }
 
 .journal .close {
@@ -103,15 +195,15 @@
 }
 
 .journal .custom {
-  --entry-background: #fff3ab;
+  --entry-background: hsl(51deg 100% 80%);
 }
 
 .journal .document {
-  --entry-background: #ffc8ff;
+  --entry-background: hsl(300deg 100% 80%);
 }
 
 .journal .note {
-  --entry-background: #aad0ff;
+  --entry-background: hsl(213deg 100% 80%);
 }
 
 .journal .open {
@@ -119,23 +211,23 @@
 }
 
 .journal .other {
-  --entry-background: #cff;
+  --entry-background: hsl(180deg 100% 70%);
 }
 
 .journal .pad {
-  --entry-background: #8ff;
+  --entry-background: hsl(180deg 100% 85%);
 }
 
 .journal .pending {
-  --entry-background: #f8a;
+  --entry-background: hsl(343deg 100% 80%);
 }
 
 .journal .query {
-  --entry-background: #aad0ff;
+  --entry-background: hsl(213deg 100% 80%);
 }
 
 .journal .budget {
-  --entry-background: #ffddae;
+  --entry-background: hsl(35deg 100% 80%);
 }
 
 .journal {
@@ -145,5 +237,58 @@
   --journal-link: hsl(203deg 39% 85%);
   --journal-posting-indicator: hsl(203deg 24% 80%);
   --journal-metadata-indicator: hsl(203deg 24% 40%);
-  --journal-hover-highlight: #f5f5f59c;
+  --journal-hover-highlight: hsl(0deg 0% 90% / 60%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    .journal .balance {
+      --entry-background: hsl(120deg 50% 15%);
+    }
+
+    .journal .close {
+      --entry-background: hsl(0deg 0% 15%);
+    }
+
+    .journal .custom {
+      --entry-background: hsl(52deg 100% 15%);
+    }
+
+    .journal .document {
+      --entry-background: hsl(300deg 45% 25%);
+    }
+
+    .journal .note {
+      --entry-background: hsl(212deg 43% 25%);
+    }
+
+    .journal .open {
+      --entry-background: hsl(0deg 0% 20%);
+    }
+
+    .journal .other {
+      --entry-background: hsl(180deg 100% 25%);
+    }
+
+    .journal .pad {
+      --entry-background: hsl(180deg 100% 15%);
+    }
+
+    .journal .pending {
+      --entry-background: hsl(343deg 60% 20%);
+    }
+
+    .journal .query {
+      --entry-background: hsl(213deg 100% 25%);
+    }
+
+    .journal .budget {
+      --entry-background: hsl(35deg 100% 20%);
+    }
+
+    .journal {
+      --journal-postings: hsl(0deg 0% 10%);
+      --journal-hover-highlight: hsl(0deg 0% 20% / 60%);
+    }
+  }
 }

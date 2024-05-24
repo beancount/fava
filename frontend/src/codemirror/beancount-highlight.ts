@@ -1,7 +1,7 @@
 import { HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
 
-export const beancountHighlight = HighlightStyle.define([
+export const beancountEditorHighlight = HighlightStyle.define([
   {
     // Dates
     tag: tags.special(tags.number),
@@ -29,7 +29,7 @@ export const beancountHighlight = HighlightStyle.define([
   {
     // Currencies
     tag: tags.unit,
-    color: "#708",
+    color: "var(--editor-currencies)",
   },
   {
     // Directives
@@ -43,9 +43,62 @@ export const beancountHighlight = HighlightStyle.define([
     color: "var(--editor-class)",
   },
   {
+    // Tag, link
+    tag: tags.labelName,
+    color: "var(--editor-label-name)",
+  },
+  {
+    // Currency value
+    tag: tags.number,
+    color: "var(--editor-number)",
+  },
+  {
+    // Payee, Narration
+    tag: tags.string,
+    color: "var(--editor-string)",
+  },
+  {
     // Invalid token
     tag: tags.invalid,
     color: "var(--editor-invalid)",
     backgroundColor: "var(--editor-invalid-background)",
+  },
+]);
+
+export const beancountQueryHighlight = HighlightStyle.define([
+  {
+    // Keywords: Select, Where, And
+    tag: tags.keyword,
+    color: "var(--bql-keywords)",
+  },
+  {
+    // Values
+    tag: [
+      tags.typeName,
+      tags.className,
+      tags.number,
+      tags.changed,
+      tags.annotation,
+      tags.modifier,
+      tags.self,
+      tags.namespace,
+    ],
+    color: "var(--bql-values)",
+  },
+  {
+    // Strings
+    tag: [tags.processingInstruction, tags.string, tags.inserted],
+    color: "var(--bql-string)",
+  },
+  {
+    // Errors
+    tag: [
+      tags.name,
+      tags.deleted,
+      tags.character,
+      tags.propertyName,
+      tags.macroName,
+    ],
+    color: "var(--bql-errors)",
   },
 ]);
