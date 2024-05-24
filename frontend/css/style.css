@@ -98,14 +98,14 @@
   :root {
     /* Base colors */
     --heading-color: #d7dce2;
-    --text-color: hsl(0, 0%, 75%);
-    --text-color-darker: hsl(0, 0%, 25%);
+    --text-color: hsl(0deg 0% 75%);
+    --text-color-darker: hsl(0deg 0% 25%);
     --text-color-lighter: hsl(0deg 0% 85%);
     --link-color: hsl(203deg 100% 45%);
     --link-hover-color: hsl(0deg 0% 45%);
     --code-background: hsl(0deg 0% 25%);
-    --background: hsl(200, 6%, 15%);
-    --background-darker: hsl(200, 5%, 30%);
+    --background: hsl(200deg 6% 15%);
+    --background-darker: hsl(200deg 5% 30%);
     --border: hsl(0deg 0% 35%);
     --border-darker: hsl(0deg 0% 30%);
 
@@ -113,9 +113,9 @@
     --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 25% / 50%);
 
     /* Sidebar */
-    --sidebar-background: hsl(200, 5%, 18%);
-    --sidebar-color: hsl(0, 0%, 73%);
-    --sidebar-border: hsl(200, 5%, 25%);
+    --sidebar-background: hsl(200deg 5% 18%);
+    --sidebar-color: hsl(0deg 0% 73%);
+    --sidebar-border: hsl(200deg 5% 25%);
 
     /* Details */
     --summary-background: hsl(0deg 0% 45%);
@@ -139,12 +139,12 @@
     --editor-constant: #02a0a0;
     --editor-account: var(--link-color);
     --editor-invalid: #d5c5c5;
-    --editor-invalid-background: rgba(176, 82, 82, 0.5);
+    --editor-invalid-background: rgb(176 82 82 / 50%);
     --editor-activeline: #ffc;
 
     /* Misc */
     --placeholder-color: var(--text-color-lighter);
-    --placeholder-background: hsl(222, 7%, 29%);
+    --placeholder-background: hsl(222deg 7% 29%);
     --mobile-button-text: #cacaca;
 
     /* Help pages */
@@ -169,10 +169,10 @@
       p .flag {
         color: var(--text-color-darker);
       }
+
       a:link {
         color: var(--text-color-darker);
       }
-
     }
 
     .journal {
@@ -180,7 +180,9 @@
       --journal-hover-highlight: #4e4e4e9c;
     }
 
-    button, input, textarea{
+    button,
+    input,
+    textarea {
       background: var(--placeholder-background);
     }
   }
