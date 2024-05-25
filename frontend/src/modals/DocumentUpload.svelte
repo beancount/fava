@@ -28,7 +28,7 @@
 
   async function submit() {
     await Promise.all(
-      $files.map(({ dataTransferFile, name }) => {
+      $files.map(async ({ dataTransferFile, name }) => {
         const formData = new FormData();
         formData.append("account", $account);
         formData.append("hash", $hash);

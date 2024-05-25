@@ -121,7 +121,7 @@
 
 <form
   class="fixed-fullsize-container"
-  on:submit|preventDefault={() => save(editor)}
+  on:submit|preventDefault={async () => save(editor)}
 >
   <EditorMenu {file_path} {editor}>
     <SaveButton {changed} {saving} />

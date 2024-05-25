@@ -128,7 +128,7 @@
       return;
     }
     await Promise.all(
-      Array.from(fileUpload.files).map((file) => {
+      Array.from(fileUpload.files).map(async (file) => {
         const formData = new FormData();
         formData.append("file", file, file.name);
         return put("upload_import_file", formData).then(notify, (error) => {

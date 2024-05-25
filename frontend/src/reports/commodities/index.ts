@@ -19,7 +19,7 @@ export const commodities = new Route<{
 }>(
   "commodities",
   CommoditiesSvelte,
-  (url) =>
+  async (url) =>
     get("commodities", getURLFilters(url)).then((cs) => {
       const charts = cs.map(({ base, quote, prices }) => {
         const name = `${base} / ${quote}`;

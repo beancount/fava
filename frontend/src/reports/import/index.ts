@@ -60,7 +60,7 @@ export function preprocessData(
 export const import_report = new Route(
   "import",
   ImportSvelte,
-  () =>
+  async () =>
     get("imports", undefined)
       .then(preprocessData)
       .then((data) => ({ data })),

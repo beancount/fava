@@ -14,7 +14,7 @@ export const editor = new Route<{
 }>(
   "editor",
   Editor,
-  (url: URL) =>
+  async (url: URL) =>
     Promise.all([
       get("source", {
         filename: url.searchParams.get("file_path") ?? "",

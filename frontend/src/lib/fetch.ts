@@ -12,7 +12,7 @@ import {
 class FetchError extends Error {}
 
 /** Wrapper around fetch with some default options */
-export function fetch(
+export async function fetch(
   input: string,
   init: RequestInit = {},
 ): Promise<Response> {

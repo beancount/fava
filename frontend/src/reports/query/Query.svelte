@@ -131,8 +131,10 @@
         {/if}
         <button
           type="button"
-          on:click|stopPropagation={() => deleteItem(history_item)}>x</button
+          on:click|stopPropagation={async () => deleteItem(history_item)}
         >
+          x
+        </button>
       </summary>
       <div>
         {#if result}

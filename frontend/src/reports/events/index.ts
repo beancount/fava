@@ -11,7 +11,7 @@ export const events = new Route<{
 }>(
   "events",
   Events,
-  (url: URL) =>
+  async (url: URL) =>
     get("events", getURLFilters(url)).then((data) => ({ events: data })),
   () => _("Events"),
 );

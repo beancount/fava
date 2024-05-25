@@ -11,6 +11,7 @@ const misc = {
   ],
   "@typescript-eslint/consistent-type-imports": ON,
   "@typescript-eslint/explicit-module-boundary-types": ON,
+  "@typescript-eslint/promise-function-async": ON,
   "@typescript-eslint/strict-boolean-expressions": ON,
   curly: [ON, "all"],
   eqeqeq: [ON, "smart"],

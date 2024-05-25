@@ -9,7 +9,7 @@ import Documents from "./Documents.svelte";
 export const documents = new Route<{ documents: Document[] }>(
   "documents",
   Documents,
-  (url: URL) =>
+  async (url: URL) =>
     get("documents", getURLFilters(url)).then((data) => ({
       documents: data,
     })),

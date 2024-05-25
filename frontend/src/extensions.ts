@@ -44,22 +44,25 @@ export class ExtensionApi {
   }
 
   /** GET an endpoint with parameters and return JSON. */
-  get(endpoint: string, params: Record<string, string>): Promise<unknown> {
+  async get(
+    endpoint: string,
+    params: Record<string, string>,
+  ): Promise<unknown> {
     return this.request(endpoint, "GET", params, undefined);
   }
 
   /** GET an endpoint with a body and return JSON. */
-  put(endpoint: string, body?: unknown): Promise<unknown> {
+  async put(endpoint: string, body?: unknown): Promise<unknown> {
     return this.request(endpoint, "PUT", undefined, body);
   }
 
   /** POST to an endpoint with a body and return JSON. */
-  post(endpoint: string, body?: unknown): Promise<unknown> {
+  async post(endpoint: string, body?: unknown): Promise<unknown> {
     return this.request(endpoint, "POST", undefined, body);
   }
 
   /** DELETE an endpoint and return JSON. */
-  delete(endpoint: string): Promise<unknown> {
+  async delete(endpoint: string): Promise<unknown> {
     return this.request(endpoint, "DELETE");
   }
 }
