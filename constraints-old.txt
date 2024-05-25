@@ -3,8 +3,11 @@
 anyio==3.0.0
     # via watchfiles
 babel==2.7.0
-    # via flask-babel
+    # via
+    #   fava (pyproject.toml)
+    #   flask-babel
 beancount==2.3.6
+    # via fava (pyproject.toml)
 beautifulsoup4==4.12.3
     # via beancount
 bottle==0.12.25
@@ -18,11 +21,17 @@ chardet==5.2.0
 charset-normalizer==3.3.2
     # via requests
 cheroot==8.0.0
+    # via fava (pyproject.toml)
 click==8.0.0
-    # via flask
+    # via
+    #   fava (pyproject.toml)
+    #   flask
 flask==2.2.0
-    # via flask-babel
+    # via
+    #   fava (pyproject.toml)
+    #   flask-babel
 flask-babel==1.0.0
+    # via fava (pyproject.toml)
 google-api-core==2.17.1
     # via google-api-python-client
 google-api-python-client==2.119.0
@@ -52,11 +61,13 @@ jaraco-functools==4.0.0
     # via cheroot
 jinja2==3.0.0
     # via
+    #   fava (pyproject.toml)
     #   flask
     #   flask-babel
 lxml==5.1.0
     # via beancount
 markdown2==2.3.0
+    # via fava (pyproject.toml)
 markupsafe==2.1.5
     # via
     #   jinja2
@@ -72,7 +83,9 @@ pdfminer2==20151206
 pluggy==1.4.0
     # via pytest
 ply==3.4
-    # via beancount
+    # via
+    #   fava (pyproject.toml)
+    #   beancount
 protobuf==4.25.3
     # via
     #   google-api-core
@@ -102,6 +115,7 @@ requests==2.31.0
 rsa==4.9
     # via google-auth
 simplejson==3.16.0
+    # via fava (pyproject.toml)
 six==1.16.0
     # via
     #   cheroot
@@ -116,5 +130,8 @@ uritemplate==4.1.1
 urllib3==2.2.1
     # via requests
 watchfiles==0.20.0
+    # via fava (pyproject.toml)
 werkzeug==2.2.0
-    # via flask
+    # via
+    #   fava (pyproject.toml)
+    #   flask

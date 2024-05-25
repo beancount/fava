@@ -6,13 +6,15 @@ altgraph==0.17.4
     # via pyinstaller
 anyio==4.3.0
     # via watchfiles
-astroid==3.1.0
+astroid==3.2.2
     # via pylint
 babel==2.15.0
     # via
+    #   fava (pyproject.toml)
     #   flask-babel
     #   sphinx
 beancount==2.3.6
+    # via fava (pyproject.toml)
 beautifulsoup4==4.12.3
     # via
     #   beancount
@@ -22,6 +24,7 @@ blinker==1.8.2
 bottle==0.12.25
     # via beancount
 build==1.2.1
+    # via fava (pyproject.toml)
 cachetools==5.3.3
     # via
     #   google-auth
@@ -40,8 +43,11 @@ chardet==5.2.0
 charset-normalizer==3.3.2
     # via requests
 cheroot==10.0.1
+    # via fava (pyproject.toml)
 click==8.1.7
-    # via flask
+    # via
+    #   fava (pyproject.toml)
+    #   flask
 colorama==0.4.6
     # via tox
 coverage==7.5.1
@@ -63,12 +69,16 @@ filelock==3.14.0
     #   tox
     #   virtualenv
 flask==3.0.3
-    # via flask-babel
+    # via
+    #   fava (pyproject.toml)
+    #   flask-babel
 flask-babel==4.0.0
+    # via fava (pyproject.toml)
 furo==2024.5.6
+    # via fava (pyproject.toml)
 google-api-core==2.19.0
     # via google-api-python-client
-google-api-python-client==2.129.0
+google-api-python-client==2.130.0
     # via beancount
 google-auth==2.29.0
     # via
@@ -113,16 +123,17 @@ jeepney==0.8.0
     #   secretstorage
 jinja2==3.1.4
     # via
+    #   fava (pyproject.toml)
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.2.0
+keyring==25.2.1
     # via twine
 lml==0.1.0
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.2.1
+lxml==5.2.2
     # via
     #   beancount
     #   pyexcel-ezodf
@@ -130,6 +141,7 @@ lxml==5.2.1
 markdown-it-py==3.0.0
     # via rich
 markdown2==2.4.13
+    # via fava (pyproject.toml)
 markupsafe==2.1.5
     # via
     #   jinja2
@@ -144,6 +156,7 @@ more-itertools==10.2.0
     #   jaraco-classes
     #   jaraco-functools
 mypy==1.10.0
+    # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
 nh3==0.2.17
@@ -166,7 +179,7 @@ pdfminer2==20151206
     # via beancount
 pkginfo==1.10.0
     # via twine
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via
     #   pylint
     #   tox
@@ -176,8 +189,11 @@ pluggy==1.5.0
     #   pytest
     #   tox
 ply==3.11
-    # via beancount
+    # via
+    #   fava (pyproject.toml)
+    #   beancount
 pre-commit==3.7.1
+    # via fava (pyproject.toml)
 proto-plus==1.23.0
     # via google-api-core
 protobuf==4.25.3
@@ -194,6 +210,7 @@ pyasn1-modules==0.4.0
 pycparser==2.22
     # via cffi
 pyexcel==0.7.0
+    # via fava (pyproject.toml)
 pyexcel-ezodf==0.3.4
     # via pyexcel-ods3
 pyexcel-io==0.6.6
@@ -202,28 +219,34 @@ pyexcel-io==0.6.6
     #   pyexcel-ods3
     #   pyexcel-xlsx
 pyexcel-ods3==0.6.1
+    # via fava (pyproject.toml)
 pyexcel-xlsx==0.6.0
+    # via fava (pyproject.toml)
 pygments==2.18.0
     # via
     #   furo
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.6.0
+pyinstaller==6.7.0
+    # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2024.6
     # via pyinstaller
-pylint==3.1.0
+pylint==3.2.2
+    # via fava (pyproject.toml)
 pyparsing==3.1.2
     # via httplib2
 pyproject-api==1.6.1
     # via tox
 pyproject-hooks==1.1.0
     # via build
-pytest==8.2.0
+pytest==8.2.1
     # via
+    #   fava (pyproject.toml)
     #   beancount
     #   pytest-cov
 pytest-cov==5.0.0
+    # via fava (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via beancount
 python-magic==0.4.27
@@ -234,7 +257,7 @@ pyyaml==6.0.1
     # via pre-commit
 readme-renderer==43.0
     # via twine
-requests==2.31.0
+requests==2.32.2
     # via
     #   beancount
     #   google-api-core
@@ -251,12 +274,14 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==69.5.1
+setuptools==70.0.0
     # via
+    #   fava (pyproject.toml)
     #   nodeenv
     #   pyinstaller
     #   pyinstaller-hooks-contrib
 simplejson==3.19.2
+    # via fava (pyproject.toml)
 six==1.16.0
     # via
     #   pdfminer2
@@ -269,10 +294,12 @@ soupsieve==2.5
     # via beautifulsoup4
 sphinx==7.3.7
     # via
+    #   fava (pyproject.toml)
     #   furo
     #   sphinx-autodoc-typehints
     #   sphinx-basic-ng
 sphinx-autodoc-typehints==2.1.0
+    # via fava (pyproject.toml)
 sphinx-basic-ng==1.0.0b2
     # via furo
 sphinxcontrib-applehelp==1.0.8
@@ -292,12 +319,18 @@ texttable==1.7.0
 tomlkit==0.12.5
     # via pylint
 tox==4.15.0
-    # via tox-uv
+    # via
+    #   fava (pyproject.toml)
+    #   tox-uv
 tox-uv==1.8.2
-twine==5.0.0
-types-setuptools==69.5.0.20240423
+    # via fava (pyproject.toml)
+twine==5.1.0
+    # via fava (pyproject.toml)
+types-setuptools==70.0.0.20240524
+    # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240310
-typing-extensions==4.11.0
+    # via fava (pyproject.toml)
+typing-extensions==4.12.0
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
@@ -305,14 +338,17 @@ urllib3==2.2.1
     # via
     #   requests
     #   twine
-uv==0.1.42
+uv==0.2.3
     # via tox-uv
-virtualenv==20.26.1
+virtualenv==20.26.2
     # via
     #   pre-commit
     #   tox
 watchfiles==0.21.0
+    # via fava (pyproject.toml)
 werkzeug==3.0.3
-    # via flask
-zipp==3.18.1
+    # via
+    #   fava (pyproject.toml)
+    #   flask
+zipp==3.18.2
     # via importlib-metadata
