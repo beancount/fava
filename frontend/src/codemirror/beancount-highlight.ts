@@ -29,7 +29,7 @@ export const beancountHighlight = HighlightStyle.define([
   {
     // Currencies
     tag: tags.unit,
-    color: "#708",
+    color: "var(--editor-currencies)",
   },
   {
     // Directives
@@ -41,6 +41,21 @@ export const beancountHighlight = HighlightStyle.define([
     // Option name
     tag: tags.standard(tags.string),
     color: "var(--editor-class)",
+  },
+  {
+    // Tag, link
+    tag: tags.labelName,
+    color: "var(--editor-label-name)",
+  },
+  {
+    // Currency value
+    tag: tags.number,
+    color: "var(--editor-number)",
+  },
+  {
+    // Payee, Narration
+    tag: tags.string,
+    color: "var(--editor-string)",
   },
   {
     // Invalid token

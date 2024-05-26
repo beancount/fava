@@ -78,6 +78,10 @@
   --editor-invalid: #333;
   --editor-invalid-background: rgb(255 199 199 / 50%);
   --editor-activeline: #ffc;
+  --editor-currencies: #708;
+  --editor-label-name: #221198;
+  --editor-number: #116543;
+  --editor-string: #a91111;
 
   /* Misc */
   --notification-color: #fff;
@@ -133,7 +137,7 @@
 
     /* Editor */
     --editor-comment: #998;
-    --editor-directive: #bcbcbc;
+    --editor-directive: #c6c6c6;
     --editor-class: #e1a759;
     --editor-date: #0ad3d3;
     --editor-constant: #02a0a0;
@@ -141,6 +145,10 @@
     --editor-invalid: #d5c5c5;
     --editor-invalid-background: rgb(176 82 82 / 50%);
     --editor-activeline: #ffc;
+    --editor-currencies: #cd00e8;
+    --editor-label-name: #9c90f6;
+    --editor-number: #00b672;
+    --editor-string: #e87f7f;
 
     /* Misc */
     --placeholder-color: var(--text-color-lighter);
@@ -184,6 +192,10 @@
     input,
     textarea {
       background: var(--placeholder-background);
+    }
+
+    .cm-tooltip {
+      background-color: #484c4f;
     }
   }
 }
