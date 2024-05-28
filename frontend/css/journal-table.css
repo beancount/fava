@@ -231,3 +231,99 @@
   text-transform: lowercase;
   border-radius: 20px;
 }
+
+@media (width <= 767px) {
+  article {
+    padding: 1rem;
+  }
+
+  .flex-table.journal p {
+    flex-wrap: wrap;
+  }
+
+  .journal .head .flag {
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .journal .datecell {
+    order: 1;
+    width: 6rem;
+    text-align: left;
+  }
+
+  .journal .flag {
+    order: 2;
+  }
+
+  .journal .description {
+    flex: inherit;
+    order: 5;
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .journal .indicators {
+    flex-grow: 1;
+    order: 3;
+  }
+
+  .journal .balance .indicators,
+  .journal .balance .change.num {
+    display: none;
+  }
+
+  .journal p > .num {
+    order: 4;
+  }
+
+  .journal .postings .datecell,
+  .journal .postings .flag {
+    display: none;
+  }
+
+  .journal .postings .description {
+    flex-grow: 1;
+    order: inherit;
+    width: inherit;
+  }
+
+  .journal .indicators span {
+    display: none;
+  }
+
+  .journal .indicators span:nth-child(-n + 2) {
+    display: initial;
+  }
+
+  .journal .indicators span:nth-child(3) {
+    display: inline;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .journal .balance > p > .num,
+  .journal .budget > p > .description > .num {
+    position: absolute;
+    right: 1rem;
+    width: 40%;
+  }
+
+  .journal .budget .description > .num {
+    display: block;
+    margin-top: -3.7rem;
+  }
+
+  .journal .budget > p > .description > .num {
+    background: var(--background);
+  }
+
+  .journal .custom > p,
+  .journal .balance > p {
+    border-top: thin solid var(--entry-background);
+  }
+
+  .journal .metadata dt,
+  .journal .metadata dd {
+    margin-left: initial;
+  }
+}
