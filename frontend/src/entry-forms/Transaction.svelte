@@ -10,7 +10,7 @@
   import type { Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
-  import { payees } from "../stores";
+  import { payees, narrations } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
@@ -78,6 +78,14 @@
     data.date = entry.date;
     entry = data;
   }
+  async function autocompleteSelectNarration() {
+    if (entry.payee || !entry.postings.every((p) => !p.account)) {
+      return;
+    }
+    const data = await get("narration_transaction", { narration: entry.narration });
+    data.date = entry.date;
+    entry = data;
+  }
 
   function movePosting({ from, to }: { from: number; to: number }) {
     const moved = entry.postings[from];
@@ -91,6 +99,24 @@
   // Always have one empty posting at the end.
   $: if (!entry.postings.some((p) => p.is_empty())) {
     entry.postings = entry.postings.concat(new Posting());
+  }
+
+  function valueExtractor(value: string, input: HTMLInputElement) {
+    const match = value
+      .slice(0, input.selectionStart ?? undefined)
+      .match(/\S*$/);
+    return match?.[0] ?? value;
+  }
+  function valueSelector(value: string, input: HTMLInputElement) {
+    const selectionStart = input.selectionStart ?? 0;
+    const match = input.value.slice(0, selectionStart).match(/\S*$/);
+    const matchLength = match?.[0]?.length;
+    return matchLength !== undefined
+      ? `${input.value.slice(
+          0,
+          selectionStart - matchLength,
+        )}${value}${input.value.slice(selectionStart)}`
+      : value;
   }
 </script>
 
@@ -109,14 +135,17 @@
         on:select={autocompleteSelectPayee}
       />
     </label>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>
       <span>{_("Narration")}:</span>
-      <input
-        type="text"
-        name="narration"
+      <AutocompleteInput
+        className="narration"
         placeholder={_("Narration")}
-        value={narration}
-        on:change={onNarrationChange}
+        bind:value={entry.narration}
+        suggestions={$narrations}
+        valueExtractor={valueExtractor}
+        valueSelector={valueSelector}
+        on:select={autocompleteSelectNarration}
       />
       <AddMetadataButton bind:meta={entry.meta} />
     </label>
@@ -149,11 +178,6 @@
 
   div :global(.payee) {
     flex-basis: 100px;
-    flex-grow: 1;
-  }
-
-  input[name="narration"] {
-    flex-basis: 200px;
     flex-grow: 1;
   }
 
