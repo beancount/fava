@@ -82,7 +82,9 @@
     if (entry.payee || !entry.postings.every((p) => !p.account)) {
       return;
     }
-    const data = await get("narration_transaction", { narration: entry.narration });
+    const data = await get("narration_transaction", {
+      narration: entry.narration,
+    });
     data.date = entry.date;
     entry = data;
   }
@@ -143,8 +145,8 @@
         placeholder={_("Narration")}
         bind:value={entry.narration}
         suggestions={$narrations}
-        valueExtractor={valueExtractor}
-        valueSelector={valueSelector}
+        {valueExtractor}
+        {valueSelector}
         on:select={autocompleteSelectNarration}
       />
       <AddMetadataButton bind:meta={entry.meta} />
