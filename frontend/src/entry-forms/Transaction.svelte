@@ -10,7 +10,7 @@
   import type { Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
-  import { payees, narrations } from "../stores";
+  import { narrations, payees } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
@@ -40,34 +40,6 @@
         });
     }
   }
-
-  /// Extract tags and links that can be provided in the narration <input>.
-  function onNarrationChange({
-    currentTarget,
-  }: {
-    currentTarget: HTMLInputElement;
-  }) {
-    const { value } = currentTarget;
-    entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
-    entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
-    entry.narration = value
-      .replaceAll(TAGS_RE, "")
-      .replaceAll(LINKS_RE, "")
-      .trim();
-  }
-
-  /// Output tags and links in the narration <input>
-  function combineNarrationTagsLinks(e: Transaction): string {
-    let val = e.narration;
-    if (e.tags.length) {
-      val += ` ${e.tags.map((t) => `#${t}`).join(" ")}`;
-    }
-    if (e.links.length) {
-      val += ` ${e.links.map((t) => `^${t}`).join(" ")}`;
-    }
-    return val;
-  }
-  $: narration = combineNarrationTagsLinks(entry);
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
