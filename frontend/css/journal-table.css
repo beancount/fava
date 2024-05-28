@@ -129,6 +129,12 @@
   background-color: var(--entry-background);
 }
 
+.journal .indicators,
+.journal .description,
+.journal p > .num{
+  background-color: var(--entry-background);
+}
+
 .journal .datecell {
   width: 5.5rem;
   white-space: nowrap;
@@ -230,4 +236,52 @@
   color: var(--journal-metadata-indicator);
   text-transform: lowercase;
   border-radius: 20px;
+}
+
+
+@media (width <= 767px) {
+  .flex-table.journal p {
+    flex-wrap: wrap;
+  }
+
+  .journal .datecell{
+    order: 1;
+    width: 6rem;
+  }
+
+  .journal .flag{
+    order: 2;
+  }
+
+  .journal .description {
+    width: 100%;
+    flex: inherit;
+    order: 5;
+    padding-left: 0px;
+  }
+
+  .journal .indicators{
+    order: 3;
+    flex-grow: 1;
+  }
+
+  .journal .balance .indicators,
+  .journal .balance .change.num{
+    display: none;
+  }
+
+  .journal p > .num {
+    order: 4;
+    flex-grow: 1;
+  }
+
+  .journal .postings .datecell,
+  .journal .postings .flag{
+    display: none;
+
+  }
+  .journal .postings .description{
+    order: inherit;
+    width: inherit;
+  }
 }
