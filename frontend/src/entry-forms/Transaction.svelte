@@ -1,8 +1,3 @@
-<script lang="ts" context="module">
-  const TAGS_RE = /(?:^|\s)#([A-Za-z0-9\-_/.]+)/g;
-  const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
-</script>
-
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
