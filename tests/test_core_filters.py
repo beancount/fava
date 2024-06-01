@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import pytest
@@ -59,13 +60,18 @@ def test_lexer_literals_in_string() -> None:
 
 def test_lexer_key() -> None:
     lex = FilterSyntaxLexer().lex
-    data = 'payee:asdfasdf ^some_link somekey:"testtest" '
+    data = 'payee:asdfasdf ^some_link somekey:"testtest" units>80.2 '
     assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("KEY", "payee"),
+        ("EQ_OP", ":"),
         ("STRING", "asdfasdf"),
         ("LINK", "some_link"),
         ("KEY", "somekey"),
+        ("EQ_OP", ":"),
         ("STRING", "testtest"),
+        ("KEY", "units"),
+        ("CMP_OP", ">"),
+        ("NUMBER", Decimal("80.2")),
     ]
 
 
@@ -75,11 +81,13 @@ def test_lexer_parentheses() -> None:
     assert [(tok.type, tok.value) for tok in lex(data)] == [
         ("(", "("),
         ("KEY", "payee"),
+        ("EQ_OP", ":"),
         ("STRING", "asdfasdf"),
         ("LINK", "some_link"),
         (")", ")"),
         ("(", "("),
         ("KEY", "somekey"),
+        ("EQ_OP", ":"),
         ("STRING", "testtest"),
         (")", ")"),
     ]
@@ -119,6 +127,10 @@ def test_filterexception() -> None:
         ('name:".*etf"', 4),
         ('name:".*etf$"', 3),
         ('any(overage:"GB$")', 1),
+        ("=26.87", 1),
+        (">=17500", 3),
+        (">=17500 <18000", 1),
+        ("any(units >= 17500)", 3),
     ],
 )
 def test_advanced_filter(
