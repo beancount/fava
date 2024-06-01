@@ -34,6 +34,7 @@ test("validate date", () => {
   assert.ok(date("2-40").is_err);
   assert.ok(date("").is_err);
   assert.ok(date("2012-12-40").is_err);
+  assert.ok(date("2012-12-20T20:00").is_err);
 });
 
 test("validate number", () => {

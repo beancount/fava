@@ -63,14 +63,20 @@ export const number: Validator<number> = (json) =>
  * Validate a date (from a string).
  */
 export const date: Validator<Date> = (json) => {
-  if (typeof json === "string" || json instanceof Date) {
+  if (json instanceof Date) {
+    return ok(json);
+  }
+  if (typeof json === "string") {
+    if (json.length !== 10) {
+      return err("Expected date to be a string of length 10");
+    }
     const parsed = new Date(json);
     if (Number.isNaN(+parsed)) {
       return err("Expected a date");
     }
     return ok(parsed);
   }
-  return err("Expected a date");
+  return err("Expected date to be a string or Date");
 };
 
 /**
