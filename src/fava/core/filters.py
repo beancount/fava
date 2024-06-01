@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from abc import ABC
 from abc import abstractmethod
+from decimal import Decimal
 from typing import Any
 from typing import Callable
 from typing import Iterable
@@ -12,6 +13,7 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
+from beancount.core.amount import Amount
 from beancount.ops.summarize import clamp_opt  # type: ignore[import-untyped]
 
 from fava.beans.account import get_entry_accounts
@@ -80,15 +82,28 @@ class Token:
 class FilterSyntaxLexer:
     """Lexer for Fava's filter syntax."""
 
-    tokens = ("ANY", "ALL", "KEY", "LINK", "STRING", "TAG")
+    tokens = (
+        "ANY",
+        "ALL",
+        "CMP_OP",
+        "EQ_OP",
+        "KEY",
+        "LINK",
+        "NUMBER",
+        "STRING",
+        "TAG",
+    )
 
     RULES = (
         ("LINK", r"\^[A-Za-z0-9\-_/.]+"),
         ("TAG", r"\#[A-Za-z0-9\-_/.]+"),
-        ("KEY", r"[a-z][a-zA-Z0-9\-_]+:"),
         ("ALL", r"all\("),
         ("ANY", r"any\("),
-        ("STRING", r'\w[-\w]*|"[^"]*"|\'[^\']*\''),
+        ("KEY", r"[a-z][a-zA-Z0-9\-_]+(?=\s*(:|=|>=|<=|<|>))"),
+        ("EQ_OP", r":"),
+        ("CMP_OP", r"(=|>=|<=|<|>)"),
+        ("NUMBER", r"\d*\.?\d+"),
+        ("STRING", r"""\w[-\w]*|"[^"]*"|'[^']*'"""),
     )
 
     regex = re.compile(
@@ -102,13 +117,22 @@ class FilterSyntaxLexer:
         return token, value[1:]
 
     def KEY(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
-        return token, value[:-1]
+        return token, value
 
     def ALL(self, token: str, _: str) -> tuple[str, str]:  # noqa: N802
         return token, token
 
     def ANY(self, token: str, _: str) -> tuple[str, str]:  # noqa: N802
         return token, token
+
+    def EQ_OP(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
+        return token, value
+
+    def CMP_OP(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
+        return token, value
+
+    def NUMBER(self, token: str, value: str) -> tuple[str, Decimal]:  # noqa: N802
+        return token, Decimal(value)
 
     def STRING(self, token: str, value: str) -> tuple[str, str]:  # noqa: N802
         if value[0] in {'"', "'"}:
@@ -168,8 +192,38 @@ class Match:
         except re.error:
             self.match = lambda s: s == search
 
-    def __call__(self, string: str) -> bool:
-        return self.match(string)
+    def __call__(self, obj: Any) -> bool:
+        return self.match(str(obj))
+
+
+class MatchAmount:
+    """Matches an amount."""
+
+    __slots__ = ("match",)
+
+    def __init__(self, op: str, value: Decimal) -> None:
+        if op == "=":
+            self.match: Callable[[Decimal], bool] = lambda x: x == value
+        elif op == ">=":
+            self.match = lambda x: x >= value
+        elif op == "<=":
+            self.match = lambda x: x <= value
+        elif op == ">":
+            self.match = lambda x: x > value
+        elif op == "<":
+            self.match = lambda x: x < value
+
+    def __call__(self, obj: Any) -> bool:
+        # Every transaction has positive and negative postings, which must
+        # sum up to zero. Skip negative postings here, otherwise a filter
+        # like units < 10.20 will always match the negative posting.
+        if (
+            isinstance(obj, Amount)
+            and obj.number is not None
+            and obj.number >= 0
+        ):
+            return self.match(obj.number)
+        return False
 
 
 class FilterSyntaxParser:
@@ -298,19 +352,37 @@ class FilterSyntaxParser:
 
     def p_simple_expr_key(self, p: list[Any]) -> None:
         """
-        simple_expr : KEY STRING
+        simple_expr : KEY EQ_OP STRING
+                    | KEY CMP_OP NUMBER
         """
-        key, value = p[1], p[2]
-        match = Match(value)
+        key, op, value = p[1], p[2], p[3]
+        match: Match | MatchAmount = (
+            Match(value) if op == ":" else MatchAmount(op, value)
+        )
 
         def _key(entry: Directive) -> bool:
             if hasattr(entry, key):
-                return match(str(getattr(entry, key) or ""))
+                return match(getattr(entry, key) or "")
             if entry.meta is not None and key in entry.meta:
-                return match(str(entry.meta.get(key)))
+                return match(entry.meta.get(key))
             return False
 
         p[0] = _key
+
+    def p_simple_expr_units(self, p: list[Any]) -> None:
+        """
+        simple_expr : CMP_OP NUMBER
+        """
+        op, value = p[1], p[2]
+        match = MatchAmount(op, value)
+
+        def _range(entry: Directive) -> bool:
+            return any(
+                match(posting.units)
+                for posting in getattr(entry, "postings", [])
+            )
+
+        p[0] = _range
 
 
 class EntryFilter(ABC):
