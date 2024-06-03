@@ -103,10 +103,10 @@ export const ledgerDataValidator = object({
   incognito: boolean,
   links: array(string),
   options,
-  other_ledgers: array(tuple([string, string])),
+  other_ledgers: array(tuple(string, string)),
   payees: array(string),
   precisions: record(number),
-  sidebar_links: array(tuple([string, string])),
+  sidebar_links: array(tuple(string, string)),
   tags: array(string),
   upcoming_events_count: number,
   user_queries: array(object({ name: string, query_string: string })),
@@ -133,7 +133,7 @@ const importable_files_validator = array<ImportableFile>(
 const date_range = object({ begin: date, end: date });
 
 const commodities = array(
-  object({ base: string, quote: string, prices: array(tuple([date, number])) }),
+  object({ base: string, quote: string, prices: array(tuple(date, number)) }),
 );
 
 export type Commodities = ValidationT<typeof commodities>;

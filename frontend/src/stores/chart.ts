@@ -3,7 +3,8 @@ import { derived, writable } from "svelte/store";
 import { _ } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
-import { array, constant, string, union } from "../lib/validation";
+import type { ValidationT } from "../lib/validation";
+import { array, constants, string } from "../lib/validation";
 
 import {
   conversion_currencies,
@@ -17,12 +18,13 @@ export const showCharts = writable(true);
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
 export const lastActiveChartName = writable<string | null>(null);
 
+const hierarchy_chart_mode_validator = constants("treemap", "sunburst");
+type HierarchyChartMode = ValidationT<typeof hierarchy_chart_mode_validator>;
+
 /** The currently selected hierarchy chart mode. */
-export const hierarchyChartMode = localStorageSyncedStore<
-  "treemap" | "sunburst"
->(
+export const hierarchyChartMode = localStorageSyncedStore<HierarchyChartMode>(
   "hierarchy-chart-mode",
-  union(constant("treemap"), constant("sunburst")),
+  hierarchy_chart_mode_validator,
   () => "treemap",
   () => [
     ["treemap", _("Treemap")],
@@ -30,10 +32,13 @@ export const hierarchyChartMode = localStorageSyncedStore<
   ],
 );
 
+const line_chart_mode_validator = constants("line", "area");
+type LineChartMode = ValidationT<typeof line_chart_mode_validator>;
+
 /** The currently selected line chart mode. */
-export const lineChartMode = localStorageSyncedStore<"line" | "area">(
+export const lineChartMode = localStorageSyncedStore<LineChartMode>(
   "line-chart-mode",
-  union(constant("line"), constant("area")),
+  line_chart_mode_validator,
   () => "line",
   () => [
     ["line", _("Line chart")],
@@ -41,10 +46,13 @@ export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   ],
 );
 
+const bar_chart_mode_validator = constants("stacked", "single");
+type BarChartMode = ValidationT<typeof bar_chart_mode_validator>;
+
 /** The currently selected bar chart mode. */
-export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
+export const barChartMode = localStorageSyncedStore<BarChartMode>(
   "bar-chart-mode",
-  union(constant("stacked"), constant("single")),
+  bar_chart_mode_validator,
   () => "stacked",
   () => [
     ["stacked", _("Stacked Bars")],

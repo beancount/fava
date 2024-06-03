@@ -1,5 +1,5 @@
 import { localStorageSyncedStore } from "../lib/store";
-import { array, constant, string, tuple, union } from "../lib/validation";
+import { array, constants, string, tuple } from "../lib/validation";
 
 const defaultValue = [
   "balance",
@@ -27,6 +27,6 @@ const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
 /** The column and order that the journal should be sorted in. */
 export const journalSortOrder = localStorageSyncedStore(
   "journal-sort-order",
-  tuple([string, union(constant("asc"), constant("desc"))]),
+  tuple(string, constants("asc", "desc")),
   () => defaultSortOrder,
 );

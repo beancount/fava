@@ -34,9 +34,9 @@ export function defaultValue<T>(
 }
 
 /**
- * Validate as unknown (noop).
+ * Validate as unknown (noop, just wrap in ok()).
  */
-export const unknown: SafeValidator<unknown> = (json) => ok(json);
+export const unknown: SafeValidator<unknown> = ok;
 
 /**
  * Validate a string.
@@ -45,7 +45,8 @@ export const string: Validator<string> = (json) =>
   typeof json === "string" ? ok(json) : err("string validation failed.");
 
 /** Validate a string and return the empty string on failure. */
-export const optional_string = defaultValue(string, () => "");
+export const optional_string: SafeValidator<string> = (json) =>
+  typeof json === "string" ? ok(json) : ok("");
 
 /**
  * Validate a boolean.
@@ -89,7 +90,20 @@ export function constant<T extends null | boolean | string | number>(
     json === value ? ok(json as T) : err("Expected a constant");
 }
 
+/** Helper type to get the union of the types in a tuple. */
 type TupleElement<T extends unknown[]> = T extends (infer E)[] ? E : T;
+
+/**
+ * Validate a value is one of the provided constant values.
+ */
+export function constants<const T extends (null | boolean | string | number)[]>(
+  ...args: T
+): Validator<TupleElement<T>> {
+  return (json) =>
+    args.includes(json as null | boolean | string | number)
+      ? ok(json as TupleElement<T>)
+      : err("Expected a constant");
+}
 
 /**
  * Validate a value that is of one of the given types.
@@ -109,11 +123,10 @@ export function union<T extends unknown[]>(
 }
 
 /**
- * Validator for an object that might be undefined.
+ * Validator for an object that might be null or undefined.
  */
 export function optional<T>(validator: Validator<T>): Validator<T | null> {
-  return (json) =>
-    json === undefined || json === null ? ok(null) : validator(json);
+  return (json) => (json == null ? ok(null) : validator(json));
 }
 
 /**
@@ -147,14 +160,14 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
 /**
  * Validator for a tuple of fixed length.
  */
-export function tuple<A, B>(
-  decoders: [Validator<A>, Validator<B>],
-): Validator<[A, B]> {
+export function tuple<const T extends unknown[]>(
+  ...args: { [P in keyof T]: Validator<T[P]> }
+): Validator<T> {
   return (json) => {
-    if (Array.isArray(json) && json.length === 2) {
+    if (Array.isArray(json) && json.length === args.length) {
       const result = [];
       let i = 0;
-      for (const decoder of decoders) {
+      for (const decoder of args) {
         const res = decoder(json[i]);
         if (res.is_ok) {
           result[i] = res.value;
@@ -163,7 +176,7 @@ export function tuple<A, B>(
         }
         i += 1;
       }
-      return ok(result as [A, B]);
+      return ok(result as T);
     }
     return err("Expected a tuple");
   };
