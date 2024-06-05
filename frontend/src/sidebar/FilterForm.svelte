@@ -1,11 +1,17 @@
 <script lang="ts" context="module">
-  export function valueExtractor(value: string, input: HTMLInputElement) : string {
+  export function valueExtractor(
+    value: string,
+    input: HTMLInputElement,
+  ): string {
     const match = value
       .slice(0, input.selectionStart ?? undefined)
       .match(/\S*$/);
     return match?.[0] ?? value;
   }
-  export function valueSelector(value: string, input: HTMLInputElement) : string {
+  export function valueSelector(
+    value: string,
+    input: HTMLInputElement,
+  ): string {
     const selectionStart = input.selectionStart ?? 0;
     const match = input.value.slice(0, selectionStart).match(/\S*$/);
     const matchLength = match?.[0]?.length;
