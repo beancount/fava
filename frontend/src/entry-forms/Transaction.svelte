@@ -1,3 +1,8 @@
+<script lang="ts" context="module">
+  const TAGS_RE = /(?:^|\s)#([A-Za-z0-9\-_/.]+)/g;
+  const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
+</script>
+
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
@@ -6,6 +11,7 @@
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { narrations, payees } from "../stores";
+  import { valueExtractor, valueSelector } from "../sidebar/FilterForm.svelte";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
@@ -34,6 +40,12 @@
           );
         });
     }
+  }
+
+  /// Extract tags and links that can be provided in the narration.
+  function onNarrationChange() {
+    entry.tags = [...entry.narration.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
+    entry.links = [...entry.narration.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
   }
 
   // Autofill complete transactions.
@@ -69,24 +81,6 @@
   $: if (!entry.postings.some((p) => p.is_empty())) {
     entry.postings = entry.postings.concat(new Posting());
   }
-
-  function valueExtractor(value: string, input: HTMLInputElement) {
-    const match = value
-      .slice(0, input.selectionStart ?? undefined)
-      .match(/\S*$/);
-    return match?.[0] ?? value;
-  }
-  function valueSelector(value: string, input: HTMLInputElement) {
-    const selectionStart = input.selectionStart ?? 0;
-    const match = input.value.slice(0, selectionStart).match(/\S*$/);
-    const matchLength = match?.[0]?.length;
-    return matchLength !== undefined
-      ? `${input.value.slice(
-          0,
-          selectionStart - matchLength,
-        )}${value}${input.value.slice(selectionStart)}`
-      : value;
-  }
 </script>
 
 <div>
@@ -112,8 +106,9 @@
         placeholder={_("Narration")}
         bind:value={entry.narration}
         suggestions={$narrations}
-        {valueExtractor}
-        {valueSelector}
+        valueExtractor={valueExtractor}
+        valueSelector={valueSelector}
+        on:blur={onNarrationChange}
         on:select={autocompleteSelectNarration}
       />
       <AddMetadataButton bind:meta={entry.meta} />
