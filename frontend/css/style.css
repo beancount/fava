@@ -238,7 +238,6 @@
       --journal-hover-highlight: #4e4e4e9c;
     }
 
-    button,
     input,
     textarea {
       background: var(--placeholder-background);
