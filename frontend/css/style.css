@@ -166,7 +166,8 @@
     .journal .close {
       --entry-background: hsl(0deg 0% 70%);
 
-      p .flag, a:link {
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
@@ -174,35 +175,44 @@
     .journal .custom {
       --entry-background: #e8bd00;
 
-      p .flag, a:link  {
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
 
     .journal .document {
       --entry-background: #9b3b9b;
-      p .flag, a:link  {
+
+      p .flag,
+      a:link {
         color: var(--text-color);
       }
     }
 
     .journal .note {
       --entry-background: #3a6596;
-      p .flag, a:link  {
+
+      p .flag,
+      a:link {
         color: var(--text-color);
       }
     }
 
     .journal .open {
-      --entry-background: hsl(0, 0%, 83%);
-      p .flag, a:link  {
+      --entry-background: hsl(0deg 0% 83%);
+
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
 
     .journal .other {
       --entry-background: #9ed0d0;
-      p .flag, a:link  {
+
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
@@ -221,14 +231,18 @@
 
     .journal .query {
       --entry-background: #83ace2;
-      p .flag, a:link  {
+
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
 
     .journal .budget {
       --entry-background: #caaa7c;
-      p .flag, a:link  {
+
+      p .flag,
+      a:link {
         color: var(--text-color-darker);
       }
     }
