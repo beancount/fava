@@ -20,6 +20,10 @@ current year up to today, or `year-1 - year` for all entries of the last and
 current year. To prevent subtraction, use parentheses: `(month)-10` refers to
 the 10th of this month, whereas `month-10` would be 10 months ago.
 
+**Week number** Week number of the year (Monday as the first day of the week) as
+a decimal number. All days in a new year preceding the first Monday are
+considered to be in week 0.
+
 ### Account
 
 Filter entries by account, matching any entry this account is part of. The
