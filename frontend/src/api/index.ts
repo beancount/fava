@@ -66,7 +66,7 @@ interface GetAPIParams {
   move: { filename: string; account: string; new_name: string };
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
-  narration_transaction: Transaction.validator,
+  narration_transaction: Transaction.validator;
   query_result: Filters & { query_string: string };
   source: { filename: string };
 }

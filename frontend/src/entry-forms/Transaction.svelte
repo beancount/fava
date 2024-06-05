@@ -45,7 +45,9 @@
   /// Extract tags and links that can be provided in the narration.
   function onNarrationChange() {
     entry.tags = [...entry.narration.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
-    entry.links = [...entry.narration.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
+    entry.links = [...entry.narration.matchAll(LINKS_RE)].map(
+      (a) => a[1] ?? "",
+    );
   }
 
   // Autofill complete transactions.
@@ -106,8 +108,8 @@
         placeholder={_("Narration")}
         bind:value={entry.narration}
         suggestions={$narrations}
-        valueExtractor={valueExtractor}
-        valueSelector={valueSelector}
+        {valueExtractor}
+        {valueSelector}
         on:blur={onNarrationChange}
         on:select={autocompleteSelectNarration}
       />
