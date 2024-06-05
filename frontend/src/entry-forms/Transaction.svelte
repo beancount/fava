@@ -10,8 +10,8 @@
   import type { Transaction } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
-  import { narrations, payees } from "../stores";
   import { valueExtractor, valueSelector } from "../sidebar/FilterForm.svelte";
+  import { narrations, payees } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
