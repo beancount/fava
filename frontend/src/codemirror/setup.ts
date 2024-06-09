@@ -49,7 +49,6 @@ import {
 import { bql } from "./bql";
 import { rulerPlugin } from "./ruler";
 
-
 const baseExtensions = [
   lineNumbers(),
   highlightSpecialChars(),
