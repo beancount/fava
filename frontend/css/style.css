@@ -275,6 +275,7 @@
       background-color: #484c4f;
     }
 
+    /* stylelint-disable selector-class-pattern */
     .cm-activeLine {
       background-color: #44535b44;
     }
@@ -282,6 +283,7 @@
     .cm-selectionMatch {
       background-color: rgb(89 89 89 / 81%) !important;
     }
+    /* stylelint-enable selector-class-pattern */
   }
 }
 
