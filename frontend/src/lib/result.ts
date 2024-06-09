@@ -30,6 +30,9 @@ interface BaseResult<T, E> {
   /** Returns the contained Ok value or throw an Error for Err. */
   unwrap(): T;
 
+  /** Returns the contained Err value or throw an Error for Ok. */
+  unwrap_err(): E;
+
   /** Returns the contained Ok value or a provided default. */
   unwrap_or<U>(d: U): T | U;
 }
@@ -65,6 +68,10 @@ export class Ok<T> implements BaseResult<T, never> {
     return this.value;
   }
 
+  unwrap_err(): never {
+    throw new Error("unwrap_err() called on Ok().");
+  }
+
   unwrap_or(): T {
     return this.value;
   }
@@ -95,7 +102,11 @@ export class Err<E> implements BaseResult<never, E> {
   }
 
   unwrap(): never {
-    throw new Error("Unwrap called on error.");
+    throw new Error("unwrap() called on error.");
+  }
+
+  unwrap_err(): E {
+    return this.error;
   }
 
   unwrap_or<U>(val: U): U {

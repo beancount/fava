@@ -18,7 +18,7 @@ class SvelteCustomElementComponent<
 > {
   constructor(
     private readonly Component: typeof SvelteComponent<T>,
-    private readonly validate: (data: unknown) => Result<T, string>,
+    private readonly validate: (data: unknown) => Result<T, Error>,
   ) {}
 
   /** Load data and render the component for this route to the given target. */
@@ -27,12 +27,13 @@ class SvelteCustomElementComponent<
     if (res.is_err) {
       const type = target.getAttribute("type");
       target.classList.add("error");
+      log_error(res.error);
       target.replaceChildren(
         domHelpers.t(
           `Rendering component '${type ?? "null"}' failed due to invalid JSON data:`,
         ),
         domHelpers.br(),
-        domHelpers.pre(res.error),
+        domHelpers.pre(res.error.message),
       );
       log_error("Invalid JSON for component:", data);
       return undefined;

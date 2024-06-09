@@ -9,17 +9,19 @@ import {
   number,
   object,
   optional_string,
+  PrimitiveValidationError,
   record,
   string,
+  tagged_union,
   tuple,
-  union,
+  ValidationError,
 } from "../src/lib/validation";
 
 test("validate boolean", () => {
   assert.equal(boolean(true).unwrap(), true);
   assert.equal(boolean(false).unwrap(), false);
   assert.ok(boolean({ a: 1 }).is_err);
-  assert.ok(boolean("1").is_err);
+  assert.instance(boolean("1").unwrap_err(), PrimitiveValidationError);
 });
 
 test("validate constant", () => {
@@ -45,11 +47,24 @@ test("validate constants", () => {
   assert.ok(a_or_b("c").is_err);
 });
 
-test("validate union", () => {
-  const string_or_boolean = union(string, boolean);
-  assert.is(string_or_boolean("asdf").unwrap(), "asdf");
-  assert.is(string_or_boolean(true).unwrap(), true);
-  assert.ok(string_or_boolean(10).is_err);
+test("validate tagged union", () => {
+  const a_or_b = tagged_union("t", {
+    a: object({ a: boolean }),
+    b: object({ b: boolean }),
+  });
+  assert.equal(a_or_b({ t: "a", a: true }).unwrap(), { a: true });
+  assert.ok(a_or_b({ t: "a", b: true }).is_err);
+  const err = a_or_b({ t: "a", b: true });
+  assert.ok(err.is_err);
+  assert.instance(err.error, ValidationError);
+  assert.instance(err.error.cause, ValidationError);
+
+  assert.equal(a_or_b({ t: "b", b: true }).unwrap(), { b: true });
+
+  assert.ok(a_or_b(null).is_err);
+  assert.ok(a_or_b({}).is_err);
+  assert.ok(a_or_b({ t: "c" }).is_err);
+  assert.ok(a_or_b({ t: "a" }).is_err);
 });
 
 test("validate date", () => {

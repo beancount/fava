@@ -4,7 +4,7 @@ import type { HierarchyNode } from "d3-hierarchy";
 
 import type { Result } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
-import type { Validator } from "../lib/validation";
+import type { ValidationError, Validator } from "../lib/validation";
 import {
   array,
   boolean,
@@ -122,7 +122,7 @@ export function hierarchy(
   label: string | null,
   json: unknown,
   $chartContext: ChartContext,
-): Result<HierarchyChart, string> {
+): Result<HierarchyChart, ValidationError> {
   const with_modifier = hierarchy_data_with_modifier(json);
   if (with_modifier.is_ok) {
     notify_warn(

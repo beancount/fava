@@ -103,7 +103,7 @@
         notify("No entries to import from this file.", "warning");
       }
     } catch (error) {
-      notify_err(error, (e) => e.message);
+      notify_err(error);
     }
   }
 

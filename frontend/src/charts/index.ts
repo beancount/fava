@@ -5,6 +5,7 @@
  */
 
 import { collect, err, type Result } from "../lib/result";
+import type { ValidationError } from "../lib/validation";
 import { array, object, string, unknown } from "../lib/validation";
 
 import { bar } from "./bar";
@@ -23,7 +24,7 @@ const parsers: Record<
     label: string,
     json: unknown,
     $chartContext: ChartContext,
-  ) => Result<FavaChart, string>
+  ) => Result<FavaChart, ValidationError>
 > = {
   balances,
   bar,
@@ -37,20 +38,31 @@ const chart_data_validator = array(
   object({ label: string, type: string, data: unknown }),
 );
 
+class ChartValidationError extends Error {
+  constructor(type: string, cause: ValidationError) {
+    super(`Parsing of data for ${type} chart failed.`, { cause });
+  }
+}
+
+class UnknownChartTypeError extends Error {
+  constructor(type: string) {
+    super(`Unknown chart type ${type}`);
+  }
+}
+
 export function parseChartData(
   data: unknown,
   $chartContext: ChartContext,
-): Result<FavaChart[], string> {
+): Result<FavaChart[], ChartValidationError | UnknownChartTypeError> {
   return chart_data_validator(data).and_then((chartData) =>
     collect(
-      chartData.map((chart) => {
-        const parser = parsers[chart.type];
+      chartData.map(({ type, label, data }) => {
+        const parser = parsers[type];
         return parser
-          ? parser(chart.label, chart.data, $chartContext).map_err(
-              (msg) =>
-                `Parsing of data for ${chart.type} chart failed:\n${msg}`,
+          ? parser(label, data, $chartContext).map_err(
+              (error) => new ChartValidationError(type, error),
             )
-          : err(`Unknown chart type ${chart.type}`);
+          : err(new UnknownChartTypeError(type));
       }),
     ),
   );

@@ -1,4 +1,5 @@
 import type { Result } from "../lib/result";
+import type { ValidationError } from "../lib/validation";
 import { array, date, object, string } from "../lib/validation";
 
 /** Data point for the scatterplot (events). */
@@ -24,7 +25,7 @@ const scatterplot_validator = array<ScatterPlotDatum>(
 export function scatterplot(
   label: string | null,
   json: unknown,
-): Result<ScatterPlot, string> {
+): Result<ScatterPlot, ValidationError> {
   return scatterplot_validator(json).map(
     (value) => new ScatterPlot(label, value),
   );

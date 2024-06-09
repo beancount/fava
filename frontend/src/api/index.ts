@@ -10,6 +10,13 @@ import type { Filters, FiltersConversionInterval } from "../stores/filters";
 import type { GetAPIValidators, SourceFile } from "./validators";
 import { getAPIValidators } from "./validators";
 
+class InvalidResponseDataError extends Error {
+  constructor(cause: Error) {
+    super("Invalid data returned in API request.", { cause });
+    notify_err(this);
+  }
+}
+
 /** Required arguments for the various PUT API endpoints. */
 interface PutAPIInputs {
   add_document: FormData;
@@ -45,8 +52,7 @@ export async function put<T extends keyof PutAPIInputs>(
   if (res.is_ok) {
     return res.value;
   }
-  notify(`Invalid data returned in API request: ${res.error}`, "error");
-  throw new Error(res.error);
+  throw new InvalidResponseDataError(res.error);
 }
 
 interface GetAPIParams {
@@ -88,8 +94,7 @@ export async function get<T extends keyof GetAPIParams>(
   if (res.is_ok) {
     return res.value as ValidationT<GetAPIValidators[T]>;
   }
-  notify(`Invalid data returned in API request: ${res.error}`, "error");
-  throw new Error(res.error);
+  throw new InvalidResponseDataError(res.error);
 }
 
 interface DeleteAPIParams {
@@ -113,8 +118,7 @@ export async function doDelete<T extends keyof DeleteAPIParams>(
   if (res.is_ok) {
     return res.value;
   }
-  notify(`Invalid data returned in API request: ${res.error}`, "error");
-  throw new Error(res.error);
+  throw new InvalidResponseDataError(res.error);
 }
 
 /**
@@ -134,7 +138,7 @@ export async function moveDocument(
     notify(msg);
     return true;
   } catch (error) {
-    notify_err(error, (e) => e.message);
+    notify_err(error);
     return false;
   }
 }
@@ -150,7 +154,7 @@ export async function deleteDocument(filename: string): Promise<boolean> {
     notify(msg);
     return true;
   } catch (error) {
-    notify_err(error, (e) => e.message);
+    notify_err(error);
     return false;
   }
 }

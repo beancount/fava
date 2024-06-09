@@ -1,24 +1,29 @@
 import { is_empty } from "./lib/objects";
-import type { Validator } from "./lib/validation";
+import { ok } from "./lib/result";
+import type { SafeValidator, Validator } from "./lib/validation";
 import {
   array,
-  boolean,
   constant,
   defaultValue,
-  number,
   object,
   optional_string,
   record,
   string,
-  union,
+  tagged_union,
 } from "./lib/validation";
 
-const entry_meta_validator = record(
-  defaultValue(
-    union(boolean, number, string),
-    () => "Unsupported metadata value",
-  ),
-);
+const entry_meta_item: SafeValidator<string | number | boolean> = (json) => {
+  if (
+    typeof json == "boolean" ||
+    typeof json == "number" ||
+    typeof json == "string"
+  ) {
+    return ok(json);
+  }
+  return ok("Unsupported metadata value");
+};
+
+const entry_meta_validator = record(entry_meta_item);
 
 /** A posting. */
 export class Posting {
@@ -254,13 +259,13 @@ export class Transaction extends EntryBase {
 export type Entry = Balance | Document | Event | Note | Transaction;
 
 /** Validate an Entry. */
-export const entryValidator: Validator<Entry> = union(
-  Balance.validator,
-  Document.validator,
-  Event.validator,
-  Note.validator,
-  Transaction.validator,
-);
+export const entryValidator: Validator<Entry> = tagged_union("t", {
+  Balance: Balance.validator,
+  Document: Document.validator,
+  Event: Event.validator,
+  Note: Note.validator,
+  Transaction: Transaction.validator,
+});
 
 /**
  * Check whether the given entry is marked as duplicate (used in imports).

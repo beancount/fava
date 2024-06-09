@@ -3,6 +3,7 @@ import { sort } from "d3-array";
 import type { FormatterContext } from "../format";
 import { day } from "../format";
 import type { Result } from "../lib/result";
+import type { ValidationError } from "../lib/validation";
 import { array, date, number, object, record } from "../lib/validation";
 
 import type { TooltipContent } from "./tooltip";
@@ -60,7 +61,7 @@ const balances_validator = array(object({ date, balance: record(number) }));
 export function balances(
   label: string | null,
   json: unknown,
-): Result<LineChart, string> {
+): Result<LineChart, ValidationError> {
   return balances_validator(json).map((parsedData) => {
     const groups = new Map<string, LineChartDatum[]>();
     for (const { date: date_val, balance } of parsedData) {
