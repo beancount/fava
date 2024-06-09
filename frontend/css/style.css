@@ -83,6 +83,12 @@
   --editor-number: #116543;
   --editor-string: #a91111;
 
+  /* Query Editor */
+  --bql-keywords: #708;
+  --bql-values: #085;
+  --bql-string: #a11;
+  --bql-errors: #000;
+
   /* Misc */
   --notification-color: #fff;
   --chart-axis: #999;
@@ -100,6 +106,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
+
     /* Base colors */
     --heading-color: #d7dce2;
     --text-color: hsl(0deg 0% 75%);
@@ -122,8 +130,8 @@
     --sidebar-border: hsl(200deg 5% 25%);
 
     /* Details */
-    --summary-background: hsl(0deg 0% 45%);
-    --summary-background-darker: hsl(0deg 0% 40%);
+    --summary-background: hsl(0deg 0% 25%);
+    --summary-background-darker: hsl(0deg 0% 20%);
 
     /* Header */
     --header-color: #fff;
@@ -149,6 +157,12 @@
     --editor-label-name: #9c90f6;
     --editor-number: #00b672;
     --editor-string: #e87f7f;
+
+    /* Query Editor */
+    --bql-keywords: #c678dd;
+    --bql-values: #98c379;
+    --bql-string: #ee5e5e; /* #e5c07b; */
+    --bql-errors: var(--text-color-lighter);
 
     /* Misc */
     --placeholder-color: var(--text-color-lighter);
@@ -259,6 +273,14 @@
 
     .cm-tooltip {
       background-color: #484c4f;
+    }
+
+    .cm-activeLine {
+      background-color: #44535b44;
+    }
+
+    .cm-selectionMatch {
+      background-color: rgba(89, 89, 89, 0.81) !important;
     }
   }
 }

@@ -13,7 +13,7 @@ import ts_wasm from "web-tree-sitter/tree-sitter.wasm";
 import { beancountCompletion } from "./beancount-autocomplete";
 import { beancountFold } from "./beancount-fold";
 import { beancountFormat } from "./beancount-format";
-import { beancountHighlight } from "./beancount-highlight";
+import { beancountEditorHighlight } from "./beancount-highlight";
 import { beancountIndent } from "./beancount-indent";
 // WASM build of tree-sitter grammar from https://github.com/yagebu/tree-sitter-beancount
 import ts_beancount_wasm from "./tree-sitter-beancount.wasm";
@@ -33,7 +33,7 @@ async function loadBeancountParser(): Promise<TSParser> {
 const beancountLanguageFacet = defineLanguageFacet();
 const beancountLanguageSupportExtensions = [
   beancountFold,
-  syntaxHighlighting(beancountHighlight),
+  syntaxHighlighting(beancountEditorHighlight),
   beancountIndent,
   keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancountFormat }]),
   beancountLanguageFacet.of({

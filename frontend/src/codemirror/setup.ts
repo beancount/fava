@@ -44,6 +44,7 @@ import { fava_options } from "../stores";
 import { getBeancountLanguageSupport } from "./beancount";
 import { bql } from "./bql";
 import { rulerPlugin } from "./ruler";
+import {beancountEditorHighlight, beancountQueryHighlight} from "./beancount-highlight";
 
 const baseExtensions = [
   lineNumbers(),
@@ -53,7 +54,6 @@ const baseExtensions = [
   drawSelection(),
   EditorState.allowMultipleSelections.of(true),
   indentOnInput(),
-  syntaxHighlighting(defaultHighlightStyle),
   bracketMatching(),
   closeBrackets(),
   autocompletion(),
@@ -146,6 +146,7 @@ export function initBeancountEditor(
       }
     }),
     baseExtensions,
+    syntaxHighlighting(beancountEditorHighlight)
   ]);
 }
 
@@ -155,7 +156,7 @@ export function initBeancountEditor(
 export function initReadonlyQueryEditor(value: string): EditorAndAction {
   return setup(value, [
     bql,
-    syntaxHighlighting(defaultHighlightStyle),
+    syntaxHighlighting(beancountQueryHighlight),
     EditorView.editable.of(false),
   ]);
 }
@@ -188,5 +189,6 @@ export function initQueryEditor(
     ]),
     placeholder(_placeholder),
     baseExtensions,
+    syntaxHighlighting(beancountQueryHighlight),
   ]);
 }
