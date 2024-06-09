@@ -44,7 +44,10 @@ import { fava_options } from "../stores";
 import { getBeancountLanguageSupport } from "./beancount";
 import { bql } from "./bql";
 import { rulerPlugin } from "./ruler";
-import {beancountEditorHighlight, beancountQueryHighlight} from "./beancount-highlight";
+import {
+  beancountEditorHighlight,
+  beancountQueryHighlight,
+} from "./beancount-highlight";
 
 const baseExtensions = [
   lineNumbers(),
@@ -146,7 +149,7 @@ export function initBeancountEditor(
       }
     }),
     baseExtensions,
-    syntaxHighlighting(beancountEditorHighlight)
+    syntaxHighlighting(beancountEditorHighlight),
   ]);
 }
 

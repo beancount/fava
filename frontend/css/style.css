@@ -280,7 +280,7 @@
     }
 
     .cm-selectionMatch {
-      background-color: rgba(89, 89, 89, 0.81) !important;
+      background-color: rgb(89 89 89 / 81%) !important;
     }
   }
 }

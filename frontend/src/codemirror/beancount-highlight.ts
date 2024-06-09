@@ -69,7 +69,7 @@ export const beancountQueryHighlight = HighlightStyle.define([
   {
     // Keywords: Select, Where, And
     tag: tags.keyword,
-    color: "var(--bql-keywords)"
+    color: "var(--bql-keywords)",
   },
   {
     // Values
@@ -81,7 +81,7 @@ export const beancountQueryHighlight = HighlightStyle.define([
       tags.annotation,
       tags.modifier,
       tags.self,
-      tags.namespace
+      tags.namespace,
     ],
     color: "var(--bql-values)",
   },
@@ -92,7 +92,13 @@ export const beancountQueryHighlight = HighlightStyle.define([
   },
   {
     // Errors
-    tag: [tags.name, tags.deleted, tags.character, tags.propertyName, tags.macroName],
+    tag: [
+      tags.name,
+      tags.deleted,
+      tags.character,
+      tags.propertyName,
+      tags.macroName,
+    ],
     color: "var(--bql-errors)",
   },
 ]);
