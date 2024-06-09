@@ -42,12 +42,13 @@ import { log_error } from "../log";
 import { fava_options } from "../stores";
 
 import { getBeancountLanguageSupport } from "./beancount";
-import { bql } from "./bql";
-import { rulerPlugin } from "./ruler";
 import {
   beancountEditorHighlight,
   beancountQueryHighlight,
 } from "./beancount-highlight";
+import { bql } from "./bql";
+import { rulerPlugin } from "./ruler";
+
 
 const baseExtensions = [
   lineNumbers(),
