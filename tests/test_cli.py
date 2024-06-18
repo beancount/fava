@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 import sys
+from pathlib import Path
 from socket import socket
 from subprocess import PIPE
 from subprocess import Popen
@@ -11,9 +13,33 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.cli import _add_env_filenames
+from fava.cli import NonAbsolutePathError
+
 if TYPE_CHECKING:  # pragma: no cover
-    from pathlib import Path
     from typing import IO
+
+
+def test__add_env_filenames(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    absolute_path = Path.cwd().resolve()
+    absolute = str(absolute_path)
+    asdf = str(absolute_path / "asdf")
+    other = str(absolute_path / "other")
+
+    monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
+    assert _add_env_filenames((asdf,)) == {asdf}
+
+    monkeypatch.setenv("BEANCOUNT_FILE", "path")
+    with pytest.raises(NonAbsolutePathError):
+        _add_env_filenames((asdf,))
+
+    monkeypatch.setenv("BEANCOUNT_FILE", absolute)
+    assert _add_env_filenames((asdf,)) == {absolute, asdf}
+
+    monkeypatch.setenv("BEANCOUNT_FILE", os.pathsep.join([absolute, other]))
+    assert _add_env_filenames((asdf,)) == {absolute, other, asdf}
 
 
 @pytest.fixture()
@@ -40,6 +66,7 @@ def output_contains(stdout: IO[str], output: str) -> bool:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
+@pytest.mark.no_cover()
 def test_cli(
     monkeypatch: pytest.MonkeyPatch,
     test_data_dir: Path,

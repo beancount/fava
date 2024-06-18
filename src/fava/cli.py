@@ -18,7 +18,7 @@ from fava.util import simple_wsgi
 
 
 class AddressInUse(click.ClickException):  # noqa: D101
-    def __init__(self, port: int) -> None:
+    def __init__(self, port: int) -> None:  # pragma: no cover
         super().__init__(
             f"Cannot start Fava because port {port} is already in use."
             "\nPlease choose a different port with the '-p' option.",
@@ -33,7 +33,7 @@ class NonAbsolutePathError(click.UsageError):  # noqa: D101
 
 
 class NoFileSpecifiedError(click.UsageError):  # noqa: D101
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # pragma: no cover
         super().__init__("No file specified")
 
 
