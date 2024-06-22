@@ -1,0 +1,24 @@
+{% import "_query_table.html" as querytable %}
+
+{% set arg_filter = request.args.get('account_filter') %}
+
+{% include 'FavaExtTestInclude.html' %}
+
+<br />
+<label for="portfolio-list-filter">Custom Account Filter:</label>
+<input id="portfolio-list-filter" value={{arg_filter or ""}}>
+<button id="portfolio-update-filter">Update Filter</button>
+<button id="portfolio-clear-filter">Clear Filter</button>
+<p id="fetched-data"></p>
+
+<h3>Fava custom elements tests</h3>
+<svelte-component></svelte-component>
+<svelte-component type="unknown"></svelte-component>
+<svelte-component type="charts"></svelte-component>
+<svelte-component type="charts"><script type="application/json">{{extension.chart_data()|tojson}}</script></svelte-component>
+
+{% for portfolio in extension.portfolio_accounts(arg_filter) %}
+    <h3>{{ portfolio.title }}</h3>
+    {{ querytable.querytable(ledger, None, portfolio.types, portfolio.rows) }}
+    <br />
+{% endfor %}

@@ -16,17 +16,17 @@ def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
     result = extension_report_ledger.extensions.extension_details
     assert result == [
         ExtensionDetails(
-            "PortfolioList",
-            "Portfolio List",
+            "FavaExtTest",
+            "Fava extension test",
             has_js_module=True,
         ),
     ]
 
     extension_report_ledger.extensions.after_write_source("test", "test")
 
-    ext = extension_report_ledger.extensions.get_extension("PortfolioList")
+    ext = extension_report_ledger.extensions.get_extension("FavaExtTest")
     assert ext
-    assert ext.name == "PortfolioList"
+    assert ext.name == "FavaExtTest"
 
     assert ext.extension_dir.exists()
-    assert (ext.extension_dir / "PortfolioList.js").exists()
+    assert (ext.extension_dir / "FavaExtTest.js").exists()

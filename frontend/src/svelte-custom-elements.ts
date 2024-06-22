@@ -17,24 +17,21 @@ class SvelteCustomElementComponent<
   T extends Record<string, unknown> = Record<string, unknown>,
 > {
   constructor(
+    readonly type: string,
     private readonly Component: typeof SvelteComponent<T>,
     private readonly validate: (data: unknown) => Result<T, Error>,
   ) {}
 
   /** Load data and render the component for this route to the given target. */
-  render(target: HTMLElement, data: unknown): (() => void) | undefined {
+  render(target: SvelteCustomElement, data: unknown): (() => void) | undefined {
     const res = this.validate(data);
     if (res.is_err) {
-      const type = target.getAttribute("type");
-      target.classList.add("error");
-      log_error(res.error);
-      target.replaceChildren(
-        domHelpers.t(
-          `Rendering component '${type ?? "null"}' failed due to invalid JSON data:`,
-        ),
+      target.setError(
+        `Rendering component '${this.type}' failed due to invalid JSON data:`,
         domHelpers.br(),
-        domHelpers.pre(res.error.message),
+        res.error.message,
       );
+      log_error(res.error);
       log_error("Invalid JSON for component:", data);
       return undefined;
     }
@@ -45,16 +42,13 @@ class SvelteCustomElementComponent<
   }
 }
 
-const components = new Map<string, SvelteCustomElementComponent>([
-  [
-    "charts",
-    new SvelteCustomElementComponent(ChartSwitcher, (data) =>
-      parseChartData(data, store_get(chartContext)).map((charts) => ({
-        charts,
-      })),
-    ),
-  ],
-]);
+const components = [
+  new SvelteCustomElementComponent("charts", ChartSwitcher, (data) =>
+    parseChartData(data, store_get(chartContext)).map((charts) => ({
+      charts,
+    })),
+  ),
+];
 
 /**
  * A custom element that represents a Svelte component.
@@ -65,17 +59,25 @@ const components = new Map<string, SvelteCustomElementComponent>([
 export class SvelteCustomElement extends HTMLElement {
   private destroy?: () => void;
 
+  /** Show some error content. */
+  setError(...nodes_or_strings: (Node | string)[]): void {
+    this.classList.add("error");
+    this.replaceChildren("Error: ", ...nodes_or_strings);
+  }
+
   connectedCallback(): void {
     if (this.destroy) {
       return;
     }
     const type = this.getAttribute("type");
     if (type == null) {
-      throw new Error("Component is missing type");
+      this.setError("Component is missing type");
+      return;
     }
-    const comp = components.get(type);
+    const comp = components.find((t) => t.type === type);
     if (!comp) {
-      throw new Error("Invalid component");
+      this.setError(`Unknown component type: '${type}'`);
+      return;
     }
     const script = this.querySelector("script");
     this.destroy = comp.render(

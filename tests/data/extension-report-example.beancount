@@ -1,6 +1,6 @@
 ; extension-report-example.beancount
 
-2010-01-01 custom "fava-extension" "fava.ext.portfolio_list" "[
+2010-01-01 custom "fava-extension" "fava.ext.fava_ext_test" "[
         ('account_name_pattern', 'Assets:US:ETrade.*'),
         ('account_open_metadata_pattern', ('number', '882882'))
     ]"

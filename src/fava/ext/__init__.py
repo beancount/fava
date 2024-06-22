@@ -18,6 +18,7 @@ from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Callable
+    from typing import TypeVar
 
     from flask.wrappers import Response
 
@@ -169,16 +170,18 @@ def find_extensions(
     return classes, []
 
 
+if TYPE_CHECKING:  # pragma: no cover
+    T = TypeVar("T", bound=FavaExtensionBase)
+
+
 def extension_endpoint(
-    func_or_endpoint_name: (
-        Callable[[FavaExtensionBase], Any] | str | None
-    ) = None,
+    func_or_endpoint_name: (Callable[[T], Any] | str | None) = None,
     methods: list[str] | None = None,
 ) -> (
-    Callable[[FavaExtensionBase], Response]
+    Callable[[T], Response]
     | Callable[
-        [Callable[[FavaExtensionBase], Response]],
-        Callable[[FavaExtensionBase], Response],
+        [Callable[[T], Response]],
+        Callable[[T], Response],
     ]
 ):
     """Decorator to mark a function as an endpoint.
@@ -201,8 +204,8 @@ def extension_endpoint(
     )
 
     def decorator(
-        func: Callable[[FavaExtensionBase], Response],
-    ) -> Callable[[FavaExtensionBase], Response]:
+        func: Callable[[T], Response],
+    ) -> Callable[[T], Response]:
         f: Any = func
         f.endpoint_key = (
             endpoint_name or func.__name__,

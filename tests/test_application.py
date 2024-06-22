@@ -244,10 +244,10 @@ def test_static_url(app: Flask) -> None:
 def test_load_extension_reports(test_client: FlaskClient) -> None:
     """Extension can register reports."""
 
-    url = "/extension-report/extension/PortfolioList/"
+    url = "/extension-report/extension/FavaExtTest/"
     result = test_client.get(url)
     assert result.status_code == 200
-    url = "/extension-report/extension_js_module/PortfolioList.js"
+    url = "/extension-report/extension_js_module/FavaExtTest.js"
     result = test_client.get(url)
     assert result.status_code == 200
     url = "/extension-report/extension_js_module/Missing.js"
