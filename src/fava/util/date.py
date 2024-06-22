@@ -389,7 +389,11 @@ def parse_date(  # noqa: PLR0911
     match = WEEK_RE.match(string)
     if match:
         year, week = map(int, match.group(1, 2))
-        start = datetime.date.fromisocalendar(year, week + 1, 1)
+        start = (
+            datetime.datetime.strptime(f"{year}-W{week}-1", "%Y-W%W-%w")
+            .replace(tzinfo=datetime.timezone.utc)
+            .date()
+        )
         return start, get_next_interval(start, Interval.WEEK)
 
     match = QUARTER_RE.match(string)
