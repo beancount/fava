@@ -44,7 +44,7 @@
 
   /// Extract tags and links that can be provided in the narration.
   function onNarrationBlur() {
-    const value = narration
+    const value = narration;
     entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
     entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
     entry.narration = value
@@ -63,7 +63,7 @@
     }
     return val;
   }
-  let narration = ""
+  let narration = "";
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
@@ -83,7 +83,7 @@
     });
     data.date = entry.date;
     entry = data;
-    narration = combineNarrationTagsLinks(entry)
+    narration = combineNarrationTagsLinks(entry);
   }
 
   function movePosting({ from, to }: { from: number; to: number }) {
