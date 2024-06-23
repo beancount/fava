@@ -43,12 +43,27 @@
   }
 
   /// Extract tags and links that can be provided in the narration.
-  function onNarrationChange() {
-    entry.tags = [...entry.narration.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
-    entry.links = [...entry.narration.matchAll(LINKS_RE)].map(
-      (a) => a[1] ?? "",
-    );
+  function onNarrationBlur() {
+    const value = narration
+    entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
+    entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
+    entry.narration = value
+      .replaceAll(TAGS_RE, "")
+      .replaceAll(LINKS_RE, "")
+      .trim();
   }
+  /// Output tags and links in the narration
+  function combineNarrationTagsLinks(e: Transaction): string {
+    let val = e.narration;
+    if (e.tags.length) {
+      val += ` ${e.tags.map((t) => `#${t}`).join(" ")}`;
+    }
+    if (e.links.length) {
+      val += ` ${e.links.map((t) => `^${t}`).join(" ")}`;
+    }
+    return val;
+  }
+  let narration = ""
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
@@ -64,10 +79,11 @@
       return;
     }
     const data = await get("narration_transaction", {
-      narration: entry.narration,
+      narration: narration,
     });
     data.date = entry.date;
     entry = data;
+    narration = combineNarrationTagsLinks(entry)
   }
 
   function movePosting({ from, to }: { from: number; to: number }) {
@@ -106,11 +122,11 @@
       <AutocompleteInput
         className="narration"
         placeholder={_("Narration")}
-        bind:value={entry.narration}
+        bind:value={narration}
         suggestions={$narrations}
         {valueExtractor}
         {valueSelector}
-        on:blur={onNarrationChange}
+        on:blur={onNarrationBlur}
         on:select={autocompleteSelectNarration}
       />
       <AddMetadataButton bind:meta={entry.meta} />
