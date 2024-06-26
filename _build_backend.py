@@ -86,7 +86,7 @@ def _build_fava() -> None:
 
 def build_wheel(
     wheel_directory: str,
-    config_settings: dict[str, str] | None = None,
+    config_settings: dict[str, str | list[str] | None] | None = None,
     metadata_directory: str | None = None,
 ) -> str:
     _build_fava()
@@ -99,7 +99,7 @@ def build_wheel(
 
 def build_editable(
     wheel_directory: str,
-    config_settings: dict[str, str] | None = None,
+    config_settings: dict[str, str | list[str] | None] | None = None,
     metadata_directory: str | None = None,
 ) -> str:
     _build_fava()
@@ -112,7 +112,7 @@ def build_editable(
 
 def build_sdist(
     sdist_directory: str,
-    config_settings: dict[str, str] | None = None,
+    config_settings: dict[str, str | list[str] | None] | None = None,
 ) -> str:
     _build_fava()
     return build_meta.build_sdist(

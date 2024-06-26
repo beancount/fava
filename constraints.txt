@@ -50,7 +50,7 @@ click==8.1.7
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.5.3
+coverage==7.5.4
     # via pytest-cov
 cryptography==42.0.8
     # via secretstorage
@@ -64,7 +64,7 @@ docutils==0.21.2
     #   sphinx
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.15.1
+filelock==3.15.4
     # via
     #   tox
     #   virtualenv
@@ -76,9 +76,9 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 furo==2024.5.6
     # via fava (pyproject.toml)
-google-api-core==2.19.0
+google-api-core==2.19.1
     # via google-api-python-client
-google-api-python-client==2.133.0
+google-api-python-client==2.134.0
     # via beancount
 google-auth==2.30.0
     # via
@@ -87,7 +87,7 @@ google-auth==2.30.0
     #   google-auth-httplib2
 google-auth-httplib2==0.2.0
     # via google-api-python-client
-googleapis-common-protos==1.63.1
+googleapis-common-protos==1.63.2
     # via google-api-core
 httplib2==0.22.0
     # via
@@ -101,7 +101,7 @@ idna==3.7
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.1.0
+importlib-metadata==8.0.0
     # via twine
 iniconfig==2.0.0
     # via pytest
@@ -155,7 +155,7 @@ more-itertools==10.3.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.10.0
+mypy==1.10.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -177,7 +177,7 @@ packaging==24.1
     #   tox-uv
 pdfminer2==20151206
     # via beancount
-pkginfo==1.11.1
+pkginfo==1.10.0
     # via twine
 platformdirs==4.2.2
     # via
@@ -194,9 +194,9 @@ ply==3.11
     #   beancount
 pre-commit==3.7.1
     # via fava (pyproject.toml)
-proto-plus==1.23.0
+proto-plus==1.24.0
     # via google-api-core
-protobuf==4.25.3
+protobuf==5.27.2
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -232,11 +232,11 @@ pyinstaller==6.8.0
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2024.7
     # via pyinstaller
-pylint==3.2.3
+pylint==3.2.4
     # via fava (pyproject.toml)
 pyparsing==3.1.2
     # via httplib2
-pyproject-api==1.6.1
+pyproject-api==1.7.1
     # via tox
 pyproject-hooks==1.1.0
     # via build
@@ -274,7 +274,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==70.0.0
+setuptools==70.1.1
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -297,7 +297,7 @@ sphinx==7.3.7
     #   furo
     #   sphinx-autodoc-typehints
     #   sphinx-basic-ng
-sphinx-autodoc-typehints==2.1.1
+sphinx-autodoc-typehints==2.2.2
     # via fava (pyproject.toml)
 sphinx-basic-ng==1.0.0b2
     # via furo
@@ -323,9 +323,9 @@ tox==4.15.1
     #   tox-uv
 tox-uv==1.9.0
     # via fava (pyproject.toml)
-twine==5.1.0
+twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==70.0.0.20240524
+types-setuptools==70.1.0.20240625
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240310
     # via fava (pyproject.toml)
@@ -337,9 +337,9 @@ urllib3==2.2.2
     # via
     #   requests
     #   twine
-uv==0.2.11
+uv==0.2.15
     # via tox-uv
-virtualenv==20.26.2
+virtualenv==20.26.3
     # via
     #   pre-commit
     #   tox
