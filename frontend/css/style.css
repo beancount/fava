@@ -78,6 +78,16 @@
   --editor-invalid: #333;
   --editor-invalid-background: rgb(255 199 199 / 50%);
   --editor-activeline: #ffc;
+  --editor-currencies: #708;
+  --editor-label-name: #221198;
+  --editor-number: #116543;
+  --editor-string: #a91111;
+
+  /* Query Editor */
+  --bql-keywords: #708;
+  --bql-values: #085;
+  --bql-string: #a11;
+  --bql-errors: #000;
 
   /* Misc */
   --notification-color: #fff;
@@ -92,6 +102,189 @@
   /* Help pages */
   --help-sidebar-background: #f8f8f8;
   --help-sidebar-border: #eaeaea;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Base colors */
+    --heading-color: #d7dce2;
+    --text-color: hsl(0deg 0% 75%);
+    --text-color-darker: hsl(0deg 0% 25%);
+    --text-color-lighter: hsl(0deg 0% 85%);
+    --link-color: hsl(203deg 100% 45%);
+    --link-hover-color: hsl(0deg 0% 45%);
+    --code-background: hsl(0deg 0% 25%);
+    --background: hsl(200deg 6% 15%);
+    --background-darker: hsl(200deg 5% 30%);
+    --border: hsl(0deg 0% 35%);
+    --border-darker: hsl(0deg 0% 30%);
+
+    /* Box shadows */
+    --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 25% / 50%);
+
+    /* Sidebar */
+    --sidebar-background: hsl(200deg 5% 18%);
+    --sidebar-color: hsl(0deg 0% 73%);
+    --sidebar-border: hsl(200deg 5% 25%);
+
+    /* Details */
+    --summary-background: hsl(0deg 0% 25%);
+    --summary-background-darker: hsl(0deg 0% 20%);
+
+    /* Header */
+    --header-color: #fff;
+    --header-background: hsl(203deg 100% 25%);
+
+    /* Tables */
+    --table-header-text: hsl(0deg 0% 80%);
+    --table-header-background: var(--sidebar-background);
+    --table-border: var(--sidebar-border);
+    --table-background-even: hsl(0deg 0% 18%);
+
+    /* Editor */
+    --editor-comment: #998;
+    --editor-directive: #c6c6c6;
+    --editor-class: #e1a759;
+    --editor-date: #0ad3d3;
+    --editor-constant: #02a0a0;
+    --editor-account: var(--link-color);
+    --editor-invalid: #d5c5c5;
+    --editor-invalid-background: rgb(176 82 82 / 50%);
+    --editor-activeline: #ffc;
+    --editor-currencies: #cd00e8;
+    --editor-label-name: #9c90f6;
+    --editor-number: #00b672;
+    --editor-string: #e87f7f;
+
+    /* Query Editor */
+    --bql-keywords: #c678dd;
+    --bql-values: #98c379;
+    --bql-string: #ee5e5e; /* #e5c07b; */
+    --bql-errors: var(--text-color-lighter);
+
+    /* Misc */
+    --placeholder-color: var(--text-color-lighter);
+    --placeholder-background: hsl(222deg 7% 29%);
+    --mobile-button-text: #cacaca;
+
+    /* Help pages */
+    --help-sidebar-background: #3b3b3b;
+    --help-sidebar-border: #2a2a2a;
+
+    .journal .balance {
+      --entry-background: #175817;
+    }
+
+    .journal .close {
+      --entry-background: hsl(0deg 0% 70%);
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal .custom {
+      --entry-background: #e8bd00;
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal .document {
+      --entry-background: #9b3b9b;
+
+      p .flag,
+      a:link {
+        color: var(--text-color);
+      }
+    }
+
+    .journal .note {
+      --entry-background: #3a6596;
+
+      p .flag,
+      a:link {
+        color: var(--text-color);
+      }
+    }
+
+    .journal .open {
+      --entry-background: hsl(0deg 0% 83%);
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal .other {
+      --entry-background: #9ed0d0;
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal .pad {
+      --entry-background: #59baba;
+    }
+
+    .journal .pending {
+      --entry-background: #952445;
+
+      a:link {
+        color: var(--text-color);
+      }
+    }
+
+    .journal .query {
+      --entry-background: #83ace2;
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal .budget {
+      --entry-background: #caaa7c;
+
+      p .flag,
+      a:link {
+        color: var(--text-color-darker);
+      }
+    }
+
+    .journal {
+      --journal-postings: hsl(0deg 0% 10%);
+      --journal-hover-highlight: #4e4e4e9c;
+    }
+
+    input,
+    textarea {
+      background: var(--placeholder-background);
+    }
+
+    .cm-tooltip {
+      background-color: #484c4f;
+    }
+
+    /* stylelint-disable selector-class-pattern */
+    .cm-activeLine {
+      background-color: #44535b44;
+    }
+
+    .cm-selectionMatch {
+      background-color: rgb(89 89 89 / 81%) !important;
+    }
+    /* stylelint-enable selector-class-pattern */
+  }
 }
 
 .journal .balance {
