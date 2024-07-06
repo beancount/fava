@@ -27,7 +27,7 @@ class WatcherTestSet:
     folder: Path
 
 
-@pytest.fixture()
+@pytest.fixture
 def watcher_paths(tmp_path: Path) -> WatcherTestSet:
     file1 = tmp_path / "file1"
     file2 = tmp_path / "file2"

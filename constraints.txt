@@ -29,7 +29,7 @@ cachetools==5.3.3
     # via
     #   google-auth
     #   tox
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 cffi==1.16.0
     # via cryptography
@@ -78,9 +78,9 @@ furo==2024.5.6
     # via fava (pyproject.toml)
 google-api-core==2.19.1
     # via google-api-python-client
-google-api-python-client==2.134.0
+google-api-python-client==2.136.0
     # via beancount
-google-auth==2.30.0
+google-auth==2.31.0
     # via
     #   google-api-core
     #   google-api-python-client
@@ -163,7 +163,7 @@ nh3==0.2.17
     # via readme-renderer
 nodeenv==1.9.1
     # via pre-commit
-openpyxl==3.1.4
+openpyxl==3.1.5
     # via pyexcel-xlsx
 packaging==24.1
     # via
@@ -232,7 +232,7 @@ pyinstaller==6.8.0
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2024.7
     # via pyinstaller
-pylint==3.2.4
+pylint==3.2.5
     # via fava (pyproject.toml)
 pyparsing==3.1.2
     # via httplib2
@@ -274,7 +274,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==70.1.1
+setuptools==70.2.0
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -317,15 +317,15 @@ texttable==1.7.0
     # via pyexcel
 tomlkit==0.12.5
     # via pylint
-tox==4.15.1
+tox==4.16.0
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.9.0
+tox-uv==1.9.1
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==70.1.0.20240625
+types-setuptools==70.2.0.20240704
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240310
     # via fava (pyproject.toml)
@@ -337,7 +337,7 @@ urllib3==2.2.2
     # via
     #   requests
     #   twine
-uv==0.2.15
+uv==0.2.21
     # via tox-uv
 virtualenv==20.26.3
     # via

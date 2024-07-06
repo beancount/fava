@@ -31,7 +31,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from .conftest import SnapshotFunc
 
 
-@pytest.fixture()
+@pytest.fixture
 def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
     """Create a FavaLedger 'edit-example.beancount' in a tmp_path."""
     ledger_path = tmp_path / "edit-example.beancount"

@@ -42,7 +42,7 @@ def test__add_env_filenames(
     assert _add_env_filenames((asdf,)) == {absolute, other, asdf}
 
 
-@pytest.fixture()
+@pytest.fixture
 def open_port() -> int:
     """Get an open port."""
     sock = socket()
@@ -66,7 +66,7 @@ def output_contains(stdout: IO[str], output: str) -> bool:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
-@pytest.mark.no_cover()
+@pytest.mark.no_cover
 def test_cli(
     monkeypatch: pytest.MonkeyPatch,
     test_data_dir: Path,

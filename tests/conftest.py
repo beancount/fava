@@ -78,7 +78,7 @@ def snap_dir(module_path: Path) -> Path:
     return snap_dir
 
 
-@pytest.fixture()
+@pytest.fixture
 def snapshot(
     request: pytest.FixtureRequest,
     test_data_dir: Path,
@@ -176,7 +176,7 @@ def app(test_data_dir: Path) -> Flask:
     return fava_app
 
 
-@pytest.fixture()
+@pytest.fixture
 def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
     """Get a Fava Flask app in a tmp_dir."""
     ledger_path = tmp_path / "edit-example.beancount"
@@ -187,20 +187,20 @@ def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
     return fava_app
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_client(app: Flask) -> FlaskClient:
     """Get the test client for the Fava Flask app."""
     return app.test_client()
 
 
-@pytest.fixture()
+@pytest.fixture
 def load_doc(request: pytest.FixtureRequest) -> LoaderResult:
     """Load the docstring as a Beancount file."""
     contents = dedent(request.function.__doc__)
     return load_string(contents)
 
 
-@pytest.fixture()
+@pytest.fixture
 def load_doc_entries(load_doc: LoaderResult) -> list[Directive]:
     """Load the docstring as Beancount entries."""
     entries, _errors, _options = load_doc
@@ -213,14 +213,14 @@ def _is_custom_entries_list(
     return all(isinstance(e, Custom) for e in entries)
 
 
-@pytest.fixture()
+@pytest.fixture
 def load_doc_custom_entries(load_doc_entries: list[Directive]) -> list[Custom]:
     """Load the docstring as Beancount custom entries."""
     assert _is_custom_entries_list(load_doc_entries)
     return load_doc_entries
 
 
-@pytest.fixture()
+@pytest.fixture
 def budgets_doc(load_doc_custom_entries: list[Custom]) -> BudgetDict:
     """Load the budgets from the custom entries in the docstring."""
     budgets, _ = parse_budgets(load_doc_custom_entries)
@@ -255,13 +255,13 @@ def get_ledger(app: Flask) -> GetFavaLedger:
     return _get_ledger
 
 
-@pytest.fixture()
+@pytest.fixture
 def small_example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
     """Get the small example ledger."""
     return get_ledger("example")
 
 
-@pytest.fixture()
+@pytest.fixture
 def example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
     """Get the long example ledger."""
     return get_ledger("long-example")
