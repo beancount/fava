@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v1.28 (2024-07-07)
+------------------
+
+This release accumulates a couple of minor fixes and improvements. Under the
+hood, the file change detection is now powered by watchfiles instead of
+polling, which is more performant.
+
 v1.27 (2024-01-06)
 ------------------
 
