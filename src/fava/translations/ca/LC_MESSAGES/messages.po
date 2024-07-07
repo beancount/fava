@@ -12,7 +12,7 @@ msgid "Custom Links"
 msgstr "Enllaços personalitzats"
 
 #: frontend/src/reports/routes.ts:28
-#: frontend/src/sidebar/AsideContents.svelte:66
+#: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
 msgstr "Errors"
 
@@ -77,7 +77,7 @@ msgstr "Esdeveniments"
 msgid "Editor"
 msgstr "Editor"
 
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:74
 #: src/fava/templates/options.html:3
 msgid "Options"
 msgstr "Opcions"
@@ -87,7 +87,7 @@ msgstr "Opcions"
 msgid "Statistics"
 msgstr "Estadístiques"
 
-#: frontend/src/sidebar/AsideContents.svelte:74 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:75 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "Ajuda"
 
@@ -111,21 +111,21 @@ msgid "Position"
 msgstr "Situació"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
-#: src/fava/templates/_journal_table.html:52
+#: src/fava/templates/_journal_table.html:53
 msgid "Price"
 msgstr "Preu"
 
-#: src/fava/templates/_journal_table.html:53
+#: src/fava/templates/_journal_table.html:52
 msgid "Cost"
 msgstr "Cost"
 
-#: src/fava/templates/_journal_table.html:55
+#: src/fava/templates/_journal_table.html:52
 msgid "Change"
 msgstr "Canvi"
 
 #: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:15
-#: src/fava/templates/_journal_table.html:56
+#: src/fava/templates/_journal_table.html:53
 #: src/fava/templates/statistics.html:32
 msgid "Balance"
 msgstr "Balanç"
@@ -166,7 +166,7 @@ msgstr "Llibre diari del compte"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:51
 #: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:594
+#: src/fava/json_api.py:646
 msgid "Changes"
 msgstr "Canvis"
 
@@ -230,16 +230,16 @@ msgstr "Moneda de cost"
 msgid "Holdings by"
 msgstr "Cartera de valors per"
 
-#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:476
-#: src/fava/json_api.py:496
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:528
+#: src/fava/json_api.py:548
 msgid "Net Profit"
 msgstr "Benefici net"
 
-#: src/fava/templates/income_statement.html:10
+#: src/fava/json_api.py:534
 msgid "Income"
 msgstr "Ingressos"
 
-#: src/fava/templates/income_statement.html:11
+#: src/fava/json_api.py:540
 msgid "Expenses"
 msgstr "Despeses"
 
@@ -430,7 +430,7 @@ msgid "Documents folder"
 msgstr "Carpeta de documents"
 
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:189
+#: frontend/src/reports/import/Import.svelte:194
 msgid "Upload"
 msgstr "Puja"
 
@@ -488,23 +488,23 @@ msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
 msgid "Import entries"
 msgstr "Importa les entrades"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:102
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Per any"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:103
 msgid "Quarterly"
 msgstr "Per trimestre"
 
-#: frontend/src/lib/interval.ts:27 src/fava/util/date.py:104
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:104
 msgid "Monthly"
 msgstr "Per mes"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:105
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "Per setmana"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:106
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:106
 msgid "Daily"
 msgstr "Per dia"
 
@@ -512,7 +512,7 @@ msgstr "Per dia"
 msgid "Edit"
 msgstr "Edita"
 
-#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Posting.svelte:77
 msgid "Amount"
 msgstr "Import"
 
@@ -533,14 +533,15 @@ msgid "At Market Value"
 msgstr "Valor de mercat"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:16
+#: src/fava/templates/_journal_table.html:51
 msgid "Units"
 msgstr "Unitats"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:30
 msgid "Treemap"
 msgstr "Mapa d'arbre"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:31
 msgid "Sunburst"
 msgstr "Anells"
 
@@ -570,7 +571,7 @@ msgstr "Transacció"
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/reports/documents/Documents.svelte:64
+#: frontend/src/reports/documents/Documents.svelte:68
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
@@ -593,11 +594,11 @@ msgstr "Suprimeix"
 msgid "No importer matched this file."
 msgstr "No hi ha cap importador per a aquest fitxer."
 
-#: frontend/src/stores/chart.ts:39
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Diagrama de línies"
 
-#: frontend/src/stores/chart.ts:40
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
@@ -617,7 +618,7 @@ msgstr "Vés al compte"
 msgid "Delete this file?"
 msgstr "Voleu suprimir aquest fitxer?"
 
-#: frontend/src/reports/import/Import.svelte:156
+#: frontend/src/reports/import/Import.svelte:161
 msgid "No files were found for import."
 msgstr "No s'ha trobat cap fitxer per importar."
 
@@ -629,11 +630,11 @@ msgstr "Mostra/amaga les entrades %(type)s"
 msgid "Converted to %(currency)s"
 msgstr "S'ha convertit a %(currency)s"
 
-#: frontend/src/stores/chart.ts:50
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "Barres apilades"
 
-#: frontend/src/stores/chart.ts:51
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "Barres senzilles"
 
@@ -672,4 +673,8 @@ msgstr "Beneficiari/descripció"
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
 msgstr "S'està suprimint..."
+
+#: frontend/src/sidebar/AsideContents.svelte:60
+msgid "Add Journal Entry"
+msgstr ""
 

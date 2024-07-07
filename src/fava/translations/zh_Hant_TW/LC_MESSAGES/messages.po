@@ -12,7 +12,7 @@ msgid "Custom Links"
 msgstr "自定義連結"
 
 #: frontend/src/reports/routes.ts:28
-#: frontend/src/sidebar/AsideContents.svelte:66
+#: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
 msgstr "錯誤"
 
@@ -77,7 +77,7 @@ msgstr "事件"
 msgid "Editor"
 msgstr "編輯器"
 
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:74
 #: src/fava/templates/options.html:3
 msgid "Options"
 msgstr "選項"
@@ -87,7 +87,7 @@ msgstr "選項"
 msgid "Statistics"
 msgstr "統計"
 
-#: frontend/src/sidebar/AsideContents.svelte:74 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:75 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "幫助"
 
@@ -111,21 +111,21 @@ msgid "Position"
 msgstr "頭寸"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
-#: src/fava/templates/_journal_table.html:52
+#: src/fava/templates/_journal_table.html:53
 msgid "Price"
 msgstr "價格"
 
-#: src/fava/templates/_journal_table.html:53
+#: src/fava/templates/_journal_table.html:52
 msgid "Cost"
 msgstr "成本"
 
-#: src/fava/templates/_journal_table.html:55
+#: src/fava/templates/_journal_table.html:52
 msgid "Change"
 msgstr "更動"
 
 #: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:15
-#: src/fava/templates/_journal_table.html:56
+#: src/fava/templates/_journal_table.html:53
 #: src/fava/templates/statistics.html:32
 msgid "Balance"
 msgstr "餘額"
@@ -166,7 +166,7 @@ msgstr "賬戶日記賬"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:51
 #: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:594
+#: src/fava/json_api.py:646
 msgid "Changes"
 msgstr "更動"
 
@@ -230,16 +230,16 @@ msgstr "成本貨幣"
 msgid "Holdings by"
 msgstr "按"
 
-#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:476
-#: src/fava/json_api.py:496
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:528
+#: src/fava/json_api.py:548
 msgid "Net Profit"
 msgstr "淨利潤"
 
-#: src/fava/templates/income_statement.html:10
+#: src/fava/json_api.py:534
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/templates/income_statement.html:11
+#: src/fava/json_api.py:540
 msgid "Expenses"
 msgstr "支出"
 
@@ -431,7 +431,7 @@ msgid "Documents folder"
 msgstr "文件資料夾"
 
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:189
+#: frontend/src/reports/import/Import.svelte:194
 msgid "Upload"
 msgstr "上傳"
 
@@ -489,23 +489,23 @@ msgstr "將篩選結果下載為 Beancount 檔"
 msgid "Import entries"
 msgstr "匯入項目"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:102
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "年度"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:103
 msgid "Quarterly"
 msgstr "季度"
 
-#: frontend/src/lib/interval.ts:27 src/fava/util/date.py:104
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:104
 msgid "Monthly"
 msgstr "月"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:105
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "週"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:106
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:106
 msgid "Daily"
 msgstr "日"
 
@@ -513,7 +513,7 @@ msgstr "日"
 msgid "Edit"
 msgstr "編輯"
 
-#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Posting.svelte:77
 msgid "Amount"
 msgstr "金額"
 
@@ -534,15 +534,16 @@ msgid "At Market Value"
 msgstr "按照市價"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:16
+#: src/fava/templates/_journal_table.html:51
 msgid "Units"
 msgstr "按照單位"
 
 #. make it 樹狀圖 is not really proper. People would think about Tree structure while seeing this term.
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:30
 msgid "Treemap"
 msgstr "Treemap"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:31
 msgid "Sunburst"
 msgstr "Sunburst"
 
@@ -572,7 +573,7 @@ msgstr "交易"
 msgid "Add"
 msgstr "新增"
 
-#: frontend/src/reports/documents/Documents.svelte:64
+#: frontend/src/reports/documents/Documents.svelte:68
 msgid "Move or rename document"
 msgstr "移動或重命名檔案"
 
@@ -595,11 +596,11 @@ msgstr "移除"
 msgid "No importer matched this file."
 msgstr "沒有匹配此檔案的匯入器。"
 
-#: frontend/src/stores/chart.ts:39
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "折綫圖"
 
-#: frontend/src/stores/chart.ts:40
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "面積圖"
 
@@ -619,7 +620,7 @@ msgstr "轉到賬戶"
 msgid "Delete this file?"
 msgstr "刪除這個文件？"
 
-#: frontend/src/reports/import/Import.svelte:156
+#: frontend/src/reports/import/Import.svelte:161
 msgid "No files were found for import."
 msgstr "未發現有可供匯入的檔案"
 
@@ -631,11 +632,11 @@ msgstr "切換 %(type)s 條目"
 msgid "Converted to %(currency)s"
 msgstr "轉為 %(currency)s"
 
-#: frontend/src/stores/chart.ts:50
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "堆疊條形圖"
 
-#: frontend/src/stores/chart.ts:51
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "條形圖"
 
@@ -674,4 +675,8 @@ msgstr "付款人/摘要"
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
 msgstr "正在删除..."
+
+#: frontend/src/sidebar/AsideContents.svelte:60
+msgid "Add Journal Entry"
+msgstr ""
 
