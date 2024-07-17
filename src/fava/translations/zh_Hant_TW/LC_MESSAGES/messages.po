@@ -670,7 +670,7 @@ msgstr "繼續"
 
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee/Narration"
-msgstr "付款人/摘要"
+msgstr "收款人/摘要"
 
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
