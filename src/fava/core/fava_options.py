@@ -119,12 +119,17 @@ def parse_option_custom_entry(  # noqa: PLR0912
     if key not in All_OPTS:
         raise UnknownOptionError(key)
 
+    value = entry.values[1].value if len(entry.values) > 1 else None
+
     if key == "default_file":
-        filename, _lineno = get_position(entry)
+        if value is None:
+            filename, _lineno = get_position(entry)
+        else:
+            filename = value
+
         options.default_file = filename
         return
 
-    value = entry.values[1].value
     if not isinstance(value, str):
         raise NotAStringOptionError(key)
 

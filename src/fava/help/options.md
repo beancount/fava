@@ -50,8 +50,8 @@ locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
 ## `default-file`
 
 Use this option to specify a default file for the editor to open. This option
-takes no value, the file the custom entry is in will be used as the default. If
-this option is not specified, Fava opens the main file by default.
+may optionally take a value of a filename to be the default. If you don't
+provide a filename, the file this custom option is in is used.
 
 ---
 
