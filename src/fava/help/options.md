@@ -113,7 +113,7 @@ a transaction, the account of the last posting is used) is matched against all
 of the matching options before the entry date. If the entry is a Transaction and
 no `insert-entry` option matches the account of the last posting the account of
 the second to last posting and so on will be tried. If no `insert-entry` option
-matches or none is given, the entry will be inserted at the end of the main
+matches or none is given, the entry will be inserted at the end of the default
 file.
 
 ---
