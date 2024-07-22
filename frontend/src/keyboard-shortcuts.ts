@@ -170,7 +170,7 @@ function getKeySpecKey(spec: KeySpec): KeyCombo {
   if (typeof spec === "string") {
     return spec;
   }
-  return isMac ? spec.mac ?? spec.key : spec.key;
+  return isMac ? (spec.mac ?? spec.key) : spec.key;
 }
 
 /**
@@ -181,7 +181,7 @@ function getKeySpecDescription(spec: KeySpec): string {
   if (typeof spec === "string") {
     return spec;
   }
-  const key = isMac ? spec.mac ?? spec.key : spec.key;
+  const key = isMac ? (spec.mac ?? spec.key) : spec.key;
   return spec.note != null ? `${key} - ${spec.note}` : key;
 }
 

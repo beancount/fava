@@ -90,7 +90,7 @@ def link_documents(
                 # Since we might link a document multiple times, we have to use
                 # the index for the replacement here.
                 doc: Document = entries[j]  # type: ignore[assignment]
-                entries[j] = replace(
+                entries[j] = replace(  # noqa: B909
                     doc,
                     links=add_to_set(doc.links, entry_link),
                     tags=add_to_set(doc.tags, "linked"),
