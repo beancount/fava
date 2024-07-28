@@ -1,3 +1,29 @@
+<script lang="ts" context="module">
+  export function valueExtractor(
+    value: string,
+    input: HTMLInputElement,
+  ): string {
+    const match = value
+      .slice(0, input.selectionStart ?? undefined)
+      .match(/\S*$/);
+    return match?.[0] ?? value;
+  }
+  export function valueSelector(
+    value: string,
+    input: HTMLInputElement,
+  ): string {
+    const selectionStart = input.selectionStart ?? 0;
+    const match = input.value.slice(0, selectionStart).match(/\S*$/);
+    const matchLength = match?.[0]?.length;
+    return matchLength !== undefined
+      ? `${input.value.slice(
+          0,
+          selectionStart - matchLength,
+        )}${value}${input.value.slice(selectionStart)}`
+      : value;
+  }
+</script>
+
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
@@ -9,24 +35,6 @@
     ...$links.map((link) => `^${link}`),
     ...$payees.map((payee) => `payee:"${payee}"`),
   ];
-
-  function valueExtractor(value: string, input: HTMLInputElement) {
-    const match = value
-      .slice(0, input.selectionStart ?? undefined)
-      .match(/\S*$/);
-    return match?.[0] ?? value;
-  }
-  function valueSelector(value: string, input: HTMLInputElement) {
-    const selectionStart = input.selectionStart ?? 0;
-    const match = input.value.slice(0, selectionStart).match(/\S*$/);
-    const matchLength = match?.[0]?.length;
-    return matchLength !== undefined
-      ? `${input.value.slice(
-          0,
-          selectionStart - matchLength,
-        )}${value}${input.value.slice(selectionStart)}`
-      : value;
-  }
 
   let account_filter_value = "";
   let fql_filter_value = "";
