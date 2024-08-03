@@ -1,4 +1,4 @@
-"""Abstract base classes for Beancount types."""
+"""Abstract base classes for Beancount types."""  # noqa: A005
 
 from __future__ import annotations
 

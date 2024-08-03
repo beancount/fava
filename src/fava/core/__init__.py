@@ -428,8 +428,8 @@ class FavaLedger:
             with_children: Whether to include postings of subaccounts of
                            the account.
 
-        Returns:
-            A generator of ``(entry, change, balance)`` tuples.
+        Yields:
+            Tuples of ``(entry, change, balance)``.
         """
 
         def is_account(a: str) -> bool:

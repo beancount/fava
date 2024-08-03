@@ -118,7 +118,7 @@
     const { key } = event;
     const modifier = event.altKey || event.ctrlKey || event.metaKey;
 
-    if (key.match(/^[\w]$/) && !modifier) {
+    if (/^[\w]$/.exec(key) && !modifier) {
       return actions.find_letter.bind(null, key, event);
     }
     if (key === "Home") {

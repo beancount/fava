@@ -12,5 +12,12 @@
     "skipLibCheck": true,
     "esModuleInterop": true
   },
-  "include": ["*.ts", "src/**/*.ts", "src/**/*.svelte", "test/**/*.ts"]
+  "include": [
+    "*.ts",
+    "src/**/*.ts",
+    "src/**/*.svelte",
+    "test/**/*.ts",
+    "*.config.js",
+    ".eslintrc.js"
+  ]
 }

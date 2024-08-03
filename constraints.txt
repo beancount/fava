@@ -78,7 +78,7 @@ furo==2024.7.18
     # via fava (pyproject.toml)
 google-api-core==2.19.1
     # via google-api-python-client
-google-api-python-client==2.137.0
+google-api-python-client==2.139.0
     # via beancount
 google-auth==2.32.0
     # via
@@ -101,7 +101,7 @@ idna==3.7
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==8.1.0
+importlib-metadata==8.2.0
     # via twine
 iniconfig==2.0.0
     # via pytest
@@ -113,7 +113,7 @@ jaraco-classes==3.4.0
     # via keyring
 jaraco-context==5.3.0
     # via keyring
-jaraco-functools==4.0.1
+jaraco-functools==4.0.2
     # via
     #   cheroot
     #   keyring
@@ -127,7 +127,7 @@ jinja2==3.1.4
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.2.1
+keyring==25.3.0
     # via twine
 lml==0.1.0
     # via
@@ -155,7 +155,7 @@ more-itertools==10.3.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.11.0
+mypy==1.11.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -192,11 +192,11 @@ ply==3.11
     # via
     #   fava (pyproject.toml)
     #   beancount
-pre-commit==3.7.1
+pre-commit==3.8.0
     # via fava (pyproject.toml)
 proto-plus==1.24.0
     # via google-api-core
-protobuf==5.27.2
+protobuf==5.27.3
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -240,7 +240,7 @@ pyproject-api==1.7.1
     # via tox
 pyproject-hooks==1.1.0
     # via build
-pytest==8.3.1
+pytest==8.3.2
     # via
     #   fava (pyproject.toml)
     #   beancount
@@ -274,7 +274,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==71.1.0
+setuptools==72.1.0
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -301,17 +301,17 @@ sphinx-autodoc-typehints==2.2.3
     # via fava (pyproject.toml)
 sphinx-basic-ng==1.0.0b2
     # via furo
-sphinxcontrib-applehelp==1.0.8
+sphinxcontrib-applehelp==2.0.0
     # via sphinx
-sphinxcontrib-devhelp==1.0.6
+sphinxcontrib-devhelp==2.0.0
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.6
+sphinxcontrib-htmlhelp==2.1.0
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.8
+sphinxcontrib-qthelp==2.0.0
     # via sphinx
-sphinxcontrib-serializinghtml==1.1.10
+sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 texttable==1.7.0
     # via pyexcel
@@ -321,13 +321,13 @@ tox==4.16.0
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.9.1
+tox-uv==1.11.1
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==71.1.0.20240723
+types-setuptools==71.1.0.20240726
     # via fava (pyproject.toml)
-types-simplejson==3.19.0.20240310
+types-simplejson==3.19.0.20240801
     # via fava (pyproject.toml)
 typing-extensions==4.12.2
     # via mypy
@@ -337,7 +337,7 @@ urllib3==2.2.2
     # via
     #   requests
     #   twine
-uv==0.2.27
+uv==0.2.33
     # via tox-uv
 virtualenv==20.26.3
     # via

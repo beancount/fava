@@ -13,6 +13,7 @@ const misc = {
   "@typescript-eslint/explicit-module-boundary-types": ON,
   "@typescript-eslint/promise-function-async": ON,
   "@typescript-eslint/strict-boolean-expressions": ON,
+  "@typescript-eslint/no-unnecessary-type-parameters": OFF,
   curly: [ON, "all"],
   eqeqeq: [ON, "smart"],
 };
@@ -47,9 +48,9 @@ const sortImports = {
   ],
 };
 
+const extraFileExtensions = [".svelte"];
 module.exports = {
   extends: [
-    "plugin:deprecation/recommended",
     "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/strict-type-checked",
@@ -62,8 +63,8 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json", "./tsconfig.confs.json"],
-    extraFileExtensions: [".svelte"],
+    projectService: true,
+    extraFileExtensions,
   },
   rules: {
     ...misc,
@@ -76,6 +77,8 @@ module.exports = {
       parser: "svelte-eslint-parser",
       parserOptions: {
         parser: "@typescript-eslint/parser",
+        projectService: true,
+        extraFileExtensions,
       },
       rules: {
         "svelte/button-has-type": ON,

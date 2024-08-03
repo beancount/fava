@@ -92,6 +92,7 @@ export class SvelteCustomElement extends HTMLElement {
     try {
       this.destroy?.();
       this.destroy = undefined;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // pass
     }

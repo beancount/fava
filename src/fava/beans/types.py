@@ -1,4 +1,4 @@
-"""Typing helpers."""
+"""Typing helpers."""  # noqa: A005
 
 from __future__ import annotations
 

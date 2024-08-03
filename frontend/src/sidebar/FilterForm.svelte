@@ -11,14 +11,14 @@
   ];
 
   function valueExtractor(value: string, input: HTMLInputElement) {
-    const match = value
-      .slice(0, input.selectionStart ?? undefined)
-      .match(/\S*$/);
+    const match = /\S*$/.exec(
+      value.slice(0, input.selectionStart ?? undefined),
+    );
     return match?.[0] ?? value;
   }
   function valueSelector(value: string, input: HTMLInputElement) {
     const selectionStart = input.selectionStart ?? 0;
-    const match = input.value.slice(0, selectionStart).match(/\S*$/);
+    const match = /\S*$/.exec(input.value.slice(0, selectionStart));
     const matchLength = match?.[0]?.length;
     return matchLength !== undefined
       ? `${input.value.slice(

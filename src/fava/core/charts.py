@@ -221,8 +221,8 @@ class ChartModule(FavaModule):
             account_name: A string.
             conversion: The conversion to use.
 
-        Returns:
-            A list of dicts for all dates on which the balance of the given
+        Yields:
+            Dicts for all dates on which the balance of the given
             account has changed containing the balance (in units) of the
             account at that date.
         """
@@ -273,8 +273,8 @@ class ChartModule(FavaModule):
             interval: A string for the interval.
             conversion: The conversion to use.
 
-        Returns:
-            A list of dicts for all ends of the given interval containing the
+        Yields:
+            Dicts for all ends of the given interval containing the
             net worth (Assets + Liabilities) separately converted to all
             operating currencies.
         """

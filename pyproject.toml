@@ -141,6 +141,9 @@ extend-ignore = [
     "C901",     # ignore mccabe complecity for now
     "CPY",      # no copyright notices in all files
     "COM812",   # better handled by formatter - avoid having trailing commas everywhere
+    "DOC201",   # allow returns not to be documented for now
+    "DOC501",   # allow raised exception not to be documented for now
+    "DOC502",   # allow documented exceptions that are not explicitly raised
     "D105",     # allow magic methods to be undocumented
     "D107",     # allow __init__ to be undocumented - the class should be.
     "PD",       # pandas-related, has false-positives

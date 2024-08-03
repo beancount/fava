@@ -110,7 +110,7 @@ class FileModule(FavaModule):
 
         Raises:
             NonSourceFileError: If the file is not one of the source files.
-            UnicodeDecodeError: If the file contains invalid unicode.
+            InvalidUnicodeError: If the file contains invalid unicode.
         """
         if str(path) not in self.ledger.options["include"]:
             raise NonSourceFileError(path)
@@ -135,7 +135,7 @@ class FileModule(FavaModule):
 
         Raises:
             NonSourceFileError: If the file is not one of the source files.
-            UnicodeDecodeError: If the file contains invalid unicode.
+            InvalidUnicodeError: If the file contains invalid unicode.
             ExternallyChangedError: If the file was changed externally.
         """
         with self._lock:
