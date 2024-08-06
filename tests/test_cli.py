@@ -29,17 +29,17 @@ def test__add_env_filenames(
     other = str(absolute_path / "other")
 
     monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
-    assert _add_env_filenames((asdf,)) == {asdf}
+    assert _add_env_filenames((asdf,)) == (asdf,)
 
     monkeypatch.setenv("BEANCOUNT_FILE", "path")
     with pytest.raises(NonAbsolutePathError):
         _add_env_filenames((asdf,))
 
     monkeypatch.setenv("BEANCOUNT_FILE", absolute)
-    assert _add_env_filenames((asdf,)) == {absolute, asdf}
+    assert _add_env_filenames((asdf,)) == (absolute, asdf)
 
     monkeypatch.setenv("BEANCOUNT_FILE", os.pathsep.join([absolute, other]))
-    assert _add_env_filenames((asdf,)) == {absolute, other, asdf}
+    assert _add_env_filenames((asdf,)) == (absolute, other, asdf)
 
 
 @pytest.fixture

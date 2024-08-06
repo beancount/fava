@@ -37,18 +37,23 @@ class NoFileSpecifiedError(click.UsageError):  # noqa: D101
         super().__init__("No file specified")
 
 
-def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
+def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
     """Read additional filenames from BEANCOUNT_FILE."""
     env_filename = os.environ.get("BEANCOUNT_FILE")
     if not env_filename:
-        return set(filenames)
+        return filenames
 
     env_names = env_filename.split(os.pathsep)
     for name in env_names:
         if not Path(name).is_absolute():
             raise NonAbsolutePathError(name)
 
-    return set(filenames + tuple(env_names))
+    all_names = tuple(env_names) + filenames
+    return tuple(
+        name
+        for [index, name] in enumerate(all_names)
+        if index == all_names.index(name)
+    )
 
 
 @click.command(context_settings={"auto_envvar_prefix": "FAVA"})
