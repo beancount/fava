@@ -50,8 +50,8 @@ locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
 ## `default-file`
 
 Use this option to specify a default file for the editor to open. This option
-takes no value, the file the custom entry is in will be used as the default. If
-this option is not specified, Fava opens the main file by default.
+may optionally take a value of a filename to be the default. If you don't
+provide a filename, the file this custom option is in is used.
 
 ---
 
@@ -113,7 +113,7 @@ a transaction, the account of the last posting is used) is matched against all
 of the matching options before the entry date. If the entry is a Transaction and
 no `insert-entry` option matches the account of the last posting the account of
 the second to last posting and so on will be tried. If no `insert-entry` option
-matches or none is given, the entry will be inserted at the end of the main
+matches or none is given, the entry will be inserted at the end of the default
 file.
 
 ---

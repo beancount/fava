@@ -233,7 +233,10 @@ class FileModule(FavaModule):
             for entry in sorted(entries, key=_incomplete_sortkey):
                 path, updated_insert_options = insert_entry(
                     entry,
-                    self.ledger.beancount_file_path,
+                    (
+                        self.ledger.fava_options.default_file
+                        or self.ledger.beancount_file_path
+                    ),
                     insert_options=fava_options.insert_entry,
                     currency_column=fava_options.currency_column,
                     indent=fava_options.indent,
