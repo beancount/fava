@@ -34,7 +34,7 @@
   let saving = false;
 
   /**
-   * Save the contents of the ediftor.
+   * Save the contents of the editor.
    */
   async function save(cm: EditorView) {
     saving = true;
