@@ -97,6 +97,10 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
     type=click.Path(),
     help="Output directory for profiling data.",
 )
+@click.option(
+    "--poll-watcher",
+    is_flag=True, help="Use old polling-based watcher."
+)
 @click.version_option(version=__version__, prog_name="fava")
 def main(
     *,
@@ -109,6 +113,7 @@ def main(
     debug: bool = False,
     profile: bool = False,
     profile_dir: str | None = None,
+    poll_watcher: bool = False,
 ) -> None:  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
@@ -129,6 +134,7 @@ def main(
         all_filenames,
         incognito=incognito,
         read_only=read_only,
+        poll_watcher=poll_watcher,
     )
 
     if prefix:

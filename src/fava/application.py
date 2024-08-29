@@ -228,7 +228,7 @@ def _setup_filters(
             with load_file_lock:
                 if not fava_app.config["LEDGERS"]:
                     fava_app.config["LEDGERS"] = _ledger_slugs_dict(
-                        FavaLedger(filepath)
+                        FavaLedger(filepath, fava_app.config["POLL_WATCHER"])
                         for filepath in fava_app.config["BEANCOUNT_FILES"]
                     )
         if g.beancount_file_slug:
@@ -441,6 +441,7 @@ def create_app(
     load: bool = False,
     incognito: bool = False,
     read_only: bool = False,
+    poll_watcher: bool = False,
 ) -> Flask:
     """Create a Fava Flask application.
 
@@ -449,6 +450,7 @@ def create_app(
         load: Whether to load the Beancount files directly.
         incognito: Whether to run in incognito mode.
         read_only: Whether to run in read-only mode.
+        poll_watcher: Whether to use old poll watcher
     """
     fava_app = Flask("fava")
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
@@ -462,10 +464,11 @@ def create_app(
     fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL
     fava_app.config["BEANCOUNT_FILES"] = [str(f) for f in files]
     fava_app.config["INCOGNITO"] = incognito
+    fava_app.config["POLL_WATCHER"] = poll_watcher
 
     if load:
         fava_app.config["LEDGERS"] = _ledger_slugs_dict(
-            FavaLedger(filepath)
+            FavaLedger(filepath, poll_watcher)
             for filepath in fava_app.config["BEANCOUNT_FILES"]
         )
     else:
