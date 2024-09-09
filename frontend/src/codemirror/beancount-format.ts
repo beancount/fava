@@ -10,7 +10,7 @@ export const beancountFormat: Command = (cm) => {
     (data) => {
       cm.dispatch(replaceContents(cm.state, data));
     },
-    (error) => {
+    (error: unknown) => {
       notify_err(error, (err) => `Formatting source failed: ${err.message}`);
     },
   );

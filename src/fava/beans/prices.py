@@ -44,7 +44,11 @@ class DateKeyWrapper(Sequence[datetime.date]):
 def _keep_last_per_day(
     prices: list[PricePoint],
 ) -> Iterable[PricePoint]:
-    """In a sorted non-empty list of prices, keep the last one for each day."""
+    """In a sorted non-empty list of prices, keep the last one for each day.
+
+    Yields:
+        The filtered prices.
+    """
     prices_iter = iter(prices)
     last = next(prices_iter)
     for price in prices_iter:
@@ -79,7 +83,7 @@ class FavaPriceMap:
             raw_map[base_quote].append((price.date, rate))
             counts[base_quote] += 1
             if rate != ZERO:
-                raw_map[(price.amount.currency, price.currency)].append(
+                raw_map[price.amount.currency, price.currency].append(
                     (price.date, ONE / rate),
                 )
         self._forward_pairs = [

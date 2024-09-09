@@ -147,6 +147,9 @@ class ChartModule(FavaModule):
             accounts: A single account (str) or a tuple of accounts.
             conversion: The conversion to use.
             invert: invert all numbers.
+
+        Yields:
+            The balances and budgets for the intervals.
         """
         prices = self.ledger.prices
 

@@ -75,7 +75,7 @@
         );
         window.scroll(0, 0);
       },
-      (error) => {
+      (error: unknown) => {
         if (error instanceof Error) {
           setResult(query, { error: error.message }).catch(log_error);
           window.scroll(0, 0);

@@ -217,7 +217,11 @@ def interval_ends(
     last: datetime.date,
     interval: Interval,
 ) -> Iterator[datetime.date]:
-    """Get interval ends."""
+    """Get interval ends.
+
+    Yields:
+        The ends of the intervals.
+    """
     yield get_prev_interval(first, interval)
     while first < last:
         first = get_next_interval(first, interval)

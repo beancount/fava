@@ -157,6 +157,7 @@ export type KeySpec =
 
 const isMac =
   // This still seems to be the least bad way to check whether we are running on macOS or iOS
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   navigator.platform.startsWith("Mac") || navigator.platform === "iPhone";
 
 export const modKey = isMac ? "Cmd" : "Ctrl";

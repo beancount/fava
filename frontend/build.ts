@@ -58,7 +58,7 @@ async function runBuild(dev: boolean) {
         () => {
           console.log("finished rebuild");
         },
-        (err) => {
+        (err: unknown) => {
           console.error(err);
         },
       );

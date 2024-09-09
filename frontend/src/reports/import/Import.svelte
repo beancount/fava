@@ -131,9 +131,12 @@
       Array.from(fileUpload.files).map(async (file) => {
         const formData = new FormData();
         formData.append("file", file, file.name);
-        return put("upload_import_file", formData).then(notify, (error) => {
-          notify_err(error, (err) => `Upload error: ${err.message}`);
-        });
+        return put("upload_import_file", formData).then(
+          notify,
+          (error: unknown) => {
+            notify_err(error, (err) => `Upload error: ${err.message}`);
+          },
+        );
       }),
     );
     fileUpload.value = "";

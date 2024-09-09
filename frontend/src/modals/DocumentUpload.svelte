@@ -34,7 +34,7 @@
         formData.append("hash", $hash);
         formData.append("folder", documents_folder);
         formData.append("file", dataTransferFile, name);
-        return put("add_document", formData).then(notify, (error) => {
+        return put("add_document", formData).then(notify, (error: unknown) => {
           notify_err(error, (err) => `Upload error: ${err.message}`);
         });
       }),

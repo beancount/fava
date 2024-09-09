@@ -68,7 +68,7 @@ class FavaExtensionBase:
             if hasattr(func, "endpoint_key"):
                 name, methods = func.endpoint_key
                 for method in methods:
-                    self.endpoints[(name, method)] = func
+                    self.endpoints[name, method] = func
 
         self.ledger = ledger
         try:

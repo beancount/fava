@@ -31,7 +31,11 @@ __all__ = [
 
 
 def _frontend_sources() -> Iterable[Path]:
-    """List all frontend sources that should trigger a rebuild if changed."""
+    """List all frontend sources that should trigger a rebuild if changed.
+
+    Yields:
+        The files relevant for the frontend build.
+    """
     yield Path("frontend/package-lock.json")
     yield Path("frontend/build.ts")
     for directory, _dirnames, files in chain(

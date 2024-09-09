@@ -85,7 +85,7 @@ function drop(event: DragEvent, target: HTMLElement): void {
       }
       put("attach_document", { filename, entry_hash: targetEntry }).then(
         notify,
-        (error) => {
+        (error: unknown) => {
           notify_err(
             error,
             (e) => `Adding document metadata failed: ${e.message}`,
