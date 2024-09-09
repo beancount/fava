@@ -79,7 +79,7 @@ class FavaPriceMap:
             raw_map[base_quote].append((price.date, rate))
             counts[base_quote] += 1
             if rate != ZERO:
-                raw_map[(price.amount.currency, price.currency)].append(
+                raw_map[price.amount.currency, price.currency].append(
                     (price.date, ONE / rate),
                 )
         self._forward_pairs = [
