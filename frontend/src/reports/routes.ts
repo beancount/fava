@@ -6,6 +6,7 @@ import { documents } from "./documents";
 import { editor } from "./editor";
 import ErrorsSvelte from "./errors/Errors.svelte";
 import { events } from "./events";
+import { holdings } from "./holdings";
 import { import_report } from "./import";
 import QuerySvelte from "./query/Query.svelte";
 import { noload, Route } from "./route";
@@ -27,6 +28,7 @@ export const frontend_routes: Route[] = [
   editor,
   new Route("errors", ErrorsSvelte, noload, () => _("Errors")),
   events,
+  holdings,
   import_report,
   income_statement,
   new Route("query", QuerySvelte, noload, () => _("Query")),

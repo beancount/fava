@@ -74,7 +74,6 @@ if TYPE_CHECKING:  # pragma: no cover
 setup_logging()
 
 SERVER_SIDE_REPORTS = [
-    "holdings",
     "journal",
     "options",
     "statistics",
@@ -87,6 +86,7 @@ CLIENT_SIDE_REPORTS = [
     "editor",
     "errors",
     "events",
+    "holdings",
     "import",
     "income_statement",
     "query",
@@ -290,13 +290,10 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         "/by_<any(account,currency,cost_currency):aggregation_key>/",
     )
     def holdings_by(
-        aggregation_key: str,
+        **_kwargs: str,
     ) -> str:
-        """Get the holdings report."""
-        return render_template(
-            "holdings.html",
-            aggregation_key=aggregation_key,
-        )
+        """Get the client-side-rendered holdings report."""
+        return render_template("_layout.html", content="")
 
     @fava_app.route("/<bfile>/<report_name>/")
     def report(report_name: str) -> str:

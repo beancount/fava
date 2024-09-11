@@ -6,6 +6,7 @@
   import { Amount, Position } from "../../entries";
   import { day } from "../../format";
   import { urlForAccount } from "../../helpers";
+  import { is_empty } from "../../lib/objects";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
   import { Sorter, UnsortedColumn } from "../../sort";
   import SortHeader from "../../sort/SortHeader.svelte";
@@ -17,13 +18,23 @@
 
   /** The table to render. */
   export let table: QueryResultTable;
+  /** A column name to filter by if empty (expected to be an Inventory column).  */
+  export let filter_empty: string | undefined = undefined;
 
-  // TODO: filter empty for e.g. the holdings report
-  // done previously in the HTML with
-  // {% for row in rows if filter_empty == None or not row[filter_empty].is_empty() %}
+  $: filter_empty_column_number = table.columns.findIndex(
+    (column) => column.name === filter_empty,
+  );
+
+  $: filtered_rows =
+    filter_empty_column_number > -1
+      ? table.rows.filter((row) => {
+          const cell = row[filter_empty_column_number];
+          return !(cell instanceof Inventory && is_empty(cell.value));
+        })
+      : table.rows;
 
   let sorter = new Sorter<QueryCell[]>(new UnsortedColumn("<Dummy>"), "asc");
-  $: sorted_rows = sorter.sort(table.rows);
+  $: sorted_rows = sorter.sort(filtered_rows);
 </script>
 
 <table>
