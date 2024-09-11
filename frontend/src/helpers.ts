@@ -16,19 +16,25 @@ export function getUrlPath(
 }
 
 /**
- * Get the URL string for one of Fava's reports.
+ * Get the URL string for one of Fava's reports (pure internal function, just exported for tests).
+ * @param $base_url - the current value of base_url
+ * @param $searchParams - the current value of searchParams or null
+ *                        if url-synced parameters are not needed.
+ * @param report - report name
+ * @param params - URL params to set
+ * @returns The URL string.
  */
-export function urlFor(
+export function urlForInternal(
+  $base_url: string,
+  $searchParams: URLSearchParams | null,
   report: string,
-  params?: Record<string, string | number | undefined>,
-  update = true,
+  params: Record<string, string | number | undefined> | undefined,
 ): string {
-  const url = `${store_get(base_url)}${report}`;
+  const url = `${$base_url}${report}`;
   const urlParams = new URLSearchParams();
-  if (update) {
-    const oldParams = store_get(searchParams);
+  if ($searchParams) {
     for (const name of urlSyncedParams) {
-      const value = oldParams.get(name);
+      const value = $searchParams.get(name);
       if (value != null) {
         urlParams.set(name, value);
       }
@@ -45,6 +51,19 @@ export function urlFor(
   return urlParamString ? `${url}?${urlParams.toString()}` : url;
 }
 
+/**
+ * Get the URL string for one of Fava's reports.
+ */
+export function urlFor(
+  report: string,
+  params?: Record<string, string | number | undefined>,
+  update = true,
+): string {
+  const $base_url = store_get(base_url);
+  const $searchParams = update ? store_get(searchParams) : null;
+  return urlForInternal($base_url, $searchParams, report, params);
+}
+
 /** URL for the editor to the source location of an entry. */
 export function urlForSource(file_path: string, line: string): string {
   return store_get(fava_options).use_external_editor
@@ -54,8 +73,8 @@ export function urlForSource(file_path: string, line: string): string {
 
 /** URL for the account report (derived store to keep track of filter changes.). */
 export const urlForAccount = derived(
-  [searchParams],
-  () =>
+  [base_url, searchParams],
+  ([$base_url, $searchParams]) =>
     (account: string, params?: Record<string, string>): string =>
-      urlFor(`account/${account}/`, params),
+      urlForInternal($base_url, $searchParams, `account/${account}/`, params),
 );

@@ -21,11 +21,7 @@ export const account_report = new Route(
       a: account,
       r: report_type,
     });
-    return {
-      ...res,
-      account,
-      report_type: to_report_type(report_type),
-    };
+    return { ...res, account, report_type };
   },
   (route) => {
     if (route.url) {

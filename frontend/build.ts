@@ -40,7 +40,12 @@ async function runBuild(dev: boolean) {
       ".woff": "empty",
       ".woff2": "file",
     },
-    plugins: [svelte({ preprocess: typescript() })],
+    plugins: [
+      svelte({
+        compilerOptions: { dev },
+        preprocess: typescript(),
+      }),
+    ],
     sourcemap: dev,
     target: compilerOptions.target,
   });

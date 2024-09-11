@@ -24,7 +24,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each sorted_events as event (event.date)}
+    {#each sorted_events as event}
       <tr>
         <td>{event.date}</td>
         <td>{event.description}</td>
