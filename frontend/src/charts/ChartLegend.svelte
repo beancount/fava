@@ -51,4 +51,10 @@
   .inactive i {
     filter: grayscale();
   }
+
+  @media print {
+    .inactive {
+      display: none;
+    }
+  }
 </style>

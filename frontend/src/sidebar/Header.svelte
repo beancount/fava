@@ -93,10 +93,4 @@
     color: var(--background);
     background-color: var(--link-color);
   }
-
-  @media print {
-    header > :global(:not(h1)) {
-      display: none;
-    }
-  }
 </style>

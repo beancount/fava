@@ -36,4 +36,10 @@
   .loading path {
     opacity: 0;
   }
+
+  @media print {
+    svg {
+      display: none;
+    }
+  }
 </style>

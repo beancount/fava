@@ -213,4 +213,10 @@
     background-color: var(--autocomplete-match);
     border-radius: 2px;
   }
+
+  @media print {
+    button {
+      display: none;
+    }
+  }
 </style>

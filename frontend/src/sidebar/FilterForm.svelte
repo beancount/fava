@@ -127,7 +127,11 @@
   }
 
   @media print {
-    form {
+    form :global(input) {
+      padding: 8px 10px;
+    }
+
+    form :global(input):placeholder-shown {
       display: none;
     }
   }
