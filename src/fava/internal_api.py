@@ -100,6 +100,7 @@ def _get_options() -> dict[str, str | list[str]]:
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
     ledger = g.ledger
+    all_queries = ledger.all_entries_by_type.Query
 
     return LedgerData(
         ledger.attributes.accounts,
@@ -117,7 +118,7 @@ def get_ledger_data() -> LedgerData:
         ledger.format_decimal.precisions,
         ledger.attributes.tags,
         ledger.attributes.years,
-        ledger.query_shell.queries[: ledger.fava_options.sidebar_show_queries],
+        all_queries[: ledger.fava_options.sidebar_show_queries],
         len(ledger.misc.upcoming_events),
         ledger.extensions.extension_details,
         ledger.misc.sidebar_links,

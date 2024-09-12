@@ -8,7 +8,7 @@
   "types": [
     {
       "dtype": "int",
-      "name": "sum_day"
+      "name": "sum(day)"
     }
   ]
 }

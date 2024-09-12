@@ -85,11 +85,13 @@
     "account": "Assets:Cash",
     "comment": "This is some comment or note",
     "date": "2017-12-20",
+    "links": [],
     "meta": {
       "filename": "<string>",
       "lineno": 14
     },
-    "t": "Note"
+    "t": "Note",
+    "tags": []
   },
   {
     "account": "Assets:Cash",

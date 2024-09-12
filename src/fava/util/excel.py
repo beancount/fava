@@ -74,7 +74,7 @@ def _result_array(
     types: list[ResultType],
     rows: list[ResultRow],
 ) -> list[list[str]]:
-    result_array = [[name for name, t in types]]
+    result_array = [[t.name for t in types]]
     result_array.extend(_row_to_pyexcel(row, types) for row in rows)
     return result_array
 
@@ -86,7 +86,7 @@ def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
         if not value:
             result.append(value)
             continue
-        type_ = column[1]
+        type_ = column.datatype
         if type_ is Decimal:
             result.append(float(value))
         elif type_ is int:

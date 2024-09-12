@@ -18,7 +18,7 @@ from setuptools.build_meta import get_requires_for_build_wheel
 from setuptools.build_meta import prepare_metadata_for_build_editable
 from setuptools.build_meta import prepare_metadata_for_build_wheel
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
 
 __all__ = [

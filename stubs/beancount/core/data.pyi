@@ -88,6 +88,8 @@ class Note(NamedTuple):
     date: datetime.date
     account: Account
     comment: str
+    tags: Tags | None
+    links: Links | None
 
 class Event(NamedTuple):
     meta: Meta

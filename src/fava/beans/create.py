@@ -13,6 +13,7 @@ from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
+from fava.beans import BEANCOUNT_V3
 from fava.beans.abc import Amount
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -71,7 +72,10 @@ def cost(
 
 def position(units: Amount, cost: Cost | None) -> Position:
     """Create a Position."""
-    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
+    return BeancountPosition(  # type: ignore[return-value]
+        units,  # type: ignore[arg-type]
+        cost,  # type: ignore[arg-type]
+    )
 
 
 def posting(
@@ -170,13 +174,16 @@ def note(
     date: datetime.date,
     account: str,
     comment: str,
+    tags: TagsOrLinks | None = None,
+    links: TagsOrLinks | None = None,
 ) -> Note:
     """Create a Beancount Note."""
+    if not BEANCOUNT_V3:  # pragma: no cover
+        return data.Note(  # type: ignore[call-arg,return-value]
+            meta, date, account, comment
+        )
     return data.Note(  # type: ignore[return-value]
-        meta,
-        date,
-        account,
-        comment,
+        meta, date, account, comment, tags, links
     )
 
 

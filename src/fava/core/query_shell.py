@@ -2,110 +2,108 @@
 
 from __future__ import annotations
 
-import contextlib
-import datetime
 import io
+import shlex
 import textwrap
-from dataclasses import dataclass
-from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import Amount
-from beancount.core.inventory import Inventory
-from beancount.core.position import Position
-from beancount.parser.options import OPTIONS_DEFAULTS
-from beancount.query import query_compile
-from beancount.query.query_compile import CompilationError
-from beancount.query.query_parser import ParseError
-from beancount.query.query_parser import RunCustom
-from beancount.query.shell import BQLShell  # type: ignore[import-untyped]
+from beanquery import compiler  # type: ignore[import-untyped]
+from beanquery import connect
+from beanquery.compiler import CompilationError  # type: ignore[import-untyped]
+from beanquery.parser import ParseError  # type: ignore[import-untyped]
+from beanquery.shell import BQLShell  # type: ignore[import-untyped]
 
 from fava.beans.funcs import execute_query
 from fava.beans.funcs import run_query
-from fava.core.conversion import simple_units
 from fava.core.module_base import FavaModule
+from fava.core.query import COLUMNS
+from fava.core.query import ObjectColumn
+from fava.core.query import QueryResultTable
+from fava.core.query import QueryResultText
 from fava.helpers import FavaAPIError
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Literal
     from typing import TypeVar
 
     from fava.beans.abc import Directive
-    from fava.beans.abc import Query
     from fava.beans.funcs import QueryResult
     from fava.beans.funcs import ResultRow
     from fava.beans.funcs import ResultType
     from fava.core import FavaLedger
-    from fava.core.inventory import SimpleCounterInventory
-    from fava.helpers import BeancountError
 
     T = TypeVar("T")
 
-    QueryRowValue = (
-        bool | int | str | datetime.date | Decimal | Position | Inventory
-    )
-    SerialisedQueryRowValue = (
-        bool
-        | int
-        | str
-        | datetime.date
-        | Decimal
-        | Position
-        | SimpleCounterInventory
-    )
 
-# This is to limit the size of the history file. Fava is not using readline at
-# all, but Beancount somehow still is...
-try:
-    import readline
-
-    readline.set_history_length(1000)
-except ImportError:  # pragma: no cover
-    pass
+class FavaShellError(FavaAPIError):
+    """An error in the Fava BQL shell, will be turned into a string."""
 
 
-@dataclass(frozen=True)
-class QueryResultTable:
-    """Table query result."""
+class QueryNotFoundError(FavaShellError):
+    """Query '{name}' not found."""
 
-    types: list[BaseColumn]
-    rows: list[tuple[SerialisedQueryRowValue, ...]]
-    t: Literal["table"] = "table"
+    def __init__(self, name: str) -> None:
+        super().__init__(f"Query '{name}' not found.")
 
 
-@dataclass(frozen=True)
-class QueryResultText:
-    """Text query result."""
+class TooManyRunArgsError(FavaShellError):
+    """Too many args to run: '{args}'."""
 
-    contents: str
-    t: Literal["string"] = "string"
+    def __init__(self, args: str) -> None:
+        super().__init__(f"Too many args to run: '{args}'.")
 
 
-class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
+class QueryCompilationError(FavaShellError):
+    """Query compilation error."""
+
+    def __init__(self, err: CompilationError) -> None:
+        super().__init__(f"Query compilation error: {err!s}.")
+
+
+class QueryParseError(FavaShellError):
+    """Query parse error."""
+
+    def __init__(self, err: ParseError) -> None:
+        super().__init__(f"Query parse error: {err!s}.")
+
+
+class FavaBQLShell(BQLShell):  # type: ignore[misc]
     """A light wrapper around Beancount's shell."""
 
-    def __init__(self, ledger: FavaLedger) -> None:
-        self.buffer = io.StringIO()
-        BQLShell.__init__(
-            self,
-            is_interactive=False,
-            loadfun=None,
-            outfile=self.buffer,
-        )
-        FavaModule.__init__(self, ledger)
-        self.result: QueryResult | None = None
-        self.stdout = self.buffer
-        self.entries: list[Directive] = []
-        self.errors: list[BeancountError] = []
-        self.options_map = OPTIONS_DEFAULTS
+    outfile: io.StringIO
 
-    @property
-    def queries(self) -> list[Query]:
-        """All queries in the ledger."""
-        return self.ledger.all_entries_by_type.Query
+    def __init__(self, ledger: FavaLedger) -> None:
+        super().__init__(
+            filename="",
+            outfile=io.StringIO(),
+            interactive=False,
+        )
+        self.ledger = ledger
+        self.stdout = self.outfile
+
+    def run(self, entries: list[Directive], query: str) -> QueryResult | str:
+        """Run a query, capturing output as string or returning the result."""
+        self.context = connect(
+            "beancount:",
+            entries=entries,
+            errors=self.ledger.errors,
+            options=self.ledger.options,
+        )
+        try:
+            result = self.onecmd(query)
+        except ParseError as exc:
+            raise QueryParseError(exc) from exc
+        except CompilationError as exc:
+            raise QueryCompilationError(exc) from exc
+
+        if result:
+            types, rows = result
+            return (types, rows)
+        contents = self.outfile.getvalue()
+        self.outfile.truncate(0)
+        return contents.strip().strip("\x00")
 
     def add_help(self) -> None:
         """Attach help functions for each of the parsed token handlers."""
@@ -118,71 +116,52 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                 f"help_{command_name.lower()}",
                 lambda _, fun=func: print(
                     textwrap.dedent(fun.__doc__).strip(),
-                    file=self.buffer,
+                    file=self.outfile,
                 ),
             )
 
-    def get_pager(self) -> io.StringIO:
-        """No real pager, just self.buffer to print to."""
-        raise NotImplementedError
-        # maybe we should return self.buffer
-
     def noop(self, _: T) -> None:
         """Doesn't do anything in Fava's query shell."""
-        print(self.noop.__doc__, file=self.buffer)
+        print(self.noop.__doc__, file=self.outfile)
 
     on_Reload = noop  # noqa: N815
     do_exit = noop
     do_quit = noop
     do_EOF = noop  # noqa: N815
 
-    def on_Select(self, statement: str) -> None:  # noqa: D102, N802
-        try:
-            c_query = query_compile.compile(  # type: ignore[attr-defined]
-                statement,
-                self.env_targets,
-                self.env_postings,
-                self.env_entries,
-            )
-        except CompilationError as exc:
-            print(f"ERROR: {str(exc).rstrip('.')}.", file=self.buffer)
-            return
-        rtypes, rrows = execute_query(c_query, self.entries, self.options_map)
+    def on_Select(self, statement: str) -> QueryResult:  # noqa: D102, N802
+        c_query = compiler.compile(self.context, statement)
+        return execute_query(c_query)
 
-        if not rrows:
-            print("(empty)", file=self.buffer)
+    def do_run(self, arg: str) -> QueryResult | None:
+        """Run a custom query."""
+        queries = self.ledger.all_entries_by_type.Query
+        stripped_arg = arg.rstrip("; \t")
+        if not stripped_arg:
+            # List the available queries.
+            for q in queries:
+                print(q.name, file=self.outfile)
+            return None
 
-        self.result = rtypes, rrows
+        name, *more = shlex.split(stripped_arg)
+        if more:
+            raise TooManyRunArgsError(stripped_arg)
 
-    def execute_query(
-        self, entries: list[Directive], query: str
-    ) -> (
-        tuple[str, None, None] | tuple[None, list[ResultType], list[ResultRow]]
-    ):
-        """Run a query.
+        query = next((q for q in queries if q.name == name), None)
+        if query is None:
+            raise QueryNotFoundError(name)
+        return self.execute(query.query_string)  # type: ignore[no-any-return]
 
-        Arguments:
-            entries: The entries to run the query on.
-            query: A query string.
 
-        Returns:
-            A tuple (contents, types, rows) where either the first or the last
-            two entries are None. If the query result is a table, it will be
-            contained in ``types`` and ``rows``, otherwise the result will be
-            contained in ``contents`` (as a string).
-        """
-        self.entries = entries
-        self.errors = self.ledger.errors
-        self.options_map = self.ledger.options
-        with contextlib.redirect_stdout(self.buffer):
-            self.onecmd(query)
-        contents = self.buffer.getvalue()
-        self.buffer.truncate(0)
-        if self.result is None:
-            return (contents.strip().strip("\x00"), None, None)
-        types, rows = self.result
-        self.result = None
-        return (None, types, rows)
+FavaBQLShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
+
+
+class QueryShell(FavaModule):
+    """A Fava module to run BQL queries."""
+
+    def __init__(self, ledger: FavaLedger) -> None:
+        super().__init__(ledger)
+        self.shell = FavaBQLShell(ledger)
 
     def execute_query_serialised(
         self, entries: list[Directive], query: str
@@ -195,33 +174,14 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
 
         Returns:
             Either a table or a text result (depending on the query).
+
+        Raises:
+            FavaAPIError: If the query response is an error.
         """
-        contents, types, rows = self.execute_query(entries, query)
-        if contents and "ERROR" in contents:
-            raise FavaAPIError(contents)
-
-        if not types or not rows:
-            return QueryResultText(contents or "")
-
-        return QueryResultTable(*serialise_query_result(types, rows))
-
-    def on_RunCustom(self, run_stmt: RunCustom) -> None:  # noqa: N802
-        """Run a custom query."""
-        name = run_stmt.query_name
-        if name is None:
-            # List the available queries.
-            for query in self.queries:
-                print(query.name, file=self.buffer)
-        else:
-            try:
-                query = next(
-                    query for query in self.queries if query.name == name
-                )
-            except StopIteration:
-                print(f"ERROR: Query '{name}' not found", file=self.buffer)
-            else:
-                statement = self.parser.parse(query.query_string)
-                self.dispatch(statement)
+        res = self.shell.run(entries, query)
+        return (
+            QueryResultText(res) if isinstance(res, str) else _serialise(*res)
+        )
 
     def query_to_file(
         self,
@@ -247,21 +207,14 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         """
         name = "query_result"
 
-        try:
-            statement = self.parser.parse(query_string)
-        except ParseError as exception:
-            raise FavaAPIError(str(exception)) from exception
-
-        if isinstance(statement, RunCustom):
-            name = statement.query_name
-
-            try:
-                query = next(
-                    query for query in self.queries if query.name == name
-                )
-            except StopIteration as exc:
-                msg = f'Query "{name}" not found.'
-                raise FavaAPIError(msg) from exc
+        if query_string.startswith((".run", "run")):
+            _run, name, *more = shlex.split(query_string)
+            if more:
+                raise TooManyRunArgsError(query_string)
+            queries = self.ledger.all_entries_by_type.Query
+            query = next((q for q in queries if q.name == name), None)
+            if query is None:
+                raise QueryNotFoundError(name)
             query_string = query.query_string
 
         try:
@@ -271,139 +224,29 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
                 query_string,
                 numberify=True,
             )
-        except (CompilationError, ParseError) as exception:
-            raise FavaAPIError(str(exception)) from exception
+        except ParseError as exc:
+            raise QueryParseError(exc) from exc
+        except CompilationError as exc:
+            raise QueryCompilationError(exc) from exc
 
         if result_format == "csv":
             data = to_csv(types, rows)
         else:
-            if not HAVE_EXCEL:
+            if not HAVE_EXCEL:  # pragma: no cover
                 msg = "Result format not supported."
                 raise FavaAPIError(msg)
             data = to_excel(types, rows, result_format, query_string)
         return name, data
 
 
-QueryShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
-
-
-@dataclass(frozen=True)
-class BaseColumn:
-    """A query column."""
-
-    name: str
-    dtype: str
-
-    @staticmethod
-    def serialise(
-        val: QueryRowValue,
-    ) -> SerialisedQueryRowValue:
-        """Serialiseable version of the column value."""
-        return val  # type: ignore[return-value]
-
-
-@dataclass(frozen=True)
-class BoolColumn(BaseColumn):
-    """A boolean query column."""
-
-    dtype: str = "bool"
-
-
-@dataclass(frozen=True)
-class DecimalColumn(BaseColumn):
-    """A Decimal query column."""
-
-    dtype: str = "Decimal"
-
-
-@dataclass(frozen=True)
-class IntColumn(BaseColumn):
-    """A int query column."""
-
-    dtype: str = "int"
-
-
-@dataclass(frozen=True)
-class StrColumn(BaseColumn):
-    """A str query column."""
-
-    dtype: str = "str"
-
-
-@dataclass(frozen=True)
-class DateColumn(BaseColumn):
-    """A date query column."""
-
-    dtype: str = "date"
-
-
-@dataclass(frozen=True)
-class PositionColumn(BaseColumn):
-    """A Position query column."""
-
-    dtype: str = "Position"
-
-
-@dataclass(frozen=True)
-class SetColumn(BaseColumn):
-    """A set query column."""
-
-    dtype: str = "set"
-
-
-@dataclass(frozen=True)
-class AmountColumn(BaseColumn):
-    """An amount query column."""
-
-    dtype: str = "Amount"
-
-
-@dataclass(frozen=True)
-class ObjectColumn(BaseColumn):
-    """An object query column."""
-
-    dtype: str = "object"
-
-    @staticmethod
-    def serialise(val: object) -> str:
-        """Serialise an object of unknown type to a string."""
-        return str(val)
-
-
-@dataclass(frozen=True)
-class InventoryColumn(BaseColumn):
-    """A str query column."""
-
-    dtype: str = "Inventory"
-
-    @staticmethod
-    def serialise(val: Inventory) -> SimpleCounterInventory:  # type: ignore[override]
-        """Serialise an inventory."""
-        return simple_units(val)
-
-
-COLUMNS = {
-    Amount: AmountColumn,
-    Decimal: DecimalColumn,
-    Inventory: InventoryColumn,
-    Position: PositionColumn,
-    bool: BoolColumn,
-    datetime.date: DateColumn,
-    int: IntColumn,
-    set: SetColumn,
-    str: StrColumn,
-    object: ObjectColumn,
-}
-
-
-def serialise_query_result(
+def _serialise(
     types: list[ResultType], rows: list[ResultRow]
-) -> tuple[list[BaseColumn], list[tuple[SerialisedQueryRowValue, ...]]]:
+) -> QueryResultTable:
     """Serialise the query result."""
-    dtypes = [COLUMNS[dtype](name) for name, dtype in types]
+    dtypes = [COLUMNS.get(c.datatype, ObjectColumn)(c.name) for c in types]
     mappers = [d.serialise for d in dtypes]
     mapped_rows = [
         tuple(mapper(row[i]) for i, mapper in enumerate(mappers))
         for row in rows
     ]
-    return dtypes, mapped_rows
+    return QueryResultTable(dtypes, mapped_rows)
