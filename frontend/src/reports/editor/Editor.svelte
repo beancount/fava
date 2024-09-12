@@ -83,8 +83,9 @@
     changed = false;
   }
 
-  // go to line on file changes
-  $: if (file_path) {
+  // wrap this in a function to not trigger the reactive block below
+  // on store updates.
+  function jumpToInsertOption() {
     const opts = $fava_options.insert_entry.filter(
       (f) => f.filename === file_path,
     );
@@ -100,6 +101,11 @@
       return editor.state.doc.lines;
     })();
     editor.dispatch(scrollToLine(editor.state, lineToScrollTo));
+  }
+
+  // Go to line if the edited file changes.
+  $: if (file_path) {
+    jumpToInsertOption();
   }
 
   // Update diagnostics, showing errors in the editor

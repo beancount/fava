@@ -79,7 +79,7 @@ function onChanges() {
     .catch((e: unknown) => {
       notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
     });
-  if (store_get(fava_options).auto_reload) {
+  if (store_get(fava_options).auto_reload && !router.hasInteruptHandler) {
     router.reload();
   } else {
     get("errors").then((v) => {

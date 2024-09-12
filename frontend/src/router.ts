@@ -82,6 +82,14 @@ export class Router extends Events<"page-loaded"> {
   }
 
   /**
+   * Whether an interrupt handler is active like on the editor or import report.
+   * Avoid auto-reloading in that case.
+   */
+  get hasInteruptHandler(): boolean {
+    return this.interruptHandlers.size > 0;
+  }
+
+  /**
    * Add an interrupt handler. Returns a function that removes it.
    * This can be used directly in a svelte onMount hook.
    */
