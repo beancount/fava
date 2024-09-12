@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: fa\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "لینک‌های ‌دستی"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -102,14 +98,6 @@ msgstr "تاریخ"
 msgid "F"
 msgstr "F"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "توصیف/پرداخت‌کننده"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "موقعیت"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -151,14 +139,6 @@ msgstr "توسعه‌حساب‌ها"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "توسعه‌همه"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "سایر"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "مجله‌ی‌همه‌‌نوشته‌های‌این‌حساب‌و‌زیر‌حساب‌ها"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 msgid "Account Journal"
@@ -204,14 +184,6 @@ msgstr "رویداد: %(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "توضیحات"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "بدون‌رویداد"
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "راهنما - %(title)s"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
@@ -294,32 +266,14 @@ msgstr "نوع"
 msgid "# Entries"
 msgstr "# ورودی‌ها"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "بستن"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "معامله‌جدید"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "توصیف"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "ذخیره‌و‌افزودن‌جدید"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "شماره"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "افزودن‌پست"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -330,37 +284,9 @@ msgstr "واردکردن"
 msgid "Budget entries"
 msgstr "ورودی‌های‌بودجه"
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr "تغییر‌منبع"
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr "تغییر‌چشم‌پوشی"
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
 msgstr "منبع"
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr "ورود"
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr "اقدامات"
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr "چشم‌پوشی"
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr "تکراری"
-
-#: fava/templates/import.html:14
-msgid "Importer"
-msgstr "واردکننده"
 
 #: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
@@ -425,12 +351,8 @@ msgstr "پست‌ها"
 msgid "Upload file(s)"
 msgstr "آپلودفایل‌(ها)"
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr "پوشه‌اسناد"
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr "آپلود"
 
@@ -484,10 +406,6 @@ msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr "واردکردن‌ورودی‌ها"
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "سالانه"
@@ -520,10 +438,6 @@ msgstr "میزان"
 msgid "Documents with a #linked tag"
 msgstr "اسناد با برچسب # مرتبط شده"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "شما باید گزینه شمارش ”اسناد” را برای آپلود فایل تنظیم کنید."
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "با قیمت"
@@ -548,10 +462,6 @@ msgstr "نمودار دایره‌ای"
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr "باید یکی از حساب های اعلام شده باشد"
-
-#: src/fava/templates/events.html:7
-msgid "Event"
-msgstr "رویداد"
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
 #: frontend/src/reports/import/Extract.svelte:79
@@ -590,10 +500,6 @@ msgstr "اسناد"
 msgid "Delete"
 msgstr "حذف"
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr "هیچ وارد کننده ای با این پرونده مطابقت ندارد."
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "نمودار خطی"
@@ -618,7 +524,7 @@ msgstr "رفتن به حساب"
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr ""
 

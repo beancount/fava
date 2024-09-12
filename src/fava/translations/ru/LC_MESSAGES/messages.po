@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: ru\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "Настраиваемые ссылки"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -102,14 +98,6 @@ msgstr "Дата"
 msgid "F"
 msgstr "Ф"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "Описание/Контрагент"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "Позиция"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -151,14 +139,6 @@ msgstr "Раскрыть все счета"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "Раскрыть всё"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "Прочее"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "Журнал всех записей по этому Счёту и Субсчетам"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 msgid "Account Journal"
@@ -204,14 +184,6 @@ msgstr "Событие: %(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Комментарий"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "События отстутствуют."
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "Помощь - %(title)s"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
@@ -294,32 +266,14 @@ msgstr "Тип"
 msgid "# Entries"
 msgstr "Записи"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "закрыть"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "Новая транзакция"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Описание"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "Записать и добавить новую"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "Количество"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "Добавить проводку"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -330,36 +284,8 @@ msgstr "Импорт"
 msgid "Budget entries"
 msgstr ""
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr ""
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr ""
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
-msgstr ""
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr ""
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr ""
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr ""
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr ""
-
-#: fava/templates/import.html:14
-msgid "Importer"
 msgstr ""
 
 #: frontend/src/reports/import/FileList.svelte:53
@@ -425,12 +351,8 @@ msgstr "Проводки"
 msgid "Upload file(s)"
 msgstr ""
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr ""
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr ""
 
@@ -483,10 +405,6 @@ msgstr "Фильтровать по тегу, контрагенту, ..."
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Скачать отфильтрованные записи как файл Beancount"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr ""
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "По годам"
@@ -519,10 +437,6 @@ msgstr "Сумма"
 msgid "Documents with a #linked tag"
 msgstr ""
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr ""
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr ""
@@ -546,10 +460,6 @@ msgstr "Солнечные лучи"
 
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
-msgstr ""
-
-#: src/fava/templates/events.html:7
-msgid "Event"
 msgstr ""
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
@@ -589,10 +499,6 @@ msgstr "Документы"
 msgid "Delete"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr ""
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Линейная диаграмма"
@@ -617,7 +523,7 @@ msgstr "Перейти к счёту"
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr ""
 

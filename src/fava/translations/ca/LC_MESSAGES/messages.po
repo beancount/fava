@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: ca\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "Enllaços personalitzats"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -102,14 +98,6 @@ msgstr "Data"
 msgid "F"
 msgstr "F"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "Descripció/beneficiari"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "Situació"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -151,14 +139,6 @@ msgstr "Amplia tots els comptes"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "Amplia-ho tot"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "Altres"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "Llibre diari de totes les entrades per a aquest compte i els comptes secundaris"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 msgid "Account Journal"
@@ -204,14 +184,6 @@ msgstr "Esdeveniment: %(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Descripció"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "No hi ha cap esdeveniment."
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "Ajuda: %(title)s"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
@@ -294,32 +266,14 @@ msgstr "Tipus"
 msgid "# Entries"
 msgstr "Nombre d'entrades"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "tanca"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "Transacció nova"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Descripció"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "Desa i afegeix-ne una altra"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "Número"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "Afegeix una comptabilització"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -330,37 +284,9 @@ msgstr "Importa"
 msgid "Budget entries"
 msgstr "Entrades de pressupost"
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr "Canvia la font"
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr "Canvia si s'ha d'ignorar"
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
 msgstr "Font"
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr "Entrada"
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr "Accions"
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr "Ignora"
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr "Duplicada"
-
-#: fava/templates/import.html:14
-msgid "Importer"
-msgstr "Importador"
 
 #: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
@@ -425,12 +351,8 @@ msgstr "Comptabilitzacions"
 msgid "Upload file(s)"
 msgstr "Puja un fitxer"
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr "Carpeta de documents"
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr "Puja"
 
@@ -484,10 +406,6 @@ msgstr "Filtreu per etiqueta, beneficiari, etc."
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr "Importa les entrades"
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Per any"
@@ -520,10 +438,6 @@ msgstr "Import"
 msgid "Documents with a #linked tag"
 msgstr "Documents amb una etiqueta #linked"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "Heu de definir l'opció «documents» del Beancount per pujar fitxers."
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "Cost"
@@ -548,10 +462,6 @@ msgstr "Anells"
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr "Ha de ser un dels comptes declarats"
-
-#: src/fava/templates/events.html:7
-msgid "Event"
-msgstr "Esdeveniment"
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
 #: frontend/src/reports/import/Extract.svelte:79
@@ -590,10 +500,6 @@ msgstr "Documents"
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr "No hi ha cap importador per a aquest fitxer."
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Diagrama de línies"
@@ -618,7 +524,7 @@ msgstr "Vés al compte"
 msgid "Delete this file?"
 msgstr "Voleu suprimir aquest fitxer?"
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr "No s'ha trobat cap fitxer per importar."
 

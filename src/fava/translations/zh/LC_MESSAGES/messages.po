@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: zh-CN\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "个性化链接"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -102,14 +98,6 @@ msgstr "日期"
 msgid "F"
 msgstr "F"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "摘要/收款人"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "款项"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -151,14 +139,6 @@ msgstr "展开所有账户"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "展开所有"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "其他"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "此账户及其子账户的日记账"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 msgid "Account Journal"
@@ -204,14 +184,6 @@ msgstr "事件：%(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "描述"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "没有事件。"
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "帮助 - %(title)s"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
@@ -294,32 +266,14 @@ msgstr "类型"
 msgid "# Entries"
 msgstr "# 条目"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "关闭"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "新交易"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "摘要"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "保存并添加下一条"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "数额"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "添加记录"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -330,37 +284,9 @@ msgstr "导入"
 msgid "Budget entries"
 msgstr "预算条目"
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr "设为来源"
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr "忽略"
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
 msgstr "来源"
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr "条目"
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr "操作"
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr "忽略"
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr "复制"
-
-#: fava/templates/import.html:14
-msgid "Importer"
-msgstr "导入器"
 
 #: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
@@ -425,12 +351,8 @@ msgstr "记录"
 msgid "Upload file(s)"
 msgstr "上传文件"
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr "凭证目录"
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr "上传"
 
@@ -484,10 +406,6 @@ msgstr "筛选（标签，收款人等等）"
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "将当前筛选的条目下载为 Beancount 文件"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr "导入条目"
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "按年"
@@ -520,10 +438,6 @@ msgstr "金额"
 msgid "Documents with a #linked tag"
 msgstr "有 #linked 标签的凭证票据"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "请设定 Beancount 选项 “documents”以上传文件。"
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "按成本"
@@ -548,10 +462,6 @@ msgstr "旭日图"
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr "该账户未找到"
-
-#: src/fava/templates/events.html:7
-msgid "Event"
-msgstr "事件"
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
 #: frontend/src/reports/import/Extract.svelte:79
@@ -590,10 +500,6 @@ msgstr "凭证文档"
 msgid "Delete"
 msgstr "删除"
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr "没有与这个文件匹配的导入器。"
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "折线图"
@@ -618,7 +524,7 @@ msgstr "前往账户"
 msgid "Delete this file?"
 msgstr "是否删除此文件？"
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr "没有发现可供导入的文件。"
 
@@ -668,7 +574,7 @@ msgstr "继续"
 
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee/Narration"
-msgstr "付款人/摘要"
+msgstr "收款人/摘要"
 
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
@@ -676,5 +582,5 @@ msgstr "正在删除..."
 
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Add Journal Entry"
-msgstr ""
+msgstr "添加日记账条目"
 

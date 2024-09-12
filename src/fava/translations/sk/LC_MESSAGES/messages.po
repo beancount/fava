@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: sk\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "Vlastné odkazy"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -106,14 +102,6 @@ msgstr "Dátum"
 msgid "F"
 msgstr "V"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "Popis/Príjemca"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "Pozícia"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -155,14 +143,6 @@ msgstr "Rozšíriť všetky účty"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "Rozšíriť všetko"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "Ostatné"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "Register všetkých zápisov pre tento účet a jeho podúčty"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 #, fuzzy
@@ -209,14 +189,6 @@ msgstr "Udalosť: %(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Popis"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "Žiadne udalosti."
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "Pomoc - %(title)s"
 
 #: src/fava/templates/help.html:8
 #, fuzzy
@@ -300,32 +272,14 @@ msgstr "Typ"
 msgid "# Entries"
 msgstr "Počet zápisov"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "zavrieť"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "Nová transakcia"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Popis"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "Uložit a pridať novú transakciu"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "Číslo"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "Pridať položku"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -336,37 +290,9 @@ msgstr "Importovať"
 msgid "Budget entries"
 msgstr "Zápisý rozpočtov"
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr "Prepnúť zdroj"
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr "Prepnúť ignorovanie"
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
 msgstr "Zdroj"
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr "Zápis"
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr "Akcie"
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr "Ignorovať"
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr "Zdvojiť"
-
-#: fava/templates/import.html:14
-msgid "Importer"
-msgstr "Importér"
 
 #: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
@@ -431,12 +357,8 @@ msgstr "Položky"
 msgid "Upload file(s)"
 msgstr "Nahrať súbor-y"
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr "Priečinok s dokumentmi"
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr "Nahrať"
 
@@ -489,10 +411,6 @@ msgstr "Filtrovať podľa tagu, príjemcu, ..."
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr "Importovať zápisy"
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Ročne"
@@ -525,10 +443,6 @@ msgstr "Suma"
 msgid "Documents with a #linked tag"
 msgstr "Dokumenty s tagom #linked"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr ""
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr ""
@@ -552,10 +466,6 @@ msgstr ""
 
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
-msgstr ""
-
-#: src/fava/templates/events.html:7
-msgid "Event"
 msgstr ""
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
@@ -595,10 +505,6 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr ""
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr ""
@@ -623,7 +529,7 @@ msgstr ""
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr ""
 

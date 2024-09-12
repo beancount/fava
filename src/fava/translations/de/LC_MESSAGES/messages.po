@@ -7,10 +7,6 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: de\n"
 
-#: fava/templates/_aside.html:4
-msgid "Custom Links"
-msgstr "Eigene Links"
-
 #: frontend/src/reports/routes.ts:28
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
@@ -102,14 +98,6 @@ msgstr "Datum"
 msgid "F"
 msgstr "M"
 
-#: src/fava/templates/_journal_table.html:46
-msgid "Narration/Payee"
-msgstr "Beschreibung/Empfänger"
-
-#: src/fava/templates/_journal_table.html:51
-msgid "Position"
-msgstr "Position"
-
 #: frontend/src/reports/commodities/CommodityTable.svelte:14
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
@@ -151,14 +139,6 @@ msgstr "Alle Konten erweitern"
 #: frontend/src/tree-table/AccountCellHeader.svelte:28
 msgid "Expand all"
 msgstr "Alle erweitern"
-
-#: src/fava/templates/_tree_table.html:29
-msgid "Other"
-msgstr "Andere"
-
-#: src/fava/templates/account.html:30
-msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "Journal aller Einträge dieses Kontos und aller Unterkonten"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:45
 msgid "Account Journal"
@@ -204,14 +184,6 @@ msgstr "Ereignis: %(type)s"
 #: frontend/src/reports/events/EventTable.svelte:11
 msgid "Description"
 msgstr "Beschreibung"
-
-#: src/fava/templates/events.html:28
-msgid "No events."
-msgstr "Keine Ereignisse."
-
-#: fava/templates/help.html:4
-msgid "Help - %(title)s"
-msgstr "Hilfe - %(title)s"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
@@ -294,32 +266,14 @@ msgstr "Art"
 msgid "# Entries"
 msgstr "Anzahl Einträge"
 
-#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
-#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-msgid "close"
-msgstr "Schließen"
-
-#: fava/static/javascript/modals/AddTransaction.svelte:43
-msgid "New transaction"
-msgstr "Neue Transaktion"
-
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
 msgid "Narration"
 msgstr "Beschreibung"
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "Save and add new"
-msgstr "Speichern und neue hinzufügen"
-
 #: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "Zahl"
-
-#: frontend/src/entry-forms/Posting.svelte:83
-#: frontend/src/entry-forms/Transaction.svelte:126
-msgid "Add posting"
-msgstr "Eintrag hinzufügen"
 
 #: frontend/src/reports/import/Extract.svelte:43
 #: frontend/src/reports/import/index.ts:67
@@ -330,37 +284,9 @@ msgstr "Importieren"
 msgid "Budget entries"
 msgstr "Budget-Einträge"
 
-#: fava/templates/extract.html:9
-msgid "Toggle source"
-msgstr "Quellcode umschalten"
-
-#: fava/templates/extract.html:10
-msgid "Toggle ignore"
-msgstr "Ignorieren umschalten"
-
 #: frontend/src/reports/import/Extract.svelte:99
 msgid "Source"
 msgstr "Quellcode"
-
-#: fava/templates/extract.html:16
-msgid "Entry"
-msgstr "Eintrag"
-
-#: fava/templates/extract.html:17
-msgid "Actions"
-msgstr "Aktionen"
-
-#: fava/templates/extract.html:32
-msgid "Ignore"
-msgstr "Ignorieren"
-
-#: fava/templates/extract.html:33
-msgid "Duplicate"
-msgstr "Duplikat"
-
-#: fava/templates/import.html:14
-msgid "Importer"
-msgstr "Importeur"
 
 #: frontend/src/reports/import/FileList.svelte:53
 msgid "Extract"
@@ -425,12 +351,8 @@ msgstr "Einträge"
 msgid "Upload file(s)"
 msgstr "Datei(en) hochladen"
 
-#: fava/templates/_overlays.html:10
-msgid "Documents folder"
-msgstr "Verzeichnis für Dokumente"
-
 #: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:197
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -484,10 +406,6 @@ msgstr "Filtern nach Markierung, Empfänger, …"
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Die aktuell gefilterten Einträge als Beancount-Datei herunterladen"
 
-#: fava/templates/extract.html:40
-msgid "Import entries"
-msgstr "Einträge importieren"
-
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr "Jährlich"
@@ -520,10 +438,6 @@ msgstr "Betrag"
 msgid "Documents with a #linked tag"
 msgstr "Dokumente mit der Markierung #linked"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:54
-msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "Für das Hochladen von Dateien müssen Sie die Beancount-Option »documents« festlegen."
-
 #: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "Einkaufspreis"
@@ -548,10 +462,6 @@ msgstr "Sunburst"
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr "Muss eines der deklarierten Konten sein"
-
-#: src/fava/templates/events.html:7
-msgid "Event"
-msgstr "Ereignis"
 
 #: frontend/src/charts/ChartSwitcher.svelte:21
 #: frontend/src/reports/import/Extract.svelte:79
@@ -590,10 +500,6 @@ msgstr "Dokumente"
 msgid "Delete"
 msgstr "Entfernen"
 
-#: frontend/src/import/Import.svelte:106
-msgid "No importer matched this file."
-msgstr "Kein passender Importer für diese Datei."
-
 #: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Liniendiagramm"
@@ -618,7 +524,7 @@ msgstr "Zum Konto"
 msgid "Delete this file?"
 msgstr "Diese Datei entfernen?"
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:164
 msgid "No files were found for import."
 msgstr "Keine Dateien zum Importieren gefunden."
 
