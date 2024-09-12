@@ -7,14 +7,19 @@ from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
+from re import sub
 from typing import TYPE_CHECKING
 from unicodedata import normalize
 
 from fava.context import g
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import TypeVar
+
     from fava.beans.abc import Meta
     from fava.beans.abc import MetaValue
+
+    T = TypeVar("T")
 
 
 ZERO = Decimal()
@@ -29,6 +34,16 @@ def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
         for key, value in meta.items()
         if not (key in {"filename", "lineno"} or key.startswith("__"))
     ]
+
+
+def replace_numbers(value: T) -> str | None:
+    """Replace numbers, to be used in incognito mode."""
+    return sub(r"[0-9]", "X", str(value)) if value is not None else None
+
+
+def passthrough_numbers(value: T) -> T:
+    """Pass through value unchanged."""
+    return value
 
 
 def format_currency(

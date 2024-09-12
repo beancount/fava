@@ -5,9 +5,22 @@ from typing import TYPE_CHECKING
 
 from fava.template_filters import basename
 from fava.template_filters import format_currency
+from fava.template_filters import passthrough_numbers
+from fava.template_filters import replace_numbers
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
+
+
+def test_incognito(app: Flask) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        assert passthrough_numbers("123123") == "123123"
+        assert passthrough_numbers(None) is None
+        assert replace_numbers("123123") == "XXXXXX"
+        assert replace_numbers("abc123123") == "abcXXXXXX"
+        assert replace_numbers(Decimal("1.1")) == "X.X"
+        assert replace_numbers(None) is None
 
 
 def test_format_currency(app: Flask) -> None:

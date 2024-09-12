@@ -30,7 +30,6 @@ from urllib.parse import urlunparse
 
 import markdown2  # type: ignore[import-untyped]
 from beancount import __version__ as beancount_version
-from beancount.utils.text_utils import replace_numbers
 from flask import abort
 from flask import current_app
 from flask import Flask
@@ -154,7 +153,7 @@ def translations() -> dict[str, str]:
     return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
 
 
-def _setup_template_config(fava_app: Flask) -> None:
+def _setup_template_config(fava_app: Flask, *, incognito: bool) -> None:
     """Setup jinja, template filters and globals."""
     # Jinja config
     fava_app.jinja_options = {
@@ -171,6 +170,12 @@ def _setup_template_config(fava_app: Flask) -> None:
     fava_app.add_template_filter(template_filters.format_currency)
     fava_app.add_template_filter(template_filters.meta_items)
     fava_app.add_template_filter(fields, "dataclass_fields")
+    fava_app.add_template_filter(
+        template_filters.replace_numbers
+        if incognito
+        else template_filters.passthrough_numbers,
+        "incognito",
+    )
 
     # Add template global functions
     fava_app.add_template_global(static_url, "static_url")
@@ -189,7 +194,6 @@ def _setup_filters(
     fava_app: Flask,
     *,
     read_only: bool,
-    incognito: bool,
 ) -> None:
     """Setup request handlers/filters."""
     fava_app.url_defaults(_inject_filters)
@@ -212,15 +216,6 @@ def _setup_filters(
         def _read_only() -> None:
             if request.method != "GET":
                 abort(401)
-
-    if incognito:
-        # Replace all numbers with 'X'.
-        @fava_app.after_request
-        def _incognito(response: WerkzeugResponse) -> WerkzeugResponse:
-            if response.content_type.startswith("text/html"):
-                original_text = response.get_data(as_text=True)
-                response.set_data(replace_numbers(original_text))
-            return response
 
     load_file_lock = Lock()
 
@@ -457,9 +452,9 @@ def create_app(
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
     fava_app.json = FavaJSONProvider(fava_app)
     fava_app.app_ctx_globals_class = Context  # type: ignore[assignment]
-    _setup_template_config(fava_app)
+    _setup_template_config(fava_app, incognito=incognito)
     _setup_babel(fava_app)
-    _setup_filters(fava_app, read_only=read_only, incognito=incognito)
+    _setup_filters(fava_app, read_only=read_only)
     _setup_routes(fava_app)
 
     fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL

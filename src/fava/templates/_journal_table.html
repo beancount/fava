@@ -140,8 +140,8 @@
                 <span class="description droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ posting.account }}" data-entry-date="{{ entry.date }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
-                <span class="num">{{ posting.units or '' }}</span>
-                <span class="num">{{ posting.cost.number }} {{ posting.cost.currency }}
+                <span class="num">{% if posting.units %}{{ posting.units.number|incognito }} {{ posting.units.currency }}{% endif %}</span>
+                <span class="num">{{ posting.cost.number|incognito }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
                 {{ commodity_macros.render_amount(ledger, posting.price) }}
