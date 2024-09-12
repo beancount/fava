@@ -6,8 +6,8 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 from beancount.core import compare  # type: ignore[attr-defined]
-from beancount.query import query  # type: ignore[attr-defined]
-from beancount.query import query_execute  # type: ignore[attr-defined]
+from beanquery import query  # type: ignore[import-untyped]
+from beanquery import query_execute
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import TypeAlias
@@ -15,7 +15,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
 
-    ResultType: TypeAlias = tuple[str, type[Any]]
+    class ResultType:
+        """The Column type from beanquery (which has more attributes)."""
+
+        name: str
+        datatype: type[Any]
+
     ResultRow: TypeAlias = tuple[Any, ...]
     QueryResult: TypeAlias = tuple[list[ResultType], list[ResultRow]]
 
@@ -38,16 +43,10 @@ def get_position(entry: Directive) -> tuple[str, int]:
     raise ValueError(msg)
 
 
-def execute_query(
-    query_: str,
-    entries: list[Directive],
-    options_map: BeancountOptions,
-) -> QueryResult:
+def execute_query(query_: str) -> QueryResult:
     """Execture a query."""
     return query_execute.execute_query(  # type: ignore[no-any-return]
-        query_,
-        entries,
-        options_map,
+        query_
     )
 
 

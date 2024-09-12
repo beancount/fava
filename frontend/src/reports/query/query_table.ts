@@ -9,6 +9,7 @@ import {
   constant,
   constants,
   date,
+  defaultValue,
   number,
   object,
   optional,
@@ -50,8 +51,13 @@ const query_table_raw = object({
   rows: array(array(unknown)),
 });
 
+const optional_number_record = optional(record(number));
+
 export class Inventory {
   constructor(readonly value: Record<string, number>) {}
+
+  static validator: Validator<Inventory> = (json) =>
+    optional_number_record(json).map((v) => new Inventory(v ?? {}));
 }
 
 export type QueryCell =
@@ -115,7 +121,12 @@ function get_query_column(type: QueryType, index: number) {
       );
     case "object":
     case "str":
-      return new StringSortedQueryColumn(type, index, string, (v) => v);
+      return new StringSortedQueryColumn(
+        type,
+        index,
+        defaultValue(string, () => ""),
+        (v) => v,
+      );
     case "Amount":
       return new NumberSortedQueryColumn(
         type,
@@ -127,7 +138,7 @@ function get_query_column(type: QueryType, index: number) {
       return new NumberSortedQueryColumn(
         type,
         index,
-        (json) => record(number)(json).map((v) => new Inventory(v)),
+        Inventory.validator,
         (v) => sum(Object.values(v.value)),
       );
     case "Position":

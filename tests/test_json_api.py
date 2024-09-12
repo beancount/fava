@@ -481,7 +481,7 @@ def test_api_add_entries(
             "select day, position, units(position), balance, payee, tags"
             " from year = 2014 and month = 1"
         ),
-        ("help"),
+        (".help"),
     ],
 )
 def test_api_query_result(
@@ -497,13 +497,27 @@ def test_api_query_result(
     snapshot(data, json=True)
 
 
+def test_api_query_result_types(
+    test_client: FlaskClient,
+) -> None:
+    query_string = (
+        "select day, position, units(position), balance, payee, tags, "
+        "entry, meta from year = 2014 and month = 1"
+    )
+    response = test_client.get(
+        "/long-example/api/query",
+        query_string={"query_string": query_string},
+    )
+    assert_api_success(response)
+
+
 def test_api_query_result_error(test_client: FlaskClient) -> None:
     response = test_client.get(
         "/long-example/api/query",
         query_string={"query_string": "nononono"},
     )
     assert response.status_code == 200
-    assert "ERROR: Syntax error near" in response.get_data(as_text=True)
+    assert "Query parse error: syntax error" in response.get_data(as_text=True)
 
 
 def test_api_commodities_empty(
