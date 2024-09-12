@@ -7,18 +7,14 @@ from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Callable
 from typing import TYPE_CHECKING
 from unicodedata import normalize
 
-from fava.beans import funcs
 from fava.context import g
-from fava.core.conversion import units
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Meta
     from fava.beans.abc import MetaValue
-    from fava.core.inventory import SimpleCounterInventory
 
 
 ZERO = Decimal()
@@ -58,18 +54,3 @@ def flag_to_type(flag: str) -> str:
 def basename(file_path: str) -> str:
     """Return the basename of a filepath."""
     return normalize("NFC", Path(file_path).name)
-
-
-FILTERS: list[
-    Callable[
-        ...,
-        (str | bool | SimpleCounterInventory | list[tuple[str, MetaValue]]),
-    ]
-] = [
-    basename,
-    flag_to_type,
-    format_currency,
-    funcs.hash_entry,
-    meta_items,
-    units,
-]
