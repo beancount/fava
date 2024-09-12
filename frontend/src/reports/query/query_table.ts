@@ -9,6 +9,7 @@ import {
   constant,
   constants,
   date,
+  defaultValue,
   number,
   object,
   optional,
@@ -115,7 +116,12 @@ function get_query_column(type: QueryType, index: number) {
       );
     case "object":
     case "str":
-      return new StringSortedQueryColumn(type, index, string, (v) => v);
+      return new StringSortedQueryColumn(
+        type,
+        index,
+        defaultValue(string, () => ""),
+        (v) => v,
+      );
     case "Amount":
       return new NumberSortedQueryColumn(
         type,
