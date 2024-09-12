@@ -27,7 +27,6 @@ from fava.internal_api import BalancesChart
 if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
-    from fava.beans.funcs import ResultType
     from fava.core.tree import Tree
     from fava.core.tree import TreeNode
 
@@ -46,7 +45,7 @@ class Portfolio:
 
     title: str
     rows: list[Row]
-    types: tuple[ResultType, ...] = (
+    types: tuple[tuple[str, type[str | Decimal]], ...] = (
         ("account", str),
         ("balance", Decimal),
         ("allocation", Decimal),
