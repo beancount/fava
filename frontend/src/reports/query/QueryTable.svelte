@@ -48,7 +48,7 @@
   <tbody>
     {#each sorted_rows as row}
       <tr>
-        {#each row as value}
+        {#each row as value, index}
           {#if value === null}
             <td>&nbsp;</td>
           {:else if typeof value === "boolean"}
@@ -57,7 +57,9 @@
             </td>
           {:else if typeof value === "number"}
             <td class="num">
-              {$num(value)}
+              {table.columns[index]?.dtype === "int"
+                ? value.toString()
+                : $num(value)}
             </td>
           {:else if typeof value === "string"}
             <td>

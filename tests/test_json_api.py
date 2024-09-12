@@ -472,32 +472,23 @@ def test_api_add_entries(
 
 
 @pytest.mark.parametrize(
-    ("query_string", "result_str"),
+    ("query_string"),
     [
-        ("balances from year = 2014", "5086.65 USD"),
-        ("select sum(day)", "43558"),
-        ("journal from year = 2014 and month = 1", "BayBook"),
+        ("balances from year = 2014"),
+        ("select sum(day)"),
+        ("journal from year = 2014 and month = 1"),
         (
             "select day, position, units(position), balance, payee, tags"
-            " from year = 2014 and month = 1",
-            "",
+            " from year = 2014 and month = 1"
         ),
-        ("help", ""),
+        ("help"),
     ],
 )
 def test_api_query_result(
     query_string: str,
-    result_str: str,
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
 ) -> None:
-    response = test_client.get(
-        "/long-example/api/query_result",
-        query_string={"query_string": query_string},
-    )
-    data = assert_api_success(response)
-    assert result_str in data["table"]
-
     response = test_client.get(
         "/long-example/api/query",
         query_string={"query_string": query_string},
@@ -508,45 +499,11 @@ def test_api_query_result(
 
 def test_api_query_result_error(test_client: FlaskClient) -> None:
     response = test_client.get(
-        "/long-example/api/query_result",
-        query_string={"query_string": "nononono"},
-    )
-    assert response.status_code == 200
-    assert "ERROR: Syntax error near" in response.get_data(as_text=True)
-
-    response = test_client.get(
         "/long-example/api/query",
         query_string={"query_string": "nononono"},
     )
     assert response.status_code == 200
     assert "ERROR: Syntax error near" in response.get_data(as_text=True)
-
-
-def test_api_query_result_filters(test_client: FlaskClient) -> None:
-    response = test_client.get(
-        "/long-example/api/query_result",
-        query_string={"query_string": "select sum(day)", "time": "2021"},
-    )
-    data = assert_api_success(response)
-    assert data["chart"] is None
-    assert "6882" in data["table"]
-
-
-def test_api_query_result_charts(
-    test_client: FlaskClient,
-    snapshot: SnapshotFunc,
-) -> None:
-    query_string = (
-        "SELECT payee, SUM(COST(position)) AS balance "
-        "WHERE account ~ 'Assets' GROUP BY payee, account"
-    )
-    response = test_client.get(
-        "/long-example/api/query_result",
-        query_string={"query_string": query_string},
-    )
-    data = assert_api_success(response)
-    assert data["chart"]
-    snapshot(data["chart"], json=True)
 
 
 def test_api_commodities_empty(

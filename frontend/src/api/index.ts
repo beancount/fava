@@ -73,7 +73,6 @@ interface GetAPIParams {
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
   query: Filters & { query_string: string };
-  query_result: Filters & { query_string: string };
   source: { filename: string };
 }
 

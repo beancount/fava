@@ -16,7 +16,6 @@ from typing import TYPE_CHECKING
 
 from beancount.core.data import Booking
 from beancount.core.data import iter_entry_dates
-from beancount.core.inventory import Inventory
 from beancount.core.number import MISSING
 from flask.json.provider import JSONProvider
 from simplejson import dumps as simplejson_dumps
@@ -28,16 +27,12 @@ from fava.beans.abc import Transaction
 from fava.beans.account import child_account_tester
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
-from fava.core.conversion import simple_units
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
-from fava.helpers import FavaAPIError
 from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.funcs import ResultRow
-    from fava.beans.funcs import ResultType
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
@@ -314,40 +309,3 @@ class ChartModule(FavaModule):
                     date_range.end_inclusive,
                 ),
             )
-
-    @staticmethod
-    def can_plot_query(types: list[ResultType]) -> bool:
-        """Whether we can plot the given query.
-
-        Args:
-            types: The list of types returned by the BQL query.
-        """
-        return (
-            len(types) == 2
-            and types[0][1] in {str, date}
-            and types[1][1] is Inventory
-        )
-
-    def query(
-        self,
-        types: list[ResultType],
-        rows: list[ResultRow],
-    ) -> list[dict[str, date | str | SimpleCounterInventory]]:
-        """Chart for a query.
-
-        Args:
-            types: The list of result row types.
-            rows: The result rows.
-        """
-        if not self.can_plot_query(types):
-            msg = "Can not plot the given chart."
-            raise FavaAPIError(msg)
-        if types[0][1] is date:
-            return [
-                {"date": date, "balance": simple_units(inv)}
-                for date, inv in rows
-            ]
-        return [
-            {"group": group, "balance": simple_units(inv)}
-            for group, inv in rows
-        ]

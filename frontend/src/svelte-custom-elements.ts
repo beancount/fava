@@ -11,6 +11,8 @@ import { chartContext } from "./charts/context";
 import { domHelpers } from "./charts/tooltip";
 import { type Result } from "./lib/result";
 import { log_error } from "./log";
+import { query_table_validator } from "./reports/query/query_table";
+import QueryTable from "./reports/query/QueryTable.svelte";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
 class SvelteCustomElementComponent<
@@ -47,6 +49,9 @@ const components = [
     parseChartData(data, store_get(chartContext)).map((charts) => ({
       charts,
     })),
+  ),
+  new SvelteCustomElementComponent("query-table", QueryTable, (data) =>
+    query_table_validator(data).map((table) => ({ table })),
   ),
 ];
 

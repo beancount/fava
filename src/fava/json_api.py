@@ -30,7 +30,6 @@ from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
-from fava.core.query_shell import serialise_query_result
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_errors
@@ -41,14 +40,12 @@ from fava.serialisation import serialise
 if TYPE_CHECKING:  # pragma: no cover
     from datetime import date
     from decimal import Decimal
-    from typing import Literal
 
     from flask.wrappers import Response
 
     from fava.core.ingest import FileImporters
-    from fava.core.inventory import SimpleCounterInventory
-    from fava.core.query_shell import BaseColumn
-    from fava.core.query_shell import SerialisedQueryRowValue
+    from fava.core.query_shell import QueryResultTable
+    from fava.core.query_shell import QueryResultText
     from fava.core.tree import SerialisedTreeNode
     from fava.internal_api import ChartData
     from fava.util.date import DateRange
@@ -240,62 +237,13 @@ def get_payee_accounts(payee: str) -> list[str]:
     return g.ledger.attributes.payee_accounts(payee)
 
 
-@dataclass(frozen=True)
-class QueryResultRendered:
-    """Table and optional chart returned by the query_result endpoint."""
-
-    table: str
-    chart: list[dict[str, date | str | SimpleCounterInventory]] | None = None
-
-
-@api_endpoint
-def get_query_result(query_string: str) -> QueryResultRendered:
-    """Render a query result to HTML."""
-    table = get_template_attribute("_query_table.html", "querytable")
-    contents, types, rows = g.ledger.query_shell.execute_query(
-        g.filtered.entries,
-        query_string,
-    )
-    if contents and "ERROR" in contents:
-        raise FavaAPIError(contents)
-    table = table(g.ledger, contents, types, rows)
-
-    if types and rows and g.ledger.charts.can_plot_query(types):
-        return QueryResultRendered(table, g.ledger.charts.query(types, rows))
-    return QueryResultRendered(table)
-
-
-@dataclass(frozen=True)
-class QueryResultTable:
-    """Table returned by the query endpoint."""
-
-    types: list[BaseColumn]
-    rows: list[tuple[SerialisedQueryRowValue, ...]]
-    t: Literal["table"] = "table"
-
-
-@dataclass(frozen=True)
-class QueryResultText:
-    """Text returned by the query endpoint."""
-
-    contents: str
-    t: Literal["string"] = "string"
-
-
 @api_endpoint
 def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     """Run a Beancount query."""
-    contents, types, rows = g.ledger.query_shell.execute_query(
+    return g.ledger.query_shell.execute_query_serialised(
         g.filtered.entries,
         query_string,
     )
-    if contents and "ERROR" in contents:
-        raise FavaAPIError(contents)
-
-    if not types or not rows:
-        return QueryResultText(contents or "")
-
-    return QueryResultTable(*serialise_query_result(types, rows))
 
 
 @api_endpoint

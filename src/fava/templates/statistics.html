@@ -2,7 +2,6 @@
 
 {% import 'macros/_account_macros.html' as account_macros %}
 {% import 'macros/_commodity_macros.html' as commodity_macros %}
-{% import '_query_table.html' as querytable %}
 
 {% set page_title = _('Statistics') %}
 
@@ -13,8 +12,7 @@
     {{ _('Postings per Account') }}
     (<a href="{{ url_for('report', report_name='query', query_string=postings_per_account) }}">Query</a>)
   </h3>
-  {% set contents, result_types, result_rows = ledger.query_shell.execute_query(g.filtered.entries, postings_per_account) %}
-  {{ querytable.querytable(ledger, contents, result_types, result_rows) }}
+  <svelte-component type="query-table"><script type="application/json">{{ledger.query_shell.execute_query_serialised(g.filtered.entries, postings_per_account)|tojson}}</script></svelte-component>
 </div>
 
 {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}

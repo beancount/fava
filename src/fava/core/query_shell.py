@@ -30,6 +30,7 @@ from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Literal
     from typing import TypeVar
 
     from fava.beans.abc import Directive
@@ -64,6 +65,23 @@ try:
     readline.set_history_length(1000)
 except ImportError:  # pragma: no cover
     pass
+
+
+@dataclass(frozen=True)
+class QueryResultTable:
+    """Table query result."""
+
+    types: list[BaseColumn]
+    rows: list[tuple[SerialisedQueryRowValue, ...]]
+    t: Literal["table"] = "table"
+
+
+@dataclass(frozen=True)
+class QueryResultText:
+    """Text query result."""
+
+    contents: str
+    t: Literal["string"] = "string"
 
 
 class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
@@ -165,6 +183,27 @@ class QueryShell(BQLShell, FavaModule):  # type: ignore[misc]
         types, rows = self.result
         self.result = None
         return (None, types, rows)
+
+    def execute_query_serialised(
+        self, entries: list[Directive], query: str
+    ) -> QueryResultTable | QueryResultText:
+        """Run a query and returns its serialised result.
+
+        Arguments:
+            entries: The entries to run the query on.
+            query: A query string.
+
+        Returns:
+            Either a table or a text result (depending on the query).
+        """
+        contents, types, rows = self.execute_query(entries, query)
+        if contents and "ERROR" in contents:
+            raise FavaAPIError(contents)
+
+        if not types or not rows:
+            return QueryResultText(contents or "")
+
+        return QueryResultTable(*serialise_query_result(types, rows))
 
     def on_RunCustom(self, run_stmt: RunCustom) -> None:  # noqa: N802
         """Run a custom query."""

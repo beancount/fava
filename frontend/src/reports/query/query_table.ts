@@ -144,13 +144,14 @@ function get_query_column(type: QueryType, index: number) {
 
 type QueryColumn = ReturnType<typeof get_query_column>;
 
-/** The parsed and validated result for a query. */
+/** The parsed and validated result for a query table result. */
 export interface QueryResultTable {
   readonly t: "table";
   readonly columns: QueryColumn[];
   readonly rows: QueryCell[][];
 }
 
+/** The parsed and validated result for a query text result. */
 export interface QueryResultText {
   readonly t: "string";
   readonly contents: string;
@@ -158,7 +159,9 @@ export interface QueryResultText {
 
 export type QueryResult = QueryResultText | QueryResultTable;
 
-const query_table_validator: Validator<QueryResultTable> = (json: unknown) =>
+export const query_table_validator: Validator<QueryResultTable> = (
+  json: unknown,
+) =>
   query_table_raw(json).and_then(({ types, rows }) => {
     const columns = types.map(get_query_column);
     const validators: Validator<QueryCell>[] = columns.map((c) => c.validator);

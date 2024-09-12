@@ -194,7 +194,6 @@ export const getAPIValidators = {
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
   query: query_validator,
-  query_result: object({ chart: unknown, table: string }),
   source,
   trial_balance: tree_report,
 };
