@@ -73,7 +73,7 @@ async function runBuild(dev: boolean) {
         awaitWriteFinish: true,
         ignoreInitial: true,
       })
-      .on("all", (eventName, path) => {
+      .on("all", (eventName: string, path: string) => {
         console.log(`${path} ${eventName}`);
         rebuild();
       });

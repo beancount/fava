@@ -78,7 +78,7 @@ furo==2024.8.6
     # via fava (pyproject.toml)
 google-api-core==2.19.2
     # via google-api-python-client
-google-api-python-client==2.144.0
+google-api-python-client==2.145.0
     # via beancount
 google-auth==2.34.0
     # via
@@ -93,15 +93,15 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-identify==2.6.0
+identify==2.6.1
     # via pre-commit
-idna==3.8
+idna==3.9
     # via
     #   anyio
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==8.4.0
+importlib-metadata==8.5.0
     # via twine
 iniconfig==2.0.0
     # via pytest
@@ -179,7 +179,7 @@ pdfminer2==20151206
     # via beancount
 pkginfo==1.10.0
     # via twine
-platformdirs==4.3.2
+platformdirs==4.3.3
     # via
     #   pylint
     #   tox
@@ -196,16 +196,16 @@ pre-commit==3.8.0
     # via fava (pyproject.toml)
 proto-plus==1.24.0
     # via google-api-core
-protobuf==5.28.0
+protobuf==5.28.1
     # via
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
-pyasn1==0.6.0
+pyasn1==0.6.1
     # via
     #   pyasn1-modules
     #   rsa
-pyasn1-modules==0.4.0
+pyasn1-modules==0.4.1
     # via google-auth
 pycparser==2.22
     # via cffi
@@ -251,7 +251,7 @@ python-dateutil==2.9.0.post0
     # via beancount
 python-magic==0.4.27
     # via beancount
-pytz==2024.1
+pytz==2024.2
     # via flask-babel
 pyyaml==6.0.2
     # via pre-commit
@@ -297,7 +297,7 @@ sphinx==8.0.2
     #   furo
     #   sphinx-autodoc-typehints
     #   sphinx-basic-ng
-sphinx-autodoc-typehints==2.4.0
+sphinx-autodoc-typehints==2.4.1
     # via fava (pyproject.toml)
 sphinx-basic-ng==1.0.0b2
     # via furo
@@ -333,11 +333,11 @@ typing-extensions==4.12.2
     # via mypy
 uritemplate==4.1.1
     # via google-api-python-client
-urllib3==2.2.2
+urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.8
+uv==0.4.10
     # via tox-uv
 virtualenv==20.26.4
     # via
@@ -349,5 +349,5 @@ werkzeug==3.0.4
     # via
     #   fava (pyproject.toml)
     #   flask
-zipp==3.20.1
+zipp==3.20.2
     # via importlib-metadata
