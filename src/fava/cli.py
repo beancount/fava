@@ -101,7 +101,7 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> set[str]:
     "--poll-watcher", is_flag=True, help="Use old polling-based watcher."
 )
 @click.version_option(version=__version__, prog_name="fava")
-def main( # noqa: PLR0913
+def main(  # noqa: PLR0913
     *,
     filenames: tuple[str, ...] = (),
     port: int = 5000,
