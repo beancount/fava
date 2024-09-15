@@ -84,9 +84,23 @@ dev = [
     "types-setuptools",
     "types-simplejson",
 ]
+# Pin some lower bounds for transitive dependencies in the old_deps tests
+# This a basically determined by increasing them until getting a combination that runs.
+old_deps_pins = [
+    "bottle>=0.12.20",  # older ones didn't build
+    "importlib_metadata>=3.6",
+    "jaraco-functools>=4",
+    "lxml>=5",  # older ones don't have wheels for recent Python versions
+    "more-itertools>=6",
+    "pytest>=7.2",  # also used for running the tests of Fava, needs to somewhat recent
+    "python-dateutil>=2",
+    "pytz>=2020",
+    "setuptools>=67",
+    "six>=1.16",
+]
 
 [build-system]
-requires = ["setuptools>=60", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
+requires = ["setuptools>=67", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
 build-backend = "_build_backend"
 backend-path = ["."]
 
