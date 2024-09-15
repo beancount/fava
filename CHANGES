@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+With this release, query results are now rendered in the frontend. The
+templates for HTML rendering are still available but extension authors are
+encouraged to switch, see the statistics report for an example how this can be
+done. This release adds CSS styles for dark-mode. Numerical comparisons on the
+units, price or cost are now possible in Fava filters. As the watchfiles based
+watcher might not work correctly in some setups with network file systems, you
+can switch to the (slower) polling based watcher as well. The `default-file`
+option, if set, is now considered instead of the "main" file when inserting an
+entry.
+
 v1.28 (2024-07-07)
 ------------------
 
