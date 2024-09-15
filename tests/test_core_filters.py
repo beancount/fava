@@ -14,6 +14,7 @@ from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterError
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
+from fava.core.filters import MatchAmount
 from fava.core.filters import TimeFilter
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -28,6 +29,34 @@ def test_match() -> None:
     assert not Match("asdf")("fdsadfs")
     assert not Match("^asdf")("aasdfasdf")
     assert Match("(((")("(((")
+
+
+def test_match_amount() -> None:
+    one = Decimal(1)
+    two = Decimal(2)
+
+    one_amt = create.amount("1 EUR")
+    two_amt = create.amount("2 EUR")
+    three_amt = create.amount("3 EUR")
+
+    assert MatchAmount("=", one)(one_amt)
+    assert MatchAmount("=", one)(one_amt)
+
+    assert MatchAmount(">", two)(three_amt)
+    assert not MatchAmount(">", two)(two_amt)
+    assert not MatchAmount(">", two)(one_amt)
+
+    assert MatchAmount(">=", two)(three_amt)
+    assert MatchAmount(">=", two)(two_amt)
+    assert not MatchAmount(">=", two)(one_amt)
+
+    assert not MatchAmount("<", two)(three_amt)
+    assert not MatchAmount("<", two)(two_amt)
+    assert MatchAmount("<", two)(one_amt)
+
+    assert not MatchAmount("<=", two)(three_amt)
+    assert MatchAmount("<=", two)(two_amt)
+    assert MatchAmount("<=", two)(one_amt)
 
 
 def test_lexer_basic() -> None:

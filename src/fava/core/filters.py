@@ -13,7 +13,6 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
-from beancount.core.amount import Amount
 from beancount.ops.summarize import clamp_opt  # type: ignore[import-untyped]
 
 from fava.beans.account import get_entry_accounts
@@ -185,10 +184,12 @@ class Match:
 
     __slots__ = ("match",)
 
+    match: Callable[[str], bool]
+
     def __init__(self, search: str) -> None:
         try:
             match = re.compile(search, re.IGNORECASE).search
-            self.match: Callable[[str], bool] = lambda s: bool(match(s))
+            self.match = lambda s: bool(match(s))
         except re.error:
             self.match = lambda s: s == search
 
@@ -201,9 +202,11 @@ class MatchAmount:
 
     __slots__ = ("match",)
 
+    match: Callable[[Decimal], bool]
+
     def __init__(self, op: str, value: Decimal) -> None:
         if op == "=":
-            self.match: Callable[[Decimal], bool] = lambda x: x == value
+            self.match = lambda x: x == value
         elif op == ">=":
             self.match = lambda x: x >= value
         elif op == "<=":
@@ -214,16 +217,9 @@ class MatchAmount:
             self.match = lambda x: x < value
 
     def __call__(self, obj: Any) -> bool:
-        # Every transaction has positive and negative postings, which must
-        # sum up to zero. Skip negative postings here, otherwise a filter
-        # like units < 10.20 will always match the negative posting.
-        if (
-            isinstance(obj, Amount)
-            and obj.number is not None
-            and obj.number >= 0
-        ):
-            return self.match(obj.number)
-        return False
+        # Compare to the absolute value to simplify this filter.
+        number = getattr(obj, "number", None)
+        return self.match(abs(number)) if number is not None else False
 
 
 class FilterSyntaxParser:

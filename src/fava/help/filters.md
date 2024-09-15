@@ -36,7 +36,8 @@ the account name, or a regular expression matching the account name, e.g.
 This final filter allows you to filter entries by various attributes.
 
 - Filter by `#tag` or `^link`.
-- Filter by amount, such as `= 100.20` or `>= 100`.
+- Filter by amount, such as `= 100.20` or `>= 100` (comparing the absolute of
+  the units).
 - Filter by any entry attribute, such as payee `payee:"restaurant"` or narration
   `narration:'Dinner with Joe'`. The argument is a regular expression which
   needs to be quoted (with `'` or `"`) if it contains spaces or special
@@ -53,8 +54,9 @@ This final filter allows you to filter entries by various attributes.
   `any(id:'12', account:"Cash$")` for all entries that have at least one posting
   with metadata `id: 12` or account ending in `Cash`, or
   `all(-account:"^Expenses:Food")` to exclude all transactions having a posting
-  to the Expenses:Food account. To match by amount, you can use range operators,
-  e.g. `any(units > 80)`.
+  to the Expenses:Food account. To match by amount, you can use comparison
+  operators, e.g. `any(units > 80)` to filter for all entries where one posting
+  has a units with an absolute amount greater than 80.
 
 These filters can be combined by separating them by spaces to match all entries
 satisfying all given filters or by commas to match all entries satisfying at
