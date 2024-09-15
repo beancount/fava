@@ -223,7 +223,7 @@ class FavaLedger:
     #: Dict of list of all (unfiltered) entries by type.
     all_entries_by_type: EntriesByType
 
-    def __init__(self, path: str, poll_watcher: bool = False) -> None:
+    def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)

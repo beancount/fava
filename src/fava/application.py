@@ -468,7 +468,7 @@ def create_app(
 
     if load:
         fava_app.config["LEDGERS"] = _ledger_slugs_dict(
-            FavaLedger(filepath, poll_watcher)
+            FavaLedger(filepath, poll_watcher=poll_watcher)
             for filepath in fava_app.config["BEANCOUNT_FILES"]
         )
     else:
