@@ -44,6 +44,7 @@ from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
+from fava.core.watcher import Watcher
 from fava.core.watcher import WatchfilesWatcher
 from fava.helpers import FavaAPIError
 from fava.util import listify
@@ -222,7 +223,7 @@ class FavaLedger:
     #: Dict of list of all (unfiltered) entries by type.
     all_entries_by_type: EntriesByType
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
@@ -260,7 +261,7 @@ class FavaLedger:
         #: A :class:`.AccountDict` module - details about the accounts.
         self.accounts = AccountDict(self)
 
-        self.watcher = WatchfilesWatcher()
+        self.watcher = WatchfilesWatcher() if not poll_watcher else Watcher()
 
         self.load_file()
 
