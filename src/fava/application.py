@@ -228,7 +228,7 @@ def _setup_filters(
             with load_file_lock:
                 if not fava_app.config["LEDGERS"]:
                     fava_app.config["LEDGERS"] = _ledger_slugs_dict(
-                        FavaLedger(filepath, fava_app.config["POLL_WATCHER"])
+                        FavaLedger(filepath, poll_watcher=fava_app.config["POLL_WATCHER"])
                         for filepath in fava_app.config["BEANCOUNT_FILES"]
                     )
         if g.beancount_file_slug:
