@@ -27,6 +27,7 @@ SELECT
     first(getprice(currency, cost_currency)) as price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value,
+    safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct,
     cost_date as acquisition_date
 WHERE account_sortkey(account) ~ "^[01]"
 GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
