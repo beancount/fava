@@ -18,6 +18,7 @@ LOCALES = [
     "fr",
     "nl",
     "pt",
+    "pt_BR",
     "ru",
     "sk",
     "sv",
@@ -25,4 +26,3 @@ LOCALES = [
     "zh",
     "zh_Hant_TW",
 ]
-LANGUAGES = [locale[:2] for locale in LOCALES]

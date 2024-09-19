@@ -95,7 +95,11 @@ def upload_translations() -> None:
 
 
 # For these languages, the name on POEDITOR is off.
-POEDITOR_LANGUAGE_NAME = {"zh": "zh-CN", "zh_Hant_TW": "zh-TW"}
+POEDITOR_LANGUAGE_NAME = {
+    "pt_BR": "pt-BR",
+    "zh": "zh-CN",
+    "zh_Hant_TW": "zh-TW",
+}
 
 
 def download_from_poeditor(language: str, token: str) -> None:
