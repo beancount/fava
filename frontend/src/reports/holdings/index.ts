@@ -21,25 +21,25 @@ const to_report_type = (s: string | null): HoldingsReportType =>
 const QUERIES = {
   all: `
 SELECT
-    account,
-    units(sum(position)) as units,
-    cost_number as cost,
-    first(getprice(currency, cost_currency)) as price,
-    cost(sum(position)) as book_value,
-    value(sum(position)) as market_value,
-    safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct,
-    cost_date as acquisition_date
+  account,
+  units(sum(position)) as units,
+  cost_number as cost,
+  first(getprice(currency, cost_currency)) as price,
+  cost(sum(position)) as book_value,
+  value(sum(position)) as market_value,
+  safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct,
+  cost_date as acquisition_date
 WHERE account_sortkey(account) ~ "^[01]"
 GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
 ORDER BY account_sortkey(account), currency, cost_date
 `.trim(),
   by_account: `
 SELECT
-    account,
-    units(sum(position)) as units,
-    cost(sum(position)) as book_value,
-    value(sum(position)) as market_value,
-    safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct
+  account,
+  units(sum(position)) as units,
+  cost(sum(position)) as book_value,
+  value(sum(position)) as market_value,
+  safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct
 WHERE account_sortkey(account) ~ "^[01]"
 GROUP BY account, cost_currency, account_sortkey(account), currency
 ORDER BY account_sortkey(account), currency
@@ -47,7 +47,8 @@ ORDER BY account_sortkey(account), currency
   by_currency: `
 SELECT
   units(sum(position)) as units,
-  SAFEDIV(number(only(first(cost_currency), cost(sum(position)))), number(only(first(currency), units(sum(position))))) as average_cost,
+  safediv(number(only(first(cost_currency), cost(sum(position)))), number(only(first(currency), units(sum(position))))) as average_cost,
+  first(getprice(currency, cost_currency)) as price,
   cost(sum(position)) as book_value,
   value(sum(position)) as market_value,
   safediv((abs(sum(number(value(position)))) - abs(sum(number(cost(position))))), sum(number(cost(position)))) * 100 as unrealized_profit_pct
