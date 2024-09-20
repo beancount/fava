@@ -72,6 +72,7 @@
       input != null && valueSelector != null
         ? valueSelector(suggestion, input)
         : suggestion;
+    value = value.replace("*", "\\*");
     dispatch("select", input);
     hidden = true;
   }
