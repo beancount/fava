@@ -3,9 +3,11 @@ from __future__ import annotations
 from typing import Iterable
 from typing import TYPE_CHECKING
 
+from babel import Locale
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
+from fava.util import get_translations
 from fava.util import listify
 from fava.util import next_key
 from fava.util import send_file_inline
@@ -16,6 +18,28 @@ if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path
 
     from flask import Flask
+
+
+def test_get_translations() -> None:
+    de = get_translations(Locale.parse("de"))
+    assert de
+    assert de == get_translations(Locale.parse("de_AT"))
+    assert get_translations(Locale.parse("pt"))
+    pt = get_translations(Locale.parse("pt_PT"))
+    assert pt
+    assert "pt" in pt
+    assert "pt_BR" not in pt
+    assert get_translations(Locale.parse("pt_BR"))
+
+    zh = get_translations(Locale.parse("zh"))
+    assert zh
+    assert "zh" in zh
+    assert "zh_Hant_TW" not in zh
+    zh_tw = get_translations(Locale.parse("zh_TW"))
+    assert zh_tw
+    assert "zh_Hant_TW" in zh_tw
+
+    assert not get_translations(Locale.parse("km"))
 
 
 def test_listify() -> None:
