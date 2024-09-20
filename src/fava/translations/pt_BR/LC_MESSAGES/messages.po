@@ -27,6 +27,7 @@ msgstr "Conta"
 
 #: frontend/src/entry-forms/Transaction.svelte:103
 #: frontend/src/entry-forms/Transaction.svelte:106
+#: src/fava/templates/_journal_table.html:50
 msgid "Payee"
 msgstr "Beneficiário"
 
@@ -279,6 +280,7 @@ msgstr "# Entradas"
 
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
+#: src/fava/templates/_journal_table.html:50
 msgid "Narration"
 msgstr "Descrição"
 
@@ -583,10 +585,6 @@ msgstr "recarregar"
 #: frontend/src/modals/AddEntry.svelte:60
 msgid "continue"
 msgstr "continuar"
-
-#: src/fava/templates/_journal_table.html:50
-msgid "Payee/Narration"
-msgstr ""
 
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."
