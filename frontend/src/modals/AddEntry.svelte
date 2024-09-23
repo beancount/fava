@@ -25,6 +25,7 @@
     // Reuse the date of the entry that was just added.
     // @ts-expect-error entry.constructor is only typed as "Function" but the
     //                  new is required here to avoid a runtime error.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     entry = new entry.constructor(added_entry_date);
     if (!$addEntryContinue) {
       closeOverlay();

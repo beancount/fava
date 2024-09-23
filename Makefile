@@ -61,8 +61,8 @@ update-snapshots:
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints
 update-constraints:
-	uv pip compile --quiet --extra excel --extra dev --upgrade --output-file constraints.txt pyproject.toml
-	uv pip compile --quiet --extra excel --extra old_deps_pins --resolution=lowest --upgrade --output-file constraints-old.txt pyproject.toml
+	uv pip compile --quiet --extra excel --extra dev --python-version 3.8 --upgrade --output-file constraints.txt pyproject.toml
+	uv pip compile --quiet --extra excel --extra old_deps_pins --resolution=lowest --python-version 3.8 --upgrade --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps

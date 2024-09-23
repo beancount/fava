@@ -2,7 +2,7 @@ ci:
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.5
+    rev: v0.6.7
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -26,7 +26,7 @@ repos:
         require_serial: true
         additional_dependencies:
           - "stylelint@16.9.0"
-          - "stylelint-config-recess-order@5.1.0"
+          - "stylelint-config-recess-order@5.1.1"
           - "stylelint-config-standard@36.0.1"
           - "postcss-html@1.7.0"
       - id: eslint

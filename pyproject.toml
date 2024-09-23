@@ -131,6 +131,7 @@ disable = [
     "broad-except",                  # is checked by ruff (BLE)
     "too-many-return-statements",    # is checked by ruff (PLR0911)
     "too-many-arguments",            # is checked by ruff (PLR0913)
+    "too-many-positional-arguments", # is checked by ruff (PLR0917)
     "redefined-builtin",             # is checked by ruff (A002)
     "protected-access",              # is checked by ruff (SLF001)
     "invalid-name",                  # is checked by ruff (N)
