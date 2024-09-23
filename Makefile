@@ -93,7 +93,8 @@ run-example:
 	BEANCOUNT_FILE= fava -p 3333 --debug tests/data/*.beancount
 
 # Generate the bql-grammar json file used by the frontend.
-frontend/src/codemirror/bql-grammar.ts: .venv contrib/scripts.py constraints.txt
+.PHONY: bql-grammar
+bql-grammar: .venv contrib/scripts.py constraints.txt
 	uv run --no-sync python contrib/scripts.py generate-bql-grammar-json
 	-pre-commit run prettier --files frontend/src/codemirror/bql-grammar.ts
 
@@ -107,7 +108,7 @@ dist:
 
 # Build the bql-grammar and update translations with POEditor.com
 .PHONY: before-release
-before-release: frontend/src/codemirror/bql-grammar.ts translations-push translations-fetch
+before-release: bql-grammar translations-push translations-fetch
 
 # Extract translation strings.
 .PHONY: translations-extract
