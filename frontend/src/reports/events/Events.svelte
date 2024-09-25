@@ -5,7 +5,6 @@
   import { ScatterPlot } from "../../charts/scatterplot";
   import type { Event } from "../../entries";
   import { _, format } from "../../i18n";
-
   import EventTable from "./EventTable.svelte";
 
   export let events: Event[];

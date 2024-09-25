@@ -1,7 +1,6 @@
 <script lang="ts">
   import { leaf } from "../../lib/account";
   import type { TreeNode } from "../../lib/tree";
-
   import { selectedAccount } from "./stores";
 
   export let node: TreeNode<{ name: string; count: number }>;

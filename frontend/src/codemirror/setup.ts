@@ -40,7 +40,6 @@ import { get as store_get } from "svelte/store";
 
 import { log_error } from "../log";
 import { fava_options } from "../stores";
-
 import { getBeancountLanguageSupport } from "./beancount";
 import {
   beancountEditorHighlight,

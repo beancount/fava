@@ -1,6 +1,5 @@
 import { stratify } from "../lib/tree";
 import type { Inventory, QueryResultTable } from "../reports/query/query_table";
-
 import type { ChartContext } from "./context";
 import type { HierarchyChart } from "./hierarchy";
 import { hierarchy_from_parsed_data } from "./hierarchy";

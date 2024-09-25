@@ -3,7 +3,6 @@
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { errors, extensions, ledgerData } from "../stores";
-
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
 

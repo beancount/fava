@@ -6,7 +6,6 @@
   import { _ } from "../i18n";
   import { addEntryContinue } from "../stores/editor";
   import { closeOverlay, urlHash } from "../stores/url";
-
   import ModalBase from "./ModalBase.svelte";
 
   /** The entry types which have support adding in the modal. */

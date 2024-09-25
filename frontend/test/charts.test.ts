@@ -13,7 +13,6 @@ import {
 import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
 import { balances, LineChart } from "../src/charts/line";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
-
 import { loadJSONSnapshot } from "./helpers";
 
 test("chart helpers (filter ticks)", () => {

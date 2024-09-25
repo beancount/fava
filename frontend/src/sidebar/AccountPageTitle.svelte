@@ -2,7 +2,6 @@
   import { day } from "../format";
   import { urlForAccount } from "../helpers";
   import { account_details } from "../stores";
-
   import AccountIndicator from "./AccountIndicator.svelte";
 
   export let account: string;

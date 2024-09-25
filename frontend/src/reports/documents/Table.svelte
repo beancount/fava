@@ -5,7 +5,6 @@
   import { basename } from "../../lib/paths";
   import { DateColumn, Sorter, StringColumn } from "../../sort";
   import SortHeader from "../../sort/SortHeader.svelte";
-
   import { selectedAccount } from "./stores";
 
   export let data: Document[];

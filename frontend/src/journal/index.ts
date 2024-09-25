@@ -2,7 +2,6 @@ import { delegate } from "../lib/events";
 import { sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
-
 import JournalFilters from "./JournalFilters.svelte";
 
 /**

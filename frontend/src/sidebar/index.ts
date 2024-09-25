@@ -6,7 +6,6 @@ import { get as store_get } from "svelte/store";
 
 import Modals from "../modals/Modals.svelte";
 import { ledger_title } from "../stores";
-
 import HeaderAndAside from "./HeaderAndAside.svelte";
 import { page_title } from "./page-title";
 

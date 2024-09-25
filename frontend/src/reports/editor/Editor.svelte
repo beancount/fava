@@ -17,7 +17,6 @@
   import router from "../../router";
   import { errors, fava_options } from "../../stores";
   import { searchParams } from "../../stores/url";
-
   import EditorMenu from "./EditorMenu.svelte";
 
   export let source: SourceFile;

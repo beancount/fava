@@ -9,15 +9,13 @@
     showCharts,
     treemapCurrency,
   } from "../stores/chart";
-
+  import type { FavaChart } from ".";
   import BarChart from "./BarChart.svelte";
   import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import LineChart from "./LineChart.svelte";
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
-
-  import type { FavaChart } from ".";
 
   /**
    * The chart to render.

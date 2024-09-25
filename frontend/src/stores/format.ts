@@ -3,7 +3,6 @@ import { derived } from "svelte/store";
 
 import type { FormatterContext } from "../format";
 import { dateFormat, localeFormatter, timeFilterDateFormat } from "../format";
-
 import { incognito, interval, locale, precisions } from ".";
 
 const replaceNumbers = (num: string) => num.replace(/[0-9]/g, "X");

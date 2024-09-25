@@ -2,7 +2,6 @@
   import type { Commodities } from "../../api/validators";
   import type { FavaChart } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
-
   import CommodityTable from "./CommodityTable.svelte";
 
   export let charts: FavaChart[];

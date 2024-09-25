@@ -4,7 +4,6 @@ import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 import type { QueryResultTable } from "../query/query_table";
 import { Route } from "../route";
-
 import Holdings from "./Holdings.svelte";
 
 export type HoldingsReportType =

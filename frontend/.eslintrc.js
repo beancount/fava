@@ -38,14 +38,8 @@ const namingConvention = {
 
 // Sort import statements and members alphabetically.
 const sortImports = {
-  "sort-imports": [ON, { ignoreDeclarationSort: true, ignoreCase: true }],
-  "import/order": [
-    ON,
-    {
-      "newlines-between": "always",
-      alphabetize: { order: "asc", caseInsensitive: true },
-    },
-  ],
+  "simple-import-sort/imports": ON,
+  "simple-import-sort/exports": ON,
 };
 
 const extraFileExtensions = [".svelte"];
@@ -58,7 +52,7 @@ module.exports = {
     "plugin:svelte/prettier",
     "prettier",
   ],
-  plugins: ["import"],
+  plugins: ["simple-import-sort"],
   env: { browser: true },
   parser: "@typescript-eslint/parser",
   parserOptions: {

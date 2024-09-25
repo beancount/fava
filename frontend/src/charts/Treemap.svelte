@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { treemap } from "d3-hierarchy";
   import type { HierarchyRectangularNode } from "d3-hierarchy";
+  import { treemap } from "d3-hierarchy";
   import type { Action } from "svelte/action";
 
   import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
   import { ctx } from "../stores/format";
-
   import { treemapScale } from "./helpers";
   import type {
     AccountHierarchyDatum,

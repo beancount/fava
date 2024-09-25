@@ -7,7 +7,6 @@
   import { urlForAccount } from "../helpers";
   import { leaf } from "../lib/account";
   import AccountIndicator from "../sidebar/AccountIndicator.svelte";
-
   import { getTreeTableContext } from "./helpers";
 
   /** The account node to render the name cell for. */

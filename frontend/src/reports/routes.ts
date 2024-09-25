@@ -1,5 +1,4 @@
 import { _ } from "../i18n";
-
 import { account_report } from "./accounts";
 import { commodities } from "./commodities";
 import { documents } from "./documents";

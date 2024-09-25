@@ -1,6 +1,6 @@
 import { sum } from "d3-array";
-import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import type { HierarchyNode } from "d3-hierarchy";
+import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 
 import type { Result } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
@@ -18,7 +18,6 @@ import {
   unknown,
 } from "../lib/validation";
 import { notify_warn } from "../notifications";
-
 import type { ChartContext } from "./context";
 
 /** The data provided with a fava.core.tree.SerialisedTreeNode. */

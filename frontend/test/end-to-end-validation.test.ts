@@ -11,7 +11,6 @@ import {
 } from "../src/charts/helpers";
 import { currencies, ledgerData } from "../src/stores";
 import { conversions } from "../src/stores/chart";
-
 import { initialiseLedgerData, loadJSONSnapshot } from "./helpers";
 
 test.before(initialiseLedgerData);

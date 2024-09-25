@@ -9,7 +9,6 @@
   import { chartContext } from "../../charts/context";
   import { getQueryChart } from "../../charts/query-charts";
   import type { Result } from "../../lib/result";
-
   import type { QueryResult } from "./query_table";
   import QueryLinks from "./QueryLinks.svelte";
   import QueryTable from "./QueryTable.svelte";

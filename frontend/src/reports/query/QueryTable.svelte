@@ -12,9 +12,8 @@
   import SortHeader from "../../sort/SortHeader.svelte";
   import { accounts_set } from "../../stores";
   import { ctx, num } from "../../stores/format";
-
-  import { Inventory } from "./query_table";
   import type { QueryCell, QueryResultTable } from "./query_table";
+  import { Inventory } from "./query_table";
 
   /** The table to render. */
   export let table: QueryResultTable;

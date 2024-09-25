@@ -16,11 +16,9 @@
   import router from "../../router";
   import { fava_options } from "../../stores";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-
+  import type { ProcessedImportableFile } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-
-  import type { ProcessedImportableFile } from ".";
 
   export let data: ProcessedImportableFile[];
 

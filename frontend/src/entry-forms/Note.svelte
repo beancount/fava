@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Note } from "../entries";
   import { _ } from "../i18n";
-
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";

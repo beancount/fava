@@ -1,6 +1,5 @@
 import { log_error } from "../log";
 import { set_mtime } from "../stores/mtime";
-
 import {
   defaultValue,
   isJsonObject,

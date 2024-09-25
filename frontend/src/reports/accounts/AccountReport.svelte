@@ -10,7 +10,6 @@
   import { intervalLabel } from "../../lib/interval";
   import { interval } from "../../stores";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
-
   import type { AccountReportType } from ".";
 
   export let account: string;

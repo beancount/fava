@@ -5,7 +5,6 @@ import { day } from "../format";
 import type { Result } from "../lib/result";
 import type { ValidationError } from "../lib/validation";
 import { array, date, number, object, record } from "../lib/validation";
-
 import type { TooltipContent } from "./tooltip";
 import { domHelpers } from "./tooltip";
 

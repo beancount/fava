@@ -3,11 +3,9 @@
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { lastActiveChartName, showCharts } from "../stores/chart";
-
+  import type { FavaChart } from ".";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
-
-  import type { FavaChart } from ".";
 
   export let charts: readonly FavaChart[];
 

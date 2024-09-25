@@ -2,7 +2,6 @@
   import type { Entry } from "../../entries";
   import AccountInput from "../../entry-forms/AccountInput.svelte";
   import { _ } from "../../i18n";
-
   import type { ProcessedImportableFile } from ".";
 
   export let files: ProcessedImportableFile[];

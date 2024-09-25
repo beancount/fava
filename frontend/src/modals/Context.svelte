@@ -3,7 +3,6 @@
   import { getBeancountLanguageSupport } from "../codemirror/beancount";
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { urlHash } from "../stores/url";
-
   import EntryContext from "./EntryContext.svelte";
   import ModalBase from "./ModalBase.svelte";
 
