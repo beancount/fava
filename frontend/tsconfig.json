@@ -17,7 +17,6 @@
     "src/**/*.ts",
     "src/**/*.svelte",
     "test/**/*.ts",
-    "*.config.js",
-    ".eslintrc.js"
+    "*.config.mjs"
   ]
 }

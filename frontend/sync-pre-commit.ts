@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 /**
  * A script to sync the exact linter dependencies
  * from `./package-lock.json` to `../.pre-commit-config.yaml`

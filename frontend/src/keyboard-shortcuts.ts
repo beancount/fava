@@ -195,11 +195,9 @@ function bindKey(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
   const key = getKeySpecKey(spec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
-    // eslint-disable-next-line no-console
     console.error("Only key sequences of length <=2 are supported: ", key);
   }
   if (keyboardShortcuts.has(key)) {
-    // eslint-disable-next-line no-console
     console.warn("Duplicate keyboard shortcut: ", key, handler);
   }
   keyboardShortcuts.set(key, handler);

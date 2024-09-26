@@ -14,12 +14,11 @@ export function initSidebar(): void {
     document.title = `${title} - ${store_get(ledger_title)}`;
   });
 
-  // eslint-disable-next-line no-new
   new HeaderAndAside({
     target: document.body,
     anchor: document.querySelector("article") ?? undefined,
   });
-  // eslint-disable-next-line no-new
+
   new Modals({
     target: document.body,
   });

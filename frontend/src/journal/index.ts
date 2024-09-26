@@ -21,7 +21,7 @@ function addFilter(value: string): void {
   );
 }
 
-function handleClick({ target }: MouseEvent): void {
+function handleClick({ target }: Event): void {
   if (!(target instanceof HTMLElement) || target instanceof HTMLAnchorElement) {
     return;
   }

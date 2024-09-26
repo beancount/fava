@@ -72,7 +72,6 @@
    * Delete the given file and remove it from the displayed list.
    */
   async function remove(filename: string) {
-    // eslint-disable-next-line no-alert
     if (!window.confirm(_("Delete this file?"))) {
       return;
     }

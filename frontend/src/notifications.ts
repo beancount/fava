@@ -53,7 +53,7 @@ export function notify(
  */
 export function notify_warn(msg: string): void {
   notify(msg, "warning");
-  // eslint-disable-next-line no-console
+
   console.warn(msg);
 }
 

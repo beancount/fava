@@ -19,7 +19,10 @@ export class TreeTableCustomElement extends HTMLElement {
       });
     });
 
-    delegate(this, "click", "span.has-children", (event: MouseEvent) => {
+    delegate(this, "click", "span.has-children", (event) => {
+      if (!(event instanceof MouseEvent)) {
+        return;
+      }
       const { target } = event;
       if (
         !(target instanceof HTMLElement) ||

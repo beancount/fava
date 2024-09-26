@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import chokidar from "chokidar";
 import { context } from "esbuild";
 import svelte from "esbuild-svelte";
