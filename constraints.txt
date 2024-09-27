@@ -84,7 +84,7 @@ furo==2024.8.6
     # via fava (pyproject.toml)
 google-api-core==2.20.0
     # via google-api-python-client
-google-api-python-client==2.146.0
+google-api-python-client==2.147.0
     # via beancount
 google-auth==2.35.0
     # via
@@ -371,7 +371,7 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.15
+uv==0.4.16
     # via tox-uv
 virtualenv==20.26.5
     # via
