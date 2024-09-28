@@ -238,8 +238,16 @@
   position: relative;
 }
 
-.file-input-wrapper svg {
-  fill: white;
+@media (prefers-color-scheme: dark) {
+  .file-input-wrapper svg {
+    fill: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .file-input-wrapper svg {
+    fill: black;
+  }
 }
 
 .file-input-wrapper input[type="file"] {
