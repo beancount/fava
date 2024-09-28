@@ -54,6 +54,7 @@
 .journal .postings .num {
   overflow: auto;
   line-height: 16px;
+  margin-top: 4px;
 }
 
 .journal > li,
@@ -152,6 +153,7 @@
 
 .journal .show-postings .description {
   white-space: normal;
+  margin-top: 4px;
 }
 
 .journal .description .separator::before {
@@ -230,4 +232,27 @@
   color: var(--journal-metadata-indicator);
   text-transform: lowercase;
   border-radius: 20px;
+}
+
+.file-input-wrapper {
+  position: relative;
+}
+
+.file-input-wrapper svg {
+  fill: white;
+}
+
+.file-input-wrapper input[type="file"] {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  cursor: pointer;
+  text-indent: -100px
 }
