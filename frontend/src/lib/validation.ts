@@ -187,8 +187,8 @@ export function constants<const T extends (null | boolean | string | number)[]>(
 /**
  * Validate a value that is of one of the given tagged types.
  */
-export function tagged_union<Tag extends string, T>(
-  tag: Tag,
+export function tagged_union<T>(
+  tag: string,
   validators: { [t in keyof T]: Validator<T[t]> },
 ): Validator<T[keyof T]> {
   return (json) => {

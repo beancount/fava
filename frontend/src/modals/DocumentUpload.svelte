@@ -12,7 +12,6 @@
   import { notify, notify_err } from "../notifications";
   import router from "../router";
   import { options } from "../stores";
-
   import ModalBase from "./ModalBase.svelte";
 
   $: shown = !!$files.length;

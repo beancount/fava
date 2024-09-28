@@ -4,7 +4,6 @@
   import type { QueryResultTable } from "../query/query_table";
   import QueryLinks from "../query/QueryLinks.svelte";
   import QueryTable from "../query/QueryTable.svelte";
-
   import type { HoldingsReportType } from ".";
 
   export let aggregation_key: HoldingsReportType;

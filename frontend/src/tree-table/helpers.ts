@@ -1,6 +1,6 @@
 import { getContext, setContext } from "svelte";
-import { derived } from "svelte/store";
 import type { Readable, Writable } from "svelte/store";
+import { derived } from "svelte/store";
 
 import type { AccountTreeNode } from "../charts/hierarchy";
 import { is_empty } from "../lib/objects";

@@ -8,7 +8,6 @@
   import router from "../router";
   import { reloadAfterSavingEntrySlice } from "../stores/editor";
   import { closeOverlay } from "../stores/url";
-
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 

@@ -5,7 +5,6 @@
   import { is_empty } from "../lib/objects";
   import { currency_name } from "../stores";
   import { ctx } from "../stores/format";
-
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
   import { getTreeTableContext } from "./helpers";

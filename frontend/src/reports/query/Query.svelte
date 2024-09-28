@@ -8,7 +8,6 @@
   import { filter_params } from "../../stores/filters";
   import { query_shell_history } from "../../stores/query";
   import { searchParams } from "../../stores/url";
-
   import type { QueryResult } from "./query_table";
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";

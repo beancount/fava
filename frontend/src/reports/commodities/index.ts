@@ -6,7 +6,6 @@ import { day } from "../../format";
 import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 import { Route } from "../route";
-
 import CommoditiesSvelte from "./Commodities.svelte";
 
 export const commodities = new Route<{

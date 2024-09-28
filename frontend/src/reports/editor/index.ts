@@ -5,7 +5,6 @@ import type { SourceFile } from "../../api/validators";
 import { getBeancountLanguageSupport } from "../../codemirror/beancount";
 import { _ } from "../../i18n";
 import { Route } from "../route";
-
 import Editor from "./Editor.svelte";
 
 export const editor = new Route<{

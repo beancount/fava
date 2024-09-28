@@ -19,9 +19,9 @@ import "../css/help.css";
 import "../css/journal-table.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
-
 // Polyfill for customised builtin elements in Webkit
 import "@ungap/custom-elements";
+
 import { get as store_get } from "svelte/store";
 
 import { get } from "./api";

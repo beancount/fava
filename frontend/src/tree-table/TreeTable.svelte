@@ -5,7 +5,6 @@
   import { _ } from "../i18n";
   import { currency_name, operating_currency } from "../stores";
   import { collapse_account, invert_account } from "../stores/accounts";
-
   import AccountCellHeader from "./AccountCellHeader.svelte";
   import { get_collapsed, get_not_shown, setTreeTableContext } from "./helpers";
   import TreeTableNode from "./TreeTableNode.svelte";

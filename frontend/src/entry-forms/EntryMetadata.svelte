@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { EntryMetadata } from "../entries";
   import { _ } from "../i18n";
-
   import { metaValueToString, stringToMetaValue } from "./metadata";
 
   export let meta: EntryMetadata;

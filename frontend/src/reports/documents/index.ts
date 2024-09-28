@@ -3,7 +3,6 @@ import type { Document } from "../../entries";
 import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 import { Route } from "../route";
-
 import Documents from "./Documents.svelte";
 
 export const documents = new Route<{ documents: Document[] }>(

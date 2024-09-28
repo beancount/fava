@@ -45,7 +45,7 @@ from markupsafe import Markup
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
-from fava import LANGUAGES
+from fava import LOCALES
 from fava import template_filters
 from fava._ctx_globals_class import Context
 from fava.beans import funcs
@@ -425,7 +425,7 @@ def _setup_babel(fava_app: Flask) -> None:
         lang = g.ledger.fava_options.language
         if lang is not None:
             return lang
-        return request.accept_languages.best_match(["en", *LANGUAGES])
+        return request.accept_languages.best_match(["en", *LOCALES])
 
     try:
         # for Flask-Babel <3.0

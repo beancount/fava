@@ -67,11 +67,11 @@ export class Events<T = string> {
  * @param selector - The DOM selector to match.
  * @param callback - The event listener to execute on a match.
  */
-export function delegate<T extends Event, C extends Element>(
-  element: Element | Document,
+export function delegate(
+  element: HTMLElement | Document,
   type: string,
   selector: string,
-  callback: (e: T, c: C) => void,
+  callback: (e: Event, c: Element) => void,
 ): void {
   element.addEventListener(type, (event) => {
     let { target } = event;
@@ -84,7 +84,7 @@ export function delegate<T extends Event, C extends Element>(
     if (target instanceof Element) {
       const closest = target.closest(selector);
       if (closest) {
-        callback(event as T, closest as C);
+        callback(event, closest);
       }
     }
   });

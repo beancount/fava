@@ -1,4 +1,4 @@
-import { join } from "path";
+import { join } from "node:path";
 
 import type { Tree } from "@lezer/common";
 import { TreeFragment } from "@lezer/common";

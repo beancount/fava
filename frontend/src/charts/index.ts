@@ -7,16 +7,15 @@
 import { collect, err, type Result } from "../lib/result";
 import type { ValidationError } from "../lib/validation";
 import { array, object, string, unknown } from "../lib/validation";
-
-import { bar } from "./bar";
 import type { BarChart } from "./bar";
+import { bar } from "./bar";
 import type { ChartContext } from "./context";
-import { hierarchy } from "./hierarchy";
 import type { HierarchyChart } from "./hierarchy";
-import { balances } from "./line";
+import { hierarchy } from "./hierarchy";
 import type { LineChart } from "./line";
-import { scatterplot } from "./scatterplot";
+import { balances } from "./line";
 import type { ScatterPlot } from "./scatterplot";
+import { scatterplot } from "./scatterplot";
 
 const parsers: Record<
   string,

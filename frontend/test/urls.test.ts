@@ -4,7 +4,6 @@ import assert from "uvu/assert";
 
 import { getUrlPath, urlForAccount, urlForInternal } from "../src/helpers";
 import { base_url } from "../src/stores";
-
 import { initialiseLedgerData } from "./helpers";
 
 test.before(initialiseLedgerData);

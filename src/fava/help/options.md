@@ -28,7 +28,7 @@ languages:
 - French (`fr`)
 - German (`de`)
 - Persian (`fa`)
-- Portuguese (`pt`)
+- Portuguese (`pt` and `pt_BR`)
 - Russian (`ru`)
 - Slovak (`sk`)
 - Spanish (`es`)

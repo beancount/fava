@@ -4,13 +4,34 @@ import datetime
 import re
 from typing import TYPE_CHECKING
 
+import pytest
+
 from fava.core.charts import dumps
+from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import InsertEntryOption
+from fava.core.fava_options import NotARegularExpressionError
 from fava.core.fava_options import parse_options
+from fava.core.fava_options import UnknownLocaleOptionError
+from fava.core.fava_options import UnsupportedLanguageOptionError
 from fava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
+
+
+def test_fava_options_errors(load_doc_custom_entries: list[Custom]) -> None:
+    """
+    2016-06-14 custom "fava-option"
+    2016-06-14 custom "fava-option" 10
+    2016-06-14 custom "fava-option" 10 10
+    2016-06-14 custom "fava-option" "indent" 10
+    2016-06-14 custom "fava-option" "fiscal-year-end" "not a date"
+    """
+    options, errors = parse_options(load_doc_custom_entries)
+    assert len(errors) == 5
+
+    with pytest.raises(NotARegularExpressionError):
+        options.set_insert_entry("((", datetime.date.min, "<string>", 0)
 
 
 def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
@@ -28,6 +49,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     2016-04-14 custom "fava-option" "fiscal-year-end" "01-11"
     2016-04-14 custom "fava-option" "conversion-currencies" "USD EUR HOOLI"
     2016-06-14 custom "fava-option" "default-file" "/some/file/name"
+    2016-04-14 custom "fava-option" "language" "en"
     """
 
     options, errors = parse_options(load_doc_custom_entries)
@@ -37,6 +59,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
 
     assert len(errors) == 3
 
+    assert options.locale == "en"
     assert options.indent == 4
     assert options.insert_entry == [
         InsertEntryOption(
@@ -52,3 +75,16 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     assert options.fiscal_year_end == FiscalYearEnd(1, 11)
     assert options.conversion_currencies == ("USD", "EUR", "HOOLI")
     assert options.default_file == "/some/file/name"
+
+
+def test_fava_options_language() -> None:
+    options = FavaOptions()
+    options.set_locale("en")
+    assert options.locale == "en"
+    with pytest.raises(UnknownLocaleOptionError):
+        options.set_locale("invalid")
+    with pytest.raises(UnknownLocaleOptionError):
+        options.set_language("invalid")
+    with pytest.raises(UnsupportedLanguageOptionError):
+        options.set_language("km")
+    options.set_language("zh")

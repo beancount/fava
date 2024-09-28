@@ -6,12 +6,11 @@
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { Posting } from "../entries";
   import type { Transaction } from "../entries";
+  import { Posting } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
   import { payees } from "../stores";
-
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
@@ -148,13 +147,13 @@
   }
 
   div :global(.payee) {
-    flex-basis: 100px;
     flex-grow: 1;
+    flex-basis: 100px;
   }
 
   input[name="narration"] {
-    flex-basis: 200px;
     flex-grow: 1;
+    flex-basis: 200px;
   }
 
   label > span:first-child,

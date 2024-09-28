@@ -3,7 +3,6 @@
   import { is_empty } from "../lib/objects";
   import { currency_name, operating_currency } from "../stores";
   import { ctx } from "../stores/format";
-
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
   import { getTreeTableContext } from "./helpers";

@@ -1,7 +1,6 @@
 import { derived } from "svelte/store";
 
 import { _ } from "../i18n";
-
 import { account_details, fava_options, options } from ".";
 
 /** Whether an account should be collapsed in the account trees. */

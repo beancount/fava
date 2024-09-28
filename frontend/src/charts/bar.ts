@@ -6,7 +6,6 @@ import type { FormatterContext } from "../format";
 import type { Result } from "../lib/result";
 import type { ValidationError, ValidationT } from "../lib/validation";
 import { array, date, number, object, record } from "../lib/validation";
-
 import type { ChartContext } from "./context";
 import type { TooltipContent } from "./tooltip";
 import { domHelpers } from "./tooltip";

@@ -4,7 +4,6 @@
 -->
 <script lang="ts">
   import { _ } from "../i18n";
-
   import { getTreeTableContext } from "./helpers";
 
   const { toggled } = getTreeTableContext();

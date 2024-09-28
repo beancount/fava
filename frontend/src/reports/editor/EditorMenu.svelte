@@ -10,7 +10,6 @@
   import { modKey } from "../../keyboard-shortcuts";
   import router from "../../router";
   import { fava_options, options } from "../../stores";
-
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
   import AppMenuSubItem from "./AppMenuSubItem.svelte";

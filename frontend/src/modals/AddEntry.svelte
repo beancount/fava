@@ -6,7 +6,6 @@
   import { _ } from "../i18n";
   import { addEntryContinue } from "../stores/editor";
   import { closeOverlay, urlHash } from "../stores/url";
-
   import ModalBase from "./ModalBase.svelte";
 
   /** The entry types which have support adding in the modal. */
@@ -25,6 +24,7 @@
     // Reuse the date of the entry that was just added.
     // @ts-expect-error entry.constructor is only typed as "Function" but the
     //                  new is required here to avoid a runtime error.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     entry = new entry.constructor(added_entry_date);
     if (!$addEntryContinue) {
       closeOverlay();

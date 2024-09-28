@@ -8,7 +8,6 @@
   import type { NonEmptyArray } from "../lib/array";
   import { collapse_account } from "../stores/accounts";
   import { currentTimeFilterDateFormat } from "../stores/format";
-
   import AccountCellHeader from "./AccountCellHeader.svelte";
   import { get_collapsed, get_not_shown, setTreeTableContext } from "./helpers";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";

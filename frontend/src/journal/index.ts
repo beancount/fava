@@ -2,7 +2,6 @@ import { delegate } from "../lib/events";
 import { sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
-
 import JournalFilters from "./JournalFilters.svelte";
 
 /**
@@ -22,7 +21,7 @@ function addFilter(value: string): void {
   );
 }
 
-function handleClick({ target }: MouseEvent): void {
+function handleClick({ target }: Event): void {
   if (!(target instanceof HTMLElement) || target instanceof HTMLAnchorElement) {
     return;
   }

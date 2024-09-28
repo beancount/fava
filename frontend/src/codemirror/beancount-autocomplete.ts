@@ -7,7 +7,6 @@ import { syntaxTree } from "@codemirror/language";
 import { get as store_get } from "svelte/store";
 
 import { accounts, currencies, links, payees, tags } from "../stores";
-
 import { beancountSnippets } from "./beancount-snippets";
 
 const undatedDirectives = ["option", "plugin", "include"];

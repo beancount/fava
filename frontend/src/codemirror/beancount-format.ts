@@ -2,7 +2,6 @@ import type { Command } from "@codemirror/view";
 
 import { put } from "../api";
 import { notify_err } from "../notifications";
-
 import { replaceContents } from "./editor-transactions";
 
 export const beancountFormat: Command = (cm) => {

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gettext
 import logging
 import re
 import time
@@ -24,6 +25,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
+    from babel import Locale
     from flask.wrappers import Response
 
 
@@ -36,6 +38,19 @@ def setup_logging() -> None:
     """Set up logging for Fava."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
+
+
+def get_translations(locale: Locale) -> str | None:
+    """Check whether Fava has translations for the locale.
+
+    Args:
+        locale: The locale to search for
+
+    Returns:
+        The path to the found translations or None if none matched.
+    """
+    translations_dir = Path(__file__).parent.parent / "translations"
+    return gettext.find("messages", str(translations_dir), [str(locale)])
 
 
 if TYPE_CHECKING:  # pragma: no cover

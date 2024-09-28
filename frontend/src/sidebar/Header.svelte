@@ -2,7 +2,6 @@
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import router from "../router";
   import { ledger_title, ledgerData } from "../stores";
-
   import FilterForm from "./FilterForm.svelte";
   import HeaderIcon from "./HeaderIcon.svelte";
   import { has_changes } from "./page-title";

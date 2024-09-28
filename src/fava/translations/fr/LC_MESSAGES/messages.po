@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: fr\n"
 
-#: frontend/src/reports/routes.ts:28
+#: frontend/src/reports/routes.ts:29
 #: frontend/src/sidebar/AsideContents.svelte:67
 msgid "Errors"
 msgstr "Erreurs"
@@ -18,13 +18,16 @@ msgstr "Période"
 
 #: frontend/src/entry-forms/AccountInput.svelte:32
 #: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/sidebar/FilterForm.svelte:73
-#: src/fava/templates/holdings.html:54 src/fava/templates/statistics.html:28
+#: src/fava/templates/statistics.html:26
 msgid "Account"
 msgstr "Compte"
 
 #: frontend/src/entry-forms/Transaction.svelte:103
 #: frontend/src/entry-forms/Transaction.svelte:106
+#: src/fava/templates/_journal_table.html:50
 msgid "Payee"
 msgstr "Bénéficiaire"
 
@@ -47,13 +50,16 @@ msgstr "Balance générale"
 msgid "Journal"
 msgstr "Journal"
 
-#: frontend/src/reports/routes.ts:32
+#: frontend/src/reports/holdings/Holdings.svelte:56
+#: frontend/src/reports/routes.ts:34
 #: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Query"
 msgstr "Requête"
 
+#: frontend/src/reports/holdings/Holdings.svelte:18
+#: frontend/src/reports/holdings/Holdings.svelte:20
+#: frontend/src/reports/holdings/index.ts:91
 #: frontend/src/sidebar/AsideContents.svelte:44
-#: src/fava/templates/holdings.html:5 src/fava/templates/holdings.html:53
 msgid "Holdings"
 msgstr "Comptes"
 
@@ -79,7 +85,7 @@ msgid "Options"
 msgstr "Options"
 
 #: frontend/src/sidebar/AsideContents.svelte:53
-#: src/fava/templates/statistics.html:7
+#: src/fava/templates/statistics.html:6
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -114,7 +120,7 @@ msgstr "Opération"
 #: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:15
 #: src/fava/templates/_journal_table.html:53
-#: src/fava/templates/statistics.html:32
+#: src/fava/templates/statistics.html:30
 msgid "Balance"
 msgstr "Solde"
 
@@ -146,7 +152,7 @@ msgstr "Journal du compte"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:51
 #: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:646
+#: src/fava/json_api.py:632
 msgid "Changes"
 msgstr "Opérations"
 
@@ -190,28 +196,35 @@ msgid "Help pages"
 msgstr "Pages d’aide"
 
 #: frontend/src/entry-forms/Balance.svelte:32
-#: src/fava/templates/holdings.html:54
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
 msgstr "Devise"
 
-#: src/fava/templates/holdings.html:54
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:49
 msgid "Cost currency"
 msgstr "Devise pour les coûts"
 
-#: src/fava/templates/holdings.html:55
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:28
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:38
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:48
 msgid "Holdings by"
 msgstr "Comptes par"
 
-#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:528
-#: src/fava/json_api.py:548
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:514
+#: src/fava/json_api.py:534
 msgid "Net Profit"
 msgstr "Bénéfice net"
 
-#: src/fava/json_api.py:534
+#: src/fava/json_api.py:520
 msgid "Income"
 msgstr "Revenus"
 
-#: src/fava/json_api.py:540
+#: src/fava/json_api.py:526
 msgid "Expenses"
 msgstr "Dépenses"
 
@@ -225,49 +238,49 @@ msgstr "Clé"
 msgid "Value"
 msgstr "Valeur"
 
-#: frontend/src/reports/query/QueryLinks.svelte:19
-#: src/fava/templates/_query_table.html:88
+#: frontend/src/reports/query/QueryLinks.svelte:25
 msgid "Download as"
 msgstr "Télécharger en tant que"
 
-#: src/fava/templates/statistics.html:13
+#: src/fava/templates/statistics.html:12
 msgid "Postings per Account"
 msgstr "Opérations par compte"
 
-#: src/fava/templates/statistics.html:82
+#: src/fava/templates/statistics.html:80
 msgid "Total"
 msgstr "Total"
 
-#: src/fava/templates/statistics.html:22
+#: src/fava/templates/statistics.html:20
 msgid "Update Activity"
 msgstr "Activité"
 
-#: src/fava/templates/statistics.html:23
+#: src/fava/templates/statistics.html:21
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Cliquez pour copier les directives balance des comptes (sauf pour ceux en verts) dans le presse-papiers."
 
-#: src/fava/templates/statistics.html:24
+#: src/fava/templates/statistics.html:22
 msgid "Copy balance directives"
 msgstr "Copier les directives balance"
 
-#: src/fava/templates/statistics.html:31
+#: src/fava/templates/statistics.html:29
 msgid "Last Entry"
 msgstr "Dernière entrée"
 
-#: src/fava/templates/statistics.html:64
+#: src/fava/templates/statistics.html:62
 msgid "Entries per Type"
 msgstr "Entrées par type"
 
-#: src/fava/templates/statistics.html:68
+#: src/fava/templates/statistics.html:66
 msgid "Type"
 msgstr "Type"
 
-#: src/fava/templates/statistics.html:69
+#: src/fava/templates/statistics.html:67
 msgid "# Entries"
 msgstr "# Entrées"
 
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/entry-forms/Transaction.svelte:117
+#: src/fava/templates/_journal_table.html:50
 msgid "Narration"
 msgstr "Description"
 
@@ -571,10 +584,6 @@ msgstr "Recharger"
 #: frontend/src/modals/AddEntry.svelte:60
 msgid "continue"
 msgstr "Continuer"
-
-#: src/fava/templates/_journal_table.html:50
-msgid "Payee/Narration"
-msgstr "Bénéficiaire / Désignation"
 
 #: frontend/src/editor/DeleteButton.svelte:7
 msgid "Deleting..."

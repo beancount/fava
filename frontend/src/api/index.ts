@@ -6,7 +6,6 @@ import { string } from "../lib/validation";
 import { notify, notify_err } from "../notifications";
 import router from "../router";
 import type { Filters, FiltersConversionInterval } from "../stores/filters";
-
 import type { GetAPIValidators, SourceFile } from "./validators";
 import { getAPIValidators } from "./validators";
 

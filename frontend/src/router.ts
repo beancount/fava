@@ -211,7 +211,6 @@ export class Router extends Events<"page-loaded"> {
   private async loadURL(url: string, historyState = true): Promise<void> {
     const leaveMessage = this.shouldInterrupt();
     if (leaveMessage != null) {
-      // eslint-disable-next-line no-alert
       if (!window.confirm(leaveMessage)) {
         return;
       }
@@ -290,31 +289,32 @@ export class Router extends Events<"page-loaded"> {
         (link.host !== window.location.host ||
           !link.protocol.startsWith("http")));
 
-    delegate(
-      document,
-      "click",
-      "a",
-      (event: MouseEvent, link: HTMLAnchorElement | SVGAElement) => {
-        if (!is_normal_click(event)) {
-          return;
-        }
-        if (event.defaultPrevented) {
-          return;
-        }
-        if (link.getAttribute("href")?.charAt(0) === "#") {
-          return;
-        }
-        if (is_external_link(link)) {
-          return;
-        }
+    delegate(document, "click", "a", (event, link) => {
+      if (
+        !(event instanceof MouseEvent) ||
+        !(link instanceof HTMLAnchorElement || link instanceof SVGAElement)
+      ) {
+        return;
+      }
+      if (!is_normal_click(event)) {
+        return;
+      }
+      if (event.defaultPrevented) {
+        return;
+      }
+      if (link.getAttribute("href")?.charAt(0) === "#") {
+        return;
+      }
+      if (is_external_link(link)) {
+        return;
+      }
 
-        event.preventDefault();
-        const href =
-          link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
+      event.preventDefault();
+      const href =
+        link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
 
-        this.navigate(href);
-      },
-    );
+      this.navigate(href);
+    });
   }
 
   /*

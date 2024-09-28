@@ -16,11 +16,9 @@
   import router from "../../router";
   import { fava_options } from "../../stores";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-
+  import type { ProcessedImportableFile } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-
-  import type { ProcessedImportableFile } from ".";
 
   export let data: ProcessedImportableFile[];
 
@@ -74,7 +72,6 @@
    * Delete the given file and remove it from the displayed list.
    */
   async function remove(filename: string) {
-    // eslint-disable-next-line no-alert
     if (!window.confirm(_("Delete this file?"))) {
       return;
     }

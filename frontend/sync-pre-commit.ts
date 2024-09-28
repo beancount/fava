@@ -1,13 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-console */
-
 /**
  * A script to sync the exact linter dependencies
  * from `./package-lock.json` to `../.pre-commit-config.yaml`
  */
 
-import { readFile, writeFile } from "fs/promises";
-import { join } from "path";
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 import { load } from "js-yaml";
 

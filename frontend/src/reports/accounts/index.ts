@@ -2,7 +2,6 @@ import { get } from "../../api";
 import { getUrlPath } from "../../helpers";
 import { getURLFilters } from "../../stores/filters";
 import { Route } from "../route";
-
 import AccountReport from "./AccountReport.svelte";
 
 export type AccountReportType = "journal" | "balances" | "changes";

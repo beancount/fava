@@ -5,7 +5,6 @@
   import { scalePoint, scaleUtc } from "d3-scale";
 
   import { day } from "../format";
-
   import Axis from "./Axis.svelte";
   import { scatterplotScale } from "./helpers";
   import type { ScatterPlot, ScatterPlotDatum } from "./scatterplot";

@@ -2,7 +2,7 @@ ci:
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.5
+    rev: v0.6.8
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -16,7 +16,7 @@ repos:
         require_serial: true
         additional_dependencies:
           - "prettier@3.3.3"
-          - "prettier-plugin-svelte@3.2.6"
+          - "prettier-plugin-svelte@3.2.7"
           - "svelte@4.2.19"
       - id: stylelint
         name: stylelint
@@ -26,12 +26,14 @@ repos:
         require_serial: true
         additional_dependencies:
           - "stylelint@16.9.0"
-          - "stylelint-config-recess-order@5.1.0"
+          - "stylelint-config-recess-order@5.1.1"
           - "stylelint-config-standard@36.0.1"
           - "postcss-html@1.7.0"
       - id: eslint
         name: eslint
         language: node
-        entry: ./frontend/node_modules/eslint/bin/eslint.js --max-warnings 0
+        entry:
+          ./frontend/node_modules/eslint/bin/eslint.js --config
+          frontend/eslint.config.mjs --fix --max-warnings 0
         require_serial: true
-        files: frontend/.*\.(js|ts|svelte)$
+        files: frontend/.*\.(js|mjs|ts|svelte)$

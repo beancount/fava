@@ -3,7 +3,6 @@
 
   import { _ } from "../i18n";
   import { hierarchyChartMode, treemapCurrency } from "../stores/chart";
-
   import type { HierarchyChart } from "./hierarchy";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";

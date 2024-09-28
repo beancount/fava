@@ -8,7 +8,6 @@
 
   import { chartToggledCurrencies, lineChartMode } from "../stores/chart";
   import { ctx, short } from "../stores/format";
-
   import Axis from "./Axis.svelte";
   import { currenciesScale, includeZero, padExtent } from "./helpers";
   import type { LineChart, LineChartDatum } from "./line";

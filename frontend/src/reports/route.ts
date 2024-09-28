@@ -1,7 +1,6 @@
 import type { SvelteComponent } from "svelte";
 
 import { log_error } from "../log";
-
 import ErrorSvelte from "./Error.svelte";
 
 /** This class pairs the components and their load functions to use them in a type-safe way. */
