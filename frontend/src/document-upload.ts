@@ -41,12 +41,12 @@ function dragleave(event: Event, closestTarget: Element): void {
 delegate(document, "dragleave", ".droptarget", dragleave);
 
 function handleDocumentUpload(event: Event) {
-  const eventTarget = event.target as HTMLInputElement
+  const eventTarget = event.target as HTMLInputElement;
   if (eventTarget.files) {
     processFiles(eventTarget, eventTarget.files);
   }
 }
-delegate(document, 'change', '.posting-file-uploader', handleDocumentUpload);
+delegate(document, "change", ".posting-file-uploader", handleDocumentUpload);
 
 /* Stores that the Svelte component accesses. */
 export const account = writable("");
@@ -63,7 +63,7 @@ function processFiles(targetElement: Element, rawFiles: FileList) {
   const targetAccount = targetElement.getAttribute("data-account-name");
 
   // Hash of the entry that the document should be attached to.
-  const targetEntry = targetElement.getAttribute("data-entry");  
+  const targetEntry = targetElement.getAttribute("data-entry");
 
   const date = targetElement.getAttribute("data-entry-date") ?? todayAsString();
   const uploadedFiles: DroppedFile[] = [];
