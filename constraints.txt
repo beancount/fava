@@ -25,7 +25,7 @@ blinker==1.8.2
     # via flask
 bottle==0.13.1
     # via beancount
-build==1.2.2
+build==1.2.2.post1
     # via fava (pyproject.toml)
 cachetools==5.5.0
     # via
@@ -56,7 +56,7 @@ coverage==7.6.1
     # via pytest-cov
 cryptography==43.0.1
     # via secretstorage
-dill==0.3.8
+dill==0.3.9
     # via pylint
 distlib==0.3.8
     # via virtualenv
@@ -84,7 +84,7 @@ furo==2024.8.6
     # via fava (pyproject.toml)
 google-api-core==2.20.0
     # via google-api-python-client
-google-api-python-client==2.147.0
+google-api-python-client==2.148.0
     # via beancount
 google-auth==2.35.0
     # via
@@ -130,7 +130,7 @@ jaraco-classes==3.4.0
     # via keyring
 jaraco-context==6.0.1
     # via keyring
-jaraco-functools==4.0.2
+jaraco-functools==4.1.0
     # via
     #   cheroot
     #   keyring
@@ -255,7 +255,7 @@ pyparsing==3.1.4
     # via httplib2
 pyproject-api==1.8.0
     # via tox
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via build
 pytest==8.3.3
     # via
@@ -287,7 +287,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.8.1
+rich==13.9.2
     # via twine
 rsa==4.9
     # via google-auth
@@ -334,7 +334,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 texttable==1.7.0
     # via pyexcel
-tomli==2.0.1
+tomli==2.0.2
     # via
     #   build
     #   coverage
@@ -345,7 +345,7 @@ tomli==2.0.1
     #   tox
 tomlkit==0.13.2
     # via pylint
-tox==4.20.0
+tox==4.21.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
@@ -364,6 +364,7 @@ typing-extensions==4.12.2
     #   mypy
     #   pylint
     #   rich
+    #   tox
     #   tox-uv
 uritemplate==4.1.1
     # via google-api-python-client
@@ -371,9 +372,9 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.16
+uv==0.4.19
     # via tox-uv
-virtualenv==20.26.5
+virtualenv==20.26.6
     # via
     #   pre-commit
     #   tox
