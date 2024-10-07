@@ -12,6 +12,8 @@ frontend/node_modules: frontend/package-lock.json
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
+.PHONY: dev
+dev: .venv
 .venv: constraints.txt requirements.txt pyproject.toml
 	uv venv --allow-existing
 	uv pip sync requirements.txt
