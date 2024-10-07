@@ -64,7 +64,8 @@ def test_ingest_file_import_info(
     info = file_import_info(str(test_data_dir / "import.csv"), importer)
     assert info.account == "Assets:Checking"
 
-    info2 = file_import_info("/asdf/basename", Imp("rawfile"))
+    abs_path = str(Path("/asdf/basename").resolve(strict=False))
+    info2 = file_import_info(abs_path, Imp("rawfile"))
     assert isinstance(info2.account, str)
     assert info2 == FileImportInfo(
         "rawfile",
@@ -74,7 +75,7 @@ def test_ingest_file_import_info(
     )
 
     with pytest.raises(FavaAPIError) as err:
-        file_import_info("/asdf/basename", Invalid("rawfile"))
+        file_import_info(abs_path, Invalid("rawfile"))
     assert "Some error reason..." in err.value.message
 
 

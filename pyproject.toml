@@ -29,12 +29,13 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Office/Business :: Financial :: Accounting",
     "Topic :: Office/Business :: Financial :: Investment",
 ]
 dependencies = [
-    "Babel>=2.7,<3",
+    "Babel>=2.11,<3",
     "Flask-Babel>=1,<5",
     "Flask>=2.2,<4",
     "Jinja2>=3,<4",
@@ -90,7 +91,7 @@ old_deps_pins = [
     "bottle>=0.12.20",  # older ones didn't build
     "importlib_metadata>=3.6",
     "jaraco-functools>=4",
-    "lxml>=5",  # older ones don't have wheels for recent Python versions
+    "lxml>=5.3.0",  # older ones don't have wheels for recent Python versions
     "more-itertools>=6",
     "pytest>=7.2",  # also used for running the tests of Fava, needs to somewhat recent
     "python-dateutil>=2",

@@ -372,7 +372,7 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.19
+uv==0.4.20
     # via tox-uv
 virtualenv==20.26.6
     # via

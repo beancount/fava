@@ -4,7 +4,7 @@ anyio==3.0.0
     # via watchfiles
 attrs==19.2.0
     # via pytest
-babel==2.7.0
+babel==2.11.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
@@ -64,7 +64,7 @@ lml==0.0.1
     # via
     #   pyexcel
     #   pyexcel-io
-lxml==5.0.0
+lxml==5.3.0
     # via
     #   fava (pyproject.toml)
     #   beancount

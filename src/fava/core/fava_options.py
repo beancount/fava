@@ -13,7 +13,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
 from pathlib import Path
-from typing import Pattern
 from typing import TYPE_CHECKING
 
 from babel.core import Locale
@@ -27,6 +26,7 @@ from fava.util.date import parse_fye_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from re import Pattern
 
     from fava.beans.abc import Custom
     from fava.util.date import FiscalYearEnd

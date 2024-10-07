@@ -9,9 +9,9 @@ from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
 from decimal import Decimal
+from re import Pattern
 from typing import Any
 from typing import Iterable
-from typing import Pattern
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Booking
