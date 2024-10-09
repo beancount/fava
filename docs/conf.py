@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.napoleon",
@@ -23,14 +25,16 @@ autodoc_default_options = {"members": True, "undoc-members": True}
 typehints_use_rtype = False
 
 
-def skip_namedtuples(_app, _what, _name, obj, _options, _lines):
+def skip_namedtuples(
+    _app: Any, _what: Any, _name: Any, obj: Any, _options: Any, _lines: Any
+) -> bool | None:
     docstr = obj.__doc__
     if isinstance(docstr, str) and docstr.startswith("Alias for field number"):
         return True
     return None
 
 
-def setup(app):
+def setup(app: Any) -> None:
     app.connect("autodoc-skip-member", skip_namedtuples)
 
 

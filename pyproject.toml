@@ -187,9 +187,8 @@ max-args = 9
 
 [tool.ruff.lint.per-file-ignores]
 "contrib/**" = ["D", "INP"]
-"docs/**" = ["D", "ANN", "INP"]
+"docs/**" = ["D", "INP"]
 "tests/conftest.py" = ["S101"]
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP"]
-"stubs/**" = ["D"]
 "src/fava/core/filters.py" = ["D"]
