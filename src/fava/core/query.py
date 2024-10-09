@@ -148,10 +148,10 @@ class InventoryColumn(BaseColumn):
 
     @staticmethod
     def serialise(  # type: ignore[override]
-        val: Inventory,
-    ) -> SimpleCounterInventory:
+        val: Inventory | None,
+    ) -> SimpleCounterInventory | None:
         """Serialise an inventory."""
-        return simple_units(val)
+        return simple_units(val) if val is not None else None
 
 
 COLUMNS = {
