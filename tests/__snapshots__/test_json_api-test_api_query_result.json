@@ -247,7 +247,7 @@
     },
     {
       "dtype": "Inventory",
-      "name": "sum_position"
+      "name": "SUM((position))"
     }
   ]
 }

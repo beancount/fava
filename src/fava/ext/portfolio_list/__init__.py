@@ -17,7 +17,6 @@ from fava.ext import FavaExtensionBase
 from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.funcs import ResultType
     from fava.core.tree import Tree
     from fava.core.tree import TreeNode
 
@@ -36,7 +35,7 @@ class Portfolio:
 
     title: str
     rows: list[Row]
-    types: tuple[ResultType, ...] = (
+    types: tuple[tuple[str, type[str | Decimal]], ...] = (
         ("account", str),
         ("balance", Decimal),
         ("allocation", Decimal),

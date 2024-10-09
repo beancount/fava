@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Unreleased (Beancount v3 support)
+---------------------------------
+
+Support for Beancount version 3 was added. Using Beancount 2 is still
+supported. Beancount query support is now provided by the beanquery package,
+which has some minor differences in syntax, the provided columns and functions
+to the bean-query functionality in Beancount version 2.
+
 v1.29 (2024-10-09)
 ------------------
 
