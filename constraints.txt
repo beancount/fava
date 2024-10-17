@@ -4,7 +4,7 @@ alabaster==0.7.13
     # via sphinx
 altgraph==0.17.4
     # via pyinstaller
-anyio==4.5.0
+anyio==4.5.2
     # via watchfiles
 astroid==3.2.4
     # via pylint
@@ -23,7 +23,7 @@ beautifulsoup4==4.12.3
     #   furo
 blinker==1.8.2
     # via flask
-bottle==0.13.1
+bottle==0.13.2
     # via beancount
 build==1.2.2.post1
     # via fava (pyproject.toml)
@@ -42,7 +42,7 @@ chardet==5.2.0
     #   beancount
     #   pyexcel
     #   tox
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
     # via requests
 cheroot==10.0.1
     # via fava (pyproject.toml)
@@ -58,7 +58,7 @@ cryptography==43.0.1
     # via secretstorage
 dill==0.3.9
     # via pylint
-distlib==0.3.8
+distlib==0.3.9
     # via virtualenv
 docutils==0.20.1
     # via
@@ -82,9 +82,9 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 furo==2024.8.6
     # via fava (pyproject.toml)
-google-api-core==2.20.0
+google-api-core==2.21.0
     # via google-api-python-client
-google-api-python-client==2.148.0
+google-api-python-client==2.149.0
     # via beancount
 google-auth==2.35.0
     # via
@@ -157,7 +157,7 @@ lxml==5.3.0
     #   pyexcel-ods3
 markdown-it-py==3.0.0
     # via rich
-markdown2==2.5.0
+markdown2==2.5.1
     # via fava (pyproject.toml)
 markupsafe==2.1.5
     # via
@@ -172,7 +172,7 @@ more-itertools==10.5.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.11.2
+mypy==1.12.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -245,9 +245,9 @@ pygments==2.18.0
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.10.0
+pyinstaller==6.11.0
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2024.8
+pyinstaller-hooks-contrib==2024.9
     # via pyinstaller
 pylint==3.2.7
     # via fava (pyproject.toml)
@@ -293,7 +293,7 @@ rsa==4.9
     # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==75.1.0
+setuptools==75.2.0
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -345,15 +345,15 @@ tomli==2.0.2
     #   tox
 tomlkit==0.13.2
     # via pylint
-tox==4.21.2
+tox==4.23.0
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.13.0
+tox-uv==1.13.1
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==75.1.0.20240917
+types-setuptools==75.1.0.20241014
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240801
     # via fava (pyproject.toml)
@@ -372,7 +372,7 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.20
+uv==0.4.23
     # via tox-uv
 virtualenv==20.26.6
     # via

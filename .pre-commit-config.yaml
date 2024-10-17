@@ -25,7 +25,7 @@ repos:
         files: \.(css|svelte)$
         require_serial: true
         additional_dependencies:
-          - "stylelint@16.9.0"
+          - "stylelint@16.10.0"
           - "stylelint-config-recess-order@5.1.1"
           - "stylelint-config-standard@36.0.1"
           - "postcss-html@1.7.0"
