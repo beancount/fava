@@ -182,15 +182,15 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
     if key not in All_OPTS:
         raise UnknownOptionError(key)
 
-    value = entry.values[1].value if len(entry.values) > 1 else None
-    if value and not isinstance(value, str):
+    value = entry.values[1].value if len(entry.values) > 1 else ""
+    if not isinstance(value, str):
         raise NotAStringOptionError(key)
     filename, lineno = get_position(entry)
 
     if key == "collapse_pattern":
         options.set_collapse_pattern(value)
     elif key == "default_file":
-        options.default_file = value if value is not None else filename
+        options.default_file = value or filename
     elif key == "fiscal_year_end":
         options.set_fiscal_year_end(value)
     elif key == "insert_entry":

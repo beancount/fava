@@ -77,7 +77,7 @@ class SimpleCounterInventory(Dict[str, Decimal]):
         counter = SimpleCounterInventory()
         for currency, number in self.items():
             pos = _Position(_Amount(number, currency), None)
-            amount = reducer(pos, *args)
+            amount = reducer(pos, *args)  # type: ignore[call-arg]
             counter.add(amount.currency, amount.number)
         return counter
 
@@ -132,7 +132,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         counter = SimpleCounterInventory()
         for (currency, cost), number in self.items():
             pos = _Position(_Amount(number, currency), cost)
-            amount = reducer(pos, *args)
+            amount = reducer(pos, *args)  # type: ignore[call-arg]
             counter.add(amount.currency, amount.number)
         return counter
 
