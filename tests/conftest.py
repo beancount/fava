@@ -5,12 +5,12 @@ from __future__ import annotations
 import os
 import re
 import shutil
+from collections import Counter
 from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
 from typing import Any
 from typing import Callable
-from typing import Counter
 from typing import TYPE_CHECKING
 
 import pytest

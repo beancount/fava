@@ -66,7 +66,7 @@ from fava.util import slugify
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Iterable
+    from collections.abc import Iterable
 
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse

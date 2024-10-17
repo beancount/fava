@@ -5,8 +5,6 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 from operator import attrgetter
-from typing import Dict
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from fava.beans.abc import Open
@@ -19,6 +17,7 @@ from fava.core.inventory import CounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Iterable
 
     from fava.beans.abc import Directive
     from fava.beans.prices import FavaPriceMap
@@ -115,7 +114,7 @@ class TreeNode:
         )
 
 
-class Tree(Dict[str, TreeNode]):
+class Tree(dict[str, TreeNode]):
     """Account tree.
 
     Args:

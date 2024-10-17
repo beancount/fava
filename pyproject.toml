@@ -3,7 +3,7 @@ name = "fava"
 dynamic = ["version"]
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {text = "MIT License"}
 authors = [
   {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
@@ -24,7 +24,6 @@ classifiers = [
     "Natural Language :: English",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -132,7 +131,7 @@ disable = [
     "broad-except",                  # is checked by ruff (BLE)
     "too-many-return-statements",    # is checked by ruff (PLR0911)
     "too-many-arguments",            # is checked by ruff (PLR0913)
-    # "too-many-positional-arguments", # is checked by ruff (PLR0917)
+    "too-many-positional-arguments", # is checked by ruff (PLR0917)
     "redefined-builtin",             # is checked by ruff (A002)
     "protected-access",              # is checked by ruff (SLF001)
     "invalid-name",                  # is checked by ruff (N)
@@ -144,7 +143,7 @@ disable = [
 filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 preview = true
 line-length = 79
 

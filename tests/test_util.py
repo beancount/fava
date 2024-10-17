@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from babel import Locale
@@ -15,6 +14,7 @@ from fava.util import simple_wsgi
 from fava.util import slugify
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
     from pathlib import Path
 
     from flask import Flask

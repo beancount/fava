@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Dict
 from typing import TYPE_CHECKING
 
 from fava.beans.abc import Balance
@@ -113,7 +112,7 @@ class AccountData:
     last_entry: LastEntry | None = None
 
 
-class AccountDict(FavaModule, Dict[str, AccountData]):
+class AccountDict(FavaModule, dict[str, AccountData]):
     """Account info dictionary."""
 
     EMPTY = AccountData()

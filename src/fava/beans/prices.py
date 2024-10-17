@@ -6,12 +6,12 @@ import datetime
 from bisect import bisect
 from collections import Counter
 from collections import defaultdict
+from collections.abc import Sequence
 from decimal import Decimal
-from typing import Iterable
-from typing import Sequence
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
     from typing import TypeAlias
 
     from fava.beans.abc import Price

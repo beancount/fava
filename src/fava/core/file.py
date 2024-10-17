@@ -10,7 +10,6 @@ from dataclasses import replace
 from hashlib import sha256
 from operator import attrgetter
 from pathlib import Path
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from markupsafe import Markup
@@ -36,6 +35,7 @@ from fava.util import next_key
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Iterable
 
     from fava.beans.abc import Directive
     from fava.core import FavaLedger

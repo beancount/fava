@@ -11,7 +11,6 @@ from datetime import timedelta
 from decimal import Decimal
 from re import Pattern
 from typing import Any
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Booking
@@ -33,6 +32,8 @@ from fava.core.tree import Tree
 from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
+
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory

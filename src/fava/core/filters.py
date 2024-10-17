@@ -8,7 +8,6 @@ from abc import abstractmethod
 from decimal import Decimal
 from typing import Any
 from typing import Callable
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
@@ -21,6 +20,8 @@ from fava.util.date import DateRange
 from fava.util.date import parse_date
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
+
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.core.fava_options import FavaOptions

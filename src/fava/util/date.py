@@ -18,8 +18,8 @@ from typing import TYPE_CHECKING
 from flask_babel import gettext  # type: ignore[import-untyped]
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Iterable
-    from typing import Iterator
+    from collections.abc import Iterable
+    from collections.abc import Iterator
     from typing import Never
 
 
