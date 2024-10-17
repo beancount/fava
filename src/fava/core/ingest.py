@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import os
 import sys
 import traceback
 from dataclasses import dataclass
+from inspect import signature
 from os import altsep
 from os import sep
 from pathlib import Path
@@ -12,11 +14,20 @@ from runpy import run_path
 from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.ingest import cache  # type: ignore[import-untyped]
-from beancount.ingest import extract
-from beancount.ingest import identify
+try:  # pragma: no cover
+    from beancount.ingest import cache  # type: ignore[import-untyped]
+    from beancount.ingest import extract
+
+    DEFAULT_HOOKS = [extract.find_duplicate_entries]
+    BEANGULP = False
+except ImportError:
+    from beangulp import cache  # type: ignore[import-untyped]
+
+    DEFAULT_HOOKS = []
+    BEANGULP = True
 
 from fava.beans.ingest import BeanImporterProtocol
+from fava.core.file import _incomplete_sortkey
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
@@ -24,8 +35,10 @@ from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Iterable
 
     from fava.beans.abc import Directive
+    from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
 
 
@@ -61,6 +74,57 @@ class MissingImporterDirsError(FavaAPIError):
         super().__init__("You need to set at least one imports-dir.")
 
 
+IGNORE_DIRS = {
+    ".cache",
+    ".git",
+    ".hg",
+    ".idea",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pycache__",
+    "node_modules",
+}
+
+
+def walk_dir(directory: Path) -> Iterable[Path]:
+    """Walk through all files in dir.
+
+    Args:
+        directory: The directory to start in.
+
+    Yields:
+        All full paths under directory, ignoring some directories.
+    """
+    for root, dirs, filenames in os.walk(directory):
+        dirs[:] = sorted(d for d in dirs if d not in IGNORE_DIRS)
+        root_path = Path(root)
+        for filename in sorted(filenames):
+            yield root_path / filename
+
+
+# Keep our own cache to also keep track of file mtimes
+_CACHE: dict[str, tuple[int, FileMemo]] = {}
+
+
+def get_cached_file(filename: str) -> FileMemo:
+    """Get a cached FileMemo.
+
+    This checks the file's mtime before getting it from the Cache.
+    In addition to using the beangulp cache.
+    """
+    mtime = Path(filename).stat().st_mtime_ns
+    cached = _CACHE.get(filename)
+    if cached:
+        mtime_cached, memo_cached = cached
+        if mtime <= mtime_cached:
+            return memo_cached
+    memo: FileMemo = cache._FileMemo(filename)  # noqa: SLF001
+    cache._CACHE[filename] = memo  # noqa: SLF001
+    _CACHE[filename] = (mtime, memo)
+    return memo
+
+
 @dataclass(frozen=True)
 class FileImportInfo:
     """Info about one file/importer combination."""
@@ -85,7 +149,7 @@ def file_import_info(
     importer: BeanImporterProtocol,
 ) -> FileImportInfo:
     """Generate info about a file with an importer."""
-    file = cache.get_file(filename)
+    file = get_cached_file(filename)
     try:
         account = importer.file_account(file)
         date = importer.file_date(file)
@@ -99,6 +163,64 @@ def file_import_info(
         date or local_today(),
         name or Path(filename).name,
     )
+
+
+# Copied here from beangulp to minimise the imports.
+_FILE_TOO_LARGE_THRESHOLD = 8 * 1024 * 1024
+
+
+def find_imports(
+    config: list[Any], directory: Path
+) -> Iterable[FileImporters]:
+    """Pair files and matching importers.
+
+    Yields:
+        For each file in directory, a pair of its filename and the matching
+        importers.
+    """
+    for filename in walk_dir(directory):
+        stat = filename.stat()
+        if stat.st_size > _FILE_TOO_LARGE_THRESHOLD:
+            continue
+
+        file = get_cached_file(str(filename))
+        importers = [
+            file_import_info(str(filename), importer)
+            for importer in config
+            if importer.identify(file)
+        ]
+        yield FileImporters(
+            name=str(filename), basename=filename.name, importers=importers
+        )
+
+
+def extract_from_file(
+    importer: Any, filename: str, existing_entries: list[Directive]
+) -> list[Directive]:
+    """Import entries from a document.
+
+    Args:
+      importer: The importer instance to handle the document.
+      filename: Filesystem path to the document.
+      existing_entries: Existing entries.
+
+    Returns:
+      The list of imported entries.
+    """
+    file = get_cached_file(filename)
+    entries = (
+        importer.extract(file, existing_entries=existing_entries)
+        if "existing_entries" in signature(importer.extract).parameters
+        else importer.extract(file)
+    )
+    if not entries:
+        return []
+
+    if hasattr(importer, "sort"):
+        importer.sort(entries)
+    else:
+        entries.sort(key=_incomplete_sortkey)
+    return entries  # type: ignore[no-any-return]
 
 
 class IngestModule(FavaModule):
@@ -149,7 +271,7 @@ class IngestModule(FavaModule):
 
         self.mtime = module_path.stat().st_mtime_ns
         self.config = mod["CONFIG"]
-        self.hooks = [extract.find_duplicate_entries]
+        self.hooks = list(DEFAULT_HOOKS)
         if "HOOKS" in mod:
             hooks = mod["HOOKS"]
             if not isinstance(hooks, list) or not all(
@@ -179,18 +301,10 @@ class IngestModule(FavaModule):
         if not self.config:
             return []
 
-        ret = []
-
+        ret: list[FileImporters] = []
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)
-            files = list(identify.find_imports(self.config, str(full_path)))
-            for filename, importers in files:
-                base = Path(filename).name
-                infos = [
-                    file_import_info(filename, importer)
-                    for importer in importers
-                ]
-                ret.append(FileImporters(filename, base, infos))
+            ret.extend(find_imports(self.config, full_path))
 
         return ret
 
@@ -214,9 +328,9 @@ class IngestModule(FavaModule):
             self.load_file()
 
         try:
-            new_entries = extract.extract_from_file(
-                filename,
+            new_entries = extract_from_file(
                 self.importers.get(importer_name),
+                filename,
                 existing_entries=self.ledger.all_entries,
             )
         except Exception as exc:
