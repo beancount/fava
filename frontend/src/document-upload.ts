@@ -40,6 +40,14 @@ function dragleave(event: Event, closestTarget: Element): void {
 }
 delegate(document, "dragleave", ".droptarget", dragleave);
 
+function handleDocumentUpload(event: Event) {
+  const eventTarget = event.target as HTMLInputElement;
+  if (eventTarget.files) {
+    processFiles(eventTarget, eventTarget.files);
+  }
+}
+delegate(document, "change", ".posting-file-uploader", handleDocumentUpload);
+
 /* Stores that the Svelte component accesses. */
 export const account = writable("");
 export const hash = writable("");
@@ -49,6 +57,28 @@ interface DroppedFile {
   name: string;
 }
 export const files: Writable<DroppedFile[]> = writable([]);
+
+function processFiles(targetElement: Element, rawFiles: FileList) {
+  // Account name that the document should be attached to.
+  const targetAccount = targetElement.getAttribute("data-account-name");
+
+  // Hash of the entry that the document should be attached to.
+  const targetEntry = targetElement.getAttribute("data-entry");
+
+  const date = targetElement.getAttribute("data-entry-date") ?? todayAsString();
+  const uploadedFiles: DroppedFile[] = [];
+
+  for (const dataTransferFile of rawFiles) {
+    let { name } = dataTransferFile;
+    if (!/^\d{4}-\d{2}-\d{2}/.test(name)) {
+      name = `${date} ${name}`;
+    }
+    uploadedFiles.push({ dataTransferFile, name });
+  }
+  account.set(targetAccount ?? "");
+  hash.set(targetEntry ?? "");
+  files.set(uploadedFiles);
+}
 
 function drop(event: Event, target: Element): void {
   if (!(event instanceof DragEvent)) {
@@ -67,19 +97,7 @@ function drop(event: Event, target: Element): void {
   const targetEntry = target.getAttribute("data-entry");
 
   if (event.dataTransfer.types.includes("Files")) {
-    // Files are being dropped.
-    const date = target.getAttribute("data-entry-date") ?? todayAsString();
-    const uploadedFiles: DroppedFile[] = [];
-    for (const dataTransferFile of event.dataTransfer.files) {
-      let { name } = dataTransferFile;
-      if (!/^\d{4}-\d{2}-\d{2}/.test(name)) {
-        name = `${date} ${name}`;
-      }
-      uploadedFiles.push({ dataTransferFile, name });
-    }
-    account.set(targetAccount ?? "");
-    hash.set(targetEntry ?? "");
-    files.set(uploadedFiles);
+    processFiles(target, event.dataTransfer.files);
   } else if (event.dataTransfer.types.includes("text/uri-list")) {
     // Links are being dropped
     const url = event.dataTransfer.getData("URL");
