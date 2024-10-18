@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -15,6 +16,8 @@ from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImporters
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
+from fava.core.ingest import ImportConfigLoadError
+from fava.core.ingest import load_import_config
 from fava.helpers import FavaAPIError
 from fava.serialisation import serialise
 from fava.util.date import local_today
@@ -78,6 +81,17 @@ def test_ingest_file_import_info(
     with pytest.raises(FavaAPIError) as err:
         file_import_info(str(csv_path), Invalid("rawfile"))
     assert "Some error reason..." in err.value.message
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="different error on windows"
+)
+def test_load_import_config() -> None:
+    with pytest.raises(ImportConfigLoadError, match=".*ImportError.*"):
+        load_import_config(Path(__file__).parent)
+
+    with pytest.raises(ImportConfigLoadError, match=".*CONFIG is missing.*"):
+        load_import_config(Path(__file__))
 
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
