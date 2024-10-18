@@ -11,7 +11,6 @@ from os import altsep
 from os import sep
 from pathlib import Path
 from runpy import run_path
-from typing import Any
 from typing import TYPE_CHECKING
 
 try:  # pragma: no cover
@@ -36,10 +35,14 @@ from fava.util.date import local_today
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Iterable
+    from typing import Callable
 
     from fava.beans.abc import Directive
     from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
+
+    HookOutput = list[tuple[str, list[Directive]]]
+    Hooks = list[Callable[[HookOutput, list[Directive]], HookOutput]]
 
 
 class IngestError(BeancountError):
@@ -72,6 +75,10 @@ class MissingImporterDirsError(FavaAPIError):
 
     def __init__(self) -> None:
         super().__init__("You need to set at least one imports-dir.")
+
+
+class ImportConfigLoadError(FavaAPIError):
+    """Error on loading the import config."""
 
 
 IGNORE_DIRS = {
@@ -170,7 +177,7 @@ _FILE_TOO_LARGE_THRESHOLD = 8 * 1024 * 1024
 
 
 def find_imports(
-    config: list[Any], directory: Path
+    config: list[BeanImporterProtocol], directory: Path
 ) -> Iterable[FileImporters]:
     """Pair files and matching importers.
 
@@ -195,7 +202,9 @@ def find_imports(
 
 
 def extract_from_file(
-    importer: Any, filename: str, existing_entries: list[Directive]
+    importer: BeanImporterProtocol,
+    filename: str,
+    existing_entries: list[Directive],
 ) -> list[Directive]:
     """Import entries from a document.
 
@@ -220,7 +229,53 @@ def extract_from_file(
         importer.sort(entries)
     else:
         entries.sort(key=_incomplete_sortkey)
-    return entries  # type: ignore[no-any-return]
+    return entries
+
+
+def load_import_config(
+    module_path: Path,
+) -> tuple[dict[str, BeanImporterProtocol], Hooks]:
+    """Load the given import config and extract importers and hooks.
+
+    Args:
+        module_path: Path to the import config.
+
+    Returns:
+        A pair of the importers (by name) and the list of hooks.
+    """
+    try:
+        mod = run_path(str(module_path))
+    except Exception as error:
+        message = "".join(traceback.format_exception(*sys.exc_info()))
+        raise ImportConfigLoadError(message) from error
+
+    if "CONFIG" not in mod:
+        msg = "CONFIG is missing"
+        raise ImportConfigLoadError(msg)
+    if not isinstance(mod["CONFIG"], list):
+        msg = "CONFIG is not a list"
+        raise ImportConfigLoadError(msg)
+
+    config = mod["CONFIG"]
+    hooks = list(DEFAULT_HOOKS)
+    if "HOOKS" in mod:
+        hooks = mod["HOOKS"]
+        if not isinstance(hooks, list) or not all(
+            callable(fn) for fn in hooks
+        ):
+            msg = "HOOKS is not a list of callables"
+            raise ImportConfigLoadError(msg)
+    importers = {}
+    for importer in config:
+        if not isinstance(importer, BeanImporterProtocol):
+            name = importer.__class__.__name__
+            msg = (
+                f"Importer class '{name}' in '{module_path}' does "
+                "not satisfy importer protocol"
+            )
+            raise ImportConfigLoadError(msg)
+        importers[importer.name()] = importer
+    return importers, hooks
 
 
 class IngestModule(FavaModule):
@@ -228,9 +283,8 @@ class IngestModule(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.config: list[Any] = []
         self.importers: dict[str, BeanImporterProtocol] = {}
-        self.hooks: list[Any] = []
+        self.hooks: Hooks = []
         self.mtime: int | None = None
 
     @property
@@ -255,42 +309,20 @@ class IngestModule(FavaModule):
             return
         module_path = self.module_path
 
-        if not module_path.exists() or module_path.is_dir():
-            self._error(f"File does not exist: '{module_path}'")
+        if not module_path.exists():
+            self._error("Import config does not exist")
             return
 
-        if module_path.stat().st_mtime_ns == self.mtime:
+        new_mtime = module_path.stat().st_mtime_ns
+        if new_mtime == self.mtime:
             return
 
         try:
-            mod = run_path(str(self.module_path))
-        except Exception:  # noqa: BLE001
-            message = "".join(traceback.format_exception(*sys.exc_info()))
-            self._error(f"Error in importer '{module_path}': {message}")
-            return
-
-        self.mtime = module_path.stat().st_mtime_ns
-        self.config = mod["CONFIG"]
-        self.hooks = list(DEFAULT_HOOKS)
-        if "HOOKS" in mod:
-            hooks = mod["HOOKS"]
-            if not isinstance(hooks, list) or not all(
-                callable(fn) for fn in hooks
-            ):
-                message = "HOOKS is not a list of callables"
-                self._error(f"Error in importer '{module_path}': {message}")
-            else:
-                self.hooks = hooks
-        self.importers = {}
-        for importer in self.config:
-            if not isinstance(importer, BeanImporterProtocol):
-                name = importer.__class__.__name__
-                self._error(
-                    f"Importer class '{name}' in '{module_path}' does "
-                    "not satisfy importer protocol",
-                )
-            else:
-                self.importers[importer.name()] = importer
+            self.importers, self.hooks = load_import_config(module_path)
+            self.mtime = new_mtime
+        except ImportConfigLoadError as error:
+            msg = f"Error in import config '{module_path}': {error!s}"
+            self._error(msg)
 
     def import_data(self) -> list[FileImporters]:
         """Identify files and importers that can be imported.
@@ -298,13 +330,15 @@ class IngestModule(FavaModule):
         Returns:
             A list of :class:`.FileImportInfo`.
         """
-        if not self.config:
+        if not self.importers:
             return []
+
+        importers = list(self.importers.values())
 
         ret: list[FileImporters] = []
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)
-            ret.extend(find_imports(self.config, full_path))
+            ret.extend(find_imports(importers, full_path))
 
         return ret
 
@@ -329,16 +363,14 @@ class IngestModule(FavaModule):
 
         try:
             new_entries = extract_from_file(
-                self.importers.get(importer_name),
+                self.importers[importer_name],
                 filename,
                 existing_entries=self.ledger.all_entries,
             )
         except Exception as exc:
             raise ImporterExtractError(importer_name, exc) from exc
 
-        new_entries_list: list[tuple[str, list[Directive]]] = [
-            (filename, new_entries),
-        ]
+        new_entries_list = [(filename, new_entries)]
         for hook_fn in self.hooks:
             new_entries_list = hook_fn(
                 new_entries_list,
