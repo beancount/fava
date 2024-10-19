@@ -31,8 +31,15 @@ class FavaExtensionError(BeancountError):
 
 
 class JinjaLoaderMissingError(ValueError):  # noqa: D101
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # pragma: no cover
         super().__init__("Expected Flask app to have jinja_loader.")
+
+
+class ExtensionConfigError(ValueError):  # noqa: D101
+    def __init__(self, error: SyntaxError, config: str) -> None:
+        super().__init__(
+            f"Could not load extension config: {error} in '{config}'."
+        )
 
 
 class FavaExtensionBase:
@@ -59,8 +66,12 @@ class FavaExtensionBase:
             ledger: Input ledger file.
             config: Configuration options string passed from the
                     beancount file's 'fava-extension' line.
+
+        Raises:
+            ExtensionConfigError: If the config cannot be parsed.
         """
         self.endpoints = {}
+        self.config = None
 
         # Go through each of the subclass's functions to find the ones
         # marked as endpoints by @extension_endpoint
@@ -71,10 +82,11 @@ class FavaExtensionBase:
                     self.endpoints[name, method] = func
 
         self.ledger = ledger
-        try:
-            self.config = ast.literal_eval(config) if config else None
-        except ValueError:
-            self.config = None
+        if config:
+            try:
+                self.config = ast.literal_eval(config)
+            except SyntaxError as error:
+                raise ExtensionConfigError(error, config) from error
 
     @property
     def name(self) -> str:
@@ -89,7 +101,7 @@ class FavaExtensionBase:
     @cached_property
     def jinja_env(self) -> jinja2.Environment:
         """Jinja env for this extension."""
-        if not current_app.jinja_loader:
+        if not current_app.jinja_loader:  # pragma: no cover
             raise JinjaLoaderMissingError
         ext_loader = jinja2.FileSystemLoader(self.extension_dir / "templates")
         loader = jinja2.ChoiceLoader([ext_loader, current_app.jinja_loader])

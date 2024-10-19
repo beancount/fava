@@ -95,7 +95,9 @@ CLIENT_SIDE_REPORTS = [
 ]
 
 
-if not mimetypes.types_map.get(".js", "").endswith("/javascript"):
+if not mimetypes.types_map.get(".js", "").endswith(
+    "/javascript"
+):  # pragma: no cover
     # This is sometimes broken on windows, see
     # https://github.com/beancount/fava/issues/1446
     logging.error("Invalid mimetype set for '.js', overriding")
@@ -246,12 +248,10 @@ def _setup_filters(
             g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
 
     @fava_app.errorhandler(FavaAPIError)
-    def fava_api_exception(error: FavaAPIError) -> str:
+    def fava_api_exception(error: FavaAPIError) -> str:  # pragma: no cover
         """Handle API errors."""
         return render_template(
-            "_layout.html",
-            page_title="Error",
-            content=error.message,
+            "_layout.html", page_title="Error", content=error.message
         )
 
 
@@ -269,9 +269,9 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         return redirect(f"{index_url}{default_page}")
 
     @fava_app.route("/<bfile>/account/<name>/")
-    def account(name: str) -> str:
+    def account(name: str) -> str:  # noqa: ARG001
         """Get the account report."""
-        return render_template("_layout.html", content="", name=name)
+        return render_template("_layout.html", content="")
 
     @fava_app.route("/<bfile>/document/", methods=["GET"])
     def document() -> Response:

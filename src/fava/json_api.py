@@ -290,8 +290,7 @@ def get_move(account: str, new_name: str, filename: str) -> str:
     if new_path.exists():
         raise TargetPathAlreadyExistsError(new_path)
 
-    if not new_path.parent.exists():
-        new_path.parent.mkdir(parents=True)
+    new_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(filename, new_path)
 
     return f"Moved {filename} to {new_path}."
@@ -370,7 +369,7 @@ def put_add_document() -> str:
 
     upload = request.files.get("file", None)
 
-    if not upload:
+    if upload is None:
         raise NoFileUploadedError
     if not upload.filename:
         raise UploadedFileIsMissingFilenameError
@@ -385,9 +384,7 @@ def put_add_document() -> str:
     if filepath.exists():
         raise TargetPathAlreadyExistsError(filepath)
 
-    if not filepath.parent.exists():
-        filepath.parent.mkdir(parents=True)
-
+    filepath.parent.mkdir(parents=True, exist_ok=True)
     upload.save(filepath)
 
     if request.form.get("hash"):
@@ -425,7 +422,7 @@ def put_upload_import_file() -> str:
     """Upload a file for importing."""
     upload = request.files.get("file", None)
 
-    if not upload:
+    if upload is None:
         raise NoFileUploadedError
     if not upload.filename:
         raise UploadedFileIsMissingFilenameError
@@ -434,9 +431,7 @@ def put_upload_import_file() -> str:
     if filepath.exists():
         raise TargetPathAlreadyExistsError(filepath)
 
-    if not filepath.parent.exists():
-        filepath.parent.mkdir(parents=True)
-
+    filepath.parent.mkdir(parents=True, exist_ok=True)
     upload.save(filepath)
 
     return f"Uploaded to {filepath}"

@@ -124,6 +124,7 @@ disable = [
     "too-many-instance-attributes",
     "too-many-locals",                # is checked by ruff (PLR0914)
     "duplicate-code",
+    "unused-argument",                # is checked by ruff (ARG001)
     "stop-iteration-return",
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives

@@ -21,7 +21,7 @@ def load_uncached(
     is_encrypted: bool,
 ) -> LoaderResult:
     """Load a Beancount file."""
-    if is_encrypted:
+    if is_encrypted:  # pragma: no cover
         return loader.load_file(beancount_file_path)
 
     return loader._load(  # type: ignore[attr-defined,no-any-return]  # noqa: SLF001

@@ -39,7 +39,7 @@ def get_locale_format(locale: Locale | None, precision: int) -> Formatter:
         return fmt
 
     pattern = copy.copy(locale.decimal_formats.get(None))
-    if not pattern:
+    if not pattern:  # pragma: no cover
         msg = "Expected Locale to have a decimal format pattern"
         raise ValueError(msg)
     pattern.frac_prec = (precision, precision)
@@ -64,7 +64,9 @@ class DecimalFormatModule(FavaModule):
         locale = None
 
         locale_option = self.ledger.fava_options.locale
-        if self.ledger.options["render_commas"] and not locale_option:
+        if (
+            self.ledger.options["render_commas"] and not locale_option
+        ):  # pragma: no cover
             locale_option = "en"
             self.ledger.fava_options.locale = locale_option
 

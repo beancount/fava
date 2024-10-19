@@ -10,6 +10,7 @@ from beancount.core.amount import (  # type: ignore[attr-defined]
     A as BEANCOUNT_A,
 )
 from beancount.core.amount import Amount as BeancountAmount
+from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
 from fava.beans.abc import Amount
@@ -20,7 +21,9 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Balance
     from fava.beans.abc import Cost
+    from fava.beans.abc import Document
     from fava.beans.abc import Meta
+    from fava.beans.abc import Note
     from fava.beans.abc import Position
     from fava.beans.abc import Posting
     from fava.beans.abc import TagsOrLinks
@@ -29,15 +32,15 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 @overload
-def amount(amt: Amount) -> Amount: ...
+def amount(amt: Amount) -> Amount: ...  # pragma: no cover
 
 
 @overload
-def amount(amt: str) -> Amount: ...
+def amount(amt: str) -> Amount: ...  # pragma: no cover
 
 
 @overload
-def amount(amt: Decimal, currency: str) -> Amount: ...
+def amount(amt: Decimal, currency: str) -> Amount: ...  # pragma: no cover
 
 
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
@@ -46,13 +49,23 @@ def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
         return amt
     if isinstance(amt, str):
         return BEANCOUNT_A(amt)  # type: ignore[no-any-return]
-    if not isinstance(currency, str):
+    if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
     return BeancountAmount(amt, currency)  # type: ignore[return-value]
 
 
+def cost(
+    number: Decimal,
+    currency: str,
+    date: datetime.date,
+    label: str | None = None,
+) -> Cost:
+    """Create a Cost."""
+    return BeancountCost(number, currency, date, label)  # type: ignore[return-value]
+
+
 def position(units: Amount, cost: Cost | None) -> Position:
-    """Create a position."""
+    """Create a Position."""
     return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
 
 
@@ -119,12 +132,26 @@ def balance(
     )
 
 
+def document(
+    meta: Meta,
+    date: datetime.date,
+    account: str,
+    filename: str,
+    tags: TagsOrLinks | None = None,
+    links: TagsOrLinks | None = None,
+) -> Document:
+    """Create a Beancount Document."""
+    return data.Document(  # type: ignore[return-value]
+        meta, date, account, filename, tags, links
+    )
+
+
 def note(
     meta: Meta,
     date: datetime.date,
     account: str,
     comment: str,
-) -> Balance:
+) -> Note:
     """Create a Beancount Note."""
     return data.Note(  # type: ignore[return-value]
         meta,

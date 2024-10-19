@@ -29,7 +29,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
 
-def filter_api_changed(record: logging.LogRecord) -> bool:
+def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.getMessage()
 

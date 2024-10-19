@@ -20,11 +20,12 @@ def test_budgets(load_doc_custom_entries: list[Custom]) -> None:
     2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
     2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR
     2016-06-01 custom "budget" Expenses:Groceries "asdfasdf"  10.00 EUR
+    2016-01-01 custom "budget" Expenses:Groceries "weekly"
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
     budgets, errors = parse_budgets(load_doc_custom_entries)
 
-    assert len(errors) == 2
+    assert len(errors) == 3
 
     empty = calculate_budget(
         budgets,

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import re
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -74,7 +75,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     assert options.collapse_pattern == [re.compile("Account:Name")]
     assert options.fiscal_year_end == FiscalYearEnd(1, 11)
     assert options.conversion_currencies == ("USD", "EUR", "HOOLI")
-    assert options.default_file == "/some/file/name"
+    assert options.default_file == str(Path("/some/file/name").absolute())
 
 
 def test_fava_options_language() -> None:

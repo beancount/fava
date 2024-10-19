@@ -2,10 +2,19 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
+from pathlib import Path
 from typing import TYPE_CHECKING
 
+import pytest
+
+from fava.beans import create
+from fava.beans.abc import Note
 from fava.beans.abc import Price
 from fava.beans.account import parent
+from fava.beans.account import root
+from fava.beans.funcs import get_position
+from fava.beans.funcs import hash_entry
+from fava.beans.helpers import replace
 from fava.beans.prices import FavaPriceMap
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -17,6 +26,55 @@ def test_account_parent() -> None:
     assert parent("Assets:Cash") == "Assets"
     assert parent("Assets:Cash:AA") == "Assets:Cash"
     assert parent("Assets:asdfasdf") == "Assets"
+    assert root("Assets:asdfasdf:asdfasdf") == "Assets"
+    assert root("Assets:asdfasdf") == "Assets"
+
+
+def test_hash_entry() -> None:
+    date = datetime.date(2022, 4, 2)
+    note = create.note(
+        {"filename": str(Path(__file__)), "lineno": 1},
+        date,
+        "Assets:Cash",
+        "a note",
+    )
+    assert isinstance(hash_entry(note), str)
+    str_hash = hash_entry("asdf")  # type: ignore[arg-type]
+    assert isinstance(str_hash, str)
+
+
+def test_get_position() -> None:
+    date = datetime.date(2022, 4, 2)
+    path = str(Path(__file__))
+    note = create.note(
+        {"filename": path, "lineno": 1}, date, "Assets:Cash", "a note"
+    )
+
+    assert get_position(note) == (path, 1)
+
+    with pytest.raises(KeyError):
+        get_position(replace(note, meta={}))
+
+    with pytest.raises(ValueError, match="Invalid filename or lineno"):
+        get_position(replace(note, meta={"filename": 1, "lineno": 1}))
+
+
+def test_replace() -> None:
+    date = datetime.date(2022, 4, 2)
+    note = create.note(
+        {"filename": str(Path(__file__)), "lineno": 1},
+        date,
+        "Assets:Cash",
+        "a note",
+    )
+    assert note.comment == "a note"
+    assert isinstance(note, Note)
+    note_new = replace(note, comment="asdfasdf")
+    assert note.comment == "a note"
+    assert note_new.comment == "asdfasdf"
+
+    with pytest.raises(TypeError):
+        replace("", a="")  # type: ignore[type-var]
 
 
 def test_fava_price_map(load_doc_entries: list[Directive]) -> None:

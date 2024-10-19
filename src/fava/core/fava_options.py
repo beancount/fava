@@ -123,10 +123,7 @@ class FavaOptions:
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
-        if value is not None:
-            self.default_file = str(Path(value).absolute())
-        else:
-            self.default_file = filename
+        self.default_file = str(Path(value).absolute()) if value else filename
 
     def set_fiscal_year_end(self, value: str) -> None:
         """Set the fiscal_year_end option."""
@@ -190,7 +187,7 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
     if key == "collapse_pattern":
         options.set_collapse_pattern(value)
     elif key == "default_file":
-        options.default_file = value or filename
+        options.set_default_file(value, filename)
     elif key == "fiscal_year_end":
         options.set_fiscal_year_end(value)
     elif key == "insert_entry":

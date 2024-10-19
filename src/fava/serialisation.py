@@ -33,7 +33,7 @@ from fava.util.date import parse_date
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
-    if not isinstance(entry, Directive):
+    if not isinstance(entry, Directive):  # pragma: no cover
         msg = f"Unsupported object {entry}"
         raise TypeError(msg)
     ret = entry._asdict()  # type: ignore[attr-defined]

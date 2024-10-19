@@ -55,7 +55,7 @@ class BeanImporterProtocol(Protocol):
         file: FileMemo,  # noqa: ARG002
         *,
         existing_entries: list[Directive] | None = None,  # noqa: ARG002
-    ) -> list[Directive] | None:
+    ) -> list[Directive] | None:  # pragma: no cover
         """Extract transactions from a file."""
         return None
 

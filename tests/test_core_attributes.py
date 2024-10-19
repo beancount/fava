@@ -18,6 +18,9 @@ def test_get_active_years(load_doc_entries: list[Directive]) -> None:
     2011-11-12 * "test"
         Assets:T   4.00 USD
         Expenses:T
+    2011-11-12 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
     2012-12-12 * "test"
         Assets:T   4.00 USD
         Expenses:T

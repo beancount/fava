@@ -80,9 +80,6 @@ class BudgetModule(FavaModule):
             end_date,
         )
 
-    def __bool__(self) -> bool:
-        return bool(self.budget_entries)
-
 
 def parse_budgets(
     custom_entries: list[Custom],

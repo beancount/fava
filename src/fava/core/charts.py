@@ -55,9 +55,9 @@ def _json_default(o: Any) -> Any:
         return o.pattern
     if is_dataclass(o):
         return {field.name: getattr(o, field.name) for field in fields(o)}
-    if o is MISSING:
+    if o is MISSING:  # pragma: no cover
         return None
-    raise TypeError
+    raise TypeError  # pragma: no cover
 
 
 def dumps(obj: Any, **_kwargs: Any) -> str:

@@ -54,7 +54,16 @@ def test_client_side_reports(
     """The client-side rendered reports are generated."""
     result = test_client.get("/long-example/documents/")
     assert result.status_code == 200
-    snapshot(result.get_data(as_text=True))
+    documents_html = result.get_data(as_text=True)
+    snapshot(documents_html)
+
+    result = test_client.get("/long-example/account/Assets/")
+    assert result.status_code == 200
+    assert documents_html == result.get_data(as_text=True)
+
+    result = test_client.get("/long-example/holdings/by_account/")
+    assert result.status_code == 200
+    assert documents_html == result.get_data(as_text=True)
 
 
 @pytest.mark.parametrize(
@@ -63,6 +72,8 @@ def test_client_side_reports(
         ("/", 302),
         ("/asdfasdf/", 404),
         ("/asdfasdf/asdfasdf/", 404),
+        ("/example/document/", 404),
+        ("/example/document/?filename=not-path", 404),
         ("/example/not-a-report/", 404),
         ("/example/holdings/not-a-holdings-aggregation-key/", 404),
         ("/example/holdings/by_not-a-holdings-aggregation-key/", 404),

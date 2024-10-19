@@ -75,7 +75,7 @@ class Token:
         self.type = type_
         self.value = value
 
-    def __repr__(self) -> str:
+    def __repr__(self) -> str:  # pragma: no cover
         return f"Token({self.type}, {self.value})"
 
 
@@ -164,7 +164,7 @@ class FilterSyntaxLexer:
                 value = match.group()
                 pos += len(value)
                 token = match.lastgroup
-                if token is None:
+                if token is None:  # pragma: no cover
                     msg = "Internal Error"
                     raise ValueError(msg)
                 func: Callable[[str, str], tuple[str, str]] = getattr(
@@ -214,7 +214,7 @@ class MatchAmount:
             self.match = lambda x: x <= value
         elif op == ">":
             self.match = lambda x: x > value
-        elif op == "<":
+        else:  # op == "<":
             self.match = lambda x: x < value
 
     def __call__(self, obj: Any) -> bool:

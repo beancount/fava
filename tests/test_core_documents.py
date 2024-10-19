@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.beans import create
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.group_entries import group_entries_by_type
 from fava.helpers import FavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -17,9 +20,18 @@ def test_is_document_or_import_file(
     example_ledger: FavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    path = str(Path(__file__))
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test/"])
+    monkeypatch.setattr(
+        example_ledger,
+        "all_entries_by_type",
+        group_entries_by_type([
+            create.document({}, datetime.date(2022, 1, 1), "Assets", path)
+        ]),
+    )
     assert not is_document_or_import_file("/asdfasdf", example_ledger)
     assert not is_document_or_import_file("/test/../../err", example_ledger)
+    assert is_document_or_import_file(path, example_ledger)
     assert is_document_or_import_file("/test/err/../err", example_ledger)
     assert is_document_or_import_file("/test/err/../err", example_ledger)
 
