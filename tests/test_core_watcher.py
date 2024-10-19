@@ -14,7 +14,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 ONE_MILLISECOND = 0.001
-FIVE_MILLISECONDS = 0.005
+TEN_MILLISECONDS = 0.010
 
 
 @dataclass
@@ -44,7 +44,7 @@ def test_watcher_file(watcher_paths: WatcherTestSet) -> None:
     watcher = Watcher()
     watcher.update([watcher_paths.file1, watcher_paths.file2], [])
     assert not watcher.check()
-    time.sleep(FIVE_MILLISECONDS)
+    time.sleep(TEN_MILLISECONDS)
     watcher_paths.file1.write_text("test2")
     assert watcher.check()
 
@@ -55,7 +55,7 @@ def test_watcher_deleted_file(watcher_paths: WatcherTestSet) -> None:
     assert not watcher.check()
     watcher_paths.file1.unlink()
 
-    time.sleep(FIVE_MILLISECONDS)
+    time.sleep(TEN_MILLISECONDS)
     assert watcher.check()
 
 
@@ -66,7 +66,7 @@ def test_watcher_folder(watcher_paths: WatcherTestSet) -> None:
     watcher.update([], [watcher_paths.folder])
     assert not watcher.check()
 
-    time.sleep(FIVE_MILLISECONDS)
+    time.sleep(TEN_MILLISECONDS)
     (watcher_paths.folder / "bar2").mkdir()
     assert watcher.check()
 
@@ -128,7 +128,7 @@ def test_watchfiles_watcher_recognises_change_to_previously_deleted_file(
         # Recreate deleted file
         # sleep to ensure file stamp is greater than time_ns() taken on
         #  previous FileNotFoundError
-        time.sleep(FIVE_MILLISECONDS)
+        time.sleep(TEN_MILLISECONDS)
         watcher_paths.file1.write_text("test-value-2")
         assert _watcher_poll_check(watcher)
         assert not watcher.check()
