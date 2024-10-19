@@ -248,11 +248,11 @@ def _setup_filters(
             g.ledger = fava_app.config["LEDGERS"][g.beancount_file_slug]
 
     @fava_app.errorhandler(FavaAPIError)
-    def fava_api_exception(error: FavaAPIError) -> str:  # pragma: no cover
+    def fava_api_exception(error: FavaAPIError) -> tuple[str, int]:
         """Handle API errors."""
         return render_template(
             "_layout.html", page_title="Error", content=error.message
-        )
+        ), 500
 
 
 def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
@@ -293,9 +293,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         "/<bfile>/holdings"
         "/by_<any(account,currency,cost_currency):aggregation_key>/",
     )
-    def holdings_by(
-        **_kwargs: str,
-    ) -> str:
+    def holdings_by(**_kwargs: str) -> str:
         """Get the client-side-rendered holdings report."""
         return render_template("_layout.html", content="")
 

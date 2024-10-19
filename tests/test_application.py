@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import datetime
+from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
@@ -12,11 +14,14 @@ from fava import __version__ as fava_version
 from fava.application import create_app
 from fava.application import SERVER_SIDE_REPORTS
 from fava.application import static_url
+from fava.beans import create
+from fava.beans.funcs import hash_entry
 from fava.context import g
+from fava.core import StatementMetadataInvalidError
+from fava.core import StatementNotFoundError
+from fava.core.group_entries import group_entries_by_type
 
 if TYPE_CHECKING:  # pragma: no cover
-    from pathlib import Path
-
     from flask import Flask
     from flask.testing import FlaskClient
 
@@ -195,6 +200,70 @@ def test_query_download(test_client: FlaskClient) -> None:
         "/long-example/download-query/query_result.csv?query_string=balances",
     )
     assert result.status_code == 200
+
+
+def test_statement_download(
+    app: Flask, test_client: FlaskClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Download entry statement."""
+
+    path = Path(__file__)
+    by_account = path.parent.parent / "found_by_account"
+    date = datetime.date(2022, 1, 1)
+    txn = create.transaction(
+        {
+            "filename": str(path),
+            "lineno": 1,
+            "statement": path.name,
+            "account-statement": "found_by_account",
+            "missing-statement": "asdf",
+        },
+        date,
+        "*",
+        "payee",
+        "narration",
+        frozenset(),
+        frozenset(),
+        [create.posting("Assets:Cash", create.amount("10 EUR"))],
+    )
+    txn_hash = hash_entry(txn)
+    entries = [
+        create.document({}, date, "Assets:Cash", str(by_account)),
+        create.document({}, date, "Assets", str(path)),
+        txn,
+    ]
+
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+
+        monkeypatch.setattr(g.ledger, "all_entries", entries)
+        monkeypatch.setattr(
+            g.ledger, "all_entries_by_type", group_entries_by_type(entries)
+        )
+        assert g.ledger.get_entry(txn_hash) == txn
+        with pytest.raises(StatementMetadataInvalidError):
+            g.ledger.statement_path(txn_hash, "asdf")
+        with pytest.raises(StatementMetadataInvalidError):
+            g.ledger.statement_path(txn_hash, "lineno")
+        with pytest.raises(StatementNotFoundError):
+            g.ledger.statement_path(txn_hash, "missing-statement")
+        assert Path(g.ledger.statement_path(txn_hash, "statement")) == path
+        assert (
+            Path(g.ledger.statement_path(txn_hash, "account-statement"))
+            == by_account
+        )
+
+        result = test_client.get(
+            "/long-example/statement/",
+            query_string={"entry_hash": txn_hash, "key": "statement"},
+        )
+        assert result.status_code == 200
+
+        result = test_client.get(
+            "/long-example/statement/",
+            query_string={"entry_hash": "asdf", "key": "asdf"},
+        )
+        assert result.status_code == 500
 
 
 def test_incognito(test_data_dir: Path) -> None:

@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from collections import defaultdict
 from typing import NamedTuple
+from typing import TYPE_CHECKING
 
 from fava.beans import abc
 from fava.beans.account import get_entry_accounts
+
+if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
 
 
 class EntriesByType(NamedTuple):
@@ -26,7 +30,7 @@ class EntriesByType(NamedTuple):
     Transaction: list[abc.Transaction]
 
 
-def group_entries_by_type(entries: list[abc.Directive]) -> EntriesByType:
+def group_entries_by_type(entries: Sequence[abc.Directive]) -> EntriesByType:
     """Group entries by type.
 
     Arguments:

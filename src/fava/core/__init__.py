@@ -64,6 +64,29 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.util.date import Interval
 
 
+class EntryNotFoundForHashError(FavaAPIError):
+    """Entry not found for hash."""
+
+    def __init__(self, entry_hash: str) -> None:
+        super().__init__(f'No entry found for hash "{entry_hash}"')
+
+
+class StatementNotFoundError(FavaAPIError):
+    """Statement not found."""
+
+    def __init__(self) -> None:
+        super().__init__("Statement not found.")
+
+
+class StatementMetadataInvalidError(FavaAPIError):
+    """Statement metadata not found or invalid."""
+
+    def __init__(self, key: str) -> None:
+        super().__init__(
+            f"Statement path at key '{key}' missing or not a string."
+        )
+
+
 class FilteredLedger:
     """Filtered Beancount ledger."""
 
@@ -81,6 +104,7 @@ class FilteredLedger:
     def __init__(
         self,
         ledger: FavaLedger,
+        *,
         account: str | None = None,
         filter: str | None = None,  # noqa: A002
         time: str | None = None,
@@ -281,7 +305,9 @@ class FavaLedger:
         )
         self.errors.extend(errors)
 
-        if not self._is_encrypted:
+        if self._is_encrypted:  # pragma: no cover
+            pass
+        else:
             self.watcher.update(*self.paths_to_watch())
 
         # Call load_file of all modules.
@@ -361,7 +387,7 @@ class FavaLedger:
             document folder was detected and the file has been reloaded.
         """
         # We can't reload an encrypted file, so act like it never changes.
-        if self._is_encrypted:
+        if self._is_encrypted:  # pragma: no cover
             return False
         changed = self.watcher.check()
         if changed:
@@ -472,7 +498,7 @@ class FavaLedger:
             The entry with the given hash.
 
         Raises:
-            FavaAPIError: If there is no entry for the given hash.
+            EntryNotFoundForHashError: If there is no entry for the given hash.
         """
         try:
             return next(
@@ -481,8 +507,7 @@ class FavaLedger:
                 if entry_hash == hash_entry(entry)
             )
         except StopIteration as exc:
-            msg = f'No entry found for hash "{entry_hash}"'
-            raise FavaAPIError(msg) from exc
+            raise EntryNotFoundForHashError(entry_hash) from exc
 
     def context(
         self,
@@ -545,26 +570,40 @@ class FavaLedger:
         return self.prices.commodity_pairs(self.options["operating_currency"])
 
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
-        """Get the path for a statement found in the specified entry."""
+        """Get the path for a statement found in the specified entry.
+
+        The entry that we look up should contain a path to a document (absolute
+        or relative to the filename of the entry) or just its basename. We go
+        through all documents and match on the full path or if one of the
+        documents with a matching account has a matching file basename.
+
+        Arguments:
+            entry_hash: Hash of the entry containing the path in its metadata.
+            metadata_key: The key that the path should be in.
+
+        Returns:
+            The filename of the matching document entry.
+
+        Raises:
+            StatementMetadataInvalidError: If the metadata at the given key is
+                                           invalid.
+            StatementNotFoundError: If no matching document is found.
+        """
         entry = self.get_entry(entry_hash)
-        value = entry.meta[metadata_key]
+        value = entry.meta.get(metadata_key, None)
         if not isinstance(value, str):
-            msg = "Statement path needs to be a string."
-            raise FavaAPIError(msg)
+            raise StatementMetadataInvalidError(metadata_key)
 
         accounts = set(get_entry_accounts(entry))
         filename, _ = get_position(entry)
         full_path = Path(filename).parent / value
         for document in self.all_entries_by_type.Document:
-            if document.filename == str(full_path):
+            document_path = Path(document.filename)
+            if document_path == full_path:
                 return document.filename
-            if (
-                document.account in accounts
-                and Path(document.filename).name == value
-            ):
+            if document.account in accounts and document_path.name == value:
                 return document.filename
 
-        msg = "Statement not found."
-        raise FavaAPIError(msg)
+        raise StatementNotFoundError
 
     group_entries_by_type = staticmethod(group_entries_by_type)

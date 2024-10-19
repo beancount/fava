@@ -110,8 +110,7 @@ def snapshot(
             filename = f"{filename}-{snap_count[fn_name]}"
 
         if json:
-            if not isinstance(data, str):
-                data = dumps(data)
+            data = dumps(data)
             filename += ".json"
 
         snap_file = snap_dir / filename

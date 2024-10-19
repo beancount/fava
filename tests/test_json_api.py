@@ -471,7 +471,7 @@ def test_api_add_entries(
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         test_file = tmp_path / "test_file"
-        test_file.open("a")
+        test_file.touch()
         monkeypatch.setattr(g.ledger, "beancount_file_path", str(test_file))
 
         entries = [
