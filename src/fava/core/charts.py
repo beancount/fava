@@ -9,9 +9,8 @@ from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
 from decimal import Decimal
+from re import Pattern
 from typing import Any
-from typing import Iterable
-from typing import Pattern
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Booking
@@ -33,6 +32,8 @@ from fava.core.tree import Tree
 from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
+
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
@@ -54,9 +55,9 @@ def _json_default(o: Any) -> Any:
         return o.pattern
     if is_dataclass(o):
         return {field.name: getattr(o, field.name) for field in fields(o)}
-    if o is MISSING:
+    if o is MISSING:  # pragma: no cover
         return None
-    raise TypeError
+    raise TypeError  # pragma: no cover
 
 
 def dumps(obj: Any, **_kwargs: Any) -> str:

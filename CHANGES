@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Unreleased
-----------
+v1.29 (2024-10-09)
+------------------
 
 With this release, query results are now rendered in the frontend. The
 templates for HTML rendering are still available but extension authors are

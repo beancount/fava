@@ -7,10 +7,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from fava.core.module_base import FavaModule
+from fava.ext import ExtensionConfigError
+from fava.ext import FavaExtensionError
 from fava.ext import find_extensions
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Custom
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
     from fava.ext import FavaExtensionBase
@@ -34,25 +35,39 @@ class ExtensionModule(FavaModule):
         self._loaded_extensions: set[type[FavaExtensionBase]] = set()
 
     def load_file(self) -> None:  # noqa: D102
-        all_extensions = []
         custom_entries = self.ledger.all_entries_by_type.Custom
-        _extension_entries = extension_entries(custom_entries)
 
-        for extension in _extension_entries:
+        seen = set()
+        for entry in (e for e in custom_entries if e.type == "fava-extension"):
+            extension = entry.values[0].value
+            if extension in seen:  # pragma: no cover
+                self.ledger.errors.append(
+                    FavaExtensionError(
+                        entry.meta, f"Duplicate extension '{extension}'", entry
+                    )
+                )
+                continue
+
+            seen.add(extension)
             extensions, errors = find_extensions(
                 Path(self.ledger.beancount_file_path).parent,
                 extension,
             )
-            all_extensions.extend(extensions)
             self.ledger.errors.extend(errors)
 
-        for cls in all_extensions:
-            module = cls.__module__
-            ext_config = _extension_entries.get(module, None)
-            if cls not in self._loaded_extensions:
-                self._loaded_extensions.add(cls)
-                ext = cls(self.ledger, ext_config)
-                self._instances[ext.name] = ext
+            for cls in extensions:
+                ext_config = (
+                    entry.values[1].value if len(entry.values) > 1 else None
+                )
+                if cls not in self._loaded_extensions:
+                    self._loaded_extensions.add(cls)
+                    try:
+                        ext = cls(self.ledger, ext_config)
+                        self._instances[ext.name] = ext
+                    except ExtensionConfigError as error:  # pragma: no cover
+                        self.ledger.errors.append(
+                            FavaExtensionError(entry.meta, str(error), entry)
+                        )
 
     @property
     def _exts(self) -> list[FavaExtensionBase]:
@@ -109,23 +124,3 @@ class ExtensionModule(FavaModule):
         """Run all `after_write_source` hooks."""
         for ext in self._exts:
             ext.after_write_source(path, source)
-
-
-def extension_entries(
-    custom_entries: list[Custom],
-) -> dict[str, str | None]:
-    """Parse custom entries for extensions.
-
-    They have the following format::
-
-        2016-04-01 custom "fava-extension" "my_extension" "{'my_option': {}}"
-    """
-    _extension_entries = [
-        entry for entry in custom_entries if entry.type == "fava-extension"
-    ]
-    return {
-        entry.values[0].value: (
-            entry.values[1].value if (len(entry.values) == 2) else None
-        )
-        for entry in _extension_entries
-    }

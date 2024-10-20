@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Iterable
 from typing import TYPE_CHECKING
 
+import pytest
 from babel import Locale
+from werkzeug.exceptions import NotFound
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -15,6 +16,7 @@ from fava.util import simple_wsgi
 from fava.util import slugify
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
     from pathlib import Path
 
     from flask import Flask
@@ -91,3 +93,5 @@ def test_send_file_inline(app: Flask, test_data_dir: Path) -> None:
             resp.headers["Content-Disposition"]
             == "inline; filename*=UTF-8''example-utf8-%F0%9F%A6%81.txt"
         )
+        with pytest.raises(NotFound):
+            resp = send_file_inline(str(test_data_dir / "non-existent-file"))

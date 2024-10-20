@@ -3,7 +3,7 @@ name = "fava"
 dynamic = ["version"]
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {text = "MIT License"}
 authors = [
   {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
@@ -24,17 +24,17 @@ classifiers = [
     "Natural Language :: English",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Office/Business :: Financial :: Accounting",
     "Topic :: Office/Business :: Financial :: Investment",
 ]
 dependencies = [
-    "Babel>=2.7,<3",
+    "Babel>=2.11,<3",
     "Flask-Babel>=1,<5",
     "Flask>=2.2,<4",
     "Jinja2>=3,<4",
@@ -90,7 +90,7 @@ old_deps_pins = [
     "bottle>=0.12.20",  # older ones didn't build
     "importlib_metadata>=3.6",
     "jaraco-functools>=4",
-    "lxml>=5",  # older ones don't have wheels for recent Python versions
+    "lxml>=5.3.0",  # older ones don't have wheels for recent Python versions
     "more-itertools>=6",
     "pytest>=7.2",  # also used for running the tests of Fava, needs to somewhat recent
     "python-dateutil>=2",
@@ -124,6 +124,7 @@ disable = [
     "too-many-instance-attributes",
     "too-many-locals",                # is checked by ruff (PLR0914)
     "duplicate-code",
+    "unused-argument",                # is checked by ruff (ARG001)
     "stop-iteration-return",
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives
@@ -131,7 +132,7 @@ disable = [
     "broad-except",                  # is checked by ruff (BLE)
     "too-many-return-statements",    # is checked by ruff (PLR0911)
     "too-many-arguments",            # is checked by ruff (PLR0913)
-    # "too-many-positional-arguments", # is checked by ruff (PLR0917)
+    "too-many-positional-arguments", # is checked by ruff (PLR0917)
     "redefined-builtin",             # is checked by ruff (A002)
     "protected-access",              # is checked by ruff (SLF001)
     "invalid-name",                  # is checked by ruff (N)
@@ -143,7 +144,7 @@ disable = [
 filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 preview = true
 line-length = 79
 
@@ -186,9 +187,8 @@ max-args = 9
 
 [tool.ruff.lint.per-file-ignores]
 "contrib/**" = ["D", "INP"]
-"docs/**" = ["D", "ANN", "INP"]
+"docs/**" = ["D", "INP"]
 "tests/conftest.py" = ["S101"]
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP"]
-"stubs/**" = ["D"]
 "src/fava/core/filters.py" = ["D"]

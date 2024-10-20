@@ -12,6 +12,8 @@ frontend/node_modules: frontend/package-lock.json
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
+.PHONY: dev
+dev: .venv
 .venv: constraints.txt requirements.txt pyproject.toml
 	uv venv --allow-existing
 	uv pip sync requirements.txt
@@ -61,8 +63,8 @@ update-snapshots:
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints
 update-constraints:
-	uv pip compile --quiet --extra excel --extra dev --python-version 3.8 --upgrade --output-file constraints.txt pyproject.toml
-	uv pip compile --quiet --extra excel --extra old_deps_pins --resolution=lowest --python-version 3.8 --upgrade --output-file constraints-old.txt pyproject.toml
+	uv pip compile --quiet --extra excel --extra dev --python-version 3.9 --upgrade --output-file constraints.txt pyproject.toml
+	uv pip compile --quiet --extra excel --extra old_deps_pins --resolution=lowest --python-version 3.9 --upgrade --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps

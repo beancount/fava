@@ -15,15 +15,15 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-        py: ["3.12", "3.8"]
+        py: ["3.13", "3.9"]
         toxenv: ["py", "old_deps"]
         include:
           - os: "macos-latest"
             toxenv: "py"
-            py: "3.12"
+            py: "3.13"
           - os: "windows-latest"
             toxenv: "py"
-            py: "3.12"
+            py: "3.13"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
       - uses: actions/setup-node@v4
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
       - run: python -m pip install -c constraints.txt tox tox-uv
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: "pip"
           cache-dependency-path: "constraints*.txt"
       - run: python -m pip install -c constraints.txt tox tox-uv

@@ -21,7 +21,7 @@ except ImportError:  # pragma: no cover
 
 
 class InvalidResultFormatError(ValueError):  # noqa: D101
-    def __init__(self, result_format: str) -> None:
+    def __init__(self, result_format: str) -> None:  # pragma: no cover
         super().__init__(f"Invalid result format: {result_format}")
 
 
@@ -42,7 +42,7 @@ def to_excel(
     Returns:
         The (binary) file contents.
     """
-    if result_format not in {"xlsx", "ods"}:
+    if result_format not in {"xlsx", "ods"}:  # pragma: no cover
         raise InvalidResultFormatError(result_format)
     resp = io.BytesIO()
     book = pyexcel.Book({
@@ -96,7 +96,7 @@ def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
         elif type_ is datetime.date:
             result.append(str(value))
         else:
-            if not isinstance(value, str):
+            if not isinstance(value, str):  # pragma: no cover
                 msg = f"unexpected type {type(value)}"
                 raise TypeError(msg)
             result.append(value)

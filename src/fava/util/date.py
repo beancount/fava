@@ -17,10 +17,11 @@ from typing import TYPE_CHECKING
 
 from flask_babel import gettext  # type: ignore[import-untyped]
 
+from fava.util.unreachable import assert_never
+
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Iterable
-    from typing import Iterator
-    from typing import Never
+    from collections.abc import Iterable
+    from collections.abc import Iterator
 
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
@@ -167,17 +168,6 @@ def get_prev_interval(
     return date
 
 
-class UnreachableCodeAssertionError(AssertionError):
-    """Expected code to be unreachable."""
-
-    def __init__(self) -> None:
-        super().__init__("Expected code to be unreachable")
-
-
-def _assert_never(_: Never) -> Never:  # pragma: no cover
-    raise UnreachableCodeAssertionError
-
-
 def get_next_interval(  # noqa: PLR0911
     date: datetime.date,
     interval: Interval,
@@ -207,7 +197,7 @@ def get_next_interval(  # noqa: PLR0911
             return date + timedelta(7 - date.weekday())
         if interval is Interval.DAY:
             return date + timedelta(1)
-        return _assert_never(interval)  # pragma: no cover
+        return assert_never(interval)  # pragma: no cover
     except (ValueError, OverflowError):
         return datetime.date.max
 
@@ -536,4 +526,4 @@ def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
     if interval is Interval.YEAR:
         date = datetime.date(date.year, 1, 1)
         return (get_next_interval(date, Interval.YEAR) - date).days
-    return _assert_never(interval)  # pragma: no cover
+    return assert_never(interval)  # pragma: no cover

@@ -7,7 +7,7 @@ import subprocess
 from itertools import chain
 from os import walk
 from pathlib import Path
-from typing import Iterable
+from typing import TYPE_CHECKING
 
 from babel.messages.mofile import write_mo
 from babel.messages.pofile import read_po
@@ -17,6 +17,9 @@ from setuptools.build_meta import get_requires_for_build_sdist
 from setuptools.build_meta import get_requires_for_build_wheel
 from setuptools.build_meta import prepare_metadata_for_build_editable
 from setuptools.build_meta import prepare_metadata_for_build_wheel
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 __all__ = [
     "build_editable",

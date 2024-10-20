@@ -70,37 +70,111 @@ def test_api_changed(test_client: FlaskClient) -> None:
     assert_api_success(response, data=False)
 
 
-def test_api_add_document(
+def test_api_add_document_and_move_and_delete(
     app: Flask,
     test_client: FlaskClient,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    add_url = "/long-example/api/add_document"
+    get_url = "/long-example/document/"
+    move_url = "/long-example/api/move"
+    delete_url = "/long-example/api/document"
+    account = "Expenses:Food:Restaurant"
+    account_dir = tmp_path / "Expenses" / "Food" / "Restaurant"
+
+    def _data(
+        filename: str,
+    ) -> dict[str, str | tuple[BytesIO, str]]:
+        return {
+            "folder": str(tmp_path),
+            "account": account,
+            "file": (BytesIO(b"asdfasdf"), filename),
+        }
+
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 
+        # error when no documents dir is set
+        monkeypatch.setitem(g.ledger.options, "documents", [])
+
+        response = test_client.put(add_url)
+        assert_api_error(response, "You need to set a documents folder.")
+
+        # upload to temporary directory
         monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])
-        request_data = {
-            "folder": str(tmp_path),
-            "account": "Expenses:Food:Restaurant",
-            "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
-        }
-        url = "/long-example/api/add_document"
-
-        response = test_client.put(url)
-        assert_api_error(response, "No file uploaded.")
-
-        filename = (
-            tmp_path / "Expenses" / "Food" / "Restaurant" / "2015-12-12 test"
+        monkeypatch.setattr(
+            g.ledger.fava_options, "import_dirs", [str(account_dir)]
         )
 
-        response = test_client.put(url, data=request_data)
-        assert_api_success(response, f"Uploaded to {filename}")
-        assert Path(filename).is_file()
+        response = test_client.put(add_url)
+        assert_api_error(response, "No file uploaded.")
 
-        request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12 test")
-        response = test_client.put(url, data=request_data)
+        response = test_client.put(add_url, data=_data(""))
+        assert_api_error(response, "Uploaded file is missing filename.")
+
+        filename = account_dir / "2015-12-12 test"
+        assert not filename.exists()
+        response = test_client.put(add_url, data=_data("2015-12-12 test"))
+        assert_api_success(response, f"Uploaded to {filename}")
+        assert filename.read_text() == "asdfasdf"
+        assert filename.is_file()
+
+        response = test_client.get(
+            get_url, query_string={"filename": str(filename)}
+        )
+        assert response.status_code == 200
+        assert response.get_data() == b"asdfasdf"
+
+        response = test_client.put(add_url, data=_data("2015-12-12 test"))
         assert_api_error(response, f"{filename} already exists.")
+
+        # move to same path should fail
+        response = test_client.get(
+            move_url,
+            query_string={
+                "account": account,
+                "filename": str(filename),
+                "new_name": "2015-12-12 test",
+            },
+        )
+        assert_api_error(response, f"{filename} already exists.")
+
+        response = test_client.get(
+            move_url,
+            query_string={
+                "account": account,
+                "filename": str(filename),
+                "new_name": "2015-12-12 test_moved",
+            },
+        )
+        new_filename = account_dir / "2015-12-12 test_moved"
+        assert_api_success(response, f"Moved {filename} to {new_filename}.")
+        assert not filename.exists()
+        assert new_filename.exists()
+
+        # delete
+        invalid_filename = tmp_path / "asdf"
+        response = test_client.delete(
+            delete_url,
+            query_string={"filename": str(invalid_filename)},
+        )
+        assert_api_error(
+            response,
+            f"Not valid document or import file: '{invalid_filename}'.",
+        )
+
+        response = test_client.delete(
+            delete_url,
+            query_string={"filename": str(filename)},
+        )
+        assert_api_error(response, f"{filename} does not exist.")
+
+        response = test_client.delete(
+            delete_url,
+            query_string={"filename": str(new_filename)},
+        )
+        assert_api_success(response, f"Deleted {new_filename}.")
 
 
 def test_api_upload_import_file(
@@ -109,31 +183,35 @@ def test_api_upload_import_file(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    url = "/long-example/api/upload_import_file"
+
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 
         monkeypatch.setattr(
-            g.ledger.fava_options,
-            "import_dirs",
-            [str(tmp_path)],
+            g.ledger.fava_options, "import_dirs", [str(tmp_path)]
         )
-        request_data = {
-            "file": (BytesIO(b"asdfasdf"), "recipt.pdf"),
-        }
-        url = "/long-example/api/upload_import_file"
 
         response = test_client.put(url)
         assert_api_error(response, "No file uploaded.")
 
-        filename = tmp_path / "recipt.pdf"
+        response = test_client.put(
+            url, data={"file": (BytesIO(b"asdfasdf"), "")}
+        )
+        assert_api_error(response, "Uploaded file is missing filename.")
 
-        response = test_client.put(url, data=request_data)
+        filename = tmp_path / "receipt.pdf"
+        assert not filename.is_file()
+        response = test_client.put(
+            url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
+        )
         assert_api_success(response, f"Uploaded to {filename}")
-        assert Path(filename).is_file()
+        assert filename.is_file()
 
         # Uploading the exact same file should fail due to path conflict
-        request_data["file"] = (BytesIO(b"asdfasdf"), "recipt.pdf")
-        response = test_client.put(url, data=request_data)
+        response = test_client.put(
+            url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
+        )
         assert_api_error(response, f"{filename} already exists.")
 
 

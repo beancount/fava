@@ -21,6 +21,14 @@ def test_report_page_globals(get_ledger: GetFavaLedger) -> None:
             has_js_module=True,
         ),
     ]
+    extension_report_ledger.load_file()
+    assert result == [
+        ExtensionDetails(
+            "FavaExtTest",
+            "Fava extension test",
+            has_js_module=True,
+        ),
+    ]
 
     extension_report_ledger.extensions.after_write_source("test", "test")
 

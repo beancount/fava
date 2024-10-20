@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 from os import environ
 from pathlib import Path
-from typing import Iterable
+from typing import TYPE_CHECKING
 
 import requests
 from beancount.query import query_env
@@ -16,6 +16,9 @@ from click import group
 from click import UsageError
 
 from fava import LOCALES
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 BASE_PATH = Path(__file__).parent.parent
 FAVA_PATH = BASE_PATH / "src" / "fava"

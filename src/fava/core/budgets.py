@@ -5,8 +5,6 @@ from __future__ import annotations
 from collections import Counter
 from collections import defaultdict
 from decimal import Decimal
-from typing import Dict
-from typing import List
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
@@ -33,7 +31,7 @@ class Budget(NamedTuple):
     currency: str
 
 
-BudgetDict = Dict[str, List[Budget]]
+BudgetDict = dict[str, list[Budget]]
 """A map of account names to lists of budget entries."""
 
 
@@ -81,9 +79,6 @@ class BudgetModule(FavaModule):
             begin_date,
             end_date,
         )
-
-    def __bool__(self) -> bool:
-        return bool(self.budget_entries)
 
 
 def parse_budgets(

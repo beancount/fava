@@ -16,10 +16,10 @@ from flask import abort
 from flask import send_file
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
     from collections.abc import Mapping
     from typing import Any
     from typing import Callable
-    from typing import Iterable
     from typing import ParamSpec
     from typing import TypeVar
 
@@ -29,7 +29,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
 
-def filter_api_changed(record: logging.LogRecord) -> bool:
+def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.getMessage()
 

@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from typing import AbstractSet
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Set as AbstractSet
 
 
 def add_to_set(set_: AbstractSet[str] | None, new: str) -> set[str]:

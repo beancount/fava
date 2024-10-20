@@ -8,7 +8,6 @@ import logging
 import threading
 from os import walk
 from pathlib import Path
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from watchfiles import DefaultFilter
@@ -16,6 +15,7 @@ from watchfiles import watch
 
 if TYPE_CHECKING:  # pragma: no cover
     import types
+    from collections.abc import Iterable
     from typing import Callable
 
     from watchfiles.main import Change

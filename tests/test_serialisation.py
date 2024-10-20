@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import sys
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -69,6 +70,10 @@ def test_serialise_txn() -> None:
     assert serialised == json_txn
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="skipped on Windows due to different absolute path",
+)
 def test_serialise_entry_types(
     snapshot: SnapshotFunc,
     load_doc_entries: list[Directive],

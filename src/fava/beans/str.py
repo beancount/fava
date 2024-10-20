@@ -41,12 +41,8 @@ def _(obj: Amount) -> str:
 @to_string.register(Cost)
 def cost_to_string(cost: Cost | protocols.Cost) -> str:
     """Convert a cost to a string."""
-    strs = [f"{cost.number} {cost.currency}"]
-    if cost.date:
-        strs.append(cost.date.isoformat())
-    if cost.label:
-        strs.append(f'"{cost.label}"')
-    return ", ".join(strs)
+    res = f"{cost.number} {cost.currency}, {cost.date.isoformat()}"
+    return f'{res}, "{cost.label}"' if cost.label else res
 
 
 @to_string.register(CostSpec)

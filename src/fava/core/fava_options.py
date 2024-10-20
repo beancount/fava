@@ -13,7 +13,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
 from pathlib import Path
-from typing import Pattern
 from typing import TYPE_CHECKING
 
 from babel.core import Locale
@@ -27,6 +26,7 @@ from fava.util.date import parse_fye_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from re import Pattern
 
     from fava.beans.abc import Custom
     from fava.util.date import FiscalYearEnd
@@ -123,10 +123,7 @@ class FavaOptions:
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
-        if value is not None:
-            self.default_file = str(Path(value).absolute())
-        else:
-            self.default_file = filename
+        self.default_file = str(Path(value).absolute()) if value else filename
 
     def set_fiscal_year_end(self, value: str) -> None:
         """Set the fiscal_year_end option."""
@@ -182,15 +179,15 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
     if key not in All_OPTS:
         raise UnknownOptionError(key)
 
-    value = entry.values[1].value if len(entry.values) > 1 else None
-    if value and not isinstance(value, str):
+    value = entry.values[1].value if len(entry.values) > 1 else ""
+    if not isinstance(value, str):
         raise NotAStringOptionError(key)
     filename, lineno = get_position(entry)
 
     if key == "collapse_pattern":
         options.set_collapse_pattern(value)
     elif key == "default_file":
-        options.default_file = value if value is not None else filename
+        options.set_default_file(value, filename)
     elif key == "fiscal_year_end":
         options.set_fiscal_year_end(value)
     elif key == "insert_entry":

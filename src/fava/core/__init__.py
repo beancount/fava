@@ -7,7 +7,6 @@ from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
 from pathlib import Path
-from typing import Iterable
 from typing import TYPE_CHECKING
 
 from beancount.core.data import iter_entry_dates
@@ -51,6 +50,7 @@ from fava.util import listify
 from fava.util.date import dateranges
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
     from decimal import Decimal
 
     from fava.beans.abc import Directive

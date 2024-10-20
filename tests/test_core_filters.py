@@ -190,11 +190,13 @@ def test_null_meta_posting() -> None:
 
 
 def test_account_filter(example_ledger: FavaLedger) -> None:
-    account_filter = AccountFilter("Assets")
+    account_filter = AccountFilter("")
+    filtered_entries = account_filter.apply(example_ledger.all_entries)
+    assert filtered_entries is example_ledger.all_entries
 
+    account_filter = AccountFilter("Assets")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 541
-
     for entry in filtered_entries:
         assert any(
             has_component(a, "Assets") for a in get_entry_accounts(entry)
