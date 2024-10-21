@@ -221,6 +221,7 @@ class FavaLedger:
         "fava_options",
         "file",
         "format_decimal",
+        "get_filtered",
         "ingest",
         "misc",
         "options",
@@ -251,6 +252,7 @@ class FavaLedger:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
+        self.get_filtered = lru_cache(maxsize=16)(self._get_filtered)
 
         #: An :class:`AttributesModule` instance.
         self.attributes = AttributesModule(self)
@@ -325,8 +327,7 @@ class FavaLedger:
 
         self.extensions.after_load_file()
 
-    @lru_cache(maxsize=16)  # noqa: B019
-    def get_filtered(
+    def _get_filtered(
         self,
         account: str | None = None,
         filter: str | None = None,  # noqa: A002

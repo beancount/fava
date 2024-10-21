@@ -245,8 +245,6 @@ def get_ledger(app: Flask) -> GetFavaLedger:
     """Getter for one of the loaded ledgers."""
 
     def _get_ledger(name: LedgerSlug) -> FavaLedger:
-        loaded_ledgers = app.config["LEDGERS"]
-        assert name in loaded_ledgers, loaded_ledgers.keys()
         ledger = app.config["LEDGERS"][name]
         assert isinstance(ledger, FavaLedger)
         return ledger
