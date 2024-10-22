@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -43,9 +44,13 @@ def test_validate_get_args() -> None:
     assert validator({"test": "value"}) == ["value"]
 
 
-def assert_api_error(response: TestResponse, msg: str | None = None) -> str:
+def assert_api_error(
+    response: TestResponse,
+    msg: str | None = None,
+    status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR,
+) -> str:
     """Asserts that the response errored and contains the message."""
-    assert response.status_code == 200
+    assert response.status_code == status.value
     assert response.json
     assert not response.json["success"], response.json
     err_msg = response.json["error"]
@@ -57,7 +62,7 @@ def assert_api_error(response: TestResponse, msg: str | None = None) -> str:
 
 def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
     """Asserts that the request was successful and contains the data."""
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK.value
     assert response.json
     assert response.json["success"], response.json
     if data is not None:
@@ -99,7 +104,11 @@ def test_api_add_document_and_move_and_delete(
         monkeypatch.setitem(g.ledger.options, "documents", [])
 
         response = test_client.put(add_url)
-        assert_api_error(response, "You need to set a documents folder.")
+        assert_api_error(
+            response,
+            "You need to set a documents folder.",
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        )
 
         # upload to temporary directory
         monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])
@@ -108,10 +117,14 @@ def test_api_add_document_and_move_and_delete(
         )
 
         response = test_client.put(add_url)
-        assert_api_error(response, "No file uploaded.")
+        assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
 
         response = test_client.put(add_url, data=_data(""))
-        assert_api_error(response, "Uploaded file is missing filename.")
+        assert_api_error(
+            response,
+            "Uploaded file is missing filename.",
+            HTTPStatus.BAD_REQUEST,
+        )
 
         filename = account_dir / "2015-12-12 test"
         assert not filename.exists()
@@ -123,11 +136,13 @@ def test_api_add_document_and_move_and_delete(
         response = test_client.get(
             get_url, query_string={"filename": str(filename)}
         )
-        assert response.status_code == 200
+        assert response.status_code == HTTPStatus.OK.value
         assert response.get_data() == b"asdfasdf"
 
         response = test_client.put(add_url, data=_data("2015-12-12 test"))
-        assert_api_error(response, f"{filename} already exists.")
+        assert_api_error(
+            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+        )
 
         # move to same path should fail
         response = test_client.get(
@@ -138,7 +153,9 @@ def test_api_add_document_and_move_and_delete(
                 "new_name": "2015-12-12 test",
             },
         )
-        assert_api_error(response, f"{filename} already exists.")
+        assert_api_error(
+            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+        )
 
         response = test_client.get(
             move_url,
@@ -162,6 +179,7 @@ def test_api_add_document_and_move_and_delete(
         assert_api_error(
             response,
             f"Not valid document or import file: '{invalid_filename}'.",
+            HTTPStatus.BAD_REQUEST,
         )
 
         response = test_client.delete(
@@ -193,12 +211,16 @@ def test_api_upload_import_file(
         )
 
         response = test_client.put(url)
-        assert_api_error(response, "No file uploaded.")
+        assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
 
         response = test_client.put(
             url, data={"file": (BytesIO(b"asdfasdf"), "")}
         )
-        assert_api_error(response, "Uploaded file is missing filename.")
+        assert_api_error(
+            response,
+            "Uploaded file is missing filename.",
+            HTTPStatus.BAD_REQUEST,
+        )
 
         filename = tmp_path / "receipt.pdf"
         assert not filename.is_file()
@@ -212,7 +234,9 @@ def test_api_upload_import_file(
         response = test_client.put(
             url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
         )
-        assert_api_error(response, f"{filename} already exists.")
+        assert_api_error(
+            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+        )
 
 
 def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
@@ -236,6 +260,7 @@ def test_api_context(
     assert_api_error(
         response,
         "Invalid API request: Parameter `entry_hash` is missing.",
+        HTTPStatus.BAD_REQUEST,
     )
 
     entry_hash = hash_entry(
@@ -267,7 +292,8 @@ def test_api_payee_accounts(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
 ) -> None:
-    assert_api_error(test_client.get("/long-example/api/payee_accounts"))
+    response = test_client.get("/long-example/api/payee_accounts")
+    assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
 
     response = test_client.get(
         "/long-example/api/payee_accounts",
@@ -319,11 +345,16 @@ def test_api_move(test_client: FlaskClient) -> None:
     assert_api_error(
         response,
         "Invalid API request: Parameter `account` is missing.",
+        HTTPStatus.BAD_REQUEST,
     )
 
     invalid = {"account": "Assets", "new_name": "new", "filename": "old"}
     response = test_client.get("/long-example/api/move", query_string=invalid)
-    assert_api_error(response, "You need to set a documents folder.")
+    assert_api_error(
+        response,
+        "You need to set a documents folder.",
+        HTTPStatus.UNPROCESSABLE_ENTITY,
+    )
 
     response = test_client.get("/import/api/move", query_string=invalid)
     assert_api_error(response, "Not a valid account: 'Assets'")
@@ -335,7 +366,9 @@ def test_api_move(test_client: FlaskClient) -> None:
             "account": "Assets:Checking",
         },
     )
-    assert_api_error(response, "Not a file: 'old'")
+    assert_api_error(
+        response, "Not a file: 'old'", HTTPStatus.UNPROCESSABLE_ENTITY
+    )
 
 
 def test_api_get_source_invalid_unicode(test_client: FlaskClient) -> None:
@@ -386,7 +419,7 @@ def test_api_source_put(app_in_tmp_dir: Flask) -> None:
     assert path.read_text("utf-8") == changed_source
 
     # write original source file
-    result = test_client.put(
+    response = test_client.put(
         url,
         json={
             "source": source,
@@ -394,7 +427,7 @@ def test_api_source_put(app_in_tmp_dir: Flask) -> None:
             "file_path": str(path),
         },
     )
-    assert result.status_code == 200
+    assert response.status_code == HTTPStatus.OK.value
     assert path.read_text("utf-8") == source
 
 
@@ -444,6 +477,7 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
     assert_api_error(
         response,
         "Invalid API request: Parameter `entry_hash` is missing.",
+        HTTPStatus.BAD_REQUEST,
     )
 
     entry = ledger.all_entries[-1]
@@ -526,6 +560,7 @@ def test_api_add_entries(
             err,
             "Invalid API request: Parameter `entries`"
             " of incorrect type - expected <class 'list'>.",
+            HTTPStatus.BAD_REQUEST,
         )
 
         response = test_client.put(url, json={"entries": entries})
@@ -580,8 +615,8 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
         "/long-example/api/query",
         query_string={"query_string": "nononono"},
     )
-    assert response.status_code == 200
-    assert "ERROR: Syntax error near" in response.get_data(as_text=True)
+    msg = assert_api_error(response)
+    assert "ERROR: Syntax error near" in msg
 
 
 def test_api_commodities_empty(

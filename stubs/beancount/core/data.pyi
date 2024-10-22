@@ -45,7 +45,7 @@ class Open(NamedTuple):
     date: datetime.date
     account: Account
     currencies: list[Currency]
-    booking: Booking
+    booking: Booking | None
 
 class Pad(NamedTuple):
     meta: Meta

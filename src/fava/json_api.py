@@ -6,9 +6,12 @@ interface for asynchronous functionality.
 
 from __future__ import annotations
 
+import logging
 import shutil
+from abc import abstractmethod
 from dataclasses import dataclass
 from functools import wraps
+from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
@@ -52,6 +55,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 json_api = Blueprint("json_api", __name__)
+log = logging.getLogger(__name__)
 
 
 class ValidationError(Exception):
@@ -74,9 +78,11 @@ class IncorrectTypeValidationError(ValidationError):
         )
 
 
-def json_err(msg: str) -> Response:
+def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
-    return jsonify({"success": False, "error": msg})
+    res = jsonify({"success": False, "error": msg})
+    res.status = status  # type: ignore[assignment]
+    return res
 
 
 def json_success(data: Any) -> Response:
@@ -86,19 +92,89 @@ def json_success(data: Any) -> Response:
     )
 
 
+class FavaJSONAPIError(FavaAPIError):
+    """An error with a HTTPStatus."""
+
+    @property
+    @abstractmethod
+    def status(self) -> HTTPStatus:
+        """HTTP status that should be used for the response."""
+
+
+class TargetPathAlreadyExistsError(FavaJSONAPIError):
+    """The given path already exists."""
+
+    status = HTTPStatus.CONFLICT
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(f"{path} already exists.")
+
+
+class DocumentDirectoryMissingError(FavaJSONAPIError):
+    """No document directory was specified."""
+
+    status = HTTPStatus.UNPROCESSABLE_ENTITY
+
+    def __init__(self) -> None:
+        super().__init__("You need to set a documents folder.")
+
+
+class NoFileUploadedError(FavaJSONAPIError):
+    """No file uploaded."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self) -> None:
+        super().__init__("No file uploaded.")
+
+
+class UploadedFileIsMissingFilenameError(FavaJSONAPIError):
+    """Uploaded file is missing filename."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self) -> None:
+        super().__init__("Uploaded file is missing filename.")
+
+
+class NotAValidDocumentOrImportFileError(FavaJSONAPIError):
+    """Not valid document or import file."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not valid document or import file: '{filename}'.")
+
+
+class NotAFileError(FavaJSONAPIError):
+    """Not a file."""
+
+    status = HTTPStatus.UNPROCESSABLE_ENTITY
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not a file: '{filename}'")
+
+
 @json_api.errorhandler(FavaAPIError)
-def _json_api_exception(error: FavaAPIError) -> Response:
-    return json_err(error.message)
+def _json_api_fava_api_error(error: FavaAPIError) -> Response:
+    log.error("Encountered FavaAPIError.", exc_info=error)
+    return json_err(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@json_api.errorhandler(FavaJSONAPIError)
+def _json_api_fava_json_api(error: FavaJSONAPIError) -> Response:
+    return json_err(error.message, error.status)
 
 
 @json_api.errorhandler(OSError)
-def _json_api_oserror(error: OSError) -> Response:
-    return json_err(error.strerror)
+def _json_api_oserror(error: OSError) -> Response:  # pragma: no cover
+    log.error("Encountered OSError.", exc_info=error)
+    return json_err(error.strerror, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(ValidationError)
 def _json_api_validation_error(error: ValidationError) -> Response:
-    return json_err(f"Invalid API request: {error!s}")
+    return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
 
 
 def validate_func_arguments(
@@ -177,48 +253,6 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
         return json_success(res)
 
     return _wrapper
-
-
-class TargetPathAlreadyExistsError(FavaAPIError):
-    """The given path already exists."""
-
-    def __init__(self, path: Path) -> None:
-        super().__init__(f"{path} already exists.")
-
-
-class DocumentDirectoryMissingError(FavaAPIError):
-    """No document directory was specified."""
-
-    def __init__(self) -> None:
-        super().__init__("You need to set a documents folder.")
-
-
-class NoFileUploadedError(FavaAPIError):
-    """No file uploaded."""
-
-    def __init__(self) -> None:
-        super().__init__("No file uploaded.")
-
-
-class UploadedFileIsMissingFilenameError(FavaAPIError):
-    """Uploaded file is missing filename."""
-
-    def __init__(self) -> None:
-        super().__init__("Uploaded file is missing filename.")
-
-
-class NotAValidDocumentOrImportFileError(FavaAPIError):
-    """Not valid document or import file."""
-
-    def __init__(self, filename: str) -> None:
-        super().__init__(f"Not valid document or import file: '{filename}'.")
-
-
-class NotAFileError(FavaAPIError):
-    """Not a file."""
-
-    def __init__(self, filename: str) -> None:
-        super().__init__(f"Not a file: '{filename}'")
 
 
 @api_endpoint

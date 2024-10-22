@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import datetime
+from http import HTTPStatus
 from pathlib import Path
 from typing import TYPE_CHECKING
-from urllib.parse import urljoin
 
 import pytest
 from beancount import __version__ as beancount_version
@@ -24,6 +24,7 @@ from fava.core.group_entries import group_entries_by_type
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
     from flask.testing import FlaskClient
+    from werkzeug.test import TestResponse
 
     from .conftest import SnapshotFunc
 
@@ -32,6 +33,12 @@ FILTER_COMBINATIONS = [
     {"filter": "any(account: Assets)"},
     {"time": "2015", "filter": "#tag1 payee:BayBook"},
 ]
+
+
+def assert_success(response: TestResponse) -> str:
+    """Asserts that the request was successful and return the data."""
+    assert response.status_code == HTTPStatus.OK.value
+    return response.get_data(as_text=True)
 
 
 @pytest.mark.parametrize(
@@ -48,8 +55,10 @@ def test_reports(
     filters: dict[str, str],
 ) -> None:
     """The standard reports work without error (content isn't checked here)."""
-    result = test_client.get(f"/long-example/{report}/", query_string=filters)
-    assert result.status_code == 200
+    response = test_client.get(
+        f"/long-example/{report}/", query_string=filters
+    )
+    assert_success(response)
 
 
 def test_client_side_reports(
@@ -57,38 +66,41 @@ def test_client_side_reports(
     snapshot: SnapshotFunc,
 ) -> None:
     """The client-side rendered reports are generated."""
-    result = test_client.get("/long-example/documents/")
-    assert result.status_code == 200
-    documents_html = result.get_data(as_text=True)
+    response = test_client.get("/long-example/documents/")
+    documents_html = assert_success(response)
     snapshot(documents_html)
 
-    result = test_client.get("/long-example/account/Assets/")
-    assert result.status_code == 200
-    assert documents_html == result.get_data(as_text=True)
+    response = test_client.get("/long-example/account/Assets/")
+    assert documents_html == assert_success(response)
 
-    result = test_client.get("/long-example/holdings/by_account/")
-    assert result.status_code == 200
-    assert documents_html == result.get_data(as_text=True)
+    response = test_client.get("/long-example/holdings/by_account/")
+    assert documents_html == assert_success(response)
+
+
+def test_redirect(test_client: FlaskClient) -> None:
+    """Redirect from root."""
+    response = test_client.get("/")
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert response.location == "/long-example/income_statement/"
 
 
 @pytest.mark.parametrize(
-    ("url", "return_code"),
+    ("url"),
     [
-        ("/", 302),
-        ("/asdfasdf/", 404),
-        ("/asdfasdf/asdfasdf/", 404),
-        ("/example/document/", 404),
-        ("/example/document/?filename=not-path", 404),
-        ("/example/not-a-report/", 404),
-        ("/example/holdings/not-a-holdings-aggregation-key/", 404),
-        ("/example/holdings/by_not-a-holdings-aggregation-key/", 404),
-        ("/example/account/Assets:US:BofA:Checking/not_a_subreport/", 404),
+        ("/asdfasdf/"),
+        ("/asdfasdf/asdfasdf/"),
+        ("/example/document/"),
+        ("/example/document/?filename=not-path"),
+        ("/example/not-a-report/"),
+        ("/example/holdings/not-a-holdings-aggregation-key/"),
+        ("/example/holdings/by_not-a-holdings-aggregation-key/"),
+        ("/example/account/Assets:US:BofA:Checking/not_a_subreport/"),
     ],
 )
-def test_urls(test_client: FlaskClient, url: str, return_code: int) -> None:
+def test_urls_not_found(test_client: FlaskClient, url: str) -> None:
     """Some URLs return a 404."""
-    result = test_client.get(url)
-    assert result.status_code == return_code
+    response = test_client.get(url)
+    assert response.status_code == HTTPStatus.NOT_FOUND.value
 
 
 @pytest.mark.parametrize(
@@ -142,12 +154,10 @@ def test_default_path_redirection(
         app.preprocess_request()
         if option:
             monkeypatch.setattr(g.ledger.fava_options, "default_page", option)
-        result = test_client.get(url)
-        get_url = result.headers.get("Location", "")
-        # pre Werkzeug 2.1:
-        expect_url = urljoin("http://localhost/", expect)
-        assert result.status_code == 302
-        assert get_url in {expect, expect_url}
+        response = test_client.get(url)
+        get_url = response.headers.get("Location", "")
+        assert response.status_code == HTTPStatus.FOUND.value
+        assert get_url == expect
 
 
 @pytest.mark.parametrize(
@@ -163,7 +173,6 @@ def test_default_path_redirection(
     ],
 )
 def test_jump_handler(
-    app: Flask,
     test_client: FlaskClient,
     referer: str,
     jump_link: str,
@@ -173,33 +182,31 @@ def test_jump_handler(
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
     """
-    result = test_client.get(jump_link, headers=[("Referer", referer)])
-    with app.test_request_context():
-        get_url = result.headers.get("Location", "")
-        # pre Werkzeug 2.1:
-        expect_url = urljoin("http://localhost/", expect)
-        assert result.status_code == 302
-        assert get_url in {expect, expect_url}
+    response = test_client.get(jump_link, headers=[("Referer", referer)])
+    get_url = response.headers.get("Location", "")
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert get_url == expect
 
 
 def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
-    result = test_client.get("/long-example/help/")
-    assert result.status_code == 200
-    assert f"Fava <code>{fava_version}</code>" in result.get_data(as_text=True)
-    assert f"<code>{beancount_version}</code>" in result.get_data(as_text=True)
-    result = test_client.get("/long-example/help/filters")
-    assert result.status_code == 200
-    result = test_client.get("/long-example/help/asdfasdf")
-    assert result.status_code == 404
+    response = test_client.get("/long-example/help/")
+    help_page = assert_success(response)
+    assert f"Fava <code>{fava_version}</code>" in help_page
+    assert f"<code>{beancount_version}</code>" in help_page
+    response = test_client.get("/long-example/help/filters")
+    assert assert_success(response)
+    response = test_client.get("/long-example/help/asdfasdf")
+    assert response.status_code == HTTPStatus.NOT_FOUND.value
 
 
 def test_query_download(test_client: FlaskClient) -> None:
     """Download query as csv."""
     result = test_client.get(
-        "/long-example/download-query/query_result.csv?query_string=balances",
+        "/long-example/download-query/query_result.csv",
+        query_string={"query_string": "balances"},
     )
-    assert result.status_code == 200
+    assert_success(result)
 
 
 def test_statement_download(
@@ -222,9 +229,7 @@ def test_statement_download(
         "*",
         "payee",
         "narration",
-        frozenset(),
-        frozenset(),
-        [create.posting("Assets:Cash", create.amount("10 EUR"))],
+        postings=[create.posting("Assets:Cash", create.amount("10 EUR"))],
     )
     txn_hash = hash_entry(txn)
     entries = [
@@ -253,30 +258,28 @@ def test_statement_download(
             == by_account
         )
 
-        result = test_client.get(
+        response = test_client.get(
             "/long-example/statement/",
             query_string={"entry_hash": txn_hash, "key": "statement"},
         )
-        assert result.status_code == 200
+        assert_success(response)
 
-        result = test_client.get(
+        response = test_client.get(
             "/long-example/statement/",
             query_string={"entry_hash": "asdf", "key": "asdf"},
         )
-        assert result.status_code == 500
+        assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def test_incognito(test_data_dir: Path) -> None:
     """Numbers get obfuscated in incognito mode."""
     app = create_app([test_data_dir / "example.beancount"], incognito=True)
     test_client = app.test_client()
-    result = test_client.get("/example/journal/")
-    assert result.status_code == 200
-    assert "XXX" in result.get_data(as_text=True)
+    response = test_client.get("/example/journal/")
+    assert "XXX" in assert_success(response)
 
-    result = test_client.get("/example/api/commodities")
-    assert result.status_code == 200
-    assert "XXX" not in result.get_data(as_text=True)
+    response = test_client.get("/example/api/commodities")
+    assert "XXX" not in assert_success(response)
 
 
 def test_read_only_mode(test_data_dir: Path) -> None:
@@ -284,7 +287,8 @@ def test_read_only_mode(test_data_dir: Path) -> None:
     app = create_app([test_data_dir / "example.beancount"], read_only=True)
     test_client = app.test_client()
 
-    assert test_client.get("/").status_code == 302
+    response = test_client.get("/")
+    assert response.status_code == HTTPStatus.FOUND.value
 
     for method in [
         test_client.delete,
@@ -292,8 +296,8 @@ def test_read_only_mode(test_data_dir: Path) -> None:
         test_client.post,
         test_client.put,
     ]:
-        result = method("/any/path/")
-        assert result.status_code == 401
+        response = method("/any/path/")
+        assert response.status_code == HTTPStatus.UNAUTHORIZED.value
 
 
 def test_download_journal(
@@ -301,15 +305,15 @@ def test_download_journal(
     snapshot: SnapshotFunc,
 ) -> None:
     """The currently filtered journal can be downloaded."""
-    result = test_client.get(
+    response = test_client.get(
         "/long-example/download-journal/",
         query_string={"time": "2016-05-07"},
     )
-    snapshot(result.get_data(as_text=True))
-    assert result.headers["Content-Disposition"].startswith(
+    snapshot(response.get_data(as_text=True))
+    assert response.headers["Content-Disposition"].startswith(
         'attachment; filename="journal_',
     )
-    assert result.headers["Content-Type"] == "application/octet-stream"
+    assert response.headers["Content-Type"] == "application/octet-stream"
 
 
 def test_static_url(app: Flask) -> None:
@@ -325,14 +329,29 @@ def test_load_extension_reports(test_client: FlaskClient) -> None:
     """Extension can register reports."""
 
     url = "/extension-report/extension/FavaExtTest/"
-    result = test_client.get(url)
-    assert result.status_code == 200
+    response = test_client.get(url)
+    assert_success(response)
     url = "/extension-report/extension_js_module/FavaExtTest.js"
-    result = test_client.get(url)
-    assert result.status_code == 200
-    url = "/extension-report/extension_js_module/Missing.js"
-    result = test_client.get(url)
-    assert result.status_code == 404
-    url = "/extension-report/extension/MissingExtension/"
-    result = test_client.get(url)
-    assert result.status_code == 404
+    response = test_client.get(url)
+    assert_success(response)
+
+
+@pytest.mark.parametrize(
+    ("url"),
+    [
+        ("/extension-report/extension/MissingExtension/"),
+        ("/extension-report/extension/MissingExtension/example_data"),
+        ("/extension-report/extension_js_module/Missing.js"),
+        ("/extension-report/extension/FavaExtTest/missing_endpoint"),
+    ],
+)
+def test_load_extension_not_found(test_client: FlaskClient, url: str) -> None:
+    response = test_client.get(url)
+    assert response.status_code == HTTPStatus.NOT_FOUND.value
+
+
+def test_load_extension_endpoint(test_client: FlaskClient) -> None:
+    url = "/extension-report/extension/FavaExtTest/example_data"
+    response = test_client.get(url)
+    assert assert_success(response)
+    assert response.json == ["some data"]

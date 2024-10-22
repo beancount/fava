@@ -273,6 +273,16 @@ class Open(Directive):
     def account(self) -> str:
         """Account of the directive."""
 
+    @property
+    @abstractmethod
+    def currencies(self) -> list[str]:
+        """Valid currencies for the account."""
+
+    @property
+    @abstractmethod
+    def booking(self) -> data.Booking | None:
+        """Booking method for the account."""
+
 
 class Pad(Directive):
     """A Beancount Pad directive."""

@@ -30,6 +30,13 @@ from fava.helpers import FavaAPIError
 from fava.util.date import parse_date
 
 
+class InvalidAmountError(FavaAPIError):
+    """Invalid amount."""
+
+    def __init__(self, amount: str) -> None:
+        super().__init__(f"Invalid amount: {amount}")
+
+
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
@@ -86,10 +93,9 @@ def deserialise_posting(posting: Any) -> Posting:
         f'2000-01-01 * "" ""\n Assets:Account {amount}',
     )
     if errors:
-        msg = f"Invalid amount: {amount}"
-        raise FavaAPIError(msg)
+        raise InvalidAmountError(amount)
     txn = entries[0]
-    if not isinstance(txn, Transaction):
+    if not isinstance(txn, Transaction):  # pragma: no cover
         msg = "Expected transaction"
         raise TypeError(msg)
     pos = txn.postings[0]
@@ -117,35 +123,34 @@ def deserialise(json_entry: Any) -> Directive:
     if json_entry["t"] == "Transaction":
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
         return create.transaction(
-            json_entry["meta"],
-            date,
-            json_entry.get("flag", ""),
-            json_entry.get("payee", ""),
-            json_entry["narration"] or "",
-            frozenset(json_entry["tags"]),
-            frozenset(json_entry["links"]),
-            postings,
+            meta=json_entry["meta"],
+            date=date,
+            flag=json_entry.get("flag", ""),
+            payee=json_entry.get("payee", ""),
+            narration=json_entry["narration"] or "",
+            tags=frozenset(json_entry["tags"]),
+            links=frozenset(json_entry["links"]),
+            postings=postings,
         )
     if json_entry["t"] == "Balance":
         raw_amount = json_entry["amount"]
         amount = create.amount(
-            Decimal(raw_amount["number"]),
-            raw_amount["currency"],
+            Decimal(raw_amount["number"]), raw_amount["currency"]
         )
 
         return create.balance(
-            json_entry["meta"],
-            date,
-            json_entry["account"],
-            amount,
+            meta=json_entry["meta"],
+            date=date,
+            account=json_entry["account"],
+            amount=amount,
         )
     if json_entry["t"] == "Note":
         comment = json_entry["comment"].replace('"', "")
         return create.note(
-            json_entry["meta"],
-            date,
-            json_entry["account"],
-            comment,
+            meta=json_entry["meta"],
+            date=date,
+            account=json_entry["account"],
+            comment=comment,
         )
     msg = "Unsupported entry type."
     raise FavaAPIError(msg)

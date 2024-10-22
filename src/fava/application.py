@@ -470,9 +470,7 @@ def _setup_babel(fava_app: Flask) -> None:
     def _get_locale() -> str | None:
         """Get locale."""
         lang = g.ledger.fava_options.language
-        if lang is not None:
-            return lang
-        return request.accept_languages.best_match(["en", *LOCALES])
+        return lang or request.accept_languages.best_match(["en", *LOCALES])
 
     try:
         # for Flask-Babel <3.0
