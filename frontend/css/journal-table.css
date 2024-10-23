@@ -52,6 +52,7 @@
 }
 
 .journal .postings .num {
+  margin-top: 4px;
   overflow: auto;
   line-height: 16px;
 }
@@ -151,6 +152,7 @@
 }
 
 .journal .show-postings .description {
+  margin-top: 4px;
   white-space: normal;
 }
 
@@ -230,4 +232,30 @@
   color: var(--journal-metadata-indicator);
   text-transform: lowercase;
   border-radius: 20px;
+}
+
+.file-input-wrapper {
+  position: relative;
+}
+
+.file-input-wrapper svg {
+  fill: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .file-input-wrapper svg {
+    fill: white;
+  }
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  text-indent: -100px;
+  cursor: pointer;
+  opacity: 0;
 }
