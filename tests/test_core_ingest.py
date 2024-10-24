@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import datetime
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.beans import BEANCOUNT_V3
 from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
@@ -14,6 +16,8 @@ from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImporters
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
+from fava.core.ingest import ImportConfigLoadError
+from fava.core.ingest import load_import_config
 from fava.helpers import FavaAPIError
 from fava.serialisation import serialise
 from fava.util.date import local_today
@@ -61,22 +65,33 @@ def test_ingest_file_import_info(
     importer = next(iter(ingest_ledger.ingest.importers.values()))
     assert importer
 
-    info = file_import_info(str(test_data_dir / "import.csv"), importer)
+    csv_path = test_data_dir / "import.csv"
+    info = file_import_info(str(csv_path), importer)
     assert info.account == "Assets:Checking"
 
-    abs_path = str(Path("/asdf/basename").resolve(strict=False))
-    info2 = file_import_info(abs_path, Imp("rawfile"))
+    info2 = file_import_info(str(csv_path), Imp("rawfile"))
     assert isinstance(info2.account, str)
     assert info2 == FileImportInfo(
         "rawfile",
         "rawfile",
         local_today(),
-        "basename",
+        "import.csv",
     )
 
     with pytest.raises(FavaAPIError) as err:
-        file_import_info(abs_path, Invalid("rawfile"))
+        file_import_info(str(csv_path), Invalid("rawfile"))
     assert "Some error reason..." in err.value.message
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="different error on windows"
+)
+def test_load_import_config() -> None:
+    with pytest.raises(ImportConfigLoadError, match=".*ImportError.*"):
+        load_import_config(Path(__file__).parent)
+
+    with pytest.raises(ImportConfigLoadError, match=".*CONFIG is missing.*"):
+        load_import_config(Path(__file__))
 
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
@@ -133,8 +148,9 @@ def test_ingest_examplefile(
     assert isinstance(entries[1].postings[1].units, Amount)
     assert entries[1].postings[1].units.number == -50.00
     assert entries[1].postings[1].units.currency == "EUR"
-    assert "__duplicate__" not in entries[1].meta
-    assert "__duplicate__" in entries[2].meta
+    if not BEANCOUNT_V3:
+        assert "__duplicate__" not in entries[1].meta
+        assert "__duplicate__" in entries[2].meta
 
 
 def test_filepath_in_primary_imports_folder(

@@ -47,8 +47,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
     from fava.core.ingest import FileImporters
-    from fava.core.query_shell import QueryResultTable
-    from fava.core.query_shell import QueryResultText
+    from fava.core.query import QueryResultTable
+    from fava.core.query import QueryResultText
     from fava.core.tree import SerialisedTreeNode
     from fava.internal_api import ChartData
     from fava.util.date import DateRange
@@ -275,8 +275,7 @@ def get_payee_accounts(payee: str) -> list[str]:
 def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     """Run a Beancount query."""
     return g.ledger.query_shell.execute_query_serialised(
-        g.filtered.entries,
-        query_string,
+        g.filtered.entries, query_string
     )
 
 
