@@ -53,7 +53,7 @@
 
 {#if shown}
   <div class="overlay">
-    <div class="background" on:click={closeHandler} aria-hidden="true" />
+    <div class="background" on:click={closeHandler} aria-hidden="true"></div>
     <div class="content" use:handleFocus role="dialog" aria-modal="true">
       <slot />
       <button type="button" class="muted close" on:click={closeHandler}

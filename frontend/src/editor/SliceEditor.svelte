@@ -82,9 +82,9 @@
 </script>
 
 <form on:submit|preventDefault={save}>
-  <div class="editor" use:renderEditor />
+  <div class="editor" use:renderEditor></div>
   <div class="flex-row">
-    <span class="spacer" />
+    <span class="spacer"></span>
     <label>
       <input type="checkbox" bind:checked={$reloadAfterSavingEntrySlice} />
       <span>{_("reload")}</span>

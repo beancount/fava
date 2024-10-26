@@ -54,7 +54,7 @@
     </h3>
     <Entry bind:entry />
     <div class="flex-row">
-      <span class="spacer" />
+      <span class="spacer"></span>
       <label>
         <input type="checkbox" bind:checked={$addEntryContinue} />
         <span>{_("continue")}</span>
