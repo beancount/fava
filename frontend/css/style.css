@@ -186,7 +186,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not(.light-theme):not(.dark-theme) {
+  :root:not(.light-theme, .dark-theme) {
     /* ... existing dark theme variables ... */
   }
 }
@@ -246,7 +246,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not(.light-theme):not(.dark-theme) {
+  :root:not(.light-theme, .dark-theme) {
     /* ... existing dark theme variables ... */
   }
 }

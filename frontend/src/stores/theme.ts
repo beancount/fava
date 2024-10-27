@@ -1,6 +1,6 @@
-import { constants } from "../lib/validation";
 import { localStorageSyncedStore } from "../lib/store";
 import type { ValidationT } from "../lib/validation";
+import { constants } from "../lib/validation";
 
 const theme_validator = constants("light", "dark");
 type Theme = ValidationT<typeof theme_validator>;

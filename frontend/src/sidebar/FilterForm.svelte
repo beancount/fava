@@ -1,9 +1,9 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
+  import ThemeSwitch from "../components/ThemeSwitch.svelte";
   import { _ } from "../i18n";
   import { accounts, links, payees, tags, years } from "../stores";
   import { account_filter, fql_filter, time_filter } from "../stores/filters";
-  import ThemeSwitch from "../components/ThemeSwitch.svelte";
 
   $: fql_filter_suggestions = [
     ...$tags.map((tag) => `#${tag}`),
