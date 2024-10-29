@@ -6,6 +6,7 @@ from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
+from itertools import takewhile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -16,7 +17,7 @@ from beancount.utils.encryption import is_encrypted_file
 from fava.beans.abc import Balance
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
-from fava.beans.account import child_account_tester
+from fava.beans.account import account_tester
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
@@ -459,12 +460,8 @@ class FavaLedger:
         Yields:
             Tuples of ``(entry, change, balance)``.
         """
-
-        def is_account(a: str) -> bool:
-            return a == account_name
-
-        relevant_account = (
-            child_account_tester(account_name) if with_children else is_account
+        relevant_account = account_tester(
+            account_name, with_children=with_children
         )
 
         prices = self.prices
@@ -539,9 +536,7 @@ class FavaLedger:
 
         entry_accounts = get_entry_accounts(entry)
         balances = {account: Inventory() for account in entry_accounts}
-        for entry_ in self.all_entries:
-            if entry_ is entry:
-                break
+        for entry_ in takewhile(lambda e: e is not entry, self.all_entries):
             if isinstance(entry_, Transaction):
                 for posting in entry_.postings:
                     balance = balances.get(posting.account, None)

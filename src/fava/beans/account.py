@@ -16,26 +16,44 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
 
 
-def parent(acc: str) -> str | None:
+def parent(account: str) -> str | None:
     """Get the name of the parent of the given account."""
-    parts = acc.rsplit(":", maxsplit=1)
+    parts = account.rsplit(":", maxsplit=1)
     return parts[0] if len(parts) == 2 else None
 
 
-def root(acc: str) -> str:
+def root(account: str) -> str:
     """Get root account of the given account."""
-    parts = acc.split(":", maxsplit=1)
+    parts = account.split(":", maxsplit=1)
     return parts[0]
 
 
-def child_account_tester(acc: str) -> Callable[[str], bool]:
+def child_account_tester(account: str) -> Callable[[str], bool]:
     """Get a function to check if an account is a descendant of the account."""
-    acc_as_parent = acc + ":"
+    account_as_parent = account + ":"
 
-    def is_child_account(a: str) -> bool:
-        return a == acc or a.startswith(acc_as_parent)
+    def is_child_account(other: str) -> bool:
+        return other == account or other.startswith(account_as_parent)
 
     return is_child_account
+
+
+def account_tester(
+    account: str, *, with_children: bool
+) -> Callable[[str], bool]:
+    """Get a function to check if an account is equal to the account.
+
+    Arguments:
+        account: An account name to check.
+        with_children: Whether to include all child accounts.
+    """
+    if with_children:
+        return child_account_tester(account)
+
+    def is_account(other: str) -> bool:
+        return other == account
+
+    return is_account
 
 
 def get_entry_accounts(entry: Directive) -> list[str]:
