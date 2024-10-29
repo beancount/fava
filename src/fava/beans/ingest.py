@@ -10,6 +10,7 @@ from typing import TypeVar
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Callable
+    from collections.abc import Sequence
 
     from fava.beans.abc import Directive
 
@@ -54,7 +55,7 @@ class BeanImporterProtocol(Protocol):
         self,
         file: FileMemo,  # noqa: ARG002
         *,
-        existing_entries: list[Directive] | None = None,  # noqa: ARG002
+        existing_entries: Sequence[Directive] | None = None,  # noqa: ARG002
     ) -> list[Directive] | None:  # pragma: no cover
         """Extract transactions from a file."""
         return None

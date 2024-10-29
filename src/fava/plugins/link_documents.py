@@ -21,6 +21,8 @@ from fava.helpers import BeancountError
 from fava.util.sets import add_to_set
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
 
 
@@ -32,9 +34,9 @@ __plugins__ = ["link_documents"]
 
 
 def link_documents(
-    entries: list[Directive],
+    entries: Sequence[Directive],
     _: Any,
-) -> tuple[list[Directive], list[DocumentError]]:
+) -> tuple[Sequence[Directive], list[DocumentError]]:
     """Link entries to documents."""
     errors = []
 
@@ -48,6 +50,7 @@ def link_documents(
             by_fullname[entry.filename] = index
             by_basename[Path(entry.filename).name].append((index, entry))
 
+    new_entries = list(entries)
     for index, entry in enumerate(entries):
         disk_docs = [
             value
@@ -79,9 +82,7 @@ def link_documents(
             if not documents:
                 errors.append(
                     DocumentError(
-                        entry.meta,
-                        f"Document not found: '{disk_doc}'",
-                        entry,
+                        entry.meta, f"Document not found: '{disk_doc}'", entry
                     ),
                 )
                 continue
@@ -89,19 +90,19 @@ def link_documents(
             for j in documents:
                 # Since we might link a document multiple times, we have to use
                 # the index for the replacement here.
-                doc: Document = entries[j]  # type: ignore[assignment]
-                entries[j] = replace(  # noqa: B909
+                doc: Document = new_entries[j]  # type: ignore[assignment]
+                new_entries[j] = replace(
                     doc,
                     links=add_to_set(doc.links, entry_link),
                     tags=add_to_set(doc.tags, "linked"),
                 )
 
-            # The other entry types do not support links, so only add links for
-            # txns.
+            # Not all entry types support links, so only add links for the ones
+            # that do.
             if hasattr(entry, "links"):
-                entries[index] = replace(
+                new_entries[index] = replace(
                     entry,
                     links=add_to_set(entry.links, entry_link),
                 )
 
-    return entries, errors
+    return new_entries, errors

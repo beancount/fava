@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Sequence
 
 ZERO = 0.0
 DEFAULT_RATE = math.log(2) * 1 / 365
@@ -45,7 +46,7 @@ class ExponentialDecayRanker:
 
     def __init__(
         self,
-        list_: list[str] | None = None,
+        list_: Sequence[str] | None = None,
         rate: float = DEFAULT_RATE,
     ) -> None:
         self.list = list_

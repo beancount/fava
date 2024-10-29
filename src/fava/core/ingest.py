@@ -35,6 +35,7 @@ from fava.util.date import local_today
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Iterable
+    from collections.abc import Sequence
     from typing import Callable
 
     from fava.beans.abc import Directive
@@ -42,7 +43,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
     HookOutput = list[tuple[str, list[Directive]]]
-    Hooks = list[Callable[[HookOutput, list[Directive]], HookOutput]]
+    Hooks = list[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
 
 
 class IngestError(BeancountError):
@@ -177,7 +178,7 @@ _FILE_TOO_LARGE_THRESHOLD = 8 * 1024 * 1024
 
 
 def find_imports(
-    config: list[BeanImporterProtocol], directory: Path
+    config: Sequence[BeanImporterProtocol], directory: Path
 ) -> Iterable[FileImporters]:
     """Pair files and matching importers.
 
@@ -204,7 +205,7 @@ def find_imports(
 def extract_from_file(
     importer: BeanImporterProtocol,
     filename: str,
-    existing_entries: list[Directive],
+    existing_entries: Sequence[Directive],
 ) -> list[Directive]:
     """Import entries from a document.
 

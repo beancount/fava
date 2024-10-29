@@ -2,6 +2,7 @@ import datetime
 import enum
 from collections.abc import Iterable
 from collections.abc import Mapping
+from collections.abc import Sequence
 from decimal import Decimal
 from typing import Any
 from typing import NamedTuple
@@ -139,7 +140,7 @@ Directive: TypeAlias = (
 )
 
 def iter_entry_dates(
-    entries: list[abc.Directive],
+    entries: Sequence[abc.Directive],
     date_begin: datetime.date,
     date_end: datetime.date,
 ) -> Iterable[abc.Directive]: ...

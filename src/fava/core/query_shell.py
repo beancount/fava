@@ -25,6 +25,7 @@ from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
     from typing import TypeVar
 
     from fava.beans.abc import Directive
@@ -79,7 +80,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
         self.ledger = ledger
         self.stdout = self.outfile
 
-    def run(self, entries: list[Directive], query: str) -> Cursor | str:
+    def run(self, entries: Sequence[Directive], query: str) -> Cursor | str:
         """Run a query, capturing output as string or returning the result."""
         self.context = connect(
             "beancount:",
@@ -158,7 +159,7 @@ class QueryShell(FavaModule):
         self.shell = FavaBQLShell(ledger)
 
     def execute_query_serialised(
-        self, entries: list[Directive], query: str
+        self, entries: Sequence[Directive], query: str
     ) -> QueryResultTable | QueryResultText:
         """Run a query and returns its serialised result.
 
@@ -179,7 +180,7 @@ class QueryShell(FavaModule):
 
     def query_to_file(
         self,
-        entries: list[Directive],
+        entries: Sequence[Directive],
         query_string: str,
         result_format: str,
     ) -> tuple[str, io.BytesIO]:

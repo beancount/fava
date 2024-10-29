@@ -11,6 +11,7 @@ from fava.beans.abc import Pad
 from fava.beans.abc import Transaction
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
     from typing import Callable
 
     from fava.beans.abc import Directive
@@ -56,7 +57,7 @@ def account_tester(
     return is_account
 
 
-def get_entry_accounts(entry: Directive) -> list[str]:
+def get_entry_accounts(entry: Directive) -> Sequence[str]:
     """Accounts for an entry.
 
     Args:

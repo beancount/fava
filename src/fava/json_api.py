@@ -41,6 +41,7 @@ from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Mapping
+    from collections.abc import Sequence
     from datetime import date
     from decimal import Decimal
 
@@ -266,7 +267,7 @@ api_endpoint(get_ledger_data)
 
 
 @api_endpoint
-def get_payee_accounts(payee: str) -> list[str]:
+def get_payee_accounts(payee: str) -> Sequence[str]:
     """Rank accounts for the given payee."""
     return g.ledger.attributes.payee_accounts(payee)
 
@@ -280,7 +281,7 @@ def get_query(query_string: str) -> QueryResultTable | QueryResultText:
 
 
 @api_endpoint
-def get_extract(filename: str, importer: str) -> list[Any]:
+def get_extract(filename: str, importer: str) -> Sequence[Any]:
     """Extract entries using the ingest framework."""
     entries = g.ledger.ingest.extract(filename, importer)
     return list(map(serialise, entries))
@@ -291,8 +292,8 @@ class Context:
     """Context for an entry."""
 
     entry: Any
-    balances_before: dict[str, list[str]] | None
-    balances_after: dict[str, list[str]] | None
+    balances_before: Mapping[str, Sequence[str]] | None
+    balances_after: Mapping[str, Sequence[str]] | None
     sha256sum: str
     slice: str
 
@@ -337,7 +338,7 @@ def get_payee_transaction(payee: str) -> Any:
 
 
 @api_endpoint
-def get_source(filename: str) -> dict[str, str]:
+def get_source(filename: str) -> Mapping[str, str]:
     """Load one of the source files."""
     file_path = (
         filename
@@ -475,21 +476,21 @@ def put_upload_import_file() -> str:
 
 
 @api_endpoint
-def get_events() -> list[Event]:
+def get_events() -> Sequence[Event]:
     """Get all (filtered) events."""
     g.ledger.changed()
     return [serialise(e) for e in g.filtered.entries if isinstance(e, Event)]
 
 
 @api_endpoint
-def get_imports() -> list[FileImporters]:
+def get_imports() -> Sequence[FileImporters]:
     """Get a list of the importable files."""
     g.ledger.changed()
     return g.ledger.ingest.import_data()
 
 
 @api_endpoint
-def get_documents() -> list[Document]:
+def get_documents() -> Sequence[Document]:
     """Get all (filtered) documents."""
     g.ledger.changed()
     return [
@@ -503,11 +504,11 @@ class CommodityPairWithPrices:
 
     base: str
     quote: str
-    prices: list[tuple[date, Decimal]]
+    prices: Sequence[tuple[date, Decimal]]
 
 
 @api_endpoint
-def get_commodities() -> list[CommodityPairWithPrices]:
+def get_commodities() -> Sequence[CommodityPairWithPrices]:
     """Get the prices for all commodity pairs."""
     g.ledger.changed()
     ret = []
@@ -524,8 +525,8 @@ class TreeReport:
     """Data for the tree reports."""
 
     date_range: DateRange | None
-    charts: list[ChartData]
-    trees: list[SerialisedTreeNode]
+    charts: Sequence[ChartData]
+    trees: Sequence[SerialisedTreeNode]
 
 
 @api_endpoint
@@ -622,15 +623,15 @@ def get_trial_balance() -> TreeReport:
 class AccountBudget:
     """Budgets for an account."""
 
-    budget: dict[str, Decimal]
-    budget_children: dict[str, Decimal]
+    budget: Mapping[str, Decimal]
+    budget_children: Mapping[str, Decimal]
 
 
 @dataclass(frozen=True)
 class AccountReportJournal:
     """Data for the journal account report."""
 
-    charts: list[ChartData]
+    charts: Sequence[ChartData]
     journal: str
 
 
@@ -638,10 +639,10 @@ class AccountReportJournal:
 class AccountReportTree:
     """Data for the tree account reports."""
 
-    charts: list[ChartData]
-    interval_balances: list[SerialisedTreeNode]
-    budgets: dict[str, list[AccountBudget]]
-    dates: list[DateRange]
+    charts: Sequence[ChartData]
+    interval_balances: Sequence[SerialisedTreeNode]
+    budgets: Mapping[str, Sequence[AccountBudget]]
+    dates: Sequence[DateRange]
 
 
 @api_endpoint
