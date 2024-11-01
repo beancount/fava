@@ -36,4 +36,8 @@
 .cm-editor .cm-selectionMatch {
   background-color: var(--editor-selectionmatch);
 }
+
+.cm-editor .cm-cursor {
+  border-left-color: var(--text-color-lighter);
+}
 /* stylelint-enable selector-class-pattern */
