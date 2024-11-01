@@ -51,6 +51,8 @@ export const currencies = derived_array(ledgerData, (v) => v.currencies);
 export const links = derived_array(ledgerData, (v) => v.links);
 /** The ranked array of all payees. */
 export const payees = derived_array(ledgerData, (v) => v.payees);
+/** The ranked array of all narrations. */
+export const narrations = derived_array(ledgerData, (v) => v.narrations);
 /** The ranked array of all tags. */
 export const tags = derived_array(ledgerData, (v) => v.tags);
 /** The array of all years. */
