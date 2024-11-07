@@ -28,7 +28,7 @@
   }
 </script>
 
-<div use:renderEditor />
+<div use:renderEditor></div>
 
 <style>
   div {

@@ -42,7 +42,7 @@
         active={treemapCurrency}
       />
     {/if}
-    <span class="spacer" />
+    <span class="spacer"></span>
     {#if chart.type === "hierarchy"}
       <ModeSwitch store={hierarchyChartMode} />
     {:else if chart.type === "linechart"}
@@ -50,7 +50,7 @@
     {:else if chart.type === "barchart" && chart.hasStackedData}
       <ModeSwitch store={barChartMode} />
     {/if}
-  {:else}<span class="spacer" />{/if}
+  {:else}<span class="spacer"></span>{/if}
   <slot />
   <button
     type="button"

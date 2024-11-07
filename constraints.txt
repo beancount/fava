@@ -52,9 +52,9 @@ click==8.1.7
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.6.3
+coverage==7.6.4
     # via pytest-cov
-cryptography==43.0.1
+cryptography==43.0.3
     # via secretstorage
 dill==0.3.9
     # via pylint
@@ -64,7 +64,7 @@ docutils==0.21.2
     # via
     #   readme-renderer
     #   sphinx
-et-xmlfile==1.1.0
+et-xmlfile==2.0.0
     # via openpyxl
 exceptiongroup==1.2.2
     # via
@@ -82,7 +82,7 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 furo==2024.8.6
     # via fava (pyproject.toml)
-google-api-core==2.21.0
+google-api-core==2.22.0
     # via google-api-python-client
 google-api-python-client==2.149.0
     # via beancount
@@ -140,7 +140,7 @@ jinja2==3.1.4
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.4.1
+keyring==25.5.0
     # via twine
 lml==0.1.0
     # via
@@ -155,7 +155,7 @@ markdown-it-py==3.0.0
     # via rich
 markdown2==2.5.1
     # via fava (pyproject.toml)
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via
     #   jinja2
     #   werkzeug
@@ -168,7 +168,7 @@ more-itertools==10.5.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.12.0
+mypy==1.13.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -207,9 +207,9 @@ ply==3.11
     #   beancount
 pre-commit==4.0.1
     # via fava (pyproject.toml)
-proto-plus==1.24.0
+proto-plus==1.25.0
     # via google-api-core
-protobuf==5.28.2
+protobuf==5.28.3
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -281,7 +281,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.9.2
+rich==13.9.3
     # via twine
 rsa==4.9
     # via google-auth
@@ -340,7 +340,7 @@ tomli==2.0.2
     #   tox
 tomlkit==0.13.2
     # via pylint
-tox==4.23.0
+tox==4.23.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
@@ -348,7 +348,7 @@ tox-uv==1.15.0
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==75.1.0.20241014
+types-setuptools==75.2.0.20241025
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240801
     # via fava (pyproject.toml)
@@ -367,15 +367,15 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.23
+uv==0.4.28
     # via tox-uv
-virtualenv==20.26.6
+virtualenv==20.27.1
     # via
     #   pre-commit
     #   tox
 watchfiles==0.24.0
     # via fava (pyproject.toml)
-werkzeug==3.0.4
+werkzeug==3.0.6
     # via
     #   fava (pyproject.toml)
     #   flask

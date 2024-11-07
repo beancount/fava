@@ -24,7 +24,7 @@
       }}
       class:inactive={active ? item !== $active : $toggled?.includes(item)}
     >
-      <i style="background-color: {color ?? '#bbb'}" />
+      <i style="background-color: {color ?? '#bbb'}"></i>
       <span>{item}</span>
     </button>
   {/each}

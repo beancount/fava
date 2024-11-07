@@ -131,7 +131,7 @@
   <EditorMenu {file_path} {editor}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
-  <div use:renderEditor />
+  <div use:renderEditor></div>
 </form>
 
 <style>

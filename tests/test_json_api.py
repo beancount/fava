@@ -263,6 +263,17 @@ def test_api_context(
         HTTPStatus.BAD_REQUEST,
     )
 
+    balance_entry_hash = hash_entry(
+        example_ledger.all_entries_by_type.Balance[0]
+    )
+    response = test_client.get(
+        "/long-example/api/context",
+        query_string={"entry_hash": balance_entry_hash},
+    )
+    data = assert_api_success(response)
+    assert data["balances_before"]
+    assert not data["balances_after"]
+
     entry_hash = hash_entry(
         next(
             entry

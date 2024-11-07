@@ -19,7 +19,7 @@
     />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>
-  <textarea name="comment" rows={2} bind:value={entry.comment} />
+  <textarea name="comment" rows={2} bind:value={entry.comment}></textarea>
   <EntryMetadata bind:meta={entry.meta} />
 </div>
 
