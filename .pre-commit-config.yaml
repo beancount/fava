@@ -7,12 +7,20 @@ repos:
       - id: ruff
         args: ["--fix"]
       - id: ruff-format
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.18
+    hooks:
+      - id: mdformat
+        args: ["--wrap", "80"]
+        additional_dependencies:
+          - mdformat-gfm
   - repo: local
     hooks:
       - id: prettier
         name: prettier
         language: node
-        entry: prettier --write --list-different --ignore-unknown
+        entry: prettier --write --list-different
+        files: \.(css|js|mjs|ts|svelte|yaml|json)$
         require_serial: true
         additional_dependencies:
           - "prettier@3.3.3"
