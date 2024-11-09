@@ -9,9 +9,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import requests
-from beanquery import query_compile
-from beanquery.parser.parser import KEYWORDS
-from beanquery.sources.beancount import TABLES
+from beancount.parser.options import OPTIONS_DEFAULTS
+from beanquery import connect
+from beanquery import query_compile  # type: ignore[attr-defined]
+from beanquery.parser.parser import KEYWORDS  # type: ignore[import-untyped]
 from click import echo
 from click import group
 from click import UsageError
@@ -46,7 +47,10 @@ def generate_bql_grammar_json() -> None:
 
     Should be run whenever the BQL changes."""
 
-    columns = {column for table in TABLES for column in table.columns}
+    tables = connect(
+        "beancount:", entries=[], options=OPTIONS_DEFAULTS, errors=[]
+    ).tables  # type: ignore[attr-defined]
+    columns = {column for table in tables.values() for column in table.columns}
     data = {
         "columns": sorted(columns),
         "functions": sorted(query_compile.FUNCTIONS.keys()),

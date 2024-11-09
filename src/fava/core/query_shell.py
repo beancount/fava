@@ -7,14 +7,13 @@ import shlex
 import textwrap
 from typing import TYPE_CHECKING
 
-from beanquery import compiler  # type: ignore[import-untyped]
+from beanquery import CompilationError
 from beanquery import connect
-from beanquery.compiler import CompilationError  # type: ignore[import-untyped]
-from beanquery.parser import ParseError  # type: ignore[import-untyped]
+from beanquery import Cursor
+from beanquery import ParseError
+from beanquery.numberify import numberify_results
 from beanquery.shell import BQLShell  # type: ignore[import-untyped]
 
-from fava.beans.funcs import execute_query
-from fava.beans.funcs import run_query
 from fava.core.module_base import FavaModule
 from fava.core.query import COLUMNS
 from fava.core.query import ObjectColumn
@@ -29,9 +28,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import TypeVar
 
     from fava.beans.abc import Directive
-    from fava.beans.funcs import QueryResult
-    from fava.beans.funcs import ResultRow
-    from fava.beans.funcs import ResultType
     from fava.core import FavaLedger
 
     T = TypeVar("T")
@@ -83,7 +79,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
         self.ledger = ledger
         self.stdout = self.outfile
 
-    def run(self, entries: list[Directive], query: str) -> QueryResult | str:
+    def run(self, entries: list[Directive], query: str) -> Cursor | str:
         """Run a query, capturing output as string or returning the result."""
         self.context = connect(
             "beancount:",
@@ -98,9 +94,8 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
         except CompilationError as exc:
             raise QueryCompilationError(exc) from exc
 
-        if result:
-            types, rows = result
-            return (types, rows)
+        if isinstance(result, Cursor):
+            return result
         contents = self.outfile.getvalue()
         self.outfile.truncate(0)
         return contents.strip().strip("\x00")
@@ -129,11 +124,10 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
     do_quit = noop
     do_EOF = noop  # noqa: N815
 
-    def on_Select(self, statement: str) -> QueryResult:  # noqa: D102, N802
-        c_query = compiler.compile(self.context, statement)
-        return execute_query(c_query)
+    def on_Select(self, statement: str) -> Cursor:  # noqa: D102, N802
+        return self.context.execute(statement)
 
-    def do_run(self, arg: str) -> QueryResult | None:
+    def do_run(self, arg: str) -> Cursor | None:
         """Run a custom query."""
         queries = self.ledger.all_entries_by_type.Query
         stripped_arg = arg.rstrip("; \t")
@@ -180,7 +174,7 @@ class QueryShell(FavaModule):
         """
         res = self.shell.run(entries, query)
         return (
-            QueryResultText(res) if isinstance(res, str) else _serialise(*res)
+            QueryResultText(res) if isinstance(res, str) else _serialise(res)
         )
 
     def query_to_file(
@@ -217,17 +211,15 @@ class QueryShell(FavaModule):
                 raise QueryNotFoundError(name)
             query_string = query.query_string
 
-        try:
-            types, rows = run_query(
-                entries,
-                self.ledger.options,
-                query_string,
-                numberify=True,
-            )
-        except ParseError as exc:
-            raise QueryParseError(exc) from exc
-        except CompilationError as exc:
-            raise QueryCompilationError(exc) from exc
+        res = self.shell.run(entries, query_string)
+        if isinstance(res, str):
+            msg = "Only queries that return a table can be printed to a file."
+            raise FavaAPIError(msg)
+
+        rrows = res.fetchall()
+        rtypes = res.description
+        dformat = self.ledger.options["dcontext"].build()  # type: ignore[attr-defined]
+        types, rows = numberify_results(rtypes, rrows, dformat)
 
         if result_format == "csv":
             data = to_csv(types, rows)
@@ -239,14 +231,15 @@ class QueryShell(FavaModule):
         return name, data
 
 
-def _serialise(
-    types: list[ResultType], rows: list[ResultRow]
-) -> QueryResultTable:
+def _serialise(cursor: Cursor) -> QueryResultTable:
     """Serialise the query result."""
-    dtypes = [COLUMNS.get(c.datatype, ObjectColumn)(c.name) for c in types]
+    dtypes = [
+        COLUMNS.get(c.datatype, ObjectColumn)(c.name)
+        for c in cursor.description
+    ]
     mappers = [d.serialise for d in dtypes]
     mapped_rows = [
         tuple(mapper(row[i]) for i, mapper in enumerate(mappers))
-        for row in rows
+        for row in cursor
     ]
     return QueryResultTable(dtypes, mapped_rows)

@@ -14,6 +14,7 @@ from beancount.core.position import Position
 from fava.core.conversion import simple_units
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any
     from typing import Literal
     from typing import TypeAlias
     from typing import TypeVar
@@ -22,9 +23,11 @@ if TYPE_CHECKING:  # pragma: no cover
 
     T = TypeVar("T")
 
-    QueryRowValue = (
-        bool | int | str | datetime.date | Decimal | Position | Inventory
-    )
+    QueryRowValue = Any
+
+    # This is not a complete enumeration of all possible column types but just
+    # of the ones we pass in some specific serialisation to the frontend.
+    # Everything unknown will be stringified (by ObjectColumn).
     SerialisedQueryRowValue = (
         bool
         | int
@@ -69,7 +72,7 @@ class BaseColumn:
         val: QueryRowValue,
     ) -> SerialisedQueryRowValue:
         """Serialiseable version of the column value."""
-        return val  # type: ignore[return-value]
+        return val  # type: ignore[no-any-return]
 
 
 @dataclass(frozen=True)

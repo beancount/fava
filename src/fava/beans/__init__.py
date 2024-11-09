@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-try:  # pragma: no cover
-    from beancount import query  # noqa: F401
+from beancount import __version__
 
-    BEANCOUNT_V3 = False
-except ImportError:
-    BEANCOUNT_V3 = True
+BEANCOUNT_V3 = not __version__.startswith("2")
