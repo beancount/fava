@@ -26,18 +26,22 @@ Fava displays charts for BQL queries - if they have exactly two columns like the
 following example with the first being a date or string and the second an
 inventory, then a line chart or treemap chart is shown on the query page.
 
-    SELECT
-        payee,
-        SUM(COST(position)) AS balance
-    WHERE
-        account ~ 'Expenses'
-    GROUP BY payee, account
+```
+SELECT
+    payee,
+    SUM(COST(position)) AS balance
+WHERE
+    account ~ 'Expenses'
+GROUP BY payee, account
+```
 
 Fava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xlsx` and
 `ods`, install Fava with the `excel` feature:
 
-    pip3 install fava[excel]
+```
+pip3 install fava[excel]
+```
 
 ## Adding Transactions
 
@@ -92,7 +96,9 @@ If you regularly use certain views in Fava with different filters, you can put
 links to them in the sidebar. Custom links can be put in the Beancount file,
 utilizing the `custom` directive:
 
-    2016-05-04 custom "fava-sidebar-link" "Income 2014" "../income_statement?time=2014"
+```
+2016-05-04 custom "fava-sidebar-link" "Income 2014" "../income_statement?time=2014"
+```
 
 `"fava-sidebar-link"` specifies that this directive is for a custom sidebar
 link, followed by the title to display in the sidebar (`"Income 2014"` in this
@@ -143,7 +149,9 @@ generate Document entries for them.
 When enabling the `tag_discovered_documents`-plugin, these Document entries will
 be tagged with `#discovered` and can be filtered in the Journal:
 
-    plugin "fava.plugins.tag_discovered_documents"
+```
+plugin "fava.plugins.tag_discovered_documents"
+```
 
 ### Uploading statements
 
@@ -160,10 +168,11 @@ When enabling the `link_documents`-plugin, the Document entries created by
 Beancount (see above) will be tagged with `#linked`, linked to the corresponding
 transaction and can be filtered in the Journal:
 
-    plugin "fava.plugins.link_documents"
+```
+plugin "fava.plugins.link_documents"
+```
 
 ### Exporting
 
 The entries that are currently shown in Fava, with filters applied, can be
-downloaded in Beancount format by clicking the ⬇ (Export) button in the
-sidebar.
+downloaded in Beancount format by clicking the ⬇ (Export) button in the sidebar.

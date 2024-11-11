@@ -21,6 +21,7 @@ from fava.util.date import parse_date
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from collections.abc import Sequence
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
@@ -386,7 +387,7 @@ class EntryFilter(ABC):
     """Filters a list of entries."""
 
     @abstractmethod
-    def apply(self, entries: list[Directive]) -> list[Directive]:
+    def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         """Filter a list of directives."""
 
 
@@ -407,7 +408,7 @@ class TimeFilter(EntryFilter):
             raise TimeFilterParseError(value)
         self.date_range = DateRange(begin, end)
 
-    def apply(self, entries: list[Directive]) -> list[Directive]:
+    def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         entries, _ = clamp_opt(
             entries,
             self.date_range.begin,
@@ -442,7 +443,7 @@ class AdvancedFilter(EntryFilter):
             exception.message += value
             raise
 
-    def apply(self, entries: list[Directive]) -> list[Directive]:
+    def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         _include = self._include
         return [entry for entry in entries if _include(entry)]
 
@@ -459,7 +460,7 @@ class AccountFilter(EntryFilter):
         self._value = value
         self._match = Match(value)
 
-    def apply(self, entries: list[Directive]) -> list[Directive]:
+    def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         value = self._value
         if not value:
             return entries

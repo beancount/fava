@@ -9,15 +9,17 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import requests
-from beancount.query import query_env
-from beancount.query import query_parser
+from beancount.parser.options import OPTIONS_DEFAULTS
+from beanquery import connect
+from beanquery import query_compile  # type: ignore[attr-defined]
+from beanquery.parser.parser import KEYWORDS  # type: ignore[import-untyped]
 from click import echo
 from click import group
 from click import UsageError
 
 from fava import LOCALES
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
 
 BASE_PATH = Path(__file__).parent.parent
@@ -45,14 +47,17 @@ def generate_bql_grammar_json() -> None:
 
     Should be run whenever the BQL changes."""
 
-    target_env = query_env.TargetsEnvironment()
+    tables = connect(
+        "beancount:", entries=[], options=OPTIONS_DEFAULTS, errors=[]
+    ).tables  # type: ignore[attr-defined]
+    columns = {column for table in tables.values() for column in table.columns}
     data = {
-        "columns": sorted(set(_env_to_list(target_env.columns))),
-        "functions": sorted(set(_env_to_list(target_env.functions))),
-        "keywords": sorted({kw.lower() for kw in query_parser.Lexer.keywords}),
+        "columns": sorted(columns),
+        "functions": sorted(query_compile.FUNCTIONS.keys()),
+        "keywords": sorted({kw.lower() for kw in KEYWORDS}),
     }
     path = BASE_PATH / "frontend" / "src" / "codemirror" / "bql-grammar.ts"
-    path.write_text("export default " + json.dumps(data))
+    path.write_text("export default " + json.dumps(data, indent="  "))
 
 
 class MissingPoeditorTokenError(UsageError):

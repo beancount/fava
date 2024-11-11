@@ -6,9 +6,12 @@ interface for asynchronous functionality.
 
 from __future__ import annotations
 
+import logging
 import shutil
+from abc import abstractmethod
 from dataclasses import dataclass
 from functools import wraps
+from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
@@ -38,20 +41,22 @@ from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Mapping
+    from collections.abc import Sequence
     from datetime import date
     from decimal import Decimal
 
     from flask.wrappers import Response
 
     from fava.core.ingest import FileImporters
-    from fava.core.query_shell import QueryResultTable
-    from fava.core.query_shell import QueryResultText
+    from fava.core.query import QueryResultTable
+    from fava.core.query import QueryResultText
     from fava.core.tree import SerialisedTreeNode
     from fava.internal_api import ChartData
     from fava.util.date import DateRange
 
 
 json_api = Blueprint("json_api", __name__)
+log = logging.getLogger(__name__)
 
 
 class ValidationError(Exception):
@@ -74,9 +79,11 @@ class IncorrectTypeValidationError(ValidationError):
         )
 
 
-def json_err(msg: str) -> Response:
+def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
-    return jsonify({"success": False, "error": msg})
+    res = jsonify({"success": False, "error": msg})
+    res.status = status  # type: ignore[assignment]
+    return res
 
 
 def json_success(data: Any) -> Response:
@@ -86,19 +93,89 @@ def json_success(data: Any) -> Response:
     )
 
 
+class FavaJSONAPIError(FavaAPIError):
+    """An error with a HTTPStatus."""
+
+    @property
+    @abstractmethod
+    def status(self) -> HTTPStatus:
+        """HTTP status that should be used for the response."""
+
+
+class TargetPathAlreadyExistsError(FavaJSONAPIError):
+    """The given path already exists."""
+
+    status = HTTPStatus.CONFLICT
+
+    def __init__(self, path: Path) -> None:
+        super().__init__(f"{path} already exists.")
+
+
+class DocumentDirectoryMissingError(FavaJSONAPIError):
+    """No document directory was specified."""
+
+    status = HTTPStatus.UNPROCESSABLE_ENTITY
+
+    def __init__(self) -> None:
+        super().__init__("You need to set a documents folder.")
+
+
+class NoFileUploadedError(FavaJSONAPIError):
+    """No file uploaded."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self) -> None:
+        super().__init__("No file uploaded.")
+
+
+class UploadedFileIsMissingFilenameError(FavaJSONAPIError):
+    """Uploaded file is missing filename."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self) -> None:
+        super().__init__("Uploaded file is missing filename.")
+
+
+class NotAValidDocumentOrImportFileError(FavaJSONAPIError):
+    """Not valid document or import file."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not valid document or import file: '{filename}'.")
+
+
+class NotAFileError(FavaJSONAPIError):
+    """Not a file."""
+
+    status = HTTPStatus.UNPROCESSABLE_ENTITY
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not a file: '{filename}'")
+
+
 @json_api.errorhandler(FavaAPIError)
-def _json_api_exception(error: FavaAPIError) -> Response:
-    return json_err(error.message)
+def _json_api_fava_api_error(error: FavaAPIError) -> Response:
+    log.error("Encountered FavaAPIError.", exc_info=error)
+    return json_err(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@json_api.errorhandler(FavaJSONAPIError)
+def _json_api_fava_json_api(error: FavaJSONAPIError) -> Response:
+    return json_err(error.message, error.status)
 
 
 @json_api.errorhandler(OSError)
-def _json_api_oserror(error: OSError) -> Response:
-    return json_err(error.strerror)
+def _json_api_oserror(error: OSError) -> Response:  # pragma: no cover
+    log.error("Encountered OSError.", exc_info=error)
+    return json_err(error.strerror, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(ValidationError)
 def _json_api_validation_error(error: ValidationError) -> Response:
-    return json_err(f"Invalid API request: {error!s}")
+    return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
 
 
 def validate_func_arguments(
@@ -179,48 +256,6 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     return _wrapper
 
 
-class TargetPathAlreadyExistsError(FavaAPIError):
-    """The given path already exists."""
-
-    def __init__(self, path: Path) -> None:
-        super().__init__(f"{path} already exists.")
-
-
-class DocumentDirectoryMissingError(FavaAPIError):
-    """No document directory was specified."""
-
-    def __init__(self) -> None:
-        super().__init__("You need to set a documents folder.")
-
-
-class NoFileUploadedError(FavaAPIError):
-    """No file uploaded."""
-
-    def __init__(self) -> None:
-        super().__init__("No file uploaded.")
-
-
-class UploadedFileIsMissingFilenameError(FavaAPIError):
-    """Uploaded file is missing filename."""
-
-    def __init__(self) -> None:
-        super().__init__("Uploaded file is missing filename.")
-
-
-class NotAValidDocumentOrImportFileError(FavaAPIError):
-    """Not valid document or import file."""
-
-    def __init__(self, filename: str) -> None:
-        super().__init__(f"Not valid document or import file: '{filename}'.")
-
-
-class NotAFileError(FavaAPIError):
-    """Not a file."""
-
-    def __init__(self, filename: str) -> None:
-        super().__init__(f"Not a file: '{filename}'")
-
-
 @api_endpoint
 def get_changed() -> bool:
     """Check for file changes."""
@@ -232,7 +267,7 @@ api_endpoint(get_ledger_data)
 
 
 @api_endpoint
-def get_payee_accounts(payee: str) -> list[str]:
+def get_payee_accounts(payee: str) -> Sequence[str]:
     """Rank accounts for the given payee."""
     return g.ledger.attributes.payee_accounts(payee)
 
@@ -241,13 +276,12 @@ def get_payee_accounts(payee: str) -> list[str]:
 def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     """Run a Beancount query."""
     return g.ledger.query_shell.execute_query_serialised(
-        g.filtered.entries,
-        query_string,
+        g.filtered.entries, query_string
     )
 
 
 @api_endpoint
-def get_extract(filename: str, importer: str) -> list[Any]:
+def get_extract(filename: str, importer: str) -> Sequence[Any]:
     """Extract entries using the ingest framework."""
     entries = g.ledger.ingest.extract(filename, importer)
     return list(map(serialise, entries))
@@ -258,8 +292,8 @@ class Context:
     """Context for an entry."""
 
     entry: Any
-    balances_before: dict[str, list[str]] | None
-    balances_after: dict[str, list[str]] | None
+    balances_before: Mapping[str, Sequence[str]] | None
+    balances_after: Mapping[str, Sequence[str]] | None
     sha256sum: str
     slice: str
 
@@ -304,7 +338,7 @@ def get_payee_transaction(payee: str) -> Any:
 
 
 @api_endpoint
-def get_source(filename: str) -> dict[str, str]:
+def get_source(filename: str) -> Mapping[str, str]:
     """Load one of the source files."""
     file_path = (
         filename
@@ -442,21 +476,21 @@ def put_upload_import_file() -> str:
 
 
 @api_endpoint
-def get_events() -> list[Event]:
+def get_events() -> Sequence[Event]:
     """Get all (filtered) events."""
     g.ledger.changed()
     return [serialise(e) for e in g.filtered.entries if isinstance(e, Event)]
 
 
 @api_endpoint
-def get_imports() -> list[FileImporters]:
+def get_imports() -> Sequence[FileImporters]:
     """Get a list of the importable files."""
     g.ledger.changed()
     return g.ledger.ingest.import_data()
 
 
 @api_endpoint
-def get_documents() -> list[Document]:
+def get_documents() -> Sequence[Document]:
     """Get all (filtered) documents."""
     g.ledger.changed()
     return [
@@ -470,11 +504,11 @@ class CommodityPairWithPrices:
 
     base: str
     quote: str
-    prices: list[tuple[date, Decimal]]
+    prices: Sequence[tuple[date, Decimal]]
 
 
 @api_endpoint
-def get_commodities() -> list[CommodityPairWithPrices]:
+def get_commodities() -> Sequence[CommodityPairWithPrices]:
     """Get the prices for all commodity pairs."""
     g.ledger.changed()
     ret = []
@@ -491,8 +525,8 @@ class TreeReport:
     """Data for the tree reports."""
 
     date_range: DateRange | None
-    charts: list[ChartData]
-    trees: list[SerialisedTreeNode]
+    charts: Sequence[ChartData]
+    trees: Sequence[SerialisedTreeNode]
 
 
 @api_endpoint
@@ -589,15 +623,15 @@ def get_trial_balance() -> TreeReport:
 class AccountBudget:
     """Budgets for an account."""
 
-    budget: dict[str, Decimal]
-    budget_children: dict[str, Decimal]
+    budget: Mapping[str, Decimal]
+    budget_children: Mapping[str, Decimal]
 
 
 @dataclass(frozen=True)
 class AccountReportJournal:
     """Data for the journal account report."""
 
-    charts: list[ChartData]
+    charts: Sequence[ChartData]
     journal: str
 
 
@@ -605,10 +639,10 @@ class AccountReportJournal:
 class AccountReportTree:
     """Data for the tree account reports."""
 
-    charts: list[ChartData]
-    interval_balances: list[SerialisedTreeNode]
-    budgets: dict[str, list[AccountBudget]]
-    dates: list[DateRange]
+    charts: Sequence[ChartData]
+    interval_balances: Sequence[SerialisedTreeNode]
+    budgets: Mapping[str, Sequence[AccountBudget]]
+    dates: Sequence[DateRange]
 
 
 @api_endpoint

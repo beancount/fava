@@ -30,13 +30,13 @@
 </script>
 
 {#if extension === "pdf"}
-  <object title={filename} data={url} />
+  <object title={filename} data={url}></object>
 {:else if plainTextExtensions.includes(extension)}
   <DocumentPreviewEditor {url} />
 {:else if imageExtensions.includes(extension)}
   <img src={url} alt={filename} />
 {:else if ["html", "htm"].includes(extension)}
-  <iframe src={url} title={filename} sandbox="" />
+  <iframe src={url} title={filename} sandbox=""></iframe>
 {:else}
   Preview for file `{filename}` with file type `{extension}` is not implemented
 {/if}

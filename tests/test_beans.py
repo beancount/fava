@@ -10,6 +10,7 @@ import pytest
 from fava.beans import create
 from fava.beans.abc import Note
 from fava.beans.abc import Price
+from fava.beans.account import account_tester
 from fava.beans.account import parent
 from fava.beans.account import root
 from fava.beans.funcs import get_position
@@ -26,8 +27,25 @@ def test_account_parent() -> None:
     assert parent("Assets:Cash") == "Assets"
     assert parent("Assets:Cash:AA") == "Assets:Cash"
     assert parent("Assets:asdfasdf") == "Assets"
+
+
+def test_account_root() -> None:
     assert root("Assets:asdfasdf:asdfasdf") == "Assets"
     assert root("Assets:asdfasdf") == "Assets"
+
+
+def test_account_tester() -> None:
+    is_child = account_tester("Assets:Cash", with_children=True)
+    assert not is_child("Assets")
+    assert not is_child("Assets:CashOther")
+    assert is_child("Assets:Cash")
+    assert is_child("Assets:Cash:Test")
+
+    is_equal = account_tester("Assets:Cash", with_children=False)
+    assert not is_equal("Assets")
+    assert not is_equal("Assets:CashOther")
+    assert is_equal("Assets:Cash")
+    assert not is_equal("Assets:Cash:Test")
 
 
 def test_hash_entry() -> None:

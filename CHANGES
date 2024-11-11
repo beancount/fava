@@ -1,6 +1,21 @@
 Changelog
 =========
 
+Unreleased (Beancount v3 support)
+---------------------------------
+
+Support for Beancount version 3 was added. Using Beancount 2 is still
+supported. Beancount query support is now provided by the beanquery package,
+which has some minor differences in syntax, the provided columns and functions
+to the bean-query functionality in Beancount version 2. For extensions using
+Fava's query_shell directly, this will lead to breakage due to differences in
+methods and the types that are returned.
+
+For importers, this sticks to beancount.ingest on v2 and used beangulp for v3.
+It still expectes importers to conform to the v2 importer protocol for now. Due
+to changes related to duplicate detection, duplicate detection is not
+automatically done by Fava here but can still be manually specified as hooks.
+
 v1.29 (2024-10-09)
 ------------------
 

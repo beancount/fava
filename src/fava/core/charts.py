@@ -23,7 +23,7 @@ from simplejson import loads as simplejson_loads
 from fava.beans.abc import Amount
 from fava.beans.abc import Position
 from fava.beans.abc import Transaction
-from fava.beans.account import child_account_tester
+from fava.beans.account import account_tester
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
@@ -33,6 +33,7 @@ from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from collections.abc import Mapping
 
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
@@ -99,8 +100,8 @@ class DateAndBalanceWithBudget:
 
     date: date
     balance: SimpleCounterInventory
-    account_balances: dict[str, SimpleCounterInventory]
-    budgets: dict[str, Decimal]
+    account_balances: Mapping[str, SimpleCounterInventory]
+    budgets: Mapping[str, Decimal]
 
 
 class ChartModule(FavaModule):
@@ -229,7 +230,7 @@ class ChartModule(FavaModule):
         def _balances() -> Iterable[tuple[date, CounterInventory]]:
             last_date = None
             running_balance = CounterInventory()
-            is_child_account = child_account_tester(account_name)
+            is_child_account = account_tester(account_name, with_children=True)
 
             for entry in filtered.entries:
                 for posting in getattr(entry, "postings", []):

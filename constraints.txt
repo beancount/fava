@@ -15,22 +15,25 @@ babel==2.16.0
     #   sphinx
 backports-tarfile==1.2.0
     # via jaraco-context
-beancount==2.3.6
+beancount==3.0.0
+    # via
+    #   fava (pyproject.toml)
+    #   beangulp
+    #   beanquery
+beangulp==0.1.1
+    # via fava (pyproject.toml)
+beanquery==0.1.0
     # via fava (pyproject.toml)
 beautifulsoup4==4.12.3
     # via
-    #   beancount
+    #   beangulp
     #   furo
-blinker==1.8.2
+blinker==1.9.0
     # via flask
-bottle==0.13.2
-    # via beancount
 build==1.2.2.post1
     # via fava (pyproject.toml)
 cachetools==5.5.0
-    # via
-    #   google-auth
-    #   tox
+    # via tox
 certifi==2024.8.30
     # via requests
 cffi==1.17.1
@@ -39,7 +42,7 @@ cfgv==3.4.0
     # via pre-commit
 chardet==5.2.0
     # via
-    #   beancount
+    #   beangulp
     #   pyexcel
     #   tox
 charset-normalizer==3.4.0
@@ -49,12 +52,15 @@ cheroot==10.0.1
 click==8.1.7
     # via
     #   fava (pyproject.toml)
+    #   beancount
+    #   beangulp
+    #   beanquery
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.6.3
+coverage==7.6.4
     # via pytest-cov
-cryptography==43.0.1
+cryptography==43.0.3
     # via secretstorage
 dill==0.3.9
     # via pylint
@@ -64,7 +70,7 @@ docutils==0.21.2
     # via
     #   readme-renderer
     #   sphinx
-et-xmlfile==1.1.0
+et-xmlfile==2.0.0
     # via openpyxl
 exceptiongroup==1.2.2
     # via
@@ -82,23 +88,6 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 furo==2024.8.6
     # via fava (pyproject.toml)
-google-api-core==2.21.0
-    # via google-api-python-client
-google-api-python-client==2.149.0
-    # via beancount
-google-auth==2.35.0
-    # via
-    #   google-api-core
-    #   google-api-python-client
-    #   google-auth-httplib2
-google-auth-httplib2==0.2.0
-    # via google-api-python-client
-googleapis-common-protos==1.65.0
-    # via google-api-core
-httplib2==0.22.0
-    # via
-    #   google-api-python-client
-    #   google-auth-httplib2
 identify==2.6.1
     # via pre-commit
 idna==3.10
@@ -140,7 +129,7 @@ jinja2==3.1.4
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.4.1
+keyring==25.5.0
     # via twine
 lml==0.1.0
     # via
@@ -148,14 +137,14 @@ lml==0.1.0
     #   pyexcel-io
 lxml==5.3.0
     # via
-    #   beancount
+    #   beangulp
     #   pyexcel-ezodf
     #   pyexcel-ods3
 markdown-it-py==3.0.0
     # via rich
 markdown2==2.5.1
     # via fava (pyproject.toml)
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via
     #   jinja2
     #   werkzeug
@@ -168,7 +157,7 @@ more-itertools==10.5.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.12.0
+mypy==1.13.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -178,7 +167,7 @@ nodeenv==1.9.1
     # via pre-commit
 openpyxl==3.1.5
     # via pyexcel-xlsx
-packaging==24.1
+packaging==24.2
     # via
     #   build
     #   pyinstaller
@@ -188,8 +177,6 @@ packaging==24.1
     #   sphinx
     #   tox
     #   tox-uv
-pdfminer2==20151206
-    # via beancount
 pkginfo==1.10.0
     # via twine
 platformdirs==4.3.6
@@ -202,24 +189,9 @@ pluggy==1.5.0
     #   pytest
     #   tox
 ply==3.11
-    # via
-    #   fava (pyproject.toml)
-    #   beancount
+    # via fava (pyproject.toml)
 pre-commit==4.0.1
     # via fava (pyproject.toml)
-proto-plus==1.24.0
-    # via google-api-core
-protobuf==5.28.2
-    # via
-    #   google-api-core
-    #   googleapis-common-protos
-    #   proto-plus
-pyasn1==0.6.1
-    # via
-    #   pyasn1-modules
-    #   rsa
-pyasn1-modules==0.4.1
-    # via google-auth
 pycparser==2.22
     # via cffi
 pyexcel==0.7.0
@@ -247,8 +219,6 @@ pyinstaller-hooks-contrib==2024.9
     # via pyinstaller
 pylint==3.3.1
     # via fava (pyproject.toml)
-pyparsing==3.2.0
-    # via httplib2
 pyproject-api==1.8.0
     # via tox
 pyproject-hooks==1.2.0
@@ -256,24 +226,26 @@ pyproject-hooks==1.2.0
 pytest==8.3.3
     # via
     #   fava (pyproject.toml)
-    #   beancount
     #   pytest-cov
-pytest-cov==5.0.0
+pytest-cov==6.0.0
     # via fava (pyproject.toml)
 python-dateutil==2.9.0.post0
-    # via beancount
+    # via
+    #   beancount
+    #   beanquery
 python-magic==0.4.27
-    # via beancount
+    # via beangulp
 pytz==2024.2
     # via flask-babel
 pyyaml==6.0.2
     # via pre-commit
 readme-renderer==44.0
     # via twine
+regex==2024.11.6
+    # via beancount
 requests==2.32.3
     # via
-    #   beancount
-    #   google-api-core
+    #   fava (pyproject.toml)
     #   requests-toolbelt
     #   sphinx
     #   twine
@@ -281,13 +253,11 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.9.2
+rich==13.9.4
     # via twine
-rsa==4.9
-    # via google-auth
 secretstorage==3.3.3
     # via keyring
-setuptools==75.2.0
+setuptools==75.3.0
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -295,9 +265,7 @@ setuptools==75.2.0
 simplejson==3.19.3
     # via fava (pyproject.toml)
 six==1.16.0
-    # via
-    #   pdfminer2
-    #   python-dateutil
+    # via python-dateutil
 sniffio==1.3.1
     # via anyio
 snowballstemmer==2.2.0
@@ -326,6 +294,8 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
+tatsu==5.7.4
+    # via beanquery
 texttable==1.7.0
     # via pyexcel
 tomli==2.0.2
@@ -340,15 +310,15 @@ tomli==2.0.2
     #   tox
 tomlkit==0.13.2
     # via pylint
-tox==4.23.0
+tox==4.23.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.15.0
+tox-uv==1.16.0
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==75.1.0.20241014
+types-setuptools==75.3.0.20241107
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240801
     # via fava (pyproject.toml)
@@ -361,21 +331,19 @@ typing-extensions==4.12.2
     #   rich
     #   tox
     #   tox-uv
-uritemplate==4.1.1
-    # via google-api-python-client
 urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.4.23
+uv==0.5.1
     # via tox-uv
-virtualenv==20.26.6
+virtualenv==20.27.1
     # via
     #   pre-commit
     #   tox
 watchfiles==0.24.0
     # via fava (pyproject.toml)
-werkzeug==3.0.4
+werkzeug==3.1.3
     # via
     #   fava (pyproject.toml)
     #   flask

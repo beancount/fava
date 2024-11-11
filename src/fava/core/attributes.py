@@ -9,6 +9,8 @@ from fava.util.date import END_OF_YEAR
 from fava.util.ranking import ExponentialDecayRanker
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
     from fava.beans.abc import Transaction
     from fava.core import FavaLedger
@@ -16,7 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def get_active_years(
-    entries: list[Directive],
+    entries: Sequence[Directive],
     fye: FiscalYearEnd,
 ) -> list[str]:
     """Return active years, with support for fiscal years.
@@ -59,12 +61,12 @@ class AttributesModule(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.accounts: list[str] = []
-        self.currencies: list[str] = []
-        self.payees: list[str] = []
-        self.links: list[str] = []
-        self.tags: list[str] = []
-        self.years: list[str] = []
+        self.accounts: Sequence[str] = []
+        self.currencies: Sequence[str] = []
+        self.payees: Sequence[str] = []
+        self.links: Sequence[str] = []
+        self.tags: Sequence[str] = []
+        self.years: Sequence[str] = []
 
     def load_file(self) -> None:  # noqa: D102
         all_entries = self.ledger.all_entries
@@ -105,7 +107,7 @@ class AttributesModule(FavaModule):
         self.currencies = currency_ranker.sort()
         self.payees = payee_ranker.sort()
 
-    def payee_accounts(self, payee: str) -> list[str]:
+    def payee_accounts(self, payee: str) -> Sequence[str]:
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
         transactions = self.ledger.all_entries_by_type.Transaction

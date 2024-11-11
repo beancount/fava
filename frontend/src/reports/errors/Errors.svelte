@@ -64,8 +64,8 @@
               <a class="source" href={url} {title}>{source.lineno}</a>
             </td>
           {:else}
-            <td />
-            <td class="num" />
+            <td></td>
+            <td class="num"></td>
           {/if}
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           <td class="pre">{@html addAccountLinks(message)}</td>

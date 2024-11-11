@@ -26,6 +26,7 @@ from fava.util.date import parse_fye_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Sequence
     from re import Pattern
 
     from fava.beans.abc import Custom
@@ -91,7 +92,7 @@ class FavaOptions:
 
     account_journal_include_children: bool = True
     auto_reload: bool = False
-    collapse_pattern: list[Pattern[str]] = field(default_factory=list)
+    collapse_pattern: Sequence[Pattern[str]] = field(default_factory=list)
     conversion_currencies: tuple[str, ...] = ()
     currency_column: int = 61
     default_file: str | None = None
@@ -100,7 +101,7 @@ class FavaOptions:
     import_config: str | None = None
     import_dirs: tuple[str, ...] = ()
     indent: int = 2
-    insert_entry: list[InsertEntryOption] = field(default_factory=list)
+    insert_entry: Sequence[InsertEntryOption] = field(default_factory=list)
     invert_income_liabilities_equity: bool = False
     language: str | None = None
     locale: str | None = None
@@ -119,7 +120,8 @@ class FavaOptions:
             pattern = re.compile(value)
         except re.error as err:
             raise NotARegularExpressionError(value) from err
-        self.collapse_pattern.append(pattern)
+        # It's typed as Sequence so that it's not externally mutated
+        self.collapse_pattern.append(pattern)  # type: ignore[attr-defined]
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
@@ -141,7 +143,8 @@ class FavaOptions:
         except re.error as err:
             raise NotARegularExpressionError(value) from err
         opt = InsertEntryOption(date, pattern, filename, lineno)
-        self.insert_entry.append(opt)
+        # It's typed as Sequence so that it's not externally mutated
+        self.insert_entry.append(opt)  # type: ignore[attr-defined]
 
     def set_language(self, value: str) -> None:
         """Set the locale option."""
@@ -207,7 +210,7 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
 
 
 def parse_options(
-    custom_entries: list[Custom],
+    custom_entries: Sequence[Custom],
 ) -> tuple[FavaOptions, list[OptionError]]:
     """Parse custom entries for Fava options.
 

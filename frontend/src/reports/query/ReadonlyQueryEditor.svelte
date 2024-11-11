@@ -7,7 +7,7 @@
   const { renderEditor } = initReadonlyQueryEditor(value);
 </script>
 
-<pre class:error use:renderEditor />
+<pre class:error use:renderEditor></pre>
 
 <style>
   .error {

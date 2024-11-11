@@ -1,0 +1,6 @@
+parsed statement
+----------------
+  (select
+    targets: (
+      (target
+        expression: (column

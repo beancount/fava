@@ -3,7 +3,7 @@
     [
       "2014-01-01",
       "*",
-      "",
+      null,
       "Opening Balance for checking account",
       "Assets:US:BofA:Checking",
       {
@@ -20,7 +20,7 @@
     [
       "2014-01-01",
       "*",
-      "",
+      null,
       "Opening Balance for checking account",
       "Equity:Opening-Balances",
       {
@@ -35,7 +35,7 @@
     [
       "2014-01-01",
       "*",
-      "",
+      null,
       "Allowed contributions for one year",
       "Income:US:Federal:PreTax401k",
       {
@@ -52,7 +52,7 @@
     [
       "2014-01-01",
       "*",
-      "",
+      null,
       "Allowed contributions for one year",
       "Assets:US:Federal:PreTax401k",
       {
@@ -367,7 +367,7 @@
     [
       "2014-01-03",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
       {
@@ -384,7 +384,7 @@
     [
       "2014-01-03",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
       {
@@ -495,7 +495,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:VBMPX",
       {
@@ -517,7 +517,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
       {
@@ -535,7 +535,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:RGAGX",
       {
@@ -559,7 +559,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
       {
@@ -578,7 +578,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:VBMPX",
       {
@@ -602,7 +602,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
       {
@@ -621,7 +621,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:RGAGX",
       {
@@ -645,7 +645,7 @@
     [
       "2014-01-06",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
       {
@@ -1350,7 +1350,7 @@
     [
       "2014-01-17",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
       {
@@ -1369,7 +1369,7 @@
     [
       "2014-01-17",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
       {
@@ -1464,7 +1464,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:VBMPX",
       {
@@ -1488,7 +1488,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
       {
@@ -1507,7 +1507,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:RGAGX",
       {
@@ -1531,7 +1531,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
       {
@@ -1550,7 +1550,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:VBMPX",
       {
@@ -1574,7 +1574,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
       {
@@ -1593,7 +1593,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:RGAGX",
       {
@@ -1617,7 +1617,7 @@
     [
       "2014-01-20",
       "*",
-      "",
+      null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
       {
@@ -2246,7 +2246,7 @@
     [
       "2014-01-31",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
       {
@@ -2265,7 +2265,7 @@
     [
       "2014-01-31",
       "*",
-      "",
+      null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
       {
@@ -2294,11 +2294,11 @@
     },
     {
       "dtype": "str",
-      "name": "maxwidth_payee_c48"
+      "name": "MAXWIDTH(payee, 48)"
     },
     {
       "dtype": "str",
-      "name": "maxwidth_narration_c80"
+      "name": "MAXWIDTH(narration, 80)"
     },
     {
       "dtype": "str",

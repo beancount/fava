@@ -13,11 +13,13 @@ from fava.helpers import BeancountError
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Custom
     from fava.beans.abc import Event
     from fava.core import FavaLedger
 
-    SidebarLinks = list[tuple[str, str]]
+    SidebarLinks = Sequence[tuple[str, str]]
 
 
 class FavaError(BeancountError):
@@ -32,7 +34,7 @@ class FavaMisc(FavaModule):
         #: User-chosen links to show in the sidebar.
         self.sidebar_links: SidebarLinks = []
         #: Upcoming events in the next few days.
-        self.upcoming_events: list[Event] = []
+        self.upcoming_events: Sequence[Event] = []
 
     def load_file(self) -> None:  # noqa: D102
         custom_entries = self.ledger.all_entries_by_type.Custom
@@ -54,7 +56,7 @@ class FavaMisc(FavaModule):
             )
 
 
-def sidebar_links(custom_entries: list[Custom]) -> list[tuple[str, str]]:
+def sidebar_links(custom_entries: Sequence[Custom]) -> SidebarLinks:
     """Parse custom entries for links.
 
     They have the following format:
@@ -70,7 +72,9 @@ def sidebar_links(custom_entries: list[Custom]) -> list[tuple[str, str]]:
     ]
 
 
-def upcoming_events(events: list[Event], max_delta: int) -> list[Event]:
+def upcoming_events(
+    events: Sequence[Event], max_delta: int
+) -> Sequence[Event]:
     """Parse entries for upcoming events.
 
     Args:

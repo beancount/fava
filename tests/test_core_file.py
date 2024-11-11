@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import os
 import re
 import shutil
@@ -18,6 +19,7 @@ from fava.beans.helpers import replace
 from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import _file_newline_character
+from fava.core.file import _incomplete_sortkey
 from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
@@ -38,6 +40,37 @@ def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
     shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
     ledger_path.chmod(tmp_path.stat().st_mode)
     return FavaLedger(str(ledger_path))
+
+
+def test_sort_incomplete_sortkey() -> None:
+    assert sorted([], key=_incomplete_sortkey) == []
+
+    date = datetime.date(2000, 1, 1)
+
+    open_ = create.open(meta={}, date=date, account="Assets", currencies=[])
+    balance = create.balance(
+        meta={}, date=date, account="Assets", amount=create.amount("10 EUR")
+    )
+    txn = create.transaction(
+        meta={}, date=date, flag="*", payee="payee", narration="narration"
+    )
+    note = create.note(meta={}, date=date, account="Assets", comment="a note")
+    document = create.document(
+        meta={}, date=date, account="Assets", filename=""
+    )
+    close = create.close(meta={}, date=date, account="Assets")
+
+    assert sorted([txn, note], key=_incomplete_sortkey) == [txn, note]
+    assert sorted(
+        [balance, txn, close, open_, note, document], key=_incomplete_sortkey
+    ) == [
+        open_,
+        balance,
+        txn,
+        note,
+        document,
+        close,
+    ]
 
 
 def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
@@ -248,9 +281,7 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        frozenset(),
-        frozenset(),
-        postings,
+        postings=postings,
     )
 
     # Test insertion without "insert-entry" options.
@@ -397,9 +428,7 @@ def test_insert_entry_align(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        frozenset(),
-        frozenset(),
-        postings,
+        postings=postings,
     )
 
     insert_entry(transaction, str(samplefile), [], 50, 4)
@@ -434,9 +463,7 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        frozenset(),
-        frozenset(),
-        postings,
+        postings=postings,
     )
 
     # Test insertion with 2-space indent.
@@ -465,9 +492,7 @@ def test_render_entries(
         "*",
         "new payee",
         "narr",
-        frozenset(),
-        frozenset(),
-        [
+        postings=[
             create.posting("Expenses:Food", "10.00 USD"),
         ],
     )

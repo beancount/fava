@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import pytest
@@ -54,9 +55,9 @@ def test_listify() -> None:
 
 def test_simple_wsgi() -> None:
     client = Client(simple_wsgi, Response)
-    resp = client.get("/any_path")
-    assert resp.status_code == 200
-    assert resp.data == b""
+    response = client.get("/any_path")
+    assert response.status_code == HTTPStatus.OK.value
+    assert response.data == b""
 
 
 def test_next_key() -> None:
