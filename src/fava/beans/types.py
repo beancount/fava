@@ -9,6 +9,8 @@ from fava.beans.abc import Directive
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from beancount.core.display_context import DisplayContext
 
 
@@ -25,9 +27,9 @@ class BeancountOptions(TypedDict):
     account_current_conversions: str
     account_current_earnings: str
     render_commas: bool
-    operating_currency: list[str]
-    documents: list[str]
-    include: list[str]
+    operating_currency: Sequence[str]
+    documents: Sequence[str]
+    include: Sequence[str]
     dcontext: DisplayContext
 
 

@@ -9,8 +9,11 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.funcs import ResultRow
-    from fava.beans.funcs import ResultType
+    from typing import Any
+
+    from beanquery import Column
+
+    ResultRow = tuple[Any, ...]
 
 try:
     import pyexcel  # type: ignore[import-not-found]
@@ -26,7 +29,7 @@ class InvalidResultFormatError(ValueError):  # noqa: D101
 
 
 def to_excel(
-    types: list[ResultType],
+    types: list[Column],
     rows: list[ResultRow],
     result_format: str,
     query_string: str,
@@ -54,7 +57,7 @@ def to_excel(
     return resp
 
 
-def to_csv(types: list[ResultType], rows: list[ResultRow]) -> io.BytesIO:
+def to_csv(types: list[Column], rows: list[ResultRow]) -> io.BytesIO:
     """Save result to CSV.
 
     Args:
@@ -71,22 +74,22 @@ def to_csv(types: list[ResultType], rows: list[ResultRow]) -> io.BytesIO:
 
 
 def _result_array(
-    types: list[ResultType],
+    types: list[Column],
     rows: list[ResultRow],
 ) -> list[list[str]]:
-    result_array = [[name for name, t in types]]
+    result_array = [[t.name for t in types]]
     result_array.extend(_row_to_pyexcel(row, types) for row in rows)
     return result_array
 
 
-def _row_to_pyexcel(row: ResultRow, header: list[ResultType]) -> list[str]:
+def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str]:
     result = []
     for idx, column in enumerate(header):
         value = row[idx]
         if not value:
             result.append(value)
             continue
-        type_ = column[1]
+        type_ = column.datatype
         if type_ is Decimal:
             result.append(float(value))
         elif type_ is int:

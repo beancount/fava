@@ -36,6 +36,7 @@ from fava.util import next_key
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Iterable
+    from collections.abc import Sequence
 
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
@@ -221,7 +222,7 @@ class FileModule(FavaModule):
             self.ledger.watcher.notify(Path(get_position(entry)[0]))
             self.ledger.extensions.after_delete_entry(entry)
 
-    def insert_entries(self, entries: list[Directive]) -> None:
+    def insert_entries(self, entries: Sequence[Directive]) -> None:
         """Insert entries.
 
         Args:
@@ -245,7 +246,7 @@ class FileModule(FavaModule):
                 self.ledger.fava_options.insert_entry = updated_insert_options
                 self.ledger.extensions.after_insert_entry(entry)
 
-    def render_entries(self, entries: list[Directive]) -> Iterable[Markup]:
+    def render_entries(self, entries: Sequence[Directive]) -> Iterable[Markup]:
         """Return entries in Beancount format.
 
         Only renders :class:`.Balance` and :class:`.Transaction`.
@@ -309,7 +310,7 @@ def insert_metadata_in_file(
         file.write("".join(contents))
 
 
-def find_entry_lines(lines: list[str], lineno: int) -> list[str]:
+def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
     """Lines of entry starting at lineno.
 
     Args:
@@ -433,10 +434,10 @@ def delete_entry_slice(
 def insert_entry(
     entry: Directive,
     default_filename: str,
-    insert_options: list[InsertEntryOption],
+    insert_options: Sequence[InsertEntryOption],
     currency_column: int,
     indent: int,
-) -> tuple[Path, list[InsertEntryOption]]:
+) -> tuple[Path, Sequence[InsertEntryOption]]:
     """Insert an entry.
 
     Args:
@@ -489,7 +490,7 @@ def insert_entry(
 
 def find_insert_position(
     entry: Directive,
-    insert_options: list[InsertEntryOption],
+    insert_options: Sequence[InsertEntryOption],
     default_filename: str,
 ) -> tuple[str, int | None]:
     """Find insert position for an entry.

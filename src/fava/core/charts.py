@@ -33,6 +33,7 @@ from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from collections.abc import Mapping
 
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
@@ -99,8 +100,8 @@ class DateAndBalanceWithBudget:
 
     date: date
     balance: SimpleCounterInventory
-    account_balances: dict[str, SimpleCounterInventory]
-    budgets: dict[str, Decimal]
+    account_balances: Mapping[str, SimpleCounterInventory]
+    budgets: Mapping[str, Decimal]
 
 
 class ChartModule(FavaModule):

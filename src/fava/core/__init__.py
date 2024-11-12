@@ -52,6 +52,8 @@ from fava.util.date import dateranges
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from collections.abc import Mapping
+    from collections.abc import Sequence
     from decimal import Decimal
 
     from fava.beans.abc import Directive
@@ -167,7 +169,7 @@ class FilteredLedger:
             return []
         return dateranges(self._date_first, self._date_last, interval)
 
-    def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
+    def prices(self, base: str, quote: str) -> Sequence[tuple[date, Decimal]]:
         """List all prices."""
         all_prices = self.ledger.prices.get_all_prices((base, quote))
         if all_prices is None:
@@ -232,7 +234,7 @@ class FavaLedger:
     )
 
     #: List of all (unfiltered) entries.
-    all_entries: list[Directive]
+    all_entries: Sequence[Directive]
 
     #: A list of all errors reported by Beancount.
     errors: list[BeancountError]
@@ -363,7 +365,7 @@ class FavaLedger:
         """Path relative to the directory of the ledger."""
         return Path(self.beancount_file_path).parent.joinpath(*args).resolve()
 
-    def paths_to_watch(self) -> tuple[list[Path], list[Path]]:
+    def paths_to_watch(self) -> tuple[Sequence[Path], Sequence[Path]]:
         """Get paths to included files and document directories.
 
         Returns:
@@ -403,7 +405,7 @@ class FavaLedger:
         account_name: str,
         *,
         accumulate: bool = False,
-    ) -> tuple[list[Tree], list[DateRange]]:
+    ) -> tuple[Sequence[Tree], Sequence[DateRange]]:
         """Balances by interval.
 
         Arguments:
@@ -512,8 +514,8 @@ class FavaLedger:
         entry_hash: str,
     ) -> tuple[
         Directive,
-        dict[str, list[str]] | None,
-        dict[str, list[str]] | None,
+        Mapping[str, Sequence[str]] | None,
+        Mapping[str, Sequence[str]] | None,
         str,
         str,
     ]:
@@ -543,7 +545,7 @@ class FavaLedger:
                     if balance is not None:
                         balance.add_position(posting)
 
-        def visualise(inv: Inventory) -> list[str]:
+        def visualise(inv: Inventory) -> Sequence[str]:
             return [to_string(pos) for pos in sorted(inv)]
 
         before = {acc: visualise(inv) for acc, inv in balances.items()}
@@ -556,7 +558,7 @@ class FavaLedger:
         after = {acc: visualise(inv) for acc, inv in balances.items()}
         return entry, before, after, source_slice, sha256sum
 
-    def commodity_pairs(self) -> list[tuple[str, str]]:
+    def commodity_pairs(self) -> Sequence[tuple[str, str]]:
         """List pairs of commodities.
 
         Returns:

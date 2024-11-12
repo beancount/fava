@@ -34,7 +34,7 @@ drastically.
 
 ## Fava Extension Setup Options
 
----
+______________________________________________________________________
 
 ## `fava-extension`
 
@@ -53,7 +53,7 @@ is specified by the individual extension.
 2010-01-01 custom "fava-extension" "extension-name"
 2010-01-01 custom "fava-extension" "extension-with-options" "{'option': 'config_value'}"</textarea></pre>
 
----
+______________________________________________________________________
 
 ## Hooks
 
@@ -64,45 +64,45 @@ Below is a list of all current hooks.
 Called after a ledger file has been loaded. Use the `self.ledger` object to
 access the ledger data.
 
----
+______________________________________________________________________
 
 ### `before_request()`
 
 Called when starting to process a request. Use Flask’s `request` object to
 access the request being processed (`from flask import request`).
 
----
+______________________________________________________________________
 
 ### `after_write_source(path: str, source: str)`
 
 Called after the string `source` has been written to the Beancount file at
 `path`.
 
----
+______________________________________________________________________
 
 ### `after_insert_metadata(entry: Directive, key: str, value: str)`
 
 Called after metadata (`key: value`) has been added to an `entry`.
 
----
+______________________________________________________________________
 
 ### `after_insert_entry(entry: Directive)`
 
 Called after an `entry` has been inserted.
 
----
+______________________________________________________________________
 
 ### `after_entry_modified(entry: Directive, new_lines: str)`
 
 Called after an `entry` has been modified, e.g., via the context popup.
 
----
+______________________________________________________________________
 
 ### `after_delete_entry(entry: Directive)`
 
 Called after an `entry` has been deleted, e.g., via the context popup.
 
----
+______________________________________________________________________
 
 ## Extension attributes
 

@@ -18,6 +18,7 @@ from fava.core.inventory import CounterInventory
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Iterable
+    from collections.abc import Sequence
 
     from fava.beans.abc import Directive
     from fava.beans.prices import FavaPriceMap
@@ -33,7 +34,7 @@ class SerialisedTreeNode:
     account: str
     balance: SimpleCounterInventory
     balance_children: SimpleCounterInventory
-    children: list[SerialisedTreeNode]
+    children: Sequence[SerialisedTreeNode]
     has_txns: bool
 
 

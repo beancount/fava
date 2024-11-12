@@ -31,7 +31,7 @@ class DateKeyWrapper(Sequence[datetime.date]):
 
     __slots__ = ("inner",)
 
-    def __init__(self, inner: list[PricePoint]) -> None:
+    def __init__(self, inner: Sequence[PricePoint]) -> None:
         self.inner = inner
 
     def __len__(self) -> int:
@@ -42,7 +42,7 @@ class DateKeyWrapper(Sequence[datetime.date]):
 
 
 def _keep_last_per_day(
-    prices: list[PricePoint],
+    prices: Sequence[PricePoint],
 ) -> Iterable[PricePoint]:
     """In a sorted non-empty list of prices, keep the last one for each day.
 
@@ -97,7 +97,7 @@ class FavaPriceMap:
 
     def commodity_pairs(
         self,
-        operating_currencies: list[str],
+        operating_currencies: Sequence[str],
     ) -> list[BaseQuote]:
         """List pairs of commodities.
 

@@ -13,6 +13,9 @@ from fava.beans.helpers import replace
 from fava.util.sets import add_to_set
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterator
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.helpers import BeancountError
@@ -21,18 +24,21 @@ __plugins__ = ["tag_discovered_documents"]
 
 
 def tag_discovered_documents(
-    entries: list[Directive],
+    entries: Sequence[Directive],
     options_map: BeancountOptions,
-) -> tuple[list[Directive], list[BeancountError]]:
+) -> tuple[Sequence[Directive], list[BeancountError]]:
     """Tag automatically added documents."""
     if not options_map["documents"]:  # pragma: no cover
         return entries, []
 
-    for index, entry in enumerate(entries):
-        if isinstance(entry, Document) and entry.meta["lineno"] == 0:
-            entries[index] = replace(
-                entry,
-                tags=add_to_set(entry.tags, "discovered"),
-            )
+    def _tag_discovered() -> Iterator[Directive]:
+        for entry in entries:
+            if isinstance(entry, Document) and entry.meta["lineno"] == 0:
+                yield replace(
+                    entry,
+                    tags=add_to_set(entry.tags, "discovered"),
+                )
+            else:
+                yield entry
 
-    return entries, []
+    return list(_tag_discovered()), []

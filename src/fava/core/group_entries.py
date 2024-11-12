@@ -10,24 +10,25 @@ from fava.beans import abc
 from fava.beans.account import get_entry_accounts
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Mapping
     from collections.abc import Sequence
 
 
 class EntriesByType(NamedTuple):
     """Entries grouped by type."""
 
-    Balance: list[abc.Balance]
-    Close: list[abc.Close]
-    Commodity: list[abc.Commodity]
-    Custom: list[abc.Custom]
-    Document: list[abc.Document]
-    Event: list[abc.Event]
-    Note: list[abc.Note]
-    Open: list[abc.Open]
-    Pad: list[abc.Pad]
-    Price: list[abc.Price]
-    Query: list[abc.Query]
-    Transaction: list[abc.Transaction]
+    Balance: Sequence[abc.Balance]
+    Close: Sequence[abc.Close]
+    Commodity: Sequence[abc.Commodity]
+    Custom: Sequence[abc.Custom]
+    Document: Sequence[abc.Document]
+    Event: Sequence[abc.Event]
+    Note: Sequence[abc.Note]
+    Open: Sequence[abc.Open]
+    Pad: Sequence[abc.Pad]
+    Price: Sequence[abc.Price]
+    Query: Sequence[abc.Query]
+    Transaction: Sequence[abc.Transaction]
 
 
 def group_entries_by_type(entries: Sequence[abc.Directive]) -> EntriesByType:
@@ -66,8 +67,8 @@ class TransactionPosting(NamedTuple):
 
 
 def group_entries_by_account(
-    entries: list[abc.Directive],
-) -> dict[str, list[abc.Directive | TransactionPosting]]:
+    entries: Sequence[abc.Directive],
+) -> Mapping[str, Sequence[abc.Directive | TransactionPosting]]:
     """Group entries by account.
 
     Arguments:

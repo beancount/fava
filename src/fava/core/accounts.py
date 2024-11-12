@@ -42,7 +42,7 @@ def get_last_entry(
 
 
 def uptodate_status(
-    txn_postings: list[Directive | TransactionPosting],
+    txn_postings: Sequence[Directive | TransactionPosting],
 ) -> Literal["green", "yellow", "red"] | None:
     """Status of the last balance or transaction.
 

@@ -14,6 +14,7 @@ from beancount.core import position
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Mapping
+    from collections.abc import Sequence
     from decimal import Decimal
     from typing import TypeAlias
 
@@ -158,7 +159,7 @@ class Transaction(Directive):
 
     @property
     @abstractmethod
-    def postings(self) -> list[Posting]:
+    def postings(self) -> Sequence[Posting]:
         """Payee of the transaction."""
 
     @property
@@ -214,7 +215,7 @@ class Custom(Directive):
 
     @property
     @abstractmethod
-    def values(self) -> list[Any]:
+    def values(self) -> Sequence[Any]:
         """Custom values."""
 
 
@@ -275,7 +276,7 @@ class Open(Directive):
 
     @property
     @abstractmethod
-    def currencies(self) -> list[str]:
+    def currencies(self) -> Sequence[str]:
         """Valid currencies for the account."""
 
     @property

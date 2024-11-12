@@ -18,6 +18,7 @@ from fava.context import g
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
     from datetime import date
     from typing import Literal
 
@@ -54,26 +55,26 @@ class SerialisedError:
 class LedgerData:
     """This is used as report-independent data in the frontend."""
 
-    accounts: list[str]
+    accounts: Sequence[str]
     account_details: AccountDict
     base_url: str
-    currencies: list[str]
+    currencies: Sequence[str]
     currency_names: dict[str, str]
-    errors: list[SerialisedError]
+    errors: Sequence[SerialisedError]
     fava_options: FavaOptions
     incognito: bool
     have_excel: bool
-    links: list[str]
-    options: dict[str, str | list[str]]
-    payees: list[str]
+    links: Sequence[str]
+    options: dict[str, str | Sequence[str]]
+    payees: Sequence[str]
     precisions: dict[str, int]
-    tags: list[str]
-    years: list[str]
-    user_queries: list[Query]
+    tags: Sequence[str]
+    years: Sequence[str]
+    user_queries: Sequence[Query]
     upcoming_events_count: int
-    extensions: list[ExtensionDetails]
-    sidebar_links: list[tuple[str, str]]
-    other_ledgers: list[tuple[str, str]]
+    extensions: Sequence[ExtensionDetails]
+    sidebar_links: Sequence[tuple[str, str]]
+    other_ledgers: Sequence[tuple[str, str]]
 
 
 def get_errors() -> list[SerialisedError]:
@@ -81,7 +82,7 @@ def get_errors() -> list[SerialisedError]:
     return [SerialisedError.from_beancount_error(e) for e in g.ledger.errors]
 
 
-def _get_options() -> dict[str, str | list[str]]:
+def _get_options() -> dict[str, str | Sequence[str]]:
     options = g.ledger.options
     return {
         "documents": options["documents"],
@@ -100,6 +101,7 @@ def _get_options() -> dict[str, str | list[str]]:
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
     ledger = g.ledger
+    all_queries = ledger.all_entries_by_type.Query
 
     return LedgerData(
         ledger.attributes.accounts,
@@ -117,7 +119,7 @@ def get_ledger_data() -> LedgerData:
         ledger.format_decimal.precisions,
         ledger.attributes.tags,
         ledger.attributes.years,
-        ledger.query_shell.queries[: ledger.fava_options.sidebar_show_queries],
+        all_queries[: ledger.fava_options.sidebar_show_queries],
         len(ledger.misc.upcoming_events),
         ledger.extensions.extension_details,
         ledger.misc.sidebar_links,
@@ -134,7 +136,7 @@ class BalancesChart:
     """Data for a balances chart."""
 
     label: str
-    data: list[DateAndBalance]
+    data: Sequence[DateAndBalance]
     type: Literal["balances"] = "balances"
 
 
@@ -143,7 +145,7 @@ class BarChart:
     """Data for a bar chart."""
 
     label: str
-    data: list[DateAndBalanceWithBudget]
+    data: Sequence[DateAndBalanceWithBudget]
     type: Literal["bar"] = "bar"
 
 
