@@ -95,13 +95,15 @@ CLIENT_SIDE_REPORTS = [
     "trial_balance",
 ]
 
+log = logging.getLogger(__name__)
+
 
 if not mimetypes.types_map.get(".js", "").endswith(
     "/javascript"
 ):  # pragma: no cover
     # This is sometimes broken on windows, see
     # https://github.com/beancount/fava/issues/1446
-    logging.error("Invalid mimetype set for '.js', overriding")
+    log.error("Invalid mimetype set for '.js', overriding")
     mimetypes.add_type("text/javascript", ".js")
 
 
@@ -389,7 +391,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
 
         g.extension = ext
         template = ext.jinja_env.get_template(f"{ext.name}.html")
-        content = Markup(template.render(ledger=g.ledger, extension=ext))
+        content = Markup(template.render(ledger=g.ledger, extension=ext))  # noqa: RUF035
         return render_template(
             "_layout.html",
             content=content,
@@ -429,7 +431,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         return render_template(
             "help.html",
             page_slug=page_slug,
-            help_html=Markup(
+            help_html=Markup(  # noqa: RUF035
                 render_template_string(
                     html,
                     beancount_version=beancount_version,
@@ -472,13 +474,7 @@ def _setup_babel(fava_app: Flask) -> None:
         lang = g.ledger.fava_options.language
         return lang or request.accept_languages.best_match(["en", *LOCALES])
 
-    try:
-        # for Flask-Babel <3.0
-        babel = Babel(fava_app)
-        babel.localeselector(_get_locale)
-    except AttributeError:
-        # for Flask-Babel >=3.0
-        babel = Babel(fava_app, locale_selector=_get_locale)
+    Babel(fava_app, locale_selector=_get_locale)
 
 
 def create_app(

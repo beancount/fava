@@ -45,7 +45,7 @@ flask==2.2.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
-flask-babel==1.0.0
+flask-babel==3.0.0
     # via fava (pyproject.toml)
 google-api-python-client==1.0
     # via beancount
@@ -68,7 +68,7 @@ jaraco-functools==4.0.0
     #   cheroot
 jdcal==1.0.1
     # via openpyxl
-jinja2==3.0.0
+jinja2==3.1.2
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -133,7 +133,7 @@ python-magic==0.4.12
     # via
     #   beancount
     #   beangulp
-pytz==2020.1
+pytz==2022.7
     # via
     #   fava (pyproject.toml)
     #   babel
