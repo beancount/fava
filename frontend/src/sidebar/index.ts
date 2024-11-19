@@ -2,6 +2,7 @@
  * This script initialises the AsideWithButton.svelte component.
  */
 
+import { mount } from "svelte";
 import { get as store_get } from "svelte/store";
 
 import Modals from "../modals/Modals.svelte";
@@ -14,12 +15,12 @@ export function initSidebar(): void {
     document.title = `${title} - ${store_get(ledger_title)}`;
   });
 
-  new HeaderAndAside({
+  mount(HeaderAndAside, {
     target: document.body,
     anchor: document.querySelector("article") ?? undefined,
   });
 
-  new Modals({
+  mount(Modals, {
     target: document.body,
   });
 }

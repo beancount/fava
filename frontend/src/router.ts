@@ -14,7 +14,7 @@ import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
 import { notify_err } from "./notifications";
-import type { Route } from "./reports/route";
+import type { FrontendRoute } from "./reports/route";
 import { raw_page_title } from "./sidebar/page-title";
 import { conversion, interval } from "./stores";
 import { showCharts } from "./stores/chart";
@@ -52,10 +52,10 @@ export class Router extends Events<"page-loaded"> {
   private article: HTMLElement;
 
   /** The frontend rendered routes. */
-  private frontend_routes?: Route[];
+  private frontend_routes?: FrontendRoute[];
 
   /** A possibly frontend rendered component. */
-  private frontend_route?: Route;
+  private frontend_route?: FrontendRoute;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -138,7 +138,7 @@ export class Router extends Events<"page-loaded"> {
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(frontend_routes: Route[]): void {
+  init(frontend_routes: FrontendRoute[]): void {
     this.frontend_routes = frontend_routes;
     urlHash.set(window.location.hash.slice(1));
     this.updateState();

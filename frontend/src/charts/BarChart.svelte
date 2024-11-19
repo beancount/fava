@@ -92,6 +92,7 @@
           width={x0.step()}
           height={innerHeight}
         />
+        <!-- svelte-ignore a11y_consider_explicit_label -->
         <a href={urlForTimeFilter(group.date)}>
           <rect
             class="axis-group-box"

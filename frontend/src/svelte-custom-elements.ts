@@ -2,9 +2,10 @@
  * A custom element that will render a Svelte component.
  */
 
-import type { SvelteComponent } from "svelte";
+import { type Component, mount, unmount } from "svelte";
 import { get as store_get } from "svelte/store";
 
+import type { FavaChart } from "./charts";
 import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import { chartContext } from "./charts/context";
@@ -15,12 +16,10 @@ import { query_table_validator } from "./reports/query/query_table";
 import QueryTable from "./reports/query/QueryTable.svelte";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
-class SvelteCustomElementComponent<
-  T extends Record<string, unknown> = Record<string, unknown>,
-> {
+class SvelteCustomElementComponent<T extends Record<string, unknown>> {
   constructor(
     readonly type: string,
-    private readonly Component: typeof SvelteComponent<T>,
+    private readonly Component: Component<T>,
     private readonly validate: (data: unknown) => Result<T, Error>,
   ) {}
 
@@ -37,18 +36,21 @@ class SvelteCustomElementComponent<
       log_error("Invalid JSON for component:", data);
       return undefined;
     }
-    const instance = new this.Component({ target, props: res.value });
+    const instance = mount(this.Component, { target, props: res.value });
     return () => {
-      instance.$destroy();
+      void unmount(instance);
     };
   }
 }
 
 const components = [
-  new SvelteCustomElementComponent("charts", ChartSwitcher, (data) =>
-    parseChartData(data, store_get(chartContext)).map((charts) => ({
-      charts,
-    })),
+  new SvelteCustomElementComponent<{ charts: readonly FavaChart[] }>(
+    "charts",
+    ChartSwitcher,
+    (data) =>
+      parseChartData(data, store_get(chartContext)).map((charts) => ({
+        charts,
+      })),
   ),
   new SvelteCustomElementComponent("query-table", QueryTable, (data) =>
     query_table_validator(data).map((table) => ({ table })),

@@ -3,17 +3,9 @@
   An autocomplete input for fuzzy selection of suggestions.
 -->
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
   import { fuzzyfilter, fuzzywrap, type FuzzyWrappedText } from "./lib/fuzzy";
-
-  const dispatch = createEventDispatcher<{
-    blur: HTMLInputElement;
-    enter: HTMLInputElement;
-    select: HTMLInputElement;
-  }>();
 
   /** The currently entered value. */
   export let value: string;
@@ -39,6 +31,12 @@
   export let checkValidity: ((val: string) => string) | undefined = undefined;
   /** Whether to show a button to clear the input. */
   export let clearButton = false;
+  /** An event handler to run on blur. */
+  export let onBlur: ((el: HTMLInputElement) => void) | undefined = undefined;
+  /** An event handler to run on enter. */
+  export let onEnter: ((el: HTMLInputElement) => void) | undefined = undefined;
+  /** An event handler to run on an element being selected. */
+  export let onSelect: ((el: HTMLInputElement) => void) | undefined = undefined;
 
   let filteredSuggestions: {
     suggestion: string;
@@ -75,7 +73,7 @@
       input != null && valueSelector != null
         ? valueSelector(suggestion, input)
         : suggestion;
-    dispatch("select", input);
+    onSelect?.(input);
     hidden = true;
   }
 
@@ -92,7 +90,7 @@
         event.preventDefault();
         select(suggestion);
       } else {
-        dispatch("enter", input);
+        onEnter?.(input);
       }
     } else if (event.key === " " && event.ctrlKey) {
       hidden = false;
@@ -121,7 +119,7 @@
     use:keyboardShortcut={key}
     on:blur={() => {
       hidden = true;
-      dispatch("blur", input);
+      onBlur?.(input);
     }}
     on:focus={() => {
       hidden = false;
@@ -140,7 +138,7 @@
       class="muted round"
       on:click={() => {
         value = "";
-        dispatch("select", input);
+        onSelect?.(input);
       }}
     >
       ×
