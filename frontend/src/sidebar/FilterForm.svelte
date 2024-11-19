@@ -65,9 +65,9 @@
     key="f t"
     clearButton={true}
     setSize={true}
-    on:blur={submit}
-    on:select={submit}
-    on:enter={submit}
+    onBlur={submit}
+    onSelect={submit}
+    onEnter={submit}
   />
   <AutocompleteInput
     bind:value={account_filter_value}
@@ -76,9 +76,9 @@
     key="f a"
     clearButton={true}
     setSize={true}
-    on:blur={submit}
-    on:select={submit}
-    on:enter={submit}
+    onBlur={submit}
+    onSelect={submit}
+    onEnter={submit}
   />
   <AutocompleteInput
     bind:value={fql_filter_value}
@@ -89,10 +89,11 @@
     setSize={true}
     {valueExtractor}
     {valueSelector}
-    on:blur={submit}
-    on:select={submit}
-    on:enter={submit}
+    onBlur={submit}
+    onSelect={submit}
+    onEnter={submit}
   />
+  <!-- svelte-ignore a11y_consider_explicit_label -->
   <button type="submit"></button>
 </form>
 

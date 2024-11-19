@@ -8,6 +8,7 @@ import { events } from "./events";
 import { holdings } from "./holdings";
 import { import_report } from "./import";
 import QuerySvelte from "./query/Query.svelte";
+import type { FrontendRoute } from "./route";
 import { noload, Route } from "./route";
 import { balance_sheet, income_statement, trial_balance } from "./tree_reports";
 
@@ -19,7 +20,7 @@ import { balance_sheet, income_statement, trial_balance } from "./tree_reports";
  * that, care mainly needs to be taken around lifecycle hooks that should run
  * if some parts of the data change)
  */
-export const frontend_routes: Route[] = [
+export const frontend_routes: FrontendRoute[] = [
   account_report,
   balance_sheet,
   commodities,

@@ -97,7 +97,6 @@
   <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
-    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>
       <span>{_("Payee")}:</span>
       <AutocompleteInput
@@ -105,7 +104,7 @@
         placeholder={_("Payee")}
         bind:value={entry.payee}
         suggestions={$payees}
-        on:select={autocompleteSelectPayee}
+        onSelect={autocompleteSelectPayee}
       />
     </label>
     <label>
@@ -125,16 +124,18 @@
     <span class="label"> <span>{_("Postings")}:</span> </span>
   </div>
   {#each entry.postings as posting, index}
-    <PostingSvelte
-      bind:posting
-      {index}
-      {suggestions}
-      date={entry.date}
-      move={movePosting}
-      remove={() => {
-        removePosting(posting);
-      }}
-    />
+    {#if entry.postings[index]}
+      <PostingSvelte
+        bind:posting={entry.postings[index]}
+        {index}
+        {suggestions}
+        date={entry.date}
+        move={movePosting}
+        remove={() => {
+          removePosting(posting);
+        }}
+      />
+    {/if}
   {/each}
 </div>
 
