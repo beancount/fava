@@ -62,7 +62,6 @@
       </label>
     </div>
     <div class="fieldset account">
-      <!-- svelte-ignore a11y-label-has-associated-control -->
       <label>
         <span>{_("Account")}:</span>
         <AccountInput bind:value={$account} />

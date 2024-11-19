@@ -64,7 +64,7 @@
 {/if}
 
 <style>
-  :global(body):has(.overlay) {
+  :global(body:has(.overlay)) {
     overflow: hidden;
   }
 
