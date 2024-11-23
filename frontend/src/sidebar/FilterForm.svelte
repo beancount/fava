@@ -5,11 +5,12 @@
   import { accounts, links, payees, tags, years } from "../stores";
   import { account_filter, fql_filter, time_filter } from "../stores/filters";
 
-  $: fql_filter_suggestions = [
+  let fql_filter_suggestions = $derived([
     ...$tags.map((tag) => `#${tag}`),
     ...$links.map((link) => `^${link}`),
     ...$payees.map((payee) => `payee:"${escape(payee)}"`),
-  ];
+    ...$payees.map((payee) => `payee:"${escape(payee)}"`),
+  ]);
 
   function valueExtractor(value: string, input: HTMLInputElement) {
     const match = /\S*$/.exec(
@@ -29,9 +30,9 @@
       : value;
   }
 
-  let account_filter_value = "";
-  let fql_filter_value = "";
-  let time_filter_value = "";
+  let account_filter_value = $state("");
+  let fql_filter_value = $state("");
+  let time_filter_value = $state("");
   account_filter.subscribe((v) => {
     account_filter_value = v;
   });
@@ -57,7 +58,12 @@
   }
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form
+  onsubmit={(ev) => {
+    ev.preventDefault();
+    submit();
+  }}
+>
   <AutocompleteInput
     bind:value={time_filter_value}
     placeholder={_("Time")}

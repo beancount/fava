@@ -5,7 +5,7 @@
   import router from "../router";
   import { accounts } from "../stores";
 
-  let value = "";
+  let value = $state("");
 
   function select(el: HTMLInputElement) {
     if (value) {

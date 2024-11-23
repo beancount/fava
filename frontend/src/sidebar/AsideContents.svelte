@@ -8,10 +8,10 @@
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
-  $: user_queries = $ledgerData.user_queries;
-  $: upcoming_events_count = $ledgerData.upcoming_events_count;
-  $: sidebar_links = $ledgerData.sidebar_links;
-  $: extension_reports = $extensions.filter((e) => e.report_title);
+  let user_queries = $derived($ledgerData.user_queries);
+  let upcoming_events_count = $derived($ledgerData.upcoming_events_count);
+  let sidebar_links = $derived($ledgerData.sidebar_links);
+  let extension_reports = $derived($extensions.filter((e) => e.report_title));
 </script>
 
 {#if sidebar_links.length}

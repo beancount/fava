@@ -2,17 +2,17 @@
   import AsideContents from "./AsideContents.svelte";
 
   /** Whether the sidebar is currently shown. */
-  let active = false;
+  let active = $state(false);
   const toggle = () => {
     active = !active;
   };
 </script>
 
 {#if active}
-  <div class="overlay" on:click={toggle} aria-hidden="true"></div>
+  <div class="overlay" onclick={toggle} aria-hidden="true"></div>
 {/if}
 <div class:active class="aside-buttons">
-  <button type="button" on:click={toggle}>☰</button>
+  <button type="button" onclick={toggle}>☰</button>
   <a class="button" href="#add-transaction">+</a>
 </div>
 <aside class:active>

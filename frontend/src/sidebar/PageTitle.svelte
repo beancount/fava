@@ -2,9 +2,9 @@
   import AccountPageTitle from "./AccountPageTitle.svelte";
   import { page_title } from "./page-title";
 
-  $: ({ title, type } = $page_title);
+  let { title, type } = $derived($page_title);
 
-  $: is_account = type === "account";
+  let is_account = $derived(type === "account");
 </script>
 
 <strong>

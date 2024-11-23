@@ -7,8 +7,8 @@
   import { has_changes } from "./page-title";
   import PageTitle from "./PageTitle.svelte";
 
-  $: other_ledgers = $ledgerData.other_ledgers;
-  $: has_dropdown = other_ledgers.length;
+  let other_ledgers = $derived($ledgerData.other_ledgers);
+  let has_dropdown = $derived(other_ledgers.length);
 </script>
 
 <header>
@@ -32,7 +32,7 @@
     hidden={!$has_changes}
     class="reload-page"
     use:keyboardShortcut={"r"}
-    on:click={router.reload.bind(router)}
+    onclick={router.reload.bind(router)}
   >
     &#8635;
   </button>
