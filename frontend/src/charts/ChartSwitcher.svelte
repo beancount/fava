@@ -7,25 +7,30 @@
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
 
-  export let charts: readonly FavaChart[];
+  interface Props {
+    charts: readonly FavaChart[];
+  }
 
-  $: active_chart =
-    charts.find((c) => c.name === $lastActiveChartName) ?? charts?.[0];
+  let { charts }: Props = $props();
+
+  let active_chart = $derived(
+    charts.find((c) => c.name === $lastActiveChartName) ?? charts[0],
+  );
 
   // Get the shortcut key for jumping to the previous chart.
-  $: shortcutPrevious = (index: number): KeySpec | undefined => {
+  let shortcutPrevious = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current - 1 + charts.length) % charts.length
       ? { key: "C", note: _("Previous") }
       : undefined;
-  };
+  });
   // Get the shortcut key for jumping to the next chart.
-  $: shortcutNext = (index: number): KeySpec | undefined => {
+  let shortcutNext = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current + 1 + charts.length) % charts.length
       ? { key: "c", note: _("Next") }
       : undefined;
-  };
+  });
 </script>
 
 {#if active_chart}
@@ -38,7 +43,7 @@
         type="button"
         class="unset"
         class:selected={chart === active_chart}
-        on:click={() => {
+        onclick={() => {
           $lastActiveChartName = chart.name;
         }}
         use:keyboardShortcut={shortcutPrevious(index)}

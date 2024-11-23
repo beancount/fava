@@ -13,15 +13,19 @@
   } from "./hierarchy";
   import { domHelpers, followingTooltip } from "./tooltip";
 
-  export let data: AccountHierarchyNode;
-  export let width: number;
-  export let currency: string;
+  interface Props {
+    data: AccountHierarchyNode;
+    width: number;
+    currency: string;
+  }
 
-  $: height = Math.min(width / 2.5, 400);
+  let { data, width, currency }: Props = $props();
+
+  let height = $derived(Math.min(width / 2.5, 400));
 
   const tree = treemap<AccountHierarchyDatum>().paddingInner(2).round(true);
-  $: root = tree.size([width, height])(data);
-  $: leaves = root.leaves().filter((d) => d.value);
+  let root = $derived(tree.size([width, height])(data));
+  let leaves = $derived(root.leaves().filter((d) => d.value));
 
   function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;
