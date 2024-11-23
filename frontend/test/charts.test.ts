@@ -43,7 +43,7 @@ test("handle data for hierarchical chart", async () => {
   const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
   const parsed = parseChartData(data, ctx).unwrap()[0];
   assert.ok(parsed instanceof HierarchyChart);
-  assert.equal([...parsed.data.keys()], ["USD"]);
+  assert.equal(parsed.currencies, ["USD"]);
   assert.ok(parsed.data.get("USD"));
 });
 
