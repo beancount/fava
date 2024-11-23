@@ -32,5 +32,5 @@
 <SelectCombobox
   bind:value={$interval}
   options={INTERVALS}
-  description={(o) => intervalLabel(getInterval(o))}
+  description={(o: string) => intervalLabel(getInterval(o))}
 />
