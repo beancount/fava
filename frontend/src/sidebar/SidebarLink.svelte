@@ -1,17 +1,26 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { base_url } from "../stores";
   import { pathname, synced_query_string } from "../stores/url";
 
-  export let report: string;
-  export let name: string;
-  export let key: KeySpec | undefined = undefined;
-  export let remote: true | undefined = undefined;
-  export let bubble: [number, "error" | "info"] | undefined = undefined;
+  interface Props {
+    report: string;
+    name: string;
+    key?: KeySpec;
+    remote?: true;
+    bubble?: [number, "error" | "info"];
+    children?: Snippet;
+  }
 
-  $: href = remote ? report : `${$base_url}${report}/${$synced_query_string}`;
-  $: selected = remote ? false : href.includes($pathname);
+  let { report, name, key, remote, bubble, children }: Props = $props();
+
+  let href = $derived(
+    remote ? report : `${$base_url}${report}/${$synced_query_string}`,
+  );
+  let selected = $derived(remote ? false : href.includes($pathname));
 </script>
 
 <li>
@@ -23,7 +32,7 @@
       </span>
     {/if}
   </a>
-  <slot />
+  {@render children?.()}
 </li>
 
 <style>
