@@ -11,34 +11,46 @@
   import type { TooltipFindNode } from "./tooltip";
   import { domHelpers, positionedTooltip } from "./tooltip";
 
-  export let chart: ScatterPlot;
-  export let width: number;
+  interface Props {
+    chart: ScatterPlot;
+    width: number;
+  }
+
+  let { chart, width }: Props = $props();
 
   const today = new Date();
   const margin = { top: 10, right: 10, bottom: 30, left: 70 };
   const height = 250;
-  $: innerWidth = width - margin.left - margin.right;
-  $: innerHeight = height - margin.top - margin.bottom;
+  let innerWidth = $derived(width - margin.left - margin.right);
+  let innerHeight = $derived(height - margin.top - margin.bottom);
 
   // Scales
-  $: dateExtent = extent(chart.data, (d) => d.date);
-  $: x = scaleUtc([0, innerWidth]).domain(dateExtent[0] ? dateExtent : [0, 1]);
-  $: y = scalePoint([innerHeight, 0])
-    .domain(chart.data.map((d) => d.type))
-    .padding(1);
+  let dateExtent = $derived(extent(chart.data, (d) => d.date));
+  let x = $derived(
+    scaleUtc([0, innerWidth]).domain(dateExtent[0] ? dateExtent : [0, 1]),
+  );
+  let y = $derived(
+    scalePoint([innerHeight, 0])
+      .domain(chart.data.map((d) => d.type))
+      .padding(1),
+  );
 
   // Axes
-  $: xAxis = axisBottom(x).tickSizeOuter(0);
-  $: yAxis = axisLeft(y)
-    .tickPadding(6)
-    .tickSize(-innerWidth)
-    .tickFormat((d) => d);
+  let xAxis = $derived(axisBottom(x).tickSizeOuter(0));
+  let yAxis = $derived(
+    axisLeft(y)
+      .tickPadding(6)
+      .tickSize(-innerWidth)
+      .tickFormat((d) => d),
+  );
 
   /** Quadtree for hover. */
-  $: quad = quadtree(
-    [...chart.data],
-    (d) => x(d.date),
-    (d) => y(d.type) ?? 0,
+  let quad = $derived(
+    quadtree(
+      [...chart.data],
+      (d) => x(d.date),
+      (d) => y(d.type) ?? 0,
+    ),
   );
 
   function tooltipText(d: ScatterPlotDatum) {

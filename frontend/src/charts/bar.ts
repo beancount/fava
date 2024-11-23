@@ -54,7 +54,7 @@ export class BarChart {
   constructor(
     readonly name: string | null,
     /** The currencies that are shown in this bar chart. */
-    readonly currencies: string[],
+    readonly currencies: readonly string[],
     /** The data for the (single) bars for all the intervals in this chart. */
     private readonly bar_groups: BarChartDatum[],
   ) {

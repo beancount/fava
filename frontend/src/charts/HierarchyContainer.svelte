@@ -1,28 +1,25 @@
 <script lang="ts">
-  import type { Writable } from "svelte/store";
-
   import { _ } from "../i18n";
-  import { hierarchyChartMode, treemapCurrency } from "../stores/chart";
+  import { hierarchyChartMode } from "../stores/chart";
   import type { HierarchyChart } from "./hierarchy";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
-  export let chart: HierarchyChart;
-  export let width: number;
-  export let treemap_currencies: Writable<string[]>;
-
-  $: data = chart.data;
-  $: currencies = [...data.keys()];
-  $: treemap_currencies.set(currencies);
-
-  $: if ($treemapCurrency === null) {
-    $treemapCurrency = $treemapCurrency ?? currencies[0] ?? null;
+  interface Props {
+    chart: HierarchyChart;
+    width: number;
   }
 
-  $: currency = $treemapCurrency;
+  let { chart, width }: Props = $props();
 
-  $: mode = $hierarchyChartMode;
-  $: treemap = mode === "treemap" ? data.get(currency ?? "") : undefined;
+  let data = $derived(chart.data);
+  let currencies = $derived(chart.currencies);
+
+  let treemap_currency = $derived(chart.treemap_currency);
+  let mode = $derived($hierarchyChartMode);
+  let treemap = $derived(
+    mode === "treemap" ? data.get($treemap_currency ?? "") : undefined,
+  );
 </script>
 
 {#if currencies.length === 0}
@@ -31,8 +28,8 @@
       {_("Chart is empty.")}
     </text>
   </svg>
-{:else if treemap && currency}
-  <Treemap data={treemap} {currency} {width} />
+{:else if treemap && $treemap_currency}
+  <Treemap data={treemap} currency={$treemap_currency} {width} />
 {:else if mode === "sunburst"}
   <svg viewBox={`0 0 ${width.toString()} 500`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}

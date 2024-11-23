@@ -14,42 +14,52 @@
   In particular it should match the Select-Only Combobox example at
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   /** Incrementing number to use for element ids in the component. */
   let id = 0;
 </script>
 
 <script lang="ts">
-  /** The currently entered value. */
-  export let value: string;
-  /** The options for the value. */
-  export let options: readonly string[];
-  /** Function to get the human readable description of an option and the value. */
-  export let description: (option: string) => string;
-  /** Whether an option can be part of a multi-selection (separated by comma in value). */
-  export let multiple_select: ((option: string) => boolean) | undefined =
-    undefined;
+  interface Props {
+    /** The currently entered value. */
+    value: string;
+    /** The options for the value. */
+    options: readonly string[];
+    /** Function to get the human readable description of an option and the value. */
+    description: (option: string) => string;
+    /** Whether an option can be part of a multi-selection (separated by comma in value). */
+    multiple_select?: (option: string) => boolean;
+  }
+
+  let {
+    value = $bindable(),
+    options,
+    description,
+    multiple_select,
+  }: Props = $props();
 
   /** Whether the list of options in the Combobox popup is hidden. */
-  let hidden = true;
+  let hidden = $state(true);
   /** The index of the option that is currently focused */
-  let index = options.indexOf(value) ?? 0;
+  let index = $state(options.indexOf(value) ?? 0);
   /** The popup list element. */
-  let ul: HTMLUListElement;
+  let ul: HTMLUListElement | undefined = $state();
 
   id += 1;
   const listbox_id = `combobox-listbox-${id.toString()}`;
 
   const SEPARATOR = ",";
-  $: values = value.split(SEPARATOR);
+  let values = $derived(value.split(SEPARATOR));
 
   // Scroll focused element into view.
-  $: if (!hidden && index) {
-    ul?.children[index]?.scrollIntoView({
-      block: "nearest",
-      inline: "nearest",
-    });
-  }
+  $effect(() => {
+    if (!hidden && index) {
+      ul?.children[index]?.scrollIntoView({
+        block: "nearest",
+        inline: "nearest",
+      });
+    }
+  });
 
   /** The various actions that can be triggered by user mouse or key events. */
   const actions = {
@@ -150,9 +160,9 @@
     aria-expanded={!hidden}
     aria-controls={listbox_id}
     class="muted"
-    on:click={actions.toggle}
-    on:blur={actions.close}
-    on:keydown={(event) => {
+    onclick={actions.toggle}
+    onblur={actions.close}
+    onkeydown={(event) => {
       const action = key_action(event);
       if (action) {
         event.preventDefault();
@@ -168,7 +178,7 @@
         role="option"
         aria-selected={values.includes(option)}
         class:current={i === index}
-        on:mousedown={(ev) => {
+        onmousedown={(ev) => {
           if (ev.button === 0) {
             actions.select(option);
           }
