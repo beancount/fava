@@ -256,7 +256,7 @@ rich==13.9.4
     # via twine
 secretstorage==3.3.3
     # via keyring
-setuptools==75.5.0
+setuptools==75.6.0
     # via
     #   fava (pyproject.toml)
     #   pyinstaller
@@ -317,7 +317,7 @@ tox-uv==1.16.0
     # via fava (pyproject.toml)
 twine==5.1.1
     # via fava (pyproject.toml)
-types-setuptools==75.5.0.20241116
+types-setuptools==75.5.0.20241122
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20240801
     # via fava (pyproject.toml)
@@ -334,7 +334,7 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.5.2
+uv==0.5.4
     # via tox-uv
 virtualenv==20.27.1
     # via

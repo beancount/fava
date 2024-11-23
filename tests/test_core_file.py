@@ -300,13 +300,13 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # transaction dates are ignored.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 1
+            date(2015, 1, 1), re.compile(r".*:Food"), str(samplefile), 1
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1
+            date(2015, 1, 2), re.compile(r".*:FOOO"), str(samplefile), 1
         ),
         InsertEntryOption(
-            date(2017, 1, 1), re.compile(".*:Food"), str(samplefile), 6
+            date(2017, 1, 1), re.compile(r".*:Food"), str(samplefile), 6
         ),
     ]
     path, new_options = insert_entry(
@@ -338,10 +338,10 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # the last posting doesn't match.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Slate"), str(samplefile), 5
+            date(2015, 1, 1), re.compile(r".*:Slate"), str(samplefile), 5
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1
+            date(2015, 1, 2), re.compile(r".*:FOOO"), str(samplefile), 1
         ),
     ]
     new_transaction = replace(transaction, narration="narr2")
@@ -377,10 +377,10 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
     # case several of them match a posting.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 5
+            date(2015, 1, 1), re.compile(r".*:Food"), str(samplefile), 5
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:Food"), str(samplefile), 1
+            date(2015, 1, 2), re.compile(r".*:Food"), str(samplefile), 1
         ),
     ]
     new_transaction = replace(transaction, narration="narr3")
