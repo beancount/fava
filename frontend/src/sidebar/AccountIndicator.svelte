@@ -24,7 +24,7 @@
       class="status-indicator status-green"
       class:small
       title="The last entry is a passing balance check."
-    />
+    ></span>
   {:else}
     <copyable-text
       class="status-indicator status-{status}"
@@ -39,14 +39,14 @@ Click to copy the balance directives to the clipboard:
 
 ${balance}`}
       data-clipboard-text={balance}
-    />
+    ></copyable-text>
   {/if}
   {#if last_account_activity > $fava_options.uptodate_indicator_grey_lookback_days}
     <span
       class="status-indicator status-gray"
       class:small
       title="This account has not been updated in a while. ({last_account_activity} days ago)"
-    />
+    ></span>
   {/if}
 {/if}
 

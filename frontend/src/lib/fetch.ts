@@ -24,7 +24,19 @@ export async function fetch(
  */
 async function handleJSON(response: Response): Promise<unknown> {
   if (!response.ok) {
-    throw new FetchError(response.statusText);
+    try {
+      const data: unknown = await response.json();
+      if (isJsonObject(data)) {
+        throw new FetchError(
+          typeof data.error === "string"
+            ? data.error
+            : "Invalid response: missing error",
+        );
+      }
+      throw new FetchError(response.statusText);
+    } catch {
+      throw new FetchError(response.statusText);
+    }
   }
   const data: unknown = await response.json();
   if (!isJsonObject(data)) {

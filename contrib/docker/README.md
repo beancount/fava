@@ -156,15 +156,17 @@ gmail accounts you want to have access to your Fava web interface.
 
 To run your proxy docker image use the following command:
 
-    docker run --detach --link beancount --publish 4180:4180 \
-      --name beancount-oauth \
-      --volume $(pwd)/oauth2_proxy.cfg:/etc/oauth2_proxy.cfg \
-      --volume $(pwd)/authenticated-emails:/etc/authenticated-emails \
-      --env "VIRTUAL_HOST=<your domain>" \
-      --env "LETSENCRYPT_HOST=<your domain>" \
-      --env "LETSENCRYPT_EMAIL=<your email>" \
-      skippy/oauth2_proxy -config=/etc/oauth2_proxy.cfg \
-      -http-address="0.0.0.0:4180" -provider=google
+```
+docker run --detach --link beancount --publish 4180:4180 \
+  --name beancount-oauth \
+  --volume $(pwd)/oauth2_proxy.cfg:/etc/oauth2_proxy.cfg \
+  --volume $(pwd)/authenticated-emails:/etc/authenticated-emails \
+  --env "VIRTUAL_HOST=<your domain>" \
+  --env "LETSENCRYPT_HOST=<your domain>" \
+  --env "LETSENCRYPT_EMAIL=<your email>" \
+  skippy/oauth2_proxy -config=/etc/oauth2_proxy.cfg \
+  -http-address="0.0.0.0:4180" -provider=google
+```
 
 Let's document the new arguments:
 

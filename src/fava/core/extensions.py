@@ -12,6 +12,9 @@ from fava.ext import FavaExtensionError
 from fava.ext import find_extensions
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterable
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
     from fava.ext import FavaExtensionBase
@@ -70,11 +73,11 @@ class ExtensionModule(FavaModule):
                         )
 
     @property
-    def _exts(self) -> list[FavaExtensionBase]:
-        return list(self._instances.values())
+    def _exts(self) -> Iterable[FavaExtensionBase]:
+        return self._instances.values()
 
     @property
-    def extension_details(self) -> list[ExtensionDetails]:
+    def extension_details(self) -> Sequence[ExtensionDetails]:
         """Extension information to provide to the Frontend."""
         return [
             ExtensionDetails(ext.name, ext.report_title, ext.has_js_module)

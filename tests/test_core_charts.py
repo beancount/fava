@@ -56,6 +56,12 @@ def test_linechart_data(
         )
         snapshot(data, json=True)
 
+    assert not example_ledger.charts.linechart(
+        filtered,
+        "Assets:Testing:MultipleCommodities:NotAnAccount",
+        "units",
+    )
+
 
 def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()

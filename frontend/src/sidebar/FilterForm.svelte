@@ -100,7 +100,7 @@
     on:select={submit}
     on:enter={submit}
   />
-  <button type="submit" />
+  <button type="submit"></button>
 </form>
 
 <style>

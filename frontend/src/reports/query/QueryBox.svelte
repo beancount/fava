@@ -36,7 +36,7 @@
 <details bind:open>
   <summary class:inactive on:click={inactive ? onselect : null}>
     <ReadonlyQueryEditor value={query} error={result?.is_err} />
-    <span class="spacer" />
+    <span class="spacer"></span>
     {#if result && result.is_ok && result.value.t === "table"}
       <QueryLinks {query} />
     {/if}

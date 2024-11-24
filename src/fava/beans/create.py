@@ -13,6 +13,7 @@ from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
+from fava.beans import BEANCOUNT_V3
 from fava.beans.abc import Amount
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -20,10 +21,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
     from fava.beans.abc import Balance
+    from fava.beans.abc import Close
     from fava.beans.abc import Cost
     from fava.beans.abc import Document
     from fava.beans.abc import Meta
     from fava.beans.abc import Note
+    from fava.beans.abc import Open
     from fava.beans.abc import Position
     from fava.beans.abc import Posting
     from fava.beans.abc import TagsOrLinks
@@ -54,6 +57,9 @@ def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     return BeancountAmount(amt, currency)  # type: ignore[return-value]
 
 
+_amount = amount
+
+
 def cost(
     number: Decimal,
     currency: str,
@@ -66,7 +72,10 @@ def cost(
 
 def position(units: Amount, cost: Cost | None) -> Position:
     """Create a Position."""
-    return BeancountPosition(units, cost)  # type: ignore[arg-type,return-value]
+    return BeancountPosition(  # type: ignore[return-value]
+        units,  # type: ignore[arg-type]
+        cost,  # type: ignore[arg-type]
+    )
 
 
 def posting(
@@ -90,15 +99,18 @@ def posting(
     )
 
 
+_EMPTY_SET: frozenset[str] = frozenset()
+
+
 def transaction(
     meta: Meta,
     date: datetime.date,
     flag: Flag,
     payee: str | None,
     narration: str,
-    tags: TagsOrLinks,
-    links: TagsOrLinks,
-    postings: list[Posting],
+    tags: TagsOrLinks | None = None,
+    links: TagsOrLinks | None = None,
+    postings: list[Posting] | None = None,
 ) -> Transaction:
     """Create a Beancount Transaction."""
     return data.Transaction(  # type: ignore[return-value]
@@ -107,9 +119,9 @@ def transaction(
         flag,
         payee,
         narration,
-        tags,
-        links,
-        postings,  # type: ignore[arg-type]
+        tags if tags is not None else _EMPTY_SET,
+        links if links is not None else _EMPTY_SET,
+        postings if postings is not None else [],  # type: ignore[arg-type]
     )
 
 
@@ -117,7 +129,7 @@ def balance(
     meta: Meta,
     date: datetime.date,
     account: str,
-    _amount: Amount | str,
+    amount: Amount | str,
     tolerance: Decimal | None = None,
     diff_amount: Amount | None = None,
 ) -> Balance:
@@ -126,9 +138,20 @@ def balance(
         meta,
         date,
         account,
-        amount(_amount),  # type: ignore[arg-type]
+        _amount(amount),  # type: ignore[arg-type]
         tolerance,
         diff_amount,  # type: ignore[arg-type]
+    )
+
+
+def close(
+    meta: Meta,
+    date: datetime.date,
+    account: str,
+) -> Close:
+    """Create a Beancount Open."""
+    return data.Close(  # type: ignore[return-value]
+        meta, date, account
     )
 
 
@@ -151,11 +174,27 @@ def note(
     date: datetime.date,
     account: str,
     comment: str,
+    tags: TagsOrLinks | None = None,
+    links: TagsOrLinks | None = None,
 ) -> Note:
     """Create a Beancount Note."""
+    if not BEANCOUNT_V3:  # pragma: no cover
+        return data.Note(  # type: ignore[call-arg,return-value]
+            meta, date, account, comment
+        )
     return data.Note(  # type: ignore[return-value]
-        meta,
-        date,
-        account,
-        comment,
+        meta, date, account, comment, tags, links
+    )
+
+
+def open(  # noqa: A001
+    meta: Meta,
+    date: datetime.date,
+    account: str,
+    currencies: list[str],
+    booking: data.Booking | None = None,
+) -> Open:
+    """Create a Beancount Open."""
+    return data.Open(  # type: ignore[return-value]
+        meta, date, account, currencies, booking
     )

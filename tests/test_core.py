@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.beans.funcs import hash_entry
+from fava.core import EntryNotFoundForHashError
+from fava.core import FilteredLedger
 from fava.helpers import FavaAPIError
+from fava.util.date import Interval
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -22,6 +26,36 @@ def test_apiexception() -> None:
 def test_attributes(example_ledger: FavaLedger) -> None:
     assert len(example_ledger.attributes.accounts) == 61
     assert "Assets" not in example_ledger.attributes.accounts
+
+
+def test_filtered_ledger(
+    small_example_ledger: FavaLedger,
+) -> None:
+    filtered = FilteredLedger(small_example_ledger, account="NONE")
+    assert filtered.prices("EUR", "USD")
+    assert filtered.prices("UNKNOWN1", "UNKNOWN2") == []
+    assert filtered.date_range is None
+    assert not filtered.interval_ranges(Interval.MONTH)
+
+    all_entries = FilteredLedger(small_example_ledger)
+    closed_acc = "Assets:Account1"
+    unclosed_acc = "Expenses:Food"
+    assert all_entries.account_is_closed(closed_acc)
+    assert not all_entries.account_is_closed(unclosed_acc)
+
+    year_2012 = FilteredLedger(small_example_ledger, time="2012")
+    assert not year_2012.account_is_closed(closed_acc)
+    assert not year_2012.account_is_closed(unclosed_acc)
+
+
+def test_ledger_get_entry(
+    small_example_ledger: FavaLedger,
+) -> None:
+    first = small_example_ledger.all_entries[0]
+    assert small_example_ledger.get_entry(hash_entry(first)) == first
+
+    with pytest.raises(EntryNotFoundForHashError):
+        small_example_ledger.get_entry("asdfa")
 
 
 def test_paths_to_watch(

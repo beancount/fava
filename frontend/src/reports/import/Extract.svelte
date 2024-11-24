@@ -51,7 +51,7 @@
           ({entries.length - duplicates}
           to import):
         </h3>
-        <span class="spacer" />
+        <span class="spacer"></span>
         <label class="button muted">
           <input
             type="checkbox"
@@ -79,7 +79,7 @@
             {_("Previous")}
           </button>
         {/if}
-        <span class="spacer" />
+        <span class="spacer"></span>
         {#if currentIndex < entries.length - 1}
           <button type="submit">{_("Next")}</button>
           <button

@@ -36,7 +36,7 @@
   >
     &#8635;
   </button>
-  <span class="spacer" />
+  <span class="spacer"></span>
   <FilterForm />
 </header>
 

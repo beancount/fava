@@ -16,6 +16,7 @@ from watchfiles import watch
 if TYPE_CHECKING:  # pragma: no cover
     import types
     from collections.abc import Iterable
+    from collections.abc import Sequence
     from typing import Callable
 
     from watchfiles.main import Change
@@ -192,8 +193,8 @@ class Watcher(WatcherBase):
     def __init__(self) -> None:
         self.last_checked = 0
         self.last_notified = 0
-        self._files: list[Path] = []
-        self._folders: list[Path] = []
+        self._files: Sequence[Path] = []
+        self._folders: Sequence[Path] = []
 
     def update(self, files: Iterable[Path], folders: Iterable[Path]) -> None:
         """Update the folders/files to watch."""
