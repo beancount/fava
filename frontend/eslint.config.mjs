@@ -73,9 +73,6 @@ export default tseslint.config(
     },
     rules: {
       "svelte/button-has-type": ON,
-      // Has some false positives in Svelte files were we have if()
-      // checks to trigger re-computations:
-      "@typescript-eslint/no-unnecessary-condition": OFF,
     },
   },
 );
