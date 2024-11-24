@@ -74,7 +74,7 @@
   );
 
   // update editor contents if source changes
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/no-unnecessary-condition
   $: if (source) {
     editor.dispatch(replaceContents(editor.state, source.source));
     sha256sum = source.sha256sum;

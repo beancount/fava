@@ -41,7 +41,7 @@
   /** Whether the list of options in the Combobox popup is hidden. */
   let hidden = $state(true);
   /** The index of the option that is currently focused */
-  let index = $state(options.indexOf(value) ?? 0);
+  let index = $state(options.indexOf(value));
   /** The popup list element. */
   let ul: HTMLUListElement | undefined = $state();
 
