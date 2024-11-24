@@ -3,23 +3,39 @@
   A sub-item in an app menu.
 -->
 <script lang="ts">
-  /** A title (optional) for the element. */
-  export let title: string | undefined = undefined;
-  /** Whether this menu item should be marked as selected. */
-  export let selected = false;
-  /** The action to execute on click. */
-  export let action: () => void;
+  import type { Snippet } from "svelte";
+
+  interface Props {
+    /** A title (optional) for the element. */
+    title?: string;
+    /** Whether this menu item should be marked as selected. */
+    selected?: boolean;
+    /** The action to execute on click. */
+    action: () => void;
+    children: Snippet;
+    right?: Snippet;
+  }
+
+  let { title, selected = false, action, children, right }: Props = $props();
 </script>
 
-<li class:selected {title}>
-  <button type="button" on:click={action}>
-    <slot />
-    {#if $$slots.right}
-      <span>
-        <slot name="right" />
-      </span>
-    {/if}
-  </button>
+<li
+  class:selected
+  {title}
+  role="menuitem"
+  onclick={action}
+  onkeydown={(event) => {
+    if (event.key === "Enter") {
+      action();
+    }
+  }}
+>
+  {@render children()}
+  {#if right}
+    <span>
+      {@render right()}
+    </span>
+  {/if}
 </li>
 
 <style>
@@ -29,16 +45,10 @@
 
   li {
     padding: 0.25em 0.5em;
-    cursor: pointer;
   }
 
   span {
     float: right;
-  }
-
-  button {
-    display: contents;
-    color: inherit;
   }
 
   li:hover,
