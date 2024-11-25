@@ -65,14 +65,14 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     assert options.insert_entry == [
         InsertEntryOption(
             datetime.date(2016, 4, 14),
-            re.compile("Ausgaben:Test"),
+            re.compile(r"Ausgaben:Test"),
             "<string>",
             6,
         ),
     ]
     assert options.show_closed_accounts
     assert options.currency_column == 10
-    assert options.collapse_pattern == [re.compile("Account:Name")]
+    assert options.collapse_pattern == [re.compile(r"Account:Name")]
     assert options.fiscal_year_end == FiscalYearEnd(1, 11)
     assert options.conversion_currencies == ("USD", "EUR", "HOOLI")
     assert options.default_file == str(Path("/some/file/name").absolute())

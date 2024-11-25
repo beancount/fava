@@ -35,7 +35,7 @@ classifiers = [
 ]
 dependencies = [
     "Babel>=2.11,<3",
-    "Flask-Babel>=1,<5",
+    "Flask-Babel>=3,<5",
     "Flask>=2.2,<4",
     "Jinja2>=3,<4",
     "Werkzeug>=2.2,<4",

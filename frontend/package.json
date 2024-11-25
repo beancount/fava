@@ -10,7 +10,7 @@
     "test:watch": "watchlist --eager src test -- npm test"
   },
   "devDependencies": {
-    "@eslint/js": "^9.11.1",
+    "@eslint/js": "^9.14.0",
     "@types/d3-array": "^3.0.1",
     "@types/d3-axis": "^3.0.1",
     "@types/d3-color": "^3.0.2",
@@ -29,8 +29,8 @@
     "chokidar": "^4.0.0",
     "esbuild": "^0.24.0",
     "esbuild-register": "^3.0.0",
-    "esbuild-svelte": "^0.8.0",
-    "eslint": "^9.11.1",
+    "esbuild-svelte": "^0.9.0",
+    "eslint": "^9.14.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-svelte": "^2.10.0",
     "js-yaml": "^4.1.0",
