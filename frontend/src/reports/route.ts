@@ -2,6 +2,7 @@ import { type Component, mount, unmount } from "svelte";
 
 import { log_error } from "../log";
 import ErrorSvelte from "./Error.svelte";
+import { updateable_props } from "./route.svelte";
 
 export interface FrontendRoute {
   readonly report: string;
@@ -15,10 +16,17 @@ export interface FrontendRoute {
 }
 
 /** This class pairs the components and their load functions to use them in a type-safe way. */
-export class Route<T extends Record<string, unknown>> implements FrontendRoute {
+// The base type for the component props needs to be typed as Record<string,any> to allow for T
+// to be correctly inferred from the imported svelte components
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Route<T extends Record<string, any>> implements FrontendRoute {
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
-    | { error: false; component: Record<string, unknown> }
+    | {
+        error: false;
+        component: Record<string, unknown>;
+        update_props: (v: T) => void;
+      }
     | { error: true; component: Record<string, unknown> };
 
   /** The currently rendered URL. */
@@ -46,7 +54,7 @@ export class Route<T extends Record<string, unknown>> implements FrontendRoute {
   /** Destroy any components that might be rendered by this route. */
   destroy(): void {
     if (this.instance !== undefined) {
-      unmount(this.instance.component);
+      void unmount(this.instance.component);
     }
     this.instance = undefined;
   }
@@ -61,17 +69,20 @@ export class Route<T extends Record<string, unknown>> implements FrontendRoute {
       previous?.destroy();
     }
     try {
-      const props = await this.load(url);
-      // Check if the component is changed - otherwise only update the data.
-      // Svelte 5 removed component.$set - so always re-render now
-      // if (previous === this && this.instance?.error === false) {
-      //this.instance.component.$set(props);
-      this.destroy();
-      target.innerHTML = "";
-      this.instance = {
-        error: false,
-        component: mount(this.Component, { target, props }),
-      };
+      const raw_props = await this.load(url);
+      // Check if the component is unchanged and only update the data in this case.
+      if (previous === this && this.instance?.error === false) {
+        this.instance.update_props(raw_props);
+      } else {
+        this.destroy();
+        target.innerHTML = "";
+        const [props, update_props] = updateable_props(raw_props);
+        this.instance = {
+          error: false,
+          component: mount(this.Component, { target, props }),
+          update_props,
+        };
+      }
     } catch (error: unknown) {
       log_error(error);
       if (error instanceof Error) {
