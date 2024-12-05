@@ -151,7 +151,12 @@
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={colorScale(account)}
                   use:followingTooltip={() =>
-                    chart.tooltipTextAccount($ctx, bar.data, account)}
+                    chart.tooltipTextAccount(
+                      $ctx,
+                      bar.data,
+                      account,
+                      $chartToggledCurrencies,
+                    )}
                 />
               {/each}
             </g>

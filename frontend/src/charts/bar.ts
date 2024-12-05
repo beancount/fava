@@ -99,13 +99,16 @@ export class BarChart {
     c: FormatterContext,
     d: BarChartDatum,
     account: string,
+    $chartToggledCurrencies: readonly string[],
   ): TooltipContent {
     const content = [];
     content.push(domHelpers.em(account));
-    d.values.forEach((a) => {
-      const value = d.account_balances[account]?.[a.currency] ?? 0;
-      content.push(domHelpers.t(c.amount(value, a.currency)));
-      content.push(domHelpers.br());
+    d.values.forEach(({ currency }) => {
+      if (!$chartToggledCurrencies.includes(currency)) {
+        const value = d.account_balances[account]?.[currency] ?? 0;
+        content.push(domHelpers.t(c.amount(value, currency)));
+        content.push(domHelpers.br());
+      }
     });
     content.push(domHelpers.em(d.label));
     return content;
