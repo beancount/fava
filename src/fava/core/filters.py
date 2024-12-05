@@ -444,8 +444,8 @@ class AdvancedFilter(EntryFilter):
             raise
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
-        _include = self._include
-        return [entry for entry in entries if _include(entry)]
+        include = self._include
+        return [entry for entry in entries if include(entry)]
 
 
 class AccountFilter(EntryFilter):
