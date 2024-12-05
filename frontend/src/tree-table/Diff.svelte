@@ -1,12 +1,16 @@
 <script lang="ts">
   import { ctx } from "../stores/format";
 
-  /** Difference to show. */
-  export let diff: number;
-  /** Number to show on hover. */
-  export let num: number;
-  /** The currency that both numbers are in. */
-  export let currency: string;
+  interface Props {
+    /** Difference to show. */
+    diff: number;
+    /** Number to show on hover. */
+    num: number;
+    /** The currency that both numbers are in. */
+    currency: string;
+  }
+
+  let { diff, num, currency }: Props = $props();
 </script>
 
 <br />
