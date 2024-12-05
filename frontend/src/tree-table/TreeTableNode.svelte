@@ -6,27 +6,36 @@
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
   import { getTreeTableContext } from "./helpers";
+  import TreeTableNode from "./TreeTableNode.svelte";
 
-  /** The account node to show. */
-  export let node: AccountTreeNode;
-  /** Whther to invert all numbers (either `1` or `-1`). */
-  export let invert: number;
+  interface Props {
+    /** The account node to show. */
+    node: AccountTreeNode;
+    /** Whther to invert all numbers (either `1` or `-1`). */
+    invert: number;
+  }
+
+  let { node, invert }: Props = $props();
 
   const { toggled, not_shown } = getTreeTableContext();
 
-  $: ({ account, children } = node);
+  let { account, children } = $derived(node);
 
-  $: is_toggled = $toggled.has(account);
+  let is_toggled = $derived($toggled.has(account));
 
-  $: has_balance = !is_empty(node.balance);
+  let has_balance = $derived(!is_empty(node.balance));
   /** Whether to show the balance (or balance_children) */
-  $: show_balance = !is_toggled && has_balance;
-  $: shown_balance = show_balance ? node.balance : node.balance_children;
-  $: shown_cost = show_balance ? node.cost : node.cost_children;
-  $: shown_balance_other = Object.entries(shown_balance)
-    .sort()
-    .filter(([c]) => !$operating_currency.includes(c));
-  $: dimmed = !is_toggled && !has_balance;
+  let show_balance = $derived(!is_toggled && has_balance);
+  let shown_balance = $derived(
+    show_balance ? node.balance : node.balance_children,
+  );
+  let shown_cost = $derived(show_balance ? node.cost : node.cost_children);
+  let shown_balance_other = $derived(
+    Object.entries(shown_balance)
+      .sort()
+      .filter(([c]) => !$operating_currency.includes(c)),
+  );
+  let dimmed = $derived(!is_toggled && !has_balance);
 </script>
 
 <li>
@@ -62,7 +71,7 @@
   {#if !is_toggled && children.some((n) => !$not_shown.has(n.account))}
     <ol>
       {#each children.filter((n) => !$not_shown.has(n.account)) as child (child.account)}
-        <svelte:self node={child} {invert} />
+        <TreeTableNode node={child} {invert} />
       {/each}
     </ol>
   {/if}

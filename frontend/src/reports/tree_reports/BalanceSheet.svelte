@@ -2,14 +2,15 @@
   import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { chartContext } from "../../charts/context";
-  import type { AccountTreeNode } from "../../charts/hierarchy";
   import TreeTable from "../../tree-table/TreeTable.svelte";
+  import type { TreeReportProps } from ".";
 
-  export let charts: unknown;
-  export let trees: AccountTreeNode[];
-  export let date_range: { begin: Date; end: Date } | null;
+  let { charts, trees, date_range }: TreeReportProps = $props();
+  let end = $derived(date_range?.end ?? null);
 
-  $: chartData = parseChartData(charts, $chartContext).unwrap_or(null);
+  let chartData = $derived(
+    parseChartData(charts, $chartContext).unwrap_or(null),
+  );
 </script>
 
 {#if chartData}
@@ -19,12 +20,12 @@
 <div class="row">
   <div class="column">
     {#each trees.slice(0, 1) as tree}
-      <TreeTable {tree} end={date_range?.end ?? null} />
+      <TreeTable {tree} {end} />
     {/each}
   </div>
   <div class="column">
     {#each trees.slice(1) as tree}
-      <TreeTable {tree} end={date_range?.end ?? null} />
+      <TreeTable {tree} {end} />
     {/each}
   </div>
 </div>

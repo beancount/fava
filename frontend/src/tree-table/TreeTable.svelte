@@ -9,17 +9,22 @@
   import { get_collapsed, get_not_shown, setTreeTableContext } from "./helpers";
   import TreeTableNode from "./TreeTableNode.svelte";
 
-  /** The account tree to show. */
-  export let tree: AccountTreeNode;
-  /** The end date (for closed accounts). */
-  export let end: Date | null;
+  interface Props {
+    /** The account tree to show. */
+    tree: AccountTreeNode;
+    /** The end date (for closed accounts). */
+    end: Date | null;
+  }
+
+  let { tree, end }: Props = $props();
 
   // Initialize context.
   // toggled is computed once on initialisation; not_shown is kept updated.
   const toggled = writable(get_collapsed(tree, $collapse_account));
   const not_shown = writable(new Set<string>());
   setTreeTableContext({ toggled, not_shown });
-  $: $not_shown = $get_not_shown(tree, end);
+
+  $not_shown = $get_not_shown(tree, end);
 </script>
 
 <ol

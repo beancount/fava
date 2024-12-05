@@ -1,10 +1,17 @@
 import { get } from "../../api";
+import type { AccountTreeNode } from "../../charts/hierarchy";
 import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 import { Route } from "../route";
 import BalanceSheet from "./BalanceSheet.svelte";
 import IncomeStatement from "./IncomeStatement.svelte";
 import TrialBalance from "./TrialBalance.svelte";
+
+export interface TreeReportProps {
+  charts: unknown;
+  trees: AccountTreeNode[];
+  date_range: { begin: Date; end: Date } | null;
+}
 
 export const income_statement = new Route(
   "income_statement",
