@@ -15,7 +15,10 @@ export interface FrontendRoute {
 }
 
 /** This class pairs the components and their load functions to use them in a type-safe way. */
-export class Route<T extends Record<string, unknown>> implements FrontendRoute {
+// The base type for the component props needs to be typed as Record<string,any> to allow for T
+// to be correctly inferred from the imported svelte components
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Route<T extends Record<string, any>> implements FrontendRoute {
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
     | { error: false; component: Record<string, unknown>; props: T }
@@ -46,7 +49,7 @@ export class Route<T extends Record<string, unknown>> implements FrontendRoute {
   /** Destroy any components that might be rendered by this route. */
   destroy(): void {
     if (this.instance !== undefined) {
-      unmount(this.instance.component);
+      void unmount(this.instance.component);
     }
     this.instance = undefined;
   }
