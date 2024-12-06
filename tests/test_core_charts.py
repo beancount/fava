@@ -75,6 +75,8 @@ def test_net_worth_off_by_one(
 ) -> None:
     off_by_one = get_ledger("off-by-one")
     off_by_one_filtered = off_by_one.get_filtered()
+    assert not off_by_one.errors
+    assert len(off_by_one_filtered.entries) == 9
 
     for interval in [Interval.DAY, Interval.MONTH]:
         data = off_by_one.charts.net_worth(
@@ -82,6 +84,7 @@ def test_net_worth_off_by_one(
             interval,
             "at_value",
         )
+        assert len(data) == 4 if interval == Interval.DAY else 1
         snapshot(data, json=True)
 
 
