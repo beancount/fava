@@ -7,7 +7,7 @@
 
   import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
-  import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy";
+  import { fuzzyfilter, fuzzywrap, type FuzzyWrappedText } from "./lib/fuzzy";
 
   const dispatch = createEventDispatcher<{
     blur: HTMLInputElement;
@@ -40,7 +40,10 @@
   /** Whether to show a button to clear the input. */
   export let clearButton = false;
 
-  let filteredSuggestions: { suggestion: string; innerHTML: string }[] = [];
+  let filteredSuggestions: {
+    suggestion: string;
+    fuzzywrapped: FuzzyWrappedText;
+  }[] = [];
   let hidden = true;
   let index = -1;
   let input: HTMLInputElement;
@@ -60,7 +63,7 @@
       .slice(0, 30)
       .map((suggestion) => ({
         suggestion,
-        innerHTML: fuzzywrap(val, suggestion),
+        fuzzywrapped: fuzzywrap(val, suggestion),
       }));
     filteredSuggestions =
       filtered.length === 1 && filtered[0]?.suggestion === val ? [] : filtered;
@@ -145,7 +148,7 @@
   {/if}
   {#if filteredSuggestions.length}
     <ul {hidden}>
-      {#each filteredSuggestions as { innerHTML, suggestion }, i}
+      {#each filteredSuggestions as { fuzzywrapped, suggestion }, i}
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <li
           class:selected={i === index}
@@ -153,8 +156,13 @@
             mousedown(ev, suggestion);
           }}
         >
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html innerHTML}
+          {#each fuzzywrapped as [type, text]}
+            {#if type === "text"}
+              {text}
+            {:else}
+              <span>{text}</span>
+            {/if}
+          {/each}
         </li>
       {/each}
     </ul>
@@ -206,7 +214,7 @@
     background: transparent;
   }
 
-  li :global(span) {
+  li span {
     height: 1.2em;
     padding: 0 0.05em;
     margin: 0 -0.05em;
