@@ -6,25 +6,15 @@
   import SortHeader from "../../sort/SortHeader.svelte";
   import { accounts, errors } from "../../stores";
 
-  $: account_re = new RegExp(`(${$accounts.join("|")})`);
+  let account_re = $derived(new RegExp(`(${$accounts.join("|")})`));
 
-  /** Replace all account names with links to the corresponding account page. */
-  function addAccountLinks(msg: string): string {
+  /** Split and extract account names to replace them with links to the account page. */
+  function extract_accounts(msg: string): ["text" | "account", string][] {
     return msg
       .split(account_re)
-      .map((s, idx) => {
-        if (idx % 2 === 0) {
-          const el = document.createElement("span");
-          el.textContent = s;
-          return el;
-        }
-        const el = document.createElement("a");
-        el.href = $urlForAccount(s);
-        el.textContent = s;
-        return el;
-      })
-      .map((el) => el.outerHTML)
-      .join("");
+      .map((text, index) =>
+        index % 2 === 0 ? ["text", text] : ["account", text],
+      );
   }
 
   type T = BeancountError;
@@ -33,9 +23,9 @@
     new NumberColumn<T>(_("Line"), (d) => d.source?.lineno ?? 0),
     new StringColumn<T>(_("Error"), (d) => d.message),
   ] as const;
-  let sorter = new Sorter(columns[0], "desc");
+  let sorter = $state(new Sorter(columns[0], "desc"));
 
-  $: sorted_errors = sorter.sort($errors);
+  let sorted_errors = $derived(sorter.sort($errors));
 </script>
 
 {#if $errors.length}
@@ -67,8 +57,15 @@
             <td></td>
             <td class="num"></td>
           {/if}
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          <td class="pre">{@html addAccountLinks(message)}</td>
+          <td class="pre">
+            {#each extract_accounts(message) as [type, text]}
+              {#if type === "text"}
+                {text}
+              {:else}
+                <a href={$urlForAccount(text)}>{text}</a>
+              {/if}
+            {/each}
+          </td>
         </tr>
       {/each}
     </tbody>

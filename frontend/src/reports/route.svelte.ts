@@ -98,4 +98,4 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   }
 }
 
-export const noload = (): Record<string, unknown> => ({});
+export const noload = (): Record<string, never> => ({});
