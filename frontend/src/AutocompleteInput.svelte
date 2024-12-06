@@ -19,7 +19,7 @@
 <script lang="ts">
   import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
-  import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy";
+  import { fuzzyfilter, fuzzywrap, type FuzzyWrappedText } from "./lib/fuzzy";
 
   interface Props {
     /** The currently entered value (bindable). */
@@ -79,18 +79,20 @@
   let extractedValue = $derived(
     input && valueExtractor ? valueExtractor(value, input) : value,
   );
-  let filteredSuggestions: { suggestion: string; innerHTML: string }[] =
-    $derived.by(() => {
-      const filtered = fuzzyfilter(extractedValue, suggestions)
-        .slice(0, 30)
-        .map((suggestion) => ({
-          suggestion,
-          innerHTML: fuzzywrap(extractedValue, suggestion),
-        }));
-      return filtered.length === 1 && filtered[0]?.suggestion === extractedValue
-        ? []
-        : filtered;
-    });
+  let filteredSuggestions: {
+    suggestion: string;
+    fuzzywrapped: FuzzyWrappedText;
+  }[] = $derived.by(() => {
+    const filtered = fuzzyfilter(extractedValue, suggestions)
+      .slice(0, 30)
+      .map((suggestion) => ({
+        suggestion,
+        fuzzywrapped: fuzzywrap(extractedValue, suggestion),
+      }));
+    return filtered.length === 1 && filtered[0]?.suggestion === extractedValue
+      ? []
+      : filtered;
+  });
 
   $effect(() => {
     const msg = checkValidity ? checkValidity(value) : "";
@@ -189,7 +191,7 @@
   {/if}
   {#if filteredSuggestions.length}
     <ul {hidden} role="listbox" id={autocomple_id}>
-      {#each filteredSuggestions as { innerHTML, suggestion }, i}
+      {#each filteredSuggestions as { fuzzywrapped, suggestion }, i}
         <li
           role="option"
           aria-selected={i === index}
@@ -198,8 +200,13 @@
             mousedown(ev, suggestion);
           }}
         >
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html innerHTML}
+          {#each fuzzywrapped as [type, text]}
+            {#if type === "text"}
+              {text}
+            {:else}
+              <span>{text}</span>
+            {/if}
+          {/each}
         </li>
       {/each}
     </ul>
@@ -251,7 +258,7 @@
     background: transparent;
   }
 
-  li :global(span) {
+  li span {
     height: 1.2em;
     padding: 0 0.05em;
     margin: 0 -0.05em;
