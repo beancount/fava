@@ -30,6 +30,7 @@ from fava.beans.abc import Event
 from fava.context import g
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.filters import FilterError
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
@@ -81,7 +82,7 @@ class IncorrectTypeValidationError(ValidationError):
 
 def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
-    res = jsonify({"success": False, "error": msg})
+    res = jsonify({"error": msg})
     res.status = status  # type: ignore[assignment]
     return res
 
@@ -89,7 +90,7 @@ def json_err(msg: str, status: HTTPStatus) -> Response:
 def json_success(data: Any) -> Response:
     """Jsonify the response."""
     return jsonify(
-        {"success": True, "data": data, "mtime": str(g.ledger.mtime)},
+        {"data": data, "mtime": str(g.ledger.mtime)},
     )
 
 
@@ -157,24 +158,29 @@ class NotAFileError(FavaJSONAPIError):
 
 
 @json_api.errorhandler(FavaAPIError)
-def _json_api_fava_api_error(error: FavaAPIError) -> Response:
+def _(error: FavaAPIError) -> Response:
     log.error("Encountered FavaAPIError.", exc_info=error)
     return json_err(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(FavaJSONAPIError)
-def _json_api_fava_json_api(error: FavaJSONAPIError) -> Response:
+def _(error: FavaJSONAPIError) -> Response:
     return json_err(error.message, error.status)
 
 
+@json_api.errorhandler(FilterError)
+def _(error: FilterError) -> Response:
+    return json_err(error.message, HTTPStatus.BAD_REQUEST)
+
+
 @json_api.errorhandler(OSError)
-def _json_api_oserror(error: OSError) -> Response:  # pragma: no cover
+def _(error: OSError) -> Response:  # pragma: no cover
     log.error("Encountered OSError.", exc_info=error)
     return json_err(error.strerror, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(ValidationError)
-def _json_api_validation_error(error: ValidationError) -> Response:
+def _(error: ValidationError) -> Response:
     return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
 
 

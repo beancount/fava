@@ -52,7 +52,6 @@ def assert_api_error(
     """Asserts that the response errored and contains the message."""
     assert response.status_code == status.value
     assert response.json
-    assert not response.json["success"], response.json
     err_msg = response.json["error"]
     assert isinstance(err_msg, str)
     if msg:
@@ -64,7 +63,6 @@ def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == HTTPStatus.OK.value
     assert response.json
-    assert response.json["success"], response.json
     if data is not None:
         assert data == response.json["data"]
     return response.json["data"]
@@ -652,6 +650,15 @@ def test_api_commodities_empty(
     )
     data = assert_api_success(response)
     assert not data
+
+
+def test_api_filter_error(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/commodities?time=20",
+    )
+    assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
 
 
 @pytest.mark.parametrize(
