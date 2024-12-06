@@ -1,5 +1,6 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
+  import ThemeSwitch from "../components/ThemeSwitch.svelte";
   import { _ } from "../i18n";
   import { accounts, links, payees, tags, years } from "../stores";
   import { account_filter, fql_filter, time_filter } from "../stores/filters";
@@ -57,6 +58,7 @@
 </script>
 
 <form on:submit|preventDefault={submit}>
+  <ThemeSwitch />
   <AutocompleteInput
     bind:value={time_filter_value}
     placeholder={_("Time")}
