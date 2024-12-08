@@ -36,6 +36,9 @@
       entry.meta.__duplicate__ = !isDuplicate(entry);
     }
   }
+
+  $: current_index_from_one = currentIndex + 1;
+  $: total_without_duplicates = entries.length - duplicates;
 </script>
 
 <ModalBase {shown} closeHandler={close}>
@@ -45,10 +48,10 @@
       <div class="flex-row">
         <h3>
           Entry
-          {currentIndex + 1}
+          {current_index_from_one}
           of
           {entries.length}
-          ({entries.length - duplicates}
+          ({total_without_duplicates}
           to import):
         </h3>
         <span class="spacer"></span>

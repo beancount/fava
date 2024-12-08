@@ -48,25 +48,19 @@ export function fuzzyfilter(
     .sort((a, b) => b[1] - a[1])
     .map(([s]) => s);
 }
-const escapeChars: Record<string, string> = {
-  '"': "&quot;",
-  "'": "&#39;",
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-};
-const e = (text: string) =>
-  text.replace(/["'&<>]/g, (m) => escapeChars[m] ?? m);
+
+export type FuzzyWrappedText = ["text" | "match", string][];
 
 /**
  * Wrap fuzzy matched characters.
  *
  * Wrap all occurences of characters of `pattern` (in order) in `string` in
- * <span> tags.
+ * tuples with a "match" marker (and the others as plain "text") to allow for
+ * the matches to be wrapped in markers to highlight them in the HTML.
  */
-export function fuzzywrap(pattern: string, text: string): string {
+export function fuzzywrap(pattern: string, text: string): FuzzyWrappedText {
   if (!pattern) {
-    return e(text);
+    return [["text", text]];
   }
   const casesensitive = pattern === pattern.toLowerCase();
   const exact = casesensitive
@@ -76,33 +70,50 @@ export function fuzzywrap(pattern: string, text: string): string {
     const before = text.slice(0, exact);
     const match = text.slice(exact, exact + pattern.length);
     const after = text.slice(exact + pattern.length);
-    return `${e(before)}<span>${e(match)}</span>${e(after)}`;
+    const result: FuzzyWrappedText = [];
+    if (before) {
+      result.push(["text", before]);
+    }
+    result.push(["match", match]);
+    if (after) {
+      result.push(["text", after]);
+    }
+    return result;
   }
+  // current index into the pattern
   let pindex = 0;
-  let inMatch = false;
-  const result = [];
+  // current unmatched string
+  let plain: string | null = null;
+  // current matched string
+  let match: string | null = null;
+  const result: FuzzyWrappedText = [];
   for (const char of text) {
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
-      if (!inMatch) {
-        result.push("<span>");
-        inMatch = true;
+      match = match != null ? match + char : char;
+      if (plain != null) {
+        result.push(["text", plain]);
+        plain = null;
       }
-      result.push(e(char));
       pindex += 1;
     } else {
-      if (inMatch) {
-        result.push("</span>");
-        inMatch = false;
+      plain = plain != null ? plain + char : char;
+      if (match != null) {
+        result.push(["match", match]);
+        match = null;
       }
-      result.push(e(char));
     }
   }
   if (pindex < pattern.length) {
-    return e(text);
+    return [["text", text]];
   }
-  if (inMatch) {
-    result.push("</span>");
+  if (plain != null) {
+    result.push(["text", plain]);
+    plain = null;
   }
-  return result.join("");
+  if (match != null) {
+    result.push(["match", match]);
+    match = null;
+  }
+  return result;
 }
