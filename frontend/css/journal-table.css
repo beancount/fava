@@ -130,7 +130,7 @@
 }
 
 .journal .datecell {
-  width: 5.5rem;
+  width: 6rem;
   white-space: nowrap;
 }
 
@@ -233,12 +233,13 @@
 }
 
 @media (width <= 767px) {
-  article {
-    padding: 1rem;
+  .journal p {
+    flex-wrap: wrap;
   }
 
-  .flex-table.journal p {
-    flex-wrap: wrap;
+  /* show a colored top border for all entries */
+  .journal > li > p {
+    border-top: thin solid var(--entry-background);
   }
 
   .journal .head .flag {
@@ -246,35 +247,23 @@
     text-align: left;
   }
 
-  .journal .datecell {
-    order: 1;
-    width: 6rem;
-    text-align: left;
-  }
-
-  .journal .flag {
-    order: 2;
-  }
-
   .journal .description {
     flex: inherit;
-    order: 5;
+    order: 1; /* push to second row */
     width: 100%;
     padding-left: 0;
   }
 
   .journal .indicators {
     flex-grow: 1;
-    order: 3;
   }
 
-  .journal .balance .indicators,
+  .journal .balance .num {
+    width: 35%;
+  }
+
   .journal .balance .change.num {
     display: none;
-  }
-
-  .journal p > .num {
-    order: 4;
   }
 
   .journal .postings .datecell,
@@ -286,40 +275,6 @@
     flex-grow: 1;
     order: inherit;
     width: inherit;
-  }
-
-  .journal .indicators span {
-    display: none;
-  }
-
-  .journal .indicators span:nth-child(-n + 2) {
-    display: initial;
-  }
-
-  .journal .indicators span:nth-child(3) {
-    display: inline;
-    border-radius: 3px 0 0 3px;
-  }
-
-  .journal .balance > p > .num,
-  .journal .budget > p > .description > .num {
-    position: absolute;
-    right: 1rem;
-    width: 40%;
-  }
-
-  .journal .budget .description > .num {
-    display: block;
-    margin-top: -3.7rem;
-  }
-
-  .journal .budget > p > .description > .num {
-    background: var(--background);
-  }
-
-  .journal .custom > p,
-  .journal .balance > p {
-    border-top: thin solid var(--entry-background);
   }
 
   .journal .metadata dt,
