@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import logging
 import mimetypes
-from dataclasses import fields
 from datetime import date
 from datetime import datetime
 from datetime import timezone
@@ -77,7 +76,6 @@ setup_logging()
 
 SERVER_SIDE_REPORTS = [
     "journal",
-    "options",
     "statistics",
 ]
 
@@ -91,6 +89,7 @@ CLIENT_SIDE_REPORTS = [
     "holdings",
     "import",
     "income_statement",
+    "options",
     "query",
     "trial_balance",
 ]
@@ -238,7 +237,6 @@ def _setup_template_config(fava_app: Flask, *, incognito: bool) -> None:
     fava_app.add_template_filter(template_filters.flag_to_type)
     fava_app.add_template_filter(template_filters.format_currency)
     fava_app.add_template_filter(template_filters.meta_items)
-    fava_app.add_template_filter(fields, "dataclass_fields")
     fava_app.add_template_filter(
         template_filters.replace_numbers
         if incognito

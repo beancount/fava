@@ -667,6 +667,7 @@ def test_api_filter_error(
     ("name", "url"),
     [
         ("documents", "/example/api/documents"),
+        ("options", "/long-example/api/options"),
     ],
 )
 def test_api_unix_only(

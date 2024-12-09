@@ -10,11 +10,13 @@ import logging
 import shutil
 from abc import abstractmethod
 from dataclasses import dataclass
+from dataclasses import fields
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
+from pprint import pformat
 from typing import Any
 from typing import Callable
 from typing import TYPE_CHECKING
@@ -502,6 +504,32 @@ def get_documents() -> Sequence[Document]:
     return [
         serialise(e) for e in g.filtered.entries if isinstance(e, Document)
     ]
+
+
+@dataclass(frozen=True)
+class Options:
+    """Fava and Beancount options as strings."""
+
+    fava_options: Mapping[str, str]
+    beancount_options: Mapping[str, str]
+
+
+@api_endpoint
+def get_options() -> Options:
+    """Get all options, rendered to strings for displaying in the frontend."""
+    g.ledger.changed()
+
+    fava_options = g.ledger.fava_options
+    pprinted_fava_options = {
+        field.name.replace("_", "-"): pformat(
+            getattr(fava_options, field.name)
+        )
+        for field in fields(fava_options)
+    }
+    return Options(
+        pprinted_fava_options,
+        {key: str(value) for key, value in g.ledger.options.items()},
+    )
 
 
 @dataclass(frozen=True)

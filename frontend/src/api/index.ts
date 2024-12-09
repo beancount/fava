@@ -69,6 +69,7 @@ interface GetAPIParams {
   trial_balance: FiltersConversionInterval;
   ledger_data: undefined;
   move: { filename: string; account: string; new_name: string };
+  options: undefined;
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
   query: Filters & { query_string: string };
