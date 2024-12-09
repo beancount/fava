@@ -54,7 +54,7 @@ export class BarChart {
   constructor(
     readonly name: string | null,
     /** The currencies that are shown in this bar chart. */
-    readonly currencies: string[],
+    readonly currencies: readonly string[],
     /** The data for the (single) bars for all the intervals in this chart. */
     private readonly bar_groups: BarChartDatum[],
   ) {
@@ -99,13 +99,16 @@ export class BarChart {
     c: FormatterContext,
     d: BarChartDatum,
     account: string,
+    $chartToggledCurrencies: readonly string[],
   ): TooltipContent {
     const content = [];
     content.push(domHelpers.em(account));
-    d.values.forEach((a) => {
-      const value = d.account_balances[account]?.[a.currency] ?? 0;
-      content.push(domHelpers.t(c.amount(value, a.currency)));
-      content.push(domHelpers.br());
+    d.values.forEach(({ currency }) => {
+      if (!$chartToggledCurrencies.includes(currency)) {
+        const value = d.account_balances[account]?.[currency] ?? 0;
+        content.push(domHelpers.t(c.amount(value, currency)));
+        content.push(domHelpers.br());
+      }
     });
     content.push(domHelpers.em(d.label));
     return content;

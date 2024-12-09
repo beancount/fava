@@ -66,9 +66,6 @@ export const chartToggledCurrencies = localStorageSyncedStore(
   () => [],
 );
 
-/** The currency to show the treemap of. */
-export const treemapCurrency = writable<string | null>(null);
-
 /** The currencies to over as conversion options. */
 const currency_suggestions = derived(
   [operating_currency, currencies_sorted, conversion_currencies],

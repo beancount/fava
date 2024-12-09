@@ -20,7 +20,7 @@
       type="button"
       class="link"
       title={_("Expand all accounts")}
-      on:click={() => {
+      onclick={() => {
         toggled.set(new Set());
       }}
     >
