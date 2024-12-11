@@ -75,7 +75,7 @@ plugin "beancount.plugins.auto_accounts"
     test: TRUE
     account: Expenses:Food
 
-2012-12-15 document Expenses:Food "import.csv" #tag ^link1
-2012-12-15 document Expenses:Food "receipt.pdf" #discovered
+2012-12-15 document Expenses:Food "/tmp/import.csv" #tag ^link1
+2012-12-15 document Expenses:Food "/tmp/receipt.pdf" #discovered
 
 2014-01-01 close Assets:Account1

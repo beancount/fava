@@ -121,8 +121,11 @@ def snapshot(
         today = local_today()
         out = out.replace(str(today), "TODAY")
         # replace entry hashes
-        out = re.sub(r'"[0-9a-f]{32}', '"ENTRY_HASH', out)
-        out = re.sub(r"context-[0-9a-f]{32}", "context-ENTRY_HASH", out)
+        out = re.sub(r'_hash": "[0-9a-f]+', '_hash": "ENTRY_HASH', out)
+        out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
+        out = re.sub(
+            r"data-entry=\\\"[0-9a-f]+", 'data-entry=\\"ENTRY_HASH', out
+        )
         # replace mtimes
         out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
         out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)

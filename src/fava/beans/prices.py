@@ -6,12 +6,12 @@ import datetime
 from bisect import bisect
 from collections import Counter
 from collections import defaultdict
-from collections.abc import Sequence
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from collections.abc import Sequence
     from typing import TypeAlias
 
     from fava.beans.abc import Price
@@ -23,7 +23,7 @@ ZERO = Decimal()
 ONE = Decimal(1)
 
 
-class DateKeyWrapper(Sequence[datetime.date]):
+class DateKeyWrapper(list[datetime.date]):
     """A class wrapping a list of prices for bisect.
 
     This is needed before Python 3.10, which adds the key argument.
@@ -31,7 +31,7 @@ class DateKeyWrapper(Sequence[datetime.date]):
 
     __slots__ = ("inner",)
 
-    def __init__(self, inner: Sequence[PricePoint]) -> None:
+    def __init__(self, inner: list[PricePoint]) -> None:
         self.inner = inner
 
     def __len__(self) -> int:

@@ -64,6 +64,10 @@ article:has(> .fixed-fullsize-container) {
 }
 
 @media (width <= 767px) {
+  article {
+    padding: 1em;
+  }
+
   body {
     display: block;
     font-size: 16px;

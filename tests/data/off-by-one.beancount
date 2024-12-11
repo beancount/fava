@@ -11,7 +11,7 @@ option "operating_currency" "USD"
 
 2022-01-01 * "Buy"
   Assets:Cash                                          -100 USD
-  Assets:Commodity                                        1 COM {{100 USD}}
+  Assets:Commodity                                        1 COM {100 USD}
 
 2022-01-01 price COM                                    101 USD
 2022-01-02 price COM                                    102 USD

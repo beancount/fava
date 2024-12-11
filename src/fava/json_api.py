@@ -10,11 +10,13 @@ import logging
 import shutil
 from abc import abstractmethod
 from dataclasses import dataclass
+from dataclasses import fields
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
+from pprint import pformat
 from typing import Any
 from typing import Callable
 from typing import TYPE_CHECKING
@@ -30,6 +32,7 @@ from fava.beans.abc import Event
 from fava.context import g
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.filters import FilterError
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
@@ -81,7 +84,7 @@ class IncorrectTypeValidationError(ValidationError):
 
 def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
-    res = jsonify({"success": False, "error": msg})
+    res = jsonify({"error": msg})
     res.status = status  # type: ignore[assignment]
     return res
 
@@ -89,7 +92,7 @@ def json_err(msg: str, status: HTTPStatus) -> Response:
 def json_success(data: Any) -> Response:
     """Jsonify the response."""
     return jsonify(
-        {"success": True, "data": data, "mtime": str(g.ledger.mtime)},
+        {"data": data, "mtime": str(g.ledger.mtime)},
     )
 
 
@@ -157,24 +160,29 @@ class NotAFileError(FavaJSONAPIError):
 
 
 @json_api.errorhandler(FavaAPIError)
-def _json_api_fava_api_error(error: FavaAPIError) -> Response:
+def _(error: FavaAPIError) -> Response:
     log.error("Encountered FavaAPIError.", exc_info=error)
     return json_err(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(FavaJSONAPIError)
-def _json_api_fava_json_api(error: FavaJSONAPIError) -> Response:
+def _(error: FavaJSONAPIError) -> Response:
     return json_err(error.message, error.status)
 
 
+@json_api.errorhandler(FilterError)
+def _(error: FilterError) -> Response:
+    return json_err(error.message, HTTPStatus.BAD_REQUEST)
+
+
 @json_api.errorhandler(OSError)
-def _json_api_oserror(error: OSError) -> Response:  # pragma: no cover
+def _(error: OSError) -> Response:  # pragma: no cover
     log.error("Encountered OSError.", exc_info=error)
     return json_err(error.strerror, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(ValidationError)
-def _json_api_validation_error(error: ValidationError) -> Response:
+def _(error: ValidationError) -> Response:
     return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
 
 
@@ -496,6 +504,32 @@ def get_documents() -> Sequence[Document]:
     return [
         serialise(e) for e in g.filtered.entries if isinstance(e, Document)
     ]
+
+
+@dataclass(frozen=True)
+class Options:
+    """Fava and Beancount options as strings."""
+
+    fava_options: Mapping[str, str]
+    beancount_options: Mapping[str, str]
+
+
+@api_endpoint
+def get_options() -> Options:
+    """Get all options, rendered to strings for displaying in the frontend."""
+    g.ledger.changed()
+
+    fava_options = g.ledger.fava_options
+    pprinted_fava_options = {
+        field.name.replace("_", "-"): pformat(
+            getattr(fava_options, field.name)
+        )
+        for field in fields(fava_options)
+    }
+    return Options(
+        pprinted_fava_options,
+        {key: str(value) for key, value in g.ledger.options.items()},
+    )
 
 
 @dataclass(frozen=True)

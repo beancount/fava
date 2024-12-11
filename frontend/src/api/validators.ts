@@ -191,6 +191,10 @@ export const getAPIValidators = {
   income_statement: tree_report,
   ledger_data: ledgerDataValidator,
   move: string,
+  options: object({
+    fava_options: record(string),
+    beancount_options: record(string),
+  }),
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
   query: query_validator,

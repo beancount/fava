@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import sys
 from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
@@ -52,7 +53,6 @@ def assert_api_error(
     """Asserts that the response errored and contains the message."""
     assert response.status_code == status.value
     assert response.json
-    assert not response.json["success"], response.json
     err_msg = response.json["error"]
     assert isinstance(err_msg, str)
     if msg:
@@ -64,7 +64,6 @@ def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == HTTPStatus.OK.value
     assert response.json
-    assert response.json["success"], response.json
     if data is not None:
         assert data == response.json["data"]
     return response.json["data"]
@@ -654,11 +653,39 @@ def test_api_commodities_empty(
     assert not data
 
 
+def test_api_filter_error(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/commodities?time=20",
+    )
+    assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
+@pytest.mark.parametrize(
+    ("name", "url"),
+    [
+        ("documents", "/example/api/documents"),
+        ("options", "/long-example/api/options"),
+    ],
+)
+def test_api_unix_only(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+    name: str,
+    url: str,
+) -> None:
+    response = test_client.get(url)
+    data = assert_api_success(response)
+    assert data
+    snapshot(data, name=name, json=True)
+
+
 @pytest.mark.parametrize(
     ("name", "url"),
     [
         ("commodities", "/long-example/api/commodities"),
-        ("documents", "/example/api/documents"),
         ("events", "/long-example/api/events"),
         ("income_statement", "/long-example/api/income_statement?time=2014"),
         ("trial_balance", "/long-example/api/trial_balance?time=2014"),

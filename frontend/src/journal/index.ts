@@ -5,9 +5,9 @@ import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
 
 /**
- * Escape the value to produce a valid regex.
+ * Escape the value to produce a valid regex for the Fava filter.
  */
-function escape(value: string): string {
+export function escape(value: string): string {
   return value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
 }
 

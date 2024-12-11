@@ -446,19 +446,3 @@ td .status-indicator {
   border-bottom: 5px solid var(--text-color-lightest);
   border-left: 5px solid transparent;
 }
-
-/*
- * View-specific and tables
- */
-
-.options td {
-  text-align: left;
-}
-
-.options td:nth-child(1) {
-  font-weight: 500;
-}
-
-.options td:nth-child(2) {
-  white-space: normal;
-}

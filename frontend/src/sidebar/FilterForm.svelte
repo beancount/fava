@@ -2,13 +2,14 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import ThemeSwitch from "../components/ThemeSwitch.svelte";
   import { _ } from "../i18n";
+  import { escape } from "../journal";
   import { accounts, links, payees, tags, years } from "../stores";
   import { account_filter, fql_filter, time_filter } from "../stores/filters";
 
   $: fql_filter_suggestions = [
     ...$tags.map((tag) => `#${tag}`),
     ...$links.map((link) => `^${link}`),
-    ...$payees.map((payee) => `payee:"${payee}"`),
+    ...$payees.map((payee) => `payee:"${escape(payee)}"`),
   ];
 
   function valueExtractor(value: string, input: HTMLInputElement) {
