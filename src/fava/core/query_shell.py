@@ -66,6 +66,15 @@ class QueryParseError(FavaShellError):
         super().__init__(f"Query parse error: {err!s}.")
 
 
+class NonExportableQueryError(FavaShellError):
+    """Only queries that return a table can be printed to a file."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            "Only queries that return a table can be printed to a file."
+        )
+
+
 class FavaBQLShell(BQLShell):  # type: ignore[misc]
     """A light wrapper around Beancount's shell."""
 
@@ -214,8 +223,7 @@ class QueryShell(FavaModule):
 
         res = self.shell.run(entries, query_string)
         if isinstance(res, str):
-            msg = "Only queries that return a table can be printed to a file."
-            raise FavaAPIError(msg)
+            raise NonExportableQueryError
 
         rrows = res.fetchall()
         rtypes = res.description

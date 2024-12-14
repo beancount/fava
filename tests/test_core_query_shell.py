@@ -7,6 +7,7 @@ import pytest
 
 from fava.core.query import QueryResultTable
 from fava.core.query import QueryResultText
+from fava.core.query_shell import NonExportableQueryError
 from fava.core.query_shell import QueryCompilationError
 from fava.core.query_shell import QueryNotFoundError
 from fava.core.query_shell import QueryParseError
@@ -109,6 +110,8 @@ def test_query_to_file(
     assert name == "query_result"
     snapshot(data.getvalue())
 
+    with pytest.raises(NonExportableQueryError):
+        query_shell.query_to_file(entries, ".help targets", "csv")
     with pytest.raises(TooManyRunArgsError):
         query_shell.query_to_file(entries, "run custom_query other", "csv")
     with pytest.raises(QueryNotFoundError):
