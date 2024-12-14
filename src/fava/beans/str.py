@@ -88,6 +88,7 @@ def _format_entry(
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
     }
     entry = replace(entry, meta=meta)
-    string = align(format_entry(entry, prefix=" " * indent), currency_column)
+    printed_entry = format_entry(entry, prefix=" " * indent)
+    string = align(printed_entry, currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")
     return "\n".join(line.rstrip() for line in string.split("\n"))

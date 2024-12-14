@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
+from textwrap import dedent
 
 import pytest
 from beancount.core.position import CostSpec
@@ -74,3 +75,45 @@ def test_to_string_cost_spec() -> None:
         to_string(_spec(number_per=one, date=date, label="label", merge=True))
         == '1, 2022-01-01, "label", *'
     )
+
+
+def test_to_string_transaction() -> None:
+    postings = [
+        create.posting("Liabilities:US:Chase:Slate", "-10.00 USD"),
+        create.posting("Expenses:Food", "10.00 USD"),
+    ]
+
+    transaction = create.transaction(
+        {},
+        datetime.date(2016, 1, 1),
+        "*",
+        "payee",
+        "narr",
+        postings=postings,
+    )
+    assert to_string(transaction, 50, 4) == dedent("""\
+        2016-01-01 * "payee" "narr"
+            Liabilities:US:Chase:Slate            -10.00 USD
+            Expenses:Food                          10.00 USD
+        """)
+
+
+def test_to_string_transaction_with_price() -> None:
+    postings = [
+        create.posting("Liabilities:US:Chase:Slate", "-10.00 USD"),
+        create.posting("Expenses:Food", units="10.00 USD", price="10 EUR"),
+    ]
+
+    transaction = create.transaction(
+        {},
+        datetime.date(2016, 1, 1),
+        "*",
+        "payee",
+        "narr",
+        postings=postings,
+    )
+    assert to_string(transaction, 50, 4) == dedent("""\
+        2016-01-01 * "payee" "narr"
+            Liabilities:US:Chase:Slate            -10.00 USD
+            Expenses:Food                          10.00 USD @ 10 EUR
+        """)

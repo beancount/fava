@@ -6,8 +6,6 @@ import io
 import re
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import CURRENCY_RE
-
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import local_today
@@ -96,6 +94,7 @@ def upcoming_events(
     return upcoming
 
 
+CURRENCY_RE = r"[A-Z][A-Z0-9\'\.\_\-]{0,22}[A-Z0-9]"
 ALIGN_RE = re.compile(
     rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({CURRENCY_RE}\b.*)',
 )

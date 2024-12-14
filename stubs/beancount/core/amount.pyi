@@ -2,8 +2,6 @@ from decimal import Decimal
 from typing import Any
 from typing import NamedTuple
 
-CURRENCY_RE: str
-
 class Amount(NamedTuple):
     number: Decimal | None
     currency: str
