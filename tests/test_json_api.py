@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import sys
+from difflib import Differ
 from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
@@ -26,6 +27,16 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
     from .conftest import SnapshotFunc
+
+
+def diff_strings(a: str, b: str) -> list[str]:
+    """Diff two strings and return the list of differing lines."""
+    differ = Differ()
+    return [
+        line
+        for line in differ.compare(a.splitlines(), b.splitlines())
+        if line.startswith(("+", "-"))
+    ]
 
 
 def test_validate_get_args() -> None:
@@ -399,27 +410,33 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     assert "Trying to read a non-source file" in err_msg
 
 
-def test_api_source_put(app_in_tmp_dir: Flask) -> None:
+def test_api_put_source_bad_request(test_client: FlaskClient) -> None:
+    response = test_client.put("/example/api/source")
+    assert_api_error(response, "Invalid JSON request.")
+
+
+def test_api_source(app_in_tmp_dir: Flask) -> None:
     test_client = app_in_tmp_dir.test_client()
     ledger = app_in_tmp_dir.config["LEDGERS"]["edit-example"]
     path = Path(ledger.beancount_file_path)
-
     url = "/edit-example/api/source"
-    # test bad request
-    response = test_client.put(url)
-    assert_api_error(response, "Invalid JSON request.")
 
     source = path.read_text("utf-8")
     changed_source = source + "\n;comment"
     sha256sum = _sha256_str(source)
 
+    # read
+    response = test_client.get(url, query_string={"filename": ""})
+    data = assert_api_success(response)
+    assert data["source"] == source
+
     # change source
     response = test_client.put(
         url,
         json={
-            "source": changed_source,
-            "sha256sum": sha256sum,
             "file_path": str(path),
+            "sha256sum": sha256sum,
+            "source": changed_source,
         },
     )
     sha256sum = _sha256_str(changed_source)
@@ -432,13 +449,95 @@ def test_api_source_put(app_in_tmp_dir: Flask) -> None:
     response = test_client.put(
         url,
         json={
-            "source": source,
-            "sha256sum": sha256sum,
             "file_path": str(path),
+            "sha256sum": sha256sum,
+            "source": source,
         },
     )
-    assert response.status_code == HTTPStatus.OK.value
+    assert_api_success(response)
     assert path.read_text("utf-8") == source
+
+
+def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
+    test_client = app_in_tmp_dir.test_client()
+    ledger = app_in_tmp_dir.config["LEDGERS"]["edit-example"]
+    path = Path(ledger.beancount_file_path)
+
+    source = path.read_text("utf-8")
+
+    # get entry context and update an entry slice
+    first_txn = next(e for e in ledger.all_entries if hasattr(e, "postings"))
+    assert first_txn.payee == "Kin Soy"
+    entry_hash = hash_entry(first_txn)
+    response = test_client.get(
+        "/edit-example/api/context",
+        query_string={"entry_hash": entry_hash},
+    )
+    data = assert_api_success(response)
+    assert "Kin Soy" in data["slice"]
+
+    response = test_client.put(
+        "/edit-example/api/source_slice",
+        json={
+            "entry_hash": entry_hash,
+            "sha256sum": data["sha256sum"],
+            "source": data["slice"].replace("Kin Soy", "Lorem Ipsum"),
+        },
+    )
+    assert_api_success(response)
+    assert diff_strings(source, path.read_text("utf-8")) == [
+        '- 2014-01-04 * "Kin Soy" "Eating out with Sue"',
+        '+ 2014-01-04 * "Lorem Ipsum" "Eating out with Sue"',
+    ]
+    ledger.load_file()
+    first_txn = next(e for e in ledger.all_entries if hasattr(e, "postings"))
+    assert first_txn.payee == "Lorem Ipsum"
+    entry_hash = hash_entry(first_txn)
+
+    response = test_client.put(
+        "/edit-example/api/attach_document",
+        json={
+            "entry_hash": entry_hash,
+            "filename": "edit-example.beancount",
+        },
+    )
+    assert_api_success(response)
+    assert diff_strings(source, path.read_text("utf-8")) == [
+        '- 2014-01-04 * "Kin Soy" "Eating out with Sue"',
+        '+ 2014-01-04 * "Lorem Ipsum" "Eating out with Sue"',
+        '+   document: "edit-example.beancount"',
+    ]
+
+    ledger.load_file()
+    first_txn = next(e for e in ledger.all_entries if hasattr(e, "postings"))
+    assert first_txn.payee == "Lorem Ipsum"
+    entry_hash = hash_entry(first_txn)
+
+    ledger.options["documents"] = [str(path.parent)]
+    target_path = (
+        path.parent
+        / "Expenses"
+        / "Food"
+        / "Restaurant"
+        / "2022-12-12 asdf.txt"
+    )
+    response = test_client.put(
+        "/edit-example/api/add_document",
+        data={
+            "folder": str(path.parent),
+            "account": "Expenses:Food:Restaurant",
+            "file": (BytesIO(b"asdfasdf"), "2022-12-12 asdf.txt"),
+            "hash": entry_hash,
+        },
+    )
+    assert_api_success(response)
+    assert target_path.exists()
+    assert diff_strings(source, path.read_text("utf-8")) == [
+        '- 2014-01-04 * "Kin Soy" "Eating out with Sue"',
+        '+ 2014-01-04 * "Lorem Ipsum" "Eating out with Sue"',
+        '+   document-2: "2022-12-12 asdf.txt"',
+        '+   document: "edit-example.beancount"',
+    ]
 
 
 def test_api_format_source(

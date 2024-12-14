@@ -450,7 +450,7 @@ def put_add_entries(entries: list[Any]) -> str:
     """Add multiple entries."""
     try:
         entries = [deserialise(entry) for entry in entries]
-    except KeyError as error:
+    except KeyError as error:  # pragma: no cover
         msg = f"KeyError: {error}"
         raise FavaAPIError(msg) from error
 
