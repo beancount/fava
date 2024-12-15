@@ -190,15 +190,15 @@ def test_ingest_errors_file_does_not_exist(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     ingest_ledger = get_ledger("import")
-    ingest_ledger.load_file()
-    previous_errors = len(ingest_ledger.errors)
+    ingest_ledger.ingest.load_file()
+    assert not ingest_ledger.ingest.errors
     monkeypatch.setattr(
         ingest_ledger.fava_options,
         "import_config",
         "does_not_exist.py",
     )
     ingest_ledger.ingest.load_file()
-    assert len(ingest_ledger.errors) > previous_errors
+    assert ingest_ledger.ingest.errors
 
 
 def test_filepath_in_primary_imports_folder(

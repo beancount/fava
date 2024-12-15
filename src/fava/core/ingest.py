@@ -323,6 +323,7 @@ class IngestModule(FavaModule):
         self.importers: Mapping[str, BeanImporterProtocol | Importer] = {}
         self.hooks: Hooks = []
         self.mtime: int | None = None
+        self.errors: list[IngestError] = []
 
     @property
     def module_path(self) -> Path | None:
@@ -333,7 +334,7 @@ class IngestModule(FavaModule):
         return self.ledger.join_path(config_path)
 
     def _error(self, msg: str) -> None:
-        self.ledger.errors.append(
+        self.errors.append(
             IngestError(
                 {"filename": str(self.module_path), "lineno": 0},
                 msg,
@@ -342,6 +343,7 @@ class IngestModule(FavaModule):
         )
 
     def load_file(self) -> None:  # noqa: D102
+        self.errors = []
         module_path = self.module_path
         if module_path is None:
             return

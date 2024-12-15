@@ -219,13 +219,14 @@ class FavaLedger:
         "budgets",
         "charts",
         "commodities",
-        "errors",
         "extensions",
         "fava_options",
+        "fava_options_errors",
         "file",
         "format_decimal",
         "get_filtered",
         "ingest",
+        "load_errors",
         "misc",
         "options",
         "prices",
@@ -237,13 +238,16 @@ class FavaLedger:
     all_entries: Sequence[Directive]
 
     #: A list of all errors reported by Beancount.
-    errors: list[BeancountError]
+    load_errors: Sequence[BeancountError]
 
     #: The Beancount options map.
     options: BeancountOptions
 
     #: A dict with all of Fava's option values.
     fava_options: FavaOptions
+
+    #: A list of all errors from parsing the custom options.
+    fava_options_errors: Sequence[BeancountError]
 
     #: The price map.
     prices: FavaPriceMap
@@ -296,7 +300,7 @@ class FavaLedger:
 
     def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
-        self.all_entries, self.errors, self.options = load_uncached(
+        self.all_entries, self.load_errors, self.options = load_uncached(
             self.beancount_file_path,
             is_encrypted=self._is_encrypted,
         )
@@ -305,10 +309,9 @@ class FavaLedger:
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
         self.prices = FavaPriceMap(self.all_entries_by_type.Price)
 
-        self.fava_options, errors = parse_options(
+        self.fava_options, self.fava_options_errors = parse_options(
             self.all_entries_by_type.Custom,
         )
-        self.errors.extend(errors)
 
         if self._is_encrypted:  # pragma: no cover
             pass
@@ -348,6 +351,18 @@ class FavaLedger:
     def mtime(self) -> int:
         """The timestamp to the latest change of the underlying files."""
         return self.watcher.last_checked
+
+    @property
+    def errors(self) -> Sequence[BeancountError]:
+        """The errors that the Beancount loading plus Fava module errors."""
+        return [
+            *self.load_errors,
+            *self.fava_options_errors,
+            *self.budgets.errors,
+            *self.extensions.errors,
+            *self.misc.errors,
+            *self.ingest.errors,
+        ]
 
     @property
     def root_accounts(self) -> tuple[str, str, str, str, str]:

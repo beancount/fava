@@ -24,6 +24,13 @@ class FavaError(BeancountError):
     """Generic Fava-specific error."""
 
 
+NO_OPERATING_CURRENCY_ERROR = FavaError(
+    None,
+    "No operating currency specified. Please add one to your beancount file.",
+    None,
+)
+
+
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
@@ -43,15 +50,14 @@ class FavaMisc(FavaModule):
             self.ledger.fava_options.upcoming_events,
         )
 
-        if not self.ledger.options["operating_currency"]:
-            self.ledger.errors.append(
-                FavaError(
-                    None,
-                    "No operating currency specified. "
-                    "Please add one to your beancount file.",
-                    None,
-                ),
-            )
+    @property
+    def errors(self) -> Sequence[FavaError]:
+        """An error if no operating currency is set."""
+        return (
+            []
+            if self.ledger.options["operating_currency"]
+            else [NO_OPERATING_CURRENCY_ERROR]
+        )
 
 
 def sidebar_links(custom_entries: Sequence[Custom]) -> SidebarLinks:

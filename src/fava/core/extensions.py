@@ -36,15 +36,18 @@ class ExtensionModule(FavaModule):
         super().__init__(ledger)
         self._instances: dict[str, FavaExtensionBase] = {}
         self._loaded_extensions: set[type[FavaExtensionBase]] = set()
+        self.errors: list[FavaExtensionError] = []
 
     def load_file(self) -> None:  # noqa: D102
+        self.errors = []
+
         custom_entries = self.ledger.all_entries_by_type.Custom
 
         seen = set()
         for entry in (e for e in custom_entries if e.type == "fava-extension"):
             extension = entry.values[0].value
             if extension in seen:  # pragma: no cover
-                self.ledger.errors.append(
+                self.errors.append(
                     FavaExtensionError(
                         entry.meta, f"Duplicate extension '{extension}'", entry
                     )
@@ -56,7 +59,7 @@ class ExtensionModule(FavaModule):
                 Path(self.ledger.beancount_file_path).parent,
                 extension,
             )
-            self.ledger.errors.extend(errors)
+            self.errors.extend(errors)
 
             for cls in extensions:
                 ext_config = (
@@ -68,7 +71,7 @@ class ExtensionModule(FavaModule):
                         ext = cls(self.ledger, ext_config)
                         self._instances[ext.name] = ext
                     except ExtensionConfigError as error:  # pragma: no cover
-                        self.ledger.errors.append(
+                        self.errors.append(
                             FavaExtensionError(entry.meta, str(error), entry)
                         )
 

@@ -47,12 +47,12 @@ class BudgetModule(FavaModule):
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self._budget_entries: BudgetDict = {}
+        self.errors: Sequence[BudgetError] = []
 
     def load_file(self) -> None:  # noqa: D102
-        self._budget_entries, errors = parse_budgets(
+        self._budget_entries, self.errors = parse_budgets(
             self.ledger.all_entries_by_type.Custom,
         )
-        self.ledger.errors.extend(errors)
 
     def calculate(
         self,
