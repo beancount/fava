@@ -129,6 +129,7 @@ disable = [
     "duplicate-code",
     "unused-argument",                # is checked by ruff (ARG001)
     "stop-iteration-return",
+    "ungrouped-imports",
     "invalid-unary-operand-type",    # type-checking like, had false-positives
     "not-an-iterable",               # type-checking like, had false-positives
     "unsubscriptable-object",        # type-checking like, had false-positives

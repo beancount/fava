@@ -39,9 +39,27 @@
     "importers": [
       {
         "account": "Assets:Checking",
-        "date": "TODAY",
+        "date": "2022-12-12",
         "importer_name": "<run_path>.TestImporter",
         "name": "examplebank.import.csv"
+      },
+      {
+        "account": "Assets:Checking",
+        "date": "2022-12-12",
+        "importer_name": "<run_path>.TestImporterThatErrorsOnExtract",
+        "name": "examplebank.import.csv"
+      },
+      {
+        "account": "Assets:Checking",
+        "date": "2022-12-12",
+        "importer_name": "<run_path>.TestBeangulpImporter",
+        "name": "import.csv"
+      },
+      {
+        "account": "Assets:Checking",
+        "date": "2022-12-12",
+        "importer_name": "<run_path>.TestBeangulpImporterNoExtraction",
+        "name": "import.csv"
       }
     ],
     "name": "TEST_DATA_DIR/import.csv"

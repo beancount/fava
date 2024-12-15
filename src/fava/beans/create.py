@@ -108,8 +108,8 @@ def transaction(
     flag: Flag,
     payee: str | None,
     narration: str,
-    tags: TagsOrLinks | None = None,
-    links: TagsOrLinks | None = None,
+    tags: frozenset[str] | None = None,
+    links: frozenset[str] | None = None,
     postings: list[Posting] | None = None,
 ) -> Transaction:
     """Create a Beancount Transaction."""

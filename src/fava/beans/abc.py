@@ -25,6 +25,7 @@ if TYPE_CHECKING:  # pragma: no cover
     )
     Meta: TypeAlias = Mapping[str, MetaValue]
     TagsOrLinks: TypeAlias = set[str] | frozenset[str]
+    Account = str
 
 
 class Amount(ABC):
