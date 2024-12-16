@@ -2,8 +2,6 @@ from collections.abc import Iterator
 from collections.abc import Sequence
 from typing import Any
 
-from fava.beans.types import BeancountOptions
-
 class CompilationError(Exception): ...
 class ParseError(Exception): ...
 
@@ -26,6 +24,6 @@ def connect(
     dsn: str,
     *,
     entries: Sequence[Any],
-    options: BeancountOptions,
+    options: Any,
     errors: Sequence[Any],
 ) -> Connection: ...

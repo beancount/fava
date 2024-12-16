@@ -6,15 +6,13 @@ from typing import overload
 from typing import TYPE_CHECKING
 
 from beancount.core import data
-from beancount.core.amount import (  # type: ignore[attr-defined]
-    A as BEANCOUNT_A,
-)
+from beancount.core.amount import A as BEANCOUNT_A
 from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
 from fava.beans import BEANCOUNT_V3
-from fava.beans.abc import Amount
+from fava.beans.protocols import Amount
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -22,16 +20,15 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Balance
     from fava.beans.abc import Close
-    from fava.beans.abc import Cost
     from fava.beans.abc import Document
     from fava.beans.abc import Meta
     from fava.beans.abc import Note
     from fava.beans.abc import Open
     from fava.beans.abc import Position
     from fava.beans.abc import Posting
-    from fava.beans.abc import TagsOrLinks
     from fava.beans.abc import Transaction
     from fava.beans.flags import Flag
+    from fava.beans.protocols import Cost
 
 
 @overload
@@ -48,10 +45,10 @@ def amount(amt: Decimal, currency: str) -> Amount: ...  # pragma: no cover
 
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     """Amount from a string or tuple."""
+    if isinstance(amt, str):
+        return BEANCOUNT_A(amt)  # type: ignore[return-value]
     if isinstance(amt, Amount):
         return amt
-    if isinstance(amt, str):
-        return BEANCOUNT_A(amt)  # type: ignore[no-any-return]
     if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
     return BeancountAmount(amt, currency)  # type: ignore[return-value]
@@ -67,7 +64,7 @@ def cost(
     label: str | None = None,
 ) -> Cost:
     """Create a Cost."""
-    return BeancountCost(number, currency, date, label)  # type: ignore[return-value]
+    return BeancountCost(number, currency, date, label)
 
 
 def position(units: Amount, cost: Cost | None) -> Position:
@@ -95,7 +92,7 @@ def posting(
         cost,  # type: ignore[arg-type]
         price,  # type: ignore[arg-type]
         flag,
-        meta,
+        dict(meta) if meta is not None else None,
     )
 
 
@@ -114,7 +111,7 @@ def transaction(
 ) -> Transaction:
     """Create a Beancount Transaction."""
     return data.Transaction(  # type: ignore[return-value]
-        meta,
+        dict(meta),
         date,
         flag,
         payee,
@@ -135,7 +132,7 @@ def balance(
 ) -> Balance:
     """Create a Beancount Balance."""
     return data.Balance(  # type: ignore[return-value]
-        meta,
+        dict(meta),
         date,
         account,
         _amount(amount),  # type: ignore[arg-type]
@@ -151,7 +148,9 @@ def close(
 ) -> Close:
     """Create a Beancount Open."""
     return data.Close(  # type: ignore[return-value]
-        meta, date, account
+        dict(meta),
+        date,
+        account,
     )
 
 
@@ -160,12 +159,17 @@ def document(
     date: datetime.date,
     account: str,
     filename: str,
-    tags: TagsOrLinks | None = None,
-    links: TagsOrLinks | None = None,
+    tags: frozenset[str] | None = None,
+    links: frozenset[str] | None = None,
 ) -> Document:
     """Create a Beancount Document."""
     return data.Document(  # type: ignore[return-value]
-        meta, date, account, filename, tags, links
+        dict(meta),
+        date,
+        account,
+        filename,
+        tags,
+        links,
     )
 
 
@@ -174,16 +178,24 @@ def note(
     date: datetime.date,
     account: str,
     comment: str,
-    tags: TagsOrLinks | None = None,
-    links: TagsOrLinks | None = None,
+    tags: frozenset[str] | None = None,
+    links: frozenset[str] | None = None,
 ) -> Note:
     """Create a Beancount Note."""
     if not BEANCOUNT_V3:  # pragma: no cover
         return data.Note(  # type: ignore[call-arg,return-value]
-            meta, date, account, comment
+            dict(meta),
+            date,
+            account,
+            comment,
         )
     return data.Note(  # type: ignore[return-value]
-        meta, date, account, comment, tags, links
+        dict(meta),
+        date,
+        account,
+        comment,
+        tags,
+        links,
     )
 
 
@@ -196,5 +208,9 @@ def open(  # noqa: A001
 ) -> Open:
     """Create a Beancount Open."""
     return data.Open(  # type: ignore[return-value]
-        meta, date, account, currencies, booking
+        dict(meta),
+        date,
+        account,
+        currencies,
+        booking,
     )

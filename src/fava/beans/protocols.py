@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Protocol
+from typing import runtime_checkable
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -10,6 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
 
+@runtime_checkable
 class Amount(Protocol):
     """An amount in some currency."""
 
@@ -22,6 +24,7 @@ class Amount(Protocol):
         """Currency of the amount."""
 
 
+@runtime_checkable
 class Cost(Protocol):
     """A cost (basically an amount with date and label)."""
 

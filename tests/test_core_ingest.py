@@ -8,10 +8,10 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans import BEANCOUNT_V3
-from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.beans.ingest import BeanImporterProtocol
+from fava.beans.protocols import Amount
 from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder

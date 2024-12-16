@@ -7,6 +7,7 @@ import shlex
 import textwrap
 from typing import TYPE_CHECKING
 
+from beancount.core.display_context import DisplayContext
 from beanquery import CompilationError
 from beanquery import connect
 from beanquery import Cursor
@@ -227,7 +228,9 @@ class QueryShell(FavaModule):
 
         rrows = res.fetchall()
         rtypes = res.description
-        dformat = self.ledger.options["dcontext"].build()  # type: ignore[attr-defined]
+        dcontext = self.ledger.options["dcontext"]
+        assert isinstance(dcontext, DisplayContext)  # noqa: S101
+        dformat = dcontext.build()
         types, rows = numberify_results(rtypes, rrows, dformat)
 
         if result_format == "csv":
