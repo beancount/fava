@@ -19,7 +19,6 @@ from typing import Any
 from beancount.parser.parser import parse_string
 
 from fava.beans import create
-from fava.beans.abc import Amount
 from fava.beans.abc import Balance
 from fava.beans.abc import Custom
 from fava.beans.abc import Directive
@@ -83,9 +82,7 @@ def _(entry: Balance) -> Any:
 @serialise.register(Posting)
 def _(posting: Posting) -> Any:
     """Serialise a posting."""
-    position_str = (
-        to_string(posting) if isinstance(posting.units, Amount) else ""
-    )
+    position_str = to_string(posting) if posting.units is not None else ""
 
     if posting.price is not None:
         position_str += f" @ {to_string(posting.price)}"

@@ -443,7 +443,7 @@ class FavaLedger:
         interval_balances = [
             Tree(
                 iter_entry_dates(
-                    filtered.entries,
+                    filtered.entries,  # type: ignore[arg-type]
                     date.min if accumulate else date_range.begin,
                     date_range.end,
                 ),
@@ -558,10 +558,10 @@ class FavaLedger:
                 for posting in entry_.postings:
                     balance = balances.get(posting.account, None)
                     if balance is not None:
-                        balance.add_position(posting)
+                        balance.add_position(posting)  # type: ignore[arg-type]
 
         def visualise(inv: Inventory) -> Sequence[str]:
-            return [to_string(pos) for pos in sorted(inv)]
+            return [to_string(pos) for pos in sorted(iter(inv))]
 
         before = {acc: visualise(inv) for acc, inv in balances.items()}
 
@@ -569,7 +569,7 @@ class FavaLedger:
             return entry, before, None, source_slice, sha256sum
 
         for posting in entry.postings:
-            balances[posting.account].add_position(posting)
+            balances[posting.account].add_position(posting)  # type: ignore[arg-type]
         after = {acc: visualise(inv) for acc, inv in balances.items()}
         return entry, before, after, source_slice, sha256sum
 
