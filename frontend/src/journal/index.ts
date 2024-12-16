@@ -88,7 +88,7 @@ export class FavaJournal extends HTMLElement {
     });
     const component = mount(JournalFilters, { target: this, anchor: ol });
     this.unmount = () => {
-      unmount(component);
+      void unmount(component);
     };
 
     sortableJournal(ol);

@@ -38,7 +38,7 @@ class SvelteCustomElementComponent<T extends Record<string, unknown>> {
     }
     const instance = mount(this.Component, { target, props: res.value });
     return () => {
-      unmount(instance);
+      void unmount(instance);
     };
   }
 }

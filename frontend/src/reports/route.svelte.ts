@@ -49,7 +49,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   /** Destroy any components that might be rendered by this route. */
   destroy(): void {
     if (this.instance !== undefined) {
-      unmount(this.instance.component);
+      void unmount(this.instance.component);
     }
     this.instance = undefined;
   }
