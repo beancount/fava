@@ -16,7 +16,9 @@ if TYPE_CHECKING:  # pragma: no cover
     ResultRow = tuple[Any, ...]
 
 try:
-    import pyexcel  # type: ignore[import-not-found]
+    # since this is a conditional dependency, there will be different mypy
+    # errors depending on whether it's installed
+    import pyexcel  # type: ignore  # noqa: PGH003
 
     HAVE_EXCEL = True
 except ImportError:  # pragma: no cover
