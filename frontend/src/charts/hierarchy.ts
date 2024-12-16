@@ -1,6 +1,8 @@
 import { sum } from "d3-array";
 import type { HierarchyNode } from "d3-hierarchy";
 import { hierarchy as d3Hierarchy } from "d3-hierarchy";
+import type { Writable } from "svelte/store";
+import { writable } from "svelte/store";
 
 import type { Result } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
@@ -67,10 +69,21 @@ export function addInternalNodesAsLeaves({
 export class HierarchyChart {
   readonly type = "hierarchy";
 
+  /** All currencies for which we have an hierarchy. */
+  readonly currencies: readonly string[];
+
+  /** The currency to show the treemap of. */
+  readonly treemap_currency: Writable<string> | null;
+
   constructor(
     readonly name: string | null,
     readonly data: ReadonlyMap<string, AccountHierarchyNode>,
-  ) {}
+  ) {
+    this.currencies = [...this.data.keys()];
+    const first_currency = this.currencies[0];
+    this.treemap_currency =
+      first_currency != null ? writable<string>(first_currency) : null;
+  }
 }
 
 export const account_hierarchy_validator: Validator<AccountTreeNode> = object({

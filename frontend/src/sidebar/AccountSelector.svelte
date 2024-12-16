@@ -5,12 +5,12 @@
   import router from "../router";
   import { accounts } from "../stores";
 
-  let value = "";
+  let value = $state("");
 
-  function select(ev: CustomEvent<HTMLInputElement>) {
+  function select(el: HTMLInputElement) {
     if (value) {
       router.navigate($urlForAccount(value));
-      ev.detail.blur();
+      el.blur();
       value = "";
     }
   }
@@ -23,8 +23,8 @@
     suggestions={$accounts}
     className="account-selector"
     key="g a"
-    on:select={select}
-    on:enter={select}
+    onSelect={select}
+    onEnter={select}
   />
 </li>
 
