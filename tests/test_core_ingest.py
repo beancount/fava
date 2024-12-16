@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans import BEANCOUNT_V3
-from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.beans.ingest import BeanImporterProtocol
@@ -180,11 +179,11 @@ def test_ingest_examplefile(
         == "Payment to Company XYZ REF: 31000161205-6944556-0000463"
     )
     assert not entries[1].postings[0].account
-    assert isinstance(entries[1].postings[0].units, Amount)
+    assert entries[1].postings[0].units is not None
     assert entries[1].postings[0].units.number == 50.00
     assert entries[1].postings[0].units.currency == "EUR"
     assert entries[1].postings[1].account == "Assets:Checking"
-    assert isinstance(entries[1].postings[1].units, Amount)
+    assert entries[1].postings[1].units is not None
     assert entries[1].postings[1].units.number == -50.00
     assert entries[1].postings[1].units.currency == "EUR"
     if not BEANCOUNT_V3:

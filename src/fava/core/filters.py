@@ -409,13 +409,13 @@ class TimeFilter(EntryFilter):
         self.date_range = DateRange(begin, end)
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
-        entries, _ = clamp_opt(
-            entries,
+        clamped_entries, _ = clamp_opt(
+            entries,  # type: ignore[arg-type]
             self.date_range.begin,
             self.date_range.end,
             self._options,
         )
-        return entries
+        return clamped_entries  # type: ignore[return-value]
 
 
 LEXER = FilterSyntaxLexer()

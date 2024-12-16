@@ -7,7 +7,6 @@ from abc import abstractmethod
 from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.core import amount
 from beancount.core import data
 from beancount.core import position
 
@@ -28,61 +27,17 @@ if TYPE_CHECKING:  # pragma: no cover
     Account = str
 
 
-class Amount(ABC):
-    """An amount in some currency."""
-
-    @property
-    @abstractmethod
-    def number(self) -> Decimal:
-        """Number of units in the amount."""
-
-    @property
-    @abstractmethod
-    def currency(self) -> str:
-        """Currency of the amount."""
-
-
-Amount.register(amount.Amount)
-
-
-class Cost(ABC):
-    """A cost (basically an amount with date and label)."""
-
-    @property
-    @abstractmethod
-    def number(self) -> Decimal:
-        """Number of units in the cost."""
-
-    @property
-    @abstractmethod
-    def currency(self) -> str:
-        """Currency of the cost."""
-
-    @property
-    @abstractmethod
-    def date(self) -> datetime.date:
-        """Date of the cost."""
-
-    @property
-    @abstractmethod
-    def label(self) -> str | None:
-        """Label of the cost."""
-
-
-Cost.register(position.Cost)
-
-
 class Position(ABC):
     """A Beancount position - just cost and units."""
 
     @property
     @abstractmethod
-    def units(self) -> Amount:
+    def units(self) -> protocols.Amount:
         """Units of the posting."""
 
     @property
     @abstractmethod
-    def cost(self) -> Cost | None:
+    def cost(self) -> protocols.Cost | None:
         """Units of the position."""
 
 
@@ -99,17 +54,17 @@ class Posting(Position):
 
     @property
     @abstractmethod
-    def units(self) -> Amount:
+    def units(self) -> protocols.Amount:
         """Units of the posting."""
 
     @property
     @abstractmethod
-    def cost(self) -> Cost | None:
+    def cost(self) -> protocols.Cost | None:
         """Units of the posting."""
 
     @property
     @abstractmethod
-    def price(self) -> Amount | None:
+    def price(self) -> protocols.Amount | None:
         """Price of the posting."""
 
     @property
@@ -184,7 +139,7 @@ class Balance(Directive):
 
     @property
     @abstractmethod
-    def diff_amount(self) -> Amount | None:
+    def diff_amount(self) -> protocols.Amount | None:
         """Account of the directive."""
 
 
@@ -310,7 +265,7 @@ class Price(Directive):
 
     @property
     @abstractmethod
-    def amount(self) -> Amount:
+    def amount(self) -> protocols.Amount:
         """Price amount."""
 
 
