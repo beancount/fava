@@ -135,43 +135,45 @@
       {#each stacks as [currency, account_stacks]}
         {#each account_stacks as stack}
           {@const account = stack.key}
-          <a href={$urlForAccount(account)}>
-            <g
-              class="category"
-              class:faded={highlighted != null && account !== highlighted}
-              onmouseover={() => {
-                highlighted = account;
-              }}
-              onfocus={() => {
-                highlighted = account;
-              }}
-              onmouseout={() => {
-                highlighted = null;
-              }}
-              onblur={() => {
-                highlighted = null;
-              }}
-              role="img"
-            >
-              {#each stack as bar}
-                <rect
-                  class:desaturate={bar.data.date > today}
-                  width={x1.bandwidth()}
-                  x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
-                  y={y(Math.max(bar[0], bar[1]))}
-                  height={Math.abs(y(bar[1]) - y(bar[0]))}
-                  fill={colorScale(account)}
-                  use:followingTooltip={() =>
-                    chart.tooltipTextAccount(
-                      $ctx,
-                      bar.data,
-                      account,
-                      $chartToggledCurrencies,
-                    )}
-                />
-              {/each}
-            </g>
-          </a>
+          <g>
+            <a href={$urlForAccount(account)}>
+              <g
+                class="category"
+                class:faded={highlighted != null && account !== highlighted}
+                onmouseover={() => {
+                  highlighted = account;
+                }}
+                onfocus={() => {
+                  highlighted = account;
+                }}
+                onmouseout={() => {
+                  highlighted = null;
+                }}
+                onblur={() => {
+                  highlighted = null;
+                }}
+                role="img"
+              >
+                {#each stack as bar}
+                  <rect
+                    class:desaturate={bar.data.date > today}
+                    width={x1.bandwidth()}
+                    x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
+                    y={y(Math.max(bar[0], bar[1]))}
+                    height={Math.abs(y(bar[1]) - y(bar[0]))}
+                    fill={colorScale(account)}
+                    use:followingTooltip={() =>
+                      chart.tooltipTextAccount(
+                        $ctx,
+                        bar.data,
+                        account,
+                        $chartToggledCurrencies,
+                      )}
+                  />
+                {/each}
+              </g>
+            </a>
+          </g>
         {/each}
       {/each}
     {/if}
