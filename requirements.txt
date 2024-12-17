@@ -1,2 +1,2 @@
--r constraints.txt
+-r constraints-git.txt
 -e .
