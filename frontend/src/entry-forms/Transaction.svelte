@@ -10,7 +10,8 @@
   import { Posting } from "../entries";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
-  import { payees } from "../stores";
+  import { valueExtractor, valueSelector } from "../sidebar/FilterForm.svelte";
+  import { narrations, payees } from "../stores";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
@@ -40,13 +41,9 @@
     }
   }
 
-  /// Extract tags and links that can be provided in the narration <input>.
-  function onNarrationChange({
-    currentTarget,
-  }: {
-    currentTarget: HTMLInputElement;
-  }) {
-    const { value } = currentTarget;
+  /// Extract tags and links that can be provided in the narration.
+  function onNarrationBlur() {
+    const value = narration;
     entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
     entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
     entry.narration = value
@@ -54,8 +51,7 @@
       .replaceAll(LINKS_RE, "")
       .trim();
   }
-
-  /// Output tags and links in the narration <input>
+  /// Output tags and links in the narration
   function combineNarrationTagsLinks(e: Transaction): string {
     let val = e.narration;
     if (e.tags.length) {
@@ -66,7 +62,7 @@
     }
     return val;
   }
-  $: narration = combineNarrationTagsLinks(entry);
+  let narration = "";
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
@@ -76,6 +72,17 @@
     const data = await get("payee_transaction", { payee: entry.payee });
     data.date = entry.date;
     entry = data;
+  }
+  async function autocompleteSelectNarration() {
+    if (entry.payee || !entry.postings.every((p) => !p.account)) {
+      return;
+    }
+    const data = await get("narration_transaction", {
+      narration: narration,
+    });
+    data.date = entry.date;
+    entry = data;
+    narration = combineNarrationTagsLinks(entry);
   }
 
   function movePosting({ from, to }: { from: number; to: number }) {
@@ -108,14 +115,18 @@
         on:select={autocompleteSelectPayee}
       />
     </label>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>
       <span>{_("Narration")}:</span>
-      <input
-        type="text"
-        name="narration"
+      <AutocompleteInput
+        className="narration"
         placeholder={_("Narration")}
-        value={narration}
-        on:change={onNarrationChange}
+        bind:value={narration}
+        suggestions={$narrations}
+        {valueExtractor}
+        {valueSelector}
+        on:blur={onNarrationBlur}
+        on:select={autocompleteSelectNarration}
       />
       <AddMetadataButton bind:meta={entry.meta} />
     </label>
@@ -149,11 +160,6 @@
   div :global(.payee) {
     flex-grow: 1;
     flex-basis: 100px;
-  }
-
-  input[name="narration"] {
-    flex-grow: 1;
-    flex-basis: 200px;
   }
 
   label > span:first-child,
