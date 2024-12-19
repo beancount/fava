@@ -1,13 +1,10 @@
 import { get } from "../../api";
-import type { Event } from "../../entries";
 import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
 import { Route } from "../route";
 import Events from "./Events.svelte";
 
-export const events = new Route<{
-  events: Event[];
-}>(
+export const events = new Route(
   "events",
   Events,
   async (url: URL) =>

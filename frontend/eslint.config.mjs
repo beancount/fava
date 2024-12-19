@@ -71,21 +71,8 @@ export default tseslint.config(
         parser: tseslint.parser,
       },
     },
-    settings: {
-      svelte: {
-        // These need to be disabled in the templates as these are not fully typed.
-        ignoreWarnings: [
-          "@typescript-eslint/no-unsafe-argument",
-          "@typescript-eslint/no-unsafe-assignment",
-          "@typescript-eslint/no-unsafe-member-access",
-        ],
-      },
-    },
     rules: {
       "svelte/button-has-type": ON,
-      // Has some false positives in Svelte files were we have if()
-      // checks to trigger re-computations:
-      "@typescript-eslint/no-unnecessary-condition": OFF,
     },
   },
 );

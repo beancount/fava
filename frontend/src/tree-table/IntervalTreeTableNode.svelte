@@ -8,19 +8,24 @@
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
   import { getTreeTableContext } from "./helpers";
+  import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
 
-  /** The account nodes to show. */
-  export let nodes: NonEmptyArray<AccountTreeNode>;
-  /** The budgets (per account a list per date range). */
-  export let budgets: Record<string, AccountBudget[]>;
+  interface Props {
+    /** The account nodes to show. */
+    nodes: NonEmptyArray<AccountTreeNode>;
+    /** The budgets (per account a list per date range). */
+    budgets: Record<string, AccountBudget[]>;
+  }
+
+  let { nodes, budgets }: Props = $props();
 
   const { toggled, not_shown } = getTreeTableContext();
 
-  $: [node] = nodes;
-  $: ({ account, children } = node);
-  $: account_budgets = budgets[account];
+  let [node] = $derived(nodes);
+  let { account, children } = $derived(node);
+  let account_budgets = $derived(budgets[account]);
 
-  $: is_toggled = $toggled.has(account);
+  let is_toggled = $derived($toggled.has(account));
 </script>
 
 <li>
@@ -63,7 +68,12 @@
     <ol>
       {#each children as child, index (child.account)}
         {#if !$not_shown.has(child.account)}
-          <svelte:self nodes={nodes.map((n) => n.children[index])} {budgets} />
+          <IntervalTreeTableNode
+            nodes={nodes.map(
+              (n) => n.children[index],
+            ) as unknown as NonEmptyArray<AccountTreeNode>}
+            {budgets}
+          />
         {/if}
       {/each}
     </ol>

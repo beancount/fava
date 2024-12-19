@@ -77,7 +77,7 @@
 <div class="fixed-fullsize-container">
   <Accounts
     {node}
-    move={(arg) => {
+    move={(arg: { account: string; filename: string }) => {
       moving = { ...arg, newName: basename(arg.filename) };
     }}
   />
