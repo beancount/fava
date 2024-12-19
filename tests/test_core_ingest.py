@@ -117,10 +117,10 @@ def test_ingest_get_name_errors() -> None:
     sys.platform == "win32", reason="different error on windows"
 )
 def test_load_import_config() -> None:
-    with pytest.raises(ImportConfigLoadError, match=".*ImportError.*"):
+    with pytest.raises(ImportConfigLoadError, match=r".*ImportError.*"):
         load_import_config(Path(__file__).parent)
 
-    with pytest.raises(ImportConfigLoadError, match=".*CONFIG is missing.*"):
+    with pytest.raises(ImportConfigLoadError, match=r".*CONFIG is missing.*"):
         load_import_config(Path(__file__))
 
 

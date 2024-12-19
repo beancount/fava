@@ -34,7 +34,7 @@ build==1.2.2.post1
     # via fava (pyproject.toml)
 cachetools==5.5.0
     # via tox
-certifi==2024.8.30
+certifi==2024.12.14
     # via requests
 cffi==1.17.1
     # via cryptography
@@ -160,7 +160,7 @@ mypy==1.13.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
-nh3==0.2.19
+nh3==0.2.20
     # via readme-renderer
 nodeenv==1.9.1
     # via pre-commit
@@ -335,7 +335,7 @@ urllib3==2.2.3
     # via
     #   requests
     #   twine
-uv==0.5.9
+uv==0.5.10
     # via tox-uv
 virtualenv==20.28.0
     # via
