@@ -15,7 +15,7 @@
   let query_string = "";
 
   /** The currently loaded results. */
-  const results: Record<string, Result<QueryResult, string>> = {};
+  let results: Record<string, Result<QueryResult, string>> = {};
   const is_open: Record<string, boolean> = {};
 
   onMount(() =>
@@ -26,6 +26,12 @@
         query_string = search_query_string;
         submit();
       }
+    }),
+  );
+
+  onMount(() =>
+    filter_params.subscribe(() => {
+      rerun_all_open();
     }),
   );
 
@@ -55,6 +61,26 @@
         document.querySelector("article")?.scroll(0, 0);
       })
       .catch(log_error);
+  }
+
+  /* Re-run all open queries on global filter change */
+  function rerun_all_open() {
+    const to_rerun = [...Object.entries(is_open)]
+      .filter(([, is_open]) => is_open)
+      .map(([query]) => query);
+    results = {};
+    for (const query of to_rerun) {
+      get("query", { query_string: query, ...$filter_params })
+        .then(
+          (res) => ok(res),
+          (error: unknown) =>
+            err(error instanceof Error ? error.message : "INTERNAL ERROR"),
+        )
+        .then((res) => {
+          results[query] = res;
+        })
+        .catch(log_error);
+    }
   }
 
   /** Delete the given query from the history and potentially clear it from the form. */
