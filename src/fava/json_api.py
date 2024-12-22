@@ -178,7 +178,7 @@ def _(error: FilterError) -> Response:
 @json_api.errorhandler(OSError)
 def _(error: OSError) -> Response:  # pragma: no cover
     log.error("Encountered OSError.", exc_info=error)
-    return json_err(error.strerror, HTTPStatus.INTERNAL_SERVER_ERROR)
+    return json_err(error.strerror or "", HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(ValidationError)

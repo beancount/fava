@@ -1,8 +1,8 @@
 import enum
 
 class Precision(enum.Enum):
-    MOST_COMMON: int
-    MAXIMUM: int
+    MOST_COMMON = 1
+    MAXIMUM = 2
 
 class _CurrencyContext:
     has_sign: bool = ...

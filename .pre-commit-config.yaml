@@ -8,7 +8,7 @@ repos:
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.19
+    rev: 0.7.21
     hooks:
       - id: mdformat
         args: ["--wrap", "80"]

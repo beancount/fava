@@ -6,7 +6,7 @@ altgraph==0.17.4
     # via pyinstaller
 anyio==4.7.0
     # via watchfiles
-astroid==3.3.6
+astroid==3.3.7
     # via pylint
 babel==2.16.0
     # via
@@ -48,7 +48,7 @@ charset-normalizer==3.4.0
     # via requests
 cheroot==10.0.1
     # via fava (pyproject.toml)
-click==8.1.7
+click==8.1.8
     # via
     #   fava (pyproject.toml)
     #   beancount
@@ -122,7 +122,7 @@ jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -156,7 +156,7 @@ more-itertools==10.5.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.13.0
+mypy==1.14.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -314,13 +314,13 @@ tox==4.23.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.16.1
+tox-uv==1.16.2
     # via fava (pyproject.toml)
 twine==6.0.1
     # via fava (pyproject.toml)
 types-setuptools==75.6.0.20241126
     # via fava (pyproject.toml)
-types-simplejson==3.19.0.20240801
+types-simplejson==3.19.0.20241221
     # via fava (pyproject.toml)
 typing-extensions==4.12.2
     # via
@@ -331,11 +331,11 @@ typing-extensions==4.12.2
     #   rich
     #   tox
     #   tox-uv
-urllib3==2.2.3
+urllib3==2.3.0
     # via
     #   requests
     #   twine
-uv==0.5.10
+uv==0.5.11
     # via tox-uv
 virtualenv==20.28.0
     # via

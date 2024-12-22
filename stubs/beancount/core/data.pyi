@@ -25,11 +25,11 @@ Links: TypeAlias = Tags
 EMPTY_SET: frozenset[str]
 
 class Booking(enum.Enum):
-    STRICT: str
-    NONE: str
-    AVERAGE: str
-    FIFO: str
-    LIFO: str
+    STRICT = "STRICT"
+    NONE = "NONE"
+    AVERAGE = "AVERAGE"
+    FIFO = "FIFO"
+    LIFO = "LIFO"
 
 class Close(NamedTuple):
     meta: Meta
