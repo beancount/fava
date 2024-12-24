@@ -6,7 +6,7 @@ altgraph==0.17.4
     # via pyinstaller
 anyio==4.7.0
     # via watchfiles
-astroid==3.3.7
+astroid==3.3.8
     # via pylint
 babel==2.16.0
     # via
@@ -215,9 +215,9 @@ pygments==2.18.0
     #   sphinx
 pyinstaller==6.11.1
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2024.10
+pyinstaller-hooks-contrib==2024.11
     # via pyinstaller
-pylint==3.3.2
+pylint==3.3.3
     # via fava (pyproject.toml)
 pyproject-api==1.8.0
     # via tox
@@ -318,7 +318,7 @@ tox-uv==1.16.2
     # via fava (pyproject.toml)
 twine==6.0.1
     # via fava (pyproject.toml)
-types-setuptools==75.6.0.20241126
+types-setuptools==75.6.0.20241223
     # via fava (pyproject.toml)
 types-simplejson==3.19.0.20241221
     # via fava (pyproject.toml)
