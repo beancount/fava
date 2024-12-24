@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
-from beancount.ops.summarize import clamp_opt  # type: ignore[import-untyped]
+from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
@@ -409,13 +409,13 @@ class TimeFilter(EntryFilter):
         self.date_range = DateRange(begin, end)
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
-        entries, _ = clamp_opt(
-            entries,
+        clamped_entries, _ = clamp_opt(
+            entries,  # type: ignore[arg-type]
             self.date_range.begin,
             self.date_range.end,
             self._options,
         )
-        return entries
+        return clamped_entries  # type: ignore[return-value]
 
 
 LEXER = FilterSyntaxLexer()

@@ -4,42 +4,46 @@ from __future__ import annotations
 
 from decimal import Decimal
 from functools import singledispatch
-from typing import TYPE_CHECKING
 
+from beancount.core import amount
+from beancount.core import data
 from beancount.core.position import CostSpec
-from beancount.parser.printer import (  # type: ignore[import-untyped]
-    format_entry,
-)
+from beancount.parser.printer import format_entry
 
-from fava.beans.abc import Amount
-from fava.beans.abc import Cost
+from fava.beans import protocols
 from fava.beans.abc import Directive
 from fava.beans.abc import Position
 from fava.beans.helpers import replace
 from fava.core.misc import align
 
-if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans import protocols
-
 
 @singledispatch
 def to_string(
-    obj: Amount | Cost | CostSpec | Directive | Position,
+    obj: amount.Amount
+    | protocols.Amount
+    | protocols.Cost
+    | CostSpec
+    | Directive
+    | Position,
     _currency_column: int | None = None,
     _indent: int | None = None,
 ) -> str:
     """Convert to a string."""
+    if isinstance(obj, protocols.Amount):
+        # The Amount and Cost protocols are ambigous, so handle this here
+        # instead of having this be dispatched
+        return f"{obj.number} {obj.currency}"
     msg = f"Unsupported object of type {type(obj)}"
     raise TypeError(msg)
 
 
-@to_string.register(Amount)
-def _(obj: Amount) -> str:
+@to_string.register(amount.Amount)
+def _(obj: amount.Amount) -> str:
     return f"{obj.number} {obj.currency}"
 
 
-@to_string.register(Cost)
-def cost_to_string(cost: Cost | protocols.Cost) -> str:
+@to_string.register(protocols.Cost)
+def cost_to_string(cost: protocols.Cost) -> str:
     """Convert a cost to a string."""
     res = f"{cost.number} {cost.currency}, {cost.date.isoformat()}"
     return f'{res}, "{cost.label}"' if cost.label else res
@@ -88,6 +92,7 @@ def _format_entry(
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
     }
     entry = replace(entry, meta=meta)
+    assert isinstance(entry, data.ALL_DIRECTIVES)  # noqa: S101
     printed_entry = format_entry(entry, prefix=" " * indent)
     string = align(printed_entry, currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")

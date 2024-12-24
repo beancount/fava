@@ -20,11 +20,11 @@ from flask.json.provider import JSONProvider
 from simplejson import dumps as simplejson_dumps
 from simplejson import loads as simplejson_loads
 
-from fava.beans.abc import Amount
 from fava.beans.abc import Position
 from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
 from fava.beans.flags import FLAG_UNREALIZED
+from fava.beans.protocols import Amount
 from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
@@ -117,7 +117,13 @@ class ChartModule(FavaModule):
     ) -> SerialisedTreeNode:
         """Render an account tree."""
         if begin is not None and end is not None:
-            tree = Tree(iter_entry_dates(filtered.entries, begin, end))
+            tree = Tree(
+                iter_entry_dates(
+                    filtered.entries,  # type: ignore[arg-type]
+                    begin,
+                    end,
+                )
+            )
         else:
             tree = filtered.root_tree
         return tree.get(account_name).serialise(
@@ -156,7 +162,7 @@ class ChartModule(FavaModule):
         for date_range in intervals:
             inventory = CounterInventory()
             entries = iter_entry_dates(
-                filtered.entries,
+                filtered.entries,  # type: ignore[arg-type]
                 date_range.begin,
                 date_range.end,
             )

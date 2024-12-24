@@ -19,12 +19,12 @@ from typing import Any
 from beancount.parser.parser import parse_string
 
 from fava.beans import create
-from fava.beans.abc import Amount
 from fava.beans.abc import Balance
 from fava.beans.abc import Directive
 from fava.beans.abc import Posting
 from fava.beans.abc import Transaction
 from fava.beans.helpers import replace
+from fava.beans.protocols import Amount
 from fava.beans.str import to_string
 from fava.helpers import FavaAPIError
 from fava.util.date import parse_date

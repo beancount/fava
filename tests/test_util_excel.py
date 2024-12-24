@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import beanquery
 import pytest
+from beancount.core.display_context import DisplayContext
 
 from fava.util import excel
 
@@ -22,7 +23,9 @@ def _run_query(ledger: FavaLedger, query: str) -> Any:
     curs = conn.execute(query)
     rrows = curs.fetchall()
     rtypes = curs.description
-    dformat = ledger.options["dcontext"].build()  # type: ignore[attr-defined]
+    dcontext = ledger.options["dcontext"]
+    assert isinstance(dcontext, DisplayContext)
+    dformat = dcontext.build()
     rtypes, rrows = beanquery.numberify.numberify_results(
         rtypes, rrows, dformat
     )
