@@ -1,8 +1,12 @@
 <script lang="ts" generics="T extends string">
   import type { LocalStoreSyncedStore } from "../lib/store";
 
-  /** The store to show a switch for. */
-  export let store: LocalStoreSyncedStore<T>;
+  interface Props {
+    /** The store to show a switch for. */
+    store: LocalStoreSyncedStore<T>;
+  }
+
+  let { store }: Props = $props();
 </script>
 
 <span>

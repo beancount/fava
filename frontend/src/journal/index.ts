@@ -1,3 +1,5 @@
+import { mount, unmount } from "svelte";
+
 import { delegate } from "../lib/events";
 import { sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
@@ -68,8 +70,10 @@ function handleClick({ target }: Event): void {
 }
 
 export class FavaJournal extends HTMLElement {
-  component?: JournalFilters;
+  /** Unmount the Svelte component. */
+  unmount?: () => void;
 
+  /** Unsubscribe store listener. */
   unsubscribe?: () => void;
 
   connectedCallback(): void {
@@ -82,7 +86,10 @@ export class FavaJournal extends HTMLElement {
       const classes = [...show].map((s) => `show-${s}`).join(" ");
       ol.className = `flex-table journal ${classes}`;
     });
-    this.component = new JournalFilters({ target: this, anchor: ol });
+    const component = mount(JournalFilters, { target: this, anchor: ol });
+    this.unmount = () => {
+      void unmount(component);
+    };
 
     sortableJournal(ol);
     delegate(this, "click", "li", handleClick);
@@ -90,6 +97,6 @@ export class FavaJournal extends HTMLElement {
 
   disconnectedCallback(): void {
     this.unsubscribe?.();
-    this.component?.$destroy();
+    this.unmount?.();
   }
 }

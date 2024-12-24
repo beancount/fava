@@ -6,18 +6,30 @@
 
   type Ax = Axis<string> | Axis<NumberValue>;
 
-  /** The d3 axis to use. */
-  export let axis: Ax;
-  /** True if this is an x axis. */
-  export let x = false;
-  /** True if this is a y axis. */
-  export let y = false;
-  /** Show a pronounced line at zero (for y axis). */
-  export let lineAtZero: number | null = null;
-  /** Height of the chart (needed for the correct offset of an x axis) */
-  export let innerHeight = 0;
+  interface Props {
+    /** The d3 axis to use. */
+    axis: Ax;
+    /** True if this is an x axis. */
+    x?: boolean;
+    /** True if this is a y axis. */
+    y?: boolean;
+    /** Show a pronounced line at zero (for y axis). */
+    lineAtZero?: number;
+    /** Height of the chart (needed for the correct offset of an x axis) */
+    innerHeight?: number;
+  }
 
-  $: transform = x ? `translate(0,${innerHeight.toString()})` : undefined;
+  let {
+    axis,
+    x = false,
+    y = false,
+    lineAtZero,
+    innerHeight = 0,
+  }: Props = $props();
+
+  let transform = $derived(
+    x ? `translate(0,${innerHeight.toString()})` : undefined,
+  );
 
   /** Svelte action to render the axis. */
   const renderAxis: Action<SVGGElement, Ax> = (node: SVGGElement, ax) => {
@@ -33,7 +45,7 @@
 </script>
 
 <g class:y use:renderAxis={axis} {transform}>
-  {#if y && lineAtZero !== null}
+  {#if y && lineAtZero != null}
     <g class="zero" transform={`translate(0,${lineAtZero.toString()})`}>
       <line x2={-axis.tickSizeInner()} />
     </g>
