@@ -71,6 +71,14 @@ export function urlForSource(file_path: string, line: string): string {
     : urlFor("editor/", { file_path, line });
 }
 
+/** URL for one of Fava's reports (derived store to keep track of filter changes.). */
+export const urlForSynced = derived(
+  [base_url, searchParams],
+  ([$base_url, $searchParams]) =>
+    (report: string, params?: Record<string, string>): string =>
+      urlForInternal($base_url, $searchParams, report, params),
+);
+
 /** URL for the account report (derived store to keep track of filter changes.). */
 export const urlForAccount = derived(
   [base_url, searchParams],

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { urlFor } from "../helpers";
+  import { urlForSynced } from "../helpers";
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { errors, extensions, ledgerData } from "../stores";
@@ -31,7 +31,9 @@
       <ul class="submenu">
         {#each user_queries as { query_string, name }}
           <li>
-            <a href={urlFor("query/", { query_string })}>{truncate(name)}</a>
+            <a href={$urlForSynced("query/", { query_string })}
+              >{truncate(name)}</a
+            >
           </li>
         {/each}
       </ul>

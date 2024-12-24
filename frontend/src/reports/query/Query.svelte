@@ -29,6 +29,12 @@
     }),
   );
 
+  onMount(() =>
+    filter_params.subscribe(() => {
+      rerun_all();
+    }),
+  );
+
   /** Submit the current query and load the result for it. */
   function submit() {
     const query = query_string;
@@ -55,6 +61,22 @@
         document.querySelector("article")?.scroll(0, 0);
       })
       .catch(log_error);
+  }
+
+  /* Resubmit all queries on global filter change */
+  function rerun_all() {
+    for (const query of Object.keys(results)) {
+      get("query", { query_string: query, ...$filter_params })
+        .then(
+          (res) => ok(res),
+          (error: unknown) =>
+            err(error instanceof Error ? error.message : "INTERNAL ERROR"),
+        )
+        .then((res) => {
+          results[query] = res;
+        })
+        .catch(log_error);
+    }
   }
 
   /** Delete the given query from the history and potentially clear it from the form. */
