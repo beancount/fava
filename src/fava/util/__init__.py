@@ -22,9 +22,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Callable
     from typing import ParamSpec
     from typing import TypeVar
+    from wsgiref.types import StartResponse
+    from wsgiref.types import WSGIEnvironment
 
-    from _typeshed.wsgi import StartResponse
-    from _typeshed.wsgi import WSGIEnvironment
     from babel import Locale
     from flask.wrappers import Response
 
