@@ -13,7 +13,7 @@
   {_("Location")}:
   <code>
     <a
-      href={urlForSource(
+      href={$urlForSource(
         entry.meta.filename?.toString() ?? "",
         entry.meta.lineno?.toString() ?? "",
       )}

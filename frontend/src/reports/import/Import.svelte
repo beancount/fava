@@ -143,7 +143,7 @@
 
 {#if $fava_options.import_config == null}
   <p>
-    No importers configured. See <a href={urlFor("help/import")}
+    No importers configured. See <a href={$urlFor("help/import")}
       >Help (Import)</a
     > for more information.
   </p>

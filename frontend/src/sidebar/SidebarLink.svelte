@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
+  import { urlFor } from "../helpers";
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { base_url } from "../stores";
-  import { pathname, synced_query_string } from "../stores/url";
+  import { pathname } from "../stores/url";
 
   interface Props {
     report: string;
@@ -17,9 +17,7 @@
 
   let { report, name, key, remote, bubble, children }: Props = $props();
 
-  let href = $derived(
-    remote ? report : `${$base_url}${report}/${$synced_query_string}`,
-  );
+  let href = $derived(remote ? report : $urlFor(`${report}/`));
   let selected = $derived(remote ? false : href.includes($pathname));
 </script>
 

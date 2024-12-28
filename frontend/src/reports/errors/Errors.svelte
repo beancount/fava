@@ -41,7 +41,7 @@
       {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
-            {@const url = urlForSource(
+            {@const url = $urlForSource(
               source.filename,
               source.lineno.toString(),
             )}

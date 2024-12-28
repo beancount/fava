@@ -1,5 +1,7 @@
+import { get as store_get } from "svelte/store";
+
 import type { Entry } from "../entries";
-import { urlFor } from "../helpers";
+import { urlForRaw } from "../helpers";
 import { fetchJSON } from "../lib/fetch";
 import type { ValidationT } from "../lib/validation";
 import { string } from "../lib/validation";
@@ -45,7 +47,8 @@ export async function put<T extends keyof PutAPIInputs>(
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         };
-  const url = urlFor(`api/${endpoint}`);
+  const $urlForRaw = store_get(urlForRaw);
+  const url = $urlForRaw(`api/${endpoint}`);
   const json = await fetchJSON(url, { method: "PUT", ...opts });
   const res = string(json);
   if (res.is_ok) {
@@ -88,7 +91,8 @@ export async function get<T extends keyof GetAPIParams>(
     ? [undefined?, number?]
     : [GetAPIParams[T], number?]
 ): Promise<ValidationT<GetAPIValidators[T]>> {
-  const url = urlFor(`api/${endpoint}`, params, false);
+  const $urlForRaw = store_get(urlForRaw);
+  const url = $urlForRaw(`api/${endpoint}`, params);
   const json = await fetchJSON(url);
   const res = getAPIValidators[endpoint](json);
   if (res.is_ok) {
@@ -112,7 +116,8 @@ export async function doDelete<T extends keyof DeleteAPIParams>(
   endpoint: T,
   params: DeleteAPIParams[T],
 ): Promise<string> {
-  const url = urlFor(`api/${endpoint}`, params, false);
+  const $urlForRaw = store_get(urlForRaw);
+  const url = $urlForRaw(`api/${endpoint}`, params);
   const json = await fetchJSON(url, { method: "DELETE" });
   const res = string(json);
   if (res.is_ok) {

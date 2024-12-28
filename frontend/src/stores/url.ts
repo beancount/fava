@@ -1,16 +1,8 @@
 import type { Readable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
+/** The current URL hash. */
 export const urlHash = writable("");
-
-export const urlSyncedParams = [
-  "account",
-  "charts",
-  "conversion",
-  "filter",
-  "interval",
-  "time",
-];
 
 /** The current URL pathname. Should only be updated by the router. */
 export const pathname = writable<string>();
@@ -19,25 +11,35 @@ export const pathname = writable<string>();
 export const search = writable<string>();
 
 /** The current URL searchParams. */
-export const searchParams: Readable<Readonly<URLSearchParams>> = derived(
+export const searchParams: Readable<URLSearchParams> = derived(
   search,
   ($search) => new URLSearchParams($search),
 );
 
-/** The query string containing all values that are synced to the URL. */
-export const synced_query_string = derived([searchParams], ([s]) => {
-  const params = new URLSearchParams();
-  for (const name of urlSyncedParams) {
-    const value = s.get(name);
-    if (value != null && value) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
+/** These URL parameters for filters and conversion / interval are synced for most links. */
+const synced_search_param_names = [
+  "account",
+  "charts",
+  "conversion",
+  "filter",
+  "interval",
+  "time",
+];
+
+/** The current searchParamscontaining all values that are synced to the URL. */
+export const syncedSearchParams: Readable<URLSearchParams> = derived(
+  searchParams,
+  ($searchParams) => {
+    const params = new URLSearchParams();
+    for (const name of synced_search_param_names) {
+      const value = $searchParams.get(name);
+      if (value != null && value) {
+        params.set(name, value);
+      }
     }
-  }
-  const str = params.toString();
-  return str ? `?${str}` : str;
-});
+    return params;
+  },
+);
 
 export function closeOverlay(): void {
   if (window.location.hash) {

@@ -20,13 +20,13 @@
 
 <script lang="ts">
   import DocumentPreviewEditor from "../../editor/DocumentPreviewEditor.svelte";
+  import { urlForRaw } from "../../helpers";
   import { ext } from "../../lib/paths";
-  import { base_url } from "../../stores";
 
   export let filename: string;
 
   $: extension = ext(filename).toLowerCase();
-  $: url = `${$base_url}document/?filename=${encodeURIComponent(filename)}`;
+  $: url = $urlForRaw("document/", { filename });
 </script>
 
 {#if extension === "pdf"}

@@ -31,7 +31,7 @@
       <ul class="submenu">
         {#each user_queries as { query_string, name }}
           <li>
-            <a href={urlFor("query/", { query_string })}>{truncate(name)}</a>
+            <a href={$urlFor("query/", { query_string })}>{truncate(name)}</a>
           </li>
         {/each}
       </ul>

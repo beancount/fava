@@ -9,10 +9,7 @@ import { initialiseLedgerData } from "./helpers";
 test.before(initialiseLedgerData);
 
 test("get URL", () => {
-  const searchParams = new URLSearchParams({
-    time: "2000",
-    unknown: "unknown",
-  });
+  const searchParams = new URLSearchParams({ time: "2000" });
   assert.equal(
     urlForInternal("/base/", searchParams, "report", {
       asdf: 10,
@@ -20,6 +17,7 @@ test("get URL", () => {
     }),
     "/base/report?time=2000&asdf=10",
   );
+  assert.equal(searchParams.get("asdf"), null);
 });
 
 test("get path for account", () => {

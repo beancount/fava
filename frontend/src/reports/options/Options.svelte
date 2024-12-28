@@ -9,7 +9,7 @@
 
 <h2>
   {_("Fava options")}
-  <a href={urlFor("help/options")}>({_("help")})</a>
+  <a href={$urlFor("help/options")}>({_("help")})</a>
 </h2>
 <OptionsTable options={fava_options} />
 

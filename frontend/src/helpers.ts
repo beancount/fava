@@ -1,7 +1,7 @@
 import { derived, get as store_get } from "svelte/store";
 
 import { base_url, fava_options } from "./stores";
-import { searchParams, urlSyncedParams } from "./stores/url";
+import { syncedSearchParams } from "./stores/url";
 
 /**
  * Get the URL path relative to the base url of the current ledger.
@@ -26,23 +26,17 @@ export function getUrlPath(
  */
 export function urlForInternal(
   $base_url: string,
-  $searchParams: URLSearchParams | null,
+  $syncedSearchParams: URLSearchParams | null,
   report: string,
   params: Record<string, string | number | undefined> | undefined,
 ): string {
   const url = `${$base_url}${report}`;
-  const urlParams = new URLSearchParams();
-  if ($searchParams) {
-    for (const name of urlSyncedParams) {
-      const value = $searchParams.get(name);
-      if (value != null) {
-        urlParams.set(name, value);
-      }
-    }
-  }
+  const urlParams = $syncedSearchParams
+    ? new URLSearchParams($syncedSearchParams)
+    : new URLSearchParams();
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined) {
+      if (value != null) {
         urlParams.set(key, value.toString());
       }
     });
@@ -54,27 +48,48 @@ export function urlForInternal(
 /**
  * Get the URL string for one of Fava's reports.
  */
-export function urlFor(
-  report: string,
-  params?: Record<string, string | number | undefined>,
-  update = true,
-): string {
-  const $base_url = store_get(base_url);
-  const $searchParams = update ? store_get(searchParams) : null;
-  return urlForInternal($base_url, $searchParams, report, params);
-}
+export const urlFor = derived(
+  [base_url, syncedSearchParams],
+  ([$base_url, $syncedSearchParams]) =>
+    (
+      report: string,
+      params?: Record<string, string | number | undefined>,
+    ): string =>
+      urlForInternal($base_url, $syncedSearchParams, report, params),
+);
+
+/**
+ * Get the URL string for one of Fava's reports - without synced params.
+ */
+export const urlForRaw = derived(
+  [base_url],
+  ([$base_url]) =>
+    (
+      report: string,
+      params?: Record<string, string | number | undefined>,
+    ): string =>
+      urlForInternal($base_url, null, report, params),
+);
+
+const use_external_editor = derived(
+  fava_options,
+  ($fava_options) => $fava_options.use_external_editor,
+);
 
 /** URL for the editor to the source location of an entry. */
-export function urlForSource(file_path: string, line: string): string {
-  return store_get(fava_options).use_external_editor
-    ? `beancount://${file_path}?lineno=${line}`
-    : urlFor("editor/", { file_path, line });
-}
+export const urlForSource = derived(
+  [urlFor, use_external_editor],
+  ([$urlFor, $use_external_editor]) =>
+    (file_path: string, line: string): string =>
+      $use_external_editor
+        ? `beancount://${file_path}?lineno=${line}`
+        : $urlFor("editor/", { file_path, line }),
+);
 
 /** URL for the account report (derived store to keep track of filter changes.). */
 export const urlForAccount = derived(
-  [base_url, searchParams],
-  ([$base_url, $searchParams]) =>
+  urlFor,
+  ($urlFor) =>
     (account: string, params?: Record<string, string>): string =>
-      urlForInternal($base_url, $searchParams, `account/${account}/`, params),
+      $urlFor(`account/${account}/`, params),
 );

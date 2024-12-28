@@ -5,7 +5,7 @@
 
 import { get as store_get } from "svelte/store";
 
-import { getUrlPath, urlFor } from "./helpers";
+import { getUrlPath, urlForRaw } from "./helpers";
 import { fetch } from "./lib/fetch";
 import { log_error } from "./log";
 import { extensions } from "./stores";
@@ -22,7 +22,8 @@ export class ExtensionApi {
     body?: unknown,
     output: "json" | "string" | "raw" = "json",
   ): Promise<unknown> {
-    const url = urlFor(`extension/${this.name}/${endpoint}`, params, false);
+    const $urlForRaw = store_get(urlForRaw);
+    const url = $urlForRaw(`extension/${this.name}/${endpoint}`, params);
     let opts = {};
     if (body != null) {
       opts =
@@ -109,7 +110,8 @@ class ExtensionData {
 }
 
 async function loadExtensionModule(name: string): Promise<ExtensionData> {
-  const url = urlFor(`extension_js_module/${name}.js`, undefined, false);
+  const $urlForRaw = store_get(urlForRaw);
+  const url = $urlForRaw(`extension_js_module/${name}.js`);
   const mod = await (import(url) as Promise<{ default?: ExtensionModule }>);
   if (typeof mod.default === "object") {
     return new ExtensionData(mod.default, { api: new ExtensionApi(name) });

@@ -8,27 +8,29 @@
   import { _ } from "../../i18n";
   import { HAVE_EXCEL } from "../../stores";
 
-  /** The query string. */
-  export let query: string;
-
-  /**
-   * URL to download a query.
-   */
-  function queryUrl(query_string: string, format: string) {
-    return urlFor(`download-query/query_result.${format}`, {
-      query_string,
-    });
+  interface Props {
+    /** The query string. */
+    query: string;
   }
+
+  let { query }: Props = $props();
+  let params = $derived({ query_string: query });
 </script>
 
 <span>
   ({_("Download as")}
-  <a href={queryUrl(query, "csv")} data-remote>CSV</a>
+  <a href={$urlFor("download-query/query_result.csv", params)} data-remote>
+    CSV
+  </a>
   {#if $HAVE_EXCEL}
     ,
-    <a href={queryUrl(query, "xlsx")} data-remote>XLSX</a>
+    <a href={$urlFor("download-query/query_result.xlsx", params)} data-remote>
+      XLSX
+    </a>
     , or
-    <a href={queryUrl(query, "ods")} data-remote>ODS</a>
+    <a href={$urlFor("download-query/query_result.ods", params)} data-remote>
+      ODS
+    </a>
   {/if}
   )
 </span>

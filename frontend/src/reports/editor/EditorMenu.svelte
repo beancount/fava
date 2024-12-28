@@ -31,7 +31,7 @@
   let insertEntryOptions = $derived($fava_options.insert_entry);
 
   function goToFileAndLine(filename: string, line?: number) {
-    const url = urlFor("editor/", { file_path: filename, line });
+    const url = $urlFor("editor/", { file_path: filename, line });
     // only load if the file changed.
     const load = filename !== file_path;
     router.navigate(url, load);
