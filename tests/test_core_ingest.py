@@ -12,14 +12,13 @@ from fava.beans.abc import Amount
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.beans.ingest import BeanImporterProtocol
-from fava.core.ingest import file_import_info
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.ingest import get_name
 from fava.core.ingest import ImportConfigLoadError
-from fava.core.ingest import importer_identify
 from fava.core.ingest import ImporterExtractError
+from fava.core.ingest import ImporterInvalidTypeError
 from fava.core.ingest import load_import_config
+from fava.core.ingest import WrappedImporter
 from fava.helpers import FavaAPIError
 from fava.serialisation import serialise
 from fava.util.date import local_today
@@ -40,7 +39,7 @@ def test_ingest_file_import_info(
     assert importer
 
     csv_path = test_data_dir / "import.csv"
-    info = file_import_info(csv_path, importer)
+    info = importer.file_import_info(csv_path)
     assert info.account == "Assets:Checking"
 
 
@@ -49,7 +48,7 @@ class MinimalImporter(BeanImporterProtocol):
         self.acc = acc
 
     def name(self) -> str:
-        return self.acc
+        return f"MinimalImporter({self.acc})"
 
     def identify(self, file: FileMemo) -> bool:
         return self.acc in file.name
@@ -61,11 +60,11 @@ class MinimalImporter(BeanImporterProtocol):
 def test_ingest_file_import_info_minimal_importer(test_data_dir: Path) -> None:
     csv_path = test_data_dir / "import.csv"
 
-    info = file_import_info(csv_path, MinimalImporter("rawfile"))
-    assert isinstance(info.account, str)
+    importer = WrappedImporter(MinimalImporter())
+    info = importer.file_import_info(csv_path)
     assert info == FileImportInfo(
-        "rawfile",
-        "rawfile",
+        "MinimalImporter(Assets:Checking)",
+        "Assets:Checking",
         local_today(),
         "import.csv",
     )
@@ -82,8 +81,9 @@ def test_ingest_file_import_info_account_method_errors(
 ) -> None:
     csv_path = test_data_dir / "import.csv"
 
+    importer = WrappedImporter(AccountNameErrors())
     with pytest.raises(FavaAPIError) as err:
-        file_import_info(csv_path, AccountNameErrors())
+        importer.file_import_info(csv_path)
     assert "Some error reason..." in err.value.message
 
 
@@ -96,8 +96,9 @@ class IdentifyErrors(MinimalImporter):
 def test_ingest_identify_errors(test_data_dir: Path) -> None:
     csv_path = test_data_dir / "import.csv"
 
+    importer = WrappedImporter(IdentifyErrors())
     with pytest.raises(FavaAPIError) as err:
-        importer_identify(IdentifyErrors(), csv_path)
+        importer.identify(csv_path)
     assert "IDENTIFY_ERRORS" in err.value.message
 
 
@@ -108,9 +109,21 @@ class ImporterNameErrors(MinimalImporter):
 
 
 def test_ingest_get_name_errors() -> None:
+    importer = WrappedImporter(ImporterNameErrors())
     with pytest.raises(FavaAPIError) as err:
-        get_name(ImporterNameErrors())
+        assert importer.name
     assert "GET_NAME_WILL_ERROR" in err.value.message
+
+
+class ImporterNameInvalidType(MinimalImporter):
+    def name(self) -> str:
+        return False  # type: ignore[return-value]
+
+
+def test_ingest_get_name_invalid_type() -> None:
+    importer = WrappedImporter(ImporterNameInvalidType())
+    with pytest.raises(ImporterInvalidTypeError):
+        assert importer.name
 
 
 @pytest.mark.skipif(
