@@ -44,7 +44,7 @@ chardet==5.2.0
     # via
     #   beangulp
     #   tox
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
 cheroot==10.0.1
     # via fava (pyproject.toml)
@@ -57,7 +57,7 @@ click==8.1.8
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.6.9
+coverage==7.6.10
     # via pytest-cov
 cryptography==44.0.0
     # via secretstorage
@@ -87,7 +87,7 @@ flask-babel==4.0.0
     # via fava (pyproject.toml)
 furo==2024.8.6
     # via fava (pyproject.toml)
-identify==2.6.3
+identify==2.6.4
     # via pre-commit
 idna==3.10
     # via
@@ -128,7 +128,7 @@ jinja2==3.1.5
     #   flask
     #   flask-babel
     #   sphinx
-keyring==25.5.0
+keyring==25.6.0
     # via twine
 lml==0.1.0
     # via
@@ -156,7 +156,7 @@ more-itertools==10.5.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.14.0
+mypy==1.14.1
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -314,7 +314,7 @@ tox==4.23.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.16.2
+tox-uv==1.17.0
     # via fava (pyproject.toml)
 twine==6.0.1
     # via fava (pyproject.toml)
@@ -335,7 +335,7 @@ urllib3==2.3.0
     # via
     #   requests
     #   twine
-uv==0.5.11
+uv==0.5.13
     # via tox-uv
 virtualenv==20.28.0
     # via
