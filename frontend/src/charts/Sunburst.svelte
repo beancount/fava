@@ -27,7 +27,7 @@
 
   let root = $derived(partition<AccountHierarchyDatum>()(data));
   let nodes = $derived(
-    root.descendants().filter((d) => !d.data.dummy && d.depth),
+    root.descendants().filter((d) => !d.data.dummy && d.depth > 0),
   );
 
   let current: AccountHierarchyNode | null = $state(null);

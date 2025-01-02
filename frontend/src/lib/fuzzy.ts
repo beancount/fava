@@ -44,7 +44,7 @@ export function fuzzyfilter(
   }
   return suggestions
     .map((s): [string, number] => [s, fuzzytest(pattern, s)])
-    .filter(([, score]) => score)
+    .filter(([, score]) => score > 0)
     .sort((a, b) => b[1] - a[1])
     .map(([s]) => s);
 }

@@ -15,9 +15,9 @@ from watchfiles import watch
 
 if TYPE_CHECKING:  # pragma: no cover
     import types
+    from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Sequence
-    from typing import Callable
 
     from watchfiles.main import Change
 

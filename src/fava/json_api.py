@@ -18,7 +18,6 @@ from inspect import signature
 from pathlib import Path
 from pprint import pformat
 from typing import Any
-from typing import Callable
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
@@ -43,6 +42,7 @@ from fava.serialisation import deserialise
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
     from collections.abc import Mapping
     from collections.abc import Sequence
     from datetime import date

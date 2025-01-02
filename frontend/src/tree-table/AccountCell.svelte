@@ -40,14 +40,14 @@
           } else {
             new_t.add(n.account);
           }
-          n.children.filter((c) => c.children.length).forEach(toggle_all);
+          n.children.filter((c) => c.children.length > 0).forEach(toggle_all);
         };
         children.forEach(toggle_all);
       }
       if (is_toggled && (event.ctrlKey || event.metaKey)) {
         // collapse all direct children to only expand one level
         children
-          .filter((c) => c.children.length)
+          .filter((c) => c.children.length > 0)
           .forEach((n) => {
             new_t.add(n.account);
           });

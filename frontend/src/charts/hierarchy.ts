@@ -120,7 +120,7 @@ export function hierarchy_from_parsed_data(
           ).sort((a, b) => sign * ((b.value ?? 0) - (a.value ?? 0)));
           return [currency, r] as const;
         })
-        .filter(([, h]) => h.value),
+        .filter(([, h]) => h.value != null && h.value !== 0),
     ),
   );
 }

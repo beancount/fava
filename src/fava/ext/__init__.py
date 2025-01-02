@@ -17,7 +17,7 @@ from flask import current_app
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Callable
+    from collections.abc import Callable
     from typing import TypeVar
 
     from flask.wrappers import Response

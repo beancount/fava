@@ -11,7 +11,9 @@
   let user_queries = $derived($ledgerData.user_queries);
   let upcoming_events_count = $derived($ledgerData.upcoming_events_count);
   let sidebar_links = $derived($ledgerData.sidebar_links);
-  let extension_reports = $derived($extensions.filter((e) => e.report_title));
+  let extension_reports = $derived(
+    $extensions.filter((e) => e.report_title != null),
+  );
 </script>
 
 {#if sidebar_links.length}

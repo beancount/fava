@@ -15,7 +15,7 @@ from fava.core.query_shell import TooManyRunArgsError
 from fava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Callable
+    from collections.abc import Callable
 
     from fava.core.query import QueryResult
 

@@ -10,7 +10,6 @@ from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
 from typing import Any
-from typing import Callable
 from typing import TYPE_CHECKING
 
 import pytest
@@ -24,6 +23,7 @@ from fava.core.charts import dumps
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
     from typing import Literal
     from typing import Protocol
     from typing import TypeAlias

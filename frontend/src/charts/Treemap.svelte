@@ -25,7 +25,9 @@
 
   const tree = treemap<AccountHierarchyDatum>().paddingInner(2).round(true);
   let root = $derived(tree.size([width, height])(data));
-  let leaves = $derived(root.leaves().filter((d) => d.value));
+  let leaves = $derived(
+    root.leaves().filter((d) => d.value != null && d.value !== 0),
+  );
 
   function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;

@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import copy
+from collections.abc import Callable
 from decimal import Decimal
-from typing import Callable
 from typing import TYPE_CHECKING
 
 from babel.core import Locale

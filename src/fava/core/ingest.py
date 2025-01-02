@@ -34,11 +34,11 @@ from fava.helpers import FavaAPIError
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Mapping
     from collections.abc import Sequence
     from typing import Any
-    from typing import Callable
     from typing import ParamSpec
     from typing import TypeVar
 

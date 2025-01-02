@@ -11,8 +11,8 @@ from fava.beans.abc import Pad
 from fava.beans.abc import Transaction
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
     from collections.abc import Sequence
-    from typing import Callable
 
     from fava.beans.abc import Directive
 

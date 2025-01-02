@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Callable
 from typing import NamedTuple
 from typing import Optional
 from typing import TYPE_CHECKING
@@ -13,6 +12,7 @@ from fava.beans.str import cost_to_string
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
+    from collections.abc import Callable
     from collections.abc import Iterator
     from typing import Concatenate
     from typing import ParamSpec
