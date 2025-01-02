@@ -98,6 +98,7 @@ def test_serialise_entry_types(
 
     2018-12-15 commodity USD
     2018-12-16 price USD 1 EUR
+    2012-12-12 custom "string" 1 EUR FALSE
 
     2019-12-12 query "query name" "journal"
     """

@@ -21,6 +21,7 @@ from beancount.parser.parser import parse_string
 from fava.beans import create
 from fava.beans.abc import Amount
 from fava.beans.abc import Balance
+from fava.beans.abc import Custom
 from fava.beans.abc import Directive
 from fava.beans.abc import Posting
 from fava.beans.abc import Transaction
@@ -57,6 +58,15 @@ def _(entry: Transaction) -> Any:
     ret["t"] = "Transaction"
     ret["payee"] = entry.payee or ""
     ret["postings"] = list(map(serialise, entry.postings))
+    return ret
+
+
+@serialise.register(Custom)
+def _(entry: Custom) -> Any:
+    """Serialise an entry."""
+    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["t"] = "Custom"
+    ret["values"] = [v.value for v in entry.values]
     return ret
 
 

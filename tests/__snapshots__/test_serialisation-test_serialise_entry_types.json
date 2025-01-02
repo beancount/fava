@@ -1,5 +1,21 @@
 [
   {
+    "date": "2012-12-12",
+    "meta": {
+      "filename": "<string>",
+      "lineno": 20
+    },
+    "t": "Custom",
+    "type": "string",
+    "values": [
+      {
+        "currency": "EUR",
+        "number": 1
+      },
+      false
+    ]
+  },
+  {
     "account": "Assets:Cash",
     "booking": "Booking.STRICT",
     "currencies": [
@@ -138,7 +154,7 @@
     "date": "2019-12-12",
     "meta": {
       "filename": "<string>",
-      "lineno": 21
+      "lineno": 22
     },
     "name": "query name",
     "query_string": "journal",
