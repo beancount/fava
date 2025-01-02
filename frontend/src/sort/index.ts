@@ -62,6 +62,16 @@ export class Sorter<T = unknown> {
 }
 
 /**
+ * Sort array with provided string value getter.
+ */
+export function sort_by_strings<T>(
+  data: readonly T[],
+  value: (v: T) => string,
+): T[] {
+  return sort_internal(data, value, compare_strings, 1);
+}
+
+/**
  * Sort array with provided value getter and compare function.
  * Calls the value getter only once per element.
  */
@@ -70,7 +80,7 @@ function sort_internal<T, U>(
   value: (row: T) => U,
   compare: (a: U, b: U) => number,
   direction: SortDirection,
-) {
+): T[] {
   const indices = Uint32Array.from(data, (_d, i) => i);
   const values = data.map(value);
   // values and indices are of the same length (as data), so this is safe
@@ -109,7 +119,7 @@ export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
 }
 /** A SortColumn for strings. */
 export class StringColumn<T> implements SortColumn<T> {
-  private compare: (x: string, y: string) => number = compare_strings;
+  private compare = compare_strings;
 
   constructor(
     readonly name: string,

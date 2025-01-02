@@ -20,6 +20,7 @@ import {
   unknown,
 } from "../lib/validation";
 import { notify_warn } from "../notifications";
+import { sort_by_strings } from "../sort";
 import type { ChartContext } from "./context";
 
 /** The data provided with a fava.core.tree.SerialisedTreeNode. */
@@ -86,13 +87,20 @@ export class HierarchyChart {
   }
 }
 
+const sort_children = (values: AccountTreeNode[]) =>
+  sort_by_strings(values, (v) => v.account);
+
+const inventory = record(number);
+
 export const account_hierarchy_validator: Validator<AccountTreeNode> = object({
   account: string,
-  balance: record(number),
-  balance_children: record(number),
-  children: lazy(() => array(account_hierarchy_validator)),
-  cost: optional(record(number)),
-  cost_children: optional(record(number)),
+  balance: inventory,
+  balance_children: inventory,
+  children: lazy(
+    () => (json) => array(account_hierarchy_validator)(json).map(sort_children),
+  ),
+  cost: optional(inventory),
+  cost_children: optional(inventory),
   has_txns: defaultValue(boolean, () => false),
 });
 
