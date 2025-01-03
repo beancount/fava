@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.core import compare  # type: ignore[attr-defined]
+from beancount.core import compare
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -13,7 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def hash_entry(entry: Directive) -> str:
     """Hash an entry."""
     if hasattr(entry, "_fields"):
-        return compare.hash_entry(entry)  # type: ignore[no-any-return]
+        return compare.hash_entry(entry)  # type: ignore[arg-type]
     return str(hash(entry))
 
 

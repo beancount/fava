@@ -196,3 +196,8 @@ max-args = 9
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP"]
 "src/fava/core/filters.py" = ["D"]
+
+[tool.uv.sources]
+beancount = { git = "https://github.com/beancount/beancount", branch = "master" }
+beangulp = { git = "https://github.com/beancount/beangulp", branch = "master" }
+beanquery = { git = "https://github.com/beancount/beanquery", branch = "master" }

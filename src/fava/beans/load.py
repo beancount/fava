@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def load_string(value: str) -> LoaderResult:
     """Load a Beancoun string."""
-    return loader.load_string(value)
+    return loader.load_string(value)  # type: ignore[return-value]
 
 
 def load_uncached(
@@ -22,9 +22,9 @@ def load_uncached(
 ) -> LoaderResult:
     """Load a Beancount file."""
     if is_encrypted:  # pragma: no cover
-        return loader.load_file(beancount_file_path)
+        return loader.load_file(beancount_file_path)  # type: ignore[return-value]
 
-    return loader._load(  # type: ignore[attr-defined,no-any-return]  # noqa: SLF001
+    return loader._load(  # type: ignore[return-value]  # noqa: SLF001
         [(beancount_file_path, True)],
         None,
         None,

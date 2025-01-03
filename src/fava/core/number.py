@@ -8,6 +8,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from babel.core import Locale
+from beancount.core.display_context import DisplayContext
 from beancount.core.display_context import Precision
 
 from fava.core.module_base import FavaModule
@@ -74,6 +75,7 @@ class DecimalFormatModule(FavaModule):
             locale = Locale.parse(locale_option)
 
         dcontext = self.ledger.options["dcontext"]
+        assert isinstance(dcontext, DisplayContext)  # noqa: S101
         precisions: dict[str, int] = {}
         for currency, ccontext in dcontext.ccontexts.items():
             prec = ccontext.get_fractional(Precision.MOST_COMMON)
