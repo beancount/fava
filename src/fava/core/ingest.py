@@ -307,6 +307,11 @@ def extract_from_file(
         entries.sort(key=_incomplete_sortkey)
     if isinstance(importer, Importer):
         importer.deduplicate(entries, existing=existing_entries)
+        for entry in entries:
+            # beangulp importers __duplicate__ metadata contains original entry
+            # and not True, so map it to True
+            if entry.meta.pop("__duplicate__", False):
+                entry.meta["__duplicate__"] = True
     return entries
 
 
