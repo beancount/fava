@@ -346,5 +346,5 @@ export const entryValidator: Validator<Entry> = tagged_union("t", {
  * Check whether the given entry is marked as duplicate (used in imports).
  */
 export function isDuplicate(e: Entry): boolean {
-  return e.meta.__duplicate__ === true;
+  return e.meta.__duplicate__ != null && e.meta.__duplicate__ !== false;
 }
