@@ -20,6 +20,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
     from collections.abc import Sequence
 
+    from beancount.core import data
+
     from fava.beans.abc import Directive
     from fava.beans.prices import FavaPriceMap
     from fava.beans.types import BeancountOptions
@@ -125,7 +127,7 @@ class Tree(dict[str, TreeNode]):
 
     def __init__(
         self,
-        entries: Iterable[Directive] | None = None,
+        entries: Iterable[Directive | data.Directive] | None = None,
         create_accounts: list[str] | None = None,
     ) -> None:
         super().__init__(self)
