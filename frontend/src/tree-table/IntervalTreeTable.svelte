@@ -31,9 +31,11 @@
   const not_shown = writable(new Set<string>());
   setTreeTableContext({ toggled, not_shown });
 
-  $not_shown = intersection(
-    ...trees.map((n, index) => $get_not_shown(n, dates[index]?.end ?? null)),
-  );
+  $effect(() => {
+    $not_shown = intersection(
+      ...trees.map((n, index) => $get_not_shown(n, dates[index]?.end ?? null)),
+    );
+  });
 
   let account = $derived(trees[0].account);
   let start_date = $derived(

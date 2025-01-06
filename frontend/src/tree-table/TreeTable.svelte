@@ -24,7 +24,9 @@
   const not_shown = writable(new Set<string>());
   setTreeTableContext({ toggled, not_shown });
 
-  $not_shown = $get_not_shown(tree, end);
+  $effect(() => {
+    $not_shown = $get_not_shown(tree, end);
+  });
 </script>
 
 <ol
