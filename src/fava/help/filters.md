@@ -45,9 +45,10 @@ This final filter allows you to filter entries by various attributes.
   for an exact match instead.
 - Search in payee and narration if no specific entry attribute is given, e.g.
   `"Cash withdrawal"`. For Note directives, the comment will be searched.
-- Filter for entries having certain metadata values: `document:"\.pdf$"`. Note
-  that if the entry has an attribute of the same name as the metadata key, the
-  filter will apply to the entry attribute, not the metadata value.
+- Filter for entries or postings having certain metadata values:
+  `document:"\.pdf$"`. Note that if the entry has an attribute of the same name
+  as the metadata key, the filter will apply to the entry attribute, not the
+  metadata value.
 - Exclude entries that match a filter by prepending a `-` to it, e.g. `-#tag` or
   `-(^link #tag)`.
 - To match entries by posting attributes, you can use `any()` and `all()`, e.g.,
