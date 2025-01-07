@@ -66,6 +66,7 @@ const fava_options = object({
   insert_entry: array(
     object({ date: string, filename: string, lineno: number, re: string }),
   ),
+  use_bulk_importer: boolean,
   use_external_editor: boolean,
 });
 
