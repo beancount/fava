@@ -9,7 +9,11 @@
   export let selected: string | null;
   export let remove: (name: string) => unknown;
   export let move: (name: string, a: string, newName: string) => unknown;
-  export let extract: (name: string, importer: string, account:string) => unknown;
+  export let extract: (
+    name: string,
+    importer: string,
+    account: string,
+  ) => unknown;
 </script>
 
 {#each files as file}

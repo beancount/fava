@@ -186,7 +186,8 @@
   }
 }
 
-.journal .balance, .bulk-importer .balance {
+.journal .balance,
+.bulk-importer .balance {
   --entry-background: hsl(120deg 100% 90%);
 }
 
@@ -230,7 +231,8 @@
   --entry-background: hsl(35deg 100% 80%);
 }
 
-.journal, .bulk-importer {
+.journal,
+.bulk-importer {
   --journal-postings: hsl(0deg 0% 92%);
   --journal-metadata: hsl(210deg 44% 67%);
   --journal-tag: hsl(210deg 61% 64%);
@@ -242,7 +244,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    .journal .balance, .bulk-importer .balance {
+    .journal .balance,
+    .bulk-importer .balance {
       --entry-background: hsl(120deg 50% 15%);
     }
 
@@ -286,7 +289,8 @@
       --entry-background: hsl(35deg 100% 20%);
     }
 
-    .journal, .bulk-importer {
+    .journal,
+    .bulk-importer {
       --journal-postings: hsl(0deg 0% 10%);
       --journal-hover-highlight: hsl(0deg 0% 20% / 60%);
     }

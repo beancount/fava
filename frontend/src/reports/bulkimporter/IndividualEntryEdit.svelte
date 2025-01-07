@@ -1,5 +1,5 @@
 <script lang="ts">
-    // This is very similar to the Extract.svelte component in the traditional importer.
+  // This is very similar to the Extract.svelte component in the traditional importer.
   import type { Entry as EntryType } from "../../entries";
   import { isDuplicate, Transaction } from "../../entries";
   import Entry from "../../entry-forms/Entry.svelte";
@@ -18,15 +18,14 @@
     }
   }
 
-  function cleanup_and_close(){
+  function cleanup_and_close() {
     if (entry instanceof Transaction) {
-        // The editor can add an extra posting to allow for editing. Clean it up
-        // before closing.
-        entry.postings = entry.postings.filter((p) => !p.is_empty());
+      // The editor can add an extra posting to allow for editing. Clean it up
+      // before closing.
+      entry.postings = entry.postings.filter((p) => !p.is_empty());
     }
-    close()
+    close();
   }
-
 </script>
 
 <ModalBase {shown} closeHandler={cleanup_and_close}>

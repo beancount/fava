@@ -215,6 +215,7 @@
   .toolbar {
     min-height: 3em;
   }
+
   .toolbar label {
     vertical-align: middle;
   }
