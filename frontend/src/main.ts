@@ -19,6 +19,7 @@ import "../css/help.css";
 import "../css/journal-table.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
+import "../css/bulk-importer.css";
 // Polyfill for customised builtin elements in Webkit
 import "@ungap/custom-elements";
 

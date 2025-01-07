@@ -1,0 +1,41 @@
+.bulk-importer span.select,
+.bulk-importer span.edit {
+    width: 2rem;
+}
+
+.bulk-importer span.flag {
+    width: 3rem;
+}
+
+.bulk-importer span.description {
+    flex: 1;
+}
+
+.bulk-importer span.datecell {
+    width: 6rem;
+}
+
+.bulk-importer span.datecell,
+.bulk-importer span.flag {
+    text-align: center;
+    background-color: var(--entry-background);
+}
+
+.bulk-importer span.edit button {
+    padding: 2px 4px;
+    margin: 0;
+    font-weight: bold;
+    background: var(--background);
+}
+
+.bulk-importer span.edit button:hover {
+    background: var(--background-darker);
+}
+
+.bulk-importer .postings {
+    font-size: 0.9em;
+    background-color: var(--journal-postings);
+}
+.bulk-importer .duplicate {
+    text-decoration: line-through;
+  }
