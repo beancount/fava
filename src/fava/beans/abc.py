@@ -165,12 +165,12 @@ class Transaction(Directive):
 
     @property
     @abstractmethod
-    def tags(self) -> TagsOrLinks:
+    def tags(self) -> frozenset[str]:
         """Entry tags."""
 
     @property
     @abstractmethod
-    def links(self) -> TagsOrLinks:
+    def links(self) -> frozenset[str]:
         """Entry links."""
 
 
@@ -235,12 +235,12 @@ class Document(Directive):
 
     @property
     @abstractmethod
-    def tags(self) -> TagsOrLinks:
+    def tags(self) -> frozenset[str]:
         """Entry tags."""
 
     @property
     @abstractmethod
-    def links(self) -> TagsOrLinks:
+    def links(self) -> frozenset[str]:
         """Entry links."""
 
 

@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 from beangulp import Importer
 
 try:  # pragma: no cover
-    from beancount.ingest import cache  # type: ignore[import-untyped]
+    from beancount.ingest import cache  # type: ignore[import-not-found]
     from beancount.ingest import extract
 
     DEFAULT_HOOKS = [extract.find_duplicate_entries]

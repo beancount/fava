@@ -36,7 +36,11 @@
    */
   function keyup(ev: KeyboardEvent) {
     if (ev.key === "F2" && selected && !moving) {
-      moving = { ...selected, newName: basename(selected.filename) };
+      moving = {
+        account: selected.account,
+        filename: selected.filename,
+        newName: basename(selected.filename),
+      };
     }
   }
 

@@ -151,8 +151,8 @@ a:focus-visible {
 a:active,
 a:focus,
 a img {
-  border: 0;
   outline: none;
+  border: 0;
 }
 
 a:focus-visible {
@@ -181,8 +181,8 @@ select {
 }
 
 input:invalid {
-  border: 1px solid var(--error);
   outline: none;
+  border: 1px solid var(--error);
   box-shadow: none;
 }
 
@@ -214,10 +214,10 @@ button,
   padding: 0.5em 0.75em;
   color: var(--button-color);
   cursor: pointer;
+  outline: 0;
   background-color: var(--button-background);
   border: 0;
   border-radius: 0;
-  outline: 0;
 }
 
 .button {
@@ -241,8 +241,8 @@ button:hover,
 .button:focus,
 .button:active,
 .button:hover {
-  filter: brightness(90%);
   box-shadow: var(--box-shadow-button);
+  filter: brightness(90%);
 }
 
 button.unset {
@@ -285,8 +285,8 @@ button.link:hover,
 .button.link:focus,
 .button.link:active,
 .button.link:hover {
-  filter: brightness(90%);
   box-shadow: unset;
+  filter: brightness(90%);
 }
 
 button.round,

@@ -7,9 +7,7 @@ from functools import singledispatch
 from typing import TYPE_CHECKING
 
 from beancount.core.position import CostSpec
-from beancount.parser.printer import (  # type: ignore[import-untyped]
-    format_entry,
-)
+from beancount.parser.printer import format_entry
 
 from fava.beans.abc import Amount
 from fava.beans.abc import Cost
@@ -88,7 +86,7 @@ def _format_entry(
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
     }
     entry = replace(entry, meta=meta)
-    printed_entry = format_entry(entry, prefix=" " * indent)
+    printed_entry = format_entry(entry, prefix=" " * indent)  # type: ignore[arg-type]
     string = align(printed_entry, currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")
     return "\n".join(line.rstrip() for line in string.split("\n"))

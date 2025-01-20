@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
-from beancount.ops.summarize import clamp_opt  # type: ignore[import-untyped]
+from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError

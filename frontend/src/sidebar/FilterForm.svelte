@@ -121,9 +121,9 @@
 
   form :global(input) {
     padding: 8px 25px 8px 10px;
+    outline: none;
     background-color: var(--background);
     border: 0;
-    outline: none;
   }
 
   form :global([type="text"]:focus) {

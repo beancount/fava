@@ -149,7 +149,7 @@ HOOKS = [_example_noop_importer_hook]
 
 
 with suppress(ImportError):  # pragma: no cover
-    from beancount.ingest import extract  # type: ignore[import-untyped]
+    from beancount.ingest import extract  # type: ignore[import-not-found]
 
     HOOKS.append(extract.find_duplicate_entries)
 

@@ -306,6 +306,7 @@ export class Transaction extends EntryBase {
 
   toJSON(): this {
     return {
+      // eslint-disable-next-line @typescript-eslint/no-misused-spread
       ...this,
       postings: this.postings.filter((p) => !p.is_empty()),
     };

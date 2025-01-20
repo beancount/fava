@@ -32,7 +32,7 @@ export function scrollToLine(
   }
   const linePos = state.doc.line(line);
   return {
-    selection: { ...linePos, anchor: linePos.from },
+    selection: { anchor: linePos.from },
     scrollIntoView: true,
   };
 }

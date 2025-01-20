@@ -29,7 +29,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Open
     from fava.beans.abc import Position
     from fava.beans.abc import Posting
-    from fava.beans.abc import TagsOrLinks
     from fava.beans.abc import Transaction
     from fava.beans.flags import Flag
 
@@ -160,8 +159,8 @@ def document(
     date: datetime.date,
     account: str,
     filename: str,
-    tags: TagsOrLinks | None = None,
-    links: TagsOrLinks | None = None,
+    tags: frozenset[str] | None = None,
+    links: frozenset[str] | None = None,
 ) -> Document:
     """Create a Beancount Document."""
     return data.Document(  # type: ignore[return-value]
@@ -174,8 +173,8 @@ def note(
     date: datetime.date,
     account: str,
     comment: str,
-    tags: TagsOrLinks | None = None,
-    links: TagsOrLinks | None = None,
+    tags: frozenset[str] | None = None,
+    links: frozenset[str] | None = None,
 ) -> Note:
     """Create a Beancount Note."""
     if not BEANCOUNT_V3:  # pragma: no cover
