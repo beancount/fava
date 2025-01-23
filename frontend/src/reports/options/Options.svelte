@@ -2,10 +2,16 @@
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import OptionsTable from "./OptionsTable.svelte";
+  import ThemeToggle from "./ThemeToggle.svelte";
 
   export let fava_options: Record<string, string>;
   export let beancount_options: Record<string, string>;
 </script>
+
+<h2>
+  {_("Theme style")}
+</h2>
+<ThemeToggle />
 
 <h2>
   {_("Fava options")}
