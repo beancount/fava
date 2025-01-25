@@ -1,4 +1,4 @@
-"""fava wsgi application"""
+"""Fava WSGI application for `fava.pythonanywhere.com`."""
 
 from __future__ import annotations
 
