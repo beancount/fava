@@ -7,9 +7,9 @@ import {
 } from "@codemirror/language";
 import { highlightTrailingWhitespace, keymap } from "@codemirror/view";
 import { styleTags, tags } from "@lezer/highlight";
-import TSParser from "web-tree-sitter";
-import ts_wasm from "web-tree-sitter/tree-sitter.wasm";
+import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
+import ts_wasm from "../../node_modules/web-tree-sitter/tree-sitter.wasm";
 import { beancountCompletion } from "./beancount-autocomplete";
 import { beancountFold } from "./beancount-fold";
 import { beancountFormat } from "./beancount-format";
@@ -24,7 +24,7 @@ async function loadBeancountParser(): Promise<TSParser> {
   const ts = import.meta.resolve(ts_wasm);
   const ts_beancount = import.meta.resolve(ts_beancount_wasm);
   await TSParser.init({ locateFile: () => ts });
-  const lang = await TSParser.Language.load(ts_beancount);
+  const lang = await TSLanguage.load(ts_beancount);
   const parser = new TSParser();
   parser.setLanguage(lang);
   return parser;

@@ -4,7 +4,7 @@ import type { Tree } from "@lezer/common";
 import { TreeFragment } from "@lezer/common";
 import { test } from "uvu";
 import assert from "uvu/assert";
-import TSParser from "web-tree-sitter";
+import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
 import {
   input_edit_for_fragments,
@@ -21,7 +21,7 @@ async function load(): Promise<TSParser> {
     "codemirror",
     "tree-sitter-beancount.wasm",
   );
-  const lang = await TSParser.Language.load(path);
+  const lang = await TSLanguage.load(path);
   const parser = new TSParser();
   parser.setLanguage(lang);
   return parser;

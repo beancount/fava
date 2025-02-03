@@ -16,7 +16,12 @@ import type {
 } from "@lezer/common";
 import { NodeProp, NodeType, Parser, Tree } from "@lezer/common";
 import { styleTags, tags } from "@lezer/highlight";
-import type TSParser from "web-tree-sitter";
+import type {
+  Edit as TSEdit,
+  Parser as TSParser,
+  Tree as TSTree,
+  TreeCursor as TSTreeCursor,
+} from "web-tree-sitter";
 
 import type { NonEmptyArray } from "../lib/array";
 import { is_non_empty, last_element } from "../lib/array";
@@ -34,14 +39,14 @@ const error = NodeType.define({
 // we usually do not have this information, pass this dummy point. Should work
 // as long as we do not use any of the APIs returning points:
 // https://github.com/tree-sitter/tree-sitter/issues/445
-const dummyPosition: TSParser.Point = { row: 0, column: 0 };
+const dummyPosition = Object.freeze({ row: 0, column: 0 });
 
 /** Get a TS edit for the three byte offsets with dummy row/column-offsets. */
 function ts_edit(
   startIndex: number,
   oldEndIndex: number,
   newEndIndex: number,
-): TSParser.Edit {
+): TSEdit {
   return {
     startIndex,
     oldEndIndex,
@@ -53,7 +58,7 @@ function ts_edit(
 }
 
 /** This node prop is used to store the TS tree on the root node of the Lezer tree for reuse. */
-const TSTreeProp = new NodeProp<TSParser.Tree>({ perNode: true });
+const TSTreeProp = new NodeProp<TSTree>({ perNode: true });
 
 class TSParserError extends Error {}
 
@@ -63,21 +68,27 @@ class InvalidRangeError extends TSParserError {
   }
 }
 
+class MissingLanguageError extends TSParserError {
+  constructor() {
+    super("Parser is missing language.");
+  }
+}
+
 /** Information about a change between an old parse and a new one. */
 interface ChangeDetails {
   /** The edit (to simplify things, we reduce it to a single change) */
-  edit: TSParser.Edit;
+  edit: TSEdit;
   /** The old Lezer syntax tree (not adjusted for edit). */
   old_tree: Tree;
   /** The TS tree, adjusted for the edit - is used to extend the edit for safe reuse of the Lezer tree. */
-  edited_old_ts_tree: TSParser.Tree;
+  edited_old_ts_tree: TSTree;
 }
 
 /** Deduce a TSParser.Edit from the given Lezer TreeFragments. */
 export function input_edit_for_fragments(
   fragments: NonEmptyArray<TreeFragment>,
   input_length: number,
-): TSParser.Edit | null {
+): TSEdit | null {
   const [fragment] = fragments;
   const { tree } = fragment;
 
@@ -140,7 +151,7 @@ class Parse implements PartialParse {
   }
 
   /** Walk over the given node and its children, recursively creating Trees. */
-  private get_tree_for_ts_cursor(ts_cursor: TSParser.TreeCursor): Tree {
+  private get_tree_for_ts_cursor(ts_cursor: TSTreeCursor): Tree {
     const { nodeTypeId, startIndex, endIndex } = ts_cursor;
     const node_type = this.node_types[nodeTypeId] ?? error;
     const children: Tree[] = [];
@@ -163,8 +174,8 @@ class Parse implements PartialParse {
    * Tries to reuse parts of an old tree.
    */
   private get_tree_for_ts_cursor_reuse(
-    ts_cursor: TSParser.TreeCursor,
-    edit: TSParser.Edit,
+    ts_cursor: TSTreeCursor,
+    edit: TSEdit,
     old_tree: Tree,
   ): Tree {
     const { nodeTypeId, startIndex, endIndex } = ts_cursor;
@@ -227,7 +238,7 @@ class Parse implements PartialParse {
 
   /** Convert the tree-sitter Tree to a Lezer tree, possibly reusing parts of an old one. */
   private convert_tree(
-    ts_tree: TSParser.Tree,
+    ts_tree: TSTree,
     change: Pick<ChangeDetails, "edit" | "old_tree"> | null,
   ): Tree {
     const ts_tree_cursor = ts_tree.rootNode.walk();
@@ -269,7 +280,7 @@ class Parse implements PartialParse {
         input_length - old_tree.length === edit.newEndIndex - edit.oldEndIndex,
         "expect offset to match change in text length",
       );
-      edited_old_ts_tree.edit(edit); // unlike the types suggest this does modify in-place
+      edited_old_ts_tree.edit(edit);
       assert(
         edited_old_ts_tree.rootNode.endIndex === input_length,
         "expect edited old tree to match text length",
@@ -288,7 +299,7 @@ class Parse implements PartialParse {
    */
   private static extend_change(
     change: ChangeDetails,
-    ts_tree: TSParser.Tree,
+    ts_tree: TSTree,
   ): Pick<ChangeDetails, "edit" | "old_tree"> | null {
     const { edit, edited_old_ts_tree } = change;
     const changed_ranges = edited_old_ts_tree.getChangedRanges(ts_tree);
@@ -325,13 +336,16 @@ class Parse implements PartialParse {
 
     const change = Parse.change_details(fragments, input_length);
     let ts_tree = ts_parser.parse(text, change?.edited_old_ts_tree);
-    if (ts_tree.rootNode.endIndex !== input_length) {
+    if (ts_tree?.rootNode.endIndex !== input_length) {
       log_error(
         "Mismatch between tree (%s) and document (%s) lengths; reparsing",
-        ts_tree.rootNode.endIndex,
+        ts_tree?.rootNode.endIndex,
         input_length,
       );
       ts_tree = ts_parser.parse(text);
+    }
+    if (ts_tree == null) {
+      return null;
     }
     const extended_change = change
       ? Parse.extend_change(change, ts_tree)
@@ -370,9 +384,11 @@ export class LezerTSParser extends Parser {
   ) {
     super();
 
-    // @ts-expect-error Type definitions seem to be incomplete and missing this attribute.
-    const types = ts_parser.getLanguage().types as string[];
-    this.node_types = types.map((name, id) =>
+    const { language } = ts_parser;
+    if (language == null) {
+      throw new MissingLanguageError();
+    }
+    this.node_types = language.types.map((name, id) =>
       NodeType.define({ id, name, props, top: name === top_node }),
     );
   }

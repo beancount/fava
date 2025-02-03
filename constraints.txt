@@ -8,7 +8,7 @@ anyio==4.8.0
     # via watchfiles
 astroid==3.3.8
     # via pylint
-babel==2.16.0
+babel==2.17.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
@@ -24,7 +24,7 @@ beangulp==0.2.0
     # via fava (pyproject.toml)
 beanquery==0.1.0
     # via fava (pyproject.toml)
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.3
     # via
     #   beangulp
     #   furo
@@ -34,7 +34,7 @@ build==1.2.2.post1
     # via fava (pyproject.toml)
 cachetools==5.5.1
     # via tox
-certifi==2024.12.14
+certifi==2025.1.31
     # via requests
 cffi==1.17.1
     # via cryptography
@@ -108,7 +108,7 @@ importlib-metadata==8.6.1
     #   twine
 iniconfig==2.0.0
     # via pytest
-isort==5.13.2
+isort==6.0.0
     # via pylint
 itsdangerous==2.2.0
     # via flask
@@ -158,7 +158,7 @@ more-itertools==10.6.0
     #   cheroot
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.14.1
+mypy==1.15.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
@@ -215,9 +215,9 @@ pygments==2.19.1
     #   sphinx
 pyinstaller==6.11.1
     # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2025.0
+pyinstaller-hooks-contrib==2025.1
     # via pyinstaller
-pylint==3.3.3
+pylint==3.3.4
     # via fava (pyproject.toml)
 pyproject-api==1.9.0
     # via tox
@@ -235,7 +235,7 @@ python-dateutil==2.9.0.post0
     #   beanquery
 python-magic==0.4.27
     # via beangulp
-pytz==2024.2
+pytz==2025.1
     # via flask-babel
 pyyaml==6.0.2
     # via pre-commit
@@ -315,7 +315,7 @@ tox==4.24.1
     # via
     #   fava (pyproject.toml)
     #   tox-uv
-tox-uv==1.20.1
+tox-uv==1.23.0
     # via fava (pyproject.toml)
 twine==6.1.0
     # via fava (pyproject.toml)
@@ -327,6 +327,7 @@ typing-extensions==4.12.2
     # via
     #   anyio
     #   astroid
+    #   beautifulsoup4
     #   mypy
     #   pylint
     #   rich
@@ -336,7 +337,7 @@ urllib3==2.3.0
     # via
     #   requests
     #   twine
-uv==0.5.24
+uv==0.5.29
     # via tox-uv
 virtualenv==20.29.1
     # via
