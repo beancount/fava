@@ -125,7 +125,7 @@ class Interval(Enum):
         if self is Interval.MONTH:
             return date.strftime("%b %Y")
         if self is Interval.WEEK:
-            return date.strftime("%YW%W")
+            return date.strftime("%GW%V")
         return date.strftime("%Y-%m-%d")
 
     def format_date_filter(self, date: datetime.date) -> str:
@@ -137,7 +137,7 @@ class Interval(Enum):
         if self is Interval.MONTH:
             return date.strftime("%Y-%m")
         if self is Interval.WEEK:
-            return date.strftime("%Y-W%W")
+            return date.strftime("%G-W%V")
         return date.strftime("%Y-%m-%d")
 
 
@@ -313,7 +313,7 @@ def substitute(
         if interval == "week":
             string = string.replace(
                 complete_match,
-                (today + timedelta(offset * 7)).strftime("%Y-W%W"),
+                (today + timedelta(offset * 7)).strftime("%G-W%V"),
             )
         if interval == "day":
             string = string.replace(
@@ -384,7 +384,7 @@ def parse_date(  # noqa: PLR0911
     if match:
         year, week = map(int, match.group(1, 2))
         start = (
-            datetime.datetime.strptime(f"{year}-W{week}-1", "%Y-W%W-%w")
+            datetime.datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%w")
             .replace(tzinfo=datetime.timezone.utc)
             .date()
         )

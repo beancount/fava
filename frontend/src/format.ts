@@ -51,7 +51,7 @@ export const dateFormat: Record<Interval, DateFormatter> = {
   quarter: (date) =>
     `${date.getUTCFullYear().toString()}Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%b %Y"),
-  week: utcFormat("%YW%W"),
+  week: utcFormat("%GW%V"),
   day,
 };
 
@@ -61,7 +61,7 @@ export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
   quarter: (date) =>
     `${date.getUTCFullYear().toString()}-Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%Y-%m"),
-  week: utcFormat("%Y-W%W"),
+  week: utcFormat("%G-W%V"),
   day,
 };
 

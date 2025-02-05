@@ -37,8 +37,8 @@ test("time filter date formatting", () => {
   assert.is(day(date), "2020-03-20");
   assert.is(month(janfirst), "2020-01");
   assert.is(month(date), "2020-03");
-  assert.is(week(janfirst), "2020-W00");
-  assert.is(week(date), "2020-W11");
+  assert.is(week(janfirst), "2020-W01");
+  assert.is(week(date), "2020-W12");
   assert.is(quarter(janfirst), "2020-Q1");
   assert.is(quarter(date), "2020-Q1");
   assert.is(year(janfirst), "2020");
@@ -54,8 +54,8 @@ test("human-readable date formatting", () => {
   assert.is(day(date), "2020-03-20");
   assert.is(month(janfirst), "Jan 2020");
   assert.is(month(date), "Mar 2020");
-  assert.is(week(janfirst), "2020W00");
-  assert.is(week(date), "2020W11");
+  assert.is(week(janfirst), "2020W01");
+  assert.is(week(date), "2020W12");
   assert.is(quarter(janfirst), "2020Q1");
   assert.is(quarter(date), "2020Q1");
   assert.is(year(janfirst), "2020");
