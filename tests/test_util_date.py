@@ -35,6 +35,7 @@ def _to_date(string: str) -> date:
     [
         ("2016-01-01", Interval.DAY, "2016-01-01", "2016-01-01"),
         ("2016-01-04", Interval.WEEK, "2016W01", "2016-W01"),
+        ("2016-01-04", Interval.FORTNIGHT, "2016W01/02", "2016-W01/02"),
         ("2016-01-04", Interval.MONTH, "Jan 2016", "2016-01"),
         ("2016-01-04", Interval.QUARTER, "2016Q1", "2016-Q1"),
         ("2016-01-04", Interval.YEAR, "2016", "2016"),
@@ -58,11 +59,13 @@ def test_interval_format(
     [
         ("2016-01-01", Interval.DAY, "2016-01-02"),
         ("2016-01-01", Interval.WEEK, "2016-01-04"),
+        ("2016-01-01", Interval.FORTNIGHT, "2016-01-04"),
         ("2016-01-01", Interval.MONTH, "2016-02-01"),
         ("2016-01-01", Interval.QUARTER, "2016-04-01"),
         ("2016-01-01", Interval.YEAR, "2017-01-01"),
         ("2016-12-31", Interval.DAY, "2017-01-01"),
         ("2016-12-31", Interval.WEEK, "2017-01-02"),
+        ("2016-12-31", Interval.FORTNIGHT, "2017-01-02"),
         ("2016-12-31", Interval.MONTH, "2017-01-01"),
         ("2016-12-31", Interval.QUARTER, "2017-01-01"),
         ("2016-12-31", Interval.YEAR, "2017-01-01"),
@@ -84,11 +87,13 @@ def test_get_next_interval(
     [
         ("2016-01-01", Interval.DAY, "2016-01-01"),
         ("2016-01-01", Interval.WEEK, "2015-12-28"),
+        ("2016-01-01", Interval.FORTNIGHT, "2015-12-28"),
         ("2016-01-01", Interval.MONTH, "2016-01-01"),
         ("2016-01-01", Interval.QUARTER, "2016-01-01"),
         ("2016-01-01", Interval.YEAR, "2016-01-01"),
         ("2016-12-31", Interval.DAY, "2016-12-31"),
         ("2016-12-31", Interval.WEEK, "2016-12-26"),
+        ("2016-12-31", Interval.FORTNIGHT, "2016-12-19"),
         ("2016-12-31", Interval.MONTH, "2016-12-01"),
         ("2016-12-31", Interval.QUARTER, "2016-10-01"),
         ("2016-12-31", Interval.YEAR, "2016-01-01"),
@@ -147,6 +152,9 @@ def test_interval_tuples() -> None:
         ("(month)", "2016-06"),
         ("month+6", "2016-12"),
         ("(month+24)", "2018-06"),
+        ("fortnight", "2016-W25/26"),
+        ("fortnight+10", "2016-W45/46"),
+        ("fortnight+1000", "2054-W43/44"),
         ("week", "2016-W25"),
         ("week+20", "2016-W45"),
         ("week+2000", "2054-W42"),
@@ -158,9 +166,8 @@ def test_substitute(string: str, output: str) -> None:
     # Mock the imported datetime.date in fava.util.date module
     # Ref:
     # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = _to_date("2016-06-24")
-        mock_date.side_effect = date
+    with mock.patch("fava.util.date.local_today") as mock_date:
+        mock_date.return_value = _to_date("2016-06-24")
         assert substitute(string) == output
 
 

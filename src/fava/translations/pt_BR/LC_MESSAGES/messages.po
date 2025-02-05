@@ -433,6 +433,10 @@ msgid "Monthly"
 msgstr "Mensal"
 
 #: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
+msgid "Fortnightly"
+msgstr "Quinzenal"
+
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "Semanal"
 
@@ -593,4 +597,3 @@ msgstr "Apagando..."
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Add Journal Entry"
 msgstr "Adicionar Entrada"
-

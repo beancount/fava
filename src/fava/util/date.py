@@ -35,6 +35,9 @@ DAY_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
 # this matches a week like 2016-W02 for the second week of 2016
 WEEK_RE = re.compile(r"^(\d{4})-w(\d{2})$")
 
+# this matches a fortnight like 2025-W01/02
+FORTNIGHT_RE = re.compile(r"^(\d{4})-w(\d{2})/(\d{2})$")
+
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
 QUARTER_RE = re.compile(r"^(\d{4})-q([1234])$")
 
@@ -46,7 +49,7 @@ FY_QUARTER_RE = re.compile(r"^fy(\d{4})-q([1234])$")
 
 VARIABLE_RE = re.compile(
     r"\(?(fiscal_year|year|fiscal_quarter|quarter"
-    r"|month|week|day)(?:([-+])(\d+))?\)?",
+    r"|month|fortnight|week|day)(?:([-+])(\d+))?\)?",
 )
 
 
@@ -93,6 +96,31 @@ class Interval(Enum):
     YEAR = "year"
     QUARTER = "quarter"
     MONTH = "month"
+    FORTNIGHT = "fortnight"
+    # Note: While a fortnight is a well-defined time interval, there are no
+    # standard abbreviations for it, nor are there any standards for when
+    # fortnights start and end. Fava implements this as follows:
+    #
+    # - Fortnights are linked to the ISO week system.
+    # - Fortnight 1 of the year corresponds to ISO weeks 1 and 2, fortnight 2
+    #   to weeks 3 and 4, and so on.
+    # - If a year has 53 ISO weeks, the last fortnight of the year will include
+    #   the first week of the next year. As a result of this, there may be some
+    #   doubling-up as the first week of the following year appears within two
+    #   fortnights.
+    #
+    #   This happens approximately every 7 years, and is only relevant for the
+    #   last fortnight of the year, this is considered an acceptable compromise
+    #   to maintain a simple fortnight system.
+    # - The fortnight is represented as `2025-W01/02` or `2025W01/02` for the
+    #   first fortnight of 2025. The `/` is used to indicate the two weeks that
+    #   make up the fortnight. Since every year starts with a new fortnight,
+    #   the first week is always odd, and the second week is always even.
+    # - Tentatively, a day within a fortnight can be represented as
+    #   `2025-W01/02-13` for the 13th day of the first fortnight of 2025. This
+    #   is not yet implemented, nor might it ever be.
+    # - For a 53-week year, the last fortnight may be represented as either
+    #   `W53/54` or `W53/01`.
     WEEK = "week"
     DAY = "day"
 
@@ -103,6 +131,7 @@ class Interval(Enum):
             Interval.YEAR: gettext("Yearly"),
             Interval.QUARTER: gettext("Quarterly"),
             Interval.MONTH: gettext("Monthly"),
+            Interval.FORTNIGHT: gettext("Fortnightly"),
             Interval.WEEK: gettext("Weekly"),
             Interval.DAY: gettext("Daily"),
         }
@@ -116,7 +145,7 @@ class Interval(Enum):
         except KeyError:
             return Interval.MONTH
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: datetime.date) -> str:  # noqa: PLR0911
         """Format a date for this interval for human consumption."""
         if self is Interval.YEAR:
             return date.strftime("%Y")
@@ -124,11 +153,17 @@ class Interval(Enum):
             return f"{date.year}Q{(date.month - 1) // 3 + 1}"
         if self is Interval.MONTH:
             return date.strftime("%b %Y")
+        if self is Interval.FORTNIGHT:
+            year, week, _ = date.isocalendar()
+            w1, w2 = (week - 1, week) if week % 2 == 0 else (week, week + 1)
+            return f"{year}W{w1:02}/{w2:02}"
         if self is Interval.WEEK:
             return date.strftime("%YW%W")
-        return date.strftime("%Y-%m-%d")
+        if self is Interval.DAY:
+            return date.strftime("%Y-%m-%d")
+        return assert_never(self)  # pragma: no cover
 
-    def format_date_filter(self, date: datetime.date) -> str:
+    def format_date_filter(self, date: datetime.date) -> str:  # noqa: PLR0911
         """Format a date for this interval for the Fava time filter."""
         if self is Interval.YEAR:
             return date.strftime("%Y")
@@ -136,12 +171,18 @@ class Interval(Enum):
             return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
         if self is Interval.MONTH:
             return date.strftime("%Y-%m")
+        if self is Interval.FORTNIGHT:
+            year, week, _ = date.isocalendar()
+            w1, w2 = (week - 1, week) if week % 2 == 0 else (week, week + 1)
+            return f"{year}-W{w1:02}/{w2:02}"
         if self is Interval.WEEK:
             return date.strftime("%Y-W%W")
-        return date.strftime("%Y-%m-%d")
+        if self is Interval.DAY:
+            return date.strftime("%Y-%m-%d")
+        return assert_never(self)  # pragma: no cover
 
 
-def get_prev_interval(
+def get_prev_interval(  # noqa: PLR0911
     date: datetime.date,
     interval: Interval,
 ) -> datetime.date:
@@ -163,9 +204,23 @@ def get_prev_interval(
         return datetime.date(date.year, 1, 1)
     if interval is Interval.MONTH:
         return datetime.date(date.year, date.month, 1)
+    if interval is Interval.FORTNIGHT:
+        year, week, _ = date.isocalendar()
+        w1 = week - 1 if week % 2 == 0 else week
+        if w1 > 2:
+            return datetime.date.fromisocalendar(year, w1, 1)
+        # If we are in the first fortnight of the year, finding the last
+        # fortnight of the previous year is a bit tricky due to being either
+        # starting on week 51 or 53 (if the year has 53 weeks).
+        try:
+            return datetime.date.fromisocalendar(year - 1, 53, 1)
+        except ValueError:
+            return datetime.date.fromisocalendar(year - 1, 51, 1)
     if interval is Interval.WEEK:
         return date - timedelta(date.weekday())
-    return date
+    if interval is Interval.DAY:
+        return date
+    return assert_never(interval)  # pragma: no cover
 
 
 def get_next_interval(  # noqa: PLR0911
@@ -193,6 +248,15 @@ def get_next_interval(  # noqa: PLR0911
             month = (date.month % 12) + 1
             year = date.year + (date.month + 1 > 12)
             return datetime.date(year, month, 1)
+        if interval is Interval.FORTNIGHT:
+            year, week, _ = date.isocalendar()
+            w1 = week - 1 if week % 2 == 0 else week
+            # Unfortunately, it is difficult to determine whether a year has 52
+            # or 53 ISO weeks, hence the trial-and-error approach.
+            try:
+                return datetime.date.fromisocalendar(year, w1 + 2, 1)
+            except ValueError:
+                return datetime.date.fromisocalendar(year + 1, 1, 1)
         if interval is Interval.WEEK:
             return date + timedelta(7 - date.weekday())
         if interval is Interval.DAY:
@@ -265,7 +329,7 @@ def local_today() -> datetime.date:
     return datetime.date.today()  # noqa: DTZ011
 
 
-def substitute(
+def substitute(  # noqa: PLR0914
     string: str,
     fye: FiscalYearEnd | None = None,
 ) -> str:
@@ -287,13 +351,16 @@ def substitute(
         complete_match, interval, plusminus_, mod_ = match.group(0, 1, 2, 3)
         mod = int(mod_) if mod_ else 0
         offset = mod if plusminus_ == "+" else -mod
+
         if interval == "fiscal_year":
             after_fye = (today.month, today.day) > (fye.month_of_year, fye.day)
             year = today.year + (1 if after_fye else 0) - fye.year_offset
             string = string.replace(complete_match, f"FY{year + offset}")
-        if interval == "year":
+
+        elif interval == "year":
             string = string.replace(complete_match, str(today.year + offset))
-        if interval == "fiscal_quarter":
+
+        elif interval == "fiscal_quarter":
             if not fye.has_quarters():
                 raise FyeHasNoQuartersError
             target = month_offset(today.replace(day=1), offset * 3)
@@ -301,25 +368,40 @@ def substitute(
             year = target.year + (1 if after_fye else 0) - fye.year_offset
             quarter = ((target.month - fye.month_of_year - 1) // 3) % 4 + 1
             string = string.replace(complete_match, f"FY{year}-Q{quarter}")
-        if interval == "quarter":
+
+        elif interval == "quarter":
             quarter_today = (today.month - 1) // 3 + 1
             year = today.year + (quarter_today + offset - 1) // 4
             quarter = (quarter_today + offset - 1) % 4 + 1
             string = string.replace(complete_match, f"{year}-Q{quarter}")
-        if interval == "month":
+
+        elif interval == "month":
             year = today.year + (today.month + offset - 1) // 12
             month = (today.month + offset - 1) % 12 + 1
             string = string.replace(complete_match, f"{year}-{month:02}")
-        if interval == "week":
+
+        elif interval == "fortnight":
+            interval_start = get_prev_interval(today, Interval.FORTNIGHT)
+            new_date = interval_start + timedelta(offset * 14)
+            string = string.replace(
+                complete_match, Interval.FORTNIGHT.format_date_filter(new_date)
+            )
+
+        elif interval == "week":
             string = string.replace(
                 complete_match,
                 (today + timedelta(offset * 7)).strftime("%Y-W%W"),
             )
-        if interval == "day":
+
+        elif interval == "day":
             string = string.replace(
                 complete_match,
                 (today + timedelta(offset)).isoformat(),
             )
+
+        else:
+            msg = f"Unknown interval '{interval}'"
+            raise ValueError(msg)
     return string
 
 
@@ -334,6 +416,7 @@ def parse_date(  # noqa: PLR0911
     - 2010-03-15, 2010-03, 2010
     - 2010-W01, 2010-Q3
     - FY2012, FY2012-Q2
+    - 2025-W01/02
 
     Ranges of dates can be expressed in the following forms:
 
@@ -379,6 +462,12 @@ def parse_date(  # noqa: PLR0911
         year, month, day = map(int, match.group(1, 2, 3))
         start = datetime.date(year, month, day)
         return start, get_next_interval(start, Interval.DAY)
+
+    match = FORTNIGHT_RE.match(string)
+    if match:
+        year, w1, _ = map(int, match.group(1, 2, 3))
+        start = datetime.date.fromisocalendar(year, w1, 1)
+        return start, get_next_interval(start, Interval.FORTNIGHT)
 
     match = WEEK_RE.match(string)
     if match:
@@ -501,7 +590,7 @@ def days_in_daterange(
         yield start_date + timedelta(diff)
 
 
-def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
+def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:  # noqa: PLR0911
     """Get number of days in the surrounding interval.
 
     Args:
@@ -516,6 +605,8 @@ def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
         return 1
     if interval is Interval.WEEK:
         return 7
+    if interval is Interval.FORTNIGHT:
+        return 14
     if interval is Interval.MONTH:
         date = datetime.date(date.year, date.month, 1)
         return (get_next_interval(date, Interval.MONTH) - date).days
