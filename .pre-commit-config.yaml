@@ -20,7 +20,7 @@ repos:
         name: prettier
         language: node
         entry: prettier --write --list-different
-        types_or: ["css", "javascript", "json", "svelte", "yaml"]
+        types_or: ["css", "javascript", "json", "svelte", "yaml", "ts"]
         require_serial: true
         additional_dependencies:
           - "prettier@3.4.2"
