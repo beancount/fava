@@ -14,13 +14,40 @@ Beancount file:
 If budgets are specified, Fava's reports and charts will display remaining
 budgets and related information.
 
-The budget directives can be specified `daily`, `weekly`, `fortnightly`,
-`monthly`, `quarterly` and `yearly`. The specified budget is valid until another
-budget directive for the account is specified. The budget is broken down to a
-daily budget, and summed up for a range of dates as needed.
+Each budget directive has an accunt for which the budget is specified, a
+frequency and amount of the budget, and a date from which the budget is valid. A
+budget directive remains valid until another budget directive for the account is
+specified. For example:
 
-This makes the budgets very flexible, allowing for a monthly budget, being taken
-over by a weekly budget, and so on.
+<pre><textarea is="beancount-textarea">
+2012-01-01 custom "budget" Expenses:Coffee       "daily"         4.00 EUR
+2013-01-01 custom "budget" Expenses:Coffee       "daily"         5.00 EUR
+2014-01-01 custom "budget" Expenses:Coffee       "weekly"        6.00 EUR</textarea></pre>
+
+In this example, the coffee budget is 4.00 EUR for 2012, then increases to 5.00
+EUR in 2013, and finally to 30 EUR per week in 2014.
+
+Fava supports the following frequencies for the budget:
+
+- `daily`
+- `weekly`
+  - The week align with ISO weeks, and start on Monday.
+- `fortnightly`
+  - Note that there are no standard conventions for dividing a year into
+    fortnights, and as such, Fava uses the following:
+    - The fortnight align with ISO weeks, with the first fortnight being W01 and
+      W02 of the year.
+    - For a year with 53 weeks, the last fortnight is W53 and W54 (equivalent to
+      the next year's W01). This unfortunately does result in overlapping
+      fortnights once every 7 years approximately.
+- `monthly`
+  - This is the calendar month, and Fava internally uses the number of days in
+    each month to calculate the monthly budget. As a result, February with 28
+    days will have a lower budget than January with 31 days.
+- `quarterly`
+  - Based on the calendar quarter, with the quarters starting on January 1,
+    April 1, July 1, and October 1.
+- `yearly`
 
 Fava displays budgets in both charts and reports. You can find a visualization
 of the global budget in the `Net Profit` and `Expenses` charts for the Income
