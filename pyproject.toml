@@ -73,7 +73,6 @@ dev = [
     "furo>=2024",
     "mypy>=1.14",
     "pre-commit>=4",
-    "pyinstaller>=6",
     "pytest>=8",
     "pytest-cov>=6",
     "requests>=2",

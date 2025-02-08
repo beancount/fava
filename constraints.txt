@@ -2,8 +2,6 @@
 #    uv pip compile --extra excel --extra dev --python-version 3.9 --output-file constraints.txt pyproject.toml
 alabaster==0.7.16
     # via sphinx
-altgraph==0.17.4
-    # via pyinstaller
 anyio==4.8.0
     # via watchfiles
 babel==2.17.0
@@ -98,8 +96,6 @@ importlib-metadata==8.6.1
     #   build
     #   flask
     #   keyring
-    #   pyinstaller
-    #   pyinstaller-hooks-contrib
     #   sphinx
     #   twine
 iniconfig==2.0.0
@@ -163,8 +159,6 @@ openpyxl==3.1.5
 packaging==24.2
     # via
     #   build
-    #   pyinstaller
-    #   pyinstaller-hooks-contrib
     #   pyproject-api
     #   pytest
     #   sphinx
@@ -204,10 +198,6 @@ pygments==2.19.1
     #   readme-renderer
     #   rich
     #   sphinx
-pyinstaller==6.11.1
-    # via fava (pyproject.toml)
-pyinstaller-hooks-contrib==2025.1
-    # via pyinstaller
 pyproject-api==1.9.0
     # via tox
 pyproject-hooks==1.2.0
@@ -248,10 +238,7 @@ rich==13.9.4
 secretstorage==3.3.3
     # via keyring
 setuptools==75.8.0
-    # via
-    #   fava (pyproject.toml)
-    #   pyinstaller
-    #   pyinstaller-hooks-contrib
+    # via fava (pyproject.toml)
 simplejson==3.19.3
     # via fava (pyproject.toml)
 six==1.17.0

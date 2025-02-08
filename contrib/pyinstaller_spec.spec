@@ -1,8 +1,10 @@
 # vim: set ft=python:
 """Pyinstaller spec file for building a binary from fava's cli.py"""
 
-from PyInstaller.utils.hooks import collect_submodules
+from __future__ import annotations
+
 from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.utils.hooks import copy_metadata
 
 # Data files and version info for Fava:
