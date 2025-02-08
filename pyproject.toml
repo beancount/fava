@@ -74,7 +74,6 @@ dev = [
     "mypy>=1.14",
     "pre-commit>=4",
     "pyinstaller>=6",
-    "pylint>=3.2",
     "pytest>=8",
     "pytest-cov>=6",
     "requests>=2",
@@ -119,30 +118,6 @@ preview = true
 [tool.mypy]
 mypy_path = "stubs"
 strict = true
-
-[tool.pylint.'messages control']
-disable = [
-    "too-few-public-methods",
-    "too-many-branches",              # is checked by ruff (PLR0912)
-    "too-many-instance-attributes",
-    "too-many-locals",                # is checked by ruff (PLR0914)
-    "duplicate-code",
-    "unused-argument",                # is checked by ruff (ARG001)
-    "stop-iteration-return",
-    "ungrouped-imports",
-    "invalid-unary-operand-type",    # type-checking like, had false-positives
-    "not-an-iterable",               # type-checking like, had false-positives
-    "unsubscriptable-object",        # type-checking like, had false-positives
-    "broad-except",                  # is checked by ruff (BLE)
-    "too-many-return-statements",    # is checked by ruff (PLR0911)
-    "too-many-arguments",            # is checked by ruff (PLR0913)
-    "too-many-positional-arguments", # is checked by ruff (PLR0917)
-    "redefined-builtin",             # is checked by ruff (A002)
-    "protected-access",              # is checked by ruff (SLF001)
-    "invalid-name",                  # is checked by ruff (N)
-    "missing-docstring",             # is checked by ruff (D)
-    "redefined-outer-name",          # false positives for pytest fixtures
-]
 
 [tool.pytest.ini_options]
 filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
@@ -196,3 +171,32 @@ max-args = 9
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP"]
 "src/fava/core/filters.py" = ["D"]
+
+# pylint is not run as part of linting for Fava anymore but we keep these disables
+# around for devs who might have pylint automatically run by their editors to avoid
+# a ton of pylint warnings
+# mypy with strict settings handles most of the whole-project analysis where pylint
+# still shines - the simpler rules are mostly covered by ruff
+[tool.pylint.'messages control']
+disable = [
+    "too-few-public-methods",
+    "too-many-branches",              # is checked by ruff (PLR0912)
+    "too-many-instance-attributes",
+    "too-many-locals",                # is checked by ruff (PLR0914)
+    "duplicate-code",
+    "unused-argument",                # is checked by ruff (ARG001)
+    "stop-iteration-return",
+    "ungrouped-imports",
+    "invalid-unary-operand-type",    # type-checking like, had false-positives
+    "not-an-iterable",               # type-checking like, had false-positives
+    "unsubscriptable-object",        # type-checking like, had false-positives
+    "broad-except",                  # is checked by ruff (BLE)
+    "too-many-return-statements",    # is checked by ruff (PLR0911)
+    "too-many-arguments",            # is checked by ruff (PLR0913)
+    "too-many-positional-arguments", # is checked by ruff (PLR0917)
+    "redefined-builtin",             # is checked by ruff (A002)
+    "protected-access",              # is checked by ruff (SLF001)
+    "invalid-name",                  # is checked by ruff (N)
+    "missing-docstring",             # is checked by ruff (D)
+    "redefined-outer-name",          # false positives for pytest fixtures
+]

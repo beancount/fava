@@ -6,8 +6,6 @@ altgraph==0.17.4
     # via pyinstaller
 anyio==4.8.0
     # via watchfiles
-astroid==3.3.8
-    # via pylint
 babel==2.17.0
     # via
     #   fava (pyproject.toml)
@@ -61,8 +59,6 @@ coverage==7.6.10
     # via pytest-cov
 cryptography==44.0.0
     # via secretstorage
-dill==0.3.9
-    # via pylint
 distlib==0.3.9
     # via virtualenv
 docutils==0.21.2
@@ -108,8 +104,6 @@ importlib-metadata==8.6.1
     #   twine
 iniconfig==2.0.0
     # via pytest
-isort==6.0.0
-    # via pylint
 itsdangerous==2.2.0
     # via flask
 jaraco-classes==3.4.0
@@ -149,8 +143,6 @@ markupsafe==3.0.2
     # via
     #   jinja2
     #   werkzeug
-mccabe==0.7.0
-    # via pylint
 mdurl==0.1.2
     # via markdown-it-py
 more-itertools==10.6.0
@@ -181,7 +173,6 @@ packaging==24.2
     #   twine
 platformdirs==4.3.6
     # via
-    #   pylint
     #   tox
     #   virtualenv
 pluggy==1.5.0
@@ -217,8 +208,6 @@ pyinstaller==6.11.1
     # via fava (pyproject.toml)
 pyinstaller-hooks-contrib==2025.1
     # via pyinstaller
-pylint==3.3.4
-    # via fava (pyproject.toml)
 pyproject-api==1.9.0
     # via tox
 pyproject-hooks==1.2.0
@@ -304,13 +293,10 @@ tomli==2.2.1
     #   build
     #   coverage
     #   mypy
-    #   pylint
     #   pyproject-api
     #   pytest
     #   sphinx
     #   tox
-tomlkit==0.13.2
-    # via pylint
 tox==4.24.1
     # via
     #   fava (pyproject.toml)
@@ -326,10 +312,8 @@ types-simplejson==3.19.0.20241221
 typing-extensions==4.12.2
     # via
     #   anyio
-    #   astroid
     #   beautifulsoup4
     #   mypy
-    #   pylint
     #   rich
     #   tox
     #   tox-uv
