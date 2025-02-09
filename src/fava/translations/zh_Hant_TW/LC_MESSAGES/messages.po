@@ -433,6 +433,10 @@ msgid "Monthly"
 msgstr "月"
 
 #: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
+msgid "Fortnightly"
+msgstr "兩周"
+
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
 msgid "Weekly"
 msgstr "週"
 
@@ -594,4 +598,3 @@ msgstr "正在删除..."
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Add Journal Entry"
 msgstr ""
-

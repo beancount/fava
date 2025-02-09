@@ -29,16 +29,19 @@ test("locale number formatting", () => {
 });
 
 test("time filter date formatting", () => {
-  const { day, month, week, quarter, year, ...rest } = timeFilterDateFormat;
+  const { day, week, fortnight, month, quarter, year, ...rest } =
+    timeFilterDateFormat;
   assert.equal(rest, {});
   const janfirst = new Date("2020-01-01");
   const date = new Date("2020-03-20");
   assert.is(day(janfirst), "2020-01-01");
   assert.is(day(date), "2020-03-20");
-  assert.is(month(janfirst), "2020-01");
-  assert.is(month(date), "2020-03");
   assert.is(week(janfirst), "2020-W00");
   assert.is(week(date), "2020-W11");
+  assert.is(fortnight(janfirst), "2020-W01/02");
+  assert.is(fortnight(date), "2020-W11/12");
+  assert.is(month(janfirst), "2020-01");
+  assert.is(month(date), "2020-03");
   assert.is(quarter(janfirst), "2020-Q1");
   assert.is(quarter(date), "2020-Q1");
   assert.is(year(janfirst), "2020");
@@ -46,16 +49,18 @@ test("time filter date formatting", () => {
 });
 
 test("human-readable date formatting", () => {
-  const { day, month, week, quarter, year, ...rest } = dateFormat;
+  const { day, week, fortnight, month, quarter, year, ...rest } = dateFormat;
   assert.equal(rest, {});
   const janfirst = new Date("2020-01-01");
   const date = new Date("2020-03-20");
   assert.is(day(janfirst), "2020-01-01");
   assert.is(day(date), "2020-03-20");
-  assert.is(month(janfirst), "Jan 2020");
-  assert.is(month(date), "Mar 2020");
   assert.is(week(janfirst), "2020W00");
   assert.is(week(date), "2020W11");
+  assert.is(fortnight(janfirst), "2020W01/02");
+  assert.is(fortnight(date), "2020W11/12");
+  assert.is(month(janfirst), "Jan 2020");
+  assert.is(month(date), "Mar 2020");
   assert.is(quarter(janfirst), "2020Q1");
   assert.is(quarter(date), "2020Q1");
   assert.is(year(janfirst), "2020");

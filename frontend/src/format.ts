@@ -51,6 +51,12 @@ export const dateFormat: Record<Interval, DateFormatter> = {
   quarter: (date) =>
     `${date.getUTCFullYear().toString()}Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%b %Y"),
+  fortnight: (date) => {
+    const year = Number.parseInt(utcFormat("%G")(date));
+    const week = Number.parseInt(utcFormat("%V")(date));
+    const [w1, w2] = week % 2 === 0 ? [week - 1, week] : [week, week + 1];
+    return `${year.toString()}W${w1.toString().padStart(2, "0")}/${w2.toString().padStart(2, "0")}`;
+  },
   week: utcFormat("%YW%W"),
   day,
 };
@@ -61,6 +67,12 @@ export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
   quarter: (date) =>
     `${date.getUTCFullYear().toString()}-Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
   month: utcFormat("%Y-%m"),
+  fortnight: (date) => {
+    const year = Number.parseInt(utcFormat("%G")(date));
+    const week = Number.parseInt(utcFormat("%V")(date));
+    const [w1, w2] = week % 2 === 0 ? [week - 1, week] : [week, week + 1];
+    return `${year.toString()}-W${w1.toString().padStart(2, "0")}/${w2.toString().padStart(2, "0")}`;
+  },
   week: utcFormat("%Y-W%W"),
   day,
 };

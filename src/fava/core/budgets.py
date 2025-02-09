@@ -103,6 +103,7 @@ def parse_budgets(
     interval_map = {
         "daily": Interval.DAY,
         "weekly": Interval.WEEK,
+        "fortnightly": Interval.FORTNIGHT,
         "monthly": Interval.MONTH,
         "quarterly": Interval.QUARTER,
         "yearly": Interval.YEAR,
