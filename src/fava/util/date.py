@@ -207,15 +207,7 @@ def get_prev_interval(  # noqa: PLR0911
     if interval is Interval.FORTNIGHT:
         year, week, _ = date.isocalendar()
         w1 = week - 1 if week % 2 == 0 else week
-        if w1 > 2:
-            return datetime.date.fromisocalendar(year, w1, 1)
-        # If we are in the first fortnight of the year, finding the last
-        # fortnight of the previous year is a bit tricky due to being either
-        # starting on week 51 or 53 (if the year has 53 weeks).
-        try:
-            return datetime.date.fromisocalendar(year - 1, 53, 1)
-        except ValueError:
-            return datetime.date.fromisocalendar(year - 1, 51, 1)
+        return datetime.date.fromisocalendar(year, w1, 1)
     if interval is Interval.WEEK:
         return date - timedelta(date.weekday())
     if interval is Interval.DAY:
@@ -400,8 +392,10 @@ def substitute(  # noqa: PLR0914
             )
 
         else:
-            msg = f"Unknown interval '{interval}'"
-            raise ValueError(msg)
+            # This is unreachable, but mypy doesn't know that as it cannot
+            # infer the values matched by the regex
+            msg = f"Unknown interval '{interval}'"  # pragma: no cover
+            raise ValueError(msg)  # pragma: no cover
     return string
 
 

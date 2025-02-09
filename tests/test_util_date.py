@@ -99,6 +99,13 @@ def test_get_next_interval(
         ("2016-12-31", Interval.YEAR, "2016-01-01"),
         ("9999-12-31", Interval.QUARTER, "9999-10-01"),
         ("9999-12-31", Interval.YEAR, "9999-01-01"),
+        # 53 week year
+        ("2020-12-31", Interval.WEEK, "2020-12-28"),
+        ("2021-01-01", Interval.WEEK, "2020-12-28"),
+        ("2021-01-04", Interval.WEEK, "2021-01-04"),
+        ("2020-12-31", Interval.FORTNIGHT, "2020-12-28"),
+        ("2021-01-01", Interval.FORTNIGHT, "2020-12-28"),
+        ("2021-01-04", Interval.FORTNIGHT, "2021-01-04"),
     ],
 )
 def test_get_prev_interval(
@@ -163,12 +170,17 @@ def test_interval_tuples() -> None:
     ],
 )
 def test_substitute(string: str, output: str) -> None:
-    # Mock the imported datetime.date in fava.util.date module
-    # Ref:
-    # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
+    # Use a specific date to make the tests deterministic.
     with mock.patch("fava.util.date.local_today") as mock_date:
         mock_date.return_value = _to_date("2016-06-24")
         assert substitute(string) == output
+
+
+def test_substitute_invalid() -> None:
+    # Use a specific date to make the tests deterministic.
+    with mock.patch("fava.util.date.local_today") as mock_date:
+        mock_date.return_value = _to_date("2016-06-24")
+        assert substitute("asdasd") == "asdasd"
 
 
 @pytest.mark.parametrize(
@@ -228,6 +240,8 @@ def test_fiscal_substitute(
         ("2000-01-03", "2000-01-04", "2000-01-03"),
         ("2015-01-05", "2015-01-12", "2015-W01"),
         ("2025-01-06", "2025-01-13", "2025-W01"),
+        ("2014-12-29", "2015-01-12", "2015-W01/02"),
+        ("2024-12-30", "2025-01-13", "2025-W01/02"),
         ("2015-04-01", "2015-07-01", "2015-Q2"),
         ("2014-01-01", "2016-01-01", "2014 to 2015"),
         ("2014-01-01", "2016-01-01", "2014-2015"),
