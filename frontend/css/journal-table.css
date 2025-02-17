@@ -77,7 +77,12 @@
 .journal.show-metadata .metadata,
 .journal.show-postings .postings,
 .transaction.show-postings .postings,
-.transaction.show-postings .metadata {
+.transaction.show-postings .metadata,
+.balance.show-metadata .metadata,
+.note.show-metadata .metadata,
+.open.show-metadata .metadata,
+/*note: metadata for custom entries seems to only be implemetned for budgets at this time */
+.custom.show-metadata .metadata {
   display: block;
 }
 

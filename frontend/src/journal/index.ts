@@ -62,9 +62,15 @@ function handleClick({ target }: Event): void {
     }
   } else if (target.closest(".indicators")) {
     // Toggle postings and metadata by clicking on indicators.
-    const entry = target.closest(".transaction");
+    let entry = target.closest(".transaction");
     if (entry) {
       entry.classList.toggle("show-postings");
+    } else {
+      // 
+      entry = target.closest(".balance,.note,.open,.custom")
+      if (entry) {
+        entry.classList.toggle("show-metadata");
+      }
     }
   }
 }
