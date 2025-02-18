@@ -64,9 +64,10 @@ function handleClick({ target }: Event): void {
     // Toggle postings and metadata by clicking on indicators.
     let entry = target.closest(".transaction");
     if (entry) {
+      // show-postings applies to both postings and metadata for transactions
       entry.classList.toggle("show-postings");
     } else {
-      //
+      // show-metadata applies to metadata for other entries
       entry = target.closest(".balance,.note,.open,.custom");
       if (entry) {
         entry.classList.toggle("show-metadata");
