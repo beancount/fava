@@ -66,8 +66,8 @@ function handleClick({ target }: Event): void {
     if (entry) {
       entry.classList.toggle("show-postings");
     } else {
-      // 
-      entry = target.closest(".balance,.note,.open,.custom")
+      //
+      entry = target.closest(".balance,.note,.open,.custom");
       if (entry) {
         entry.classList.toggle("show-metadata");
       }
