@@ -79,6 +79,18 @@ def test_budgets_weekly(budgets_doc: BudgetDict) -> None:
         assert budget["EUR"] == num
 
 
+def test_budgets_fortnightly(budgets_doc: BudgetDict) -> None:
+    """
+    2016-05-01 custom "budget" Expenses:Books "fortnightly" 42 EUR"""
+
+    for start, end, num in [
+        (date(2016, 5, 1), date(2016, 5, 2), Decimal(21) / 7),
+        (date(2016, 9, 1), date(2016, 9, 2), Decimal(21) / 7),
+    ]:
+        budget = calculate_budget(budgets_doc, "Expenses:Books", start, end)
+        assert budget["EUR"] == num
+
+
 def test_budgets_monthly(budgets_doc: BudgetDict) -> None:
     """
     2014-05-01 custom "budget" Expenses:Books "monthly" 100 EUR"""

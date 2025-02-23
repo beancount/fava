@@ -1,6 +1,12 @@
 import { _ } from "../i18n";
 
-export type Interval = "year" | "quarter" | "month" | "week" | "day";
+export type Interval =
+  | "year"
+  | "quarter"
+  | "month"
+  | "fortnight"
+  | "week"
+  | "day";
 
 export const DEFAULT_INTERVAL: Interval = "month";
 
@@ -8,6 +14,7 @@ export const INTERVALS: Interval[] = [
   "year",
   "quarter",
   "month",
+  "fortnight",
   "week",
   "day",
 ];
@@ -22,6 +29,7 @@ export function intervalLabel(s: Interval): string {
     year: _("Yearly"),
     quarter: _("Quarterly"),
     month: _("Monthly"),
+    fortnight: _("Fortnightly"),
     week: _("Weekly"),
     day: _("Daily"),
   }[s];
