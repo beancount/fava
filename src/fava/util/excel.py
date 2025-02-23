@@ -50,10 +50,12 @@ def to_excel(
     if result_format not in {"xlsx", "ods"}:  # pragma: no cover
         raise InvalidResultFormatError(result_format)
     resp = io.BytesIO()
-    book = pyexcel.Book({
-        "Results": _result_array(types, rows),
-        "Query": [["Query"], [query_string]],
-    })
+    book = pyexcel.Book(
+        {
+            "Results": _result_array(types, rows),
+            "Query": [["Query"], [query_string]],
+        }
+    )
     book.save_to_memory(result_format, resp)
     resp.seek(0)
     return resp

@@ -389,7 +389,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
 
         g.extension = ext
         template = ext.jinja_env.get_template(f"{ext.name}.html")
-        content = Markup(template.render(ledger=g.ledger, extension=ext))  # noqa: RUF035
+        content = Markup(template.render(ledger=g.ledger, extension=ext))
         return render_template(
             "_layout.html",
             content=content,
@@ -429,7 +429,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         return render_template(
             "help.html",
             page_slug=page_slug,
-            help_html=Markup(  # noqa: RUF035
+            help_html=Markup(
                 render_template_string(
                     html,
                     beancount_version=beancount_version,
