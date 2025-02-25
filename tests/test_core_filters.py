@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from beancount.core.account import has_component
+from beancount.core.data import Transaction
 
 from fava.beans import create
 from fava.beans.account import get_entry_accounts
@@ -130,36 +131,39 @@ def test_filterexception() -> None:
         AdvancedFilter('any(who:"Martin"')
 
 
+TOTAL_ENTRIES = 1826
+NON_TRANSACTION_ENTRIES = 893
+
+
 @pytest.mark.parametrize(
     ("string", "number"),
     [
-        ('any(account:"Assets:US:ETrade")', 48),
-        ('all(-account:"Assets:US:ETrade")', 1826 - 48),
-        ("#test", 2),
-        ("#test,#nomatch", 2),
-        ("-#nomatch", 1826),
-        ("-#nomatch -#nomatch", 1826),
-        ("-#nomatch -#test", 1824),
-        ("-#test", 1824),
-        ("^test-link", 3),
-        ("^test-link,#test", 4),
-        ("^test-link -#test", 2),
-        ("payee:BayBook", 62),
-        ("BayBook", 62),
-        ("(payee:BayBook, #test,#nomatch) -#nomatch", 64),
-        ('payee:"BayBo.*"', 62),
-        ('payee:"baybo.*"', 62),
-        (r'number:"\d*"', 3),
-        ('not_a_meta_key:".*"', 0),
-        ('name:".*ETF"', 4),
-        ('name:".*ETF$"', 3),
-        ('name:".*etf"', 4),
-        ('name:".*etf$"', 3),
-        ('any(overage:"GB$")', 1),
-        ("=26.87", 1),
-        (">=17500", 3),
-        (">=17500 <18000", 1),
-        ("any(units >= 17500)", 3),
+        ('any(account:"Assets:US:ETrade")', 48 + NON_TRANSACTION_ENTRIES),
+        ('all(-account:"Assets:US:ETrade")', TOTAL_ENTRIES - 48),
+        ("#test", 2 + NON_TRANSACTION_ENTRIES),
+        ("#test,#nomatch", 2 + NON_TRANSACTION_ENTRIES),
+        ("-#nomatch", TOTAL_ENTRIES),
+        ("-#nomatch -#nomatch", TOTAL_ENTRIES),
+        ("-#nomatch -#test", TOTAL_ENTRIES - 2),
+        ("-#test", TOTAL_ENTRIES - 2),
+        ("^test-link", 3 + NON_TRANSACTION_ENTRIES),
+        ("^test-link,#test", 4 + NON_TRANSACTION_ENTRIES),
+        ("^test-link -#test", 2 + NON_TRANSACTION_ENTRIES),
+        ("payee:BayBook", 62 + NON_TRANSACTION_ENTRIES),
+        ("BayBook", 62 + NON_TRANSACTION_ENTRIES),
+        (
+            "(payee:BayBook, #test,#nomatch) -#nomatch",
+            64 + NON_TRANSACTION_ENTRIES,
+        ),
+        ('payee:"BayBo.*"', 62 + NON_TRANSACTION_ENTRIES),
+        ('payee:"baybo.*"', 62 + NON_TRANSACTION_ENTRIES),
+        (r'number:"\d*"', 2 + NON_TRANSACTION_ENTRIES),
+        ('not_a_meta_key:".*"', 0 + NON_TRANSACTION_ENTRIES),
+        ('any(overage:"GB$")', 1 + NON_TRANSACTION_ENTRIES),
+        ("=26.87", 1 + NON_TRANSACTION_ENTRIES),
+        (">=17500", 3 + NON_TRANSACTION_ENTRIES),
+        (">=17500 <18000", 1 + NON_TRANSACTION_ENTRIES),
+        ("any(units >= 17500)", 3 + NON_TRANSACTION_ENTRIES),
     ],
 )
 def test_advanced_filter(
@@ -196,15 +200,15 @@ def test_account_filter(example_ledger: FavaLedger) -> None:
 
     account_filter = AccountFilter("Assets")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
-    assert len(filtered_entries) == 541
+    assert len(filtered_entries) == 488 + NON_TRANSACTION_ENTRIES
     for entry in filtered_entries:
         assert any(
             has_component(a, "Assets") for a in get_entry_accounts(entry)
-        )
+        ) or not isinstance(entry, Transaction)
 
     account_filter = AccountFilter(".*US:State")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
-    assert len(filtered_entries) == 67
+    assert len(filtered_entries) == 64 + NON_TRANSACTION_ENTRIES
 
 
 def test_time_filter(example_ledger: FavaLedger) -> None:

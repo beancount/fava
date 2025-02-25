@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
+from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
@@ -445,7 +446,11 @@ class AdvancedFilter(EntryFilter):
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         include = self._include
-        return [entry for entry in entries if include(entry)]
+        return [
+            entry
+            for entry in entries
+            if include(entry) or not isinstance(entry, Transaction)
+        ]
 
 
 class AccountFilter(EntryFilter):
@@ -472,4 +477,5 @@ class AccountFilter(EntryFilter):
                 account.has_component(name, value) or match(name)
                 for name in get_entry_accounts(entry)
             )
+            or not isinstance(entry, Transaction)
         ]

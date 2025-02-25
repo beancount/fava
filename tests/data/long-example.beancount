@@ -2941,10 +2941,12 @@ option "operating_currency" "USD"
   Income:US:ETrade:Gains                            66.08 USD
 
 2016-03-17 * "Dividends on portfolio"
+    number: "882882"
   Assets:US:ETrade:Cash                            119.06 USD
   Income:US:ETrade:Dividends                      -119.06 USD
 
 2016-04-30 * "Buy shares of GLD"
+    number: "882882"
   Assets:US:ETrade:Cash                          -1807.72 USD
   Assets:US:ETrade:GLD                                 17 GLD {105.81 USD}
   Expenses:Financial:Commissions                     8.95 USD
@@ -2959,16 +2961,13 @@ option "operating_currency" "USD"
 * Vanguard Investments
 
 2014-01-01 open Assets:US:Vanguard:VBMPX                     VBMPX
-  number: "882882"
 2014-01-01 open Assets:US:Vanguard:RGAGX                     RGAGX
-  number: "882882"
 2014-01-01 open Assets:US:Vanguard                            USD
   address: "P.O. Box 1110, Valley Forge, PA 19482-1110"
   institution: "Vanguard Group"
   phone: "+1.800.523.1188"
 2014-01-01 open Income:US:BayBook:Match401k                   USD
 2014-01-01 open Assets:US:Vanguard:Cash                       USD
-  number: "882882"
 
 2014-01-03 * "Employer match for contribution"
   Assets:US:Vanguard:Cash                          600.00 USD

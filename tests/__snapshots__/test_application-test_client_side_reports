@@ -21,7 +21,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5809
+        "lineno": 5808
       },
       "uptodate_status": null
     },
@@ -34,7 +34,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3760
+        "lineno": 3759
       },
       "uptodate_status": null
     },
@@ -143,7 +143,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4968
+        "lineno": 4967
       },
       "uptodate_status": null
     },
@@ -172,8 +172,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 2970,
-        "number": "882882"
+        "lineno": 2970
       },
       "uptodate_status": null
     },
@@ -186,8 +185,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 2963,
-        "number": "882882"
+        "lineno": 2964
       },
       "uptodate_status": null
     },
@@ -200,8 +198,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 2961,
-        "number": "882882"
+        "lineno": 2963
       },
       "uptodate_status": null
     },
@@ -227,7 +224,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5064
+        "lineno": 5063
       },
       "uptodate_status": null
     },
@@ -240,7 +237,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5063
+        "lineno": 5062
       },
       "uptodate_status": null
     },
@@ -253,7 +250,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5057
+        "lineno": 5056
       },
       "uptodate_status": null
     },
@@ -266,7 +263,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5056
+        "lineno": 5055
       },
       "uptodate_status": null
     },
@@ -279,7 +276,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5054
+        "lineno": 5053
       },
       "uptodate_status": null
     },
@@ -292,7 +289,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5055
+        "lineno": 5054
       },
       "uptodate_status": null
     },
@@ -305,7 +302,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3764
+        "lineno": 3763
       },
       "uptodate_status": null
     },
@@ -318,7 +315,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3762
+        "lineno": 3761
       },
       "uptodate_status": null
     },
@@ -331,7 +328,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3763
+        "lineno": 3762
       },
       "uptodate_status": null
     },
@@ -344,7 +341,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3765
+        "lineno": 3764
       },
       "uptodate_status": null
     },
@@ -357,7 +354,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5060
+        "lineno": 5059
       },
       "uptodate_status": null
     },
@@ -370,7 +367,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5061
+        "lineno": 5060
       },
       "uptodate_status": null
     },
@@ -383,7 +380,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5062
+        "lineno": 5061
       },
       "uptodate_status": null
     },
@@ -396,7 +393,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5059
+        "lineno": 5058
       },
       "uptodate_status": null
     },
@@ -409,7 +406,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4977
+        "lineno": 4976
       },
       "uptodate_status": null
     },
@@ -422,7 +419,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4976
+        "lineno": 4975
       },
       "uptodate_status": null
     },
@@ -435,7 +432,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4974
+        "lineno": 4973
       },
       "uptodate_status": null
     },
@@ -448,7 +445,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4975
+        "lineno": 4974
       },
       "uptodate_status": null
     },
@@ -461,7 +458,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4978
+        "lineno": 4977
       },
       "uptodate_status": null
     },
@@ -474,7 +471,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4980
+        "lineno": 4979
       },
       "uptodate_status": null
     },
@@ -487,7 +484,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4979
+        "lineno": 4978
       },
       "uptodate_status": null
     },
@@ -500,7 +497,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5008
+        "lineno": 5007
       },
       "uptodate_status": null
     },
@@ -513,7 +510,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5007
+        "lineno": 5006
       },
       "uptodate_status": null
     },
@@ -526,7 +523,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5005
+        "lineno": 5004
       },
       "uptodate_status": null
     },
@@ -539,7 +536,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5006
+        "lineno": 5005
       },
       "uptodate_status": null
     },
@@ -552,7 +549,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5009
+        "lineno": 5008
       },
       "uptodate_status": null
     },
@@ -565,7 +562,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5011
+        "lineno": 5010
       },
       "uptodate_status": null
     },
@@ -578,7 +575,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5010
+        "lineno": 5009
       },
       "uptodate_status": null
     },
@@ -591,7 +588,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5039
+        "lineno": 5038
       },
       "uptodate_status": null
     },
@@ -604,7 +601,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5038
+        "lineno": 5037
       },
       "uptodate_status": null
     },
@@ -617,7 +614,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5036
+        "lineno": 5035
       },
       "uptodate_status": null
     },
@@ -630,7 +627,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5037
+        "lineno": 5036
       },
       "uptodate_status": null
     },
@@ -643,7 +640,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5040
+        "lineno": 5039
       },
       "uptodate_status": null
     },
@@ -656,7 +653,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5042
+        "lineno": 5041
       },
       "uptodate_status": null
     },
@@ -669,7 +666,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5041
+        "lineno": 5040
       },
       "uptodate_status": null
     },
@@ -682,7 +679,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 5058
+        "lineno": 5057
       },
       "uptodate_status": null
     },
@@ -695,7 +692,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3761
+        "lineno": 3760
       },
       "uptodate_status": null
     },
@@ -708,7 +705,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3758
+        "lineno": 3757
       },
       "uptodate_status": null
     },
@@ -734,7 +731,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3757
+        "lineno": 3756
       },
       "uptodate_status": null
     },
@@ -747,7 +744,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 3759
+        "lineno": 3758
       },
       "uptodate_status": null
     },
@@ -786,7 +783,7 @@
       },
       "meta": {
         "filename": "TEST_DATA_DIR/long-example.beancount",
-        "lineno": 4967
+        "lineno": 4966
       },
       "uptodate_status": null
     },
