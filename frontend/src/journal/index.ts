@@ -62,9 +62,9 @@ function handleClick({ target }: Event): void {
     }
   } else if (target.closest(".indicators")) {
     // Toggle postings and metadata by clicking on indicators.
-    const entry = target.closest(".transaction");
+    const entry = target.closest(".journal > li");
     if (entry) {
-      entry.classList.toggle("show-postings");
+      entry.classList.toggle("show-full-entry");
     }
   }
 }

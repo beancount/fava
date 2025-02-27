@@ -74,10 +74,12 @@
 .journal.show-open .open,
 .journal.show-pad .pad,
 .journal.show-query .query,
+/* Show metadata and postings if it was toggled for the whole journal. */
 .journal.show-metadata .metadata,
 .journal.show-postings .postings,
-.transaction.show-postings .postings,
-.transaction.show-postings .metadata {
+/* Show metadata and postings where it was explicitly toggled with the indicators. */
+.journal > li.show-full-entry .postings,
+.journal > li.show-full-entry .metadata {
   display: block;
 }
 
