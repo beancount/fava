@@ -4,7 +4,7 @@
     "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
-      "lineno": 3767
+      "lineno": 3766
     },
     "t": "Event",
     "type": "employer"
