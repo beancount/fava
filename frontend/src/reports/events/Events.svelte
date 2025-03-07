@@ -3,15 +3,15 @@
 
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { ScatterPlot } from "../../charts/scatterplot";
-  import type { Event } from "../../entries";
   import { _, format } from "../../i18n";
+  import type { EventsReportProps } from ".";
   import EventTable from "./EventTable.svelte";
 
-  export let events: Event[];
+  let { events }: EventsReportProps = $props();
 
-  $: groups = [...group(events, (e) => e.type)];
+  let groups = $derived([...group(events, (e) => e.type)]);
 
-  $: charts = [
+  let charts = $derived([
     new ScatterPlot(
       _("Events"),
       events.map(({ date, type, description }) => ({
@@ -20,7 +20,7 @@
         description,
       })),
     ),
-  ];
+  ]);
 </script>
 
 {#if groups.length}

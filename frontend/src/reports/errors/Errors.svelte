@@ -6,7 +6,7 @@
   import SortHeader from "../../sort/SortHeader.svelte";
   import { accounts, errors } from "../../stores";
 
-  $: account_re = new RegExp(`(${$accounts.join("|")})`);
+  let account_re = $derived(new RegExp(`(${$accounts.join("|")})`));
 
   /** Split and extract account names to replace them with links to the account page. */
   function extract_accounts(msg: string): ["text" | "account", string][] {
@@ -23,13 +23,13 @@
     new NumberColumn<T>(_("Line"), (d) => d.source?.lineno ?? 0),
     new StringColumn<T>(_("Error"), (d) => d.message),
   ] as const;
-  let sorter = new Sorter(columns[0], "desc");
+  let sorter = $state(new Sorter(columns[0], "desc"));
 
-  $: sorted_errors = sorter.sort($errors);
+  let sorted_errors = $derived(sorter.sort($errors));
 </script>
 
 {#if $errors.length}
-  <table class="errors">
+  <table>
     <thead>
       <tr>
         {#each columns as column}

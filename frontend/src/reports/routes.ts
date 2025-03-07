@@ -1,16 +1,14 @@
-import { _ } from "../i18n";
 import { account_report } from "./accounts";
 import { commodities } from "./commodities";
 import { documents } from "./documents";
 import { editor } from "./editor";
-import ErrorsSvelte from "./errors/Errors.svelte";
+import { errors } from "./errors";
 import { events } from "./events";
 import { holdings } from "./holdings";
 import { import_report } from "./import";
 import { options } from "./options";
-import QuerySvelte from "./query/Query.svelte";
+import { query } from "./query";
 import type { FrontendRoute } from "./route";
-import { noload, Route } from "./route";
 import { balance_sheet, income_statement, trial_balance } from "./tree_reports";
 
 /**
@@ -27,12 +25,12 @@ export const frontend_routes: FrontendRoute[] = [
   commodities,
   documents,
   editor,
-  new Route("errors", ErrorsSvelte, noload, () => _("Errors")),
+  errors,
   events,
   holdings,
   import_report,
   income_statement,
   options,
-  new Route("query", QuerySvelte, noload, () => _("Query")),
+  query,
   trial_balance,
 ];

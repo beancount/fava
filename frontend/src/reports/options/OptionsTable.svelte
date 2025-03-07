@@ -4,16 +4,20 @@
   import SortHeader from "../../sort/SortHeader.svelte";
 
   type T = [string, string];
-  export let options: Record<string, string>;
+  interface Props {
+    options: Record<string, string>;
+  }
+
+  let { options }: Props = $props();
 
   const columns = [
     new StringColumn<T>(_("Key"), (d) => d[0]),
     new StringColumn<T>(_("Value"), (d) => d[1]),
   ] as const;
-  let sorter = new Sorter(columns[0], "asc");
+  let sorter = $state(new Sorter(columns[0], "asc"));
 
-  $: options_array = Object.entries(options);
-  $: sorted_options = sorter.sort(options_array);
+  let options_array = $derived(Object.entries(options));
+  let sorted_options = $derived(sorter.sort(options_array));
 </script>
 
 <table>

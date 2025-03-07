@@ -1,11 +1,9 @@
 <script lang="ts">
-  import type { Commodities } from "../../api/validators";
-  import type { FavaChart } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
+  import type { CommoditiesReportProps } from ".";
   import CommodityTable from "./CommodityTable.svelte";
 
-  export let charts: FavaChart[];
-  export let commodities: Commodities;
+  let { charts, commodities }: CommoditiesReportProps = $props();
 </script>
 
 <ChartSwitcher {charts} />

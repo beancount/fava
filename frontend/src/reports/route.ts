@@ -1,7 +1,7 @@
 import { type Component, mount, unmount } from "svelte";
 
 import { log_error } from "../log";
-import ErrorSvelte from "./Error.svelte";
+import ReportLoadError from "./ReportLoadError.svelte";
 import { updateable_props } from "./route.svelte";
 
 export interface FrontendRoute {
@@ -53,7 +53,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
 
   /** Destroy any components that might be rendered by this route. */
   destroy(): void {
-    if (this.instance !== undefined) {
+    if (this.instance) {
       void unmount(this.instance.component);
     }
     this.instance = undefined;
@@ -90,7 +90,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
         target.innerHTML = "";
         this.instance = {
           error: true,
-          component: mount(ErrorSvelte, {
+          component: mount(ReportLoadError, {
             target,
             props: { title: this.title, error },
           }),
@@ -102,4 +102,17 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   }
 }
 
-export const noload = (): Record<string, unknown> => ({});
+type NoProps = Record<string, never>;
+
+const noload = () => ({});
+
+/** A frontend rendered route that does not need to load any props. */
+export class DatalessRoute extends Route<NoProps> {
+  constructor(
+    report: string,
+    Component: Component<NoProps>,
+    get_title: (route: Route<NoProps>) => string,
+  ) {
+    super(report, Component, noload, get_title);
+  }
+}

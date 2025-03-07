@@ -8,24 +8,28 @@
   import { initDocumentPreviewEditor } from "../codemirror/setup";
   import { fetch, handleText } from "../lib/fetch";
 
-  export let url: string;
-
-  let value = "";
-
-  const { editor, renderEditor } = initDocumentPreviewEditor(value);
-
-  $: fetch(url)
-    .then(handleText)
-    .then((v) => {
-      value = v;
-    })
-    .catch(() => {
-      value = `Loading ${url} failed...`;
-    });
-
-  $: if (value !== editor.state.sliceDoc()) {
-    editor.dispatch(replaceContents(editor.state, value));
+  interface Props {
+    /** The URL to load the editor contents from. */
+    url: string;
   }
+
+  let { url }: Props = $props();
+
+  const { editor, renderEditor } = initDocumentPreviewEditor("");
+
+  const set_editor_content = (value: string) => {
+    if (value !== editor.state.sliceDoc()) {
+      editor.dispatch(replaceContents(editor.state, value));
+    }
+  };
+
+  $effect(() => {
+    fetch(url)
+      .then(handleText)
+      .then(set_editor_content, () => {
+        set_editor_content(`Loading ${url} failed...`);
+      });
+  });
 </script>
 
 <div use:renderEditor></div>

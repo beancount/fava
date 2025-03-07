@@ -1,29 +1,31 @@
 <script lang="ts">
-  import type { AccountBudget } from "../../api/validators";
   import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { chartContext } from "../../charts/context";
-  import type { AccountTreeNode } from "../../charts/hierarchy";
   import { urlForAccount } from "../../helpers";
   import { _ } from "../../i18n";
   import { is_non_empty } from "../../lib/array";
   import { intervalLabel } from "../../lib/interval";
   import { interval } from "../../stores";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
-  import type { AccountReportType } from ".";
+  import type { AccountReportProps } from ".";
 
-  export let account: string;
-  export let report_type: AccountReportType;
-  export let charts: unknown;
-  export let journal: string | null;
-  export let interval_balances: AccountTreeNode[] | null;
-  export let dates: { begin: Date; end: Date }[] | null;
-  export let budgets: Record<string, AccountBudget[]> | null;
+  let {
+    account,
+    report_type,
+    charts,
+    journal,
+    interval_balances,
+    dates,
+    budgets,
+  }: AccountReportProps = $props();
 
-  $: accumulate = report_type === "balances";
+  let accumulate = $derived(report_type === "balances");
 
-  $: chartData = parseChartData(charts, $chartContext).unwrap_or(null);
-  $: interval_label = intervalLabel($interval).toLowerCase();
+  let chartData = $derived(
+    parseChartData(charts, $chartContext).unwrap_or(null),
+  );
+  let interval_label = $derived(intervalLabel($interval).toLowerCase());
 </script>
 
 {#if chartData}

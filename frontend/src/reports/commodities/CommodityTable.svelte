@@ -6,16 +6,20 @@
   import { ctx } from "../../stores/format";
 
   type T = [Date, number];
-  export let prices: readonly T[];
-  export let quote: string;
+  interface Props {
+    prices: readonly T[];
+    quote: string;
+  }
+
+  let { prices, quote }: Props = $props();
 
   const columns = [
     new NumberColumn<T>(_("Date"), (d) => d[0].valueOf()),
     new NumberColumn<T>(_("Price"), (d) => d[1]),
   ] as const;
-  let sorter = new Sorter(columns[0], "desc");
+  let sorter = $state(new Sorter(columns[0], "desc"));
 
-  $: sorted_prices = sorter.sort(prices);
+  let sorted_prices = $derived(sorter.sort(prices));
 </script>
 
 <table>

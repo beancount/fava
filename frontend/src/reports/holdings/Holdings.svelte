@@ -1,14 +1,15 @@
 <script lang="ts">
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
-  import type { QueryResultTable } from "../query/query_table";
   import QueryLinks from "../query/QueryLinks.svelte";
   import QueryTable from "../query/QueryTable.svelte";
-  import type { HoldingsReportType } from ".";
+  import type { HoldingsReportProps } from ".";
 
-  export let aggregation_key: HoldingsReportType;
-  export let query_string: string;
-  export let query_result_table: QueryResultTable;
+  let {
+    aggregation_key,
+    query_string,
+    query_result_table,
+  }: HoldingsReportProps = $props();
 </script>
 
 <div class="headerline">

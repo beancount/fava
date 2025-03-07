@@ -2,7 +2,7 @@
   @component
   A component to show PDFs, text, images, and HTML files.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   /** For these file extensions we show a plain-text read-only editor. */
   const plainTextExtensions = ["csv", "json", "qfx", "txt", "xml"];
   /** For these file extensions we try to show the file as an `<img>` */
@@ -23,10 +23,14 @@
   import { urlForRaw } from "../../helpers";
   import { ext } from "../../lib/paths";
 
-  export let filename: string;
+  interface Props {
+    filename: string;
+  }
 
-  $: extension = ext(filename).toLowerCase();
-  $: url = $urlForRaw("document/", { filename });
+  let { filename }: Props = $props();
+
+  let extension = $derived(ext(filename).toLowerCase());
+  let url = $derived($urlForRaw("document/", { filename }));
 </script>
 
 {#if extension === "pdf"}

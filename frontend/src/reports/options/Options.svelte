@@ -1,10 +1,10 @@
 <script lang="ts">
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
+  import type { OptionsReportProps } from ".";
   import OptionsTable from "./OptionsTable.svelte";
 
-  export let fava_options: Record<string, string>;
-  export let beancount_options: Record<string, string>;
+  let { fava_options, beancount_options }: OptionsReportProps = $props();
 </script>
 
 <h2>

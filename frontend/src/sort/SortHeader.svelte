@@ -1,12 +1,22 @@
+<!--
+  @component
+  A `<th>` table header for a sortable column.
+-->
 <script lang="ts">
   import type { SortColumn, Sorter } from ".";
 
-  export let sorter: Sorter;
-  export let column: SortColumn;
+  interface Props {
+    /** The current sorter. */
+    sorter: Sorter;
+    /** The column to show the header for. */
+    column: SortColumn;
+  }
+
+  let { sorter = $bindable(), column }: Props = $props();
 </script>
 
 <th
-  on:click={() => {
+  onclick={() => {
     sorter = sorter.switchColumn(column);
   }}
   data-order={column === sorter.column ? sorter.order : undefined}

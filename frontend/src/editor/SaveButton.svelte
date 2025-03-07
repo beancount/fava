@@ -2,10 +2,16 @@
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
 
-  export let changed: boolean;
-  export let saving: boolean;
+  interface Props {
+    /** Whether anything is changed - the button is disabled otherwise. */
+    changed: boolean;
+    /** Whether the contents are currently being saved. */
+    saving: boolean;
+  }
 
-  $: buttonContent = saving ? _("Saving...") : _("Save");
+  let { changed, saving }: Props = $props();
+
+  let buttonContent = $derived(saving ? _("Saving...") : _("Save"));
 </script>
 
 <button

@@ -1,16 +1,21 @@
 <script lang="ts">
   import { leaf } from "../../lib/account";
   import type { TreeNode } from "../../lib/tree";
+  import Accounts from "./Accounts.svelte";
   import { selectedAccount } from "./stores";
 
-  export let node: TreeNode<{ name: string; count: number }>;
-  export let move: (m: { account: string; filename: string }) => void;
+  interface Props {
+    node: TreeNode<{ name: string; count: number }>;
+    move: (m: { account: string; filename: string }) => void;
+  }
 
-  let expanded = true;
-  let drag = false;
+  let { node, move }: Props = $props();
 
-  $: hasChildren = node.children.length > 0;
-  $: selected = $selectedAccount === node.name;
+  let expanded = $state(true);
+  let drag = $state(false);
+
+  let hasChildren = $derived(node.children.length > 0);
+  let selected = $derived($selectedAccount === node.name);
 
   /**
    * Start drag if a document filename is dragged onto an account.
@@ -29,6 +34,7 @@
    * @param event - The drag event that is passed to the event handler.
    */
   function drop(event: DragEvent) {
+    event.preventDefault();
     const filename = event.dataTransfer?.getData("fava/filename");
     if (filename != null) {
       move({ account: node.name, filename });
@@ -39,12 +45,12 @@
 
 {#if node.name}
   <p
-    on:dragenter={dragenter}
-    on:dragover={dragenter}
-    on:dragleave={() => {
+    ondragenter={dragenter}
+    ondragover={dragenter}
+    ondragleave={() => {
       drag = false;
     }}
-    on:drop|preventDefault={drop}
+    ondrop={drop}
     title={node.name}
     class="droptarget"
     data-account-name={node.name}
@@ -55,7 +61,7 @@
       <button
         type="button"
         class="unset toggle"
-        on:click={(ev) => {
+        onclick={(ev) => {
           expanded = !expanded;
           ev.stopPropagation();
         }}>{expanded ? "▾" : "▸"}</button
@@ -64,7 +70,7 @@
     <button
       type="button"
       class="unset leaf"
-      on:click={() => {
+      onclick={() => {
         $selectedAccount = selected ? "" : node.name;
       }}>{leaf(node.name)}</button
     >
@@ -77,7 +83,7 @@
   <ul hidden={!expanded}>
     {#each node.children as child}
       <li>
-        <svelte:self node={child} {move} />
+        <Accounts node={child} {move} />
       </li>
     {/each}
   </ul>

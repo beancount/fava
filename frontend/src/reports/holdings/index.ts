@@ -2,6 +2,7 @@ import { get } from "../../api";
 import { getUrlPath } from "../../helpers";
 import { _ } from "../../i18n";
 import { getURLFilters } from "../../stores/filters";
+import type { QueryResultTable } from "../query/query_table";
 import { Route } from "../route";
 import Holdings from "./Holdings.svelte";
 
@@ -66,7 +67,13 @@ ORDER BY cost_currency
 `.trim(),
 };
 
-export const holdings = new Route(
+export interface HoldingsReportProps {
+  aggregation_key: HoldingsReportType;
+  query_string: string;
+  query_result_table: QueryResultTable;
+}
+
+export const holdings = new Route<HoldingsReportProps>(
   "holdings",
   Holdings,
   async (url) => {

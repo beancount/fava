@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { LanguageSupport } from "@codemirror/language";
   import type { EditorView } from "@codemirror/view";
   import { onMount, untrack } from "svelte";
 
   import { get, put } from "../../api";
-  import type { SourceFile } from "../../api/validators";
   import {
     replaceContents,
     scrollToLine,
@@ -17,14 +15,10 @@
   import router from "../../router";
   import { errors, fava_options } from "../../stores";
   import { searchParams } from "../../stores/url";
+  import type { EditorReportProps } from ".";
   import EditorMenu from "./EditorMenu.svelte";
 
-  interface Props {
-    source: SourceFile;
-    beancount_language_support: LanguageSupport;
-  }
-
-  let { source, beancount_language_support }: Props = $props();
+  let { source, beancount_language_support }: EditorReportProps = $props();
 
   let file_path = $derived(source.file_path);
 

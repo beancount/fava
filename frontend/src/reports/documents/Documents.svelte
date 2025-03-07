@@ -9,11 +9,12 @@
   import { stratify } from "../../lib/tree";
   import ModalBase from "../../modals/ModalBase.svelte";
   import router from "../../router";
+  import type { DocumentsReportProps } from ".";
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
   import Table from "./Table.svelte";
 
-  export let documents: Document[];
+  let { documents }: DocumentsReportProps = $props();
 
   interface MoveDetails {
     account: string;
@@ -21,15 +22,17 @@
     newName: string;
   }
 
-  $: grouped = group(documents, (d) => d.account);
-  $: node = stratify(
-    grouped.entries(),
-    ([s]) => s,
-    (name, d) => ({ name, count: d?.[1].length ?? 0 }),
+  let grouped = $derived(group(documents, (d) => d.account));
+  let node = $derived(
+    stratify(
+      grouped.entries(),
+      ([s]) => s,
+      (name, d) => ({ name, count: d?.[1].length ?? 0 }),
+    ),
   );
 
-  let selected: Document | null = null;
-  let moving: MoveDetails | null = null;
+  let selected: Document | null = $state(null);
+  let moving: MoveDetails | null = $state(null);
 
   /**
    * Rename the selected document with <F2>.
@@ -44,7 +47,8 @@
     }
   }
 
-  async function move() {
+  async function move(event: SubmitEvent) {
+    event.preventDefault();
     if (moving) {
       const moved = await moveDocument(
         moving.filename,
@@ -59,7 +63,7 @@
   }
 </script>
 
-<svelte:window on:keyup={keyup} />
+<svelte:window onkeyup={keyup} />
 {#if moving}
   <ModalBase
     shown={true}
@@ -67,7 +71,7 @@
       moving = null;
     }}
   >
-    <form on:submit|preventDefault={move}>
+    <form onsubmit={move}>
       <h3>{_("Move or rename document")}</h3>
       <p><code>{moving.filename}</code></p>
       <p>

@@ -1,8 +1,12 @@
 <script lang="ts">
   import { errorWithCauses } from "../lib/errors";
 
-  export let title: string;
-  export let error: Error;
+  interface Props {
+    title: string;
+    error: Error;
+  }
+
+  let { title, error }: Props = $props();
 </script>
 
 <h2>Loading {title} failed with error:</h2>
