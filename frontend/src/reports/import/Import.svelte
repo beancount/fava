@@ -1,13 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import {
-    deleteDocument,
-    get,
-    moveDocument,
-    put,
-    saveEntries,
-  } from "../../api";
+  import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
   import type { Entry } from "../../entries";
   import { isDuplicate } from "../../entries";
   import { urlFor } from "../../helpers";
@@ -19,6 +13,7 @@
   import type { ProcessedImportableFile } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
+  import ImportFileUpload from "./ImportFileUpload.svelte";
 
   export let data: ProcessedImportableFile[];
 
@@ -117,28 +112,6 @@
     entries = [];
     await saveEntries(withoutDuplicates);
   }
-
-  let fileUpload: HTMLInputElement;
-
-  async function uploadImports() {
-    if (fileUpload.files == null) {
-      return;
-    }
-    await Promise.all(
-      Array.from(fileUpload.files).map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file, file.name);
-        return put("upload_import_file", formData).then(
-          notify,
-          (error: unknown) => {
-            notify_err(error, (err) => `Upload error: ${err.message}`);
-          },
-        );
-      }),
-    );
-    fileUpload.value = "";
-    router.reload();
-  }
 </script>
 
 {#if $fava_options.import_config == null}
@@ -187,13 +160,7 @@
           />
         </details>
       {/if}
-      <div>
-        <form on:submit|preventDefault={uploadImports}>
-          <h2>{_("Upload files for import")}</h2>
-          <input bind:this={fileUpload} multiple type="file" />
-          <button type="submit">{_("Upload")}</button>
-        </form>
-      </div>
+      <ImportFileUpload />
     </div>
     {#if selected}
       <div>
