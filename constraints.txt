@@ -55,7 +55,7 @@ colorama==0.4.6
     # via tox
 coverage==7.6.12
     # via pytest-cov
-cryptography==44.0.1
+cryptography==44.0.2
     # via secretstorage
 distlib==0.3.9
     # via virtualenv
@@ -69,7 +69,7 @@ exceptiongroup==1.2.2
     # via
     #   anyio
     #   pytest
-filelock==3.17.0
+filelock==3.18.0
     # via
     #   tox
     #   virtualenv
@@ -83,7 +83,7 @@ furo==2024.8.6
     # via fava (pyproject.toml)
 id==1.5.0
     # via twine
-identify==2.6.8
+identify==2.6.9
     # via pre-commit
 idna==3.10
     # via
@@ -110,11 +110,11 @@ jaraco-functools==4.1.0
     # via
     #   cheroot
     #   keyring
-jeepney==0.8.0
+jeepney==0.9.0
     # via
     #   keyring
     #   secretstorage
-jinja2==3.1.5
+jinja2==3.1.6
     # via
     #   fava (pyproject.toml)
     #   flask
@@ -150,7 +150,7 @@ mypy==1.15.0
     # via fava (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
-nh3==0.2.20
+nh3==0.2.21
     # via readme-renderer
 nodeenv==1.9.1
     # via pre-commit
@@ -190,7 +190,7 @@ pyexcel-io==0.6.7
     #   pyexcel-xlsx
 pyexcel-ods3==0.6.1
     # via fava (pyproject.toml)
-pyexcel-xlsx==0.6.0
+pyexcel-xlsx==0.6.1
     # via fava (pyproject.toml)
 pygments==2.19.1
     # via
@@ -202,7 +202,7 @@ pyproject-api==1.9.0
     # via tox
 pyproject-hooks==1.2.0
     # via build
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   fava (pyproject.toml)
     #   pytest-cov
@@ -237,8 +237,10 @@ rich==13.9.4
     # via twine
 secretstorage==3.3.3
     # via keyring
-setuptools==75.8.0
-    # via fava (pyproject.toml)
+setuptools==76.0.0
+    # via
+    #   fava (pyproject.toml)
+    #   types-setuptools
 simplejson==3.20.1
     # via fava (pyproject.toml)
 six==1.17.0
@@ -284,7 +286,7 @@ tomli==2.2.1
     #   pytest
     #   sphinx
     #   tox
-tox==4.24.1
+tox==4.24.2
     # via
     #   fava (pyproject.toml)
     #   tox-uv
@@ -292,7 +294,7 @@ tox-uv==1.25.0
     # via fava (pyproject.toml)
 twine==6.1.0
     # via fava (pyproject.toml)
-types-setuptools==75.8.0.20250210
+types-setuptools==76.0.0.20250313
     # via fava (pyproject.toml)
 types-simplejson==3.20.0.20250218
     # via fava (pyproject.toml)
@@ -308,9 +310,9 @@ urllib3==2.3.0
     # via
     #   requests
     #   twine
-uv==0.6.2
+uv==0.6.6
     # via tox-uv
-virtualenv==20.29.2
+virtualenv==20.29.3
     # via
     #   pre-commit
     #   tox
