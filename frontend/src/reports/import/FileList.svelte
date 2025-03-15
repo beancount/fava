@@ -39,7 +39,7 @@
         type="button"
         on:click={() => move(file.name, info.account, info.newName)}
       >
-        {"Move"}
+        {_("Move")}
       </button>
       {#if info.importer_name}
         <button

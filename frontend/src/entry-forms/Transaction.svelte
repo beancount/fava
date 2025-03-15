@@ -28,6 +28,7 @@
     if ($payees.includes(payee)) {
       get("payee_accounts", { payee })
         .then((s) => {
+          // eslint-disable-next-line svelte/infinite-reactive-loop
           suggestions = s;
         })
         .catch((error: unknown) => {

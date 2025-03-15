@@ -266,9 +266,9 @@ class FileModule(FavaModule):
                 ):
                     continue
                 try:
-                    yield Markup(get_entry_slice(entry)[0] + "\n")
+                    yield Markup(get_entry_slice(entry)[0] + "\n")  # noqa: S704
                 except (KeyError, FileNotFoundError):
-                    yield Markup(
+                    yield Markup(  # noqa: S704
                         to_string(
                             entry,
                             self.ledger.fava_options.currency_column,

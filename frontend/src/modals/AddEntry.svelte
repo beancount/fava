@@ -49,6 +49,7 @@
         >
           {displayName}
         </button>
+        <!-- eslint-disable-next-line svelte/no-useless-mustaches -->
         {" "}
       {/each}
     </h3>

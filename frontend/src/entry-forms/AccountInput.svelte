@@ -5,27 +5,34 @@
   import { accounts } from "../stores";
   import { is_closed_account } from "../stores/accounts";
 
-  /** The account name input value. */
-  export let value: string;
-  /** An optional list of accounts to suggest - otherwise the whole account list is used. */
-  export let suggestions: string[] | undefined = undefined;
-  /** The date to enter this account for to exclude closed accounts. */
-  export let date: string | undefined = undefined;
-  /** An optional class name to assign to the input element. */
-  export let className: string | undefined = undefined;
+  interface Props {
+    /** The account name input value. */
+    value: string;
+    /** An optional list of accounts to suggest - otherwise the whole account list is used. */
+    suggestions?: string[];
+    /** The date to enter this account for to exclude closed accounts. */
+    date?: string;
+    /** An optional class name to assign to the input element. */
+    className?: string;
+  }
 
-  $: checkValidity = (val: string) =>
+  let { value = $bindable(), suggestions, date, className }: Props = $props();
+
+  let checkValidity = $derived((val: string) =>
     !$accounts.length || $accounts.includes(val) || !val
       ? ""
-      : _("Should be one of the declared accounts");
+      : _("Should be one of the declared accounts"),
+  );
 
-  $: parsed_date = validate_date(date).unwrap_or(null);
-  $: account_suggestions = suggestions ?? $accounts;
-  $: filtered_suggestions = parsed_date
-    ? account_suggestions.filter(
-        (account) => !$is_closed_account(account, parsed_date),
-      )
-    : account_suggestions;
+  let parsed_date = $derived(validate_date(date).unwrap_or(null));
+  let account_suggestions = $derived(suggestions ?? $accounts);
+  let filtered_suggestions = $derived(
+    parsed_date
+      ? account_suggestions.filter(
+          (account) => !$is_closed_account(account, parsed_date),
+        )
+      : account_suggestions,
+  );
 </script>
 
 <AutocompleteInput

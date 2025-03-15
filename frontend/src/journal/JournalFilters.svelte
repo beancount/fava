@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import { _, format } from "../i18n";
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
@@ -45,7 +45,7 @@
 </script>
 
 <script lang="ts">
-  $: shownSet = new Set($journalShow);
+  let shownSet = $derived(new Set($journalShow));
 
   function toggle(type: string) {
     journalShow.update((show) => {
@@ -60,10 +60,11 @@
     });
   }
 
-  $: active = (type: string, supertype?: string): boolean =>
+  let active = $derived((type: string, supertype?: string): boolean =>
     supertype != null
       ? shownSet.has(type) && shownSet.has(supertype)
-      : shownSet.has(type);
+      : shownSet.has(type),
+  );
 </script>
 
 <form class="flex-row">
@@ -73,7 +74,7 @@
       title={title ?? format(toggleText, { type: button_text })}
       use:keyboardShortcut={shortcut}
       class:inactive={!active(type, supertype)}
-      on:click={() => {
+      onclick={() => {
         toggle(type);
       }}
     >

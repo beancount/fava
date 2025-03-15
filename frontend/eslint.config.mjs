@@ -63,7 +63,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*.svelte"],
+    files: ["**/*.svelte", "**/*.svelte.ts"],
     languageOptions: {
       parser: svelteParser,
       parserOptions: {
@@ -73,6 +73,7 @@ export default tseslint.config(
     },
     rules: {
       "svelte/button-has-type": ON,
+      "svelte/require-each-key": OFF,
     },
   },
 );

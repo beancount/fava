@@ -33,6 +33,7 @@
 
   function toggleDuplicate() {
     if (entry) {
+      // eslint-disable-next-line svelte/no-reactive-reassign
       entry.meta.__duplicate__ = !isDuplicate(entry);
     }
   }
@@ -65,6 +66,7 @@
         </label>
       </div>
       <div class:duplicate>
+        <!-- eslint-disable-next-line svelte/no-reactive-reassign -->
         <Entry bind:entry />
       </div>
       <div class="flex-row">

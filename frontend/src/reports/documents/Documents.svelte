@@ -77,7 +77,7 @@
       <p>
         <AccountInput bind:value={moving.account} />
         <input size={40} bind:value={moving.newName} />
-        <button type="submit">{"Move"}</button>
+        <button type="submit">{_("Move")}</button>
       </p>
     </form>
   </ModalBase>
