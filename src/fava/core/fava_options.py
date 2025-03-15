@@ -113,6 +113,7 @@ class FavaOptions:
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
     use_external_editor: bool = False
+    use_bulk_importer: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""

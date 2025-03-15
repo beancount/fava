@@ -12,6 +12,7 @@
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import type { ProcessedImportableFile } from ".";
   import Extract from "./Extract.svelte";
+  import BulkExtract from "../bulkimporter/BulkExtract.svelte";
   import FileList from "./FileList.svelte";
   import ImportFileUpload from "./ImportFileUpload.svelte";
 
@@ -19,6 +20,9 @@
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = [];
+  // Tracks the account that we are currently importing into. The bulk importer
+  // needs this for "simple" transactions.
+  let bulk_importer_account: string = "";
 
   /** Name of the currently selected file. */
   let selected: string | null = null;
@@ -79,8 +83,9 @@
   /**
    * Open the extract dialog for the given file/importer combination.
    */
-  async function extract(filename: string, importer: string) {
+  async function extract(filename: string, importer: string, account: string) {
     const extractCacheKey = `${filename}:${importer}`;
+    bulk_importer_account = account;
     const cached = extractCache.get(extractCacheKey);
     if (cached) {
       entries = cached;
@@ -121,13 +126,24 @@
     > for more information.
   </p>
 {:else}
-  <Extract
-    {entries}
-    close={() => {
-      entries = [];
-    }}
-    {save}
-  />
+  {#if $fava_options.use_bulk_importer}
+    <BulkExtract
+      {entries}
+      close={() => {
+        entries = [];
+      }}
+      {save}
+      account={bulk_importer_account}
+    />
+  {:else}
+    <Extract
+      {entries}
+      close={() => {
+        entries = [];
+      }}
+      {save}
+    />
+  {/if}
   <div class="fixed-fullsize-container">
     <div class="filelist">
       {#if files.length === 0}
