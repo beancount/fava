@@ -3,6 +3,7 @@ import assert from "uvu/assert";
 
 import {
   dateFormat,
+  formatter_context,
   localeFormatter,
   timeFilterDateFormat,
 } from "../src/format";
@@ -26,6 +27,21 @@ test("locale number formatting", () => {
   assert.is(de_large(1000), "1.000,00000000000000000000");
   const de_negative = localeFormatter("de_DE", -100);
   assert.is(de_negative(1000), "1.000");
+});
+
+test("formatter context", () => {
+  const ctx = formatter_context(false, null, {});
+  assert.equal(ctx.num(10, "EUR"), "10.00");
+  assert.equal(ctx.amount(10, "EUR"), "10.00 EUR");
+
+  const de_ctx = formatter_context(false, "de_DE", { EUR: 1 });
+  assert.equal(de_ctx.num(10, "EUR"), "10,0");
+  assert.equal(de_ctx.amount(10, "EUR"), "10,0 EUR");
+  assert.equal(de_ctx.amount(10, "USD"), "10,00 USD");
+
+  const incognito_ctx = formatter_context(true, null, { USD: 4 });
+  assert.equal(incognito_ctx.num(10, "EUR"), "XX.XX");
+  assert.equal(incognito_ctx.num(10, "USD"), "XX.XXXX");
 });
 
 test("time filter date formatting", () => {

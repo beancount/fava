@@ -1,6 +1,7 @@
 import { sum } from "d3-array";
 
-import { Amount, Position } from "../../entries";
+import { Amount } from "../../entries";
+import { Position } from "../../entries/position";
 import { collect } from "../../lib/result";
 import type { ValidationT, Validator } from "../../lib/validation";
 import {

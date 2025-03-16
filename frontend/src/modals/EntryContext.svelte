@@ -12,12 +12,7 @@
 <p>
   {_("Location")}:
   <code>
-    <a
-      href={$urlForSource(
-        entry.meta.filename?.toString() ?? "",
-        entry.meta.lineno?.toString() ?? "",
-      )}
-    >
+    <a href={$urlForSource(entry.meta.filename, entry.meta.lineno)}>
       {entry.meta.filename}:{entry.meta.lineno}
     </a>
   </code>

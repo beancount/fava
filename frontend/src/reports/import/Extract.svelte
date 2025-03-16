@@ -34,7 +34,7 @@
   function toggleDuplicate() {
     if (entry) {
       // eslint-disable-next-line svelte/no-reactive-reassign
-      entry.meta.__duplicate__ = !isDuplicate(entry);
+      entry.meta = entry.meta.set("__duplicate__", !isDuplicate(entry));
     }
   }
 
@@ -99,12 +99,12 @@
         {:else}<button type="submit">{_("Save")}</button>{/if}
       </div>
       <hr />
-      {#if entry.meta.__source__}
+      {#if entry.meta.get("__source__")}
         <h3>
           {_("Source")}
           {#if entry.meta.lineno}({_("Line")}: {entry.meta.lineno}){/if}
         </h3>
-        <pre>{entry.meta.__source__}</pre>
+        <pre>{entry.meta.get("__source__")}</pre>
       {/if}
     {/if}
   </form>

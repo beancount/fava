@@ -1,106 +1,19 @@
-import { day, type FormatterContext } from "./format";
-import { is_empty } from "./lib/objects";
-import { ok } from "./lib/result";
-import type { SafeValidator, Validator } from "./lib/validation";
+import type { Validator } from "../lib/validation";
 import {
   array,
   constant,
-  date,
   defaultValue,
-  number,
   object,
-  optional,
   optional_string,
-  record,
   string,
   tagged_union,
-} from "./lib/validation";
+} from "../lib/validation";
+import { Amount } from "./amount";
+import { Cost } from "./cost";
+import { EntryMetadata } from "./metadata";
+import { Position } from "./position";
 
-const entry_meta_item: SafeValidator<string | number | boolean> = (json) => {
-  if (
-    typeof json == "boolean" ||
-    typeof json == "number" ||
-    typeof json == "string"
-  ) {
-    return ok(json);
-  }
-  return ok("Unsupported metadata value");
-};
-
-const entry_meta_validator = record(entry_meta_item);
-
-/** An amount is a pair of number and currency. */
-export class Amount {
-  constructor(
-    readonly number: number,
-    readonly currency: string,
-  ) {}
-
-  /** Render to a string. */
-  str($ctx: FormatterContext): string {
-    return $ctx.amount(this.number, this.currency);
-  }
-
-  private static raw_validator = object({ number, currency: string });
-
-  static validator: Validator<Amount> = (json) =>
-    Amount.raw_validator(json).map(
-      ({ number, currency }) => new Amount(number, currency),
-    );
-}
-
-/** A cost is a pair of number and currency with date and an optional label. */
-export class Cost {
-  constructor(
-    readonly number: number,
-    readonly currency: string,
-    readonly date: Date | null,
-    readonly label: string | null,
-  ) {}
-
-  /** Render to a string. */
-  str($ctx: FormatterContext): string {
-    const strs = [$ctx.amount(this.number, this.currency)];
-    if (this.date) {
-      strs.push(day(this.date));
-    }
-    if (this.label != null && this.label) {
-      strs.push(`"${this.label}"`);
-    }
-    return strs.join(", ");
-  }
-
-  private static raw_validator = object({
-    number,
-    currency: string,
-    date: optional(date),
-    label: optional_string,
-  });
-
-  static validator: Validator<Cost> = (json) =>
-    Cost.raw_validator(json).map(
-      ({ number, currency, date, label }) =>
-        new Cost(number, currency, date, label),
-    );
-}
-
-/** A position, a pair of units and cost. */
-export class Position {
-  constructor(
-    readonly units: Amount,
-    readonly cost: Cost | null,
-  ) {}
-
-  private static raw_validator = object({
-    units: Amount.validator,
-    cost: optional(Cost.validator),
-  });
-
-  static validator: Validator<Position> = (json) =>
-    Position.raw_validator(json).map(
-      ({ units, cost }) => new Position(units, cost),
-    );
-}
+export { Amount, Cost, EntryMetadata, Position };
 
 /** A posting. */
 export class Posting {
@@ -111,17 +24,17 @@ export class Posting {
   constructor() {
     this.account = "";
     this.amount = "";
-    this.meta = {};
+    this.meta = new EntryMetadata();
   }
 
   is_empty(): boolean {
-    return !this.account && !this.amount && is_empty(this.meta);
+    return !this.account && !this.amount && this.meta.is_empty();
   }
 
   private static raw_validator = object({
     account: string,
     amount: string,
-    meta: defaultValue(entry_meta_validator, () => ({})),
+    meta: defaultValue(EntryMetadata.validator, () => new EntryMetadata()),
   });
 
   static validator: Validator<Posting> = (json) =>
@@ -129,8 +42,6 @@ export class Posting {
       Object.assign(new Posting(), value),
     );
 }
-
-export type EntryMetadata = Record<string, string | boolean | number>;
 export type EntryTypeName =
   | "Balance"
   | "Document"
@@ -141,7 +52,7 @@ export type EntryTypeName =
 const validatorBase = {
   t: string,
   date: string,
-  meta: entry_meta_validator,
+  meta: EntryMetadata.validator,
 };
 
 /** The properties that all entries share. */
@@ -164,7 +75,7 @@ abstract class EntryBase {
 
   constructor(type: EntryTypeName, date: string) {
     this.t = type;
-    this.meta = {};
+    this.meta = new EntryMetadata();
     this.date = date;
   }
 }
@@ -347,5 +258,6 @@ export const entryValidator: Validator<Entry> = tagged_union("t", {
  * Check whether the given entry is marked as duplicate (used in imports).
  */
 export function isDuplicate(e: Entry): boolean {
-  return e.meta.__duplicate__ != null && e.meta.__duplicate__ !== false;
+  const value = e.meta.get("__duplicate__");
+  return value != null && value !== false;
 }

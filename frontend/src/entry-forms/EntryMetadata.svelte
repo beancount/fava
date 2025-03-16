@@ -1,50 +1,23 @@
 <script lang="ts">
   import type { EntryMetadata } from "../entries";
   import { _ } from "../i18n";
-  import { metaValueToString, stringToMetaValue } from "./metadata";
 
-  export let meta: EntryMetadata;
-
-  $: metakeys = Object.keys(meta).filter(
-    (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno",
-  );
-
-  function removeMetadata(metakey: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [metakey]: ignored, ...rest } = meta;
-    meta = rest;
+  interface Props {
+    meta: EntryMetadata;
   }
 
-  function updateMetakey(currentKey: string, newKey: string) {
-    meta = Object.keys(meta).reduce<EntryMetadata>((m, key) => {
-      if (key === currentKey) {
-        const val = meta[currentKey];
-        if (val !== undefined) {
-          m[newKey] = val;
-        }
-      } else {
-        const val = meta[key];
-        if (val != null) {
-          m[key] = val;
-        }
-      }
-      return m;
-    }, {});
-  }
+  let { meta = $bindable() }: Props = $props();
 
-  function addMetadata() {
-    meta[""] = "";
-    meta = meta;
-  }
+  let meta_entries = $derived(meta.entries());
 </script>
 
-{#each metakeys as metakey, i}
+{#each meta_entries as [key, value], i}
   <div class="flex-row">
     <button
       type="button"
       class="muted round remove-row"
-      on:click={() => {
-        removeMetadata(metakey);
+      onclick={() => {
+        meta = meta.delete(key);
       }}
       tabindex={-1}
     >
@@ -54,9 +27,9 @@
       type="text"
       class="key"
       placeholder={_("Key")}
-      value={metakey}
-      on:change={(event) => {
-        updateMetakey(metakey, event.currentTarget.value);
+      value={key}
+      onchange={(event) => {
+        meta = meta.update_key(key, event.currentTarget.value);
       }}
       required
     />
@@ -64,16 +37,18 @@
       type="text"
       class="value"
       placeholder={_("Value")}
-      value={metaValueToString(meta[metakey] ?? "")}
-      on:change={(event) => {
-        meta[metakey] = stringToMetaValue(event.currentTarget.value);
+      {value}
+      onchange={(event) => {
+        meta = meta.set_string(key, event.currentTarget.value);
       }}
     />
-    {#if i === metakeys.length - 1}
+    {#if i === meta_entries.length - 1 && key}
       <button
         type="button"
         class="muted round"
-        on:click={addMetadata}
+        onclick={() => {
+          meta = meta.add();
+        }}
         title={_("Add metadata")}
       >
         +

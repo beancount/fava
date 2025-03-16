@@ -33,11 +33,41 @@ export function formatPercentage(number: number): string {
   return `${formatterPer(Math.abs(number) * 100)}%`;
 }
 
+/** Obscure numbers for incognito mode. */
+export const replaceNumbers = (num: string): string =>
+  num.replace(/[0-9]/g, "X");
+
 export interface FormatterContext {
   /** Render an amount to a string like "2.00 USD". */
   amount: (num: number, currency: string) => string;
   /** Render an number for a currency like "2.00". */
   num: (num: number, currency: string) => string;
+}
+
+/** Build the formatter context for the given configuration */
+export function formatter_context(
+  incognito: boolean,
+  locale: string | null,
+  precisions: Record<string, number>,
+): FormatterContext {
+  const formatter = localeFormatter(locale);
+  const currencyFormatters = Object.fromEntries(
+    Object.entries(precisions).map(([currency, prec]) => [
+      currency,
+      localeFormatter(locale, prec),
+    ]),
+  );
+  const num_raw = (n: number, c: string) =>
+    (currencyFormatters[c] ?? formatter)(n);
+
+  const num = incognito
+    ? (n: number, c: string) => replaceNumbers(num_raw(n, c))
+    : num_raw;
+
+  return {
+    amount: (n, c) => `${num(n, c)} ${c}`,
+    num,
+  };
 }
 
 type DateFormatter = (date: Date) => string;
