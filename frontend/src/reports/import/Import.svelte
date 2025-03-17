@@ -1,57 +1,56 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { SvelteMap } from "svelte/reactivity";
 
   import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
   import type { Entry } from "../../entries";
-  import { isDuplicate } from "../../entries";
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { notify, notify_err } from "../../notifications";
   import router from "../../router";
   import { fava_options } from "../../stores";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-  import type { ProcessedImportableFile } from ".";
+  import type { ImportReportProps } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
   import ImportFileUpload from "./ImportFileUpload.svelte";
 
-  export let data: ProcessedImportableFile[];
+  let { files }: ImportReportProps = $props();
+
+  /** Whether the `<details>` for the "other files" is open. */
+  let show_other_files = $state.raw(
+    // initially show the other files if no importable files are present
+    files.every((file) => !file.identified_by_importers),
+  );
 
   /** The array of entries to show the modal for. */
-  let entries: Entry[] = [];
+  let entries: Entry[] = $state([]);
 
   /** Name of the currently selected file. */
-  let selected: string | null = null;
+  let selected: string | null = $state.raw(null);
 
-  /** All files (importable and those without importers). */
-  let files: ProcessedImportableFile[] = [];
+  /** The lists of entries for file and importer combos where extract was started and not completed. */
+  let extract_cache = new SvelteMap<string, Entry[]>();
+  /** The account names chosen for a file and importer. */
+  let file_accounts = new SvelteMap<string, string>();
+  /** The names chosen for a file and importer. */
+  let file_names = new SvelteMap<string, string>();
 
-  let extractCache = new Map<string, Entry[]>();
-
-  $: importableFiles = files.filter(
-    (i) => i.importers[0]?.importer_name !== "",
+  /** Importable files. */
+  let importable_files = $derived(
+    files.filter((file) => file.identified_by_importers),
   );
-  $: otherFiles = files.filter((i) => i.importers[0]?.importer_name === "");
+  /** Files not identified by any importer. */
+  let other_files = $derived(
+    files.filter((file) => !file.identified_by_importers),
+  );
 
   const preventNavigation = () =>
-    extractCache.size > 0
+    extract_cache.size > 0
       ? "There are unfinished imports, are you sure you want to continue?"
       : null;
 
   onMount(() => router.addInteruptHandler(preventNavigation));
-  $: {
-    const existingFiles = Object.fromEntries(
-      files.map((file) => [file.name, file]),
-    );
-    files = data.map((file) => {
-      // Use existing importers if we found any, since the user might have changed these before a reload happens
-      const importers = existingFiles[file.name]?.importers ?? file.importers;
-      return {
-        ...file,
-        importers,
-      };
-    });
-  }
 
   /**
    * Move the given file to the new file name (and remove from the list).
@@ -72,6 +71,9 @@
     }
     const removed = await deleteDocument(filename);
     if (removed) {
+      if (selected === filename) {
+        selected = null;
+      }
       router.reload();
     }
   }
@@ -80,8 +82,8 @@
    * Open the extract dialog for the given file/importer combination.
    */
   async function extract(filename: string, importer: string) {
-    const extractCacheKey = `${filename}:${importer}`;
-    const cached = extractCache.get(extractCacheKey);
+    const file_importer_key = `${filename}:${importer}`;
+    const cached = extract_cache.get(file_importer_key);
     if (cached) {
       entries = cached;
       return;
@@ -89,8 +91,7 @@
     try {
       entries = await get("extract", { filename, importer });
       if (entries.length) {
-        extractCache.set(extractCacheKey, entries);
-        extractCache = extractCache;
+        extract_cache.set(file_importer_key, entries);
       } else {
         notify("No entries to import from this file.", "warning");
       }
@@ -103,14 +104,13 @@
    * Save the current entries.
    */
   async function save() {
-    const withoutDuplicates = entries.filter((e) => !isDuplicate(e));
-    const key = [...extractCache].find(([, e]) => e === entries)?.[0];
+    const without_duplicates = entries.filter((e) => !e.is_duplicate());
+    const key = [...extract_cache].find(([, e]) => e === entries)?.[0];
     if (key != null) {
-      extractCache.delete(key);
-      extractCache = extractCache;
+      extract_cache.delete(key);
     }
     entries = [];
-    await saveEntries(withoutDuplicates);
+    await saveEntries(without_duplicates);
   }
 </script>
 
@@ -122,7 +122,7 @@
   </p>
 {:else}
   <Extract
-    {entries}
+    bind:entries
     close={() => {
       entries = [];
     }}
@@ -133,12 +133,14 @@
       {#if files.length === 0}
         <p>{_("No files were found for import.")}</p>
       {/if}
-      {#if importableFiles.length > 0}
+      {#if importable_files.length > 0}
         <div>
           <h2>{_("Importable Files")}</h2>
           <FileList
-            files={importableFiles}
-            {extractCache}
+            files={importable_files}
+            {extract_cache}
+            {file_accounts}
+            {file_names}
             bind:selected
             {move}
             {remove}
@@ -147,12 +149,14 @@
         </div>
         <hr />
       {/if}
-      {#if otherFiles.length > 0}
-        <details open={importableFiles.length === 0}>
+      {#if other_files.length > 0}
+        <details bind:open={show_other_files}>
           <summary>{_("Non-importable Files")}</summary>
           <FileList
-            files={otherFiles}
-            {extractCache}
+            files={other_files}
+            {extract_cache}
+            {file_accounts}
+            {file_names}
             bind:selected
             {move}
             {remove}

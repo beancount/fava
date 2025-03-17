@@ -14,12 +14,20 @@
     date?: string;
     /** An optional class name to assign to the input element. */
     className?: string;
+    /** Whether to mark the input as required. */
+    required?: boolean;
   }
 
-  let { value = $bindable(), suggestions, date, className }: Props = $props();
+  let {
+    value = $bindable(),
+    suggestions,
+    date,
+    className,
+    required,
+  }: Props = $props();
 
   let checkValidity = $derived((val: string) =>
-    !$accounts.length || $accounts.includes(val) || !val
+    !$accounts.length || $accounts.includes(val) || (required !== true && !val)
       ? ""
       : _("Should be one of the declared accounts"),
   );
@@ -40,5 +48,6 @@
   bind:value
   {className}
   {checkValidity}
+  {required}
   suggestions={filtered_suggestions}
 />

@@ -11,7 +11,7 @@
   let meta_entries = $derived(meta.entries());
 </script>
 
-{#each meta_entries as [key, value], i}
+{#each meta_entries as [key, value], index (key)}
   <div class="flex-row">
     <button
       type="button"
@@ -42,7 +42,7 @@
         meta = meta.set_string(key, event.currentTarget.value);
       }}
     />
-    {#if i === meta_entries.length - 1 && key}
+    {#if index === meta_entries.length - 1 && key}
       <button
         type="button"
         class="muted round"

@@ -40,6 +40,8 @@
     key?: KeySpec;
     /** A function that checks the entered value for validity. */
     checkValidity?: (val: string) => string;
+    /** Whether to mark the input as required. */
+    required?: boolean;
     /** Whether to show a button to clear the input. */
     clearButton?: boolean;
     /** An event handler to run on blur. */
@@ -61,6 +63,7 @@
     key,
     checkValidity,
     clearButton = false,
+    required,
     onBlur,
     onEnter,
     onSelect,
@@ -172,6 +175,7 @@
     }}
     onkeydown={keydown}
     {placeholder}
+    {required}
     {size}
   />
   {#if clearButton && value}

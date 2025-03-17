@@ -6,62 +6,55 @@ import ImportSvelte from "./Import.svelte";
 
 /**
  * Construct the filename from date and basename.
+ *
+ * If it already starts with a date use it, otherwise prepend the date
  */
-function newFilename(date: string | null, basename: string | null): string {
-  if (date == null || basename == null) {
-    return "";
-  }
-  if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
-    return basename;
-  }
-  return `${date} ${basename}`;
+function newFilename(date: string, basename: string): string {
+  return /^\d{4}-\d{2}-\d{2}/.test(basename) ? basename : `${date} ${basename}`;
 }
 
-interface FileWithImporters<T> {
+export interface ProcessedImportableFile {
+  /** Full filename of this file. */
   readonly name: string;
+  /** Basename of this file. */
   readonly basename: string;
-  readonly importers: readonly Readonly<
-    { account: string; importer_name: string } & T
-  >[];
+  /** Whether at least one importer identified this file. */
+  readonly identified_by_importers: boolean;
+  readonly importers: {
+    readonly account: string;
+    readonly importer_name: string;
+    readonly newName: string;
+  }[];
 }
 
-export type ImportableFile = Readonly<
-  FileWithImporters<{
-    date: string | null;
-    name: string | null;
-  }>
->;
-export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
-
-/**
- * Initially set the file names for all importable files.
- */
-export function preprocessData(
-  arr: ImportableFile[],
-): ProcessedImportableFile[] {
-  const today = todayAsString();
-  return arr.map((file) => {
-    const importers = file.importers.map(
-      ({ account, importer_name, date, name }) => ({
-        account,
-        importer_name,
-        newName: newFilename(date, name),
-      }),
-    );
-    if (importers.length === 0) {
-      const newName = newFilename(today, file.basename);
-      importers.push({ account: "", newName, importer_name: "" });
-    }
-    return { ...file, importers };
-  });
+export interface ImportReportProps {
+  files: ProcessedImportableFile[];
 }
 
-export const import_report = new Route(
+export const import_report = new Route<ImportReportProps>(
   "import",
   ImportSvelte,
   async () =>
     get("imports", undefined)
-      .then(preprocessData)
-      .then((data) => ({ data })),
+      .then((files) => {
+        // Initially set the file names for all importable files.
+        const today = todayAsString();
+        return files.map((file) => {
+          const importers = file.importers.map(
+            ({ account, importer_name, date, name }) => ({
+              account,
+              importer_name,
+              newName: newFilename(date, name),
+            }),
+          );
+          const identified_by_importers = importers.length > 0;
+          if (!identified_by_importers) {
+            const newName = newFilename(today, file.basename);
+            importers.push({ account: "", newName, importer_name: "" });
+          }
+          return { ...file, identified_by_importers, importers };
+        });
+      })
+      .then((files) => ({ files })),
   () => _("Import"),
 );

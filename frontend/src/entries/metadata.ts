@@ -3,7 +3,7 @@ import { ok } from "../lib/result";
 import type { SafeValidator, Validator } from "../lib/validation";
 import { record } from "../lib/validation";
 
-type MetadataValue = string | boolean | number;
+export type MetadataValue = string | boolean | number;
 
 const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   if (

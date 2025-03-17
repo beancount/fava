@@ -4,12 +4,27 @@
   import { _ } from "../../i18n";
   import type { ProcessedImportableFile } from ".";
 
-  export let files: ProcessedImportableFile[];
-  export let extractCache: Map<string, Entry[]>;
-  export let selected: string | null;
-  export let remove: (name: string) => unknown;
-  export let move: (name: string, a: string, newName: string) => unknown;
-  export let extract: (name: string, importer: string) => unknown;
+  interface Props {
+    files: ProcessedImportableFile[];
+    extract_cache: Map<string, Entry[]>;
+    file_accounts: Map<string, string>;
+    file_names: Map<string, string>;
+    selected: string | null;
+    remove: (name: string) => void;
+    move: (name: string, a: string, newName: string) => void;
+    extract: (name: string, importer: string) => void;
+  }
+
+  let {
+    files,
+    extract_cache = $bindable(),
+    file_accounts = $bindable(),
+    file_names = $bindable(),
+    selected = $bindable(),
+    remove,
+    move,
+    extract,
+  }: Props = $props();
 </script>
 
 {#each files as file}
@@ -17,14 +32,18 @@
     <button
       type="button"
       class="unset"
-      on:click={() => {
+      onclick={() => {
         selected = selected === file.name ? null : file.name;
-      }}>{file.basename}</button
+      }}
     >
+      {file.basename}
+    </button>
     <button
       type="button"
       class="round"
-      on:click={() => remove(file.name)}
+      onclick={() => {
+        remove(file.name);
+      }}
       title={_("Delete")}
       tabindex={-1}
     >
@@ -32,31 +51,53 @@
     </button>
   </div>
   {#each file.importers as info}
-    <div class="flex-row">
-      <AccountInput bind:value={info.account} />
-      <input size={40} bind:value={info.newName} />
-      <button
-        type="button"
-        on:click={() => move(file.name, info.account, info.newName)}
-      >
+    {@const file_importer_key = `${file.name}:${info.importer_name}`}
+    {@const account = file_accounts.get(file_importer_key) ?? info.account}
+    {@const new_name = file_names.get(file_importer_key) ?? info.newName}
+    <form
+      class="flex-row"
+      onsubmit={(event) => {
+        event.preventDefault();
+        move(file.name, account, new_name);
+      }}
+    >
+      <AccountInput
+        bind:value={
+          () => account,
+          (value: string) => {
+            file_accounts.set(file_importer_key, value);
+          }
+        }
+        required
+      />
+      <input
+        size={40}
+        bind:value={
+          () => new_name,
+          (value: string) => {
+            file_names.set(file_importer_key, value);
+          }
+        }
+      />
+      <button type="submit">
         {_("Move")}
       </button>
       {#if info.importer_name}
+        {@const is_cached = extract_cache.has(file_importer_key)}
         <button
           type="button"
           title="{_('Extract')} with importer {info.importer_name}"
-          on:click={() => extract(file.name, info.importer_name)}
+          onclick={() => {
+            extract(file.name, info.importer_name);
+          }}
         >
-          {extractCache.get(`${file.name}:${info.importer_name}`)
-            ? _("Continue")
-            : _("Extract")}
+          {is_cached ? _("Continue") : _("Extract")}
         </button>
-        {#if extractCache.get(`${file.name}:${info.importer_name}`)}
+        {#if is_cached}
           <button
             type="button"
-            on:click={() => {
-              extractCache.delete(`${file.name}:${info.importer_name}`);
-              extractCache = extractCache;
+            onclick={() => {
+              extract_cache.delete(file_importer_key);
             }}
           >
             {_("Clear")}
@@ -64,7 +105,7 @@
         {/if}
         {info.importer_name}
       {/if}
-    </div>
+    </form>
   {/each}
 {/each}
 

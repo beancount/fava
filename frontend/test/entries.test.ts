@@ -5,9 +5,11 @@ import {
   Amount,
   Balance,
   Cost,
+  Document,
   EntryMetadata,
   entryValidator,
   Note,
+  Posting,
   Transaction,
 } from "../src/entries";
 import { Position } from "../src/entries/position";
@@ -92,10 +94,21 @@ test("metadata: get filename and lineno", () => {
   assert.equal(meta.lineno, "");
 });
 
+test("postings", () => {
+  const posting = Posting.empty();
+  assert.instance(posting, Posting);
+  assert.ok(posting.is_empty());
+
+  assert.equal(posting.account, "");
+  const modified = posting.set("account", "Assets");
+  assert.equal(posting.account, "");
+  assert.equal(modified.account, "Assets");
+});
+
 test("create empty entries on a date", () => {
-  assert.instance(new Balance("2012-12-12"), Balance);
-  assert.instance(new Note("2012-12-12"), Note);
-  assert.instance(new Transaction("2012-12-12"), Transaction);
+  assert.instance(Balance.empty("2012-12-12"), Balance);
+  assert.instance(Note.empty("2012-12-12"), Note);
+  assert.instance(Transaction.empty("2012-12-12"), Transaction);
 });
 
 test("create amounts, cost, and positions from JSON data", () => {
@@ -124,6 +137,22 @@ test("create amounts, cost, and positions from JSON data", () => {
   assert.equal(cost.str(ctx), '10.00 EUR, 2012-12-12, "a label"');
 });
 
+test("entries: create changed copies", () => {
+  const balance = Balance.empty("2012-12-12");
+  assert.ok(balance instanceof Balance);
+  const balance_changed = balance.set("account", "Assets:Cash");
+  assert.equal(balance_changed.account, "Assets:Cash");
+  assert.equal(balance.account, "");
+
+  const balance_with_meta = balance.set_meta("key", "value");
+  assert.equal(balance.meta.get("key"), undefined);
+  assert.equal(balance_with_meta.meta.get("key"), "value");
+
+  assert.not(balance.is_duplicate());
+  assert.ok(balance.set_meta("__duplicate__", true).is_duplicate());
+  assert.ok(balance.set_meta("__duplicate__", "asdfasdf").is_duplicate());
+});
+
 test("create entries from JSON data", () => {
   const balance = entryValidator({
     t: "Balance",
@@ -134,6 +163,15 @@ test("create entries from JSON data", () => {
   }).unwrap();
   assert.instance(balance, Balance);
 
+  const doc = entryValidator({
+    t: "Document",
+    meta: { filename: "/home/test/test.beancount", lineno: 1 },
+    date: "2022-12-12",
+    account: "Expenses:Food",
+    filename: "/tmp/some/path",
+  }).unwrap();
+  assert.instance(doc, Document);
+
   const note = entryValidator({
     t: "Note",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
@@ -143,7 +181,28 @@ test("create entries from JSON data", () => {
   }).unwrap();
   assert.instance(note, Note);
 
-  const transaction = entryValidator({
+  const raw = {
+    t: "Transaction",
+    meta: { filename: "/home/test/test.beancount", lineno: 1 },
+    date: "2022-12-12",
+    flag: "*",
+    payee: "Some Store",
+    narration: "Bought food",
+    tags: [],
+    links: [],
+    postings: [
+      { account: "Expenses:Food", amount: "", meta: {} },
+      { account: "Assets:Cash", amount: "-5.15 EUR", meta: {} },
+      { account: "Assets:Cash", amount: "-5.15 EUR", meta: {} },
+    ],
+  };
+  const transaction = entryValidator(raw).unwrap();
+  assert.ok(transaction instanceof Transaction);
+  const json: unknown = JSON.parse(JSON.stringify(transaction));
+  assert.equal(Object.keys(raw), Object.keys(json as Record<string, unknown>));
+  assert.equal(raw, json);
+
+  const raw_with_null_meta_postings = {
     t: "Transaction",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
@@ -157,8 +216,34 @@ test("create entries from JSON data", () => {
       { account: "Assets:Cash", amount: "-5.15 EUR", meta: null },
       { account: "Assets:Cash", amount: "-5.15 EUR" },
     ],
-  }).unwrap();
-  assert.instance(transaction, Transaction);
+  };
+  const transaction_with_null_meta = entryValidator(
+    raw_with_null_meta_postings,
+  ).unwrap();
+  assert.ok(transaction_with_null_meta instanceof Transaction);
+});
+
+test("transaction: combine narration, tags, and links", () => {
+  const txn = Transaction.empty("2022-12-12");
+  assert.equal(txn.get_narration_tags_links(), "");
+
+  const basic_narration = txn.set("narration", "a narration");
+  assert.equal(basic_narration.get_narration_tags_links(), "a narration");
+  const narration_and_tag = basic_narration.set("tags", ["tag"]);
+  assert.equal(
+    narration_and_tag.get_narration_tags_links(),
+    "a narration #tag",
+  );
+  const narration_tag_and_link = narration_and_tag.set("links", ["link"]);
+  assert.equal(
+    narration_tag_and_link.get_narration_tags_links(),
+    "a narration #tag ^link",
+  );
+
+  const parsed = txn.set_narration_tags_links("a narration   #tag ^link");
+  assert.equal(parsed.narration, "a narration");
+  assert.equal(parsed.tags, ["tag"]);
+  assert.equal(parsed.links, ["link"]);
 });
 
 test.run();

@@ -5,7 +5,11 @@
   import NoteSvelte from "./Note.svelte";
   import TransactionSvelte from "./Transaction.svelte";
 
-  export let entry: Entry;
+  interface Props {
+    entry: Entry;
+  }
+
+  let { entry = $bindable() }: Props = $props();
 </script>
 
 {#if entry instanceof Balance}

@@ -1,24 +1,43 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { Posting } from "../entries";
+  import type { EntryMetadata, Posting } from "../entries";
   import { _ } from "../i18n";
   import { currencies } from "../stores";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
-  import EntryMetadata from "./EntryMetadata.svelte";
+  import EntryMetadataSvelte from "./EntryMetadata.svelte";
 
-  export let posting: Posting;
-  export let index: number;
-  export let suggestions: string[] | undefined;
-  export let date: string | undefined;
-  export let move: (arg: { from: number; to: number }) => void;
-  export let remove: () => void;
+  interface Props {
+    /** The posting to show and edit. */
+    posting: Posting;
+    /** Index in the list of postings, used to move it. */
+    index: number;
+    /** Account suggestions. */
+    suggestions?: string[];
+    /** Entry date to limit account suggestions. */
+    date?: string;
+    /** Handler to move a posting to another position on drag. */
+    move: (arg: { from: number; to: number }) => void;
+    /** Handler to remove this posting. */
+    remove: () => void;
+  }
 
-  $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
-  $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
+  let {
+    posting = $bindable(),
+    index,
+    suggestions,
+    date,
+    move,
+    remove,
+  }: Props = $props();
 
-  let drag = false;
-  let draggable = true;
+  let amount_number = $derived(posting.amount.replace(/[^\-?0-9.]/g, ""));
+  let amountSuggestions = $derived(
+    $currencies.map((c) => `${amount_number} ${c}`),
+  );
+
+  let drag = $state.raw(false);
+  let draggable = $state.raw(true);
 
   function mousemove(event: MouseEvent) {
     draggable = !(event.target instanceof HTMLInputElement);
@@ -50,25 +69,30 @@
   class="flex-row"
   class:drag
   {draggable}
-  on:mousemove={mousemove}
-  on:dragstart={dragstart}
-  on:dragenter={dragenter}
-  on:dragover={dragenter}
-  on:dragleave={dragleave}
-  on:drop={drop}
+  onmousemove={mousemove}
+  ondragstart={dragstart}
+  ondragenter={dragenter}
+  ondragover={dragenter}
+  ondragleave={dragleave}
+  ondrop={drop}
   role="group"
 >
   <button
     type="button"
     class="muted round remove-row"
-    on:click={remove}
+    onclick={remove}
     tabindex={-1}
   >
     ×
   </button>
   <AccountInput
     className="grow"
-    bind:value={posting.account}
+    bind:value={
+      () => posting.account,
+      (account: string) => {
+        posting = posting.set("account", account);
+      }
+    }
     {suggestions}
     {date}
   />
@@ -76,10 +100,29 @@
     className="amount"
     placeholder={_("Amount")}
     suggestions={amountSuggestions}
-    bind:value={posting.amount}
+    bind:value={
+      () => posting.amount,
+      (amount: string) => {
+        posting = posting.set("amount", amount);
+      }
+    }
   />
-  <AddMetadataButton bind:meta={posting.meta} />
-  <EntryMetadata bind:meta={posting.meta} />
+  <AddMetadataButton
+    bind:meta={
+      () => posting.meta,
+      (meta: EntryMetadata) => {
+        posting = posting.set("meta", meta);
+      }
+    }
+  />
+  <EntryMetadataSvelte
+    bind:meta={
+      () => posting.meta,
+      (meta: EntryMetadata) => {
+        posting = posting.set("meta", meta);
+      }
+    }
+  />
 </div>
 
 <style>
