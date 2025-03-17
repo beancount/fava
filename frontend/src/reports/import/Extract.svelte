@@ -19,7 +19,8 @@
     currentIndex = 0;
   }
 
-  function submitOrNext() {
+  function submitOrNext(event: SubmitEvent) {
+    event.preventDefault();
     if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {
@@ -43,7 +44,7 @@
 </script>
 
 <ModalBase {shown} closeHandler={close}>
-  <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
+  <form novalidate={duplicate} on:submit={submitOrNext}>
     <h3>{_("Import")}</h3>
     {#if entry}
       <div class="flex-row">

@@ -6,9 +6,9 @@
   import EntryContext from "./EntryContext.svelte";
   import ModalBase from "./ModalBase.svelte";
 
-  $: shown = $urlHash.startsWith("context");
-  $: entry_hash = shown ? $urlHash.slice(8) : "";
-  $: content = shown ? get("context", { entry_hash }) : null;
+  let shown = $derived($urlHash.startsWith("context"));
+  let entry_hash = $derived(shown ? $urlHash.slice(8) : "");
+  let content = $derived(shown ? get("context", { entry_hash }) : null);
 </script>
 
 <ModalBase {shown}>

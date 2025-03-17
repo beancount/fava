@@ -4,7 +4,7 @@
   import { urlHash } from "../stores/url";
   import ModalBase from "./ModalBase.svelte";
 
-  $: shown = $urlHash === "export";
+  let shown = $derived($urlHash === "export");
 </script>
 
 <ModalBase {shown}>

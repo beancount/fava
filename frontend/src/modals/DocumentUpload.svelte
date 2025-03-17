@@ -14,10 +14,10 @@
   import { options } from "../stores";
   import ModalBase from "./ModalBase.svelte";
 
-  $: shown = !!$files.length;
-  $: documents = $options.documents;
+  let shown = $derived(!!$files.length);
+  let documents = $derived($options.documents);
 
-  let documents_folder = "";
+  let documents_folder = $state("");
 
   function closeHandler() {
     $files = [];
@@ -25,7 +25,8 @@
     $hash = "";
   }
 
-  async function submit() {
+  async function submit(event: SubmitEvent) {
+    event.preventDefault();
     await Promise.all(
       $files.map(async ({ dataTransferFile, name }) => {
         const formData = new FormData();
@@ -44,7 +45,7 @@
 </script>
 
 <ModalBase {shown} {closeHandler}>
-  <form on:submit|preventDefault={submit}>
+  <form onsubmit={submit}>
     <h3>{_("Upload file(s)")}:</h3>
     {#each $files as file}
       <div class="fieldset">

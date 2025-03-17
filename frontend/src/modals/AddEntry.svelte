@@ -18,7 +18,8 @@
   // For the first entry to be added, use today as the default date.
   let entry: Transaction | Balance | Note = new Transaction(todayAsString());
 
-  async function submit() {
+  async function submit(event: SubmitEvent) {
+    event.preventDefault();
     await saveEntries([entry]);
     const added_entry_date = entry.date;
     // Reuse the date of the entry that was just added.
@@ -35,7 +36,7 @@
 </script>
 
 <ModalBase {shown} focus=".payee input">
-  <form on:submit|preventDefault={submit}>
+  <form on:submit={submit}>
     <h3>
       {_("Add")}
       {#each entryTypes as [Cls, displayName]}

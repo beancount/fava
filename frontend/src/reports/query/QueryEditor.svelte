@@ -21,7 +21,12 @@
   }
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form
+  on:submit={(event) => {
+    event.preventDefault();
+    submit();
+  }}
+>
   <div use:renderEditor></div>
   <button type="submit" use:keyboardShortcut={"Control+Enter"}>
     {_("Submit")}

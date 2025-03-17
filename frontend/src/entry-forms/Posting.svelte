@@ -37,6 +37,7 @@
     drag = false;
   }
   function drop(event: DragEvent) {
+    event.preventDefault();
     const from = event.dataTransfer?.getData("fava/posting");
     if (from != null) {
       move({ from: +from, to: index });
@@ -54,7 +55,7 @@
   on:dragenter={dragenter}
   on:dragover={dragenter}
   on:dragleave={dragleave}
-  on:drop|preventDefault={drop}
+  on:drop={drop}
   role="group"
 >
   <button

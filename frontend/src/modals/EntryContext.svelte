@@ -4,9 +4,13 @@
   import { _ } from "../i18n";
 
   type ContextBalance = Record<string, string[]>;
-  export let entry: EntryBaseAttributes;
-  export let balances_before: ContextBalance | null;
-  export let balances_after: ContextBalance | null;
+  interface Props {
+    entry: EntryBaseAttributes;
+    balances_before: ContextBalance | null;
+    balances_after: ContextBalance | null;
+  }
+
+  let { entry, balances_before, balances_after }: Props = $props();
 </script>
 
 <p>

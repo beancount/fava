@@ -5,14 +5,20 @@
    This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
 -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import type { Action } from "svelte/action";
 
   import { attemptFocus, getFocusableElements } from "../lib/focus";
   import { closeOverlay } from "../stores/url";
 
-  export let shown = false;
-  export let focus: string | undefined = undefined;
-  export let closeHandler = closeOverlay;
+  interface Props {
+    shown: boolean;
+    focus?: string;
+    closeHandler?: () => void;
+    children: Snippet;
+  }
+
+  let { shown, focus, closeHandler = closeOverlay, children }: Props = $props();
 
   /**
    * A Svelte action to handle focus within a modal.
@@ -53,12 +59,12 @@
 
 {#if shown}
   <div class="overlay">
-    <div class="background" on:click={closeHandler} aria-hidden="true"></div>
+    <div class="background" onclick={closeHandler} aria-hidden="true"></div>
     <div class="content" use:handleFocus role="dialog" aria-modal="true">
-      <slot />
-      <button type="button" class="muted close" on:click={closeHandler}
-        >x</button
-      >
+      {@render children()}
+      <button type="button" class="muted close" onclick={closeHandler}>
+        x
+      </button>
     </div>
   </div>
 {/if}
