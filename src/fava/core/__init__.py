@@ -7,6 +7,7 @@ from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
 from itertools import takewhile
+from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -609,7 +610,7 @@ class FavaLedger:
 
         accounts = set(get_entry_accounts(entry))
         filename, _ = get_position(entry)
-        full_path = Path(filename).parent / value
+        full_path = Path(normpath(Path(filename).parent / value))
         for document in self.all_entries_by_type.Document:
             document_path = Path(document.filename)
             if document_path == full_path:
