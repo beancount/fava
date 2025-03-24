@@ -12,6 +12,7 @@ import { chartContext } from "./charts/context";
 import { domHelpers } from "./charts/tooltip";
 import { type Result } from "./lib/result";
 import { log_error } from "./log";
+import type { QueryResultTable } from "./reports/query/query_table";
 import { query_table_validator } from "./reports/query/query_table";
 import QueryTable from "./reports/query/QueryTable.svelte";
 
@@ -52,8 +53,10 @@ const components = [
         charts,
       })),
   ),
-  new SvelteCustomElementComponent("query-table", QueryTable, (data) =>
-    query_table_validator(data).map((table) => ({ table })),
+  new SvelteCustomElementComponent<{ table: QueryResultTable }>(
+    "query-table",
+    QueryTable,
+    (data) => query_table_validator(data).map((table) => ({ table })),
   ),
 ];
 

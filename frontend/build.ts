@@ -40,7 +40,7 @@ async function runBuild(dev: boolean) {
     },
     plugins: [
       svelte({
-        compilerOptions: { dev },
+        compilerOptions: { dev, runes: true },
         preprocess: typescript(),
       }),
     ],

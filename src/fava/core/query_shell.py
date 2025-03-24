@@ -103,7 +103,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
 
         if isinstance(result, Cursor):
             return result
-        contents = self.outfile.getvalue()
+        contents = self.outfile.getvalue().strip()
         self.outfile.truncate(0)
         return contents.strip().strip("\x00")
 

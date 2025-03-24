@@ -12,15 +12,16 @@
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
 
-  let query_string = "";
-
+  /** The current query string in the editor. */
+  let query_string = $state.raw("");
   /** The currently loaded results. */
-  let results: Record<string, Result<QueryResult, string>> = {};
-  const is_open: Record<string, boolean> = {};
+  let results: Record<string, Result<QueryResult, string>> = $state({});
+  /** The toggle states of the individual boxes. */
+  const is_open: Record<string, boolean> = $state({});
 
   onMount(() =>
-    searchParams.subscribe((s) => {
-      const search_query_string = s.get("query_string") ?? "";
+    searchParams.subscribe(($searchParams) => {
+      const search_query_string = $searchParams.get("query_string") ?? "";
       // Set the query string to the value from the URL query if that changes (e.g. on navigation).
       if (search_query_string !== query_string) {
         query_string = search_query_string;
@@ -63,7 +64,7 @@
       .catch(log_error);
   }
 
-  /* Re-run all open queries on global filter change */
+  /* Re-run all open queries on global filter change. */
   function rerun_all_open() {
     const to_rerun = [...Object.entries(is_open)]
       .filter(([, is_open]) => is_open)

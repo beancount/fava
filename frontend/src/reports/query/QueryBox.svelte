@@ -2,8 +2,6 @@
   @component
   Renders a query result in a collapsible box.
 -->
-<svelte:options immutable />
-
 <script lang="ts">
   import Chart from "../../charts/Chart.svelte";
   import { chartContext } from "../../charts/context";
@@ -14,27 +12,32 @@
   import QueryTable from "./QueryTable.svelte";
   import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";
 
-  /** The query string. */
-  export let query: string;
-  /** The query result, possibly missing or an error. */
-  export let result: Result<QueryResult, string> | undefined;
-  /** Whether this box is open. */
-  export let open: boolean | undefined;
+  interface Props {
+    /** The query string. */
+    query: string;
+    /** The query result, possibly missing or an error. */
+    result?: Result<QueryResult, string>;
+    /** Whether this box is open. */
+    open?: boolean;
+    /** Handler to run on 'select' (clicking the summary bar). */
+    onselect: () => void;
+    /** Handler to run on 'delete' (clicking the x button). */
+    ondelete: () => void;
+  }
 
-  /** Handler to run on 'select' (clicking the summary bar). */
-  export let onselect: () => void;
-  /** Handler to run on 'delete' (clicking the x button). */
-  export let ondelete: () => void;
+  let {
+    query,
+    result,
+    open = $bindable(),
+    onselect,
+    ondelete,
+  }: Props = $props();
 
-  $: inactive = !result;
-  $: chart =
-    result && result.is_ok && result.value.t === "table"
-      ? getQueryChart(result.value, $chartContext)
-      : null;
+  let inactive = $derived(!result);
 </script>
 
 <details bind:open>
-  <summary class:inactive on:click={inactive ? onselect : null}>
+  <summary class:inactive onclick={inactive ? onselect : null}>
     <ReadonlyQueryEditor value={query} error={result?.is_err} />
     <span class="spacer"></span>
     {#if result && result.is_ok && result.value.t === "table"}
@@ -42,7 +45,7 @@
     {/if}
     <button
       type="button"
-      on:click={(ev) => {
+      onclick={(ev) => {
         ev.stopPropagation();
         ondelete();
       }}
@@ -56,6 +59,7 @@
         {#if result.value.t === "string"}
           <pre><code>{result.value.contents}</code></pre>
         {:else}
+          {@const chart = getQueryChart(result.value, $chartContext)}
           {#if chart}
             <Chart {chart} />
           {/if}
