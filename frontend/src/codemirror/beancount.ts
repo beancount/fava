@@ -75,9 +75,7 @@ let load_parser: Promise<TSParser> | null = null;
  * Since this might need to load the tree-sitter parser, this is async.
  */
 export async function getBeancountLanguageSupport(): Promise<LanguageSupport> {
-  if (!load_parser) {
-    load_parser = loadBeancountParser();
-  }
+  load_parser ??= loadBeancountParser();
   const ts_parser = await load_parser;
   return new LanguageSupport(
     new Language(

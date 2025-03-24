@@ -2,7 +2,7 @@
 #    uv pip compile --extra excel --extra dev --python-version 3.9 --output-file constraints.txt pyproject.toml
 alabaster==0.7.16
     # via sphinx
-anyio==4.8.0
+anyio==4.9.0
     # via watchfiles
 babel==2.17.0
     # via
@@ -53,7 +53,7 @@ click==8.1.8
     #   flask
 colorama==0.4.6
     # via tox
-coverage==7.6.12
+coverage==7.7.1
     # via pytest-cov
 cryptography==44.0.2
     # via secretstorage
@@ -98,7 +98,7 @@ importlib-metadata==8.6.1
     #   keyring
     #   sphinx
     #   twine
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via pytest
 itsdangerous==2.2.0
     # via flask
@@ -122,7 +122,7 @@ jinja2==3.1.6
     #   sphinx
 keyring==25.6.0
     # via twine
-lml==0.1.0
+lml==0.2.0
     # via
     #   pyexcel
     #   pyexcel-io
@@ -165,7 +165,7 @@ packaging==24.2
     #   tox
     #   tox-uv
     #   twine
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via
     #   tox
     #   virtualenv
@@ -175,11 +175,11 @@ pluggy==1.5.0
     #   tox
 ply==3.11
     # via fava (pyproject.toml)
-pre-commit==4.1.0
+pre-commit==4.2.0
     # via fava (pyproject.toml)
 pycparser==2.22
     # via cffi
-pyexcel==0.7.1
+pyexcel==0.7.2
     # via fava (pyproject.toml)
 pyexcel-ezodf==0.3.4
     # via pyexcel-ods3
@@ -237,7 +237,7 @@ rich==13.9.4
     # via twine
 secretstorage==3.3.3
     # via keyring
-setuptools==76.0.0
+setuptools==78.0.1
     # via
     #   fava (pyproject.toml)
     #   types-setuptools
@@ -296,7 +296,7 @@ twine==6.1.0
     # via fava (pyproject.toml)
 types-setuptools==76.0.0.20250313
     # via fava (pyproject.toml)
-types-simplejson==3.20.0.20250218
+types-simplejson==3.20.0.20250318
     # via fava (pyproject.toml)
 typing-extensions==4.12.2
     # via
@@ -310,7 +310,7 @@ urllib3==2.3.0
     # via
     #   requests
     #   twine
-uv==0.6.6
+uv==0.6.9
     # via tox-uv
 virtualenv==20.29.3
     # via
