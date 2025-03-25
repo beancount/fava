@@ -53,7 +53,6 @@ def test_text_queries(
     snapshot: SnapshotFunc, run_text_query: Callable[[str], str]
 ) -> None:
     assert run_text_query(".help")
-    assert run_text_query("print")
 
     noop_doc = "Doesn't do anything in Fava's query shell."
     assert run_text_query(".exit") == noop_doc

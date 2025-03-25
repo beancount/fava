@@ -82,11 +82,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
     outfile: io.StringIO
 
     def __init__(self, ledger: FavaLedger) -> None:
-        super().__init__(
-            filename="",
-            outfile=io.StringIO(),
-            interactive=False,
-        )
+        super().__init__("", io.StringIO(), interactive=False)
         self.ledger = ledger
         self.stdout = self.outfile
 

@@ -18,7 +18,7 @@ beancount==3.1.0
     #   beanquery
 beangulp==0.2.0
     # via fava (pyproject.toml)
-beanquery==0.1.0
+beanquery==0.2.0
     # via fava (pyproject.toml)
 beautifulsoup4==4.13.3
     # via
@@ -214,7 +214,7 @@ python-dateutil==2.9.0.post0
     #   beanquery
 python-magic==0.4.27
     # via beangulp
-pytz==2025.1
+pytz==2025.2
     # via flask-babel
 pyyaml==6.0.2
     # via pre-commit
@@ -237,7 +237,7 @@ rich==13.9.4
     # via twine
 secretstorage==3.3.3
     # via keyring
-setuptools==78.0.1
+setuptools==78.0.2
     # via
     #   fava (pyproject.toml)
     #   types-setuptools
@@ -273,7 +273,7 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-tatsu==5.7.4
+tatsu-lts==5.13.1
     # via beanquery
 texttable==1.7.0
     # via pyexcel
