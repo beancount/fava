@@ -9,7 +9,6 @@
     ...$tags.map((tag) => `#${tag}`),
     ...$links.map((link) => `^${link}`),
     ...$payees.map((payee) => `payee:"${escape(payee)}"`),
-    ...$payees.map((payee) => `payee:"${escape(payee)}"`),
   ]);
 
   function valueExtractor(value: string, input: HTMLInputElement) {
