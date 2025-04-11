@@ -144,7 +144,7 @@ class Parse implements PartialParse {
     if (
       ranges.length !== 1 ||
       ranges[0]?.from !== 0 ||
-      ranges[0]?.to !== input.length
+      ranges[0].to !== input.length
     ) {
       throw new InvalidRangeError();
     }
