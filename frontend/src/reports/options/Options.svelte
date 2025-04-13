@@ -3,9 +3,15 @@
   import { _ } from "../../i18n";
   import type { OptionsReportProps } from ".";
   import OptionsTable from "./OptionsTable.svelte";
+  import ThemeToggle from "./ThemeToggle.svelte";
 
   let { fava_options, beancount_options }: OptionsReportProps = $props();
 </script>
+
+<h2>
+  {_("Theme style")}
+</h2>
+<ThemeToggle />
 
 <h2>
   {_("Fava options")}
