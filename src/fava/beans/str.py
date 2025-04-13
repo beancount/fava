@@ -37,10 +37,10 @@ def to_string(
     currency = getattr(obj, "currency", None)
     if isinstance(number, Decimal) and isinstance(currency, str):
         # The Amount and Cost protocols are ambigous, so handle this here
-        # instead of having this be dispatched
+        # instead of having this be dispatched - relevant for older Pythons
         if hasattr(obj, "date"):  # pragma: no cover
             cost_to_string(obj)  # type: ignore[arg-type]
-        return f"{number} {currency}"
+        return f"{number} {currency}"  # pragma: no cover
     msg = f"Unsupported object of type {type(obj)}"
     raise TypeError(msg)
 

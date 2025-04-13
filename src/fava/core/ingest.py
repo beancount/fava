@@ -403,7 +403,7 @@ class IngestModule(FavaModule):
         try:
             self.importers, self.hooks = load_import_config(module_path)
             self.mtime = new_mtime
-        except FavaAPIError as error:
+        except FavaAPIError as error:  # pragma: no cover
             msg = f"Error in import config '{module_path}': {error!s}"
             self._error(msg)
 

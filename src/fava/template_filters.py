@@ -27,7 +27,7 @@ ZERO = Decimal()
 
 def meta_items(meta: Meta | None) -> list[tuple[str, MetaValue]]:
     """Remove keys from a dictionary."""
-    if not meta:
+    if not meta:  # pragma: no cover
         return []
     return [
         (key, value)
