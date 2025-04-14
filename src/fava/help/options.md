@@ -22,11 +22,12 @@ languages:
 
 - Bulgarian (`bg`)
 - Catalan (`ca`)
-- Chinese (`zh_CN` and `zh_TW`)
+- Chinese (`zh` and `zh_Hant_TW`)
 - Dutch (`nl`)
 - English (`en`)
 - French (`fr`)
 - German (`de`)
+- Japanese (`ja`)
 - Persian (`fa`)
 - Portuguese (`pt` and `pt_BR`)
 - Russian (`ru`)
