@@ -22,7 +22,7 @@ languages:
 
 - Bulgarian (`bg`)
 - Catalan (`ca`)
-- Chinese (`zh` and `zh_Hant_TW`)
+- Chinese (`zh_CN` and `zh_TW`)
 - Dutch (`nl`)
 - English (`en`)
 - French (`fr`)
