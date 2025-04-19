@@ -16,7 +16,7 @@ LOCALES = [
     "es",
     "fa",
     "fr",
-    'ja',
+    "ja",
     "nl",
     "pt",
     "pt_BR",
