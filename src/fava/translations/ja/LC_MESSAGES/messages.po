@@ -1,0 +1,593 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: ja\n"
+
+#: frontend/src/reports/routes.ts:29
+#: frontend/src/sidebar/AsideContents.svelte:67
+msgid "Errors"
+msgstr "エラー"
+
+#: frontend/src/sidebar/FilterForm.svelte:62
+msgid "Time"
+msgstr "時間"
+
+#: frontend/src/entry-forms/AccountInput.svelte:32
+#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:29
+#: frontend/src/sidebar/FilterForm.svelte:73
+#: src/fava/templates/statistics.html:26
+msgid "Account"
+msgstr "アカウント"
+
+#: frontend/src/entry-forms/Transaction.svelte:103
+#: frontend/src/entry-forms/Transaction.svelte:106
+#: src/fava/templates/_journal_table.html:50
+msgid "Payee"
+msgstr "支払先"
+
+#: frontend/src/reports/tree_reports/index.ts:14
+msgid "Income Statement"
+msgstr "損益計算書"
+
+#: frontend/src/reports/tree_reports/index.ts:21
+#: frontend/src/sidebar/AsideContents.svelte:27
+msgid "Balance Sheet"
+msgstr "貸借対照表"
+
+#: frontend/src/reports/tree_reports/index.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:28
+msgid "Trial Balance"
+msgstr "試算表"
+
+#: frontend/src/sidebar/AsideContents.svelte:29
+#: src/fava/templates/journal.html:5
+msgid "Journal"
+msgstr "仕訳帳"
+
+#: frontend/src/reports/holdings/Holdings.svelte:56
+#: frontend/src/reports/routes.ts:34
+#: frontend/src/sidebar/AsideContents.svelte:30
+msgid "Query"
+msgstr "クエリ"
+
+#: frontend/src/reports/holdings/Holdings.svelte:18
+#: frontend/src/reports/holdings/Holdings.svelte:20
+#: frontend/src/reports/holdings/index.ts:91
+#: frontend/src/sidebar/AsideContents.svelte:44
+msgid "Holdings"
+msgstr "保有資産"
+
+#: frontend/src/reports/commodities/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:45
+msgid "Commodities"
+msgstr "通貨"
+
+#: frontend/src/reports/events/Events.svelte:17
+#: frontend/src/reports/events/index.ts:16
+#: frontend/src/sidebar/AsideContents.svelte:49
+msgid "Events"
+msgstr "イベント"
+
+#: frontend/src/reports/editor/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:56
+msgid "Editor"
+msgstr "エディタ"
+
+#: frontend/src/sidebar/AsideContents.svelte:74
+#: src/fava/templates/options.html:3
+msgid "Options"
+msgstr "オプション"
+
+#: frontend/src/sidebar/AsideContents.svelte:53
+#: src/fava/templates/statistics.html:6
+msgid "Statistics"
+msgstr "統計"
+
+#: frontend/src/sidebar/AsideContents.svelte:75 src/fava/templates/help.html:3
+msgid "Help"
+msgstr "ヘルプ"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:13
+#: frontend/src/reports/documents/Table.svelte:23
+#: frontend/src/reports/events/EventTable.svelte:10
+#: src/fava/templates/_journal_table.html:48
+msgid "Date"
+msgstr "日付"
+
+#: src/fava/templates/_journal_table.html:49
+msgid "F"
+msgstr "F"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:14
+#: src/fava/templates/_journal_table.html:53
+msgid "Price"
+msgstr "価格"
+
+#: src/fava/templates/_journal_table.html:52
+msgid "Cost"
+msgstr "原価"
+
+#: src/fava/templates/_journal_table.html:52
+msgid "Change"
+msgstr "変更"
+
+#: frontend/src/entry-forms/Balance.svelte:17
+#: frontend/src/modals/AddEntry.svelte:15
+#: src/fava/templates/_journal_table.html:53
+#: src/fava/templates/statistics.html:30
+msgid "Balance"
+msgstr "残高"
+
+#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/modals/AddEntry.svelte:62
+#: frontend/src/reports/import/Extract.svelte:94
+msgid "Save"
+msgstr "保存"
+
+#: frontend/src/editor/SaveButton.svelte:8
+msgid "Saving..."
+msgstr "保存中..."
+
+#: frontend/src/main.ts:88
+msgid "File change detected. Click to reload."
+msgstr "ファイルの変更が検出されました。クリックして再読み込みしてください。"
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:23
+msgid "Expand all accounts"
+msgstr "すべてのアカウントを展開"
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:28
+msgid "Expand all"
+msgstr "すべて展開"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:45
+msgid "Account Journal"
+msgstr "アカウント仕訳帳"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:51
+#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: src/fava/json_api.py:632
+msgid "Changes"
+msgstr "変更"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:60
+#: frontend/src/reports/accounts/AccountReport.svelte:63
+msgid "Balances"
+msgstr "残高"
+
+#: frontend/src/reports/errors/Errors.svelte:58
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "ソース表示 %(file)s:%(lineno)s"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:40
+#: frontend/src/reports/errors/Errors.svelte:32
+msgid "File"
+msgstr "ファイル"
+
+#: frontend/src/reports/errors/Errors.svelte:33
+#: frontend/src/reports/import/Extract.svelte:100
+msgid "Line"
+msgstr "行"
+
+#: frontend/src/reports/errors/Errors.svelte:34
+msgid "Error"
+msgstr "エラー"
+
+#: frontend/src/reports/errors/Errors.svelte:78
+msgid "No errors."
+msgstr "エラーはありません。"
+
+#: frontend/src/reports/events/Events.svelte:32
+msgid "Event: %(type)s"
+msgstr "イベント: %(type)s"
+
+#: frontend/src/reports/events/EventTable.svelte:11
+msgid "Description"
+msgstr "説明"
+
+#: src/fava/templates/help.html:8
+msgid "Help pages"
+msgstr "ヘルプページ"
+
+#: frontend/src/entry-forms/Balance.svelte:32
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:39
+msgid "Currency"
+msgstr "通貨"
+
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:49
+msgid "Cost currency"
+msgstr "原価通貨"
+
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:28
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:38
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:48
+msgid "Holdings by"
+msgstr "保有資産（分類:"
+
+#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:514
+#: src/fava/json_api.py:534
+msgid "Net Profit"
+msgstr "純利益"
+
+#: src/fava/json_api.py:520
+msgid "Income"
+msgstr "収入"
+
+#: src/fava/json_api.py:526
+msgid "Expenses"
+msgstr "支出"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:57
+#: src/fava/templates/options.html:10 src/fava/templates/options.html:27
+msgid "Key"
+msgstr "キー"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:67
+#: src/fava/templates/options.html:11 src/fava/templates/options.html:28
+msgid "Value"
+msgstr "値"
+
+#: frontend/src/reports/query/QueryLinks.svelte:25
+msgid "Download as"
+msgstr "ダウンロード形式"
+
+#: src/fava/templates/statistics.html:12
+msgid "Postings per Account"
+msgstr "アカウントごとの記帳数"
+
+#: src/fava/templates/statistics.html:80
+msgid "Total"
+msgstr "合計"
+
+#: src/fava/templates/statistics.html:20
+msgid "Update Activity"
+msgstr "更新アクティビティ"
+
+#: src/fava/templates/statistics.html:21
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "クリックして残高コマンド（緑色以外のアカウント）をクリップボードにコピーします。"
+
+#: src/fava/templates/statistics.html:22
+msgid "Copy balance directives"
+msgstr "残高コー?をコピー"
+
+#: src/fava/templates/statistics.html:29
+msgid "Last Entry"
+msgstr "最終エントリ"
+
+#: src/fava/templates/statistics.html:62
+msgid "Entries per Type"
+msgstr "タイプごとのエントリ数"
+
+#: src/fava/templates/statistics.html:66
+msgid "Type"
+msgstr "タイプ"
+
+#: src/fava/templates/statistics.html:67
+msgid "# Entries"
+msgstr "# エントリ"
+
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:117
+#: src/fava/templates/_journal_table.html:50
+msgid "Narration"
+msgstr "説明"
+
+#: frontend/src/entry-forms/Balance.svelte:26
+msgid "Number"
+msgstr "数値"
+
+#: frontend/src/reports/import/Extract.svelte:43
+#: frontend/src/reports/import/index.ts:67
+msgid "Import"
+msgstr "インポート"
+
+#: frontend/src/journal/JournalFilters.svelte:41
+msgid "Budget entries"
+msgstr "予算エントリ"
+
+#: frontend/src/reports/import/Extract.svelte:99
+msgid "Source"
+msgstr "ソース"
+
+#: frontend/src/reports/import/FileList.svelte:53
+msgid "Extract"
+msgstr "抽出"
+
+#: frontend/src/reports/query/QueryEditor.svelte:15
+msgid "...enter a BQL query. 'help' to list available commands."
+msgstr "...BQLクエリを入力してください。'help'で利用可能なコマンドを表示します。"
+
+#: frontend/src/journal/JournalFilters.svelte:42
+msgid "Metadata"
+msgstr "メタデータ"
+
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:78
+msgid "Add metadata"
+msgstr "メタデータを追加"
+
+#: frontend/src/entry-forms/Note.svelte:15
+#: frontend/src/modals/AddEntry.svelte:16
+msgid "Note"
+msgstr "メモ"
+
+#: frontend/src/modals/EntryContext.svelte:13
+msgid "Location"
+msgstr "場所"
+
+#: frontend/src/modals/EntryContext.svelte:29
+msgid "Context"
+msgstr "コンテキスト"
+
+#: frontend/src/modals/EntryContext.svelte:35
+msgid "Balances before entry"
+msgstr "エントリ前の残高"
+
+#: frontend/src/modals/EntryContext.svelte:55
+msgid "Balances after entry"
+msgstr "エントリ後の残高"
+
+#: frontend/src/journal/JournalFilters.svelte:24
+msgid "Cleared transactions"
+msgstr "決済済み取引"
+
+#: frontend/src/journal/JournalFilters.svelte:25
+msgid "Pending transactions"
+msgstr "保留中の取引"
+
+#: frontend/src/journal/JournalFilters.svelte:26
+msgid "Other transactions"
+msgstr "その他の取引"
+
+#: frontend/src/journal/JournalFilters.svelte:33
+msgid "Documents with a #discovered tag"
+msgstr "#discovered タグ付きの文書"
+
+#: frontend/src/entry-forms/Transaction.svelte:126
+#: frontend/src/journal/JournalFilters.svelte:43
+msgid "Postings"
+msgstr "記帳"
+
+#: frontend/src/modals/DocumentUpload.svelte:49
+msgid "Upload file(s)"
+msgstr "ファイルをアップロード"
+
+#: frontend/src/modals/DocumentUpload.svelte:72
+#: frontend/src/reports/import/Import.svelte:197
+msgid "Upload"
+msgstr "アップロード"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:54
+msgid "Align Amounts"
+msgstr "金額を揃える"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:58
+msgid "Toggle Comment (selection)"
+msgstr "コメントの切り替え（選択部分）"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:62
+msgid "Open all folds"
+msgstr "すべての折りたたみを開く"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:66
+msgid "Close all folds"
+msgstr "すべての折りたたみを閉じる"
+
+#: src/fava/templates/options.html:6
+msgid "Fava options"
+msgstr "Favaオプション"
+
+#: src/fava/templates/options.html:6
+msgid "help"
+msgstr "ヘルプ"
+
+#: src/fava/templates/options.html:23
+msgid "Beancount options"
+msgstr "Beancountオプション"
+#: frontend/src/reports/query/QueryEditor.svelte:27
+msgid "Submit"
+msgstr "送信"
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:12
+msgid "Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr "Shiftキーを押しながらクリックすると、すべての子項目が展開されます。\n"
+"CtrlキーまたはCmdキーを押しながらクリックすると、1レベルだけ展開されます。"
+
+#: frontend/src/modals/Export.svelte:14
+msgid "Export"
+msgstr "エクスポート"
+
+#: frontend/src/sidebar/FilterForm.svelte:84
+msgid "Filter by tag, payee, ..."
+msgstr "タグ、支払先などでフィルター"
+
+#: frontend/src/modals/Export.svelte:16
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "現在フィルターされたエントリをBeancountファイルとしてダウンロード"
+
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
+msgid "Yearly"
+msgstr "年次"
+
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:103
+msgid "Quarterly"
+msgstr "四半期"
+
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:104
+msgid "Monthly"
+msgstr "月次"
+
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
+msgid "Weekly"
+msgstr "週次"
+
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:106
+msgid "Daily"
+msgstr "日次"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:52
+msgid "Edit"
+msgstr "編集"
+
+#: frontend/src/entry-forms/Posting.svelte:77
+msgid "Amount"
+msgstr "金額"
+
+#: frontend/src/journal/JournalFilters.svelte:37
+msgid "Documents with a #linked tag"
+msgstr "#linkedタグのある文書"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:12
+msgid "At Cost"
+msgstr "原価で"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:14
+msgid "At Market Value"
+msgstr "市場価値で"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:16
+#: src/fava/templates/_journal_table.html:51
+msgid "Units"
+msgstr "単位"
+
+#: frontend/src/stores/chart.ts:30
+msgid "Treemap"
+msgstr "ツリーマップ"
+
+#: frontend/src/stores/chart.ts:31
+msgid "Sunburst"
+msgstr "サンバースト"
+
+#: frontend/src/entry-forms/AccountInput.svelte:20
+msgid "Should be one of the declared accounts"
+msgstr "宣言されたアカウントの一つである必要があります"
+
+#: frontend/src/charts/ChartSwitcher.svelte:21
+#: frontend/src/reports/import/Extract.svelte:79
+msgid "Previous"
+msgstr "前へ"
+
+#: frontend/src/charts/ChartSwitcher.svelte:28
+#: frontend/src/reports/import/Extract.svelte:84
+msgid "Next"
+msgstr "次へ"
+
+#: frontend/src/modals/AddEntry.svelte:14
+msgid "Transaction"
+msgstr "取引"
+
+#: frontend/src/modals/AddEntry.svelte:40
+msgid "Add"
+msgstr "追加"
+
+#: frontend/src/reports/documents/Documents.svelte:68
+msgid "Move or rename document"
+msgstr "文書の移動または名前変更"
+
+#: frontend/src/reports/documents/Table.svelte:24
+msgid "Name"
+msgstr "名前"
+
+#: frontend/src/reports/documents/index.ts:16
+#: frontend/src/sidebar/AsideContents.svelte:46
+msgid "Documents"
+msgstr "文書"
+
+#: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:10
+#: frontend/src/reports/import/FileList.svelte:29
+msgid "Delete"
+msgstr "削除"
+
+#: frontend/src/stores/chart.ts:44
+msgid "Line chart"
+msgstr "折れ線グラフ"
+
+#: frontend/src/stores/chart.ts:45
+msgid "Area chart"
+msgstr "エリアチャート"
+
+#: frontend/src/reports/import/FileList.svelte:52
+msgid "Continue"
+msgstr "続ける"
+
+#: frontend/src/reports/import/FileList.svelte:63
+msgid "Clear"
+msgstr "クリア"
+
+#: frontend/src/sidebar/AccountSelector.svelte:22
+msgid "Go to account"
+msgstr "アカウントに移動"
+
+#: frontend/src/reports/import/Import.svelte:78
+msgid "Delete this file?"
+msgstr "このファイルを削除しますか？"
+
+#: frontend/src/reports/import/Import.svelte:164
+msgid "No files were found for import."
+msgstr "インポート用のファイルが見つかりませんでした。"
+
+#: frontend/src/journal/JournalFilters.svelte:7
+msgid "Toggle %(type)s entries"
+msgstr "%(type)sエントリの切り替え"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:18
+msgid "Converted to %(currency)s"
+msgstr "%(currency)sに変換"
+
+#: frontend/src/stores/chart.ts:58
+msgid "Stacked Bars"
+msgstr "積み上げ棒グラフ"
+
+#: frontend/src/stores/chart.ts:59
+msgid "Single Bars"
+msgstr "単一棒グラフ"
+
+#: frontend/src/charts/HierarchyContainer.svelte:32
+msgid "Chart is empty."
+msgstr "チャートが空です。"
+
+#: frontend/src/journal/JournalFilters.svelte:42
+msgid "Toggle metadata"
+msgstr "メタデータの切り替え"
+
+#: frontend/src/journal/JournalFilters.svelte:43
+msgid "Toggle postings"
+msgstr "記帳の切り替え"
+
+#: src/fava/internal_api.py:221
+msgid "Net Worth"
+msgstr "純資産"
+
+#: src/fava/internal_api.py:170
+msgid "Account Balance"
+msgstr "口座残高"
+
+#: frontend/src/editor/SliceEditor.svelte:91
+msgid "reload"
+msgstr "再読み込み"
+
+#: frontend/src/modals/AddEntry.svelte:60
+msgid "continue"
+msgstr "続ける"
+
+#: frontend/src/editor/DeleteButton.svelte:7
+msgid "Deleting..."
+msgstr "削除中..."
+
+#: frontend/src/sidebar/AsideContents.svelte:60
+msgid "Add Journal Entry"
+msgstr "仕訳を追加"
