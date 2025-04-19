@@ -27,6 +27,7 @@ languages:
 - English (`en`)
 - French (`fr`)
 - German (`de`)
+- Japanese (`ja`)
 - Persian (`fa`)
 - Portuguese (`pt` and `pt_BR`)
 - Russian (`ru`)
