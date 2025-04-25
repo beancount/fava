@@ -40,10 +40,13 @@ class FavaMisc(FavaModule):
         self.sidebar_links: SidebarLinks = []
         #: Upcoming events in the next few days.
         self.upcoming_events: Sequence[Event] = []
+        #: User-defined filter presets.
+        self.filter_presets: Sequence[tuple[str, str, str]] = []
 
     def load_file(self) -> None:  # noqa: D102
         custom_entries = self.ledger.all_entries_by_type.Custom
         self.sidebar_links = sidebar_links(custom_entries)
+        self.filter_presets = filter_presets(custom_entries)
 
         self.upcoming_events = upcoming_events(
             self.ledger.all_entries_by_type.Event,
@@ -73,6 +76,25 @@ def sidebar_links(custom_entries: Sequence[Custom]) -> SidebarLinks:
     return [
         (entry.values[0].value, entry.values[1].value)
         for entry in sidebar_link_entries
+    ]
+
+
+def filter_presets(
+    custom_entries: Sequence[Custom],
+) -> Sequence[tuple[str, str, str]]:
+    """Parse custom entries for filter presets.
+
+    They have the following format:
+
+    2016-04-01 custom "fava-filter-preset" "time" "month" "Current Month"
+    2016-04-01 custom "fava-filter-preset" "advanced" "-#tag" "Exclude #tag"
+    """
+    filter_preset_entries = [
+        entry for entry in custom_entries if entry.type == "fava-filter-preset"
+    ]
+    return [
+        (entry.values[0].value, entry.values[1].value, entry.values[2].value)
+        for entry in filter_preset_entries
     ]
 
 

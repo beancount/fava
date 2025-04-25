@@ -75,6 +75,7 @@ class LedgerData:
     extensions: Sequence[ExtensionDetails]
     sidebar_links: Sequence[tuple[str, str]]
     other_ledgers: Sequence[tuple[str, str]]
+    filter_presets: Sequence[tuple[str, str, str]]
 
 
 def get_errors() -> list[SerialisedError]:
@@ -128,6 +129,7 @@ def get_ledger_data() -> LedgerData:
             for (file_slug, ledger) in current_app.config["LEDGERS"].items()
             if file_slug != g.beancount_file_slug
         ],
+        ledger.misc.filter_presets,
     )
 
 
