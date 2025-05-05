@@ -120,6 +120,7 @@ strict = true
 
 [tool.pytest.ini_options]
 filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
+testpaths = ["tests"]
 
 [tool.ruff]
 target-version = "py39"
