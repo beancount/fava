@@ -40,7 +40,7 @@ chardet==5.2.0
     # via
     #   beangulp
     #   tox
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
 cheroot==10.0.1
     # via fava (pyproject.toml)
@@ -55,7 +55,7 @@ colorama==0.4.6
     # via tox
 coverage==7.8.0
     # via pytest-cov
-cryptography==44.0.2
+cryptography==44.0.3
     # via secretstorage
 distlib==0.3.9
     # via virtualenv
@@ -91,7 +91,7 @@ idna==3.10
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==8.6.1
+importlib-metadata==8.7.0
     # via
     #   build
     #   flask
@@ -237,7 +237,7 @@ rich==14.0.0
     # via twine
 secretstorage==3.3.3
     # via keyring
-setuptools==79.0.1
+setuptools==80.3.1
     # via
     #   fava (pyproject.toml)
     #   types-setuptools
@@ -294,7 +294,7 @@ tox-uv==1.25.0
     # via fava (pyproject.toml)
 twine==6.1.0
     # via fava (pyproject.toml)
-types-setuptools==79.0.0.20250422
+types-setuptools==80.3.0.20250505
     # via fava (pyproject.toml)
 types-simplejson==3.20.0.20250326
     # via fava (pyproject.toml)
@@ -310,9 +310,9 @@ urllib3==2.4.0
     # via
     #   requests
     #   twine
-uv==0.6.17
+uv==0.7.2
     # via tox-uv
-virtualenv==20.30.0
+virtualenv==20.31.1
     # via
     #   pre-commit
     #   tox
