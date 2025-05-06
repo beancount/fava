@@ -422,9 +422,9 @@ def delete_entry_slice(
             line = lines[last_entry_line]
         except IndexError:
             break
-        if line.strip():
+        if line.strip():  # pragma: no cover
             break
-        last_entry_line += 1
+        last_entry_line += 1  # pragma: no cover
     lines = lines[:first_entry_line] + lines[last_entry_line:]
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:

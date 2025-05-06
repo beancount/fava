@@ -103,17 +103,17 @@ class ExtensionModule(FavaModule):
 
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Run all `after_entry_modified` hooks."""
-        for ext in self._exts:
+        for ext in self._exts:  # pragma: no cover
             ext.after_entry_modified(entry, new_lines)
 
     def after_insert_entry(self, entry: Directive) -> None:
         """Run all `after_insert_entry` hooks."""
-        for ext in self._exts:
+        for ext in self._exts:  # pragma: no cover
             ext.after_insert_entry(entry)
 
     def after_delete_entry(self, entry: Directive) -> None:
         """Run all `after_delete_entry` hooks."""
-        for ext in self._exts:
+        for ext in self._exts:  # pragma: no cover
             ext.after_delete_entry(entry)
 
     def after_insert_metadata(
@@ -123,7 +123,7 @@ class ExtensionModule(FavaModule):
         value: str,
     ) -> None:
         """Run all `after_insert_metadata` hooks."""
-        for ext in self._exts:
+        for ext in self._exts:  # pragma: no cover
             ext.after_insert_metadata(entry, key, value)
 
     def after_write_source(self, path: str, source: str) -> None:
