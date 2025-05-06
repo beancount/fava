@@ -96,7 +96,7 @@ def test_watchfiles_watcher(watcher_paths: WatcherTestSet) -> None:
         watcher_paths.file1.write_text("test2")
         assert _watcher_poll_check(watcher)
 
-        watcher.update([watcher_paths.file1], [])
+        watcher.update([watcher_paths.file1], [watcher_paths.folder])
         assert not watcher.check()
         watcher_paths.file1.write_text("test2")
         assert _watcher_poll_check(watcher)
@@ -104,6 +104,13 @@ def test_watchfiles_watcher(watcher_paths: WatcherTestSet) -> None:
         # notify of change we already detected
         watcher.notify(watcher_paths.file1)
         assert not watcher.check()
+
+        # rename file to folder
+        new_path_in_folder = watcher_paths.folder / "new_name"
+        assert not new_path_in_folder.exists()
+        watcher_paths.file2.rename(new_path_in_folder)
+        assert new_path_in_folder.exists()
+        assert _watcher_poll_check(watcher)
 
         # delete
         watcher_paths.file1.unlink()

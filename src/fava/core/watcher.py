@@ -10,6 +10,7 @@ from os import walk
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from watchfiles import Change
 from watchfiles import DefaultFilter
 from watchfiles import watch
 
@@ -18,8 +19,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Sequence
-
-    from watchfiles.main import Change
 
 
 log = logging.getLogger(__name__)
@@ -64,13 +63,17 @@ class _WatchfilesThread(threading.Thread):
             ignore_permission_denied=True,
             watch_filter=self._is_relevant,
         ):
-            for path in {change[1] for change in changes}:
-                try:
-                    change_mtime = Path(path).stat().st_mtime_ns
-                except FileNotFoundError:
-                    # set the change time to an artificial timestamp one
-                    # nanosecond after the latest mtime.
-                    change_mtime = self.mtime + 1
+            for change_type, path_str in changes:
+                path = Path(path_str)
+                # move up the tree to an existing path
+                while not path.exists():
+                    path = path.parent
+                change_mtime = path.stat().st_mtime_ns
+                if change_type is Change.added:
+                    # check parent to get possibly newer timestamp of addition
+                    change_mtime = max(
+                        change_mtime, Path(path_str).parent.stat().st_mtime_ns
+                    )
                 self.mtime = max(change_mtime, self.mtime)
             log.debug("new mtime: %s", self.mtime)
 
