@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import errno
-import logging
 import os
 from pathlib import Path
 
@@ -14,6 +13,7 @@ from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from fava import __version__
 from fava.application import create_app
+from fava.util import setup_debug_logging
 from fava.util import simple_wsgi
 
 
@@ -161,7 +161,7 @@ def main(  # noqa: PLR0913
                 raise AddressInUse(port) from error
             raise click.Abort from error
     else:
-        logging.getLogger("fava").setLevel(logging.DEBUG)
+        setup_debug_logging()
         if profile:
             app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
                 app.wsgi_app,

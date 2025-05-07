@@ -36,8 +36,14 @@ def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
 
 def setup_logging() -> None:
     """Set up logging for Fava."""
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logging.basicConfig(level=logging.WARNING, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
+
+
+def setup_debug_logging() -> None:
+    """Set up debug level logging for Fava."""
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger("watchfiles").setLevel(logging.INFO)
 
 
 def get_translations(locale: Locale) -> str | None:
