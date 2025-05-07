@@ -1,9 +1,8 @@
-FROM python:alpine as builder
+FROM python:slim as builder
 
-RUN apk add --update libxml2-dev libxslt-dev gcc musl-dev g++
-RUN pip install --prefix="/install" fava
+RUN pip install --root-user-action ignore --prefix="/install" fava
 
-FROM python:alpine
+FROM python:slim
 
 COPY --from=builder /install /usr/local
 
