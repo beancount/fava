@@ -40,7 +40,7 @@ def setup_logging() -> None:
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
-def setup_debug_logging() -> None:
+def setup_debug_logging() -> None:  # pragma: no cover
     """Set up debug level logging for Fava."""
     logging.getLogger().setLevel(logging.DEBUG)
     logging.getLogger("watchfiles").setLevel(logging.INFO)

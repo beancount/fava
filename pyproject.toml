@@ -122,6 +122,20 @@ strict = true
 filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 testpaths = ["tests"]
 
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/fava/beans/types.py",
+    "*/fava/ext/auto_commit.py",
+    "*/fava/ext/portfolio_list/__init__.py",
+ ]
+
+[tool.coverage.paths]
+source = [
+    "src/fava/",
+    ".tox/**/fava/",
+]
+
 [tool.ruff]
 target-version = "py39"
 line-length = 79
