@@ -752,7 +752,9 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
                     date_range.end_inclusive,
                     with_cost=False,
                 )
-                for tree, date_range in zip(interval_balances, dates)
+                for tree, date_range in zip(
+                    interval_balances, dates, strict=True
+                )
             ],
             dates=dates,
             budgets=budgets,

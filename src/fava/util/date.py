@@ -256,7 +256,7 @@ def dateranges(
     ends = interval_ends(begin, end, interval)
     left, right = tee(ends)
     next(right, None)
-    for interval_begin, interval_end in zip(left, right):
+    for interval_begin, interval_end in zip(left, right, strict=False):
         yield DateRange(interval_begin, interval_end)
 
 

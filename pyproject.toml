@@ -3,7 +3,7 @@ name = "fava"
 dynamic = ["version"]
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "MIT License"}
 authors = [
   {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
@@ -24,7 +24,6 @@ classifiers = [
     "Natural Language :: English",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -137,7 +136,6 @@ source = [
 ]
 
 [tool.ruff]
-target-version = "py39"
 line-length = 79
 
 [tool.ruff.lint]

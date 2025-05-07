@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from decimal import Decimal
 from typing import NamedTuple
-from typing import Optional
 from typing import TYPE_CHECKING
 
 from fava.beans.protocols import Cost
@@ -24,7 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 ZERO = Decimal()
-InventoryKey = tuple[str, Optional[Cost]]
+InventoryKey = tuple[str, Cost | None]
 
 
 class _Amount(NamedTuple):
