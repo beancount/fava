@@ -694,20 +694,22 @@ def test_api_add_entries(
 
 
 @pytest.mark.parametrize(
-    ("query_string"),
+    ("query_string", "name"),
     [
-        ("balances from year = 2014"),
-        ("select sum(day)"),
-        ("journal from year = 2014 and month = 1"),
+        ("balances from year = 2014", "balances"),
+        ("select sum(day)", "sum"),
+        ("journal from year = 2014 and month = 1", "journal"),
         (
             "select day, position, units(position), balance, payee, tags"
-            " from year = 2014 and month = 1"
+            " from year = 2014 and month = 1",
+            "misc",
         ),
-        (".help"),
+        (".help", "help"),
     ],
 )
 def test_api_query_result(
     query_string: str,
+    name: str,
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
 ) -> None:
@@ -716,7 +718,7 @@ def test_api_query_result(
         query_string={"query_string": query_string},
     )
     data = assert_api_success(response)
-    snapshot(data, json=True)
+    snapshot(data, name=name, json=True)
 
 
 def test_api_query_result_types(

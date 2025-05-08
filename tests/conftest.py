@@ -5,7 +5,6 @@ from __future__ import annotations
 import os
 import re
 import shutil
-from collections import Counter
 from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
@@ -24,6 +23,7 @@ from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
+    from collections.abc import Generator
     from typing import Literal
     from typing import Protocol
     from typing import TypeAlias
@@ -56,64 +56,108 @@ def test_data_dir() -> Path:
     return Path(__file__).parent / "data"
 
 
-@pytest.fixture(scope="module")
-def module_path(request: pytest.FixtureRequest) -> Path:
-    """Path to the tested module."""
-    fspath = getattr(request, "fspath")  # noqa: B009
-    return Path(getattr(request, "path", fspath))
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """Add pytest options to influence snapshot behaviour."""
+    parser.addoption(
+        "--snapshot-clean",
+        action="store_true",
+        dest="SNAPSHOT_CLEAN",
+        help="Clean unused snapshot files",
+    )
+    parser.addoption(
+        "--snapshot-ignore",
+        action="store_true",
+        dest="SNAPSHOT_IGNORE",
+        help="Ignore snapshot files",
+    )
+    parser.addoption(
+        "--snapshot-update",
+        action="store_true",
+        dest="SNAPSHOT_UPDATE",
+        help="Update snapshot files",
+    )
 
 
-@pytest.fixture(scope="module")
-def snap_count() -> Counter[str]:
-    """Counter for the number of snapshots per function in a module."""
-    return Counter()
-
-
-@pytest.fixture(scope="module")
-def snap_dir(module_path: Path) -> Path:
-    """Path to snapshot directory."""
-    snap_dir = module_path.parent / "__snapshots__"
+@pytest.fixture(scope="session")
+def compare_snapshot(
+    request: pytest.FixtureRequest,
+) -> Generator[Callable[[str, str], None], None, None]:
+    """Compare on-disk snapshots, possibly updating if configured."""
+    snap_dir = Path(__file__).parent / "__snapshots__"
     if not snap_dir.exists():
         snap_dir.mkdir()
-    return snap_dir
+
+    should_update = request.config.getoption("SNAPSHOT_UPDATE")
+    seen_snapshots = set()
+
+    def check_snapshot(name: str, expected: str) -> None:
+        snap_file = snap_dir / name
+        seen_snapshots.add(snap_file)
+
+        contents = snap_file.read_text("utf-8") if snap_file.exists() else ""
+        if should_update:
+            if expected != contents:
+                snap_file.write_text(expected, "utf-8")
+        else:
+            assert expected == contents, (
+                "Snaphot test failed. Snapshots can be updated with "
+                "`pytest --snapshot-update`"
+            )
+
+    yield check_snapshot
+
+    # Cleanup unused snapshot files if requested
+    if request.config.getoption("SNAPSHOT_CLEAN"):
+        existing_snapshots = set(snap_dir.iterdir())
+        extra_snapshots = existing_snapshots - seen_snapshots
+        for extra_snapshot in extra_snapshots:
+            extra_snapshot.unlink()
+
+
+class SnapCount:
+    """Count the number of snapshots within a function."""
+
+    def __init__(self) -> None:
+        self.count = 0
+
+    def filename(self, base: str, name: str | None) -> str:
+        """Get the filename, possibly including the count."""
+        self.count += 1
+        if name:
+            return f"{base}-{name}"
+        if self.count > 1:
+            return f"{base}-{self.count}"
+        return base
 
 
 @pytest.fixture
 def snapshot(
     request: pytest.FixtureRequest,
     test_data_dir: Path,
-    module_path: Path,
-    snap_dir: Path,
-    snap_count: Counter[str],
+    compare_snapshot: Callable[[str, str], None],
 ) -> SnapshotFunc:
     """Create a snaphot for some given data."""
     fn_name = request.function.__name__
-    module_name = module_path.stem
+    module_name = request.path.stem
+    snap_count = SnapCount()
 
     def snapshot_data(
         data: Any,
-        name: str | None = None,
         *,
+        name: str | None = None,
         json: bool = False,
     ) -> None:
-        if os.environ.get("SNAPSHOT_IGNORE"):
+        if request.config.getoption("SNAPSHOT_IGNORE"):
             # For the tests runs with old dependencies, we avoid comparing
             # the snapshots, as they might change in subtle ways between
             # dependency versions.
             return
 
-        snap_count[fn_name] += 1
-        filename = f"{module_name}-{fn_name}"
-        if name:
-            filename = f"{filename}-{name}"
-        elif snap_count[fn_name] > 1:
-            filename = f"{filename}-{snap_count[fn_name]}"
+        filename = snap_count.filename(f"{module_name}-{fn_name}", name)
 
         if json:
             data = dumps(data)
             filename += ".json"
-
-        snap_file = snap_dir / filename
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
@@ -133,24 +177,14 @@ def snapshot(
         out = out.replace('have_excel": false', 'have_excel": true')
 
         for dir_path, replacement in [
-            (str(test_data_dir), "TEST_DATA_DIR"),
+            (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
         ]:
-            if os.name == "nt":
-                search = dir_path.replace("\\", "\\\\") + "\\\\"
-                out = out.replace(search, replacement + "/")
-            else:
-                out = out.replace(dir_path, replacement)
+            search = (
+                dir_path.replace("\\", "\\\\") if os.name == "nt" else dir_path
+            )
+            out = out.replace(search, replacement)
 
-        if os.environ.get("SNAPSHOT_UPDATE"):
-            snap_file.write_text(out, "utf-8")
-        else:
-            contents = (
-                snap_file.read_text("utf-8") if snap_file.exists() else ""
-            )
-            assert out == contents, (
-                "Snaphot test failed. Snapshots can be updated with "
-                "`SNAPSHOT_UPDATE=1 pytest`"
-            )
+        compare_snapshot(filename, out)
 
     return snapshot_data
 
