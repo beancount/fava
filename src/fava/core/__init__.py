@@ -11,7 +11,6 @@ from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from beancount.core.data import iter_entry_dates
 from beancount.core.inventory import Inventory
 from beancount.utils.encryption import is_encrypted_file
 
@@ -22,6 +21,7 @@ from fava.beans.account import account_tester
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
+from fava.beans.helpers import slice_entry_dates
 from fava.beans.load import load_uncached
 from fava.beans.prices import FavaPriceMap
 from fava.beans.str import to_string
@@ -443,8 +443,8 @@ class FavaLedger:
         interval_ranges = list(reversed(filtered.interval_ranges(interval)))
         interval_balances = [
             Tree(
-                iter_entry_dates(
-                    filtered.entries,  # type: ignore[arg-type]
+                slice_entry_dates(
+                    filtered.entries,
                     date.min if accumulate else date_range.begin,
                     date_range.end,
                 ),
