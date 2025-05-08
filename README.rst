@@ -1,8 +1,8 @@
 .. image:: https://badges.gitter.im/beancount/fava.svg
    :alt: Join the chat at https://gitter.im/beancount/fava
    :target: https://gitter.im/beancount/fava
-.. image:: https://img.shields.io/pypi/l/fava.svg
-   :target: https://pypi.python.org/pypi/fava
+.. image:: https://img.shields.io/github/license/beancount/fava
+   :target: https://github.com/beancount/fava/blob/main/LICENSE
 .. image:: https://img.shields.io/pypi/v/fava.svg
    :target: https://pypi.python.org/pypi/fava
 
