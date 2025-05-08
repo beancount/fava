@@ -1,6 +1,7 @@
 export default {
   columns: [
     "account",
+    "accounts",
     "amount",
     "balance",
     "close",
@@ -53,6 +54,7 @@ export default {
     "currency_meta",
     "date",
     "date_add",
+    "date_bin",
     "date_diff",
     "date_part",
     "date_trunc",
@@ -112,6 +114,7 @@ export default {
     "asc",
     "balances",
     "by",
+    "create",
     "desc",
     "distinct",
     "false",
@@ -119,6 +122,8 @@ export default {
     "group",
     "having",
     "in",
+    "insert",
+    "into",
     "is",
     "journal",
     "limit",
@@ -128,7 +133,9 @@ export default {
     "pivot",
     "print",
     "select",
+    "table",
     "true",
+    "using",
     "where",
   ],
 };
