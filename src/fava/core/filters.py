@@ -361,9 +361,15 @@ class FilterSyntaxParser:
         def _key(entry: Directive) -> bool:
             if hasattr(entry, key):
                 return match(getattr(entry, key) or "")
-            if entry.meta is not None and key in entry.meta:
-                return match(entry.meta.get(key))
-            return False
+            return (
+                entry.meta is not None
+                and key in entry.meta
+                and match(entry.meta.get(key))
+            ) or any(
+                match(posting.meta.get(key))
+                for posting in getattr(entry, "postings", [])
+                if posting.meta is not None and key in posting.meta
+            )
 
         p[0] = _key
 
