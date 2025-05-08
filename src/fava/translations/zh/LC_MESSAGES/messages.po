@@ -7,95 +7,95 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: zh-CN\n"
 
-#: frontend/src/reports/routes.ts:29
-#: frontend/src/sidebar/AsideContents.svelte:67
+#: frontend/src/reports/errors/index.ts:6
+#: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
 msgstr "错误"
 
-#: frontend/src/sidebar/FilterForm.svelte:62
+#: frontend/src/sidebar/FilterForm.svelte:68
 msgid "Time"
 msgstr "时间"
 
-#: frontend/src/entry-forms/AccountInput.svelte:32
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/entry-forms/AccountInput.svelte:47
+#: frontend/src/modals/DocumentUpload.svelte:67
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
-#: frontend/src/sidebar/FilterForm.svelte:73
+#: frontend/src/sidebar/FilterForm.svelte:79
 #: src/fava/templates/statistics.html:26
 msgid "Account"
 msgstr "账户"
 
-#: frontend/src/entry-forms/Transaction.svelte:103
-#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Transaction.svelte:86
+#: frontend/src/entry-forms/Transaction.svelte:89
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee"
 msgstr "收款人"
 
-#: frontend/src/reports/tree_reports/index.ts:14
+#: frontend/src/reports/tree_reports/index.ts:20
 msgid "Income Statement"
 msgstr "损益表"
 
-#: frontend/src/reports/tree_reports/index.ts:21
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/reports/tree_reports/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:28
 msgid "Balance Sheet"
 msgstr "资产负债表"
 
-#: frontend/src/reports/tree_reports/index.ts:28
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/reports/tree_reports/index.ts:34
+#: frontend/src/sidebar/AsideContents.svelte:29
 msgid "Trial Balance"
 msgstr "试算表"
 
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:30
 #: src/fava/templates/journal.html:5
 msgid "Journal"
 msgstr "日记账"
 
 #: frontend/src/reports/holdings/Holdings.svelte:56
-#: frontend/src/reports/routes.ts:34
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/reports/query/index.ts:5
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Query"
 msgstr "查询"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
-#: frontend/src/reports/holdings/index.ts:91
-#: frontend/src/sidebar/AsideContents.svelte:44
+#: frontend/src/reports/holdings/index.ts:92
+#: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Holdings"
 msgstr "资产"
 
-#: frontend/src/reports/commodities/index.ts:35
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/reports/commodities/index.ts:33
+#: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
 msgstr "通货"
 
-#: frontend/src/reports/events/Events.svelte:17
-#: frontend/src/reports/events/index.ts:16
-#: frontend/src/sidebar/AsideContents.svelte:49
+#: frontend/src/reports/events/Events.svelte:16
+#: frontend/src/reports/events/index.ts:17
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Events"
 msgstr "事件"
 
-#: frontend/src/reports/editor/index.ts:27
-#: frontend/src/sidebar/AsideContents.svelte:56
+#: frontend/src/reports/editor/index.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
 msgstr "编辑器"
 
-#: frontend/src/sidebar/AsideContents.svelte:74
-#: src/fava/templates/options.html:3
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
 msgid "Options"
 msgstr "选项"
 
-#: frontend/src/sidebar/AsideContents.svelte:53
+#: frontend/src/sidebar/AsideContents.svelte:54
 #: src/fava/templates/statistics.html:6
 msgid "Statistics"
 msgstr "统计"
 
-#: frontend/src/sidebar/AsideContents.svelte:75 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "帮助"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:13
-#: frontend/src/reports/documents/Table.svelte:23
-#: frontend/src/reports/events/EventTable.svelte:10
+#: frontend/src/reports/commodities/CommodityTable.svelte:17
+#: frontend/src/reports/documents/Table.svelte:26
+#: frontend/src/reports/events/EventTable.svelte:14
 #: src/fava/templates/_journal_table.html:48
 msgid "Date"
 msgstr "日期"
@@ -104,7 +104,7 @@ msgstr "日期"
 msgid "F"
 msgstr "F"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:14
+#: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
 msgstr "价格"
@@ -117,20 +117,20 @@ msgstr "成本"
 msgid "Change"
 msgstr "变动"
 
-#: frontend/src/entry-forms/Balance.svelte:17
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/entry-forms/Balance.svelte:29
+#: frontend/src/modals/AddEntry.svelte:14
 #: src/fava/templates/_journal_table.html:53
 #: src/fava/templates/statistics.html:30
 msgid "Balance"
 msgstr "余额"
 
-#: frontend/src/editor/SaveButton.svelte:8
-#: frontend/src/modals/AddEntry.svelte:62
-#: frontend/src/reports/import/Extract.svelte:94
+#: frontend/src/editor/SaveButton.svelte:14
+#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/reports/import/Extract.svelte:116
 msgid "Save"
 msgstr "保存"
 
-#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/editor/SaveButton.svelte:14
 msgid "Saving..."
 msgstr "正在保存…"
 
@@ -138,56 +138,56 @@ msgstr "正在保存…"
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:23
+#: frontend/src/tree-table/AccountCellHeader.svelte:22
 msgid "Expand all accounts"
 msgstr "展开所有账户"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:28
+#: frontend/src/tree-table/AccountCellHeader.svelte:27
 msgid "Expand all"
 msgstr "展开所有"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:45
+#: frontend/src/reports/accounts/AccountReport.svelte:46
 msgid "Account Journal"
 msgstr "账户日记账"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:51
-#: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:632
+#: frontend/src/reports/accounts/AccountReport.svelte:52
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: src/fava/json_api.py:695
 msgid "Changes"
 msgstr "变更"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:60
-#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:61
+#: frontend/src/reports/accounts/AccountReport.svelte:64
 msgid "Balances"
 msgstr "余额"
 
-#: frontend/src/reports/errors/Errors.svelte:58
+#: frontend/src/reports/errors/Errors.svelte:48
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "源文件 %(file)s:%(lineno)s"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:40
-#: frontend/src/reports/errors/Errors.svelte:32
+#: frontend/src/reports/editor/EditorMenu.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
 msgstr "文件"
 
-#: frontend/src/reports/errors/Errors.svelte:33
-#: frontend/src/reports/import/Extract.svelte:100
+#: frontend/src/reports/errors/Errors.svelte:23
+#: frontend/src/reports/import/Extract.svelte:122
 msgid "Line"
 msgstr "行"
 
-#: frontend/src/reports/errors/Errors.svelte:34
+#: frontend/src/reports/errors/Errors.svelte:24
 msgid "Error"
 msgstr "错误"
 
-#: frontend/src/reports/errors/Errors.svelte:78
+#: frontend/src/reports/errors/Errors.svelte:75
 msgid "No errors."
 msgstr "没有错误。"
 
-#: frontend/src/reports/events/Events.svelte:32
+#: frontend/src/reports/events/Events.svelte:31
 msgid "Event: %(type)s"
 msgstr "事件：%(type)s"
 
-#: frontend/src/reports/events/EventTable.svelte:11
+#: frontend/src/reports/events/EventTable.svelte:15
 msgid "Description"
 msgstr "描述"
 
@@ -195,7 +195,7 @@ msgstr "描述"
 msgid "Help pages"
 msgstr "帮助页"
 
-#: frontend/src/entry-forms/Balance.svelte:32
+#: frontend/src/entry-forms/Balance.svelte:56
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
@@ -215,30 +215,30 @@ msgstr "成本货币"
 msgid "Holdings by"
 msgstr "按"
 
-#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:514
-#: src/fava/json_api.py:534
+#: frontend/src/stores/accounts.ts:21 src/fava/json_api.py:577
+#: src/fava/json_api.py:597
 msgid "Net Profit"
 msgstr "净利润"
 
-#: src/fava/json_api.py:520
+#: src/fava/json_api.py:583
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:526
+#: src/fava/json_api.py:589
 msgid "Expenses"
 msgstr "支出"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:57
-#: src/fava/templates/options.html:10 src/fava/templates/options.html:27
+#: frontend/src/entry-forms/EntryMetadata.svelte:29
+#: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
 msgstr "键"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:67
-#: src/fava/templates/options.html:11 src/fava/templates/options.html:28
+#: frontend/src/entry-forms/EntryMetadata.svelte:39
+#: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
 msgstr "值"
 
-#: frontend/src/reports/query/QueryLinks.svelte:25
+#: frontend/src/reports/query/QueryLinks.svelte:21
 msgid "Download as"
 msgstr "下载为"
 
@@ -278,18 +278,18 @@ msgstr "类型"
 msgid "# Entries"
 msgstr "# 条目"
 
-#: frontend/src/entry-forms/Transaction.svelte:113
-#: frontend/src/entry-forms/Transaction.svelte:117
+#: frontend/src/entry-forms/Transaction.svelte:101
+#: frontend/src/entry-forms/Transaction.svelte:105
 #: src/fava/templates/_journal_table.html:50
 msgid "Narration"
 msgstr "摘要"
 
-#: frontend/src/entry-forms/Balance.svelte:26
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr "数额"
 
-#: frontend/src/reports/import/Extract.svelte:43
-#: frontend/src/reports/import/index.ts:67
+#: frontend/src/reports/import/Extract.svelte:58
+#: frontend/src/reports/import/index.ts:59
 msgid "Import"
 msgstr "导入"
 
@@ -297,15 +297,15 @@ msgstr "导入"
 msgid "Budget entries"
 msgstr "预算条目"
 
-#: frontend/src/reports/import/Extract.svelte:99
+#: frontend/src/reports/import/Extract.svelte:121
 msgid "Source"
 msgstr "来源"
 
-#: frontend/src/reports/import/FileList.svelte:53
+#: frontend/src/reports/import/FileList.svelte:94
 msgid "Extract"
 msgstr "导出"
 
-#: frontend/src/reports/query/QueryEditor.svelte:15
+#: frontend/src/reports/query/QueryEditor.svelte:19
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命令。"
 
@@ -313,29 +313,29 @@ msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命
 msgid "Metadata"
 msgstr "元数据"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:78
+#: frontend/src/entry-forms/AddMetadataButton.svelte:19
+#: frontend/src/entry-forms/EntryMetadata.svelte:52
 msgid "Add metadata"
 msgstr "添加元数据"
 
-#: frontend/src/entry-forms/Note.svelte:15
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/entry-forms/Note.svelte:28
+#: frontend/src/modals/AddEntry.svelte:15
 msgid "Note"
 msgstr "备注"
 
-#: frontend/src/modals/EntryContext.svelte:13
+#: frontend/src/modals/EntryContext.svelte:17
 msgid "Location"
 msgstr "位置"
 
-#: frontend/src/modals/EntryContext.svelte:29
+#: frontend/src/modals/EntryContext.svelte:28
 msgid "Context"
 msgstr "内容"
 
-#: frontend/src/modals/EntryContext.svelte:35
+#: frontend/src/modals/EntryContext.svelte:34
 msgid "Balances before entry"
 msgstr "在此条目前余额"
 
-#: frontend/src/modals/EntryContext.svelte:55
+#: frontend/src/modals/EntryContext.svelte:54
 msgid "Balances after entry"
 msgstr "在此条目后余额"
 
@@ -355,7 +355,7 @@ msgstr "其他交易"
 msgid "Documents with a #discovered tag"
 msgstr "带有 #discovered 标签的凭证票据"
 
-#: frontend/src/entry-forms/Transaction.svelte:126
+#: frontend/src/entry-forms/Transaction.svelte:130
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "记录"
@@ -364,86 +364,86 @@ msgstr "记录"
 msgid "Upload file(s)"
 msgstr "上传文件"
 
-#: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:197
+#: frontend/src/modals/DocumentUpload.svelte:71
+#: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
 msgstr "上传"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:54
+#: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Align Amounts"
 msgstr "对齐金额"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:58
+#: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Toggle Comment (selection)"
 msgstr "设为注释"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:62
+#: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Open all folds"
 msgstr "展开所有行"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:66
+#: frontend/src/reports/editor/EditorMenu.svelte:80
 msgid "Close all folds"
 msgstr "折叠所有行"
 
-#: src/fava/templates/options.html:6
+#: frontend/src/reports/options/Options.svelte:11
 msgid "Fava options"
 msgstr "Fava 选项"
 
-#: src/fava/templates/options.html:6
+#: frontend/src/reports/options/Options.svelte:12
 msgid "help"
 msgstr "帮助"
 
-#: src/fava/templates/options.html:23
+#: frontend/src/reports/options/Options.svelte:16
 msgid "Beancount options"
 msgstr "Beancount 选项"
 
-#: frontend/src/reports/query/QueryEditor.svelte:27
+#: frontend/src/reports/query/QueryEditor.svelte:38
 msgid "Submit"
 msgstr "提交"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:12
+#: frontend/src/tree-table/AccountCellHeader.svelte:11
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "按住 Shift 键展开所有子集\n"
 "按住 Ctrl 或 Cmd 键并点击展开单层子集"
 
-#: frontend/src/modals/Export.svelte:14
+#: frontend/src/modals/Export.svelte:13
 msgid "Export"
 msgstr "导出"
 
-#: frontend/src/sidebar/FilterForm.svelte:84
+#: frontend/src/sidebar/FilterForm.svelte:90
 msgid "Filter by tag, payee, ..."
 msgstr "筛选（标签，收款人等等）"
 
-#: frontend/src/modals/Export.svelte:16
+#: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "将当前筛选的条目下载为 Beancount 文件"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "按年"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:104
 msgid "Quarterly"
 msgstr "按季"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:104
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:105
 msgid "Monthly"
 msgstr "按月"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:106
 msgid "Weekly"
 msgstr "按周"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:106
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:107
 msgid "Daily"
 msgstr "按日"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:52
+#: frontend/src/reports/editor/EditorMenu.svelte:60
 msgid "Edit"
 msgstr "编辑"
 
-#: frontend/src/entry-forms/Posting.svelte:77
+#: frontend/src/entry-forms/Posting.svelte:101
 msgid "Amount"
 msgstr "金额"
 
@@ -451,81 +451,81 @@ msgstr "金额"
 msgid "Documents with a #linked tag"
 msgstr "有 #linked 标签的凭证票据"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:12
+#: frontend/src/charts/ConversionAndInterval.svelte:11
 msgid "At Cost"
 msgstr "按成本"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:14
+#: frontend/src/charts/ConversionAndInterval.svelte:13
 msgid "At Market Value"
 msgstr "按市价"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:16
+#: frontend/src/charts/ConversionAndInterval.svelte:15
 #: src/fava/templates/_journal_table.html:51
 msgid "Units"
 msgstr "按单位数量"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "树状图"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "旭日图"
 
-#: frontend/src/entry-forms/AccountInput.svelte:20
+#: frontend/src/entry-forms/AccountInput.svelte:32
 msgid "Should be one of the declared accounts"
 msgstr "该账户未找到"
 
-#: frontend/src/charts/ChartSwitcher.svelte:21
-#: frontend/src/reports/import/Extract.svelte:79
+#: frontend/src/charts/ChartSwitcher.svelte:24
+#: frontend/src/reports/import/Extract.svelte:101
 msgid "Previous"
 msgstr "上一个"
 
-#: frontend/src/charts/ChartSwitcher.svelte:28
-#: frontend/src/reports/import/Extract.svelte:84
+#: frontend/src/charts/ChartSwitcher.svelte:31
+#: frontend/src/reports/import/Extract.svelte:106
 msgid "Next"
 msgstr "下一个"
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:13
 msgid "Transaction"
 msgstr "交易"
 
-#: frontend/src/modals/AddEntry.svelte:40
+#: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
 msgstr "添加"
 
-#: frontend/src/reports/documents/Documents.svelte:68
+#: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
 msgstr "移动或重命名凭证文件"
 
-#: frontend/src/reports/documents/Table.svelte:24
+#: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
 msgstr "名称"
 
-#: frontend/src/reports/documents/index.ts:16
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/reports/documents/index.ts:19
+#: frontend/src/sidebar/AsideContents.svelte:47
 msgid "Documents"
 msgstr "凭证文档"
 
-#: frontend/src/editor/DeleteButton.svelte:7
-#: frontend/src/editor/DeleteButton.svelte:10
-#: frontend/src/reports/import/FileList.svelte:29
+#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:14
+#: frontend/src/reports/import/FileList.svelte:47
 msgid "Delete"
 msgstr "删除"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:43
 msgid "Line chart"
 msgstr "折线图"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:44
 msgid "Area chart"
 msgstr "面积图"
 
-#: frontend/src/reports/import/FileList.svelte:52
+#: frontend/src/reports/import/FileList.svelte:94
 msgid "Continue"
 msgstr "继续"
 
-#: frontend/src/reports/import/FileList.svelte:63
+#: frontend/src/reports/import/FileList.svelte:103
 msgid "Clear"
 msgstr "清除"
 
@@ -533,11 +533,11 @@ msgstr "清除"
 msgid "Go to account"
 msgstr "前往账户"
 
-#: frontend/src/reports/import/Import.svelte:78
+#: frontend/src/reports/import/Import.svelte:69
 msgid "Delete this file?"
 msgstr "是否删除此文件？"
 
-#: frontend/src/reports/import/Import.svelte:164
+#: frontend/src/reports/import/Import.svelte:134
 msgid "No files were found for import."
 msgstr "没有发现可供导入的文件。"
 
@@ -545,21 +545,21 @@ msgstr "没有发现可供导入的文件。"
 msgid "Toggle %(type)s entries"
 msgstr "切换 %(type)s 条目"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:18
+#: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "Converted to %(currency)s"
 msgstr "转换为 %(currency)s"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:57
 msgid "Stacked Bars"
 msgstr "堆叠条形图"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
 msgstr "条形图"
 
-#: frontend/src/charts/HierarchyContainer.svelte:32
+#: frontend/src/charts/HierarchyContainer.svelte:28
 msgid "Chart is empty."
-msgstr "图标为空"
+msgstr "图表为空"
 
 #: frontend/src/journal/JournalFilters.svelte:42
 msgid "Toggle metadata"
@@ -569,27 +569,40 @@ msgstr "切换描述数据"
 msgid "Toggle postings"
 msgstr "切换记录"
 
-#: src/fava/internal_api.py:221
+#: src/fava/internal_api.py:223
 msgid "Net Worth"
 msgstr "净值"
 
-#: src/fava/internal_api.py:170
+#: src/fava/internal_api.py:172
 msgid "Account Balance"
 msgstr "账户余额"
 
-#: frontend/src/editor/SliceEditor.svelte:91
+#: frontend/src/editor/SliceEditor.svelte:97
 msgid "reload"
 msgstr "重新加载"
 
-#: frontend/src/modals/AddEntry.svelte:60
+#: frontend/src/modals/AddEntry.svelte:63
 msgid "continue"
 msgstr "继续"
 
-#: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:11
 msgid "Deleting..."
 msgstr "正在删除..."
 
-#: frontend/src/sidebar/AsideContents.svelte:60
+#: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
 msgstr "添加日记账条目"
+
+#: frontend/src/reports/documents/Documents.svelte:80
+#: frontend/src/reports/import/FileList.svelte:83
+msgid "Move"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:76
+msgid "ignore duplicate"
+msgstr ""
+
+#: frontend/src/reports/import/ImportFileUpload.svelte:33
+msgid "Upload files for import"
+msgstr ""
 

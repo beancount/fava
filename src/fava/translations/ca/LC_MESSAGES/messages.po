@@ -7,95 +7,95 @@ msgstr ""
 "Project-Id-Version: Fava\n"
 "Language: ca\n"
 
-#: frontend/src/reports/routes.ts:29
-#: frontend/src/sidebar/AsideContents.svelte:67
+#: frontend/src/reports/errors/index.ts:6
+#: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
 msgstr "Errors"
 
-#: frontend/src/sidebar/FilterForm.svelte:62
+#: frontend/src/sidebar/FilterForm.svelte:68
 msgid "Time"
 msgstr "Data"
 
-#: frontend/src/entry-forms/AccountInput.svelte:32
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/entry-forms/AccountInput.svelte:47
+#: frontend/src/modals/DocumentUpload.svelte:67
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
-#: frontend/src/sidebar/FilterForm.svelte:73
+#: frontend/src/sidebar/FilterForm.svelte:79
 #: src/fava/templates/statistics.html:26
 msgid "Account"
 msgstr "Compte"
 
-#: frontend/src/entry-forms/Transaction.svelte:103
-#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Transaction.svelte:86
+#: frontend/src/entry-forms/Transaction.svelte:89
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee"
 msgstr "Beneficiari"
 
-#: frontend/src/reports/tree_reports/index.ts:14
+#: frontend/src/reports/tree_reports/index.ts:20
 msgid "Income Statement"
 msgstr "Compte de resultats"
 
-#: frontend/src/reports/tree_reports/index.ts:21
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/reports/tree_reports/index.ts:27
+#: frontend/src/sidebar/AsideContents.svelte:28
 msgid "Balance Sheet"
 msgstr "Balanç de situació"
 
-#: frontend/src/reports/tree_reports/index.ts:28
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/reports/tree_reports/index.ts:34
+#: frontend/src/sidebar/AsideContents.svelte:29
 msgid "Trial Balance"
 msgstr "Balanç de comprovació"
 
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:30
 #: src/fava/templates/journal.html:5
 msgid "Journal"
 msgstr "Llibre diari"
 
 #: frontend/src/reports/holdings/Holdings.svelte:56
-#: frontend/src/reports/routes.ts:34
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/reports/query/index.ts:5
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Query"
 msgstr "Consulta"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
-#: frontend/src/reports/holdings/index.ts:91
-#: frontend/src/sidebar/AsideContents.svelte:44
+#: frontend/src/reports/holdings/index.ts:92
+#: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Holdings"
 msgstr "Cartera de valors"
 
-#: frontend/src/reports/commodities/index.ts:35
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/reports/commodities/index.ts:33
+#: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
 msgstr "Productes"
 
-#: frontend/src/reports/events/Events.svelte:17
-#: frontend/src/reports/events/index.ts:16
-#: frontend/src/sidebar/AsideContents.svelte:49
+#: frontend/src/reports/events/Events.svelte:16
+#: frontend/src/reports/events/index.ts:17
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Events"
 msgstr "Esdeveniments"
 
-#: frontend/src/reports/editor/index.ts:27
-#: frontend/src/sidebar/AsideContents.svelte:56
+#: frontend/src/reports/editor/index.ts:28
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
 msgstr "Editor"
 
-#: frontend/src/sidebar/AsideContents.svelte:74
-#: src/fava/templates/options.html:3
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
 msgid "Options"
 msgstr "Opcions"
 
-#: frontend/src/sidebar/AsideContents.svelte:53
+#: frontend/src/sidebar/AsideContents.svelte:54
 #: src/fava/templates/statistics.html:6
 msgid "Statistics"
 msgstr "Estadístiques"
 
-#: frontend/src/sidebar/AsideContents.svelte:75 src/fava/templates/help.html:3
+#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:13
-#: frontend/src/reports/documents/Table.svelte:23
-#: frontend/src/reports/events/EventTable.svelte:10
+#: frontend/src/reports/commodities/CommodityTable.svelte:17
+#: frontend/src/reports/documents/Table.svelte:26
+#: frontend/src/reports/events/EventTable.svelte:14
 #: src/fava/templates/_journal_table.html:48
 msgid "Date"
 msgstr "Data"
@@ -104,7 +104,7 @@ msgstr "Data"
 msgid "F"
 msgstr "F"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:14
+#: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
 msgstr "Preu"
@@ -117,20 +117,20 @@ msgstr "Cost"
 msgid "Change"
 msgstr "Canvi"
 
-#: frontend/src/entry-forms/Balance.svelte:17
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/entry-forms/Balance.svelte:29
+#: frontend/src/modals/AddEntry.svelte:14
 #: src/fava/templates/_journal_table.html:53
 #: src/fava/templates/statistics.html:30
 msgid "Balance"
 msgstr "Balanç"
 
-#: frontend/src/editor/SaveButton.svelte:8
-#: frontend/src/modals/AddEntry.svelte:62
-#: frontend/src/reports/import/Extract.svelte:94
+#: frontend/src/editor/SaveButton.svelte:14
+#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/reports/import/Extract.svelte:116
 msgid "Save"
 msgstr "Desa"
 
-#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/editor/SaveButton.svelte:14
 msgid "Saving..."
 msgstr "S'està desant..."
 
@@ -138,56 +138,56 @@ msgstr "S'està desant..."
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:23
+#: frontend/src/tree-table/AccountCellHeader.svelte:22
 msgid "Expand all accounts"
 msgstr "Amplia tots els comptes"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:28
+#: frontend/src/tree-table/AccountCellHeader.svelte:27
 msgid "Expand all"
 msgstr "Amplia-ho tot"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:45
+#: frontend/src/reports/accounts/AccountReport.svelte:46
 msgid "Account Journal"
 msgstr "Llibre diari del compte"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:51
-#: frontend/src/reports/accounts/AccountReport.svelte:54
-#: src/fava/json_api.py:632
+#: frontend/src/reports/accounts/AccountReport.svelte:52
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: src/fava/json_api.py:695
 msgid "Changes"
 msgstr "Canvis"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:60
-#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:61
+#: frontend/src/reports/accounts/AccountReport.svelte:64
 msgid "Balances"
 msgstr "Balanços"
 
-#: frontend/src/reports/errors/Errors.svelte:58
+#: frontend/src/reports/errors/Errors.svelte:48
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostra la font %(file)s:%(lineno)s"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:40
-#: frontend/src/reports/errors/Errors.svelte:32
+#: frontend/src/reports/editor/EditorMenu.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
 msgstr "Fitxer"
 
-#: frontend/src/reports/errors/Errors.svelte:33
-#: frontend/src/reports/import/Extract.svelte:100
+#: frontend/src/reports/errors/Errors.svelte:23
+#: frontend/src/reports/import/Extract.svelte:122
 msgid "Line"
 msgstr "Línia"
 
-#: frontend/src/reports/errors/Errors.svelte:34
+#: frontend/src/reports/errors/Errors.svelte:24
 msgid "Error"
 msgstr "Error"
 
-#: frontend/src/reports/errors/Errors.svelte:78
+#: frontend/src/reports/errors/Errors.svelte:75
 msgid "No errors."
 msgstr "No hi ha cap error."
 
-#: frontend/src/reports/events/Events.svelte:32
+#: frontend/src/reports/events/Events.svelte:31
 msgid "Event: %(type)s"
 msgstr "Esdeveniment: %(type)s"
 
-#: frontend/src/reports/events/EventTable.svelte:11
+#: frontend/src/reports/events/EventTable.svelte:15
 msgid "Description"
 msgstr "Descripció"
 
@@ -195,7 +195,7 @@ msgstr "Descripció"
 msgid "Help pages"
 msgstr "Pàgines d'ajuda"
 
-#: frontend/src/entry-forms/Balance.svelte:32
+#: frontend/src/entry-forms/Balance.svelte:56
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
@@ -215,30 +215,30 @@ msgstr "Moneda de cost"
 msgid "Holdings by"
 msgstr "Cartera de valors per"
 
-#: frontend/src/stores/accounts.ts:22 src/fava/json_api.py:514
-#: src/fava/json_api.py:534
+#: frontend/src/stores/accounts.ts:21 src/fava/json_api.py:577
+#: src/fava/json_api.py:597
 msgid "Net Profit"
 msgstr "Benefici net"
 
-#: src/fava/json_api.py:520
+#: src/fava/json_api.py:583
 msgid "Income"
 msgstr "Ingressos"
 
-#: src/fava/json_api.py:526
+#: src/fava/json_api.py:589
 msgid "Expenses"
 msgstr "Despeses"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:57
-#: src/fava/templates/options.html:10 src/fava/templates/options.html:27
+#: frontend/src/entry-forms/EntryMetadata.svelte:29
+#: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
 msgstr "Clau"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:67
-#: src/fava/templates/options.html:11 src/fava/templates/options.html:28
+#: frontend/src/entry-forms/EntryMetadata.svelte:39
+#: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
 msgstr "Valor"
 
-#: frontend/src/reports/query/QueryLinks.svelte:25
+#: frontend/src/reports/query/QueryLinks.svelte:21
 msgid "Download as"
 msgstr "Anomena i desa"
 
@@ -278,18 +278,18 @@ msgstr "Tipus"
 msgid "# Entries"
 msgstr "Nombre d'entrades"
 
-#: frontend/src/entry-forms/Transaction.svelte:113
-#: frontend/src/entry-forms/Transaction.svelte:117
+#: frontend/src/entry-forms/Transaction.svelte:101
+#: frontend/src/entry-forms/Transaction.svelte:105
 #: src/fava/templates/_journal_table.html:50
 msgid "Narration"
 msgstr "Descripció"
 
-#: frontend/src/entry-forms/Balance.svelte:26
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr "Número"
 
-#: frontend/src/reports/import/Extract.svelte:43
-#: frontend/src/reports/import/index.ts:67
+#: frontend/src/reports/import/Extract.svelte:58
+#: frontend/src/reports/import/index.ts:59
 msgid "Import"
 msgstr "Importa"
 
@@ -297,15 +297,15 @@ msgstr "Importa"
 msgid "Budget entries"
 msgstr "Entrades de pressupost"
 
-#: frontend/src/reports/import/Extract.svelte:99
+#: frontend/src/reports/import/Extract.svelte:121
 msgid "Source"
 msgstr "Font"
 
-#: frontend/src/reports/import/FileList.svelte:53
+#: frontend/src/reports/import/FileList.svelte:94
 msgid "Extract"
 msgstr "Extreu"
 
-#: frontend/src/reports/query/QueryEditor.svelte:15
+#: frontend/src/reports/query/QueryEditor.svelte:19
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de les ordres disponibles."
 
@@ -313,29 +313,29 @@ msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de l
 msgid "Metadata"
 msgstr "Metadades"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:78
+#: frontend/src/entry-forms/AddMetadataButton.svelte:19
+#: frontend/src/entry-forms/EntryMetadata.svelte:52
 msgid "Add metadata"
 msgstr "Afegeix metadades"
 
-#: frontend/src/entry-forms/Note.svelte:15
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/entry-forms/Note.svelte:28
+#: frontend/src/modals/AddEntry.svelte:15
 msgid "Note"
 msgstr "Nota"
 
-#: frontend/src/modals/EntryContext.svelte:13
+#: frontend/src/modals/EntryContext.svelte:17
 msgid "Location"
 msgstr "Ubicació"
 
-#: frontend/src/modals/EntryContext.svelte:29
+#: frontend/src/modals/EntryContext.svelte:28
 msgid "Context"
 msgstr "Context"
 
-#: frontend/src/modals/EntryContext.svelte:35
+#: frontend/src/modals/EntryContext.svelte:34
 msgid "Balances before entry"
 msgstr "Balanços abans de l'entrada"
 
-#: frontend/src/modals/EntryContext.svelte:55
+#: frontend/src/modals/EntryContext.svelte:54
 msgid "Balances after entry"
 msgstr "Balanços després de l'entrada"
 
@@ -355,7 +355,7 @@ msgstr "Altres transaccions"
 msgid "Documents with a #discovered tag"
 msgstr "Documents amb una etiqueta #discovered"
 
-#: frontend/src/entry-forms/Transaction.svelte:126
+#: frontend/src/entry-forms/Transaction.svelte:130
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "Comptabilitzacions"
@@ -364,86 +364,86 @@ msgstr "Comptabilitzacions"
 msgid "Upload file(s)"
 msgstr "Puja un fitxer"
 
-#: frontend/src/modals/DocumentUpload.svelte:72
-#: frontend/src/reports/import/Import.svelte:197
+#: frontend/src/modals/DocumentUpload.svelte:71
+#: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
 msgstr "Puja"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:54
+#: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Align Amounts"
 msgstr "Alinea els imports"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:58
+#: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Toggle Comment (selection)"
 msgstr "Commuta el comentari (selecció)"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:62
+#: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Open all folds"
 msgstr "Desplega les línies"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:66
+#: frontend/src/reports/editor/EditorMenu.svelte:80
 msgid "Close all folds"
 msgstr "Plega les línies"
 
-#: src/fava/templates/options.html:6
+#: frontend/src/reports/options/Options.svelte:11
 msgid "Fava options"
 msgstr "Opcions del Fava"
 
-#: src/fava/templates/options.html:6
+#: frontend/src/reports/options/Options.svelte:12
 msgid "help"
 msgstr "ajuda"
 
-#: src/fava/templates/options.html:23
+#: frontend/src/reports/options/Options.svelte:16
 msgid "Beancount options"
 msgstr "Opcions del Beancount"
 
-#: frontend/src/reports/query/QueryEditor.svelte:27
+#: frontend/src/reports/query/QueryEditor.svelte:38
 msgid "Submit"
 msgstr "Envia"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:12
+#: frontend/src/tree-table/AccountCellHeader.svelte:11
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Premeu Maj en fer clic per ampliar tots els elements secundaris.\n"
 "Premeu Ctrl o Cmd en fer clic per ampliar un nivell."
 
-#: frontend/src/modals/Export.svelte:14
+#: frontend/src/modals/Export.svelte:13
 msgid "Export"
 msgstr "Exporta"
 
-#: frontend/src/sidebar/FilterForm.svelte:84
+#: frontend/src/sidebar/FilterForm.svelte:90
 msgid "Filter by tag, payee, ..."
 msgstr "Filtreu per etiqueta, beneficiari, etc."
 
-#: frontend/src/modals/Export.svelte:16
+#: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "Per any"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:104
 msgid "Quarterly"
 msgstr "Per trimestre"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:104
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:105
 msgid "Monthly"
 msgstr "Per mes"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:105
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:106
 msgid "Weekly"
 msgstr "Per setmana"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:106
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:107
 msgid "Daily"
 msgstr "Per dia"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:52
+#: frontend/src/reports/editor/EditorMenu.svelte:60
 msgid "Edit"
 msgstr "Edita"
 
-#: frontend/src/entry-forms/Posting.svelte:77
+#: frontend/src/entry-forms/Posting.svelte:101
 msgid "Amount"
 msgstr "Import"
 
@@ -451,81 +451,81 @@ msgstr "Import"
 msgid "Documents with a #linked tag"
 msgstr "Documents amb una etiqueta #linked"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:12
+#: frontend/src/charts/ConversionAndInterval.svelte:11
 msgid "At Cost"
 msgstr "Cost"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:14
+#: frontend/src/charts/ConversionAndInterval.svelte:13
 msgid "At Market Value"
 msgstr "Valor de mercat"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:16
+#: frontend/src/charts/ConversionAndInterval.svelte:15
 #: src/fava/templates/_journal_table.html:51
 msgid "Units"
 msgstr "Unitats"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "Mapa d'arbre"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "Anells"
 
-#: frontend/src/entry-forms/AccountInput.svelte:20
+#: frontend/src/entry-forms/AccountInput.svelte:32
 msgid "Should be one of the declared accounts"
 msgstr "Ha de ser un dels comptes declarats"
 
-#: frontend/src/charts/ChartSwitcher.svelte:21
-#: frontend/src/reports/import/Extract.svelte:79
+#: frontend/src/charts/ChartSwitcher.svelte:24
+#: frontend/src/reports/import/Extract.svelte:101
 msgid "Previous"
 msgstr "Anterior"
 
-#: frontend/src/charts/ChartSwitcher.svelte:28
-#: frontend/src/reports/import/Extract.svelte:84
+#: frontend/src/charts/ChartSwitcher.svelte:31
+#: frontend/src/reports/import/Extract.svelte:106
 msgid "Next"
 msgstr "Següent"
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:13
 msgid "Transaction"
 msgstr "Transacció"
 
-#: frontend/src/modals/AddEntry.svelte:40
+#: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/reports/documents/Documents.svelte:68
+#: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
-#: frontend/src/reports/documents/Table.svelte:24
+#: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
 msgstr "Nom"
 
-#: frontend/src/reports/documents/index.ts:16
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/reports/documents/index.ts:19
+#: frontend/src/sidebar/AsideContents.svelte:47
 msgid "Documents"
 msgstr "Documents"
 
-#: frontend/src/editor/DeleteButton.svelte:7
-#: frontend/src/editor/DeleteButton.svelte:10
-#: frontend/src/reports/import/FileList.svelte:29
+#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:14
+#: frontend/src/reports/import/FileList.svelte:47
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:43
 msgid "Line chart"
 msgstr "Diagrama de línies"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:44
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
-#: frontend/src/reports/import/FileList.svelte:52
+#: frontend/src/reports/import/FileList.svelte:94
 msgid "Continue"
 msgstr "Continua"
 
-#: frontend/src/reports/import/FileList.svelte:63
+#: frontend/src/reports/import/FileList.svelte:103
 msgid "Clear"
 msgstr "Esborra"
 
@@ -533,11 +533,11 @@ msgstr "Esborra"
 msgid "Go to account"
 msgstr "Vés al compte"
 
-#: frontend/src/reports/import/Import.svelte:78
+#: frontend/src/reports/import/Import.svelte:69
 msgid "Delete this file?"
 msgstr "Voleu suprimir aquest fitxer?"
 
-#: frontend/src/reports/import/Import.svelte:164
+#: frontend/src/reports/import/Import.svelte:134
 msgid "No files were found for import."
 msgstr "No s'ha trobat cap fitxer per importar."
 
@@ -545,19 +545,19 @@ msgstr "No s'ha trobat cap fitxer per importar."
 msgid "Toggle %(type)s entries"
 msgstr "Mostra/amaga les entrades %(type)s"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:18
+#: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "Converted to %(currency)s"
 msgstr "S'ha convertit a %(currency)s"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:57
 msgid "Stacked Bars"
 msgstr "Barres apilades"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
 msgstr "Barres senzilles"
 
-#: frontend/src/charts/HierarchyContainer.svelte:32
+#: frontend/src/charts/HierarchyContainer.svelte:28
 msgid "Chart is empty."
 msgstr "El gràfic és buit."
 
@@ -569,27 +569,40 @@ msgstr "Mostra/amaga les metadades"
 msgid "Toggle postings"
 msgstr "Mostra/amaga les comptabilitzacions"
 
-#: src/fava/internal_api.py:221
+#: src/fava/internal_api.py:223
 msgid "Net Worth"
 msgstr "Patrimoni net"
 
-#: src/fava/internal_api.py:170
+#: src/fava/internal_api.py:172
 msgid "Account Balance"
 msgstr "Balanç del compte"
 
-#: frontend/src/editor/SliceEditor.svelte:91
+#: frontend/src/editor/SliceEditor.svelte:97
 msgid "reload"
 msgstr "torna a carregar"
 
-#: frontend/src/modals/AddEntry.svelte:60
+#: frontend/src/modals/AddEntry.svelte:63
 msgid "continue"
 msgstr "continua"
 
-#: frontend/src/editor/DeleteButton.svelte:7
+#: frontend/src/editor/DeleteButton.svelte:11
 msgid "Deleting..."
 msgstr "S'està suprimint..."
 
-#: frontend/src/sidebar/AsideContents.svelte:60
+#: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
+msgstr "Afegeix una entrada al llibre diari"
+
+#: frontend/src/reports/documents/Documents.svelte:80
+#: frontend/src/reports/import/FileList.svelte:83
+msgid "Move"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:76
+msgid "ignore duplicate"
+msgstr ""
+
+#: frontend/src/reports/import/ImportFileUpload.svelte:33
+msgid "Upload files for import"
 msgstr ""
 
