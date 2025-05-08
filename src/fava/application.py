@@ -400,7 +400,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     def download_query(result_format: str) -> Response:
         """Download a query result."""
         name, data = g.ledger.query_shell.query_to_file(
-            g.filtered.entries,
+            g.filtered.entries_with_all_prices,
             request.args.get("query_string", ""),
             result_format,
         )

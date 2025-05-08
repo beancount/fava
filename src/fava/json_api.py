@@ -284,7 +284,7 @@ def get_payee_accounts(payee: str) -> Sequence[str]:
 def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     """Run a Beancount query."""
     return g.ledger.query_shell.execute_query_serialised(
-        g.filtered.entries, query_string
+        g.filtered.entries_with_all_prices, query_string
     )
 
 

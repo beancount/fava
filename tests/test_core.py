@@ -32,6 +32,11 @@ def test_filtered_ledger(
     small_example_ledger: FavaLedger,
 ) -> None:
     filtered = FilteredLedger(small_example_ledger, account="NONE")
+    assert not filtered.entries
+    assert (
+        filtered.entries_with_all_prices
+        == small_example_ledger.all_entries_by_type.Price
+    )
     assert filtered.prices("EUR", "USD")
     assert filtered.prices("UNKNOWN1", "UNKNOWN2") == []
     assert filtered.date_range is None

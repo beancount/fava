@@ -33,6 +33,7 @@ from fava.core.commodities import CommoditiesModule
 from fava.core.conversion import cost_or_value
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
+from fava.core.file import _incomplete_sortkey
 from fava.core.file import FileModule
 from fava.core.file import get_entry_slice
 from fava.core.filters import AccountFilter
@@ -150,6 +151,13 @@ class FilteredLedger:
         if date_range:
             return date_range.end_inclusive
         return None
+
+    @cached_property
+    def entries_with_all_prices(self) -> Sequence[Directive]:
+        """The filtered entries, with all prices added back in for queries."""
+        entries = [*self.entries, *self.ledger.all_entries_by_type.Price]
+        entries.sort(key=_incomplete_sortkey)
+        return entries
 
     @cached_property
     def root_tree(self) -> Tree:
