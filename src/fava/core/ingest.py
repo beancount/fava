@@ -7,6 +7,7 @@ import os
 import sys
 import traceback
 from dataclasses import dataclass
+from inspect import get_annotations
 from inspect import signature
 from os import altsep
 from os import sep
@@ -46,7 +47,10 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
 
-    HookOutput = list[tuple[str, list[Directive]]]
+    HookOutput = (
+        list[tuple[str, list[Directive], str, BeanImporterProtocol | Importer]]
+        | list[tuple[str, list[Directive]]]
+    )
     Hooks = Sequence[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
 
     P = ParamSpec("P")
@@ -443,22 +447,39 @@ class IngestModule(FavaModule):
 
         try:
             path = Path(filename)
+            importer = self.importers[importer_name]
             new_entries = extract_from_file(
-                self.importers[importer_name],
+                importer,
                 path,
                 existing_entries=self.ledger.all_entries,
             )
         except Exception as exc:
             raise ImporterExtractError from exc
 
-        new_entries_list = [(filename, new_entries)]
         for hook_fn in self.hooks:
+            new_entries_list: HookOutput = []
+            annotations = get_annotations(hook_fn)
+            if any("Importer" in a for a in annotations.values()):
+                importer_info = importer.file_import_info(path)
+                new_entries_list = [
+                    (
+                        filename,
+                        new_entries,
+                        importer_info.account,
+                        importer.importer,
+                    )
+                ]
+            else:
+                new_entries_list = [(filename, new_entries)]
+
             new_entries_list = hook_fn(
                 new_entries_list,
                 self.ledger.all_entries,
             )
 
-        return new_entries_list[0][1]
+            new_entries = new_entries_list[0][1]
+
+        return new_entries
 
 
 def filepath_in_primary_imports_folder(
