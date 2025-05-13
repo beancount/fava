@@ -152,7 +152,7 @@ sniffio==1.1.0
     # via anyio
 tatsu==5.7.4
     # via beanquery
-texttable==0.8.3
+texttable==0.8.1
     # via pyexcel
 tomli==1.0.0
     # via pytest

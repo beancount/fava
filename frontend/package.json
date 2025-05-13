@@ -30,7 +30,7 @@
     "esbuild": "^0.25.0",
     "esbuild-register": "^3.0.0",
     "esbuild-svelte": "^0.9.0",
-    "eslint": "9.25.1",
+    "eslint": "^9.27.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-svelte": "^3.1.0",
     "js-yaml": "^4.1.0",

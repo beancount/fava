@@ -2,9 +2,9 @@ ci:
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.8
+    rev: v0.11.10
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/executablebooks/mdformat
@@ -24,8 +24,8 @@ repos:
         require_serial: true
         additional_dependencies:
           - "prettier@3.5.3"
-          - "prettier-plugin-svelte@3.3.3"
-          - "svelte@5.28.2"
+          - "prettier-plugin-svelte@3.4.0"
+          - "svelte@5.30.2"
       - id: stylelint
         name: stylelint
         language: node
