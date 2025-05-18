@@ -3,6 +3,7 @@
    :target: https://gitter.im/beancount/fava
 .. image:: https://img.shields.io/pypi/l/fava
    :alt: PyPI - License
+   :target: https://github.com/beancount/fava/blob/main/LICENSE
 .. image:: https://img.shields.io/pypi/v/fava
    :alt: PyPI - Version
    :target: https://pypi.org/project/fava/
