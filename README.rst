@@ -1,10 +1,11 @@
-.. image:: https://badges.gitter.im/beancount/fava.svg
+.. image:: https://img.shields.io/gitter/room/beancount/fava
    :alt: Join the chat at https://gitter.im/beancount/fava
    :target: https://gitter.im/beancount/fava
-.. image:: https://img.shields.io/pypi/l/fava.svg
-   :target: https://pypi.python.org/pypi/fava
-.. image:: https://img.shields.io/pypi/v/fava.svg
-   :target: https://pypi.python.org/pypi/fava
+.. image:: https://img.shields.io/pypi/l/fava
+   :alt: PyPI - License
+.. image:: https://img.shields.io/pypi/v/fava
+   :alt: PyPI - Version
+   :target: https://pypi.org/project/fava/
 
 Fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
@@ -28,7 +29,7 @@ If you want to hack on Fava or run a development version, see the
 website for details. Contributions are very welcome!
 
 .. image:: https://i.imgbox.com/rfb9I7Zw.png
-    :alt: Fava Screenshot
-    :width: 100%
-    :align: center
-    :target: https://fava.pythonanywhere.com
+   :alt: Fava Screenshot
+   :width: 100%
+   :align: center
+   :target: https://fava.pythonanywhere.com
