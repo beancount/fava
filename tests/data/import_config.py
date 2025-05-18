@@ -138,23 +138,23 @@ class TestImporterThatErrorsOnExtract(TestImporter):
 
 
 def _example_noop_importer_legacy_hook(
-    entries: list[tuple[str, list[Directive]]],
-    existing: Sequence[Directive],  # noqa: ARG001
+    files_entries: list[tuple[str, list[Directive]]],
+    _existing: Sequence[Directive],
 ) -> list[tuple[str, list[Directive]]]:
-    for e in entries:
-        assert len(e) == 2  # noqa: S101
-    return entries
+    for e in files_entries:
+        assert len(e) == 2
+    return files_entries
 
 
 def _example_noop_importer_hook(
-    entries: list[
+    files_entries_accounts_importers: list[
         tuple[str, list[Directive], str, BeanImporterProtocol | Importer]
     ],
-    existing: Sequence[Directive],  # noqa: ARG001
+    _existing: Sequence[Directive],
 ) -> list[tuple[str, list[Directive], str, BeanImporterProtocol | Importer]]:
-    for e in entries:
-        assert len(e) == 4  # noqa: S101
-    return entries
+    for e in files_entries_accounts_importers:
+        assert len(e) == 4
+    return files_entries_accounts_importers
 
 
 HOOKS = [_example_noop_importer_legacy_hook, _example_noop_importer_hook]

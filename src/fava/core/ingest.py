@@ -457,11 +457,10 @@ class IngestModule(FavaModule):
             raise ImporterExtractError from exc
 
         for hook_fn in self.hooks:
-            new_entries_list: HookOutput = []
             annotations = get_annotations(hook_fn)
             if any("Importer" in a for a in annotations.values()):
                 importer_info = importer.file_import_info(path)
-                new_entries_list = [
+                new_entries_list: HookOutput = [
                     (
                         filename,
                         new_entries,

@@ -180,7 +180,7 @@ max-args = 9
 "docs/**" = ["D", "INP"]
 "tests/conftest.py" = ["S101"]
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
-"tests/data/import_config.py" = ["D", "INP"]
+"tests/data/import_config.py" = ["D", "INP", "S101"]
 "src/fava/core/filters.py" = ["D"]
 
 # pylint is not run as part of linting for Fava anymore but we keep these disables
