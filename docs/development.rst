@@ -8,15 +8,14 @@ If you want to hack on Fava or run the latest development version, make sure
 you have recent enough versions of the following installed (ideally with your
 system package manager):
 
-- `Python 3`_ - with `pip` (at least v21.3), to install the Fava Python package,
-- `Node.js`_ - with `npm`, to install the Javascript dependencies,
-- `tox`_ - to run the Python tests,
-- `pre-commit`_ - to lint changes with a git pre-commit hook.
+- `Python 3`_ - as Fava is written in Python,
+- `Node.js`_ - with `npm`, to build the frontend,
+- Make - to run various build / lint/ test targets,
+- `uv`_ - to install the development environment and run scripts.
 
 .. _Python 3: https://www.python.org/
 .. _Node.js: https://nodejs.org/
-.. _tox: https://tox.wiki/en/latest/
-.. _pre-commit: https://pre-commit.com/
+.. _uv: https://docs.astral.sh/uv/
 
 Then this will get you up and running:
 
@@ -24,12 +23,9 @@ Then this will get you up and running:
 
     git clone https://github.com/beancount/fava.git
     cd fava
-    # setup a virtual environment (at .venv) and install Fava into it
-    # alternatively, run `make dev` to do these next two steps with `uv` instead
-    python -m venv .venv
-    pip install --editable .
-    # add a git pre-commit hook to run linters
-    pre-commit install
+    # setup a virtual environment (at .venv) and install Fava and development
+    # dependencies into it:
+    make dev
 
 You can start Fava in the virtual environment as usual by running ``fava``.
 Running in debug mode with ``fava --debug`` is useful for development.

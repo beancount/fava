@@ -4,7 +4,7 @@ dynamic = ["version"]
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
 requires-python = ">=3.10"
-license = {text = "MIT License"}
+license = "MIT"
 authors = [
   {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
 ]
@@ -20,7 +20,6 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3 :: Only",
@@ -44,7 +43,7 @@ dependencies = [
     "cheroot>=8,<11",
     "click>=7,<9",
     "markdown2>=2.3.0,<3",
-    "ply",
+    "ply>=3.4",
     "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
 ]
@@ -66,27 +65,60 @@ excel =[
     "pyexcel-ods3>=0.5",
     "pyexcel-xlsx>=0.5",
 ]
-# Extra dependencies that are used in tests or for linting.
-dev = [
-    "build>=1",
+
+[dependency-groups]
+# Building the documentation website with sphinx.
+docs = [
     "furo>=2024",
-    "mypy>=1.14",
-    "pre-commit>=4",
-    "pytest>=8",
-    "pytest-cov>=6",
-    "requests>=2",
-    "setuptools>=67",
     "sphinx>=7",
     "sphinx-autodoc-typehints>=2",
-    "tox>=4",
-    "tox-uv>=1",
-    "twine>=5",
+]
+# Type-checking with mypy.
+mypy = [
+    "mypy>=1.14",
+    "pytest>=8",
+    "types-requests>=2.32.0.20250515",
     "types-setuptools>=67",
     "types-simplejson>=3",
 ]
+# Add setuptools for the old_deps constraints
+# (otherwise it is not added to the constraints as it's only a build dependency).
+old-deps = [
+    "setuptools",
+]
+# Running pre-commit hooks.
+pre-commit = [
+    "pre-commit>=4",
+]
+# Dependencies for the scripts/*.py.
+scripts = [
+    "requests>=2",
+]
+# Dependencies for tests.
+test = [
+    "fava[excel]",
+    "pytest-cov>=6",
+    "pytest>=8",
+    "setuptools>=67",
+]
+# Stuff for the dev environment.
+dev = [
+    { include-group = "mypy" },
+    { include-group = "pre-commit" },
+    { include-group = "test" },
+    "ruff>=0.11",
+]
+
+[build-system]
+requires = ["setuptools>=67", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
+build-backend = "_build_backend"
+backend-path = ["."]
+
+[tool.uv]
+python-preference = "system"
 # Pin some lower bounds for transitive dependencies in the old_deps tests
 # This a basically determined by increasing them until getting a combination that runs.
-old_deps_pins = [
+constraint-dependencies = [
     "bottle>=0.12.20",  # older ones didn't build
     "importlib_metadata>=3.6",
     "jaraco-functools>=4",
@@ -98,11 +130,6 @@ old_deps_pins = [
     "setuptools>=67",
     "six>=1.16",
 ]
-
-[build-system]
-requires = ["setuptools>=67", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
-build-backend = "_build_backend"
-backend-path = ["."]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -116,9 +143,15 @@ preview = true
 [tool.mypy]
 mypy_path = "stubs"
 strict = true
+files = [
+    "_build_backend.py",
+    "contrib/scripts.py",
+    "src/fava",
+    "tests",
+]
 
 [tool.pytest.ini_options]
-filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
+# filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 testpaths = ["tests"]
 
 [tool.coverage.run]
