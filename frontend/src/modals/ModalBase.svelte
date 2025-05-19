@@ -11,14 +11,13 @@
   import { attemptFocus, getFocusableElements } from "../lib/focus";
   import { closeOverlay } from "../stores/url";
 
-  interface Props {
+  // 使用 $props() 获取传递给该组件的属性
+  const { shown, focus, closeHandler = closeOverlay, children }: {
     shown: boolean;
     focus?: string;
     closeHandler?: () => void;
     children: Snippet;
-  }
-
-  let { shown, focus, closeHandler = closeOverlay, children }: Props = $props();
+  } = $props();
 
   /**
    * A Svelte action to handle focus within a modal.

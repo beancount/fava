@@ -5,6 +5,42 @@
   import { errors, extensions, ledgerData } from "../stores";
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
+  import { onMount } from "svelte";
+  import TodayBalanceModal from "../modals/TodayBalanceModal.svelte";
+
+  let showModal = $state(false);  // 使用 $state 来确保 showModal 是响应式的
+  let balance = $state("Loading...");
+  const { onClose } = $props();
+
+  // 在组件挂载时发起 API 请求
+  onMount(async () => {
+    try {
+      const res = await fetch("/api/today_balance");
+      const data = await res.json();
+      balance = `${data.balance} USD`;  // 更新 balance
+    } catch (e) {
+      balance = "Error fetching data";  // 错误时显示信息
+    }
+  });
+  const showBalanceInNewWindow = async () => {
+    try {
+      const res = await fetch("/api/today_balance");
+      const data = await res.json();  // 解包 JSON 数据
+
+      // 尝试打开一个新窗口
+      const newWindow = window.open("", "_blank", "width=600,height=400");
+
+      // 确保 newWindow 被正确打开
+      if (newWindow) {
+        newWindow.document.write("<h1>Today's Balance</h1>");
+        newWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+      } else {
+        console.error("Unable to open new window.");
+      }
+    } catch (e) {
+      console.error("Error fetching data", e);
+    }
+  };
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
@@ -52,6 +88,17 @@
     bubble={[upcoming_events_count, "info"]}
   />
   <Link report="statistics" name={_("Statistics")} key="g s" />
+<!-- <li>
+  <button onclick={() => (showModal = true)} style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
+    📊 今日余额
+  </button>
+</li> -->
+<!-- 触发 showBalanceInNewWindow 显示今日余额的按钮 -->
+<li>
+  <button onclick={showBalanceInNewWindow} style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
+    📊 显示今日余额 (新窗口)
+  </button>
+</li>
 </ul>
 <ul class="navigation">
   <Link report="editor" name={_("Editor")} key="g e">
@@ -81,6 +128,10 @@
       <Link report={`extension/${ext.name}`} name={ext.report_title ?? ""} />
     {/each}
   </ul>
+{/if}
+
+{#if showModal}
+  <TodayBalanceModal {onClose} balance={balance} />
 {/if}
 
 <style>
