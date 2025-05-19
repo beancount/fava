@@ -84,7 +84,7 @@
   {
     "account": "Assets:Cash",
     "date": "2017-12-16",
-    "filename": "/absolute/filename",
+    "filename": "TEST_DATA_DIR/filename",
     "links": [
       "link"
     ],
