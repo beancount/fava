@@ -12,7 +12,12 @@
   import { closeOverlay } from "../stores/url";
 
   // 使用 $props() 获取传递给该组件的属性
-  const { shown, focus, closeHandler = closeOverlay, children }: {
+  const {
+    shown,
+    focus,
+    closeHandler = closeOverlay,
+    children,
+  }: {
     shown: boolean;
     focus?: string;
     closeHandler?: () => void;

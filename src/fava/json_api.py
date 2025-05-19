@@ -263,6 +263,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
 
     return _wrapper
 
+
 @api_endpoint
 def get_today_balance() -> dict:
     """Return today's balance."""
@@ -272,6 +273,7 @@ def get_today_balance() -> dict:
         "date": today.isoformat(),
         "balance": balance,
     }
+
 
 @api_endpoint
 def get_changed() -> bool:

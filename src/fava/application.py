@@ -11,10 +11,10 @@ To start a simple server::
 """
 
 from __future__ import annotations
-from flask import g
+
 import logging
-import random
 import mimetypes
+import random
 from datetime import date
 from datetime import datetime
 from datetime import timezone
@@ -30,9 +30,11 @@ from urllib.parse import urlunparse
 
 import markdown2  # type: ignore[import-untyped]
 from beancount import __version__ as beancount_version
-from flask import abort, jsonify
+from flask import abort
 from flask import current_app
 from flask import Flask
+from flask import g
+from flask import jsonify
 from flask import redirect
 from flask import render_template
 from flask import render_template_string
@@ -40,6 +42,7 @@ from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
 from flask_babel import Babel  # type: ignore[import-untyped]
+
 # from flask import g
 from flask_babel import get_translations
 from markupsafe import Markup
@@ -73,6 +76,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
     from werkzeug import Response as WerkzeugResponse
 
+
 def get_ledger_from_slug(ledger_slug: str) -> FavaLedger:
     """获取当前的 Ledger 实例"""
     ledgers: _LedgerSlugLoader = current_app.config["LEDGERS"]
@@ -82,8 +86,11 @@ def get_ledger_from_slug(ledger_slug: str) -> FavaLedger:
         abort(404, description="Ledger not found")
     return ledger
 
+
 # 修改后的 get_account_transactions
-def get_account_transactions(ledger: FavaLedger, account_name: str, start_date: str, end_date: str):
+def get_account_transactions(
+    ledger: FavaLedger, account_name: str, start_date: str, end_date: str
+):
     """获取指定账户的交易记录"""
     transactions = []
     start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -93,13 +100,16 @@ def get_account_transactions(ledger: FavaLedger, account_name: str, start_date: 
         if entry.date >= start_date and entry.date <= end_date:  # 日期范围过滤
             for posting in entry.postings:
                 if posting.account == account_name:
-                    transactions.append({
-                        "date": entry.date.isoformat(),
-                        "description": entry.narration,
-                        "amount": str(posting.amount),
-                        "account": posting.account,
-                    })
+                    transactions.append(
+                        {
+                            "date": entry.date.isoformat(),
+                            "description": entry.narration,
+                            "amount": str(posting.amount),
+                            "account": posting.account,
+                        }
+                    )
     return transactions
+
 
 setup_logging()
 
@@ -359,34 +369,39 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
 
         # 获取账户余额，假设要查询 "Assets:Cash" 账户
         balance = balance = round(random.uniform(1000, 10000), 2)
-        
-        # 返回 JSON 格式的响应
-        return jsonify({
-            "date": today.isoformat(),
-            "balance": balance
-        })
 
-    @fava_app.route("/<bfile>/account/<account_name>/transactions", methods=["GET"])
+        # 返回 JSON 格式的响应
+        return jsonify({"date": today.isoformat(), "balance": balance})
+
+    @fava_app.route(
+        "/<bfile>/account/<account_name>/transactions", methods=["GET"]
+    )
     def get_transactions(account_name: str, bfile: str) -> Response:
         """获取指定账户的历史交易记录"""
         start_date = request.args.get("start_date")
         end_date = request.args.get("end_date")
 
         if not start_date or not end_date:
-            return jsonify({"error": "Both 'start_date' and 'end_date' are required"}), 400
+            return jsonify(
+                {"error": "Both 'start_date' and 'end_date' are required"}
+            ), 400
 
         # 根据 ledger_slug 获取 Ledger 实例
         ledger = get_ledger_from_slug(bfile)  # bfile 作为 ledger_slug
 
         # 获取账户的交易记录
-        transactions = get_account_transactions(ledger, account_name, start_date, end_date)
-        
-        return jsonify({
-            "account": account_name,
-            "start_date": start_date,
-            "end_date": end_date,
-            "transactions": transactions
-        })
+        transactions = get_account_transactions(
+            ledger, account_name, start_date, end_date
+        )
+
+        return jsonify(
+            {
+                "account": account_name,
+                "start_date": start_date,
+                "end_date": end_date,
+                "transactions": transactions,
+            }
+        )
 
     @fava_app.route("/<bfile>/document/", methods=["GET"])
     def document() -> Response:
