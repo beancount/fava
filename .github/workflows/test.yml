@@ -19,10 +19,10 @@ jobs:
       matrix:
         os: ["ubuntu-latest"]
         py: ["3.13", "3.10"]
-        toxenv: ["full_coverage", "old_deps"]
+        toxenv: ["py", "old_deps"]
         include:
           - os: "macos-latest"
-            toxenv: "full_coverage"
+            toxenv: "py"
             py: "3.13"
           - os: "windows-latest"
             toxenv: "py"

@@ -327,7 +327,7 @@ def load_import_config(
     """
     try:
         mod = run_path(str(module_path))
-    except Exception as error:
+    except Exception as error:  # pragma: no cover
         message = "".join(traceback.format_exception(*sys.exc_info()))
         raise ImportConfigLoadError(message) from error
 
@@ -498,8 +498,8 @@ def filepath_in_primary_imports_folder(
     if primary_imports_folder is None:
         raise MissingImporterDirsError
 
-    for separator in sep, altsep:
-        if separator:
-            filename = filename.replace(separator, " ")
+    filename = filename.replace(sep, " ")
+    if altsep:  # pragma: no cover
+        filename = filename.replace(altsep, " ")
 
     return ledger.join_path(primary_imports_folder, filename)
