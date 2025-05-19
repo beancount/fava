@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime
-import sys
 from difflib import Differ
 from http import HTTPStatus
 from io import BytesIO
@@ -763,30 +762,11 @@ def test_api_filter_error(
     assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
-@pytest.mark.parametrize(
-    ("name", "url"),
-    [
-        ("documents", "/example/api/documents"),
-        ("options", "/long-example/api/options"),
-    ],
-)
-def test_api_unix_only(
-    test_client: FlaskClient,
-    snapshot: SnapshotFunc,
-    name: str,
-    url: str,
-) -> None:
-    response = test_client.get(url)
-    data = assert_api_success(response)
-    assert data
-    snapshot(data, name=name, json=True)
-
-
 @pytest.mark.parametrize(
     ("name", "url"),
     [
         ("commodities", "/long-example/api/commodities"),
+        ("documents", "/example/api/documents"),
         ("events", "/long-example/api/events"),
         ("income_statement", "/long-example/api/income_statement?time=2014"),
         ("trial_balance", "/long-example/api/trial_balance?time=2014"),
@@ -809,6 +789,7 @@ def test_api_unix_only(
                 "?interval=day&conversion=at_value&a=Assets&r=balances"
             ),
         ),
+        ("options", "/long-example/api/options"),
     ],
 )
 def test_api(

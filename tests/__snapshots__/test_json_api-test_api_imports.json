@@ -88,5 +88,10 @@
     "basename": "query-example.beancount",
     "importers": [],
     "name": "TEST_DATA_DIR/query-example.beancount"
+  },
+  {
+    "basename": "receipt.pdf",
+    "importers": [],
+    "name": "TEST_DATA_DIR/receipt.pdf"
   }
 ]

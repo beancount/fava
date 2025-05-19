@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 from pprint import pformat
 from textwrap import dedent
@@ -179,10 +180,15 @@ def snapshot(
         for dir_path, replacement in [
             (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
         ]:
-            search = (
-                dir_path.replace("\\", "\\\\") if os.name == "nt" else dir_path
-            )
-            out = out.replace(search, replacement)
+            if sys.platform == "win32":
+                out = out.replace(
+                    dir_path.replace(os.sep, os.sep * 2), replacement
+                )
+                out = out.replace(
+                    dir_path.replace(os.sep, os.sep * 4), replacement
+                )
+            else:
+                out = out.replace(dir_path, replacement)
 
         compare_snapshot(filename, out)
 
