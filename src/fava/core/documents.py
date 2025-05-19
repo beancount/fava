@@ -71,9 +71,9 @@ def filepath_in_document_folder(
     if account not in ledger.attributes.accounts:
         raise NotAValidAccountError(account)
 
-    for separator in sep, altsep:
-        if separator:
-            filename = filename.replace(separator, " ")
+    filename = filename.replace(sep, " ")
+    if altsep:  # pragma: no cover
+        filename = filename.replace(altsep, " ")
 
     return ledger.join_path(
         documents_folder,
