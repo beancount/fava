@@ -8,28 +8,30 @@
   import { onMount } from "svelte";
   import TodayBalanceModal from "../modals/TodayBalanceModal.svelte";
 
-  let showModal = $state(false);  // 使用 $state 来确保 showModal 是响应式的
+  let showModal = $state(false); // 使用 $state 来确保 showModal 是响应式的
   let balance = $state("Loading...");
   const { onClose } = $props();
 
-const showAccountOverviewInNewWindow = async () => {
-  try {
-    const pathParts = window.location.pathname.split("/");
-    const bfile = pathParts.length > 1 ? pathParts[1] : "";
-    const res = await fetch(`/${bfile}/api/account_overview`);
-    const { data } = await res.json();
+  const showAccountOverviewInNewWindow = async () => {
+    try {
+      const pathParts = window.location.pathname.split("/");
+      const bfile = pathParts.length > 1 ? pathParts[1] : "";
+      const res = await fetch(`/${bfile}/api/account_overview`);
+      const { data } = await res.json();
 
-    const tableRows = data.map(
-      (row: any, index: number) => `
+      const tableRows = data
+        .map(
+          (row: any, index: number) => `
         <tr class="${index % 2 === 0 ? "even" : "odd"}">
           <td class="account">${row.account}</td>
           <td class="date">${row.last_posting_date}</td>
           <td class="balance">${row.balance} ${row.currency}</td>
-        </tr>`
-    ).join("");
+        </tr>`,
+        )
+        .join("");
 
-    const newWindow = window.open("", "_blank", "width=950,height=600");
-    newWindow?.document.write(`
+      const newWindow = window.open("", "_blank", "width=950,height=600");
+      newWindow?.document.write(`
       <html>
         <head>
           <title>账户总览</title>
@@ -120,13 +122,11 @@ const showAccountOverviewInNewWindow = async () => {
       </html>
     `);
 
-    newWindow?.document.close();
-  } catch (e) {
-    console.error("Error fetching account overview", e);
-  }
-};
-
-
+      newWindow?.document.close();
+    } catch (e) {
+      console.error("Error fetching account overview", e);
+    }
+  };
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
@@ -174,13 +174,15 @@ const showAccountOverviewInNewWindow = async () => {
     bubble={[upcoming_events_count, "info"]}
   />
   <Link report="statistics" name={_("Statistics")} key="g s" />
-<li>
-  <button onclick={showAccountOverviewInNewWindow}
-    style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;
-           font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
-    📋 账户总览
-  </button>
-</li>
+  <li>
+    <button
+      onclick={showAccountOverviewInNewWindow}
+      style="width:100%;padding:0.25em 0.5em 0.25em 1em;
+           font:inherit;color:inherit;text-align:left;cursor:pointer;background:none;border:none;"
+    >
+      📋 账户总览
+    </button>
+  </li>
 </ul>
 <ul class="navigation">
   <Link report="editor" name={_("Editor")} key="g e">
@@ -213,7 +215,7 @@ const showAccountOverviewInNewWindow = async () => {
 {/if}
 
 {#if showModal}
-  <TodayBalanceModal {onClose} balance={balance} />
+  <TodayBalanceModal {onClose} {balance} />
 {/if}
 
 <style>

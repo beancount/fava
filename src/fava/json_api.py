@@ -5,13 +5,15 @@ interface for asynchronous functionality.
 """
 
 from __future__ import annotations
-from datetime import date
 
 import logging
 import shutil
 from abc import abstractmethod
+from collections import defaultdict
 from dataclasses import dataclass
 from dataclasses import fields
+from datetime import date
+from decimal import Decimal
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
@@ -21,6 +23,7 @@ from pprint import pformat
 from typing import Any
 from typing import TYPE_CHECKING
 
+from beancount.core.data import Transaction
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
@@ -41,10 +44,6 @@ from fava.internal_api import get_errors
 from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
-from dataclasses import dataclass
-from beancount.core.data import Transaction, Posting
-from collections import defaultdict
-from decimal import Decimal
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
@@ -268,12 +267,14 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
 
     return _wrapper
 
+
 @dataclass(frozen=True)
 class AccountOverviewEntry:
     account: str
     last_posting_date: str
     balance: str
     currency: str
+
 
 @api_endpoint
 def get_account_overview() -> list[AccountOverviewEntry]:
@@ -287,7 +288,7 @@ def get_account_overview() -> list[AccountOverviewEntry]:
         if isinstance(entry, Transaction):
             for posting in entry.postings:
                 account = posting.account
-                units = posting.units 
+                units = posting.units
                 date_ = entry.date
 
                 if account not in latest_date or date_ > latest_date[account]:
@@ -301,10 +302,11 @@ def get_account_overview() -> list[AccountOverviewEntry]:
             account=acc,
             last_posting_date=latest_date[acc].isoformat(),
             balance=str(balances[acc][0]),
-            currency=balances[acc][1]
+            currency=balances[acc][1],
         )
         for acc in sorted(latest_date)
     ]
+
 
 @api_endpoint
 def get_changed() -> bool:
