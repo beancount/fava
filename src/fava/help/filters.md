@@ -20,6 +20,22 @@ current year up to today, or `year-1 - year` for all entries of the last and
 current year. To prevent subtraction, use parentheses: `(month)-10` refers to
 the 10th of this month, whereas `month-10` would be 10 months ago.
 
+### Summarisation of previous balances and conversions
+
+When setting a time filter, Fava does not just filter to the transactions in the
+interval but also summarises transactions in the following ways (using
+Beancount's "clamp" summarisation):
+
+- All balances for the Income and Expenses accounts previous to the filtered
+  period are transferred to the `account_previous_earnings` ("retained
+  earnings") account and all of the other transactions before begin date are
+  summarised against the `account_previous_balances` account (usually "opening
+  balances"). So the Income and Expenses start with a balance of zero whereas
+  Assets and Liabilities accounts start with their accumulated balance.
+- All the entries after the end date are removed.
+- A conversion entry is added to the `account_current_conversions` account for
+  the changes occurring within the filtered period.
+
 ### ISO 8601 Week dates
 
 The week-based calendar follows
