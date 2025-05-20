@@ -40,7 +40,6 @@ from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
 from flask_babel import Babel  # type: ignore[import-untyped]
-# from flask import g
 from flask_babel import get_translations
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
@@ -107,6 +106,8 @@ SERVER_SIDE_REPORTS = [
     "journal",
     "statistics",
 ]
+
+balance = round(random.uniform(1000, 10000), 2)
 
 CLIENT_SIDE_REPORTS = [
     "balance_sheet",
@@ -350,21 +351,6 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     def account(name: str) -> str:  # noqa: ARG001
         """Get the account report."""
         return render_template("_layout.html", content="")
-
-    @fava_app.route("/api/today_balance", methods=["GET"])
-    def get_today_balance() -> Response:
-        """Get today's balance."""
-        # 获取今天的日期
-        today = date.today()
-
-        # 获取账户余额，假设要查询 "Assets:Cash" 账户
-        balance = balance = round(random.uniform(1000, 10000), 2)
-        
-        # 返回 JSON 格式的响应
-        return jsonify({
-            "date": today.isoformat(),
-            "balance": balance
-        })
 
     @fava_app.route("/<bfile>/account/<account_name>/transactions", methods=["GET"])
     def get_transactions(account_name: str, bfile: str) -> Response:

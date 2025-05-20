@@ -12,35 +12,121 @@
   let balance = $state("Loading...");
   const { onClose } = $props();
 
-  // 在组件挂载时发起 API 请求
-  onMount(async () => {
-    try {
-      const res = await fetch("/api/today_balance");
-      const data = await res.json();
-      balance = `${data.balance} USD`;  // 更新 balance
-    } catch (e) {
-      balance = "Error fetching data";  // 错误时显示信息
-    }
-  });
-  const showBalanceInNewWindow = async () => {
-    try {
-      const res = await fetch("/api/today_balance");
-      const data = await res.json();  // 解包 JSON 数据
+const showAccountOverviewInNewWindow = async () => {
+  try {
+    const pathParts = window.location.pathname.split("/");
+    const bfile = pathParts.length > 1 ? pathParts[1] : "";
+    const res = await fetch(`/${bfile}/api/account_overview`);
+    const { data } = await res.json();
 
-      // 尝试打开一个新窗口
-      const newWindow = window.open("", "_blank", "width=600,height=400");
+    const tableRows = data.map(
+      (row: any, index: number) => `
+        <tr class="${index % 2 === 0 ? "even" : "odd"}">
+          <td class="account">${row.account}</td>
+          <td class="date">${row.last_posting_date}</td>
+          <td class="balance">${row.balance} ${row.currency}</td>
+        </tr>`
+    ).join("");
 
-      // 确保 newWindow 被正确打开
-      if (newWindow) {
-        newWindow.document.write("<h1>Today's Balance</h1>");
-        newWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
-      } else {
-        console.error("Unable to open new window.");
-      }
-    } catch (e) {
-      console.error("Error fetching data", e);
-    }
-  };
+    const newWindow = window.open("", "_blank", "width=950,height=600");
+    newWindow?.document.write(`
+      <html>
+        <head>
+          <title>账户总览</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Roboto, sans-serif;
+              background: #f9f9fb;
+              margin: 0;
+              padding: 2rem;
+              color: #333;
+            }
+
+            h1 {
+              font-size: 1.6rem;
+              margin-bottom: 1rem;
+              text-align: center;
+              color: #007acc;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+              background: white;
+              border-radius: 8px;
+              overflow: hidden;
+            }
+
+            thead {
+              background-color: #e9f4fc;
+            }
+
+            th {
+              text-align: left;
+              padding: 0.75rem 1rem;
+              font-weight: 600;
+              border-bottom: 2px solid #ccc;
+              color: #007acc;
+            }
+
+            td {
+              padding: 0.6rem 1rem;
+              border-bottom: 1px solid #eee;
+              vertical-align: middle;
+            }
+
+            tr.even {
+              background-color: #fcfcfc;
+            }
+
+            tr.odd {
+              background-color: #f5f9fc;
+            }
+
+            td.balance {
+              text-align: right;
+              font-family: monospace;
+              font-weight: bold;
+              color: #333;
+            }
+
+            td.date {
+              white-space: nowrap;
+              color: #666;
+            }
+
+            td.account {
+              font-family: monospace;
+              color: #333;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>账户总览</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>账户</th>
+                <th>最新条目</th>
+                <th>余额</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `);
+
+    newWindow?.document.close();
+  } catch (e) {
+    console.error("Error fetching account overview", e);
+  }
+};
+
+
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
@@ -88,15 +174,11 @@
     bubble={[upcoming_events_count, "info"]}
   />
   <Link report="statistics" name={_("Statistics")} key="g s" />
-<!-- <li>
-  <button onclick={() => (showModal = true)} style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
-    📊 今日余额
-  </button>
-</li> -->
-<!-- 触发 showBalanceInNewWindow 显示今日余额的按钮 -->
 <li>
-  <button onclick={showBalanceInNewWindow} style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
-    📊 显示今日余额 (新窗口)
+  <button onclick={showAccountOverviewInNewWindow}
+    style="background:none;border:none;padding:0.25em 0.5em 0.25em 1em;
+           font:inherit;cursor:pointer;color:inherit;width:100%;text-align:left;">
+    📋 账户总览
   </button>
 </li>
 </ul>
