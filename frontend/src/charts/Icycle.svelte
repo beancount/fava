@@ -1,8 +1,6 @@
 <script lang="ts">
-  import type { HierarchyRectangularNode } from "d3-hierarchy";
   import { partition } from "d3-hierarchy";
-  import { scaleLinear, scaleSqrt } from "d3-scale";
-  import { arc } from "d3-shape";
+  import { scaleLinear } from "d3-scale";
   import { untrack } from "svelte";
 
   import { formatPercentage } from "../format";
@@ -13,6 +11,7 @@
     AccountHierarchyDatum,
     AccountHierarchyNode,
   } from "./hierarchy";
+  import { domHelpers, followingTooltip } from "./tooltip";
 
   interface Props {
     data: AccountHierarchyNode;
@@ -22,8 +21,6 @@
   }
 
   let { data, currency, width, height }: Props = $props();
-
-  let radius = $derived(Math.min(width, height) / 2);
 
   let root = $derived(partition<AccountHierarchyDatum>()(data));
   let nodes = $derived(
@@ -49,49 +46,76 @@
       : $ctx.amount(val, currency);
   }
 
-  const x = scaleLinear([0, 2 * Math.PI]);
-  let y = $derived(scaleSqrt([0, radius]));
-  let arcShape = $derived(
-    arc<HierarchyRectangularNode<AccountHierarchyDatum>>()
-      .startAngle((d) => x(d.x0))
-      .endAngle((d) => x(d.x1))
-      .innerRadius((d) => y(d.y0))
-      .outerRadius((d) => y(d.y1)),
-  );
+  let x = $derived(scaleLinear([0, width]));
+  let y = $derived(scaleLinear([0, height]));
+
+  function avg(x1: number, x2: number) {
+    return (x1 + x2) / 2;
+  }
+
+  function tooltipText(d: AccountHierarchyNode) {
+    const val = d.value ?? 0;
+    const rootValue = root.value ?? 1;
+
+    return [
+      domHelpers.t(
+        `${$ctx.amount(val, currency)} (${formatPercentage(val / rootValue)})`,
+      ),
+      domHelpers.em(d.data.account),
+    ];
+  }
 </script>
 
 <g
   {width}
   {height}
-  transform={`translate(${(width / 2).toString()},${(height / 2).toString()})`}
   onmouseleave={() => {
     current = null;
   }}
   role="img"
 >
-  <circle style="opacity:0" r={radius} />
-  <text class="account" text-anchor="middle">
-    {(current ?? root).data.account}
-  </text>
-  <text class="balance" dy="1.2em" text-anchor="middle">
-    {balanceText(current ?? root)}
-  </text>
+  <g
+    transform={`translate(${x(avg(root.y0, root.y1)).toString()},${y(avg(root.x0, root.x1)).toString()})`}
+  >
+    <text class="account" text-anchor="middle">
+      {root.data.account}
+    </text>
+    <text class="balance" dy="1.2em" text-anchor="middle">
+      {balanceText(root)}
+    </text>
+  </g>
   {#each nodes as d}
-    <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
-      <path
-        onmouseover={() => {
-          current = d;
-        }}
-        onfocus={() => {
-          current = d;
-        }}
-        class:half={current && !current.data.account.startsWith(d.data.account)}
-        fill-rule="evenodd"
-        fill={$sunburstScale(d.data.account)}
-        d={arcShape(d)}
-        role="img"
-      />
-    </a>
+    <g
+      transform={`translate(${x(d.y0).toString()},${y(d.x0).toString()})`}
+      use:followingTooltip={() => tooltipText(d)}
+    >
+      <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
+        <rect
+          fill-rule="evenodd"
+          fill={$sunburstScale(d.data.account)}
+          class:half={current &&
+            !current.data.account.startsWith(d.data.account)}
+          onmouseover={() => {
+            current = d;
+          }}
+          onfocus={() => {
+            current = d;
+          }}
+          width={width * (d.y1 - d.y0)}
+          height={height * (d.x1 - d.x0)}
+          role="img"
+        />
+        <text
+          dy=".5em"
+          text-anchor="middle"
+          x={x((d.y1 - d.y0) / 2)}
+          y={y((d.x1 - d.x0) / 2)}
+          visibility={y(d.x1 - d.x0) > 14 ? "visible" : "hidden"}
+        >
+          {d.data.account.split(":").pop() ?? ""}
+        </text>
+      </a>
+    </g>
   {/each}
 </g>
 
@@ -106,9 +130,5 @@
 
   .balance {
     font-family: var(--font-family-monospaced);
-  }
-
-  path {
-    cursor: pointer;
   }
 </style>
