@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING
 
 from flask_babel import gettext  # type: ignore[import-untyped]
 
+from fava.util import listify
 from fava.util.unreachable import assert_never
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -202,26 +203,38 @@ def get_next_interval(  # noqa: PLR0911
         return datetime.date.max
 
 
+class InvalidDateRangeError(ValueError):
+    """End date needs to be after begin date."""
+
+    def __init__(self) -> None:
+        super().__init__("End date needs to be after begin date.")
+
+
 def interval_ends(
-    first: datetime.date,
-    last: datetime.date,
+    begin: datetime.date,
+    end: datetime.date,
     interval: Interval,
+    *,
+    complete: bool,
 ) -> Iterator[datetime.date]:
     """Get interval ends.
 
     Yields:
         The ends of the intervals.
     """
-    yield get_prev_interval(first, interval)
-    while first < last:
-        first = get_next_interval(first, interval)
-        yield first
+    if begin >= end:
+        raise InvalidDateRangeError
+    current = get_prev_interval(begin, interval) if complete else begin
+    while current < end:
+        yield current
+        current = get_next_interval(current, interval)
+    yield current if complete else end
 
 
 ONE_DAY = timedelta(days=1)
 
 
-@dataclass
+@dataclass(frozen=True)
 class DateRange:
     """A range of dates, usually matching an interval."""
 
@@ -230,16 +243,23 @@ class DateRange:
     #: The exclusive end date of this range of dates.
     end: datetime.date
 
+    def __post_init__(self) -> None:
+        if self.begin >= self.end:
+            raise InvalidDateRangeError
+
     @property
     def end_inclusive(self) -> datetime.date:
         """The last day of this interval."""
         return self.end - ONE_DAY
 
 
+@listify
 def dateranges(
     begin: datetime.date,
     end: datetime.date,
     interval: Interval,
+    *,
+    complete: bool,
 ) -> Iterable[DateRange]:
     """Get date ranges for the given begin and end date.
 
@@ -249,11 +269,12 @@ def dateranges(
         end: The end date - the last interval will end on or after
              date
         interval: The type of interval to generate ranges for.
+        complete: Whether to complete starting and ending intervals.
 
     Yields:
         Date ranges for all intervals of the given in the
     """
-    ends = interval_ends(begin, end, interval)
+    ends = interval_ends(begin, end, interval, complete=complete)
     left, right = tee(ends)
     next(right, None)
     for interval_begin, interval_end in zip(left, right, strict=False):

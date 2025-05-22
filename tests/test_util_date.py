@@ -5,12 +5,15 @@ from unittest import mock
 
 import pytest
 
+from fava.util.date import DateRange
+from fava.util.date import dateranges
 from fava.util.date import FiscalYearEnd
 from fava.util.date import get_fiscal_period
 from fava.util.date import get_next_interval
 from fava.util.date import get_prev_interval
 from fava.util.date import Interval
 from fava.util.date import interval_ends
+from fava.util.date import InvalidDateRangeError
 from fava.util.date import month_offset
 from fava.util.date import number_of_days_in_period
 from fava.util.date import parse_date
@@ -105,30 +108,98 @@ def test_get_prev_interval(
     assert get == _to_date(expect)
 
 
-def test_interval_tuples() -> None:
+@pytest.mark.parametrize(
+    ("begin", "end", "interval", "expect_complete", "expect_exact"),
+    [
+        (
+            "2014-03-05",
+            "2014-05-05",
+            Interval.MONTH,
+            [
+                "2014-03-01",
+                "2014-04-01",
+                "2014-05-01",
+                "2014-06-01",
+            ],
+            [
+                "2014-03-05",
+                "2014-04-01",
+                "2014-05-01",
+                "2014-05-05",
+            ],
+        ),
+        (
+            "2014-01-01",
+            "2014-05-01",
+            Interval.MONTH,
+            [
+                "2014-01-01",
+                "2014-02-01",
+                "2014-03-01",
+                "2014-04-01",
+                "2014-05-01",
+            ],
+            [
+                "2014-01-01",
+                "2014-02-01",
+                "2014-03-01",
+                "2014-04-01",
+                "2014-05-01",
+            ],
+        ),
+        (
+            "2014-03-05",
+            "2014-05-05",
+            Interval.YEAR,
+            [
+                "2014-01-01",
+                "2015-01-01",
+            ],
+            [
+                "2014-03-05",
+                "2014-05-05",
+            ],
+        ),
+        (
+            "2014-01-01",
+            "2014-05-01",
+            Interval.YEAR,
+            [
+                "2014-01-01",
+                "2015-01-01",
+            ],
+            [
+                "2014-01-01",
+                "2014-05-01",
+            ],
+        ),
+    ],
+)
+def test_interval_tuples(
+    begin: str,
+    end: str,
+    interval: Interval,
+    expect_complete: list[str],
+    expect_exact: list[str],
+) -> None:
+    begin_date = _to_date(begin)
+    end_date = _to_date(end)
     assert list(
-        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH),
-    ) == [
-        date(2014, 3, 1),
-        date(2014, 4, 1),
-        date(2014, 5, 1),
-        date(2014, 6, 1),
-    ]
+        interval_ends(begin_date, end_date, interval, complete=True),
+    ) == [_to_date(d) for d in expect_complete]
     assert list(
-        interval_ends(date(2014, 1, 1), date(2014, 5, 1), Interval.MONTH),
-    ) == [
-        date(2014, 1, 1),
-        date(2014, 2, 1),
-        date(2014, 3, 1),
-        date(2014, 4, 1),
-        date(2014, 5, 1),
-    ]
-    assert list(
-        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.YEAR),
-    ) == [date(2014, 1, 1), date(2015, 1, 1)]
-    assert list(
-        interval_ends(date(2014, 1, 1), date(2015, 1, 1), Interval.YEAR),
-    ) == [date(2014, 1, 1), date(2015, 1, 1)]
+        interval_ends(begin_date, end_date, interval, complete=False),
+    ) == [_to_date(d) for d in expect_exact]
+
+
+def test_dateranges_single_date() -> None:
+    date_ = date(2012, 1, 1)
+    with pytest.raises(InvalidDateRangeError):
+        DateRange(date_, date_)
+    with pytest.raises(InvalidDateRangeError):
+        list(interval_ends(date_, date_, Interval.MONTH, complete=True))
+    with pytest.raises(InvalidDateRangeError):
+        dateranges(date_, date_, Interval.MONTH, complete=True)
 
 
 @pytest.mark.parametrize(

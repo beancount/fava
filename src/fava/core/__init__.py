@@ -171,12 +171,14 @@ class FilteredLedger:
         tree.cap(self.ledger.options, self.ledger.fava_options.unrealized)
         return tree
 
-    @listify
-    def interval_ranges(self, interval: Interval) -> Iterable[DateRange]:
+    def interval_ranges(self, interval: Interval) -> Sequence[DateRange]:
         """Yield date ranges corresponding to interval boundaries."""
         if not self._date_first or not self._date_last:
             return []
-        return dateranges(self._date_first, self._date_last, interval)
+        complete = not self.date_range
+        return dateranges(
+            self._date_first, self._date_last, interval, complete=complete
+        )
 
     def prices(self, base: str, quote: str) -> Sequence[tuple[date, Decimal]]:
         """List all prices."""
