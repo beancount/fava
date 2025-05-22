@@ -67,6 +67,6 @@
 
   g.y .zero line {
     opacity: 1;
-    stroke: #666;
+    stroke: var(--chart-line-at-zero);
   }
 </style>

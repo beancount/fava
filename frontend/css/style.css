@@ -4,291 +4,182 @@
   --font-family-monospaced: "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
 
+  color-scheme: light dark;
+
   /* Scale of z-index values */
   --z-index-floating-ui: 1;
   --z-index-autocomplete: 2;
   --z-index-overlay: 3;
   --z-index-keyboard-overlays: 4;
 
-  /* Base colors */
+  /* Named colors */
   --error: hsl(0deg 100% 30%);
   --warning: hsl(52deg 84% 56%);
   --red: var(--error);
   --yellow: var(--warning);
   --green: hsl(151deg 100% 25%);
-  --gray: #aaa;
-  --transparent-black: hsl(0deg 0% 0% / 50%);
-  --transparent-white: hsl(0deg 0% 100% / 50%);
-  --background: #fff;
-  --background-darker: hsl(0deg 0% 85%);
-  --text-color: hsl(0deg 0% 27%);
-  --text-color-lighter: hsl(0deg 0% 33%);
-  --text-color-lightest: hsl(0deg 0% 47%);
-  --link-color: hsl(203deg 100% 32%);
-  --link-hover-color: hsl(0deg 0% 33%);
-  --heading-color: #333;
-  --code-background: hsl(0deg 0% 97%);
-  --border: hsl(0deg 0% 85%);
-  --border-darker: hsl(0deg 0% 80%);
+  --gray: hsl(0deg 0% 67%);
+
+  /* Base colors (backgrounds) */
+  --background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 15%));
+  --background-darker: light-dark(hsl(0deg 0% 95%), hsl(0deg 0% 20%));
+  --background-darkest: light-dark(hsl(0deg 0% 90%), hsl(0deg 0% 25%));
+  --background-button: light-dark(hsl(0deg 0% 80%), hsl(0deg 0% 35%));
+
+  /* Base colors (borders) */
+  --border-lighter: light-dark(hsl(0deg 0% 90%), hsl(0deg 0% 25%));
+  --border: light-dark(hsl(0deg 0% 85%), hsl(0deg 0% 30%));
+  --border-darker: light-dark(hsl(0deg 0% 80%), hsl(0deg 0% 35%));
+
+  /* Base colors (foreground) */
+  --text-color: light-dark(hsl(0deg 0% 25%), hsl(0deg 0% 80%));
+  --text-color-lighter: light-dark(hsl(0deg 0% 30%), hsl(0deg 0% 75%));
+  --text-color-lightest: light-dark(hsl(0deg 0% 40%), hsl(0deg 0% 65%));
+  --link-color: light-dark(hsl(203deg 100% 32%), hsl(203deg 100% 68%));
+  --link-hover-color: var(--text-color-lighter);
+
+  /* Base elements */
+  --heading-color: var(--text-color);
+  --code-background: var(--background-darker);
 
   /* Box shadows */
   --box-shadow-button: 0 0 5px hsl(0deg 0% 50% / 50%);
-  --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 50% / 50%);
+  --box-shadow-dropdown: 3px 3px 3px
+    light-dark(hsl(0deg 0% 50% / 50%), hsl(0deg 0% 25% / 50%));
   --box-shadow-kbd: inset 0 -1px 0 var(--border-darker);
   --box-shadow-overlay: 0 0 20px var(--overlay-wrapper-background);
 
   /* Buttons */
-  --button-color: #fff;
+  --button-color: hsl(0deg 0% 100%);
   --button-background: hsl(203deg 100% 32%);
   --button-muted-color: var(--text-color);
-  --button-muted-background: var(--background-darker);
+  --button-muted-background: var(--background-button);
 
   /* Sidebar */
-  --sidebar-color: #444;
+  --sidebar-color: var(--text-color-lighter);
   --sidebar-hover-color: var(--link-color);
-  --sidebar-background: hsl(0deg 0% 96%);
-  --sidebar-border: hsl(0deg 0% 87%);
+  --sidebar-background: var(--background-darker);
+  --sidebar-border: var(--border-lighter);
 
   /* Details */
-  --summary-background: hsl(0deg 0% 95%);
-  --summary-background-darker: hsl(0deg 0% 90%);
+  --summary-background: var(--background-darker);
+  --summary-background-darker: var(--background-darkest);
 
   /* Header */
-  --header-color: #fff;
-  --header-background: hsl(203deg 100% 32%);
+  --header-color: hsl(0deg 0% 100%);
+  --header-background: light-dark(hsl(203deg 100% 32%), hsl(203deg 100% 25%));
   --header-placeholder-color: hsl(203deg 47% 66%);
   --header-placeholder-background: hsl(203deg 56% 45%);
 
   /* Tables */
-  --table-header-text: hsl(0deg 0% 40%);
-  --table-header-background: hsl(0deg 0% 90%);
-  --table-border: hsl(0deg 0% 90%);
-  --table-background-even: hsl(0deg 0% 95%);
-  --treetable-expander: #afc1d3;
-  --budget-negative: #af3d3d;
-  --budget-positive: #3daf46;
+  --table-header-text: var(--text-color-lightest);
+  --table-header-background: var(--background-darkest);
+  --table-border: var(--border-lighter);
+  --table-background-even: var(--background-darker);
+  --treetable-expander: light-dark(hsl(210deg 30% 45%), hsl(210deg 30% 55%));
 
-  /* Editor elements. */
-  --editor-activeline: #cef4;
-  --editor-selectionmatch: hsl(105deg 100% 73% / 50%);
+  /* Amount differences. */
+  --diff-negative: light-dark(hsl(0deg 48% 40%), hsl(0deg 48% 60%));
+  --diff-positive: light-dark(hsl(125deg 48% 40%), hsl(125deg 48% 60%));
 
-  /* Editor contents */
+  /* Editor elements */
+  --editor-activeline: light-dark(
+    hsl(200deg 100% 90% / 30%),
+    hsl(200deg 100% 30% / 30%)
+  );
+  --editor-selectionmatch: light-dark(
+    hsl(105deg 100% 70% / 50%),
+    hsl(105deg 100% 30% / 50%)
+  );
+
+  /* Beancount editor contents */
   --editor-account: var(--link-color);
-  --editor-class: #b84;
-  --editor-comment: #998;
-  --editor-constant: #008080;
-  --editor-currencies: #708;
-  --editor-date: #099;
-  --editor-directive: #333;
-  --editor-invalid-background: rgb(255 199 199 / 50%);
-  --editor-invalid: #333;
-  --editor-label-name: #221198;
-  --editor-number: #116543;
-  --editor-string: #a91111;
+  --editor-class: light-dark(hsl(34deg 50% 30%), hsl(34deg 50% 70%));
+  --editor-comment: hsl(60deg 8% 50%);
+  --editor-currencies: light-dark(hsl(293deg 100% 30%), hsl(293deg 100% 60%));
+  --editor-date: light-dark(hsl(180deg 100% 20%), hsl(180deg 100% 50%));
+  --editor-directive: var(--text-color);
+  --editor-invalid-background: hsl(0deg 100% 80% / 50%);
+  --editor-invalid: var(--text-color);
+  --editor-label-name: light-dark(hsl(248deg 80% 33%), hsl(248deg 80% 67%));
+  --editor-number: light-dark(hsl(156deg 71% 20%), hsl(156deg 71% 40%));
+  --editor-string: light-dark(hsl(0deg 82% 33%), hsl(0deg 82% 67%));
 
-  /* Query Editor */
-  --bql-keywords: #708;
-  --bql-values: #085;
-  --bql-string: #a11;
-  --bql-errors: #000;
+  /* Query editor contents */
+  --bql-keywords: var(--editor-currencies);
+  --bql-values: light-dark(hsl(158deg 100% 30%), hsl(158deg 100% 60%));
+  --bql-string: var(--editor-string);
+  --bql-errors: var(--text-color);
 
   /* Misc */
-  --notification-color: #fff;
-  --chart-axis: #999;
-  --autocomplete-match: #ffd27c;
-  --mobile-button-text: #000;
-  --placeholder-color: var(--text-color-lightest);
-  --placeholder-background: var(--background);
+  --notification-color: hsl(0deg 0% 100%);
+  --chart-axis: hsl(0deg 0% 60%);
+  --chart-line-at-zero: hsl(0deg 0% 40%);
+  --autocomplete-match: hsl(39deg 100% 70% / 50%);
+  --mobile-button-text: light-dark(hsl(0deg 0% 0%), hsl(0deg 0% 79%));
+  --placeholder-color: light-dark(hsl(0deg 0% 47%), hsl(0deg 0% 85%));
+  --placeholder-background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 30%));
   --dragover-background: hsl(203deg 100% 32% / 50%);
-  --overlay-wrapper-background: rgb(0 0 0 / 50%);
+  --overlay-wrapper-background: hsl(0deg 0% 50% / 50%);
 
   /* Help pages */
-  --help-sidebar-background: #f8f8f8;
-  --help-sidebar-border: #eaeaea;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-
-    /* Base colors */
-    --heading-color: #d7dce2;
-    --text-color: hsl(0deg 0% 75%);
-    --text-color-darker: hsl(0deg 0% 25%);
-    --text-color-lighter: hsl(0deg 0% 85%);
-    --link-color: hsl(203deg 100% 70%);
-    --link-hover-color: hsl(0deg 0% 45%);
-    --code-background: hsl(0deg 0% 25%);
-    --background: hsl(200deg 6% 15%);
-    --background-darker: hsl(200deg 5% 30%);
-    --border: hsl(0deg 0% 35%);
-    --border-darker: hsl(0deg 0% 30%);
-
-    /* Box shadows */
-    --box-shadow-dropdown: 3px 3px 3px hsl(0deg 0% 25% / 50%);
-
-    /* Sidebar */
-    --sidebar-background: hsl(200deg 5% 18%);
-    --sidebar-color: hsl(0deg 0% 73%);
-    --sidebar-border: hsl(200deg 5% 25%);
-
-    /* Details */
-    --summary-background: hsl(0deg 0% 25%);
-    --summary-background-darker: hsl(0deg 0% 20%);
-
-    /* Header */
-    --header-color: #fff;
-    --header-background: hsl(203deg 100% 25%);
-
-    /* Tables */
-    --table-header-text: hsl(0deg 0% 80%);
-    --table-header-background: var(--sidebar-background);
-    --table-border: var(--sidebar-border);
-    --table-background-even: hsl(0deg 0% 18%);
-
-    /* Editor elements. */
-    --editor-activeline: #44535b44;
-    --editor-selectionmatch: hsl(105deg 100% 30% / 50%);
-
-    /* Editor */
-    --editor-account: var(--link-color);
-    --editor-class: #e1a759;
-    --editor-comment: #998;
-    --editor-constant: #02a0a0;
-    --editor-currencies: #cd00e8;
-    --editor-date: #0ad3d3;
-    --editor-directive: #c6c6c6;
-    --editor-invalid-background: rgb(176 82 82 / 50%);
-    --editor-invalid: #d5c5c5;
-    --editor-label-name: #9c90f6;
-    --editor-number: #00b672;
-    --editor-string: #e87f7f;
-
-    /* Query Editor */
-    --bql-keywords: #c678dd;
-    --bql-values: #98c379;
-    --bql-string: #ee5e5e; /* #e5c07b; */
-    --bql-errors: var(--text-color-lighter);
-
-    /* Misc */
-    --placeholder-color: var(--text-color-lighter);
-    --placeholder-background: hsl(222deg 7% 29%);
-    --mobile-button-text: #cacaca;
-
-    /* Help pages */
-    --help-sidebar-background: #3b3b3b;
-    --help-sidebar-border: #2a2a2a;
-
-    input,
-    textarea {
-      background: var(--placeholder-background);
-    }
-  }
+  --help-sidebar-background: var(--background-darker);
+  --help-sidebar-border: var(--border-lighter);
 }
 
 .journal .balance {
-  --entry-background: hsl(120deg 100% 90%);
+  --entry-background: light-dark(hsl(120deg 100% 90%), hsl(120deg 50% 15%));
 }
 
 .journal .close {
-  --entry-background: hsl(0deg 0% 70%);
+  --entry-background: light-dark(hsl(0deg 0% 70%), hsl(0deg 0% 15%));
 }
 
 .journal .custom {
-  --entry-background: hsl(51deg 100% 80%);
+  --entry-background: light-dark(hsl(51deg 100% 80%), hsl(52deg 100% 15%));
 }
 
 .journal .document {
-  --entry-background: hsl(300deg 100% 80%);
+  --entry-background: light-dark(hsl(300deg 100% 80%), hsl(300deg 45% 25%));
 }
 
 .journal .note {
-  --entry-background: hsl(213deg 100% 80%);
+  --entry-background: light-dark(hsl(213deg 100% 80%), hsl(212deg 43% 25%));
 }
 
 .journal .open {
-  --entry-background: hsl(0deg 0% 92%);
+  --entry-background: light-dark(hsl(0deg 0% 92%), hsl(0deg 0% 20%));
 }
 
 .journal .other {
-  --entry-background: hsl(180deg 100% 70%);
+  --entry-background: light-dark(hsl(180deg 100% 70%), hsl(180deg 100% 25%));
 }
 
 .journal .pad {
-  --entry-background: hsl(180deg 100% 85%);
+  --entry-background: light-dark(hsl(180deg 100% 85%), hsl(180deg 100% 15%));
 }
 
 .journal .pending {
-  --entry-background: hsl(343deg 100% 80%);
+  --entry-background: light-dark(hsl(343deg 100% 80%), hsl(343deg 60% 20%));
 }
 
 .journal .query {
-  --entry-background: hsl(213deg 100% 80%);
+  --entry-background: light-dark(hsl(213deg 100% 80%), hsl(213deg 100% 25%));
 }
 
 .journal .budget {
-  --entry-background: hsl(35deg 100% 80%);
+  --entry-background: light-dark(hsl(35deg 100% 80%), hsl(35deg 100% 20%));
 }
 
 .journal {
-  --journal-postings: hsl(0deg 0% 92%);
+  --journal-postings: light-dark(hsl(0deg 0% 92%), hsl(0deg 0% 10%));
   --journal-metadata: hsl(210deg 44% 67%);
   --journal-tag: hsl(210deg 61% 64%);
   --journal-link: hsl(203deg 39% 85%);
   --journal-posting-indicator: hsl(203deg 24% 80%);
   --journal-metadata-indicator: hsl(203deg 24% 40%);
-  --journal-hover-highlight: hsl(0deg 0% 90% / 60%);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    .journal .balance {
-      --entry-background: hsl(120deg 50% 15%);
-    }
-
-    .journal .close {
-      --entry-background: hsl(0deg 0% 15%);
-    }
-
-    .journal .custom {
-      --entry-background: hsl(52deg 100% 15%);
-    }
-
-    .journal .document {
-      --entry-background: hsl(300deg 45% 25%);
-    }
-
-    .journal .note {
-      --entry-background: hsl(212deg 43% 25%);
-    }
-
-    .journal .open {
-      --entry-background: hsl(0deg 0% 20%);
-    }
-
-    .journal .other {
-      --entry-background: hsl(180deg 100% 25%);
-    }
-
-    .journal .pad {
-      --entry-background: hsl(180deg 100% 15%);
-    }
-
-    .journal .pending {
-      --entry-background: hsl(343deg 60% 20%);
-    }
-
-    .journal .query {
-      --entry-background: hsl(213deg 100% 25%);
-    }
-
-    .journal .budget {
-      --entry-background: hsl(35deg 100% 20%);
-    }
-
-    .journal {
-      --journal-postings: hsl(0deg 0% 10%);
-      --journal-hover-highlight: hsl(0deg 0% 20% / 60%);
-    }
-  }
+  --journal-hover-highlight: light-dark(
+    hsl(0deg 0% 90% / 60%),
+    hsl(0deg 0% 20% / 60%)
+  );
 }

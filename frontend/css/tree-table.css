@@ -176,16 +176,15 @@
 .tree-table .diff {
   margin-right: 3px;
   font-size: 0.9em;
-  color: var(--budget-zero);
   white-space: nowrap;
 }
 
 .tree-table .diff.negative {
-  color: var(--budget-negative);
+  color: var(--diff-negative);
 }
 
 .tree-table .diff.positive {
-  color: var(--budget-positive);
+  color: var(--diff-positive);
 }
 
 /* For two or more operating currencies, set a slightly smaller size. */

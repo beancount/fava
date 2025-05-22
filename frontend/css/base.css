@@ -169,6 +169,7 @@ textarea {
 input,
 textarea {
   padding: 6px 10px;
+  background: var(--placeholder-background);
   border: 1px solid var(--border-darker);
 }
 
@@ -346,7 +347,7 @@ kbd {
 }
 
 .dimmed {
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 /*

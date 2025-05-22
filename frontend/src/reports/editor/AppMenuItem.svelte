@@ -47,7 +47,7 @@
 
   span.open,
   span:hover {
-    background-color: var(--background-darker);
+    background-color: var(--background-darkest);
   }
 
   span::after {

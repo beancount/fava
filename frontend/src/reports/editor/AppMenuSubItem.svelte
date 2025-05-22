@@ -53,6 +53,6 @@
 
   li:hover,
   li:focus-visible {
-    background-color: var(--background-darker);
+    background-color: var(--background-darkest);
   }
 </style>
