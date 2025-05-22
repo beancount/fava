@@ -14,11 +14,6 @@
   In particular it should match the Select-Only Combobox example at
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/
 -->
-<script lang="ts" module>
-  /** Incrementing number to use for element ids in the component. */
-  let id = 0;
-</script>
-
 <script lang="ts">
   interface Props {
     /** The currently entered value. */
@@ -45,8 +40,8 @@
   /** The popup list element. */
   let ul: HTMLUListElement | undefined = $state();
 
-  id += 1;
-  const listbox_id = `combobox-listbox-${id.toString()}`;
+  const uid = $props.id();
+  const listbox_id = `combobox-listbox-${uid.toString()}`;
 
   const SEPARATOR = ",";
   let values = $derived(value.split(SEPARATOR));

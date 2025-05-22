@@ -11,11 +11,6 @@
   In particular it should match the Editable Combobox With List Autocomplete example at
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
 -->
-<script lang="ts" module>
-  /** Incrementing number to use for element ids in the component. */
-  let id = 0;
-</script>
-
 <script lang="ts">
   import type { KeySpec } from "./keyboard-shortcuts";
   import { keyboardShortcut } from "./keyboard-shortcuts";
@@ -69,8 +64,8 @@
     onSelect,
   }: Props = $props();
 
-  id += 1;
-  const autocomple_id = `combobox-autocomplete-${id.toString()}`;
+  const uid = $props.id();
+  const autocomple_id = `combobox-autocomplete-${uid.toString()}`;
 
   let hidden = $state.raw(true);
   let index = $state.raw(-1);
