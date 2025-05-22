@@ -129,24 +129,29 @@
   <div class="flex-row">
     <span class="label"> <span>{_("Postings")}:</span> </span>
   </div>
-  {#each entry.postings as posting, index}
-    <PostingSvelte
-      bind:posting={
-        () => posting,
-        (posting: Posting) => {
-          entry = entry.set("postings", entry.postings.with(index, posting));
+  {#each entry.postings, index (index)}
+    <!-- Using the indexed access (instead of `as posting` in the each) seems to track
+         the reactivity differently and avoids cursor jumping on the posting inputs. -->
+    {@const posting = entry.postings[index]}
+    {#if posting}
+      <PostingSvelte
+        bind:posting={
+          () => posting,
+          (posting: Posting) => {
+            entry = entry.set("postings", entry.postings.with(index, posting));
+          }
         }
-      }
-      {index}
-      {suggestions}
-      date={entry.date}
-      move={({ from, to }: { from: number; to: number }) => {
-        entry = entry.set("postings", move(entry.postings, from, to));
-      }}
-      remove={() => {
-        entry = entry.set("postings", entry.postings.toSpliced(index, 1));
-      }}
-    />
+        {index}
+        {suggestions}
+        date={entry.date}
+        move={({ from, to }: { from: number; to: number }) => {
+          entry = entry.set("postings", move(entry.postings, from, to));
+        }}
+        remove={() => {
+          entry = entry.set("postings", entry.postings.toSpliced(index, 1));
+        }}
+      />
+    {/if}
   {/each}
 </div>
 
