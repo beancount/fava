@@ -54,7 +54,7 @@
   <tbody>
     {#each sorted_rows as row (row)}
       <tr>
-        {#each row as value, index (value)}
+        {#each row as value, index (index)}
           {#if value === null}
             <td>&nbsp;</td>
           {:else if typeof value === "boolean"}
