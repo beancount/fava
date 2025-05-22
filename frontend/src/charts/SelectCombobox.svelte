@@ -168,7 +168,7 @@
     {description(value)}
   </button>
   <ul {hidden} role="listbox" id={listbox_id} bind:this={ul}>
-    {#each options as option, i}
+    {#each options as option, i (option)}
       <li
         role="option"
         aria-selected={values.includes(option)}

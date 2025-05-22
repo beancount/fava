@@ -81,7 +81,7 @@
 {/if}
 {#if hasChildren}
   <ul hidden={!expanded}>
-    {#each node.children as child}
+    {#each node.children as child (child.name)}
       <li>
         <Accounts node={child} {move} />
       </li>

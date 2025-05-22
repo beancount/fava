@@ -68,7 +68,7 @@
 </script>
 
 <form class="flex-row">
-  {#each buttons as [type, button_text, title, shortcut, supertype]}
+  {#each buttons as [type, button_text, title, shortcut, supertype] (type)}
     <button
       type="button"
       title={title ?? format(toggleText, { type: button_text })}

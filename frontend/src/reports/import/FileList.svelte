@@ -27,7 +27,7 @@
   }: Props = $props();
 </script>
 
-{#each files as file}
+{#each files as file (file.name)}
   <div class="header" title={file.name} class:selected={selected === file.name}>
     <button
       type="button"
@@ -50,7 +50,7 @@
       ×
     </button>
   </div>
-  {#each file.importers as info}
+  {#each file.importers as info (info.importer_name)}
     {@const file_importer_key = `${file.name}:${info.importer_name}`}
     {@const account = file_accounts.get(file_importer_key) ?? info.account}
     {@const new_name = file_names.get(file_importer_key) ?? info.newName}

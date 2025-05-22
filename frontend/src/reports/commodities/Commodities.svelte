@@ -7,7 +7,7 @@
 </script>
 
 <ChartSwitcher {charts} />
-{#each commodities as { base, quote, prices }}
+{#each commodities as { base, quote, prices } (`${base}-${quote}`)}
   <div class="left">
     <h3>{base} / {quote}</h3>
     <CommodityTable {prices} {quote} />

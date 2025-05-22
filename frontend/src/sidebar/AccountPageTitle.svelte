@@ -17,7 +17,7 @@
 </script>
 
 <span class="droptarget" data-account-name={account}>
-  {#each parts as part, index}
+  {#each parts as part, index (index)}
     {@const name = parts.slice(0, index + 1).join(":")}<a
       href={$urlForAccount(name)}
       title={name}>{part}</a

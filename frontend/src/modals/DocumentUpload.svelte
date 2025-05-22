@@ -47,7 +47,7 @@
 <ModalBase {shown} {closeHandler}>
   <form onsubmit={submit}>
     <h3>{_("Upload file(s)")}:</h3>
-    {#each $files as file}
+    {#each $files as file (file.dataTransferFile)}
       <div class="fieldset">
         <input class="file" bind:value={file.name} />
       </div>
@@ -56,7 +56,7 @@
       <label>
         <span>{_("Documents folder")}:</span>
         <select bind:value={documents_folder}>
-          {#each documents as folder}
+          {#each documents as folder (folder)}
             <option>{folder}</option>
           {/each}
         </select>
@@ -81,11 +81,11 @@
     margin-bottom: 6px;
   }
 
-  .fieldset :global(span):first-child {
+  .fieldset > label > :global(span):first-child {
     margin-right: 8px;
   }
 
-  .fieldset.account :global(span):last-child {
+  .fieldset.account > label > :global(span):last-child {
     min-width: 25rem;
   }
 </style>

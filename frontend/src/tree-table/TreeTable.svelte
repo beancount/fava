@@ -36,13 +36,13 @@
   <li class="head">
     <p>
       <AccountCellHeader />
-      {#each $operating_currency as currency}
+      {#each $operating_currency as currency (currency)}
         <span class="num" title={$currency_name(currency)}>{currency}</span>
       {/each}
       <span class="num other">{_("Other")}</span>
     </p>
   </li>
-  {#each tree.account === "" ? tree.children : [tree] as n}
+  {#each tree.account === "" ? tree.children : [tree] as n (n.account)}
     <TreeTableNode node={n} invert={$invert_account(n.account) ? -1 : 1} />
   {/each}
 </ol>

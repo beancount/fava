@@ -76,7 +76,7 @@
   <text class="balance" dy="1.2em" text-anchor="middle">
     {balanceText(current ?? root)}
   </text>
-  {#each nodes as d}
+  {#each nodes as d (d.data.account)}
     <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
       <path
         onmouseover={() => {

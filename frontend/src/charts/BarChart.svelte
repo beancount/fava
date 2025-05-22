@@ -87,7 +87,7 @@
   <g transform={`translate(${offset.toString()},${margin.top.toString()})`}>
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} lineAtZero={y(0)} />
-    {#each bar_groups as group}
+    {#each bar_groups as group (group.date)}
       <g
         class="group"
         class:desaturate={group.date > today}
@@ -112,7 +112,7 @@
           />
         </a>
         {#if !showStackedBars}
-          {#each group.values as { currency, value, budget }}
+          {#each group.values as { currency, value, budget } (currency)}
             <rect
               fill={$currenciesScale(currency)}
               width={x1.bandwidth()}
@@ -132,8 +132,8 @@
       </g>
     {/each}
     {#if showStackedBars}
-      {#each stacks as [currency, account_stacks]}
-        {#each account_stacks as stack}
+      {#each stacks as [currency, account_stacks] (currency)}
+        {#each account_stacks as stack (stack.key)}
           {@const account = stack.key}
           <a href={$urlForAccount(account)}>
             <g
@@ -153,7 +153,7 @@
               }}
               role="img"
             >
-              {#each stack as bar}
+              {#each stack as bar (bar.data.date)}
                 <rect
                   class:desaturate={bar.data.date > today}
                   width={x1.bandwidth()}

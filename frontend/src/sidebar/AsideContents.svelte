@@ -18,7 +18,7 @@
 
 {#if sidebar_links.length}
   <ul class="navigation">
-    {#each sidebar_links as [label, link]}
+    {#each sidebar_links as [label, link] (link)}
       <Link report={link} name={label} remote />
     {/each}
   </ul>
@@ -31,7 +31,7 @@
   <Link report="query" name={_("Query")} key="g q">
     {#if user_queries.length}
       <ul class="submenu">
-        {#each user_queries as { query_string, name }}
+        {#each user_queries as { query_string, name } (query_string)}
           <li>
             <a href={$urlFor("query/", { query_string })}>{truncate(name)}</a>
           </li>
@@ -77,7 +77,7 @@
 </ul>
 {#if extension_reports.length}
   <ul class="navigation">
-    {#each extension_reports as ext}
+    {#each extension_reports as ext (ext.name)}
       <Link report={`extension/${ext.name}`} name={ext.report_title ?? ""} />
     {/each}
   </ul>

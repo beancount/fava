@@ -65,7 +65,7 @@
 </script>
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
-  {#each leaves as d}
+  {#each leaves as d (d.data.account)}
     <g
       transform={`translate(${d.x0.toString()},${d.y0.toString()})`}
       use:followingTooltip={() => tooltipText(d)}

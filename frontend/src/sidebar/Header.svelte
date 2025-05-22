@@ -18,7 +18,7 @@
     {#if has_dropdown}
       <div class="beancount-files">
         <ul>
-          {#each other_ledgers as [name, url]}
+          {#each other_ledgers as [name, url] (url)}
             <li>
               <a href={url} data-remote>{name}</a>
             </li>

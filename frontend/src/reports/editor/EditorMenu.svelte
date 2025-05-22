@@ -46,7 +46,7 @@
 <div>
   <AppMenu>
     <AppMenuItem name={_("File")}>
-      {#each sources as source}
+      {#each sources as source (source)}
         <AppMenuSubItem
           action={() => {
             goToFileAndLine(source);
@@ -85,7 +85,7 @@
     </AppMenuItem>
     {#if insertEntryOptions.length}
       <AppMenuItem name={`'insert-entry' ${_("Options")}`}>
-        {#each insertEntryOptions as opt}
+        {#each insertEntryOptions as opt (`${opt.filename}:${opt.lineno.toString()}`)}
           <AppMenuSubItem
             title={`${opt.filename}:${opt.lineno.toString()}`}
             action={() => {

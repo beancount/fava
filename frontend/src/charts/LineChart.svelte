@@ -97,21 +97,21 @@
     <Axis y axis={yAxis} />
     {#if $lineChartMode === "area"}
       <g class="area" filter={futureFilter}>
-        {#each data as d}
+        {#each data as d (d.name)}
           <path d={areaShape(d.values)} fill={$currenciesScale(d.name)} />
         {/each}
       </g>
     {/if}
     <g class="lines" filter={futureFilter}>
-      {#each data as d}
+      {#each data as d (d.name)}
         <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
       {/each}
     </g>
     {#if $lineChartMode === "line"}
       <g>
-        {#each data as d}
+        {#each data as d (d.name)}
           <g fill={$currenciesScale(d.name)}>
-            {#each d.values as v}
+            {#each d.values as v (v.date)}
               <circle
                 r="2"
                 cx={x(v.date)}

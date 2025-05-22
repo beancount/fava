@@ -22,13 +22,13 @@
 <table>
   <thead>
     <tr>
-      {#each columns as column}
+      {#each columns as column (column)}
         <SortHeader bind:sorter {column} />
       {/each}
     </tr>
   </thead>
   <tbody>
-    {#each sorted_events as event}
+    {#each sorted_events as event (`${event.date}-${event.description}`)}
       <tr>
         <td>{event.date}</td>
         <td>{event.description}</td>

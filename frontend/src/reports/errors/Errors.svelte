@@ -32,13 +32,13 @@
   <table>
     <thead>
       <tr>
-        {#each columns as column}
+        {#each columns as column (column)}
           <SortHeader bind:sorter {column} />
         {/each}
       </tr>
     </thead>
     <tbody>
-      {#each sorted_errors as { message, source }}
+      {#each sorted_errors as { message, source } (source ? `${source.filename}-${source.lineno.toString()}-${message}` : message)}
         <tr>
           {#if source}
             {@const url = $urlForSource(
@@ -58,7 +58,7 @@
             <td class="num"></td>
           {/if}
           <td class="pre">
-            {#each extract_accounts(message) as [type, text]}
+            {#each extract_accounts(message) as [type, text] (text)}
               {#if type === "text"}
                 {text}
               {:else}

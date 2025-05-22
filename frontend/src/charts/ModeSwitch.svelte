@@ -10,7 +10,7 @@
 </script>
 
 <span>
-  {#each store.values() as [option, name]}
+  {#each store.values() as [option, name] (option)}
     <label class="button" class:muted={$store !== option}>
       <input type="radio" bind:group={$store} value={option} />
       {name}

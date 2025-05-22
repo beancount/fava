@@ -40,7 +40,7 @@
   <form onsubmit={submit}>
     <h3>
       {_("Add")}
-      {#each entryTypes as [Cls, displayName]}
+      {#each entryTypes as [Cls, displayName] (displayName)}
         <button
           type="button"
           class:muted={!(entry instanceof Cls)}

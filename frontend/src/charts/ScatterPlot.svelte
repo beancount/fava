@@ -71,7 +71,7 @@
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} />
     <g>
-      {#each chart.data as dot}
+      {#each chart.data as dot (`${dot.date.toString()}-${dot.type}`)}
         <circle
           r="5"
           fill={scatterplotScale(dot.type)}

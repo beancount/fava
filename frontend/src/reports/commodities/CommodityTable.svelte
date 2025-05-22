@@ -25,7 +25,7 @@
 <table>
   <thead>
     <tr>
-      {#each columns as column}
+      {#each columns as column (column)}
         <SortHeader bind:sorter {column} />
       {/each}
     </tr>

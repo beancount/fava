@@ -18,7 +18,7 @@
 {/if}
 
 <div class="row">
-  {#each trees as tree}
+  {#each trees as tree (tree.account)}
     <TreeTable {tree} {end} />
   {/each}
 </div>

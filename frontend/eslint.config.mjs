@@ -73,7 +73,6 @@ export default tseslint.config(
     },
     rules: {
       "svelte/button-has-type": ON,
-      "svelte/require-each-key": OFF,
     },
   },
 );

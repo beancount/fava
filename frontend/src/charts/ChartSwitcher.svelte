@@ -38,7 +38,7 @@
     <ConversionAndInterval />
   </Chart>
   <div hidden={!$showCharts}>
-    {#each charts as chart, index}
+    {#each charts as chart, index (chart.name)}
       <button
         type="button"
         class="unset"

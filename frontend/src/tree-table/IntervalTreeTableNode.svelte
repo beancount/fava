@@ -31,7 +31,7 @@
 <li>
   <p>
     <AccountCell {node} />
-    {#each nodes as n, index}
+    {#each nodes as n, index (n.account)}
       {@const account_budget = account_budgets?.[index]}
       {@const has_balance =
         !is_empty(n.balance) ||
@@ -42,7 +42,7 @@
         ? account_budget?.budget
         : account_budget?.budget_children}
       <span class="num other" class:dimmed={!is_toggled && !has_balance}>
-        {#each Object.entries(shown_balance) as [currency, number]}
+        {#each Object.entries(shown_balance) as [currency, number] (currency)}
           {@const budget = shown_budget?.[currency]}
           <span title={$currency_name(currency)}>
             {$ctx.amount(number, currency)}
@@ -53,7 +53,7 @@
           <br />
         {/each}
         {#if shown_budget}
-          {#each Object.entries(shown_budget).filter(([c]) => !(shown_balance[c] ?? 0)) as [currency, budget]}
+          {#each Object.entries(shown_budget).filter(([c]) => !(shown_balance[c] ?? 0)) as [currency, budget] (currency)}
             <span title={$currency_name(currency)}>
               {$ctx.amount(0, currency)}
             </span>

@@ -19,12 +19,12 @@
 
 <div class="row">
   <div class="column">
-    {#each trees.slice(0, 2) as tree}
+    {#each trees.slice(0, 2) as tree (tree.account)}
       <TreeTable {tree} {end} />
     {/each}
   </div>
   <div class="column">
-    {#each trees.slice(2) as tree}
+    {#each trees.slice(2) as tree (tree.account)}
       <TreeTable {tree} {end} />
     {/each}
   </div>

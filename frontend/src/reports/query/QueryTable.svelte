@@ -46,15 +46,15 @@
 <table>
   <thead>
     <tr>
-      {#each table.columns as column}
+      {#each table.columns as column (column.name)}
         <SortHeader bind:sorter {column} />
       {/each}
     </tr>
   </thead>
   <tbody>
-    {#each sorted_rows as row}
+    {#each sorted_rows as row (row)}
       <tr>
-        {#each row as value, index}
+        {#each row as value, index (value)}
           {#if value === null}
             <td>&nbsp;</td>
           {:else if typeof value === "boolean"}
@@ -98,7 +98,7 @@
             </td>
           {:else if value instanceof Inventory}
             <td class="num">
-              {#each Object.entries(value.value) as [currency, number]}
+              {#each Object.entries(value.value) as [currency, number] (currency)}
                 {$ctx.amount(number, currency)}
                 <br />
               {/each}

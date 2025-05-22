@@ -18,7 +18,7 @@
 </script>
 
 <div>
-  {#each legend as item}
+  {#each legend as item (item)}
     <button
       type="button"
       onclick={() => {

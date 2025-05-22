@@ -35,11 +35,11 @@
           </tr>
         </thead>
         <tbody>
-          {#each Object.entries(balances_before) as [account, inventory]}
+          {#each Object.entries(balances_before) as [account, inventory] (account)}
             <tr>
               <td><a href={$urlForAccount(account)}>{account}</a></td>
               <td>
-                {#each inventory as amount}
+                {#each inventory as amount (amount)}
                   {amount}
                   <br />
                 {/each}
@@ -55,11 +55,11 @@
           </tr>
         </thead>
         <tbody>
-          {#each Object.entries(balances_after) as [account, inventory]}
+          {#each Object.entries(balances_after) as [account, inventory] (account)}
             <tr>
               <td><a href={$urlForAccount(account)}>{account}</a></td>
               <td>
-                {#each inventory as amount}
+                {#each inventory as amount (amount)}
                   {amount}
                   <br />
                 {/each}

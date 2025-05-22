@@ -58,7 +58,7 @@
   <li class="head">
     <p>
       <AccountCellHeader />
-      {#each time_filters as [title, time]}
+      {#each time_filters as [title, time] (time)}
         <span class="num other">
           <a href={$urlForAccount(account, { time })}>
             {title}

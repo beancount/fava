@@ -190,7 +190,7 @@
   {/if}
   {#if filteredSuggestions.length}
     <ul {hidden} role="listbox" id={autocomple_id}>
-      {#each filteredSuggestions as { fuzzywrapped, suggestion }, i}
+      {#each filteredSuggestions as { fuzzywrapped, suggestion }, i (suggestion)}
         <li
           role="option"
           aria-selected={i === index}
@@ -199,7 +199,7 @@
             mousedown(ev, suggestion);
           }}
         >
-          {#each fuzzywrapped as [type, text]}
+          {#each fuzzywrapped as [type, text] (`${type}-${text}`)}
             {#if type === "text"}
               {text}
             {:else}

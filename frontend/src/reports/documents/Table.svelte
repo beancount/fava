@@ -37,13 +37,13 @@
 <table>
   <thead>
     <tr>
-      {#each columns as column}
+      {#each columns as column (column)}
         <SortHeader bind:sorter {column} />
       {/each}
     </tr>
   </thead>
   <tbody>
-    {#each sorted_documents as doc}
+    {#each sorted_documents as doc (doc.filename)}
       <tr
         class:selected={selected === doc}
         draggable={true}
