@@ -20,7 +20,7 @@ export const lastActiveChartName = writable<string | null>(null);
 const hierarchy_chart_mode_validator = constants(
   "treemap",
   "sunburst",
-  "icycle",
+  "icicle",
 );
 type HierarchyChartMode = ValidationT<typeof hierarchy_chart_mode_validator>;
 
@@ -32,7 +32,7 @@ export const hierarchyChartMode = localStorageSyncedStore<HierarchyChartMode>(
   () => [
     ["treemap", _("Treemap")],
     ["sunburst", _("Sunburst")],
-    ["icycle", _("Icycle")],
+    ["icicle", _("Icicle")],
   ],
 );
 
