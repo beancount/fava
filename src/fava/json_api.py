@@ -9,8 +9,11 @@ from __future__ import annotations
 import logging
 import shutil
 from abc import abstractmethod
+from collections import defaultdict
 from dataclasses import dataclass
 from dataclasses import fields
+from datetime import date
+from decimal import Decimal
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
@@ -20,6 +23,7 @@ from pprint import pformat
 from typing import Any
 from typing import TYPE_CHECKING
 
+from beancount.core.data import Transaction
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
@@ -262,6 +266,46 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
         return json_success(res)
 
     return _wrapper
+
+
+@dataclass(frozen=True)
+class AccountOverviewEntry:
+    account: str
+    last_posting_date: str
+    balance: str
+    currency: str
+
+
+@api_endpoint
+def get_account_overview() -> list[AccountOverviewEntry]:
+    """Get all accounts with last transaction date and balance."""
+    g.ledger.changed()
+
+    latest_date = {}
+    balances = defaultdict(lambda: (Decimal(0), ""))
+
+    for entry in g.ledger.all_entries:
+        if isinstance(entry, Transaction):
+            for posting in entry.postings:
+                account = posting.account
+                units = posting.units
+                date_ = entry.date
+
+                if account not in latest_date or date_ > latest_date[account]:
+                    latest_date[account] = date_
+
+                prev_total, prev_currency = balances[account]
+                balances[account] = (prev_total + units.number, units.currency)
+
+    return [
+        AccountOverviewEntry(
+            account=acc,
+            last_posting_date=latest_date[acc].isoformat(),
+            balance=str(balances[acc][0]),
+            currency=balances[acc][1],
+        )
+        for acc in sorted(latest_date)
+    ]
 
 
 @api_endpoint

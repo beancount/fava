@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+from datetime import datetime
 from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
@@ -592,6 +593,35 @@ class FavaLedger:
             be given in both directions not just in the one found in file.
         """
         return self.prices.commodity_pairs(self.options["operating_currency"])
+
+    def get_balance(self, date: datetime.date) -> str:
+        """Compute total balance for 'Assets:' accounts on a given date.
+
+        Arguments:
+            date: The date for which to compute the balance.
+
+        Returns:
+            The total balance (as string) of all accounts starting with 'Assets:'
+            as of the specified date. Rounded to two decimal places.
+
+        Raises:
+            KeyError: If account data is unavailable for the given date.
+        """
+        from beancount.core.number import ZERO
+
+        balance_sum = ZERO
+
+        for acct in self.accounts.keys():
+            if acct.startswith("Assets"):
+                try:
+                    bal = self.account_up_to_balance(acct, date)
+                    if bal and bal.units:
+                        balance_sum += bal.units.number
+                except Exception:
+                    # You can replace this with logging if desired
+                    pass  # skip accounts that fail (e.g., no postings yet)
+
+        return f"{balance_sum:.2f}"
 
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
         """Get the path for a statement found in the specified entry.
