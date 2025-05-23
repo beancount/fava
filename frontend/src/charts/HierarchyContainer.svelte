@@ -2,7 +2,7 @@
   import { _ } from "../i18n";
   import { hierarchyChartMode } from "../stores/chart";
   import type { HierarchyChart } from "./hierarchy";
-  import Icycle from "./Icycle.svelte";
+  import Icicle from "./Icicle.svelte";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
@@ -31,7 +31,7 @@
   </svg>
 {:else if treemap && $treemap_currency}
   <Treemap data={treemap} currency={$treemap_currency} {width} />
-{:else if mode === "sunburst" || mode === "icycle"}
+{:else if mode === "sunburst" || mode === "icicle"}
   <svg viewBox={`0 0 ${width.toString()} 500`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}
       <g
@@ -44,8 +44,8 @@
             width={width / currencies.length}
             height={500}
           />
-        {:else if mode === "icycle"}
-          <Icycle
+        {:else if mode === "icicle"}
+          <Icicle
             data={d}
             currency={chart_currency}
             width={width / currencies.length}
