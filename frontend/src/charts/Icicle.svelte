@@ -62,7 +62,7 @@
   }}
   role="img"
 >
-  {#each nodes as d}
+  {#each nodes as d (d.data.account)}
     <g
       transform={`translate(${x(d.y0).toString()},${y(d.x0).toString()})`}
       use:followingTooltip={() => tooltipText(d)}
