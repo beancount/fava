@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.py }}
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
       - run: touch src/fava/static/app.js
       - run: make ${{ matrix.make_target }}
   test-js:
@@ -62,7 +62,7 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
       - run: cd frontend && npm ci
       - run: uv run --no-dev --group pre-commit pre-commit run -a eslint
       - run: cd frontend; npx tsc
@@ -74,5 +74,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
       - run: make mypy

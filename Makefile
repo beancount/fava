@@ -86,9 +86,14 @@ update-frontend-deps:
 update-precommit:
 	uv run pre-commit autoupdate
 
+# Update github actions action versions.
+.PHONY: update-github-actions
+update-github-actions:
+	cd frontend; npm run sync-github-actions
+
 # Update frontend deps, Python deps and pre-commit
 .PHONY: update
-update: update-constraints update-frontend-deps update-precommit
+update: update-constraints update-frontend-deps update-precommit update-github-actions
 
 # Build the website
 .PHONY: docs

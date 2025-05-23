@@ -6,6 +6,7 @@
     "build": "node -r esbuild-register build.ts",
     "dev": "node -r esbuild-register build.ts --watch",
     "sync-pre-commit": "node -r esbuild-register sync-pre-commit.ts",
+    "sync-github-actions": "node -r esbuild-register sync-github-actions.ts",
     "test": "c8 --all --src src -r html uvu -r esbuild-register test",
     "test:watch": "watchlist --eager src test -- npm test"
   },
