@@ -14,11 +14,14 @@
   import { notify_err } from "../../notifications";
   import router from "../../router";
   import { errors, fava_options } from "../../stores";
-  import { searchParams } from "../../stores/url";
   import type { EditorReportProps } from ".";
   import EditorMenu from "./EditorMenu.svelte";
 
-  let { source, beancount_language_support }: EditorReportProps = $props();
+  let {
+    source,
+    beancount_language_support,
+    line_search_param,
+  }: EditorReportProps = $props();
 
   let file_path = $derived(source.file_path);
 
@@ -84,25 +87,18 @@
   });
 
   $effect(() => {
-    // Go to line if the edited file changes.
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    file_path;
-    untrack(() => {
-      const opts = $fava_options.insert_entry.filter(
-        (f) => f.filename === file_path,
-      );
-      const last_insert_opt = opts[opts.length - 1];
-      const line = parseInt($searchParams.get("line") ?? "0", 10);
-      let line_to_scroll_to = null;
-      if (line > 0) {
-        line_to_scroll_to = line;
-      } else if (last_insert_opt) {
-        line_to_scroll_to = last_insert_opt.lineno - 1;
-      }
-      editor.dispatch(
-        scrollToLine(editor.state, line_to_scroll_to ?? editor.state.doc.lines),
-      );
-    });
+    // Go to line if the edited file changes. The line number is obtained from the
+    // URL, last file insert option, or last file line (in that order).
+    const last_insert_opt = untrack(() =>
+      $fava_options.insert_entry.filter((f) => f.filename === file_path).at(-1),
+    );
+    let line = editor.state.doc.lines;
+    if (line_search_param != null) {
+      line = line_search_param;
+    } else if (last_insert_opt) {
+      line = last_insert_opt.lineno - 1;
+    }
+    editor.dispatch(scrollToLine(editor.state, line));
   });
 
   $effect(() => {

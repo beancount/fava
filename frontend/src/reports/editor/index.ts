@@ -10,13 +10,16 @@ import Editor from "./Editor.svelte";
 export interface EditorReportProps {
   source: SourceFile;
   beancount_language_support: LanguageSupport;
+  line_search_param: number | null;
 }
 
 export const editor = new Route<EditorReportProps>(
   "editor",
   Editor,
-  async (url: URL) =>
-    Promise.all([
+  async (url: URL) => {
+    const line = url.searchParams.get("line");
+    const line_search_param = line != null ? parseInt(line, 10) : null;
+    return Promise.all([
       get("source", {
         filename: url.searchParams.get("file_path") ?? "",
       }),
@@ -24,6 +27,8 @@ export const editor = new Route<EditorReportProps>(
     ]).then(([source, beancount_language_support]) => ({
       source,
       beancount_language_support,
-    })),
+      line_search_param,
+    }));
+  },
   () => _("Editor"),
 );
