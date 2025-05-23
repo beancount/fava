@@ -2,10 +2,11 @@
   import type { AccountTreeNode } from "../charts/hierarchy";
   import { is_empty } from "../lib/objects";
   import { currency_name, operating_currency } from "../stores";
+  import { toggled_accounts } from "../stores/accounts";
   import { ctx } from "../stores/format";
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
-  import { getTreeTableContext } from "./helpers";
+  import { getTreeTableNotShownContext } from "./helpers";
   import TreeTableNode from "./TreeTableNode.svelte";
 
   interface Props {
@@ -17,11 +18,11 @@
 
   let { node, invert }: Props = $props();
 
-  const { toggled, not_shown } = getTreeTableContext();
+  const not_shown = getTreeTableNotShownContext();
 
   let { account, children } = $derived(node);
 
-  let is_toggled = $derived($toggled.has(account));
+  let is_toggled = $derived($toggled_accounts.has(account));
 
   let has_balance = $derived(!is_empty(node.balance));
   /** Whether to show the balance (or balance_children) */

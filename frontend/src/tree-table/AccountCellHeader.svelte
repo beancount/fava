@@ -3,10 +3,22 @@
     Header for the account column.
 -->
 <script lang="ts">
-  import { _ } from "../i18n";
-  import { getTreeTableContext } from "./helpers";
+  import { some } from "d3-array";
 
-  const { toggled } = getTreeTableContext();
+  import { _ } from "../i18n";
+  import { isDescendant } from "../lib/account";
+  import { expand_all, toggled_accounts } from "../stores/accounts";
+
+  interface Props {
+    /** The account this tree is rendered for. */
+    account: string;
+  }
+
+  let { account }: Props = $props();
+
+  const toggled_children = $derived(
+    some($toggled_accounts, (a) => isDescendant(a, account)),
+  );
 
   const help_title = _(
     "Hold Shift while clicking to expand all children.\n" +
@@ -15,13 +27,13 @@
 </script>
 
 <span title={help_title}>
-  {#if $toggled.size}
+  {#if toggled_children}
     <button
       type="button"
       class="link"
       title={_("Expand all accounts")}
       onclick={() => {
-        toggled.set(new Set());
+        expand_all(account);
       }}
     >
       {_("Expand all")}

@@ -2,6 +2,7 @@
   import { _, format } from "../i18n";
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { toggle } from "../lib/set";
   import { journalShow } from "../stores/journal";
 
   const toggleText = _("Toggle %(type)s entries");
@@ -47,15 +48,12 @@
 <script lang="ts">
   let shownSet = $derived(new Set($journalShow));
 
-  function toggle(type: string) {
+  function toggle_type(type: string) {
     journalShow.update((show) => {
       const set = new Set(show);
-      const toggle_func = set.has(type)
-        ? set.delete.bind(set)
-        : set.add.bind(set);
-      toggle_func(type);
+      toggle(set, type);
       // Also toggle all entries that have `type` as their supertype.
-      buttons.filter((b) => b[4] === type).forEach((b) => toggle_func(b[0]));
+      buttons.filter((b) => b[4] === type).forEach((b) => toggle(set, b[0]));
       return [...set].sort();
     });
   }
@@ -75,7 +73,7 @@
       use:keyboardShortcut={shortcut}
       class:inactive={!active(type, supertype)}
       onclick={() => {
-        toggle(type);
+        toggle_type(type);
       }}
     >
       {button_text}

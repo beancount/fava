@@ -1,6 +1,7 @@
 <script lang="ts">
   import { leaf } from "../../lib/account";
   import type { TreeNode } from "../../lib/tree";
+  import { toggle_account, toggled_accounts } from "../../stores/accounts";
   import Accounts from "./Accounts.svelte";
   import { selectedAccount } from "./stores";
 
@@ -10,9 +11,10 @@
   }
 
   let { node, move }: Props = $props();
+  let account = $derived(node.name);
 
-  let expanded = $state(true);
   let drag = $state(false);
+  let is_toggled = $derived($toggled_accounts.has(account));
 
   let hasChildren = $derived(node.children.length > 0);
   let selected = $derived($selectedAccount === node.name);
@@ -43,7 +45,7 @@
   }
 </script>
 
-{#if node.name}
+{#if account}
   <p
     ondragenter={dragenter}
     ondragover={dragenter}
@@ -51,9 +53,9 @@
       drag = false;
     }}
     ondrop={drop}
-    title={node.name}
+    title={account}
     class="droptarget"
-    data-account-name={node.name}
+    data-account-name={account}
     class:selected
     class:drag
   >
@@ -61,26 +63,26 @@
       <button
         type="button"
         class="unset toggle"
-        onclick={(ev) => {
-          expanded = !expanded;
-          ev.stopPropagation();
-        }}>{expanded ? "▾" : "▸"}</button
+        onclick={(event) => {
+          toggle_account(account, event);
+          event.stopPropagation();
+        }}>{is_toggled ? "▸" : "▾"}</button
       >
     {/if}
     <button
       type="button"
       class="unset leaf"
       onclick={() => {
-        $selectedAccount = selected ? "" : node.name;
-      }}>{leaf(node.name)}</button
+        $selectedAccount = selected ? "" : account;
+      }}>{leaf(account)}</button
     >
     {#if node.count > 0}
       <span class="count"> {node.count}</span>
     {/if}
   </p>
 {/if}
-{#if hasChildren}
-  <ul hidden={!expanded}>
+{#if hasChildren && !is_toggled}
+  <ul>
     {#each node.children as child (child.name)}
       <li>
         <Accounts node={child} {move} />

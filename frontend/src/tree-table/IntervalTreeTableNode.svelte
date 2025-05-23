@@ -4,10 +4,11 @@
   import type { NonEmptyArray } from "../lib/array";
   import { is_empty } from "../lib/objects";
   import { currency_name } from "../stores";
+  import { toggled_accounts } from "../stores/accounts";
   import { ctx } from "../stores/format";
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
-  import { getTreeTableContext } from "./helpers";
+  import { getTreeTableNotShownContext } from "./helpers";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
 
   interface Props {
@@ -19,13 +20,13 @@
 
   let { nodes, budgets }: Props = $props();
 
-  const { toggled, not_shown } = getTreeTableContext();
+  const not_shown = getTreeTableNotShownContext();
 
   let [node] = $derived(nodes);
   let { account, children } = $derived(node);
   let account_budgets = $derived(budgets[account]);
 
-  let is_toggled = $derived($toggled.has(account));
+  let is_toggled = $derived($toggled_accounts.has(account));
 </script>
 
 <li>

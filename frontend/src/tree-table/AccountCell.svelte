@@ -7,7 +7,7 @@
   import { urlForAccount } from "../helpers";
   import { leaf } from "../lib/account";
   import AccountIndicator from "../sidebar/AccountIndicator.svelte";
-  import { getTreeTableContext } from "./helpers";
+  import { toggle_account, toggled_accounts } from "../stores/accounts";
 
   interface Props {
     /** The account node to render the name cell for. */
@@ -16,51 +16,20 @@
 
   let { node }: Props = $props();
 
-  const { toggled } = getTreeTableContext();
-
   let { account, children } = $derived(node);
-
-  /**
-   * Toggle the account and (depending on the mouse event) its children in the set.
-   */
-  let on_click = $derived((event: MouseEvent) => {
-    toggled.update((t) => {
-      const new_t = new Set(t);
-      const is_toggled = new_t.has(account);
-      if (is_toggled) {
-        new_t.delete(account);
-      } else {
-        new_t.add(account);
-      }
-      if (event.shiftKey) {
-        // toggle all children as well.
-        const toggle_all = (n: AccountTreeNode) => {
-          if (is_toggled) {
-            new_t.delete(n.account);
-          } else {
-            new_t.add(n.account);
-          }
-          n.children.filter((c) => c.children.length > 0).forEach(toggle_all);
-        };
-        children.forEach(toggle_all);
-      }
-      if (is_toggled && (event.ctrlKey || event.metaKey)) {
-        // collapse all direct children to only expand one level
-        children
-          .filter((c) => c.children.length > 0)
-          .forEach((n) => {
-            new_t.add(n.account);
-          });
-      }
-      return new_t;
-    });
-  });
+  let is_toggled = $derived($toggled_accounts.has(account));
 </script>
 
 <span class="droptarget" data-account-name={account}>
   {#if children.length > 0}
-    <button type="button" class="unset" onclick={on_click}>
-      {$toggled.has(account) ? "▸" : "▾"}
+    <button
+      type="button"
+      class="unset"
+      onclick={(event) => {
+        toggle_account(account, event);
+      }}
+    >
+      {is_toggled ? "▸" : "▾"}
     </button>
   {/if}
   <a href={$urlForAccount(account)} class="account">

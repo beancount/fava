@@ -1,6 +1,8 @@
+import { sort } from "d3-array";
 import { derived, writable } from "svelte/store";
 
 import type { BeancountError, LedgerData } from "../api/validators";
+import { parent } from "../lib/account";
 import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
 
@@ -52,6 +54,16 @@ export const accounts_set = derived(
   accounts,
   ($accounts) => new Set($accounts),
 );
+/** All non-leaf accounts. */
+export const accounts_internal = derived_array(accounts, ($accounts) => {
+  const res = new Set<string>();
+  for (let account of $accounts) {
+    while ((account = parent(account))) {
+      res.add(account);
+    }
+  }
+  return sort(res);
+});
 
 /** Get the name (as given per metadata) of a currency. */
 export const currency_name = derived(

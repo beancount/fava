@@ -1,5 +1,5 @@
 import { getContext, setContext } from "svelte";
-import type { Readable, Writable } from "svelte/store";
+import type { Readable } from "svelte/store";
 import { derived } from "svelte/store";
 
 import type { AccountTreeNode } from "../charts/hierarchy";
@@ -9,17 +9,13 @@ import { is_closed_account } from "../stores/accounts";
 
 const key = Symbol("tree-table");
 
-interface TreeTableContext {
-  /** The accounts for which the decsendants are currently hidden. */
-  readonly toggled: Writable<ReadonlySet<string>>;
-  /** The accounts that should not be shown. */
-  readonly not_shown: Readable<ReadonlySet<string>>;
-}
+/** The accounts that should not be shown. */
+type NotShown = Readable<ReadonlySet<string>>;
 
-export const setTreeTableContext = (ctx: TreeTableContext): TreeTableContext =>
+export const setTreeTableNotShownContext = (ctx: NotShown): NotShown =>
   setContext(key, ctx);
 
-export const getTreeTableContext = (): TreeTableContext => getContext(key);
+export const getTreeTableNotShownContext = (): NotShown => getContext(key);
 
 /** Recursively build set of accounts that should not be shown. */
 export const get_not_shown = derived(
@@ -56,19 +52,3 @@ export const get_not_shown = derived(
       return not_shown;
     },
 );
-
-/** Determine the accounts that should initially be collapsed. */
-export function get_collapsed(
-  root: AccountTreeNode,
-  $collapse_account: (s: string) => boolean,
-): Set<string> {
-  const s = new Set<string>();
-  const get_collapsed_recursive = ({ children, account }: AccountTreeNode) => {
-    if (children.length && $collapse_account(account)) {
-      s.add(account);
-    }
-    children.forEach(get_collapsed_recursive);
-  };
-  get_collapsed_recursive(root);
-  return s;
-}
