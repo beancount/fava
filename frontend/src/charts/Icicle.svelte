@@ -24,7 +24,7 @@
 
   let root = $derived(partition<AccountHierarchyDatum>()(data));
   let nodes = $derived(
-    root.descendants().filter((d) => !d.data.dummy && d.depth > 0),
+    root.descendants().filter((d) => !d.data.dummy && d.depth >= 0),
   );
 
   let current: AccountHierarchyNode | null = $state(null);
@@ -38,20 +38,8 @@
     });
   });
 
-  function balanceText(d: AccountHierarchyNode): string {
-    const val = d.value ?? 0;
-    const total = root.value ?? 0;
-    return total
-      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / total)})`
-      : $ctx.amount(val, currency);
-  }
-
   let x = $derived(scaleLinear([0, width]));
   let y = $derived(scaleLinear([0, height]));
-
-  function avg(x1: number, x2: number) {
-    return (x1 + x2) / 2;
-  }
 
   function tooltipText(d: AccountHierarchyNode) {
     const val = d.value ?? 0;
@@ -74,16 +62,6 @@
   }}
   role="img"
 >
-  <g
-    transform={`translate(${x(avg(root.y0, root.y1)).toString()},${y(avg(root.x0, root.x1)).toString()})`}
-  >
-    <text class="account" text-anchor="middle">
-      {root.data.account}
-    </text>
-    <text class="balance" dy="1.2em" text-anchor="middle">
-      {balanceText(root)}
-    </text>
-  </g>
   {#each nodes as d}
     <g
       transform={`translate(${x(d.y0).toString()},${y(d.x0).toString()})`}
@@ -122,13 +100,5 @@
 <style>
   .half {
     opacity: 0.5;
-  }
-
-  .account {
-    fill: var(--text-color);
-  }
-
-  .balance {
-    font-family: var(--font-family-monospaced);
   }
 </style>
