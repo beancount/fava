@@ -4,7 +4,8 @@
 
 import type { Diagnostic } from "@codemirror/lint";
 import { setDiagnostics } from "@codemirror/lint";
-import type { EditorState, TransactionSpec } from "@codemirror/state";
+import { type EditorState, type TransactionSpec } from "@codemirror/state";
+import { EditorView } from "@codemirror/view";
 
 import type { BeancountError } from "../api/validators";
 
@@ -32,8 +33,8 @@ export function scrollToLine(
   }
   const linePos = state.doc.line(line);
   return {
+    effects: [EditorView.scrollIntoView(linePos.from, { y: "center" })],
     selection: { anchor: linePos.from },
-    scrollIntoView: true,
   };
 }
 
