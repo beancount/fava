@@ -125,7 +125,11 @@ class FavaOptions:
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
-        self.default_file = str(Path(value).absolute()) if value else filename
+        self.default_file = (
+            str((Path(filename).parent / value).absolute())
+            if value
+            else filename
+        )
 
     def set_fiscal_year_end(self, value: str) -> None:
         """Set the fiscal_year_end option."""
