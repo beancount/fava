@@ -18,7 +18,7 @@ export const editor = new Route<EditorReportProps>(
   Editor,
   async (url: URL) => {
     const line = url.searchParams.get("line");
-    const line_search_param = line != null ? parseInt(line, 10) : null;
+    const line_search_param = line != null ? Number.parseInt(line, 10) : null;
     return Promise.all([
       get("source", {
         filename: url.searchParams.get("file_path") ?? "",

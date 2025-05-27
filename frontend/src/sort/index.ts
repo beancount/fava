@@ -134,7 +134,7 @@ export class StringColumn<T> implements SortColumn<T> {
 /** Parse a number from the string, ignoring all other characters. */
 function parse_number(num: string): number {
   const cleaned = num.replace(/[^\-?0-9.]/g, "");
-  const n = parseFloat(cleaned);
+  const n = Number.parseFloat(cleaned);
   return Number.isNaN(n) ? 0 : n;
 }
 

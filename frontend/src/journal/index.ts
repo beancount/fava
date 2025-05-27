@@ -9,7 +9,7 @@ import JournalFilters from "./JournalFilters.svelte";
 /**
  * Escape the value to produce a valid regex for the Fava filter.
  */
-export function escape(value: string): string {
+export function escape_for_regex(value: string): string {
   return value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
 }
 
@@ -35,7 +35,7 @@ function handleClick({ target }: Event): void {
     // Filter for payees when clicking on them.
     // Note: any special characters in the payee string are escaped so the
     // filter matches against the payee literally.
-    addFilter(`payee:"^${escape(target.innerText)}$"`);
+    addFilter(`payee:"^${escape_for_regex(target.innerText)}$"`);
   } else if (target.tagName === "DT") {
     // Filter for metadata key when clicking on the key. The key tag text
     // includes the colon.
@@ -51,7 +51,7 @@ function handleClick({ target }: Event): void {
     // Filter for metadata key and value when clicking on the value. The key
     // tag text includes the colon.
     const key = (target.previousElementSibling as HTMLElement).innerText;
-    const value = `"^${escape(target.innerText)}$"`;
+    const value = `"^${escape_for_regex(target.innerText)}$"`;
     const expr = `${key}${value}`;
     if (target.closest(".postings")) {
       // Posting metadata.

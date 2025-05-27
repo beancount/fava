@@ -10,7 +10,7 @@ import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import { chartContext } from "./charts/context";
 import { domHelpers } from "./charts/tooltip";
-import { type Result } from "./lib/result";
+import type { Result } from "./lib/result";
 import { log_error } from "./log";
 import type { QueryResultTable } from "./reports/query/query_table";
 import { query_table_validator } from "./reports/query/query_table";

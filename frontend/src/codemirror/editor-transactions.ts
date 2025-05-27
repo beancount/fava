@@ -4,7 +4,7 @@
 
 import type { Diagnostic } from "@codemirror/lint";
 import { setDiagnostics } from "@codemirror/lint";
-import { type EditorState, type TransactionSpec } from "@codemirror/state";
+import type { EditorState, TransactionSpec } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 
 import type { BeancountError } from "../api/validators";

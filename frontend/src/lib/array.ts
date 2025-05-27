@@ -30,7 +30,6 @@ export function move<T>(
     const updated = array.toSpliced(from, 1);
     updated.splice(to, 0, moved);
     return updated;
-  } else {
-    return array;
   }
+  return array;
 }

@@ -20,7 +20,7 @@ export function _(text: string): string {
         : ok({});
     translations = res.unwrap_or({});
     if (res.is_err) {
-      log_error(`Loading translations failed:`, res.error);
+      log_error("Loading translations failed:", res.error);
     }
   }
   return translations[text] ?? text;

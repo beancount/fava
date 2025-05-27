@@ -16,27 +16,27 @@ export class PrimitiveValidationError extends ValidationError {
 }
 class InvalidDateValidationError extends ValidationError {
   constructor() {
-    super(`Validation of date failed: invalid date`);
+    super("Validation of date failed: invalid date");
   }
 }
 class TypeDateValidationError extends ValidationError {
   constructor() {
-    super(`Validation of date failed: invalid type or length`);
+    super("Validation of date failed: invalid type or length");
   }
 }
 class ConstantValidationError extends ValidationError {
   constructor() {
-    super(`Validation of constant failed`);
+    super("Validation of constant failed");
   }
 }
 class TaggedUnionObjectValidationError extends ValidationError {
   constructor() {
-    super(`Validation of tagged union failed: expected object`);
+    super("Validation of tagged union failed: expected object");
   }
 }
 class TaggedUnionInvalidTagValidationError extends ValidationError {
   constructor() {
-    super(`Validation of tagged union failed: invalid tag.`);
+    super("Validation of tagged union failed: invalid tag.");
   }
 }
 class TaggedUnionValidationError extends ValidationError {
@@ -46,7 +46,7 @@ class TaggedUnionValidationError extends ValidationError {
 }
 class ArrayValidationError extends ValidationError {
   constructor() {
-    super(`Validation of array failed.`);
+    super("Validation of array failed.");
   }
 }
 class ArrayItemValidationError extends ValidationError {
@@ -56,7 +56,7 @@ class ArrayItemValidationError extends ValidationError {
 }
 class TupleValidationError extends ValidationError {
   constructor() {
-    super(`Validation of tuple failed.`);
+    super("Validation of tuple failed.");
   }
 }
 class TupleItemValidationError extends ValidationError {
@@ -66,7 +66,7 @@ class TupleItemValidationError extends ValidationError {
 }
 class ObjectValidationError extends ValidationError {
   constructor() {
-    super(`Validation of object failed.`);
+    super("Validation of object failed.");
   }
 }
 class ObjectKeyValidationError extends ValidationError {
@@ -76,7 +76,7 @@ class ObjectKeyValidationError extends ValidationError {
 }
 class RecordValidationError extends ValidationError {
   constructor() {
-    super(`Validation of record failed.`);
+    super("Validation of record failed.");
   }
 }
 class RecordKeyValidationError extends ValidationError {
@@ -196,7 +196,10 @@ export function tagged_union<T>(
       return err(new TaggedUnionObjectValidationError());
     }
     const tag_value = json[tag];
-    if (typeof tag_value != "string" || !Object.hasOwn(validators, tag_value)) {
+    if (
+      typeof tag_value !== "string" ||
+      !Object.hasOwn(validators, tag_value)
+    ) {
       return err(new TaggedUnionInvalidTagValidationError());
     }
     const res = validators[tag_value as keyof T](json);

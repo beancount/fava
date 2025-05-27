@@ -66,7 +66,7 @@
 
   /* Re-run all open queries on global filter change. */
   function rerun_all_open() {
-    const to_rerun = [...Object.entries(is_open)]
+    const to_rerun = Object.entries(is_open)
       .filter(([, is_open]) => is_open)
       .map(([query]) => query);
     results = {};

@@ -29,7 +29,7 @@
   let data = $derived(chart.filter($chartToggledCurrencies));
 
   // Scales and quadtree
-  let allValues = $derived(data.map((d) => d.values).flat(1));
+  let allValues = $derived(data.flatMap((d) => d.values));
 
   let xExtent = $derived([
     min(data, (s) => s.values[0]?.date) ?? today,

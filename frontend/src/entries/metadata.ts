@@ -7,9 +7,9 @@ export type MetadataValue = string | boolean | number;
 
 const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   if (
-    typeof json == "boolean" ||
-    typeof json == "number" ||
-    typeof json == "string"
+    typeof json === "boolean" ||
+    typeof json === "number" ||
+    typeof json === "string"
   ) {
     return ok(json);
   }

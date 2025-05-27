@@ -62,7 +62,10 @@
   let yExtent = $derived(
     showStackedBars
       ? extent(stacks.flatMap(([, s]) => s.flat(2)))
-      : extent(bar_groups.map((d) => d.values).flat(), (d) => d.value),
+      : extent(
+          bar_groups.flatMap((d) => d.values),
+          (d) => d.value,
+        ),
   );
   let y = $derived(
     scaleLinear([innerHeight, 0]).domain(padExtent(includeZero(yExtent))),
