@@ -61,13 +61,16 @@
   {#each nodes as d (d.data.account)}
     <g
       use:followingTooltip={() => tooltipText(d)}
+      class={current
+        ? current.data.account.startsWith(d.data.account)
+          ? "selected"
+          : "unselected"
+        : ""}
     >
       <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
         <rect
           fill-rule="evenodd"
           fill={$sunburstScale(d.data.account)}
-          class:half={current &&
-            !current.data.account.startsWith(d.data.account)}
           onmouseover={() => {
             current = d;
           }}
@@ -77,15 +80,15 @@
           width={width * (d.y1 - d.y0)}
           height={height * (d.x1 - d.x0)}
           role="img"
-          x={width*d.y0}
-          y={height*d.x0}
+          x={width * d.y0}
+          y={height * d.x0}
         />
         <text
           dy=".5em"
           text-anchor="middle"
-          x={width*(d.y1 + d.y0) / 2}
-          y={height*(d.x1 + d.x0) / 2}
-          visibility={height*(d.x1 - d.x0) > 14 ? "visible" : "hidden"}
+          x={(width * (d.y1 + d.y0)) / 2}
+          y={(height * (d.x1 + d.x0)) / 2}
+          visibility={height * (d.x1 - d.x0) > 14 ? "visible" : "hidden"}
         >
           {d.data.account.split(":").pop() ?? ""}
         </text>
@@ -95,7 +98,12 @@
 </g>
 
 <style>
-  .half {
-    opacity: 0.5;
+  .selected {
+    filter: drop-shadow(0.2rem 0.2rem 0.1rem grey);
+  }
+
+  .unselected {
+    opacity: 0.75;
+    filter: blur(0.1rem);
   }
 </style>
