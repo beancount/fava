@@ -14,13 +14,18 @@ repos:
         args: ["--wrap", "80"]
         additional_dependencies:
           - mdformat-gfm
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.0.6
+    hooks:
+      - id: biome-check
+        args: ["--error-on-warnings"]
   - repo: local
     hooks:
       - id: prettier
         name: prettier
         language: node
         entry: prettier --write --list-different
-        types_or: ["css", "javascript", "json", "svelte", "yaml", "ts"]
+        types_or: ["svelte", "yaml"]
         require_serial: true
         additional_dependencies:
           - "prettier@3.6.2"

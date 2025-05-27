@@ -111,7 +111,7 @@ run-example:
 .PHONY: bql-grammar
 bql-grammar: .venv contrib/scripts.py
 	uv run --group scripts contrib/scripts.py generate-bql-grammar-json
-	-uv run pre-commit run prettier --files frontend/src/codemirror/bql-grammar.ts
+	-uv run pre-commit run --files frontend/src/codemirror/bql-grammar.ts
 
 # Build the distribution (sdist and wheel).
 .PHONY: dist

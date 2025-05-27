@@ -98,6 +98,7 @@
       const option = o ?? options[index];
       if (option != null) {
         if (
+          // biome-ignore lint/complexity/useOptionalChain: clashes with strict-boolean-expressions rule
           multiple_select != null &&
           multiple_select(option) &&
           values.every(multiple_select)
