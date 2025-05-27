@@ -1,6 +1,5 @@
 <script lang="ts">
   import { partition } from "d3-hierarchy";
-  import { scaleLinear } from "d3-scale";
   import { untrack } from "svelte";
 
   import { formatPercentage } from "../format";
@@ -38,9 +37,6 @@
     });
   });
 
-  let x = $derived(scaleLinear([0, width]));
-  let y = $derived(scaleLinear([0, height]));
-
   function tooltipText(d: AccountHierarchyNode) {
     const val = d.value ?? 0;
     const rootValue = root.value ?? 1;
@@ -64,7 +60,6 @@
 >
   {#each nodes as d (d.data.account)}
     <g
-      transform={`translate(${x(d.y0).toString()},${y(d.x0).toString()})`}
       use:followingTooltip={() => tooltipText(d)}
     >
       <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
@@ -82,13 +77,15 @@
           width={width * (d.y1 - d.y0)}
           height={height * (d.x1 - d.x0)}
           role="img"
+          x={width*d.y0}
+          y={height*d.x0}
         />
         <text
           dy=".5em"
           text-anchor="middle"
-          x={x((d.y1 - d.y0) / 2)}
-          y={y((d.x1 - d.x0) / 2)}
-          visibility={y(d.x1 - d.x0) > 14 ? "visible" : "hidden"}
+          x={width*(d.y1 + d.y0) / 2}
+          y={height*(d.x1 + d.x0) / 2}
+          visibility={height*(d.x1 - d.x0) > 14 ? "visible" : "hidden"}
         >
           {d.data.account.split(":").pop() ?? ""}
         </text>
