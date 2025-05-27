@@ -22,9 +22,7 @@
   let { data, currency, width, height }: Props = $props();
 
   let root = $derived(partition<AccountHierarchyDatum>()(data));
-  let nodes = $derived(
-    root.descendants().filter((d) => !d.data.dummy && d.depth >= 0),
-  );
+  let nodes = $derived(root.descendants().filter((d) => !d.data.dummy));
 
   let current: AccountHierarchyNode | null = $state(null);
 
