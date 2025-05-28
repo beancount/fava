@@ -4,6 +4,7 @@
 
   import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
+  import { leaf } from "../lib/account";
   import { ctx } from "../stores/format";
   import { sunburstScale } from "./helpers";
   import type {
@@ -24,7 +25,7 @@
   let root = $derived(partition<AccountHierarchyDatum>()(data));
   let nodes = $derived(root.descendants().filter((d) => !d.data.dummy));
 
-  let current: AccountHierarchyNode | null = $state(null);
+  let current: string | null = $state(null);
 
   $effect.pre(() => {
     // if-expression to run on each change of chart
@@ -57,24 +58,24 @@
   role="img"
 >
   {#each nodes as d (d.data.account)}
+    {@const account = d.data.account}
     <g
       use:followingTooltip={() => tooltipText(d)}
-      class={current
-        ? current.data.account.startsWith(d.data.account)
-          ? "selected"
-          : "unselected"
-        : ""}
+      class:current={current !== null ? current.startsWith(account) : false}
     >
-      <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
+      <a
+        href={$urlForAccount(account)}
+        aria-label={account}
+        onmouseover={() => {
+          current = account;
+        }}
+        onfocus={() => {
+          current = account;
+        }}
+      >
         <rect
           fill-rule="evenodd"
-          fill={$sunburstScale(d.data.account)}
-          onmouseover={() => {
-            current = d;
-          }}
-          onfocus={() => {
-            current = d;
-          }}
+          fill={$sunburstScale(account)}
           width={width * (d.y1 - d.y0)}
           height={height * (d.x1 - d.x0)}
           role="img"
@@ -88,7 +89,7 @@
           y={(height * (d.x1 + d.x0)) / 2}
           visibility={height * (d.x1 - d.x0) > 14 ? "visible" : "hidden"}
         >
-          {d.data.account.split(":").pop() ?? ""}
+          {leaf(account)}
         </text>
       </a>
     </g>
@@ -96,12 +97,13 @@
 </g>
 
 <style>
-  .selected {
-    filter: drop-shadow(0.2rem 0.2rem 0.1rem grey);
+  g:focus-within > g,
+  g:hover > g {
+    opacity: 0.7;
   }
 
-  .unselected {
-    opacity: 0.75;
-    filter: blur(0.1rem);
+  g:focus-within > g.current,
+  g:hover > g.current {
+    opacity: 1;
   }
 </style>
