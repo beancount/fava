@@ -6,7 +6,7 @@
   import { some } from "d3-array";
 
   import { _ } from "../i18n";
-  import { isDescendant } from "../lib/account";
+  import { is_descendant_or_equal } from "../lib/account";
   import { expand_all, toggled_accounts } from "../stores/accounts";
 
   interface Props {
@@ -17,7 +17,7 @@
   let { account }: Props = $props();
 
   const toggled_children = $derived(
-    some($toggled_accounts, (a) => isDescendant(a, account)),
+    some($toggled_accounts, is_descendant_or_equal(account)),
   );
 
   const help_title = _(

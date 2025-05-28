@@ -2,7 +2,7 @@ import type { Readable } from "svelte/store";
 import { derived, get as store_get, writable } from "svelte/store";
 
 import { _ } from "../i18n";
-import { isDescendant, parent } from "../lib/account";
+import { is_descendant, is_descendant_or_equal, parent } from "../lib/account";
 import { derived_array } from "../lib/store";
 import { account_details, accounts_internal, fava_options, options } from ".";
 
@@ -59,11 +59,9 @@ export function toggle_account(account: string, event: MouseEvent): void {
     new_explicitly_toggled.set(account, !is_opening);
     if (is_opening) {
       if (event.shiftKey) {
-        $accounts_internal
-          .filter((a) => a !== account && isDescendant(a, account))
-          .forEach((child) => {
-            new_explicitly_toggled.set(child, false);
-          });
+        $accounts_internal.filter(is_descendant(account)).forEach((child) => {
+          new_explicitly_toggled.set(child, false);
+        });
       } else if (event.ctrlKey || event.metaKey) {
         $accounts_internal
           .filter((a) => parent(a) === account)
@@ -83,7 +81,7 @@ export function expand_all(account: string): void {
   explicitly_toggled.update(($explicitly_toggled) => {
     const new_explicitly_toggled = new Map($explicitly_toggled);
     [...$toggled_accounts]
-      .filter((a) => isDescendant(a, account))
+      .filter(is_descendant_or_equal(account))
       .forEach((descendant) => {
         new_explicitly_toggled.set(descendant, false);
       });
