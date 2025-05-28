@@ -1,6 +1,5 @@
 <script lang="ts">
   import { partition } from "d3-hierarchy";
-  import { untrack } from "svelte";
 
   import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
@@ -26,15 +25,6 @@
   let nodes = $derived(root.descendants().filter((d) => !d.data.dummy));
 
   let current: string | null = $state(null);
-
-  $effect.pre(() => {
-    // if-expression to run on each change of chart
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    data;
-    untrack(() => {
-      current = null;
-    });
-  });
 
   function tooltipText(d: AccountHierarchyNode) {
     const val = d.value ?? 0;
