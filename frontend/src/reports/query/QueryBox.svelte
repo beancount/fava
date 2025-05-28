@@ -16,9 +16,9 @@
     /** The query string. */
     query: string;
     /** The query result, possibly missing or an error. */
-    result?: Result<QueryResult, string>;
+    result?: Result<QueryResult, string> | undefined;
     /** Whether this box is open. */
-    open?: boolean;
+    open?: boolean | undefined;
     /** Handler to run on 'select' (clicking the summary bar). */
     onselect: () => void;
     /** Handler to run on 'delete' (clicking the x button). */

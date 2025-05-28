@@ -30,13 +30,13 @@
     /** Automatically adjust the size of the input element. */
     setSize?: boolean;
     /** An optional class name to assign to the input element. */
-    className?: string;
+    className?: string | undefined;
     /** A key binding to add for this input. */
     key?: KeySpec;
     /** A function that checks the entered value for validity. */
     checkValidity?: (val: string) => string;
     /** Whether to mark the input as required. */
-    required?: boolean;
+    required?: boolean | undefined;
     /** Whether to show a button to clear the input. */
     clearButton?: boolean;
     /** An event handler to run on blur. */

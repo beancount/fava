@@ -55,7 +55,7 @@ export class Router extends Events<"page-loaded"> {
   private frontend_routes?: FrontendRoute[];
 
   /** A possibly frontend rendered component. */
-  private frontend_route?: FrontendRoute;
+  private frontend_route?: FrontendRoute | undefined;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.

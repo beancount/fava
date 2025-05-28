@@ -13,7 +13,7 @@
     /** Index in the list of postings, used to move it. */
     index: number;
     /** Account suggestions. */
-    suggestions?: string[];
+    suggestions?: string[] | undefined;
     /** Entry date to limit account suggestions. */
     date?: string;
     /** Handler to move a posting to another position on drag. */

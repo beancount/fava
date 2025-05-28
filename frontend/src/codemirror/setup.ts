@@ -86,7 +86,9 @@ function setup(
   extensions: Extension[],
 ): EditorAndAction {
   const view = new EditorView({
-    state: EditorState.create({ doc: value, extensions }),
+    state: EditorState.create(
+      value !== undefined ? { doc: value, extensions } : { extensions },
+    ),
   });
   return {
     editor: view,

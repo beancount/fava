@@ -1,7 +1,6 @@
 import chokidar from "chokidar";
 import { context } from "esbuild";
 import svelte from "esbuild-svelte";
-import { typescript } from "svelte-preprocess-esbuild";
 
 import { compilerOptions } from "./tsconfig.json";
 
@@ -41,7 +40,6 @@ async function runBuild(dev: boolean) {
     plugins: [
       svelte({
         compilerOptions: { dev, runes: true },
-        preprocess: typescript(),
       }),
     ],
     sourcemap: dev,

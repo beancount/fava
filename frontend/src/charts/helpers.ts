@@ -55,7 +55,7 @@ export function filterTicks(domain: string[], count: number): string[] {
     return domain;
   }
   const showIndices = Math.ceil(domain.length / count);
-  return domain.filter((d, i) => i % showIndices === 0);
+  return domain.filter((_d, i) => i % showIndices === 0);
 }
 
 /**

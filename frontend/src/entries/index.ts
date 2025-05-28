@@ -282,7 +282,7 @@ export class Transaction extends EntryBase<"Transaction"> {
     );
   }
 
-  toString(): string {
+  override toString(): string {
     const postings = this.postings.map((p) => `  ${p.account}  ${p.amount}`);
     return (
       `${this.date} ${this.flag} "${this.payee}" "${this.narration}"` +

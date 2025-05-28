@@ -67,7 +67,7 @@ const components = [
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {
-  private destroy?: () => void;
+  private destroy?: (() => void) | undefined;
 
   /** Show some error content. */
   setError(...nodes_or_strings: (Node | string)[]): void {

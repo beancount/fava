@@ -3,7 +3,7 @@
 
   interface Props {
     value: string;
-    error?: boolean;
+    error?: boolean | undefined;
   }
 
   let { value, error = false }: Props = $props();

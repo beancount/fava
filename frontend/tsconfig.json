@@ -1,16 +1,14 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "target": "es2023",
-    "module": "es2020",
-    "moduleResolution": "Node",
+    "target": "ES2024",
+    "module": "Preserve",
     "resolveJsonModule": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "verbatimModuleSyntax": true,
     "allowJs": true,
-    "checkJs": true,
-    "noEmit": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true
+    "noEmit": true
   },
   "include": [
     "*.ts",

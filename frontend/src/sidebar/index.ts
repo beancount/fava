@@ -15,10 +15,11 @@ export function initSidebar(): void {
     document.title = `${title} - ${store_get(ledger_title)}`;
   });
 
-  mount(HeaderAndAside, {
-    target: document.body,
-    anchor: document.querySelector("article") ?? undefined,
-  });
+  const anchor = document.querySelector("article");
+  mount(
+    HeaderAndAside,
+    anchor ? { target: document.body, anchor } : { target: document.body },
+  );
 
   mount(Modals, {
     target: document.body,

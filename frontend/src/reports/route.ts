@@ -27,7 +27,8 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
         component: Record<string, unknown>;
         update_props: (v: T) => void;
       }
-    | { error: true; component: Record<string, unknown> };
+    | { error: true; component: Record<string, unknown> }
+    | undefined;
 
   /** The currently rendered URL. */
   url?: URL;

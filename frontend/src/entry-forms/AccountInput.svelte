@@ -9,9 +9,9 @@
     /** The account name input value. */
     value: string;
     /** An optional list of accounts to suggest - otherwise the whole account list is used. */
-    suggestions?: string[];
+    suggestions?: string[] | undefined;
     /** The date to enter this account for to exclude closed accounts. */
-    date?: string;
+    date?: string | undefined;
     /** An optional class name to assign to the input element. */
     className?: string;
     /** Whether to mark the input as required. */
