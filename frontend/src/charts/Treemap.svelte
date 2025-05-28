@@ -17,12 +17,11 @@
   interface Props {
     data: AccountHierarchyNode;
     width: number;
+    height: number;
     currency: string;
   }
 
-  let { data, width, currency }: Props = $props();
-
-  let height = $derived(Math.min(width / 2.5, 400));
+  let { data, width, height, currency }: Props = $props();
 
   const tree = treemap<AccountHierarchyDatum>().paddingInner(2).round(true);
   let root = $derived(tree.size([width, height])(data.copy()));

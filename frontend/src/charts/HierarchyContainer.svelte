@@ -2,6 +2,7 @@
   import { _ } from "../i18n";
   import { hierarchyChartMode } from "../stores/chart";
   import type { HierarchyChart } from "./hierarchy";
+  import Icicle from "./Icicle.svelte";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
@@ -20,6 +21,10 @@
   let treemap = $derived(
     mode === "treemap" ? data.get($treemap_currency ?? "") : undefined,
   );
+
+  let treemap_height = $derived(Math.min(width / 2.5, 400));
+  let sunburst_height = 500;
+  let icicle_height = $derived(Math.min(width / 2.5, 400));
 </script>
 
 {#if currencies.length === 0}
@@ -29,9 +34,14 @@
     </text>
   </svg>
 {:else if treemap && $treemap_currency}
-  <Treemap data={treemap} currency={$treemap_currency} {width} />
+  <Treemap
+    data={treemap}
+    currency={$treemap_currency}
+    {width}
+    height={treemap_height}
+  />
 {:else if mode === "sunburst"}
-  <svg viewBox={`0 0 ${width.toString()} 500`}>
+  <svg viewBox={`0 0 ${width.toString()} ${sunburst_height.toString()}`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}
       <g
         transform={`translate(${((width * i) / currencies.length).toString()},0)`}
@@ -40,7 +50,22 @@
           data={d}
           currency={chart_currency}
           width={width / currencies.length}
-          height={500}
+          height={sunburst_height}
+        />
+      </g>
+    {/each}
+  </svg>
+{:else if mode === "icicle"}
+  <svg viewBox={`0 0 ${width.toString()} ${icicle_height.toString()}`}>
+    {#each [...data] as [chart_currency, d], i (chart_currency)}
+      <g
+        transform={`translate(${((width * i) / currencies.length).toString()},0)`}
+      >
+        <Icicle
+          data={d}
+          currency={chart_currency}
+          width={width / currencies.length}
+          height={icicle_height}
         />
       </g>
     {/each}

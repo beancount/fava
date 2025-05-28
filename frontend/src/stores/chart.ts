@@ -17,7 +17,11 @@ export const showCharts = writable(true);
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
 export const lastActiveChartName = writable<string | null>(null);
 
-const hierarchy_chart_mode_validator = constants("treemap", "sunburst");
+const hierarchy_chart_mode_validator = constants(
+  "treemap",
+  "sunburst",
+  "icicle",
+);
 type HierarchyChartMode = ValidationT<typeof hierarchy_chart_mode_validator>;
 
 /** The currently selected hierarchy chart mode. */
@@ -28,6 +32,7 @@ export const hierarchyChartMode = localStorageSyncedStore<HierarchyChartMode>(
   () => [
     ["treemap", _("Treemap")],
     ["sunburst", _("Sunburst")],
+    ["icicle", _("Icicle")],
   ],
 );
 
