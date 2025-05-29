@@ -85,7 +85,7 @@ class IncorrectTypeValidationError(ValidationError):
 def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
     res = jsonify({"error": msg})
-    res.status = status  # type: ignore[assignment]
+    res.status = status
     return res
 
 

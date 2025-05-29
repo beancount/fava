@@ -8,7 +8,8 @@
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "plugins": [{ "name": "typescript-svelte-plugin" }]
   },
   "include": [
     "*.ts",
