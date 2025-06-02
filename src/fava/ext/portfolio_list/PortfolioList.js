@@ -1,3 +1,6 @@
+// @ts-check
+
+/** @type import("../../../../frontend/src/extensions").ExtensionModule */
 export default {
   init() {
     console.log("initialising extension");
@@ -12,9 +15,9 @@ export default {
     );
 
     const updateFilter = document.getElementById("portfolio-update-filter");
-    updateFilter.addEventListener("click", () => {
+    updateFilter?.addEventListener("click", () => {
       const filterInput = document.getElementById("portfolio-list-filter");
-      if (filterInput.value.length) {
+      if (filterInput instanceof HTMLInputElement && filterInput.value.length) {
         const search = new URLSearchParams(window.location.search);
         search.set("account_filter", filterInput.value);
         window.location.search = search.toString();
@@ -22,7 +25,7 @@ export default {
     });
 
     const clearFilter = document.getElementById("portfolio-clear-filter");
-    clearFilter.addEventListener("click", () => {
+    clearFilter?.addEventListener("click", () => {
       const search = new URLSearchParams(window.location.search);
       search.delete("account_filter");
       window.location.search = search.toString();

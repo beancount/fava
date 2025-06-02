@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
 
 
-class AutoCommit(FavaExtensionBase):
+class AutoCommit(FavaExtensionBase):  # pragma: no cover
     """Auto-commit hook for Fava."""
 
     def _run(self, args: list[str]) -> None:

@@ -50,6 +50,10 @@
 {% endmacro %}
 
 {% macro querytable(ledger, contents, types, rows, filter_empty=None, footer=None) %}
+<p class="deprecation-notice">
+  The querytable macro is deprecated, please switch to the frontend-rendered query result.
+  See fava.ext.fava_ext_test for an example of how to use them.
+<p>
 {% if contents %}
 <pre><code>{{ contents }}</code></pre>
 {% elif types %}

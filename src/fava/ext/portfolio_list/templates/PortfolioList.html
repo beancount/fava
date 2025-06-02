@@ -1,18 +1,15 @@
-{% import "_query_table.html" as querytable %}
-
 {% set arg_filter = request.args.get('account_filter') %}
 
-{% include 'PortfolioListHeader.html' %}
+<h2>Portfolio List Sample Report Extension</h2>
 
-<br />
+<p>
 <label for="portfolio-list-filter">Custom Account Filter:</label>
 <input id="portfolio-list-filter" value={{arg_filter or ""}}>
 <button id="portfolio-update-filter">Update Filter</button>
 <button id="portfolio-clear-filter">Clear Filter</button>
-<br />
-<br />
+</p>
+
 {% for portfolio in extension.portfolio_accounts(arg_filter) %}
-    <h3>{{ portfolio.title }}</h3>
-    {{ querytable.querytable(ledger, None, portfolio.types, portfolio.rows) }}
-    <br />
+  <h3>{{ portfolio.title }}</h3>
+  <svelte-component type="query-table"><script type="application/json">{{portfolio.table|tojson}}</script></svelte-component>
 {% endfor %}

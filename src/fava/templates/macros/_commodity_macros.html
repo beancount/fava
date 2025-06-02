@@ -3,11 +3,11 @@
   <span class="{{ class }}"></span>
 {%- else -%}
   <span class="{{ class }}" title="{{ ledger.commodities.name(amount.currency) }}">
-    {{- amount.number|format_currency(amount.currency, show_if_zero=True)|incognito }} {{ amount.currency -}}
+    {{- amount.number|format_currency(amount.currency)|incognito }} {{ amount.currency -}}
   </span>
 {%- endif %}
 {% endmacro %}
 
 {% macro render_num(ledger, currency, number) -%}
-<span title="{{ ledger.commodities.name(currency) }}">{{ number|format_currency(currency, show_if_zero=True)|incognito }} {{ currency }}</span>
+<span title="{{ ledger.commodities.name(currency) }}">{{ number|format_currency(currency)|incognito }} {{ currency }}</span>
 {%- endmacro %}

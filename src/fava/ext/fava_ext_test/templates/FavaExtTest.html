@@ -1,24 +1,41 @@
-{% import "_query_table.html" as querytable %}
-
 {% set arg_filter = request.args.get('account_filter') %}
 
 {% include 'FavaExtTestInclude.html' %}
 
-<br />
-<label for="portfolio-list-filter">Custom Account Filter:</label>
-<input id="portfolio-list-filter" value={{arg_filter or ""}}>
-<button id="portfolio-update-filter">Update Filter</button>
-<button id="portfolio-clear-filter">Clear Filter</button>
+<p>
+  <label for="portfolio-list-filter">Custom Account Filter:</label>
+  <input id="portfolio-list-filter" value={{arg_filter or ""}}>
+  <button id="portfolio-update-filter">Update Filter</button>
+  <button id="portfolio-clear-filter">Clear Filter</button>
+</p>
+
+<hr>
+
+<h3>Test for asynchronously fetched data</h3>
 <p id="fetched-data"></p>
 
-<h3>Fava custom elements tests</h3>
+<hr>
+
+<h3>Fava charts custom elements tests</h3>
+<h4>Expected error: missing type</h4>
 <svelte-component></svelte-component>
+<h4>Expected error: unknown type</h4>
 <svelte-component type="unknown"></svelte-component>
+<h4>Expected error: invalid data type</h4>
 <svelte-component type="charts"></svelte-component>
+<h4>This should render a chart</h4>
 <svelte-component type="charts"><script type="application/json">{{extension.chart_data()|tojson}}</script></svelte-component>
 
+<hr>
+
+<h3>Portfolio (renders a query-table)</h3>
 {% for portfolio in extension.portfolio_accounts(arg_filter) %}
-    <h3>{{ portfolio.title }}</h3>
-    {{ querytable.querytable(ledger, None, portfolio.types, portfolio.rows) }}
-    <br />
+  <h4>{{ portfolio.title }}</h4>
+  <svelte-component type="query-table"><script type="application/json">{{portfolio.table|tojson}}</script></svelte-component>
 {% endfor %}
+<hr>
+
+<h3>Query table (postings by account) from BQL query.</h3>
+
+{% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
+<svelte-component type="query-table"><script type="application/json">{{ledger.query_shell.execute_query_serialised(g.filtered.entries_with_all_prices, postings_per_account)|tojson}}</script></svelte-component>

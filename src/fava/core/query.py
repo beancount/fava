@@ -36,6 +36,7 @@ if TYPE_CHECKING:  # pragma: no cover
         | Decimal
         | Position
         | SimpleCounterInventory
+        | None
     )
 
 
@@ -150,7 +151,7 @@ class InventoryColumn(BaseColumn):
     dtype: str = "Inventory"
 
     @staticmethod
-    def serialise(  # type: ignore[override]
+    def serialise(
         val: Inventory | None,
     ) -> SimpleCounterInventory | None:
         """Serialise an inventory."""

@@ -157,9 +157,8 @@ testpaths = ["tests"]
 [tool.coverage.run]
 branch = true
 omit = [
-    "*/fava/beans/types.py",
-    "*/fava/ext/auto_commit.py",
-    "*/fava/ext/portfolio_list/__init__.py",
+    "src/fava/beans/types.py",
+    "src/fava/ext/auto_commit.py",
  ]
 
 [tool.coverage.paths]

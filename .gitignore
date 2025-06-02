@@ -13,15 +13,17 @@
 /src/fava.egg-info
 /htmlcov
 /venv
+/.venv
 
 /.idea/
 /.vscode/
 
-node_modules
+*.mo
 *.pyc
 *.so
-*.mo
 .DS_Store
 .env
 TODO
+__pycache__
+node_modules
 npm-debug.log

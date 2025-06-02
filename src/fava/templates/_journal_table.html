@@ -91,7 +91,7 @@
             {{ account_link(entry.account) }}
             {% if entry.diff_amount %}
             <span class="spacer"></span>
-            accumulated <span class="num">{{ (entry.amount.number + entry.diff_amount.number)|format_currency(entry.amount.currency, show_if_zero=True) }} {{ entry.amount.currency }}</span>
+            accumulated <span class="num">{{ (entry.amount.number + entry.diff_amount.number)|format_currency(entry.amount.currency) }} {{ entry.amount.currency }}</span>
             {% endif %}
         {% elif type == 'transaction' %}
             <strong class="payee">{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %}<span class="separator"></span>{% endif %}{{ entry.narration or '' }}
