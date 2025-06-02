@@ -3,20 +3,18 @@ import { derived, get as store_get, writable } from "svelte/store";
 
 import { _ } from "../i18n";
 import { is_descendant, is_descendant_or_equal, parent } from "../lib/account";
-import { derived_array } from "../lib/store";
-import { account_details, accounts_internal, fava_options, options } from ".";
-
-// a derived_array to avoid recreating collapsed_accounts too often.
-const collapse_patterns = derived_array(
-  fava_options,
-  ($fava_options) => $fava_options.collapse_pattern,
-);
+import { account_details, accounts_internal } from ".";
+import {
+  collapse_pattern,
+  invert_income_liabilities_equity,
+} from "./fava_options";
+import { name_equity, name_income, name_liabilities } from "./options";
 
 /** The accounts that are toggled via the collapse-pattern option. */
 const collapsed_accounts: Readable<readonly string[]> = derived(
-  [collapse_patterns, accounts_internal],
-  ([$collapse_patterns, $accounts_internal]) => {
-    const matchers = $collapse_patterns.map((pattern) => new RegExp(pattern));
+  [collapse_pattern, accounts_internal],
+  ([$collapse_pattern, $accounts_internal]) => {
+    const matchers = $collapse_pattern.map((pattern) => new RegExp(pattern));
     return $accounts_internal.filter((account: string) =>
       matchers.some((matcher) => matcher.test(account)),
     );
@@ -91,13 +89,23 @@ export function expand_all(account: string): void {
 
 /** Whether the balances for an account should be inverted. */
 export const invert_account = derived(
-  [fava_options, options],
-  ([$fava_options, $options]): ((name: string) => boolean) =>
-    $fava_options.invert_income_liabilities_equity
+  [
+    invert_income_liabilities_equity,
+    name_income,
+    name_liabilities,
+    name_equity,
+  ],
+  ([
+    $invert_income_liabilities_equity,
+    $name_income,
+    $name_liabilities,
+    $name_equity,
+  ]): ((name: string) => boolean) =>
+    $invert_income_liabilities_equity
       ? (name) =>
-          name.startsWith($options.name_income) ||
-          name.startsWith($options.name_liabilities) ||
-          name.startsWith($options.name_equity) ||
+          name.startsWith($name_income) ||
+          name.startsWith($name_liabilities) ||
+          name.startsWith($name_equity) ||
           name === _("Net Profit")
       : () => false,
 );

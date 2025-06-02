@@ -5,11 +5,9 @@ import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
 import type { ValidationT } from "../lib/validation";
 import { array, constants, string } from "../lib/validation";
-import {
-  conversion_currencies,
-  currencies_sorted,
-  operating_currency,
-} from ".";
+import { currencies_sorted } from ".";
+import { conversion_currencies } from "./fava_options";
+import { operating_currency } from "./options";
 
 /** Whether the charts should be shown - this applies globally to all charts. */
 export const showCharts = writable(true);
@@ -77,12 +75,10 @@ const currency_suggestions = derived(
   ([$operating_currency, $currencies_sorted, $conversion_currencies]) =>
     $conversion_currencies.length > 0
       ? $conversion_currencies
-      : [
+      : new Set([
           ...$operating_currency,
-          ...$currencies_sorted.filter(
-            (c) => !$operating_currency.includes(c) && iso4217currencies.has(c),
-          ),
-        ],
+          ...$currencies_sorted.filter((c) => iso4217currencies.has(c)),
+        ]),
 );
 
 /** The possible conversion options and their human-readable descriptions. */

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { timeDay } from "d3-time";
 
-  import { account_details, fava_options } from "../stores";
+  import { account_details } from "../stores";
+  import { uptodate_indicator_grey_lookback_days } from "../stores/fava_options";
 
   interface Props {
     /** The account name. */
@@ -45,7 +46,7 @@ ${balance}`}
       data-clipboard-text={balance}
     ></copyable-text>
   {/if}
-  {#if last_account_activity > $fava_options.uptodate_indicator_grey_lookback_days}
+  {#if last_account_activity > $uptodate_indicator_grey_lookback_days}
     <span
       class="status-indicator status-gray"
       class:small

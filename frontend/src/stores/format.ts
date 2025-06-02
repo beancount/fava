@@ -1,4 +1,5 @@
 import { format } from "d3-format";
+import type { NumberValue } from "d3-scale";
 import { derived } from "svelte/store";
 
 import type { FormatterContext } from "../format";
@@ -9,15 +10,16 @@ import {
   replaceNumbers,
   timeFilterDateFormat,
 } from "../format";
-import { incognito, interval, locale, precisions } from ".";
+import { incognito, interval, precisions } from ".";
+import { locale } from "./fava_options";
 
 const short_format = format(".3s");
 
 /** Render a number to a short string, for example for the y-axis of a line chart. */
-export const short = derived(
-  incognito,
-  ($incognito): ((number: number | { valueOf(): number }) => string) =>
-    $incognito ? (n) => replaceNumbers(short_format(n)) : short_format,
+export const short = derived(incognito, ($incognito) =>
+  $incognito
+    ? (n: NumberValue) => replaceNumbers(short_format(n))
+    : short_format,
 );
 
 /** Format a number for which the currency is not known. */

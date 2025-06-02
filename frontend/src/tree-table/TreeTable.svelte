@@ -3,8 +3,9 @@
 
   import type { AccountTreeNode } from "../charts/hierarchy";
   import { _ } from "../i18n";
-  import { currency_name, operating_currency } from "../stores";
+  import { currency_name } from "../stores";
   import { invert_account } from "../stores/accounts";
+  import { operating_currency } from "../stores/options";
   import AccountCellHeader from "./AccountCellHeader.svelte";
   import { get_not_shown, setTreeTableNotShownContext } from "./helpers";
   import TreeTableNode from "./TreeTableNode.svelte";

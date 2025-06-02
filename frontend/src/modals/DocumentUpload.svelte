@@ -11,11 +11,10 @@
   import { _ } from "../i18n";
   import { notify, notify_err } from "../notifications";
   import router from "../router";
-  import { options } from "../stores";
+  import { documents } from "../stores/options";
   import ModalBase from "./ModalBase.svelte";
 
   let shown = $derived(!!$files.length);
-  let documents = $derived($options.documents);
 
   let documents_folder = $state("");
 
@@ -56,7 +55,7 @@
       <label>
         <span>{_("Documents folder")}:</span>
         <select bind:value={documents_folder}>
-          {#each documents as folder (folder)}
+          {#each $documents as folder (folder)}
             <option>{folder}</option>
           {/each}
         </select>

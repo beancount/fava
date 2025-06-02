@@ -2,7 +2,7 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { date as validate_date } from "../lib/validation";
-  import { accounts } from "../stores";
+  import { accounts, accounts_set } from "../stores";
   import { is_closed_account } from "../stores/accounts";
 
   interface Props {
@@ -27,7 +27,7 @@
   }: Props = $props();
 
   let checkValidity = $derived((val: string) =>
-    !$accounts.length || $accounts.includes(val) || (required !== true && !val)
+    !$accounts_set.size || $accounts_set.has(val) || (required !== true && !val)
       ? ""
       : _("Should be one of the declared accounts"),
   );

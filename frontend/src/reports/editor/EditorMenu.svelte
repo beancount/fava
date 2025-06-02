@@ -10,7 +10,8 @@
   import { _ } from "../../i18n";
   import { modKey } from "../../keyboard-shortcuts";
   import router from "../../router";
-  import { fava_options, options } from "../../stores";
+  import { insert_entry } from "../../stores/fava_options";
+  import { sources } from "../../stores/options";
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
   import AppMenuSubItem from "./AppMenuSubItem.svelte";
@@ -23,12 +24,6 @@
   }
 
   let { file_path, editor, children }: Props = $props();
-
-  let sources = $derived([
-    $options.filename,
-    ...$options.include.filter((f) => f !== $options.filename),
-  ]);
-  let insertEntryOptions = $derived($fava_options.insert_entry);
 
   function goToFileAndLine(filename: string, line?: number) {
     const url = $urlFor("editor/", { file_path: filename, line });
@@ -46,7 +41,7 @@
 <div>
   <AppMenu>
     <AppMenuItem name={_("File")}>
-      {#each sources as source (source)}
+      {#each $sources as source (source)}
         <AppMenuSubItem
           action={() => {
             goToFileAndLine(source);
@@ -83,9 +78,9 @@
         {/snippet}
       </AppMenuSubItem>
     </AppMenuItem>
-    {#if insertEntryOptions.length}
+    {#if $insert_entry.length}
       <AppMenuItem name={`'insert-entry' ${_("Options")}`}>
-        {#each insertEntryOptions as opt (`${opt.filename}:${opt.lineno.toString()}`)}
+        {#each $insert_entry as opt (`${opt.filename}:${opt.lineno.toString()}`)}
           <AppMenuSubItem
             title={`${opt.filename}:${opt.lineno.toString()}`}
             action={() => {

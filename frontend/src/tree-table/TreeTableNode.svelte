@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { AccountTreeNode } from "../charts/hierarchy";
   import { is_empty } from "../lib/objects";
-  import { currency_name, operating_currency } from "../stores";
+  import { currency_name } from "../stores";
   import { toggled_accounts } from "../stores/accounts";
   import { ctx } from "../stores/format";
+  import { operating_currency } from "../stores/options";
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
   import { getTreeTableNotShownContext } from "./helpers";

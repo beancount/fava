@@ -13,7 +13,8 @@
   import { log_error } from "../../log";
   import { notify_err } from "../../notifications";
   import router from "../../router";
-  import { errors, fava_options } from "../../stores";
+  import { errors } from "../../stores";
+  import { insert_entry } from "../../stores/fava_options";
   import type { EditorReportProps } from ".";
   import EditorMenu from "./EditorMenu.svelte";
 
@@ -90,7 +91,7 @@
     // Go to line if the edited file changes. The line number is obtained from the
     // URL, last file insert option, or last file line (in that order).
     const last_insert_opt = untrack(() =>
-      $fava_options.insert_entry.filter((f) => f.filename === file_path).at(-1),
+      $insert_entry.filter((f) => f.filename === file_path).at(-1),
     );
     let line = editor.state.doc.lines;
     if (line_search_param != null) {

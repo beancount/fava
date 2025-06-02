@@ -8,7 +8,7 @@
   import { _ } from "../../i18n";
   import { notify, notify_err } from "../../notifications";
   import router from "../../router";
-  import { fava_options } from "../../stores";
+  import { import_config } from "../../stores/fava_options";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import type { ImportReportProps } from ".";
   import Extract from "./Extract.svelte";
@@ -114,7 +114,7 @@
   }
 </script>
 
-{#if $fava_options.import_config == null}
+{#if $import_config == null}
   <p>
     No importers configured. See <a href={$urlFor("help/import")}
       >Help (Import)</a
