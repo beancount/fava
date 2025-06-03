@@ -9,12 +9,17 @@ import type { FavaChart } from "./charts";
 import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import { chartContext } from "./charts/context";
+import {
+  account_hierarchy_validator,
+  type AccountTreeNode,
+} from "./charts/hierarchy";
 import { domHelpers } from "./charts/tooltip";
 import type { Result } from "./lib/result";
 import { log_error } from "./log";
 import type { QueryResultTable } from "./reports/query/query_table";
 import { query_table_validator } from "./reports/query/query_table";
 import QueryTable from "./reports/query/QueryTable.svelte";
+import TreeTable from "./tree-table/TreeTable.svelte";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
 class SvelteCustomElementComponent<T extends Record<string, unknown>> {
@@ -57,6 +62,12 @@ const components = [
     "query-table",
     QueryTable,
     (data) => query_table_validator(data).map((table) => ({ table })),
+  ),
+  new SvelteCustomElementComponent<{ tree: AccountTreeNode; end: null }>(
+    "tree-table",
+    TreeTable,
+    (data) =>
+      account_hierarchy_validator(data).map((tree) => ({ tree, end: null })),
   ),
 ];
 

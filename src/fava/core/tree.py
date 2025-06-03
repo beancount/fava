@@ -38,14 +38,8 @@ class SerialisedTreeNode:
     balance_children: SimpleCounterInventory
     children: Sequence[SerialisedTreeNode]
     has_txns: bool
-
-
-@dataclass(frozen=True)
-class SerialisedTreeNodeWithCost(SerialisedTreeNode):
-    """A serialised TreeNode with cost."""
-
-    cost: SimpleCounterInventory
-    cost_children: SimpleCounterInventory
+    cost: SimpleCounterInventory | None = None
+    cost_children: SimpleCounterInventory | None = None
 
 
 class TreeNode:
@@ -72,7 +66,7 @@ class TreeNode:
         end: datetime.date | None,
         *,
         with_cost: bool = False,
-    ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
+    ) -> SerialisedTreeNode:
         """Serialise the account.
 
         Args:
@@ -86,7 +80,7 @@ class TreeNode:
             for child in sorted(self.children, key=attrgetter("name"))
         ]
         return (
-            SerialisedTreeNodeWithCost(
+            SerialisedTreeNode(
                 self.name,
                 cost_or_value(self.balance, conversion, prices, end),
                 cost_or_value(self.balance_children, conversion, prices, end),
@@ -105,9 +99,7 @@ class TreeNode:
             )
         )
 
-    def serialise_with_context(
-        self,
-    ) -> SerialisedTreeNode | SerialisedTreeNodeWithCost:
+    def serialise_with_context(self) -> SerialisedTreeNode:
         """Serialise, getting all parameters from Flask context."""
         return self.serialise(
             g.conv,

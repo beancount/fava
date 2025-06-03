@@ -36,6 +36,8 @@
                       "USD": -632.32
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -47,6 +49,8 @@
                       "USD": -8750.0
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -58,6 +62,8 @@
                       "USD": -119999.88
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -69,9 +75,13 @@
                       "VACHR": -130
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -90,6 +100,8 @@
                       "USD": -51.68
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -101,9 +113,13 @@
                       "USD": 98.12
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -122,15 +138,23 @@
                       "IRAUSD": -17500
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Income",
@@ -161,6 +185,8 @@
                   "USD": 89.5
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               },
               {
@@ -172,9 +198,13 @@
                   "USD": 48.0
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -189,6 +219,8 @@
                 "balance": {},
                 "balance_children": {},
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -196,6 +228,8 @@
                 "balance": {},
                 "balance_children": {},
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -207,6 +241,8 @@
                   "USD": 2424.91
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               },
               {
@@ -218,9 +254,13 @@
                   "USD": 4177.07
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -246,9 +286,13 @@
                       "USD": 75.4
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -267,9 +311,13 @@
                       "USD": 632.32
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -288,9 +336,13 @@
                       "USD": 711.88
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -309,12 +361,18 @@
                       "USD": 1099.8
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -333,6 +391,8 @@
                   "USD": 780.0
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               },
               {
@@ -344,6 +404,8 @@
                   "USD": 959.79
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               },
               {
@@ -355,6 +417,8 @@
                   "USD": 762.65
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               },
               {
@@ -366,9 +430,13 @@
                   "USD": 28800.0
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -404,6 +472,8 @@
                           "USD": 4547.92
                         },
                         "children": [],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       },
                       {
@@ -425,9 +495,13 @@
                               "IRAUSD": 17500.0
                             },
                             "children": [],
+                            "cost": null,
+                            "cost_children": null,
                             "has_txns": true
                           }
                         ],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       },
                       {
@@ -439,6 +513,8 @@
                           "USD": 2772.12
                         },
                         "children": [],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       },
                       {
@@ -450,6 +526,8 @@
                           "USD": 29.12
                         },
                         "children": [],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       },
                       {
@@ -461,6 +539,8 @@
                           "USD": 7000.04
                         },
                         "children": [],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       },
                       {
@@ -472,15 +552,23 @@
                           "USD": 9492.08
                         },
                         "children": [],
+                        "cost": null,
+                        "cost_children": null,
                         "has_txns": true
                       }
                     ],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": false
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -499,9 +587,13 @@
                   "USD": 1440.0
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -509,9 +601,13 @@
             "balance": {},
             "balance_children": {},
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Expenses",
@@ -542,9 +638,13 @@
                   "USD": 100
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -571,9 +671,13 @@
                       "VACHR": 130
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -592,9 +696,13 @@
                       "USD": 5086.65
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -613,6 +721,8 @@
                       "USD": 342.85
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -624,6 +734,8 @@
                       "USD": 1967.55
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -635,6 +747,8 @@
                       "USD": 2039.8
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -646,6 +760,8 @@
                       "USD": 1988.22
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -657,9 +773,13 @@
                       "USD": 2025.64
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -672,9 +792,13 @@
                     "balance": {},
                     "balance_children": {},
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -693,6 +817,8 @@
                       "USD": 0.03
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -704,6 +830,8 @@
                       "USD": 15750.02569
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -715,15 +843,23 @@
                       "USD": 10499.9363
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Assets",
@@ -742,6 +878,8 @@
             "balance": {},
             "balance_children": {},
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -767,15 +905,23 @@
                       "USD": -390.29
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Liabilities",
@@ -805,9 +951,13 @@
                   "USD": 0.00801
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -819,9 +969,13 @@
               "USD": -3553.18
             },
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": true
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Equity",
@@ -862,9 +1016,13 @@
                     "USD": 100
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -891,9 +1049,13 @@
                         "VACHR": 130
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -912,9 +1074,13 @@
                         "USD": 5086.65
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -933,6 +1099,8 @@
                         "USD": 342.85
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -944,6 +1112,8 @@
                         "USD": 1967.55
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -955,6 +1125,8 @@
                         "USD": 2039.8
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -966,6 +1138,8 @@
                         "USD": 1988.22
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -977,9 +1151,13 @@
                         "USD": 2025.64
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -992,9 +1170,13 @@
                       "balance": {},
                       "balance_children": {},
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1013,6 +1195,8 @@
                         "USD": 0.03
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1024,6 +1208,8 @@
                         "USD": 15750.02569
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1035,15 +1221,23 @@
                         "USD": 10499.9363
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             }
           ],
+          "cost": null,
+          "cost_children": null,
           "has_txns": false
         },
         {
@@ -1069,9 +1263,13 @@
                     "USD": 0.00801
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1083,9 +1281,13 @@
                 "USD": -3553.18
               },
               "children": [],
+              "cost": null,
+              "cost_children": null,
               "has_txns": true
             }
           ],
+          "cost": null,
+          "cost_children": null,
           "has_txns": false
         },
         {
@@ -1112,6 +1314,8 @@
                     "USD": 89.5
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 },
                 {
@@ -1123,9 +1327,13 @@
                     "USD": 48.0
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1140,6 +1348,8 @@
                   "balance": {},
                   "balance_children": {},
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1147,6 +1357,8 @@
                   "balance": {},
                   "balance_children": {},
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1158,6 +1370,8 @@
                     "USD": 2424.91
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 },
                 {
@@ -1169,9 +1383,13 @@
                     "USD": 4177.07
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1197,9 +1415,13 @@
                         "USD": 75.4
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1218,9 +1440,13 @@
                         "USD": 632.32
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1239,9 +1465,13 @@
                         "USD": 711.88
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1260,12 +1490,18 @@
                         "USD": 1099.8
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1284,6 +1520,8 @@
                     "USD": 780.0
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 },
                 {
@@ -1295,6 +1533,8 @@
                     "USD": 959.79
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 },
                 {
@@ -1306,6 +1546,8 @@
                     "USD": 762.65
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 },
                 {
@@ -1317,9 +1559,13 @@
                     "USD": 28800.0
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1355,6 +1601,8 @@
                             "USD": 4547.92
                           },
                           "children": [],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         },
                         {
@@ -1376,9 +1624,13 @@
                                 "IRAUSD": 17500.0
                               },
                               "children": [],
+                              "cost": null,
+                              "cost_children": null,
                               "has_txns": true
                             }
                           ],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         },
                         {
@@ -1390,6 +1642,8 @@
                             "USD": 2772.12
                           },
                           "children": [],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         },
                         {
@@ -1401,6 +1655,8 @@
                             "USD": 29.12
                           },
                           "children": [],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         },
                         {
@@ -1412,6 +1668,8 @@
                             "USD": 7000.04
                           },
                           "children": [],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         },
                         {
@@ -1423,15 +1681,23 @@
                             "USD": 9492.08
                           },
                           "children": [],
+                          "cost": null,
+                          "cost_children": null,
                           "has_txns": true
                         }
                       ],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": false
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1450,9 +1716,13 @@
                     "USD": 1440.0
                   },
                   "children": [],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": true
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1460,9 +1730,13 @@
               "balance": {},
               "balance_children": {},
               "children": [],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             }
           ],
+          "cost": null,
+          "cost_children": null,
           "has_txns": false
         },
         {
@@ -1500,6 +1774,8 @@
                         "USD": -632.32
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1511,6 +1787,8 @@
                         "USD": -8750.0
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1522,6 +1800,8 @@
                         "USD": -119999.88
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1533,9 +1813,13 @@
                         "VACHR": -130
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1554,6 +1838,8 @@
                         "USD": -51.68
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     },
                     {
@@ -1565,9 +1851,13 @@
                         "USD": 98.12
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 },
                 {
@@ -1586,15 +1876,23 @@
                         "IRAUSD": -17500
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             }
           ],
+          "cost": null,
+          "cost_children": null,
           "has_txns": false
         },
         {
@@ -1609,6 +1907,8 @@
               "balance": {},
               "balance_children": {},
               "children": [],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             },
             {
@@ -1634,18 +1934,28 @@
                         "USD": -390.29
                       },
                       "children": [],
+                      "cost": null,
+                      "cost_children": null,
                       "has_txns": true
                     }
                   ],
+                  "cost": null,
+                  "cost_children": null,
                   "has_txns": false
                 }
               ],
+              "cost": null,
+              "cost_children": null,
               "has_txns": false
             }
           ],
+          "cost": null,
+          "cost_children": null,
           "has_txns": false
         }
       ],
+      "cost": null,
+      "cost_children": null,
       "has_txns": false
     }
   ]

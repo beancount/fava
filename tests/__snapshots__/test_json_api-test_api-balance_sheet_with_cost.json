@@ -1260,9 +1260,13 @@
                   "USD": 175
                 },
                 "children": [],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": true
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           },
           {
@@ -1290,9 +1294,13 @@
                       "VACHR": -82
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -1311,9 +1319,13 @@
                       "USD": 1632.79
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -1332,6 +1344,8 @@
                       "USD": 641.76
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1343,6 +1357,8 @@
                       "USD": 5045.92
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1354,6 +1370,8 @@
                       "USD": 5375.44
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1365,6 +1383,8 @@
                       "USD": 7811.72
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1376,9 +1396,13 @@
                       "USD": 5304.25
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -1397,9 +1421,13 @@
                       "IRAUSD": 7200.0
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               },
               {
@@ -1418,6 +1446,8 @@
                       "USD": 0.02
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1429,6 +1459,8 @@
                       "USD": 51311.71216
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   },
                   {
@@ -1440,15 +1472,23 @@
                       "USD": 28139.56928
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Assets",
@@ -1467,6 +1507,8 @@
             "balance": {},
             "balance_children": {},
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": true
           },
           {
@@ -1492,15 +1534,23 @@
                       "USD": -2935.65
                     },
                     "children": [],
+                    "cost": null,
+                    "cost_children": null,
                     "has_txns": true
                   }
                 ],
+                "cost": null,
+                "cost_children": null,
                 "has_txns": false
               }
             ],
+            "cost": null,
+            "cost_children": null,
             "has_txns": false
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Liabilities",
@@ -1523,9 +1573,13 @@
               "USD": -3553.18
             },
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": true
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Equity",

@@ -118,6 +118,8 @@
             "balance": {},
             "balance_children": {},
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": true
           },
           {
@@ -129,9 +131,13 @@
               "USD": 104
             },
             "children": [],
+            "cost": null,
+            "cost_children": null,
             "has_txns": true
           }
         ],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "Assets",
@@ -143,6 +149,8 @@
         "balance": {},
         "balance_children": {},
         "children": [],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "2022-01-04",
@@ -154,6 +162,8 @@
         "balance": {},
         "balance_children": {},
         "children": [],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "2022-01-03",
@@ -165,6 +175,8 @@
         "balance": {},
         "balance_children": {},
         "children": [],
+        "cost": null,
+        "cost_children": null,
         "has_txns": false
       },
       "label": "2022-01-02",
@@ -202,6 +214,8 @@
           "balance": {},
           "balance_children": {},
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         },
         {
@@ -213,9 +227,13 @@
             "USD": 104
           },
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         }
       ],
+      "cost": null,
+      "cost_children": null,
       "has_txns": false
     },
     {
@@ -230,6 +248,8 @@
           "balance": {},
           "balance_children": {},
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         },
         {
@@ -241,9 +261,13 @@
             "USD": 103
           },
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         }
       ],
+      "cost": null,
+      "cost_children": null,
       "has_txns": false
     },
     {
@@ -258,6 +282,8 @@
           "balance": {},
           "balance_children": {},
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         },
         {
@@ -269,9 +295,13 @@
             "USD": 102
           },
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         }
       ],
+      "cost": null,
+      "cost_children": null,
       "has_txns": false
     },
     {
@@ -286,6 +316,8 @@
           "balance": {},
           "balance_children": {},
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         },
         {
@@ -297,9 +329,13 @@
             "USD": 101
           },
           "children": [],
+          "cost": null,
+          "cost_children": null,
           "has_txns": true
         }
       ],
+      "cost": null,
+      "cost_children": null,
       "has_txns": false
     }
   ]

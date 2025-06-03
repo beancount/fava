@@ -30,6 +30,7 @@ from fava.internal_api import BalancesChart
 if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
+    from fava.core.tree import SerialisedTreeNode
     from fava.core.tree import Tree
     from fava.core.tree import TreeNode
 
@@ -172,6 +173,12 @@ class FavaExtTest(FavaExtensionBase):
     ) -> list[Portfolio]:
         """Get an account tree based on matching regex patterns."""
         return portfolio_accounts(self.config, filter_str)
+
+    @extension_endpoint
+    def example_tree(self) -> SerialisedTreeNode:
+        """Return a tree to render as a tree-table."""
+        assets = g.ledger.options["name_assets"]
+        return g.filtered.root_tree.get(assets).serialise_with_context()
 
     @extension_endpoint
     def example_data(self) -> Response:

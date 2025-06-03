@@ -28,6 +28,11 @@
 
 <hr>
 
+<h3>Tree-table test</h3>
+{% set tree = extension.example_tree() %}
+<svelte-component type="tree-table"><script type="application/json">{{tree|tojson}}</script></svelte-component>
+<hr>
+
 <h3>Portfolio (renders a query-table)</h3>
 {% for portfolio in extension.portfolio_accounts(arg_filter) %}
   <h4>{{ portfolio.title }}</h4>
@@ -36,6 +41,5 @@
 <hr>
 
 <h3>Query table (postings by account) from BQL query.</h3>
-
 {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
 <svelte-component type="query-table"><script type="application/json">{{ledger.query_shell.execute_query_serialised(g.filtered.entries_with_all_prices, postings_per_account)|tojson}}</script></svelte-component>
