@@ -1,2 +1,3 @@
-src/fava/**/*.html
-tests/__snapshots__/*
+**/*.html
+**/*.md
+tests/__snapshots__/*.json

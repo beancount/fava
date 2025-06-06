@@ -6,7 +6,6 @@ exclude .editorconfig
 exclude .gitignore
 exclude .pre-commit-config.yaml
 exclude .prettierignore
-exclude .prettierrc.json
 prune .github
 
 graft src/fava/static
