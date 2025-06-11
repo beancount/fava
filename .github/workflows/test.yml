@@ -75,4 +75,5 @@ jobs:
         with:
           python-version: "3.13"
       - uses: astral-sh/setup-uv@v6
+      - run: touch src/fava/static/app.js
       - run: make mypy

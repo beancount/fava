@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import type { Result } from "../src/lib/result";
 import { collect, Err, err, Ok, ok } from "../src/lib/result";

@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { basename, documentHasAccount, ext } from "../src/lib/paths";
 

@@ -5,52 +5,36 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { load } from "js-yaml";
+import package_lock from "./package-lock.json" with { type: "json" };
 
-import { packages } from "./package-lock.json";
-import { array, object, optional, string } from "./src/lib/validation";
+const { packages } = package_lock;
 
-const preCommitConfigPath = join(__dirname, "..", ".pre-commit-config.yaml");
-
-const confValidator = object({
-  repos: array(
-    object({
-      hooks: array(
-        object({
-          language: optional(string),
-          additional_dependencies: optional(array(string)),
-        }),
-      ),
-    }),
-  ),
-});
+const config_path = join(
+  fileURLToPath(import.meta.url),
+  "..",
+  "..",
+  ".pre-commit-config.yaml",
+);
 
 async function main() {
-  const rawConfig = await readFile(preCommitConfigPath, "utf-8");
-  let newConfig = rawConfig;
-  const conf = confValidator(load(rawConfig));
-  for (const { hooks } of conf.unwrap().repos) {
-    for (const { language, additional_dependencies } of hooks) {
-      if (language === "node" && additional_dependencies) {
-        for (const dep of additional_dependencies) {
-          const name = dep.split(/@[^@]*$/)[0] ?? "ERROR";
-          const { version } =
-            packages[`node_modules/${name}` as keyof typeof packages];
-          const currentDep = `${name}@${version}`;
-          if (dep !== currentDep) {
-            console.log(
-              `Updating dependency '${name}' from '${dep}' to '${currentDep}'.`,
-            );
-            newConfig = newConfig.replace(`"${dep}"`, `"${currentDep}"`);
-          }
-        }
-      }
+  const current_config = await readFile(config_path, "utf-8");
+  let new_config = current_config;
+
+  for (const [pack, { version }] of Object.entries(packages)) {
+    const name = pack.substring("node_modules/".length);
+    if (name) {
+      new_config = new_config.replaceAll(
+        new RegExp(`"${name}@[\\d\\.]+"`, "g"),
+        `"${name}@${version}"`,
+      );
     }
   }
-  if (newConfig !== rawConfig) {
+
+  if (new_config !== current_config) {
     console.log("Writing updated pre-commit config.");
-    await writeFile(preCommitConfigPath, newConfig, "utf-8");
+    await writeFile(config_path, new_config, "utf-8");
   }
 }
 

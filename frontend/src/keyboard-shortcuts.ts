@@ -148,8 +148,6 @@ function keydown(event: KeyboardEvent): void {
   }
 }
 
-document.addEventListener("keydown", keydown);
-
 /** A type to specify a platform-dependent keyboard shortcut. */
 export type KeySpec =
   | KeyCombo
@@ -248,9 +246,11 @@ export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
 };
 
 /**
- * Register the keys to show/hide the tooltips
+ * Register the keys to show/hide the tooltips and register the global keydown handler.
  */
 export function initGlobalKeyboardShortcuts(): void {
+  document.addEventListener("keydown", keydown);
+
   bindKey("?", () => {
     const hide = showTooltips();
     const once = () => {

@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import {
   Amount,
@@ -11,7 +11,7 @@ import {
   Note,
   Posting,
   Transaction,
-} from "../src/entries";
+} from "../src/entries/index";
 import { Position } from "../src/entries/position";
 import { formatter_context } from "../src/format";
 

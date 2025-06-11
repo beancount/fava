@@ -4,10 +4,17 @@
 
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { object, string } from "./src/lib/validation";
 
-const workflows = join(__dirname, "..", ".github", "workflows");
+const workflows = join(
+  fileURLToPath(import.meta.url),
+  "..",
+  "..",
+  ".github",
+  "workflows",
+);
 const action_regex = /uses: ([-/\w]+)@(\S+)/g;
 const release_validator = object({ tag_name: string });
 

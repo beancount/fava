@@ -1,9 +1,10 @@
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { Tree } from "@lezer/common";
 import { TreeFragment } from "@lezer/common";
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
 import {
@@ -15,7 +16,8 @@ import { is_non_empty } from "../src/lib/array";
 async function load(): Promise<TSParser> {
   await TSParser.init();
   const path = join(
-    __dirname,
+    fileURLToPath(import.meta.url),
+    "..",
     "..",
     "src",
     "codemirror",

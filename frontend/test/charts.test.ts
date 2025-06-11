@@ -1,7 +1,6 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
-import { parseChartData } from "../src/charts";
 import { bar } from "../src/charts/bar";
 import {
   colors10,
@@ -11,6 +10,7 @@ import {
   padExtent,
 } from "../src/charts/helpers";
 import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
+import { parseChartData } from "../src/charts/index";
 import { balances, LineChart } from "../src/charts/line";
 import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
 import { loadJSONSnapshot } from "./helpers";

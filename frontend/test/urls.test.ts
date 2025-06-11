@@ -1,9 +1,9 @@
 import { get as store_get } from "svelte/store";
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { getUrlPath, urlForAccount, urlForInternal } from "../src/helpers";
-import { base_url } from "../src/stores";
+import { base_url } from "../src/stores/index";
 import { initialiseLedgerData } from "./helpers";
 
 test.before(initialiseLedgerData);

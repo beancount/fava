@@ -1,15 +1,24 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { ledgerDataValidator } from "../src/api/validators";
 import { parseJSON } from "../src/lib/json";
-import { ledgerData } from "../src/stores";
+import { ledgerData } from "../src/stores/index";
 
 /** Load the Python test snapshot output with the given name and parse as JSON. */
 export async function loadJSONSnapshot(
   name: `${string}.json`,
 ): Promise<unknown> {
-  const path = join(__dirname, "..", "..", "tests", "__snapshots__", name);
+  const path = join(
+    fileURLToPath(import.meta.url),
+    "..",
+    "..",
+    "..",
+    "tests",
+    "__snapshots__",
+    name,
+  );
   return parseJSON(await readFile(path, "utf8")).unwrap();
 }
 

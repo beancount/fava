@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { is_non_empty, move } from "../src/lib/array";
 

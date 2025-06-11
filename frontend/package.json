@@ -2,13 +2,31 @@
   "name": "fava",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "build": "node -r esbuild-register build.ts",
-    "dev": "node -r esbuild-register build.ts --watch",
-    "sync-pre-commit": "node -r esbuild-register sync-pre-commit.ts",
-    "sync-github-actions": "node -r esbuild-register sync-github-actions.ts",
-    "test": "c8 --all --src src -r html uvu -r esbuild-register test",
+    "build": "node --import ./setup.mjs build.ts",
+    "dev": "node --import ./setup.mjs build.ts --watch",
+    "sync-pre-commit": "node --import ./setup.mjs sync-pre-commit.ts",
+    "sync-github-actions": "node --import ./setup.mjs sync-github-actions.ts",
+    "test": "c8 node --conditions browser --import ./setup.mjs ./node_modules/uvu/bin.js test",
     "test:watch": "watchlist --eager src test -- npm test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "c8": {
+    "all": true,
+    "extension": [
+      ".mjs",
+      ".svelte",
+      ".ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "src": [
+      "src"
+    ]
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
@@ -24,18 +42,16 @@
     "@types/d3-shape": "^3.0.2",
     "@types/d3-time": "^3.0.0",
     "@types/d3-time-format": "^4.0.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/js-yaml": "^4.0.5",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^22.1.0",
     "c8": "^10.1.2",
     "chokidar": "^4.0.0",
     "esbuild": "^0.25.0",
-    "esbuild-register": "^3.0.0",
     "esbuild-svelte": "^0.9.0",
     "eslint": "^9.27.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-svelte": "^3.1.0",
-    "js-yaml": "^4.1.0",
+    "jsdom": "^26.1.0",
     "postcss-html": "^1.0.1",
     "prettier": "^3.0.0",
     "prettier-plugin-svelte": "^3.0.0",

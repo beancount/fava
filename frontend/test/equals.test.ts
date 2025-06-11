@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { shallow_equal } from "../src/lib/equals";
 

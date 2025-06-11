@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { is_non_empty, last_element } from "../src/lib/array";
 import { errorWithCauses } from "../src/lib/errors";

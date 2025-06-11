@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import { derived_array } from "../src/lib/store";
 

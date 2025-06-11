@@ -20,6 +20,7 @@ jobs:
         with:
           python-version: "3.12"
       - uses: astral-sh/setup-uv@v6
+      - run: touch src/fava/static/app.js
       - run: make docs
       - if: github.repository == 'beancount/fava'
         uses: actions/configure-pages@v5

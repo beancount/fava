@@ -1,7 +1,7 @@
 import { setDiagnosticsEffect } from "@codemirror/lint";
 import { EditorState } from "@codemirror/state";
 import { test } from "uvu";
-import assert from "uvu/assert";
+import * as assert from "uvu/assert";
 
 import {
   replaceContents,
