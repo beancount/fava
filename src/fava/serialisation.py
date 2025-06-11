@@ -23,7 +23,9 @@ from fava.beans.abc import Balance
 from fava.beans.abc import Custom
 from fava.beans.abc import Directive
 from fava.beans.abc import Posting
+from fava.beans.abc import Price
 from fava.beans.abc import Transaction
+from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
 from fava.helpers import FavaAPIError
@@ -44,17 +46,18 @@ def serialise(entry: Directive | Posting) -> Any:
         msg = f"Unsupported object {entry}"
         raise TypeError(msg)
     ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["entry_hash"] = hash_entry(entry)
     ret["t"] = entry.__class__.__name__
     return ret
 
 
 @serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
-    """Serialise an entry."""
     ret = entry._asdict()  # type: ignore[attr-defined]
     ret["meta"] = copy(entry.meta)
     ret["meta"].pop("__tolerances__", None)
     ret["t"] = "Transaction"
+    ret["entry_hash"] = hash_entry(entry)
     ret["payee"] = entry.payee or ""
     ret["postings"] = list(map(serialise, entry.postings))
     return ret
@@ -62,18 +65,28 @@ def _(entry: Transaction) -> Any:
 
 @serialise.register(Custom)
 def _(entry: Custom) -> Any:
-    """Serialise an entry."""
     ret = entry._asdict()  # type: ignore[attr-defined]
     ret["t"] = "Custom"
+    ret["entry_hash"] = hash_entry(entry)
     ret["values"] = [v.value for v in entry.values]
     return ret
 
 
 @serialise.register(Balance)
 def _(entry: Balance) -> Any:
-    """Serialise an entry."""
     ret = entry._asdict()  # type: ignore[attr-defined]
     ret["t"] = "Balance"
+    ret["entry_hash"] = hash_entry(entry)
+    amt = ret["amount"]
+    ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
+    return ret
+
+
+@serialise.register(Price)
+def _(entry: Balance) -> Any:
+    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["t"] = "Price"
+    ret["entry_hash"] = hash_entry(entry)
     amt = ret["amount"]
     ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
     return ret
@@ -81,7 +94,6 @@ def _(entry: Balance) -> Any:
 
 @serialise.register(Posting)
 def _(posting: Posting) -> Any:
-    """Serialise a posting."""
     position_str = to_string(posting) if posting.units is not None else ""
 
     if posting.price is not None:

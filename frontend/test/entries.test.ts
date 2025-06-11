@@ -158,6 +158,7 @@ test("create entries from JSON data", () => {
     t: "Balance",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
+    entry_hash: "ENTRY_HASH",
     account: "Expenses:Food",
     amount: { number: "10", currency: "USD" },
   }).unwrap();
@@ -167,8 +168,11 @@ test("create entries from JSON data", () => {
     t: "Document",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
+    entry_hash: "ENTRY_HASH",
     account: "Expenses:Food",
     filename: "/tmp/some/path",
+    tags: [],
+    links: [],
   }).unwrap();
   assert.instance(doc, Document);
 
@@ -176,6 +180,7 @@ test("create entries from JSON data", () => {
     t: "Note",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
+    entry_hash: "ENTRY_HASH",
     account: "Expenses:Food",
     comment: "Some note for the expenses account",
   }).unwrap();
@@ -185,6 +190,7 @@ test("create entries from JSON data", () => {
     t: "Transaction",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
+    entry_hash: "ENTRY_HASH",
     flag: "*",
     payee: "Some Store",
     narration: "Bought food",
@@ -206,6 +212,7 @@ test("create entries from JSON data", () => {
     t: "Transaction",
     meta: { filename: "/home/test/test.beancount", lineno: 1 },
     date: "2022-12-12",
+    entry_hash: "ENTRY_HASH",
     flag: "*",
     payee: "Some Store",
     narration: "Bought food",

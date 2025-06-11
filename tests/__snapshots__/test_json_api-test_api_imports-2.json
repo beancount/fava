@@ -3,6 +3,7 @@
     "account": "Assets:Checking",
     "comment": "Hinweis: Zinssatz auf 0,15% ge\u00e4ndert",
     "date": "2017-02-12",
+    "entry_hash": "ENTRY_HASH",
     "links": null,
     "meta": {
       "__source__": ";;2017-02-12;;;;;;;Hinweis: Zinssatz auf 0,15% ge\u00e4ndert;",
@@ -14,6 +15,7 @@
   },
   {
     "date": "2017-02-13",
+    "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
     "meta": {
@@ -38,6 +40,7 @@
   },
   {
     "date": "2017-02-14",
+    "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
     "meta": {
@@ -68,6 +71,7 @@
     },
     "date": "2022-12-12",
     "diff_amount": null,
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "__source__": "Balance",
       "filename": "TEST_DATA_DIR/import.csv",

@@ -92,6 +92,7 @@
   },
   "entry": {
     "date": "2016-05-09",
+    "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
     "meta": {

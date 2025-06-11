@@ -50,6 +50,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from flask.wrappers import Response
 
+    from fava.beans.abc import Directive
     from fava.core.ingest import FileImporters
     from fava.core.query import QueryResultTable
     from fava.core.query import QueryResultText
@@ -494,6 +495,13 @@ def put_upload_import_file() -> str:
 
 ########################################################################
 # Reports
+
+
+@api_endpoint
+def get_journal() -> Sequence[Directive]:
+    """Get all (filtered) entries."""
+    g.ledger.changed()
+    return [serialise(e) for e in g.filtered.entries]
 
 
 @api_endpoint

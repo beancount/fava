@@ -46,7 +46,7 @@
       bind:value={
         () => entry.amount.number,
         (number: string) => {
-          entry = entry.set("amount", { ...entry.amount, number });
+          entry = entry.set("amount", entry.amount.set_number(number));
         }
       }
       required
@@ -58,7 +58,7 @@
       bind:value={
         () => entry.amount.currency,
         (currency: string) => {
-          entry = entry.set("amount", { ...entry.amount, currency });
+          entry = entry.set("amount", entry.amount.set_currency(currency));
         }
       }
       required

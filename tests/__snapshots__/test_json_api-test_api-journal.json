@@ -1,0 +1,725 @@
+[
+  {
+    "account": "Assets:Account2",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-11-18",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 1
+    },
+    "t": "Open"
+  },
+  {
+    "account": "Expenses:Others",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-11-18",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 5
+    },
+    "t": "Open"
+  },
+  {
+    "date": "2012-11-18",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "*",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 5
+    },
+    "narration": "Narration with many postings and long narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 6
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 7
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 8
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 9
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 10
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 11
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 12
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 13
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 14
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 15
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 16
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 17
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 18
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 19
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 20
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 21
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 22
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 23
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 24
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 25
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 26
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 27
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 28
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 29
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 30
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 31
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 32
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 33
+        }
+      },
+      {
+        "account": "Assets:Account2",
+        "amount": "-280.00 EUR",
+        "meta": {
+          "__automatic__": true,
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 34
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "date": "2012-11-20",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 36
+    },
+    "t": "Custom",
+    "type": "type",
+    "values": [
+      true,
+      true,
+      "Assets:Other",
+      {
+        "currency": "USD",
+        "number": 20
+      }
+    ]
+  },
+  {
+    "date": "2012-11-20",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 37
+    },
+    "t": "Custom",
+    "type": "budget",
+    "values": [
+      "Expenses:Books",
+      "weekly",
+      {
+        "currency": "EUR",
+        "number": 20.0
+      }
+    ]
+  },
+  {
+    "amount": {
+      "currency": "EUR",
+      "number": "4"
+    },
+    "currency": "USD",
+    "date": "2012-11-30",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 39
+    },
+    "t": "Price"
+  },
+  {
+    "amount": {
+      "currency": "EUR",
+      "number": "2"
+    },
+    "currency": "USD",
+    "date": "2012-12-01",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 40
+    },
+    "t": "Price"
+  },
+  {
+    "account": "Assets:Account1",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-12-10",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 0
+    },
+    "t": "Open"
+  },
+  {
+    "account": "Equity:Opening-Balances",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-12-10",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 2
+    },
+    "t": "Open"
+  },
+  {
+    "account": "Assets:Account1",
+    "date": "2012-12-10",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 42
+    },
+    "source_account": "Equity:Opening-Balances",
+    "t": "Pad"
+  },
+  {
+    "date": "2012-12-10",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "P",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 42
+    },
+    "narration": "(Padding inserted for Balance of 10.00 EUR for difference 10.00 EUR)",
+    "payee": "",
+    "postings": [
+      {
+        "account": "Assets:Account1",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 43
+        }
+      },
+      {
+        "account": "Equity:Opening-Balances",
+        "amount": "-10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 43
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "account": "Assets:Account1",
+    "amount": {
+      "currency": "EUR",
+      "number": "10.00"
+    },
+    "date": "2012-12-11",
+    "diff_amount": null,
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 43
+    },
+    "t": "Balance",
+    "tolerance": null
+  },
+  {
+    "account": "Expenses:Food",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-12-12",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 3
+    },
+    "t": "Open"
+  },
+  {
+    "date": "2012-12-12",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "*",
+    "links": [],
+    "meta": {
+      "document": "file.pdf",
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 45
+    },
+    "narration": "Narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 47
+        }
+      },
+      {
+        "account": "Assets:Account1",
+        "amount": "-10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 48
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "date": "2012-12-12",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 71
+    },
+    "name": "journal",
+    "query_string": "journal",
+    "t": "Query"
+  },
+  {
+    "date": "2012-12-13",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "*",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 50
+    },
+    "narration": "Narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 51
+        }
+      },
+      {
+        "account": "Assets:Account1",
+        "amount": "-10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 52
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "account": "Expenses:Other",
+    "booking": null,
+    "currencies": null,
+    "date": "2012-12-15",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "<auto_accounts>",
+      "lineno": 4
+    },
+    "t": "Open"
+  },
+  {
+    "account": "Assets:Account1",
+    "amount": {
+      "currency": "EUR",
+      "number": "10.00"
+    },
+    "date": "2012-12-15",
+    "diff_amount": {
+      "currency": "EUR",
+      "number": -20.0
+    },
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 69
+    },
+    "t": "Balance",
+    "tolerance": null
+  },
+  {
+    "account": "Expenses:Other",
+    "comment": "Just some comment",
+    "date": "2012-12-15",
+    "entry_hash": "ENTRY_HASH",
+    "links": [],
+    "meta": {
+      "account": "Expenses:Food",
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 73,
+      "meta": "Value",
+      "test": true
+    },
+    "t": "Note",
+    "tags": []
+  },
+  {
+    "account": "Expenses:Food",
+    "date": "2012-12-15",
+    "entry_hash": "ENTRY_HASH",
+    "filename": "TEST_DATA_DIR/import.csv",
+    "links": [
+      "link1"
+    ],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 78
+    },
+    "t": "Document",
+    "tags": [
+      "tag"
+    ]
+  },
+  {
+    "account": "Expenses:Food",
+    "date": "2012-12-15",
+    "entry_hash": "ENTRY_HASH",
+    "filename": "TEST_DATA_DIR/receipt.pdf",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 79
+    },
+    "t": "Document",
+    "tags": [
+      "discovered"
+    ]
+  },
+  {
+    "date": "2012-12-17",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "!",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 54
+    },
+    "narration": "Narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 55
+        }
+      },
+      {
+        "account": "Expenses:Others",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 56
+        }
+      },
+      {
+        "account": "Assets:Account1",
+        "amount": "-20.00 EUR",
+        "meta": {
+          "__automatic__": true,
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 57
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "date": "2012-12-17",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "P",
+    "links": [],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 59
+    },
+    "narration": "Narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 60
+        }
+      },
+      {
+        "account": "Assets:Account1",
+        "amount": "-10.00 EUR",
+        "meta": {
+          "__automatic__": true,
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 61
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "date": "2012-12-17",
+    "entry_hash": "ENTRY_HASH",
+    "flag": "*",
+    "links": [
+      "link1"
+    ],
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 63
+    },
+    "narration": "Narration",
+    "payee": "Payee",
+    "postings": [
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 64
+        }
+      },
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 65
+        }
+      },
+      {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": {
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 66
+        }
+      },
+      {
+        "account": "Assets:Account1",
+        "amount": "-30.00 EUR",
+        "meta": {
+          "__automatic__": true,
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 67
+        }
+      }
+    ],
+    "t": "Transaction",
+    "tags": []
+  },
+  {
+    "account": "Assets:Account1",
+    "date": "2014-01-01",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 81
+    },
+    "t": "Close"
+  }
+]

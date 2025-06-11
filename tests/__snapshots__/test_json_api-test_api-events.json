@@ -2,6 +2,7 @@
   {
     "date": "2014-01-01",
     "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 3767
@@ -12,6 +13,7 @@
   {
     "date": "2015-01-21",
     "description": "Chicago",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1548
@@ -22,6 +24,7 @@
   {
     "date": "2015-02-05",
     "description": "New Metropolis",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1628
@@ -32,6 +35,7 @@
   {
     "date": "2015-07-07",
     "description": "San Francisco",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1914
@@ -42,6 +46,7 @@
   {
     "date": "2015-07-26",
     "description": "New Metropolis",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2078
@@ -52,6 +57,7 @@
   {
     "date": "2016-03-31",
     "description": "New York",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2560
@@ -62,6 +68,7 @@
   {
     "date": "2016-04-15",
     "description": "New Metropolis",
+    "entry_hash": "ENTRY_HASH",
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2686

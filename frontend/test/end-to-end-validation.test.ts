@@ -60,4 +60,12 @@ test("validate events", async () => {
   assert.equal(res.unwrap()[0]?.type, "employer");
 });
 
+test("validate journal", async () => {
+  const data = await loadJSONSnapshot("test_json_api-test_api-journal.json");
+  const res = getAPIValidators.journal(data);
+  assert.ok(res.is_ok);
+  const entries = res.unwrap();
+  assert.equal(entries.length, 25);
+});
+
 test.run();
