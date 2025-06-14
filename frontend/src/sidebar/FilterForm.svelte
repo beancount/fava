@@ -131,7 +131,6 @@
     outline: none;
     background-color: var(--background);
     border: 0;
-    outline: none;
   }
 
   form :global([type="text"]:focus) {
