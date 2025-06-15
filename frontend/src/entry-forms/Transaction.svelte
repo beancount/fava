@@ -6,7 +6,6 @@
   import { _ } from "../i18n";
   import { move } from "../lib/array";
   import { notify_err } from "../notifications";
-  import { valueExtractor, valueSelector } from "../sidebar/FilterForm.svelte";
   import { narrations, payees } from "../stores";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
@@ -60,7 +59,7 @@
     });
     data.date = entry.date;
     entry = data;
-    narration = entry.set_narration_tags_links(narration);
+    narration = entry.get_narration_tags_links();
   }
 
   // Always have one empty posting at the end.
@@ -109,7 +108,6 @@
         onSelect={autocompleteSelectPayee}
       />
     </label>
-    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>
       <span>{_("Narration")}:</span>
       <AutocompleteInput
@@ -117,12 +115,9 @@
         placeholder={_("Narration")}
         bind:value={narration}
         suggestions={$narrations}
-        {valueExtractor}
-        {valueSelector}
-        on:blur={onNarrationBlur}
-        on:select={autocompleteSelectNarration}
-        onchange={({ currentTarget }) => {
-          entry = entry.set_narration_tags_links(currentTarget.value);
+        onSelect={autocompleteSelectNarration}
+        onBlur={() => {
+          entry = entry.set_narration_tags_links(narration);
         }}
       />
       <AddMetadataButton
