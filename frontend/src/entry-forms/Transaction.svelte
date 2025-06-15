@@ -6,7 +6,7 @@
   import { _ } from "../i18n";
   import { move } from "../lib/array";
   import { notify_err } from "../notifications";
-  import { payees } from "../stores";
+  import { narrations, payees } from "../stores";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
@@ -49,6 +49,17 @@
       payee: entry.payee,
     });
     entry = payee_transaction.set("date", entry.date);
+  }
+  async function autocompleteSelectNarration() {
+    if (entry.payee || !entry.postings.every((p) => !p.account)) {
+      return;
+    }
+    const data = await get("narration_transaction", {
+      narration: narration,
+    });
+    data.date = entry.date;
+    entry = data;
+    narration = entry.get_narration_tags_links();
   }
 
   // Always have one empty posting at the end.
@@ -99,13 +110,14 @@
     </label>
     <label>
       <span>{_("Narration")}:</span>
-      <input
-        type="text"
-        name="narration"
+      <AutocompleteInput
+        className="narration"
         placeholder={_("Narration")}
-        value={narration}
-        onchange={({ currentTarget }) => {
-          entry = entry.set_narration_tags_links(currentTarget.value);
+        bind:value={narration}
+        suggestions={$narrations}
+        onSelect={autocompleteSelectNarration}
+        onBlur={() => {
+          entry = entry.set_narration_tags_links(narration);
         }}
       />
       <AddMetadataButton
@@ -166,11 +178,6 @@
   div :global(.payee) {
     flex-grow: 1;
     flex-basis: 100px;
-  }
-
-  input[name="narration"] {
-    flex-grow: 1;
-    flex-basis: 200px;
   }
 
   label > span:first-child,
