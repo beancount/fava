@@ -57,7 +57,6 @@
     const data = await get("narration_transaction", {
       narration: narration,
     });
-    data.date = entry.date;
     entry = data;
     narration = entry.get_narration_tags_links();
   }
