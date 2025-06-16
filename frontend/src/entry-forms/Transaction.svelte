@@ -64,7 +64,7 @@
     entry = payee_transaction.set("date", entry.date);
   }
   async function autocompleteSelectNarration() {
-    if (entry.payee || !entry.postings.every((p) => !p.account)) {
+    if (entry.payee || entry.postings.every((p) => !p.is_empty())) {
       return;
     }
     const data = await get("narration_transaction", {
