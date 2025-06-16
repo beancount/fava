@@ -6,7 +6,7 @@
   import { _ } from "../i18n";
   import { move } from "../lib/array";
   import { notify_err } from "../notifications";
-  import { narrations, payees } from "../stores";
+  import { payees } from "../stores";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
@@ -39,6 +39,19 @@
   });
 
   let narration = $derived(entry.get_narration_tags_links());
+  let narration_suggestions: string[] | undefined = [];
+  $effect(() => {
+    get("narrations")
+      .then((s) => {
+        narration_suggestions = s;
+      })
+      .catch((error: unknown) => {
+        notify_err(
+          error,
+          (err) => `Fetching narration suggestions failed: ${err.message}`,
+        );
+      });
+  });
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
@@ -113,7 +126,7 @@
         className="narration"
         placeholder={_("Narration")}
         bind:value={narration}
-        suggestions={$narrations}
+        suggestions={narration_suggestions}
         onSelect={autocompleteSelectNarration}
         onBlur={() => {
           entry = entry.set_narration_tags_links(narration);
