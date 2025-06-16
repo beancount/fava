@@ -337,6 +337,30 @@ def test_api_payee_transaction(
     snapshot(data, json=True)
 
 
+def test_api_narration_transaction(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/narration_transaction",
+        query_string={"narration": "Buying groceries"},
+    )
+    data = assert_api_success(response)
+    assert data["date"] == "2016-04-21"
+    assert data["narration"] == "Buying groceries"
+    assert data["payee"] == "Farmer Fresh"
+    assert len(data["postings"]) == 2
+    assert data["t"] == "Transaction"
+
+
+def test_api_narrations(
+    test_client: FlaskClient,
+    example_ledger: FavaLedger,
+) -> None:
+    response = test_client.get("/long-example/api/narrations")
+    data = assert_api_success(response)
+    assert data == example_ledger.attributes.narrations()
+
+
 def test_api_imports(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
