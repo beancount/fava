@@ -39,7 +39,7 @@
   });
 
   let narration = $derived(entry.get_narration_tags_links());
-  let narration_suggestions: string[] | undefined = [];
+  let narration_suggestions: string[] = $state.raw([]);
   $effect(() => {
     get("narrations")
       .then((s) => {
