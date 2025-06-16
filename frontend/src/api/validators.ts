@@ -105,7 +105,6 @@ export const ledgerDataValidator = object({
   options,
   other_ledgers: array(tuple(string, string)),
   payees: array(string),
-  narrations: array(string),
   precisions: record(number),
   sidebar_links: array(tuple(string, string)),
   tags: array(string),

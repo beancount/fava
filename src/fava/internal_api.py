@@ -67,7 +67,6 @@ class LedgerData:
     links: Sequence[str]
     options: dict[str, str | Sequence[str]]
     payees: Sequence[str]
-    narrations: Sequence[str]
     precisions: dict[str, int]
     tags: Sequence[str]
     years: Sequence[str]
@@ -117,7 +116,6 @@ def get_ledger_data() -> LedgerData:
         ledger.attributes.links,
         _get_options(),
         ledger.attributes.payees,
-        ledger.attributes.narrations,
         ledger.format_decimal.precisions,
         ledger.attributes.tags,
         ledger.attributes.years,

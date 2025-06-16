@@ -355,7 +355,7 @@ def get_narration_transaction(narration: str) -> Any:
 @api_endpoint
 def get_narrations() -> Sequence[str]:
     """List of all narrations in the ledger."""
-    return g.ledger.attributes.narrations
+    return g.ledger.attributes.narrations()
 
 
 @api_endpoint

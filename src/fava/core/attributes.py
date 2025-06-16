@@ -64,7 +64,6 @@ class AttributesModule(FavaModule):
         self.accounts: Sequence[str] = []
         self.currencies: Sequence[str] = []
         self.payees: Sequence[str] = []
-        self.narrations: Sequence[str] = []
         self.links: Sequence[str] = []
         self.tags: Sequence[str] = []
         self.years: Sequence[str] = []
@@ -94,13 +93,10 @@ class AttributesModule(FavaModule):
         )
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()
-        narration_ranker = ExponentialDecayRanker()
 
         for txn in self.ledger.all_entries_by_type.Transaction:
             if txn.payee:
                 payee_ranker.update(txn.payee, txn.date)
-            if txn.narration:
-                narration_ranker.update(txn.narration, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
                 currency_ranker.update(posting.units.currency, txn.date)
@@ -110,7 +106,6 @@ class AttributesModule(FavaModule):
         self.accounts = account_ranker.sort()
         self.currencies = currency_ranker.sort()
         self.payees = payee_ranker.sort()
-        self.narrations = narration_ranker.sort()
 
     def payee_accounts(self, payee: str) -> Sequence[str]:
         """Rank accounts for the given payee."""
@@ -137,3 +132,11 @@ class AttributesModule(FavaModule):
             if txn.narration == narration:
                 return txn
         return None
+
+    def narrations(self) -> Sequence[str]:
+        """Get the narrations of all transactions."""
+        narration_ranker = ExponentialDecayRanker()
+        for txn in self.ledger.all_entries_by_type.Transaction:
+            if txn.narration:
+                narration_ranker.update(txn.narration, txn.date)
+        return narration_ranker.sort()
