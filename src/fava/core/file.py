@@ -379,11 +379,11 @@ def save_entry_slice(
     if _sha256_str(entry_source) != sha256sum:
         raise ExternallyChangedError(path)
 
-    lines = (
-        lines[:first_entry_line]
-        + [source_slice + "\n"]
-        + lines[first_entry_line + len(entry_lines) :]
-    )
+    lines = [
+        *lines[:first_entry_line],
+        source_slice + "\n",
+        *lines[first_entry_line + len(entry_lines) :],
+    ]
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
         file.writelines(lines)
