@@ -31,11 +31,11 @@ registerHooks({
     if (specifier.startsWith(".") && !specifier.endsWith(".ts")) {
       try {
         // Resolve dir imports that are not supported by ES imports
-        return nextResolve(specifier + "/index.ts", context);
+        return nextResolve(`${specifier}/index.ts`, context);
       } catch {
         try {
           // Try adding .ts extension
-          return nextResolve(specifier + ".ts", context);
+          return nextResolve(`${specifier}.ts`, context);
         } catch {
           // Fall back to original resolution
         }

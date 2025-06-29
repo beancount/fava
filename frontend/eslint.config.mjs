@@ -42,11 +42,13 @@ export default tseslint.config(
       "@typescript-eslint/strict-boolean-expressions": ON,
       curly: [ON, "all"],
       eqeqeq: [ON, "smart"],
+      "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
       "@typescript-eslint/naming-convention": [
         ON,
         {
           selector: "variable",
           format: ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
+          leadingUnderscore: "allow",
         },
         {
           selector: "function",

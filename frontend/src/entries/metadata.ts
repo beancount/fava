@@ -70,8 +70,7 @@ export class EntryMetadata {
 
   /** Delete a key from the metadata and return an updated copy. */
   delete(key: string): EntryMetadata {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [key]: ignored, ...rest } = this.#meta;
+    const { [key]: _ignored, ...rest } = this.#meta;
     return new EntryMetadata(rest);
   }
 

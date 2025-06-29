@@ -43,6 +43,8 @@ export function stratify<T, S = null>(
 
   [...data]
     .sort((a, b) => id(a).localeCompare(id(b)))
-    .forEach((datum) => addAccount(id(datum), datum));
+    .forEach((datum) => {
+      addAccount(id(datum), datum);
+    });
   return root;
 }

@@ -21,8 +21,7 @@ export function attemptFocus(el: Node): boolean {
     // @ts-expect-error We are attempting to focus any kind of element here.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     el.focus();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
+  } catch {
     // pass
   }
   return document.activeElement === el;
