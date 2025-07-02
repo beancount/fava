@@ -352,15 +352,6 @@ def test_api_narration_transaction(
     assert data["t"] == "Transaction"
 
 
-def test_api_narrations(
-    test_client: FlaskClient,
-    example_ledger: FavaLedger,
-) -> None:
-    response = test_client.get("/long-example/api/narrations")
-    data = assert_api_success(response)
-    assert data == example_ledger.attributes.narrations()
-
-
 def test_api_imports(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
@@ -793,6 +784,7 @@ def test_api_filter_error(
         ("documents", "/example/api/documents"),
         ("events", "/long-example/api/events"),
         ("income_statement", "/long-example/api/income_statement?time=2014"),
+        ("narrations", "/long-example/api/narrations"),
         ("trial_balance", "/long-example/api/trial_balance?time=2014"),
         ("balance_sheet", "/long-example/api/balance_sheet"),
         (

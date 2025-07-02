@@ -133,6 +133,7 @@ class AttributesModule(FavaModule):
                 return txn
         return None
 
+    @property
     def narrations(self) -> Sequence[str]:
         """Get the narrations of all transactions."""
         narration_ranker = ExponentialDecayRanker()
