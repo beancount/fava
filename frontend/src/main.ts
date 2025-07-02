@@ -41,6 +41,7 @@ import { initSidebar } from "./sidebar";
 import { has_changes, updatePageTitle } from "./sidebar/page-title";
 import { SortableTable } from "./sort/sortable-table";
 import { errors, ledgerData } from "./stores";
+import { init_color_scheme } from "./stores/color_scheme";
 import { auto_reload } from "./stores/fava_options";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
@@ -136,6 +137,8 @@ function init(): void {
   });
 
   router.trigger("page-loaded");
+
+  init_color_scheme();
 }
 
 init();
