@@ -346,6 +346,19 @@ def get_payee_transaction(payee: str) -> Any:
 
 
 @api_endpoint
+def get_narration_transaction(narration: str) -> Any:
+    """Last transaction for the given narration."""
+    entry = g.ledger.attributes.narration_transaction(narration)
+    return serialise(entry) if entry else None
+
+
+@api_endpoint
+def get_narrations() -> Sequence[str]:
+    """List of all narrations in the ledger."""
+    return g.ledger.attributes.narrations
+
+
+@api_endpoint
 def get_source(filename: str) -> Mapping[str, str]:
     """Load one of the source files."""
     file_path = (

@@ -9,6 +9,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
+    from .conftest import SnapshotFunc
+
 
 def test_get_active_years(load_doc_entries: list[Directive]) -> None:
     """
@@ -63,3 +65,21 @@ def test_payee_transaction(example_ledger: FavaLedger) -> None:
     txn = attr.payee_transaction("BayBook")
     assert txn
     assert str(txn.date) == "2016-05-05"
+
+
+def test_narration_transaction(example_ledger: FavaLedger) -> None:
+    attr = example_ledger.attributes
+    assert attr.narration_transaction("NOTANARRATION") is None
+
+    txn = attr.narration_transaction("Monthly bank fee")
+    assert txn
+    assert str(txn.date) == "2016-05-04"
+
+
+def test_narrations(
+    example_ledger: FavaLedger,
+    snapshot: SnapshotFunc,
+) -> None:
+    narrations = example_ledger.attributes.narrations
+    assert narrations
+    snapshot(narrations, json=True)

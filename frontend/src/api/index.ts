@@ -75,6 +75,8 @@ interface GetAPIParams {
   options: undefined;
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
+  narration_transaction: { narration: string };
+  narrations: undefined;
   query: Filters & { query_string: string };
   source: { filename: string };
 }

@@ -124,3 +124,20 @@ class AttributesModule(FavaModule):
             if txn.payee == payee:
                 return txn
         return None
+
+    def narration_transaction(self, narration: str) -> Transaction | None:
+        """Get the last transaction for a narration."""
+        transactions = self.ledger.all_entries_by_type.Transaction
+        for txn in reversed(transactions):
+            if txn.narration == narration:
+                return txn
+        return None
+
+    @property
+    def narrations(self) -> Sequence[str]:
+        """Get the narrations of all transactions."""
+        narration_ranker = ExponentialDecayRanker()
+        for txn in self.ledger.all_entries_by_type.Transaction:
+            if txn.narration:
+                narration_ranker.update(txn.narration, txn.date)
+        return narration_ranker.sort()

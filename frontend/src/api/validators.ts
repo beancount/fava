@@ -196,6 +196,8 @@ export const getAPIValidators = {
   }),
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
+  narration_transaction: Transaction.validator,
+  narrations: array(string),
   query: query_validator,
   source,
   trial_balance: tree_report,
