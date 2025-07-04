@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { AccountTreeNode } from "../charts/hierarchy";
+  import { last_element, type NonEmptyArray } from "../lib/array";
   import { is_empty } from "../lib/objects";
   import { currency_name } from "../stores";
   import { toggled_accounts } from "../stores/accounts";
@@ -21,17 +22,41 @@
 
   const not_shown = getTreeTableNotShownContext();
 
-  let { account, children } = $derived(node);
+  function compute_fold_info(
+    start_node: AccountTreeNode,
+    not_shown_set: ReadonlySet<string>,
+  ): NonEmptyArray<AccountTreeNode> {
+    const chain: AccountTreeNode[] = [];
+    let current: AccountTreeNode | undefined = start_node;
+    do {
+      chain.push(current);
+      const visible_children: AccountTreeNode[] = current.children.filter(
+        (n) => !not_shown_set.has(n.account),
+      );
+      current =
+        visible_children.length === 1 && is_empty(current.balance)
+          ? visible_children[0]
+          : undefined;
+    } while (current);
+    return chain as readonly AccountTreeNode[] as NonEmptyArray<AccountTreeNode>;
+  }
+
+  let chain = $derived(compute_fold_info(node, $not_shown));
+  let display_node = $derived(last_element(chain));
+  let { account, children } = $derived(display_node);
 
   let is_toggled = $derived($toggled_accounts.has(account));
 
-  let has_balance = $derived(!is_empty(node.balance));
+  let has_balance = $derived(!is_empty(display_node.balance));
   /** Whether to show the balance (or balance_children) */
   let show_balance = $derived(!is_toggled && has_balance);
   let shown_balance = $derived(
-    show_balance ? node.balance : node.balance_children,
+    show_balance ? display_node.balance : display_node.balance_children,
   );
-  let shown_cost = $derived(show_balance ? node.cost : node.cost_children);
+  let shown_cost = $derived(
+    show_balance ? display_node.cost : display_node.cost_children,
+  );
+
   let shown_balance_other = $derived(
     Object.entries(shown_balance)
       .sort()
@@ -42,7 +67,7 @@
 
 <li>
   <p>
-    <AccountCell {node} />
+    <AccountCell node={display_node} {chain} />
     {#each $operating_currency as currency (currency)}
       {@const num = shown_balance[currency]}
       {@const cost_num = shown_cost?.[currency] ?? 0}
