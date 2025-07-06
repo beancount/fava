@@ -5,5 +5,14 @@
 {% set page_title = _('Journal') %}
 
 {% block content %}
-{{ journal_table.journal_table(g.filtered.entries) }}
+{% set page = request.args.get('page', default="1")|int %}
+{% set per_page = 1000 %}
+{% set entries = g.filtered.entries %}
+{% set num_entries = entries|length %}
+{% set start = (page - 1) * per_page %}
+{% set end = page * per_page %}
+{% set page_entries = entries[-(start + 1):-(end + 1):-1] %}
+{% set total_pages = (num_entries / per_page)|round(0, 'ceil') %}
+{% set paginated = total_pages if total_pages > 1 and not request.args.get('page') else None %}
+{{ journal_table.journal_table(page_entries, paginated=paginated, start=start) }}
 {% endblock %}
