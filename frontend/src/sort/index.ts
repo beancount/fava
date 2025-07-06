@@ -171,6 +171,16 @@ export function sortElements<T extends Element>(
   parent.appendChild(fragment);
 }
 
+function sortInfoFromHeader(header: Element) {
+  const headerClass = header.classList[0];
+  const name = header.getAttribute("data-sort-name");
+  const type = header.getAttribute("data-sort");
+  if (headerClass == null || name == null || type == null) {
+    throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
+  }
+  return { headerClass, name, type };
+}
+
 /**
  * Make the Fava journal sortable.
  * @param ol - the <ol> element.
@@ -183,13 +193,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
   const headers = head.querySelectorAll("span[data-sort]");
   const [initialColumn, initialOrder] = store_get(journalSortOrder);
   headers.forEach((header) => {
-    const headerClass = header.classList[0];
-    const name = header.getAttribute("data-sort-name");
-    const type = header.getAttribute("data-sort");
-    if (headerClass == null || name == null || type == null) {
-      throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
-    }
-
+    const { headerClass, name, type } = sortInfoFromHeader(header);
     const sort = (order: SortOrder) => {
       // update displayed sort order
       headers.forEach((el) => {
@@ -216,4 +220,34 @@ export function sortableJournal(ol: HTMLOListElement): void {
       journalSortOrder.set([name, order]);
     });
   });
+}
+
+/**
+ * Sort journal based on the current sort order.
+ */
+export function sortJournal(ol: HTMLOListElement): void {
+  const head = ol.querySelector(".head");
+  if (!head) {
+    throw new Error("Journal is missing header.");
+  }
+  const header = head.querySelector("span[data-sort][data-order]");
+  if (!header) {
+    return;
+  }
+  const { headerClass, type } = sortInfoFromHeader(header);
+  const order = header.getAttribute("data-order");
+  if (order == null) {
+    throw new Error("Journal header is missing sort order.");
+  }
+  if (order !== "asc" && order !== "desc") {
+    throw new Error(`Invalid sort order: ${order}`);
+  }
+  // sort elements
+  sortElements<HTMLLIElement>(
+    ol,
+    [].slice.call(ol.children, 1),
+    (li) => li.querySelector(`.${headerClass}`),
+    get_direction(order),
+    type,
+  );
 }

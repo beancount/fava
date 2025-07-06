@@ -1,7 +1,7 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
-import { sortableJournal } from "../sort";
+import { sortableJournal, sortJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
@@ -133,7 +133,7 @@ export class FavaJournal extends HTMLElement {
         // items appending.
         setTimeout(() => {
           sorting = false;
-          sortableJournal(ol);
+          sortJournal(ol);
         });
       }
     }
