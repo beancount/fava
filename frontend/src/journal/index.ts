@@ -1,7 +1,7 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
-import { sortableJournal, sortJournal } from "../sort";
+import { getCurrentJournalSort, sortableJournal, sortJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
@@ -127,15 +127,22 @@ export class FavaJournal extends HTMLElement {
     let sorting = false;
     for (const promise of promises) {
       ol.append(...(await promise));
-      if (!sorting) {
-        sorting = true;
-        // Batch sorting to avoid repeatedly sorting in-between consecutive
-        // items appending.
-        setTimeout(() => {
-          sorting = false;
-          sortJournal(ol);
-        });
+      if (sorting) {
+        continue;
       }
+      sorting = true;
+      // Batch sorting to avoid repeatedly sorting in-between consecutive
+      // items appending.
+      setTimeout(() => {
+        sorting = false;
+        const current_sort = getCurrentJournalSort(ol);
+        if (
+          current_sort &&
+          (current_sort.name !== "date" || current_sort.order !== "desc")
+        ) {
+          sortJournal(ol);
+        }
+      });
     }
   }
 }
