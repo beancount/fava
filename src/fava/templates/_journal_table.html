@@ -63,7 +63,7 @@
     {% set entry_hash = entry|hash_entry %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
-        <span class="datecell" data-sort-value={{ -(start + loop.index) }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
+        <span class="datecell" data-sort-value="{{ -(start + loop.index) }}"><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
         <span class="description{% if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-entry-date="{{ entry.date }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif %}>
         {% if type == 'open' or type == 'close' %}
