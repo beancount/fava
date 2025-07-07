@@ -32,7 +32,7 @@
 <li>
   <p>
     <AccountCell {node} />
-    {#each nodes as n, index (n.account)}
+    {#each nodes as n, index (index)}
       {@const account_budget = account_budgets?.[index]}
       {@const has_balance =
         !is_empty(n.balance) ||
