@@ -1,5 +1,10 @@
 /* stylelint-disable no-descending-specificity */
 
+.flex-table {
+  display: flex;
+  flex-direction: column;
+}
+
 .flex-table p,
 .flex-table li,
 .flex-table ul,
