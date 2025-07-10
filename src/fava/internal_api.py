@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 
 from flask import current_app
 from flask import url_for
-from flask_babel import gettext  # type: ignore[import-untyped]
+from flask_babel import gettext
 
 from fava.context import g
 from fava.util.excel import HAVE_EXCEL

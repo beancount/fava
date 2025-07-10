@@ -15,7 +15,7 @@ from enum import Enum
 from itertools import tee
 from typing import TYPE_CHECKING
 
-from flask_babel import gettext  # type: ignore[import-untyped]
+from flask_babel import gettext
 
 from fava.util import listify
 from fava.util.unreachable import assert_never

@@ -24,7 +24,7 @@ from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
-from flask_babel import gettext  # type: ignore[import-untyped]
+from flask_babel import gettext
 
 from fava.beans.abc import Document
 from fava.beans.abc import Event

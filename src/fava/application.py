@@ -27,7 +27,7 @@ from urllib.parse import urlencode
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
-import markdown2  # type: ignore[import-untyped]
+import markdown2
 from beancount import __version__ as beancount_version
 from flask import abort
 from flask import current_app
@@ -38,7 +38,7 @@ from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
-from flask_babel import Babel  # type: ignore[import-untyped]
+from flask_babel import Babel
 from flask_babel import get_translations
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
@@ -218,7 +218,8 @@ def url_for(endpoint: str, **values: str) -> str:
 
 def translations() -> dict[str, str]:
     """Get translations catalog."""
-    return get_translations()._catalog  # type: ignore[no-any-return]  # noqa: SLF001
+    catalog = get_translations()._catalog  # noqa: SLF001
+    return {k: v for k, v in catalog.items() if isinstance(k, str) and k}
 
 
 def _setup_template_config(fava_app: Flask, *, incognito: bool) -> None:
@@ -422,8 +423,10 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         """Fava's included documentation."""
         if page_slug not in HELP_PAGES:
             abort(404)
-        html = markdown2.markdown_path(
-            (Path(__file__).parent / "help" / (page_slug + ".md")),
+        help_path = Path(__file__).parent / "help" / (page_slug + ".md")
+        contents = help_path.read_text(encoding="utf-8")
+        html = markdown2.markdown(
+            contents,
             extras=["fenced-code-blocks", "tables", "header-ids"],
         )
         return render_template(
@@ -472,7 +475,7 @@ def _setup_babel(fava_app: Flask) -> None:
         lang = g.ledger.fava_options.language
         return lang or request.accept_languages.best_match(["en", *LOCALES])
 
-    Babel(fava_app, locale_selector=_get_locale)
+    Babel(fava_app, locale_selector=_get_locale)  # type: ignore[no-untyped-call]
 
 
 def create_app(

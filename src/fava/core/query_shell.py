@@ -13,7 +13,7 @@ from beanquery import connect
 from beanquery import Cursor
 from beanquery import ParseError
 from beanquery.numberify import numberify_results
-from beanquery.shell import BQLShell  # type: ignore[import-untyped]
+from beanquery.shell import BQLShell
 
 from fava.core.module_base import FavaModule
 from fava.core.query import COLUMNS
@@ -76,13 +76,13 @@ class NonExportableQueryError(FavaShellError):
         )
 
 
-class FavaBQLShell(BQLShell):  # type: ignore[misc]
+class FavaBQLShell(BQLShell):
     """A light wrapper around Beancount's shell."""
 
     outfile: io.StringIO
 
     def __init__(self, ledger: FavaLedger) -> None:
-        super().__init__("", io.StringIO(), interactive=False)
+        super().__init__("", io.StringIO(), interactive=False)  # type: ignore[no-untyped-call]
         self.ledger = ledger
         self.stdout = self.outfile
 
@@ -95,7 +95,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
             options=self.ledger.options,
         )
         try:
-            result = self.onecmd(query)
+            result = self.onecmd(query)  # type: ignore[no-untyped-call]
         except ParseError as exc:
             raise QueryParseError(exc) from exc
         except CompilationError as exc:
@@ -151,7 +151,7 @@ class FavaBQLShell(BQLShell):  # type: ignore[misc]
         query = next((q for q in queries if q.name == name), None)
         if query is None:
             raise QueryNotFoundError(name)
-        return self.execute(query.query_string)  # type: ignore[no-any-return]
+        return self.execute(query.query_string)  # type: ignore[no-any-return,no-untyped-call]
 
 
 FavaBQLShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
