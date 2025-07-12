@@ -1,7 +1,7 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
-import { sortableJournal } from "../sort";
+import { getCurrentJournalSort, sortableJournal, sortJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
@@ -82,6 +82,11 @@ export class FavaJournal extends HTMLElement {
       throw new Error("fava-journal is missing its <ol>");
     }
 
+    const paginated = this.getAttribute("paginated");
+    if (paginated != null) {
+      void this.fetchAllPages(ol, parseInt(paginated));
+    }
+
     this.unsubscribe = journalShow.subscribe((show) => {
       const classes = [...show].map((s) => `show-${s}`).join(" ");
       ol.className = `flex-table journal ${classes}`;
@@ -98,5 +103,46 @@ export class FavaJournal extends HTMLElement {
   disconnectedCallback(): void {
     this.unsubscribe?.();
     this.unmount?.();
+  }
+
+  async fetchAllPages(ol: HTMLOListElement, total: number): Promise<void> {
+    const url = new URL(window.location.href);
+    url.searchParams.set("partial", "true");
+
+    const promises: Promise<NodeList>[] = [];
+    for (let page = 2; page <= total; page++) {
+      url.searchParams.set("page", page.toString());
+      promises.push(
+        fetch(url).then(async (response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch page ${page.toString()}`);
+          }
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          return doc.querySelectorAll("ol.journal > li:not(.head)");
+        }),
+      );
+    }
+    let sorting = false;
+    for (const promise of promises) {
+      ol.append(...(await promise));
+      if (sorting) {
+        continue;
+      }
+      sorting = true;
+      // Batch sorting to avoid repeatedly sorting in-between consecutive
+      // items appending.
+      setTimeout(() => {
+        sorting = false;
+        const current_sort = getCurrentJournalSort(ol);
+        if (
+          current_sort &&
+          (current_sort.name !== "date" || current_sort.order !== "desc")
+        ) {
+          sortJournal(ol);
+        }
+      });
+    }
   }
 }
