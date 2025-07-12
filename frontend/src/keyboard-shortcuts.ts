@@ -40,7 +40,7 @@ function showTooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
     const key = el.getAttribute("data-key");
-    if (el instanceof HTMLElement && key !== null) {
+    if (el instanceof HTMLElement && key != null) {
       removes.push(showTooltip(el, key));
     }
   });

@@ -5,7 +5,7 @@ import type { Action } from "svelte/action";
 const tooltip = (() => {
   let value: HTMLDivElement | null = null;
   return () => {
-    if (value === null) {
+    if (value == null) {
       value = document.createElement("div");
       value.className = "tooltip";
       document.body.appendChild(value);

@@ -119,6 +119,6 @@ export const is_closed_account = derived(
       if (!close_date) {
         return false;
       }
-      return date === null ? true : close_date < date;
+      return date == null ? true : close_date < date;
     },
 );

@@ -51,7 +51,7 @@
     {@const account = d.data.account}
     <g
       use:followingTooltip={() => tooltipText(d)}
-      class:current={current !== null ? current.startsWith(account) : false}
+      class:current={current != null ? current.startsWith(account) : false}
     >
       <a
         href={$urlForAccount(account)}

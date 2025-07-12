@@ -275,7 +275,7 @@ export function tuple<const T extends unknown[]>(
  * Check whether the given object is a string-indexable object.
  */
 export function isJsonObject(json: unknown): json is Record<string, unknown> {
-  return typeof json === "object" && json !== null && !Array.isArray(json);
+  return typeof json === "object" && json != null && !Array.isArray(json);
 }
 
 /**
