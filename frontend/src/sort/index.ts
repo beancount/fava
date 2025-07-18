@@ -171,6 +171,16 @@ export function sortElements<T extends Element>(
   parent.appendChild(fragment);
 }
 
+function sort_info_from_header(header: Element) {
+  const headerClass = header.classList[0];
+  const name = header.getAttribute("data-sort-name");
+  const type = header.getAttribute("data-sort");
+  if (headerClass == null || name == null || type == null) {
+    throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
+  }
+  return { headerClass, name, type };
+}
+
 /**
  * Make the Fava journal sortable.
  * @param ol - the <ol> element.
@@ -183,13 +193,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
   const headers = head.querySelectorAll("span[data-sort]");
   const [initialColumn, initialOrder] = store_get(journalSortOrder);
   headers.forEach((header) => {
-    const headerClass = header.classList[0];
-    const name = header.getAttribute("data-sort-name");
-    const type = header.getAttribute("data-sort");
-    if (headerClass == null || name == null || type == null) {
-      throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
-    }
-
+    const { headerClass, name, type } = sort_info_from_header(header);
     const sort = (order: SortOrder) => {
       // update displayed sort order
       headers.forEach((el) => {
@@ -216,4 +220,48 @@ export function sortableJournal(ol: HTMLOListElement): void {
       journalSortOrder.set([name, order]);
     });
   });
+}
+
+function current_journal_sort(ol: HTMLOListElement): {
+  headerClass: string;
+  name: string;
+  type: string;
+  order: SortOrder;
+} | null {
+  const header = ol.querySelector(".head span[data-sort][data-order]");
+  if (!header) {
+    return null;
+  }
+  const info = sort_info_from_header(header);
+  const order = header.getAttribute("data-order") ?? "";
+  if (order !== "asc" && order !== "desc") {
+    throw new Error(`Invalid sort order: ${order}`);
+  }
+  return { ...info, order };
+}
+
+export function getCurrentJournalSort(
+  ol: HTMLOListElement,
+): { name: string; order: SortOrder } | null {
+  const current_sort = current_journal_sort(ol);
+  return current_sort && { name: current_sort.name, order: current_sort.order };
+}
+
+/**
+ * Sort journal based on the current sort order.
+ */
+export function sortJournal(ol: HTMLOListElement): void {
+  const current_sort = current_journal_sort(ol);
+  if (!current_sort) {
+    return;
+  }
+  const { headerClass, type, order } = current_sort;
+  // sort elements
+  sortElements<HTMLLIElement>(
+    ol,
+    [].slice.call(ol.children, 1),
+    (li) => li.querySelector(`.${headerClass}`),
+    get_direction(order),
+    type,
+  );
 }

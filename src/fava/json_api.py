@@ -782,11 +782,13 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         )
 
     journal = get_template_attribute("_journal_table.html", "journal_table")
-    entries = g.ledger.account_journal(
-        g.filtered,
-        account_name,
-        g.conversion,
-        with_children=g.ledger.fava_options.account_journal_include_children,
+    entries = reversed(
+        g.ledger.account_journal(
+            g.filtered,
+            account_name,
+            g.conversion,
+            with_children=g.ledger.fava_options.account_journal_include_children,
+        )
     )
     return AccountReportJournal(
         charts,
