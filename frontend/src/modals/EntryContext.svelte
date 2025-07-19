@@ -71,3 +71,12 @@
     </div>
   </details>
 {/if}
+
+<style>
+  code {
+    display: inline-block;
+    max-width: 80%;
+    overflow: clip;
+    text-overflow: ellipsis;
+  }
+</style>
