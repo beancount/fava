@@ -2,7 +2,7 @@ ci:
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.3
+    rev: v0.12.4
     hooks:
       - id: ruff-check
         args: ["--fix"]
@@ -15,7 +15,7 @@ repos:
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.1.1
+    rev: v2.1.2
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
