@@ -28,6 +28,7 @@
   <Link report="balance_sheet" name={_("Balance Sheet")} key="g b" />
   <Link report="trial_balance" name={_("Trial Balance")} key="g t" />
   <Link report="journal" name={_("Journal")} key="g j" />
+  <Link report="journal2" name={_("Journal") + " 2"}/>
   <Link report="query" name={_("Query")} key="g q">
     {#if user_queries.length}
       <ul class="submenu">
