@@ -35,8 +35,9 @@ class TaggedUnionObjectValidationError extends ValidationError {
   }
 }
 class TaggedUnionInvalidTagValidationError extends ValidationError {
-  constructor() {
-    super("Validation of tagged union failed: invalid tag.");
+  constructor(value: unknown) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    super(`Validation of tagged union failed: invalid tag ${value}.`);
   }
 }
 class TaggedUnionValidationError extends ValidationError {
@@ -200,7 +201,7 @@ export function tagged_union<T>(
       typeof tag_value !== "string" ||
       !Object.hasOwn(validators, tag_value)
     ) {
-      return err(new TaggedUnionInvalidTagValidationError());
+      return err(new TaggedUnionInvalidTagValidationError(tag_value));
     }
     const res = validators[tag_value as keyof T](json);
     return res.is_ok

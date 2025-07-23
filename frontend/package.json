@@ -91,6 +91,7 @@
     "d3-time": "^3.0.0",
     "d3-time-format": "^4.1.0",
     "svelte": "^5.11.3",
+    "svelte-virtuallists": "^1.4.2",
     "web-tree-sitter": "^0.25.1"
   }
 }

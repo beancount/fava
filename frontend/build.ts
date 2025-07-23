@@ -31,7 +31,7 @@ async function runBuild(dev: boolean) {
     format: "esm",
     bundle: true,
     outfile: "../src/fava/static/app.js",
-    conditions: dev ? ["development"] : ["production"],
+    conditions: ["svelte", dev ? "development" : "production"],
     external: ["fs/promises", "module"], // for web-tree-sitter
     loader: {
       ".wasm": "file",

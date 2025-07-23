@@ -24,7 +24,7 @@ export class Posting {
     readonly meta: EntryMetadata,
     readonly account: string,
     readonly amount: string,
-  ) {}
+  ) { }
 
   /** Create a new empty Posting. */
   static empty(): Posting {
@@ -78,7 +78,7 @@ abstract class EntryBase<T extends string> {
     readonly meta: EntryMetadata,
     readonly date: string,
     readonly entry_hash: string,
-  ) {}
+  ) { }
 
   /** Clone. */
   clone(): this {
@@ -111,6 +111,32 @@ abstract class EntryBase<T extends string> {
     const value = this.meta.get("__duplicate__");
     return value != null && value !== false;
   }
+}
+
+/** A commodity. */
+export class Commodity extends EntryBase<"Commodity"> {
+  private constructor(
+    meta: EntryMetadata,
+    date: string,
+    entry_hash: string,
+    readonly currency: string,
+  ) {
+    super("Commodity", meta, date, entry_hash);
+  }
+
+  private static raw_validator = object({
+    t: constant("Commodity"),
+    meta: EntryMetadata.validator,
+    date: string,
+    entry_hash: string,
+    currency: string,
+  });
+
+  static validator: Validator<Commodity> = (json) =>
+    Commodity.raw_validator(json).map(
+      ({ meta, date, entry_hash, currency }) =>
+        new Commodity(meta, date, entry_hash, currency),
+    );
 }
 
 /** A balance. */
@@ -545,6 +571,7 @@ export class Transaction extends EntryBase<"Transaction"> {
 export const entryValidator = tagged_union("t", {
   Balance: Balance.validator,
   Close: Close.validator,
+  Commodity: Commodity.validator,
   Custom: Custom.validator,
   Document: Document.validator,
   Event: Event.validator,

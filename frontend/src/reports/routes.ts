@@ -6,6 +6,7 @@ import { errors } from "./errors";
 import { events } from "./events";
 import { holdings } from "./holdings";
 import { import_report } from "./import";
+import { journal } from "./journal";
 import { options } from "./options";
 import { query } from "./query";
 import type { FrontendRoute } from "./route";
@@ -30,6 +31,7 @@ export const frontend_routes: FrontendRoute[] = [
   holdings,
   import_report,
   income_statement,
+  journal,
   options,
   query,
   trial_balance,
