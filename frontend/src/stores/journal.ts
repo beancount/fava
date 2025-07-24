@@ -46,7 +46,7 @@ export const journalShow = localStorageSyncedStore(
 );
 
 const sortOrderValidator = tuple(constants("date", "flag", "narration"), constants("asc", "desc"));
-type JournalSortOrder = ValidationT<typeof sortOrderValidator>
+export type JournalSortOrder = ValidationT<typeof sortOrderValidator>
 
 const defaultSortOrder: JournalSortOrder = ["date", "desc"];
 

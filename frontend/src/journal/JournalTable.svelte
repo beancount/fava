@@ -7,9 +7,12 @@
     journalShow as journalShowStore,
     journalSortOrder,
     type JournalShowEntry,
+    type JournalSortOrder,
   } from "../stores/journal";
   import { DateColumn, Sorter, StringColumn, type SortColumn } from "../sort";
   import JournalFilters from "./JournalFilters.svelte";
+  import { onDestroy } from "svelte";
+  import { derived } from "svelte/store";
 
   interface Props {
     entries: Entry[];
@@ -17,11 +20,19 @@
   }
 
   const { entries, showChangeAndBalance = false }: Props = $props();
-  const journalShow = $derived(new Set($journalShowStore));
 
-  let sortedEntries = $derived.by(() => {
+  let sortedEntries = $state.raw<readonly Entry[]>([]);
+  let journalShow = derived(journalShowStore, (t) => new Set(t));
+
+  const filter = derived(
+    [journalSortOrder, journalShow],
+    ([$order, $show]) =>
+      [$order, $show] as [JournalSortOrder, Set<JournalShowEntry>],
+  );
+
+  const unsub = filter.subscribe(([journalSortOrder, journalShow]) => {
     let column: SortColumn<Entry>;
-    switch ($journalSortOrder[0]) {
+    switch (journalSortOrder[0]) {
       case "date":
         column = new DateColumn("date");
         break;
@@ -32,8 +43,10 @@
         column = new StringColumn("narration", (e) => e.sortNarration);
         break;
     }
-    const sorter = new Sorter(column, $journalSortOrder[1]);
+    const sorter = new Sorter(column, journalSortOrder[1]);
 
+    // TODO: remove logging
+    console.time("filter");
     const filtered = entries.filter((e) => {
       if (journalShow.has(e.t.toLowerCase() as any)) {
         if (e.t === "Transaction") {
@@ -62,9 +75,17 @@
       }
       return false;
     });
+    console.timeEnd("filter");
 
-    return sorter.sort(filtered);
+    // TODO: remove logging
+    console.time("sort");
+    const sorted = sorter.sort(filtered);
+    console.timeEnd("sort");
+
+    sortedEntries = sorted;
   });
+
+  onDestroy(() => unsub());
 </script>
 
 <JournalFilters />
@@ -103,7 +124,12 @@
   </li>
   <VirtualList items={sortedEntries as Entry[]} style="height: 100vh;">
     {#snippet vl_slot({ item, index }: VLSlotSignature<Entry>)}
-      <JournalEntry index={+index + 1} entry={item} {showChangeAndBalance} {journalShow} />
+      <JournalEntry
+        index={+index + 1}
+        entry={item}
+        {showChangeAndBalance}
+        journalShow={$journalShow}
+      />
     {/snippet}
   </VirtualList>
 </ol>
