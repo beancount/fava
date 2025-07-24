@@ -213,7 +213,7 @@ export function sortableJournal(ol: HTMLOListElement): void {
       const order =
         header.getAttribute("data-order") === "asc" ? "desc" : "asc";
       sort(order);
-      journalSortOrder.set([name, order]);
+      journalSortOrder.set([name as never, order]);
     });
   });
 }

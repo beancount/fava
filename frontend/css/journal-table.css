@@ -61,45 +61,46 @@
   line-height: 16px;
 }
 
-.journal > li,
-.journal.show-custom .custom.budget,
-.journal.show-document .document.discovered,
-.journal.show-document .document.linked,
-.journal .metadata,
-.journal .postings {
+.journal.ssr > li,
+.journal.ssr.show-custom .custom.budget,
+.journal.ssr.show-document .document.discovered,
+.journal.ssr.show-document .document.linked,
+.journal.ssr .metadata,
+.journal.ssr .postings {
   display: none;
 }
 
-.journal .head,
-.journal.show-balance .balance,
-.journal.show-close .close,
-.journal.show-custom .custom,
-.journal.show-document .document,
-.journal.show-note .note,
-.journal.show-open .open,
-.journal.show-pad .pad,
-.journal.show-query .query {
+.journal.ssr .head,
+.journal.ssr.show-balance .balance,
+.journal.ssr.show-close .close,
+.journal.ssr.show-custom .custom,
+.journal.ssr.show-document .document,
+.journal.ssr.show-note .note,
+.journal.ssr.show-open .open,
+.journal.ssr.show-pad .pad,
+.journal.ssr.show-query .query {
   display: block;
 }
 
 /* Show metadata and postings if it was toggled for the whole journal. */
-.journal.show-metadata .metadata,
-.journal.show-postings .postings {
+.journal.ssr.show-metadata .metadata,
+.journal.ssr.show-postings .postings {
   display: block;
 }
 
+/* TODO */
 /* Show metadata and postings where it was explicitly toggled with the indicators. */
 .journal > li.show-full-entry .postings,
 .journal > li.show-full-entry .metadata {
   display: block;
 }
 
-.journal.show-transaction.show-cleared .transaction.cleared,
-.journal.show-transaction.show-pending .transaction.pending,
-.journal.show-transaction.show-other .transaction.other,
-.journal.show-document.show-discovered .document.discovered,
-.journal.show-document.show-linked .document.linked,
-.journal.show-custom.show-budget .custom.budget {
+.journal.ssr.show-transaction.show-cleared .transaction.cleared,
+.journal.ssr.show-transaction.show-pending .transaction.pending,
+.journal.ssr.show-transaction.show-other .transaction.other,
+.journal.ssr.show-document.show-discovered .document.discovered,
+.journal.ssr.show-document.show-linked .document.linked,
+.journal.ssr.show-custom.show-budget .custom.budget {
   display: block;
 }
 

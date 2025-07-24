@@ -3,7 +3,7 @@
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { toggle } from "../lib/set";
-  import { journalShow } from "../stores/journal";
+  import { journalShow, type JournalShowEntry } from "../stores/journal";
 
   const toggleText = _("Toggle %(type)s entries");
 
@@ -13,11 +13,11 @@
    * which get special-cased in the toggle logic below.
    */
   const buttons: [
-    type: string,
+    type: JournalShowEntry,
     button_text: string,
     title: string | null,
     shortcut: KeySpec,
-    supertype?: string,
+    supertype?: JournalShowEntry,
   ][] = [
     ["open", "Open", null, "s o"],
     ["close", "Close", null, "s c"],
@@ -48,7 +48,7 @@
 <script lang="ts">
   let shownSet = $derived(new Set($journalShow));
 
-  function toggle_type(type: string) {
+  function toggle_type(type: JournalShowEntry) {
     journalShow.update((show) => {
       const set = new Set(show);
       toggle(set, type);
@@ -58,7 +58,7 @@
     });
   }
 
-  let active = $derived((type: string, supertype?: string): boolean =>
+  let active = $derived((type: JournalShowEntry, supertype?: JournalShowEntry): boolean =>
     supertype != null
       ? shownSet.has(type) && shownSet.has(supertype)
       : shownSet.has(type),

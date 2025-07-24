@@ -7,27 +7,20 @@
     Transaction,
     type Entry,
   } from "../entries";
-  import { sort } from "d3-array";
   import { basename } from "../lib/paths";
   import { RawAmount } from "../entries/amount";
   import { currency_name } from "../stores";
   import { ctx } from "../stores/format";
-
-  const shortType: Record<string, string> = {
-    Balance: "Bal",
-    Close: "Close",
-    Document: "Doc",
-    Note: "Note",
-    Open: "Open",
-  };
+  import type { JournalShowEntry } from "../stores/journal";
 
   interface Props {
     index: number;
     entry: Entry;
     showChangeAndBalance: boolean;
+    journalShow: Set<JournalShowEntry>;
   }
 
-  const { index, entry, showChangeAndBalance }: Props = $props();
+  const { index, entry, showChangeAndBalance, journalShow }: Props = $props();
   const { t } = entry;
 
   // svelte-ignore non_reactive_update
@@ -65,126 +58,50 @@
 {/snippet}
 
 {#snippet metadata(metadata: EntryMetadata, entryHash: string)}
-  {@const entries = metadata.entries()}
-  {#if entries.length > 0}
-    <dl class="metadata">
-      {#each metadata.entries() as [key, value]}
-        <dt>{key}:</dt>
-        <dd>
-          {#if key.startsWith("document")}
-            <a
-              class="filename"
-              data-remote
-              target="_blank"
-              href={$urlFor("statement", { entry_hash: entryHash, key: key })}
-            >
+  {#if journalShow.has("metadata")}
+    {@const entries = metadata.entries()}
+    {#if entries.length > 0}
+      <dl class="metadata">
+        {#each metadata.entries() as [key, value]}
+          <dt>{key}:</dt>
+          <dd>
+            {#if key.startsWith("document")}
+              <a
+                class="filename"
+                data-remote
+                target="_blank"
+                href={$urlFor("statement", { entry_hash: entryHash, key: key })}
+              >
+                {value}
+              </a>
+            {:else if value.startsWith("http://") || value.startsWith("https://")}
+              <a
+                class="url"
+                data-remote
+                target="_blank"
+                rel="noopener noreferrer"
+                href={value}
+              >
+                {value}
+              </a>
+            {:else}
               {value}
-            </a>
-          {:else if value.startsWith("http://") || value.startsWith("https://")}
-            <a
-              class="url"
-              data-remote
-              target="_blank"
-              rel="noopener noreferrer"
-              href={value}
-            >
-              {value}
-            </a>
-          {:else}
-            {value}
-          {/if}
-        </dd>
-      {/each}
-    </dl>
+            {/if}
+          </dd>
+        {/each}
+      </dl>
+    {/if}
   {/if}
 {/snippet}
 
 {#snippet tagsLinks(entry: Document | Transaction)}
-  {#each sort(entry.tags ?? []) as tag}
+  {#each entry.tags?.toSorted() ?? [] as tag}
     <span class="tag">{tag}</span>
   {/each}
-  {#each sort(entry.links ?? []) as link}
+  {#each entry.links?.toSorted() ?? [] as link}
     <span class="link">^{link}</span>
   {/each}
 {/snippet}
-
-{#if t === "Price"}
-<li></li>
-{:else}
-  <li class={liClasses}>
-    <p>
-      <span class="datecell" data-sort-value={index}>
-        <a href={`#context-${entry.entry_hash}`}>{entry.date}</a>
-      </span>
-      <span class="flag">
-        {#if t === "Transaction"}
-          {entry.flag}
-        {:else}
-          {shortType[t] ?? t.substring(0, 3).toLowerCase()}
-        {/if}
-      </span>
-      {#if t === "Transaction"}
-        <span
-          class="description droptarget"
-          data-entry={entry.entry_hash}
-          data-entry-date={entry.date}
-          data-account-name={entry.postings[0]?.account}
-          >{@render description()}</span
-        >
-      {:else}
-        <span class="description">{@render description()}</span>
-      {/if}
-      <span class="indicators">
-        {@render metadataIndicators(entry.meta)}
-        {#if t === "Transaction"}
-          {#each entry.postings as posting}
-            <!-- TODO: posting flags -->
-            <span></span>
-            {@render metadataIndicators(posting.meta)}
-          {/each}
-        {/if}
-      </span>
-      {#if t === "Balance"}
-        <!-- TODO: diff_amount -->
-        {@render amount(entry.amount, "num bal")}
-        <span class="change num"></span>
-        {#if !showChangeAndBalance}
-          <span class="change num"></span>
-        {/if}
-      {/if}
-      {#if showChangeAndBalance}
-        <!-- TODO -->
-      {/if}
-    </p>
-    {@render metadata(entry.meta, entry.entry_hash)}
-    {#if t === "Transaction" && entry.postings.length > 0}
-      <ul class="postings">
-        {#each entry.postings as posting}
-          <!-- TODO: posting flags -->
-          <li>
-            <p>
-              <span class="datecell"></span>
-              <span class="flag"></span>
-              <!-- TODO: it uses the entry hash, is this correct? -->
-              <span
-                class="description droptarget"
-                data-entry={entry.entry_hash}
-                data-account-name={posting.account}
-                data-entry-date={entry.date}
-              >
-                {@render accountLink(posting.account)}
-              </span>
-              <!-- TODO: cost and price -->
-              <span class="num">{posting.amount}</span>
-              <span class="num"></span>
-              <span class="num"></span>
-            </p>
-          </li>
-        {/each}
-      </ul>
-    {/if}
-  </li>
-{/if}
 
 {#snippet description()}
   {#if t === "Open" || t === "Close"}
@@ -233,3 +150,71 @@
     {@render tagsLinks(entry)}
   {/if}
 {/snippet}
+
+<li class={liClasses}>
+  <p>
+    <span class="datecell" data-sort-value={index}>
+      <a href={`#context-${entry.entry_hash}`}>{entry.date}</a>
+    </span>
+    <span class="flag">{entry.sortFlag}</span>
+    {#if t === "Transaction"}
+      <span
+        class="description droptarget"
+        data-entry={entry.entry_hash}
+        data-entry-date={entry.date}
+        data-account-name={entry.postings[0]?.account}
+        >{@render description()}</span
+      >
+    {:else}
+      <span class="description">{@render description()}</span>
+    {/if}
+    <span class="indicators">
+      {@render metadataIndicators(entry.meta)}
+      {#if t === "Transaction"}
+        {#each entry.postings as posting}
+          <!-- TODO: posting flags -->
+          <span></span>
+          {@render metadataIndicators(posting.meta)}
+        {/each}
+      {/if}
+    </span>
+    {#if t === "Balance"}
+      <!-- TODO: diff_amount -->
+      {@render amount(entry.amount, "num bal")}
+      <span class="change num"></span>
+      {#if !showChangeAndBalance}
+        <span class="change num"></span>
+      {/if}
+    {/if}
+    {#if showChangeAndBalance}
+      <!-- TODO -->
+    {/if}
+  </p>
+  {@render metadata(entry.meta, entry.entry_hash)}
+  {#if journalShow.has("postings") && t === "Transaction" && entry.postings.length > 0}
+    <ul class="postings">
+      {#each entry.postings as posting}
+        <!-- TODO: posting flags -->
+        <li>
+          <p>
+            <span class="datecell"></span>
+            <span class="flag"></span>
+            <!-- TODO: it uses the entry hash, is this correct? -->
+            <span
+              class="description droptarget"
+              data-entry={entry.entry_hash}
+              data-account-name={posting.account}
+              data-entry-date={entry.date}
+            >
+              {@render accountLink(posting.account)}
+            </span>
+            <!-- TODO: cost and price -->
+            <span class="num">{posting.amount}</span>
+            <span class="num"></span>
+            <span class="num"></span>
+          </p>
+        </li>
+      {/each}
+    </ul>
+  {/if}
+</li>
