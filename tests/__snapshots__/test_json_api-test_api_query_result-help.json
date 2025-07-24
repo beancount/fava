@@ -1,4 +1,4 @@
 {
-  "contents": "Shell utility commands (type help <topic>):\n===========================================\nEOF    describe  exit     format  history  parse  reload  set   \nclear  errors    explain  help    output   quit   run     tables\n\nBeancount query commands:\n=========================\nbalances  from  journal  print  select  targets  where",
+  "contents": "Shell utility commands (type help <topic>):\n===========================================\nEOF    describe  exit     help     parse  reload  set   \nclear  errors    explain  history  quit   run     tables\n\nBeancount query commands:\n=========================\nbalances  from  journal  print  select  targets  where",
   "t": "string"
 }
