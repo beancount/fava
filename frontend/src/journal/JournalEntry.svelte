@@ -65,7 +65,8 @@
 {/snippet}
 
 {#snippet metadata(metadata: EntryMetadata, entryHash: string)}
-  {#if !metadata.is_empty()}
+  {@const entries = metadata.entries()}
+  {#if entries.length > 0}
     <dl class="metadata">
       {#each metadata.entries() as [key, value]}
         <dt>{key}:</dt>
@@ -107,7 +108,9 @@
   {/each}
 {/snippet}
 
-{#if t !== "Price"}
+{#if t === "Price"}
+<li></li>
+{:else}
   <li class={liClasses}>
     <p>
       <span class="datecell" data-sort-value={index}>

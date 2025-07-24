@@ -45,7 +45,7 @@
         </span>
       </p>
     </li>
-    <VirtualList items={entries}>
+    <VirtualList items={entries} style="height: 1000px;">
       {#snippet vl_slot({ item, index }: VLSlotSignature<Entry>)}
         <JournalEntry index={+index + 1} entry={item} {showChangeAndBalance} />
       {/snippet}
