@@ -13,12 +13,11 @@ from re import Pattern
 from typing import Any
 from typing import TYPE_CHECKING
 
+import orjson
 from beancount.core.amount import Amount
 from beancount.core.data import Booking
 from beancount.core.number import MISSING
 from flask.json.provider import JSONProvider
-from simplejson import dumps as simplejson_dumps
-from simplejson import loads as simplejson_loads
 
 from fava.beans.abc import Position
 from fava.beans.abc import Transaction
@@ -63,17 +62,16 @@ def _json_default(o: Any) -> Any:
 
 def dumps(obj: Any, **_kwargs: Any) -> str:
     """Dump as a JSON string."""
-    return simplejson_dumps(
+    return orjson.dumps(
         obj,
-        indent="  ",
-        sort_keys=True,
         default=_json_default,
-    )
+        option=orjson.OPT_SORT_KEYS | orjson.OPT_INDENT_2
+    ).decode()
 
 
 def loads(s: str | bytes) -> Any:
     """Load a JSON string."""
-    return simplejson_loads(s)
+    return orjson,loads(s)
 
 
 class FavaJSONProvider(JSONProvider):
@@ -83,7 +81,7 @@ class FavaJSONProvider(JSONProvider):
         return dumps(obj)
 
     def loads(self, s: str | bytes, **_kwargs: Any) -> Any:  # noqa: D102
-        return simplejson_loads(s)
+        return loads(s)
 
 
 @dataclass(frozen=True)
