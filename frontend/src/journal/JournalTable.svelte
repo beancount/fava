@@ -11,7 +11,7 @@
   } from "../stores/journal";
   import { DateColumn, Sorter, StringColumn, type SortColumn } from "../sort";
   import JournalFilters from "./JournalFilters.svelte";
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { derived } from "svelte/store";
 
   interface Props {
@@ -24,87 +24,120 @@
   let sortedEntries = $state.raw<readonly Entry[]>([]);
   let journalShow = derived(journalShowStore, (t) => new Set(t));
 
+  let head: HTMLLIElement;
+
   const filter = derived(
     [journalSortOrder, journalShow],
     ([$order, $show]) =>
       [$order, $show] as [JournalSortOrder, Set<JournalShowEntry>],
   );
 
-  const unsub = filter.subscribe(([journalSortOrder, journalShow]) => {
-    let column: SortColumn<Entry>;
-    switch (journalSortOrder[0]) {
-      case "date":
-        column = new DateColumn("date");
-        break;
-      case "flag":
-        column = new StringColumn("flag", (e) => e.sortFlag);
-        break;
-      case "narration":
-        column = new StringColumn("narration", (e) => e.sortNarration);
-        break;
-    }
-    const sorter = new Sorter(column, journalSortOrder[1]);
-
-    // TODO: remove logging
-    console.time("filter");
-    const filtered = entries.filter((e) => {
-      if (journalShow.has(e.t.toLowerCase() as any)) {
-        if (e.t === "Transaction") {
-          let flagOpt: JournalShowEntry;
-          switch (e.flag) {
-            case "*":
-              flagOpt = "cleared";
-              break;
-            case "!":
-              flagOpt = "pending";
-              break;
-            default:
-              flagOpt = "other";
-          }
-          return journalShow.has(flagOpt);
-        } else if (e.t === "Document") {
-          if (e.tags) {
-            if (e.tags.includes("discovered"))
-              return journalShow.has("discovered");
-            if (e.tags.includes("linked")) return journalShow.has("linked");
-          }
-        } else if (e.t === "Custom") {
-          if (e.type === "budget") return journalShow.has("budget");
-        }
-        return true;
+  let unsub: () => void;
+  onMount(() => {
+    unsub = filter.subscribe(([journalSortOrder, journalShow]) => {
+      let column: SortColumn<Entry>;
+      switch (journalSortOrder[0]) {
+        case "flag":
+          column = new StringColumn("flag", (e) => e.sortFlag);
+          break;
+        case "narration":
+          column = new StringColumn("narration", (e) => e.sortNarration);
+          break;
+        default:
+          column = new DateColumn("date");
+          break;
       }
-      return false;
+      const sorter = new Sorter(column, journalSortOrder[1] ?? "asc");
+
+      const headers = head.querySelectorAll<HTMLSpanElement>("span[data-sort]");
+      headers.forEach((el) => {
+        el.removeAttribute("data-order");
+        if (el.getAttribute("data-sort-name") === column.name) {
+          el.setAttribute("data-order", sorter.order);
+        }
+      });
+
+      // TODO: remove logging
+      console.time("filter");
+      const filtered = entries.filter((e) => {
+        if (journalShow.has(e.t.toLowerCase() as any)) {
+          if (e.t === "Transaction") {
+            let flagOpt: JournalShowEntry;
+            switch (e.flag) {
+              case "*":
+                flagOpt = "cleared";
+                break;
+              case "!":
+                flagOpt = "pending";
+                break;
+              default:
+                flagOpt = "other";
+            }
+            return journalShow.has(flagOpt);
+          } else if (e.t === "Document") {
+            if (e.tags) {
+              if (e.tags.includes("discovered"))
+                return journalShow.has("discovered");
+              if (e.tags.includes("linked")) return journalShow.has("linked");
+            }
+          } else if (e.t === "Custom") {
+            if (e.type === "budget") return journalShow.has("budget");
+          }
+          return true;
+        }
+        return false;
+      });
+      console.timeEnd("filter");
+
+      // TODO: remove logging
+      console.time("sort");
+      const sorted = sorter.sort(filtered);
+      console.timeEnd("sort");
+
+      sortedEntries = sorted;
     });
-    console.timeEnd("filter");
-
-    // TODO: remove logging
-    console.time("sort");
-    const sorted = sorter.sort(filtered);
-    console.timeEnd("sort");
-
-    sortedEntries = sorted;
   });
 
   onDestroy(() => unsub());
+
+  function headerClick(e: MouseEvent & { currentTarget: HTMLSpanElement }) {
+    const name = e.currentTarget.getAttribute("data-sort-name");
+    const order = e.currentTarget.getAttribute("data-order") === "asc" ? "desc" : "asc";
+    $journalSortOrder = [name as JournalSortOrder[0], order];
+  }
 </script>
 
 <JournalFilters />
 
 <ol class="flex-table journal">
-  <li class="head">
+  <li class="head" bind:this={head}>
     <p>
+      <!-- TODO: ARIA tags -->
       <span
         class="datecell"
-        data-sort="num"
+        data-sort="date"
         data-sort-name="date"
-        data-order="asc"
+        onclick={headerClick}
+        aria-hidden="true"
       >
         {_("Date")}
       </span>
-      <span class="flag" data-sort="string" data-sort-name="flag">
+      <span
+        class="flag"
+        data-sort="string"
+        data-sort-name="flag"
+        onclick={headerClick}
+        aria-hidden="true"
+      >
         {_("F")}
       </span>
-      <span class="description" data-sort="string" data-sort-name="narration">
+      <span
+        class="description"
+        data-sort="string"
+        data-sort-name="narration"
+        onclick={headerClick}
+        aria-hidden="true"
+      >
         {_("Payee")}/{_("Narration")}
       </span>
       <span class="num">{_("Units")}</span>

@@ -2,24 +2,25 @@ import { localStorageSyncedStore } from "../lib/store";
 import { array, constants, tuple, type ValidationT } from "../lib/validation";
 
 const journalShowEntryValidator = constants(
-   "open",
-   "close",
-   "transaction",
-   "cleared",
-   "pending",
-   "other",
-   "balance",
-   "note",
-   "document",
-   "discovered",
-   "linked",
-   "pad",
-   "query",
-   "statement",
-   "custom",
-   "budget",
-   "metadata",
-   "postings",
+  "open",
+  "close",
+  "transaction",
+  "cleared",
+  "pending",
+  "other",
+  "balance",
+  "note",
+  "document",
+  "discovered",
+  "linked",
+  "pad",
+  "query",
+  "statement",
+  "custom",
+  "budget",
+  "metadata",
+  "postings",
+  null,
 )
 
 export type JournalShowEntry = ValidationT<typeof journalShowEntryValidator>
@@ -45,7 +46,7 @@ export const journalShow = localStorageSyncedStore(
   () => defaultValue,
 );
 
-const sortOrderValidator = tuple(constants("date", "flag", "narration"), constants("asc", "desc"));
+const sortOrderValidator = tuple(constants("date", "flag", "narration", null), constants("asc", "desc", null));
 export type JournalSortOrder = ValidationT<typeof sortOrderValidator>
 
 const defaultSortOrder: JournalSortOrder = ["date", "desc"];

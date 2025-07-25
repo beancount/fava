@@ -14,7 +14,7 @@
 import { permute } from "d3-array";
 import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal";
+import { journalSortOrder, type JournalSortOrder } from "../stores/journal";
 
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
@@ -206,14 +206,14 @@ export function sortableJournal(ol: HTMLOListElement): void {
       );
     };
     if (name === initialColumn) {
-      sort(initialOrder);
+      sort(initialOrder ?? "asc");
     }
 
     header.addEventListener("click", () => {
       const order =
         header.getAttribute("data-order") === "asc" ? "desc" : "asc";
       sort(order);
-      journalSortOrder.set([name as never, order]);
+      journalSortOrder.set([name as JournalSortOrder[0], order]);
     });
   });
 }
