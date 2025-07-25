@@ -45,7 +45,7 @@ ONE_DAY = timedelta(days=1)
 ZERO = Decimal()
 
 
-def _json_default(o: Any) -> Any:
+def _json_default(o: Any) -> Any:  # noqa: PLR0911
     """Specific serialisation for some data types."""
     if isinstance(o, (date, Amount, Booking, Position)):
         return str(o)
@@ -53,10 +53,14 @@ def _json_default(o: Any) -> Any:
         return list(o)
     if isinstance(o, Pattern):
         return o.pattern
+    if isinstance(o, Decimal):
+        return float(o)
     if is_dataclass(o):
         return {field.name: getattr(o, field.name) for field in fields(o)}
     if o is MISSING:  # pragma: no cover
         return None
+    if hasattr(o, "_asdict"):
+        return o._asdict()
     raise TypeError  # pragma: no cover
 
 
@@ -65,13 +69,13 @@ def dumps(obj: Any, **_kwargs: Any) -> str:
     return orjson.dumps(
         obj,
         default=_json_default,
-        option=orjson.OPT_SORT_KEYS | orjson.OPT_INDENT_2
+        option=orjson.OPT_SORT_KEYS | orjson.OPT_INDENT_2,
     ).decode()
 
 
 def loads(s: str | bytes) -> Any:
     """Load a JSON string."""
-    return orjson,loads(s)
+    return orjson.loads(s)
 
 
 class FavaJSONProvider(JSONProvider):
