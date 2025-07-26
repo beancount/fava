@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { VirtualList, type VLSlotSignature } from "svelte-virtuallists";
   import type { Entry } from "../entries";
   import { _ } from "../i18n";
   import JournalEntry from "./JournalEntry.svelte";
@@ -13,6 +12,7 @@
   import JournalFilters from "./JournalFilters.svelte";
   import { onDestroy, onMount } from "svelte";
   import { derived } from "svelte/store";
+  import { createVirtualizer } from "@tanstack/svelte-virtual";
 
   interface Props {
     entries: Entry[];
@@ -21,7 +21,7 @@
 
   const { entries, showChangeAndBalance = false }: Props = $props();
 
-  let sortedEntries = $state.raw<readonly Entry[]>([]);
+  let sortedEntries = $state.raw<Entry[]>([]);
   let journalShow = derived(journalShowStore, (t) => new Set(t));
 
   let head: HTMLLIElement;
@@ -94,7 +94,7 @@
       const sorted = sorter.sort(filtered);
       console.timeEnd("sort");
 
-      sortedEntries = sorted;
+      sortedEntries = sorted as Entry[];
     });
   });
 
@@ -102,9 +102,36 @@
 
   function headerClick(e: MouseEvent & { currentTarget: HTMLSpanElement }) {
     const name = e.currentTarget.getAttribute("data-sort-name");
-    const order = e.currentTarget.getAttribute("data-order") === "asc" ? "desc" : "asc";
+    const order =
+      e.currentTarget.getAttribute("data-order") === "asc" ? "desc" : "asc";
     $journalSortOrder = [name as JournalSortOrder[0], order];
   }
+
+  let ol = $state<HTMLDivElement>();
+  let lis = $state<HTMLLIElement[]>([]);
+
+  function depend<T, R>(t: T, fn: (t: T) => R) {
+    return fn(t);
+  }
+
+  let virtualizer = $derived(
+    createVirtualizer({
+      overscan: 5,
+      count: sortedEntries.length,
+      getItemKey: depend(
+        sortedEntries,
+        (sortedEntries) => (i) => sortedEntries[i]?.entry_hash ?? i,
+      ),
+      getScrollElement: depend(ol, (ol) => () => ol ?? null),
+      estimateSize: () => 50,
+    }),
+  );
+
+  let items = $derived($virtualizer.getVirtualItems());
+
+  $effect(() => {
+    if (lis.length) lis.forEach((li) => $virtualizer.measureElement(li));
+  });
 </script>
 
 <JournalFilters />
@@ -155,14 +182,43 @@
       </span>
     </p>
   </li>
-  <VirtualList items={sortedEntries as Entry[]} style="height: 100vh;">
-    {#snippet vl_slot({ item, index }: VLSlotSignature<Entry>)}
-      <JournalEntry
-        index={+index + 1}
-        entry={item}
-        {showChangeAndBalance}
-        journalShow={$journalShow}
-      />
-    {/snippet}
-  </VirtualList>
+
+  <div bind:this={ol} class="vlist-outer">
+    <div class="vlist-inner" style="height: {$virtualizer.getTotalSize()}px;">
+      <div
+        class="vlist-items"
+        style="transform: translateY({items[0]?.start ?? 0}px);"
+      >
+        {#each items as row}
+          <JournalEntry
+            index={row.index}
+            e={sortedEntries[row.index]!}
+            {showChangeAndBalance}
+            journalShow={$journalShow}
+            bind:li={lis[row.index]}
+          />
+        {/each}
+      </div>
+    </div>
+  </div>
 </ol>
+
+<style>
+  .vlist-outer {
+    height: 1000px;
+    overflow-y: auto;
+    contain: strict;
+  }
+
+  .vlist-inner {
+    position: relative;
+    width: 100%;
+  }
+
+  .vlist-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+</style>

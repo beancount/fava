@@ -15,24 +15,33 @@
 
   interface Props {
     index: number;
-    entry: Entry;
+    e: Entry;
     showChangeAndBalance: boolean;
     journalShow: Set<JournalShowEntry>;
+    li?: HTMLLIElement;
   }
 
-  const { index, entry, showChangeAndBalance, journalShow }: Props = $props();
-  const { t } = entry;
+  let {
+    index,
+    e,
+    showChangeAndBalance,
+    journalShow,
+    li = $bindable<HTMLLIElement>(),
+  }: Props = $props();
 
-  // svelte-ignore non_reactive_update
-  let liClasses = t.toLowerCase();
-  if (t === "Custom") liClasses += ` ${entry.type}`;
-  if (t === "Transaction") liClasses += ` ${entry.flag}`;
+  let liClasses = $derived.by(() => {
+    const t = e.t
+    let liClasses = t.toLowerCase();
+    if (t === "Custom") liClasses += ` ${e.type}`;
+    if (t === "Transaction") liClasses += ` ${e.flag}`;
 
-  if (t === "Transaction" || t === "Note" || t == "Document") {
-    const { tags } = entry;
-    if (tags?.includes("linked")) liClasses += " linked";
-    if (tags?.includes("discovered")) liClasses += " discovered";
-  }
+    if (t === "Transaction" || t === "Note" || t == "Document") {
+      const { tags } = e;
+      if (tags?.includes("linked")) liClasses += " linked";
+      if (tags?.includes("discovered")) liClasses += " discovered";
+    }
+    return liClasses;
+  });
 </script>
 
 {#snippet amount(amount: Amount | RawAmount, cls: string)}
@@ -104,83 +113,83 @@
 {/snippet}
 
 {#snippet description()}
-  {#if t === "Open" || t === "Close"}
-    {@render accountLink(entry.account)}
-  {:else if t === "Note"}
-    {entry.comment}
-  {:else if t === "Query"}
+  {#if e.t === "Open" || e.t === "Close"}
+    {@render accountLink(e.account)}
+  {:else if e.t === "Note"}
+    {e.comment}
+  {:else if e.t === "Query"}
     <a
       href={$urlFor("report", {
         report_name: "query",
-        query_string: `run ${entry.name}`,
+        query_string: `run ${e.name}`,
       })}
     >
-      {entry.name}
+      {e.name}
     </a>
-  {:else if t === "Pad"}
-    {@render accountLink(entry.account)}&nbsp;from&nbsp;{@render accountLink(
-      entry.source_account,
+  {:else if e.t === "Pad"}
+    {@render accountLink(e.account)}&nbsp;from&nbsp;{@render accountLink(
+      e.source_account,
     )}
-  {:else if t === "Custom"}
-    <strong>{entry.type}</strong>
+  {:else if e.t === "Custom"}
+    <strong>{e.type}</strong>
     <!-- TODO custom attributes -->
-    {#each entry.values as value}
+    {#each e.values as value}
       {value}
     {/each}
-  {:else if t === "Document"}
-    {@render accountLink(entry.account)}
+  {:else if e.t === "Document"}
+    {@render accountLink(e.account)}
     <a
       class="filename"
       data-remote
       target="_blank"
-      href={$urlFor("document", { filename: entry.filename })}
+      href={$urlFor("document", { filename: e.filename })}
     >
-      {basename(entry.filename)}
+      {basename(e.filename)}
     </a>
-    {@render tagsLinks(entry)}
-  {:else if t === "Balance"}
-    {@render accountLink(entry.account)}
+    {@render tagsLinks(e)}
+  {:else if e.t === "Balance"}
+    {@render accountLink(e.account)}
     <!-- TODO diff_amount -->
-  {:else if t === "Transaction"}
-    <strong class="payee">{entry.payee}</strong>
-    {#if entry.payee && entry.narration}
+  {:else if e.t === "Transaction"}
+    <strong class="payee">{e.payee}</strong>
+    {#if e.payee && e.narration}
       <span class="separator"></span>
     {/if}
-    {entry.narration}
-    {@render tagsLinks(entry)}
+    {e.narration}
+    {@render tagsLinks(e)}
   {/if}
 {/snippet}
 
-<li class={liClasses}>
+<li class={liClasses} bind:this={li} data-index={index}>
   <p>
     <span class="datecell" data-sort-value={index}>
-      <a href={`#context-${entry.entry_hash}`}>{entry.date}</a>
+      <a href={`#context-${e.entry_hash}`}>{e.date}</a>
     </span>
-    <span class="flag">{entry.sortFlag}</span>
-    {#if t === "Transaction"}
+    <span class="flag">{e.sortFlag}</span>
+    {#if e.t === "Transaction"}
       <span
         class="description droptarget"
-        data-entry={entry.entry_hash}
-        data-entry-date={entry.date}
-        data-account-name={entry.postings[0]?.account}
+        data-entry={e.entry_hash}
+        data-entry-date={e.date}
+        data-account-name={e.postings[0]?.account}
         >{@render description()}</span
       >
     {:else}
       <span class="description">{@render description()}</span>
     {/if}
     <span class="indicators">
-      {@render metadataIndicators(entry.meta)}
-      {#if t === "Transaction"}
-        {#each entry.postings as posting}
+      {@render metadataIndicators(e.meta)}
+      {#if e.t === "Transaction"}
+        {#each e.postings as posting}
           <!-- TODO: posting flags -->
           <span></span>
           {@render metadataIndicators(posting.meta)}
         {/each}
       {/if}
     </span>
-    {#if t === "Balance"}
+    {#if e.t === "Balance"}
       <!-- TODO: diff_amount -->
-      {@render amount(entry.amount, "num bal")}
+      {@render amount(e.amount, "num bal")}
       <span class="change num"></span>
       {#if !showChangeAndBalance}
         <span class="change num"></span>
@@ -190,10 +199,10 @@
       <!-- TODO -->
     {/if}
   </p>
-  {@render metadata(entry.meta, entry.entry_hash)}
-  {#if journalShow.has("postings") && t === "Transaction" && entry.postings.length > 0}
+  {@render metadata(e.meta, e.entry_hash)}
+  {#if journalShow.has("postings") && e.t === "Transaction" && e.postings.length > 0}
     <ul class="postings">
-      {#each entry.postings as posting}
+      {#each e.postings as posting}
         <!-- TODO: posting flags -->
         <li>
           <p>
@@ -202,9 +211,9 @@
             <!-- TODO: it uses the entry hash, is this correct? -->
             <span
               class="description droptarget"
-              data-entry={entry.entry_hash}
+              data-entry={e.entry_hash}
               data-account-name={posting.account}
-              data-entry-date={entry.date}
+              data-entry-date={e.date}
             >
               {@render accountLink(posting.account)}
             </span>

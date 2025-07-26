@@ -78,6 +78,7 @@
     "@fontsource/source-code-pro": "^5.0.1",
     "@lezer/common": "^1.0.2",
     "@lezer/highlight": "^1.0.0",
+    "@tanstack/svelte-virtual": "^3.13.12",
     "@ungap/custom-elements": "^1.0.0",
     "d3-array": "^3.1.1",
     "d3-axis": "^3.0.0",
@@ -91,7 +92,6 @@
     "d3-time": "^3.0.0",
     "d3-time-format": "^4.1.0",
     "svelte": "^5.11.3",
-    "svelte-virtuallists": "^1.4.2",
     "web-tree-sitter": "^0.25.1"
   }
 }
