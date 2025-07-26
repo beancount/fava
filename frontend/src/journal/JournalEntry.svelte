@@ -1,14 +1,10 @@
 <script lang="ts">
+  /* eslint-disable @typescript-eslint/no-confusing-void-expression */
+  import type { Document, EntryMetadata, Transaction } from "../entries";
+  import { type Entry } from "../entries";
+  import type { RawAmount } from "../entries/amount";
   import { urlFor, urlForAccount } from "../helpers";
-  import {
-    Amount,
-    Document,
-    EntryMetadata,
-    Transaction,
-    type Entry,
-  } from "../entries";
   import { basename } from "../lib/paths";
-  import { RawAmount } from "../entries/amount";
   import { currency_name } from "../stores";
   import { ctx } from "../stores/format";
   import type { JournalShowEntry } from "../stores/journal";
@@ -18,7 +14,7 @@
     e: Entry;
     showChangeAndBalance: boolean;
     journalShow: Set<JournalShowEntry>;
-    li?: HTMLLIElement;
+    li?: HTMLLIElement | undefined;
   }
 
   let {
@@ -30,21 +26,29 @@
   }: Props = $props();
 
   let liClasses = $derived.by(() => {
-    const t = e.t
+    const t = e.t;
     let liClasses = t.toLowerCase();
-    if (t === "Custom") liClasses += ` ${e.type}`;
-    if (t === "Transaction") liClasses += ` ${e.flag}`;
+    if (t === "Custom") {
+      liClasses += ` ${e.type}`;
+    }
+    if (t === "Transaction") {
+      liClasses += ` ${e.flag}`;
+    }
 
-    if (t === "Transaction" || t === "Note" || t == "Document") {
+    if (t === "Transaction" || t === "Note" || t === "Document") {
       const { tags } = e;
-      if (tags?.includes("linked")) liClasses += " linked";
-      if (tags?.includes("discovered")) liClasses += " discovered";
+      if (tags?.includes("linked") ?? false) {
+        liClasses += " linked";
+      }
+      if (tags?.includes("discovered") ?? false) {
+        liClasses += " discovered";
+      }
     }
     return liClasses;
   });
 </script>
 
-{#snippet amount(amount: Amount | RawAmount, cls: string)}
+{#snippet amount(amount: RawAmount, cls: string)}
   {#if !amount.number}
     <span class={cls}></span>
   {:else}
@@ -59,7 +63,7 @@
 {/snippet}
 
 {#snippet metadataIndicators(metadata: EntryMetadata)}
-  {#each metadata.entries() as [key, value]}
+  {#each metadata.entries() as [key, value] (key)}
     <span class="metadata-indicator" title={`${key}: ${value}`}>
       {key.substring(0, 2)}
     </span>
@@ -71,7 +75,7 @@
     {@const entries = metadata.entries()}
     {#if entries.length > 0}
       <dl class="metadata">
-        {#each metadata.entries() as [key, value]}
+        {#each metadata.entries() as [key, value] (key)}
           <dt>{key}:</dt>
           <dd>
             {#if key.startsWith("document")}
@@ -104,10 +108,10 @@
 {/snippet}
 
 {#snippet tagsLinks(entry: Document | Transaction)}
-  {#each entry.tags?.toSorted() ?? [] as tag}
+  {#each entry.tags?.toSorted() ?? [] as tag (tag)}
     <span class="tag">{tag}</span>
   {/each}
-  {#each entry.links?.toSorted() ?? [] as link}
+  {#each entry.links?.toSorted() ?? [] as link (link)}
     <span class="link">^{link}</span>
   {/each}
 {/snippet}
@@ -133,7 +137,7 @@
   {:else if e.t === "Custom"}
     <strong>{e.type}</strong>
     <!-- TODO custom attributes -->
-    {#each e.values as value}
+    {#each e.values as value (value)}
       {value}
     {/each}
   {:else if e.t === "Document"}
@@ -171,8 +175,7 @@
         class="description droptarget"
         data-entry={e.entry_hash}
         data-entry-date={e.date}
-        data-account-name={e.postings[0]?.account}
-        >{@render description()}</span
+        data-account-name={e.postings[0]?.account}>{@render description()}</span
       >
     {:else}
       <span class="description">{@render description()}</span>
@@ -180,7 +183,7 @@
     <span class="indicators">
       {@render metadataIndicators(e.meta)}
       {#if e.t === "Transaction"}
-        {#each e.postings as posting}
+        {#each e.postings as posting, index (index)}
           <!-- TODO: posting flags -->
           <span></span>
           {@render metadataIndicators(posting.meta)}
@@ -202,7 +205,7 @@
   {@render metadata(e.meta, e.entry_hash)}
   {#if journalShow.has("postings") && e.t === "Transaction" && e.postings.length > 0}
     <ul class="postings">
-      {#each e.postings as posting}
+      {#each e.postings as posting, index (index)}
         <!-- TODO: posting flags -->
         <li>
           <p>

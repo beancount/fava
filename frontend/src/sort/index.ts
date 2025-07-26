@@ -14,7 +14,7 @@
 import { permute } from "d3-array";
 import { get as store_get } from "svelte/store";
 
-import { journalSortOrder, type JournalSortOrder } from "../stores/journal";
+import { type JournalSortOrder, journalSortOrder } from "../stores/journal";
 
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;

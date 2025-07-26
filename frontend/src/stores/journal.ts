@@ -21,9 +21,9 @@ const journalShowEntryValidator = constants(
   "metadata",
   "postings",
   null,
-)
+);
 
-export type JournalShowEntry = ValidationT<typeof journalShowEntryValidator>
+export type JournalShowEntry = ValidationT<typeof journalShowEntryValidator>;
 
 const defaultValue: JournalShowEntry[] = [
   "balance",
@@ -46,8 +46,11 @@ export const journalShow = localStorageSyncedStore(
   () => defaultValue,
 );
 
-const sortOrderValidator = tuple(constants("date", "flag", "narration", null), constants("asc", "desc", null));
-export type JournalSortOrder = ValidationT<typeof sortOrderValidator>
+const sortOrderValidator = tuple(
+  constants("date", "flag", "narration", null),
+  constants("asc", "desc", null),
+);
+export type JournalSortOrder = ValidationT<typeof sortOrderValidator>;
 
 const defaultSortOrder: JournalSortOrder = ["date", "desc"];
 

@@ -58,10 +58,11 @@
     });
   }
 
-  let active = $derived((type: JournalShowEntry, supertype?: JournalShowEntry): boolean =>
-    supertype != null
-      ? shownSet.has(type) && shownSet.has(supertype)
-      : shownSet.has(type),
+  let active = $derived(
+    (type: JournalShowEntry, supertype?: JournalShowEntry): boolean =>
+      supertype != null
+        ? shownSet.has(type) && shownSet.has(supertype)
+        : shownSet.has(type),
   );
 </script>
 

@@ -61,6 +61,28 @@
   line-height: 16px;
 }
 
+/* Metadata */
+.journal .metadata {
+  padding: 2px 0;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.journal .metadata dt {
+  float: left;
+  width: auto;
+  min-width: 4rem;
+  margin-right: 6px;
+  margin-left: 9rem;
+  color: var(--journal-metadata);
+  cursor: pointer;
+}
+
+.journal .metadata dd {
+  margin-left: 15rem;
+  cursor: pointer;
+}
+
 .journal.ssr > li,
 .journal.ssr.show-custom .custom.budget,
 .journal.ssr.show-document .document.discovered,
@@ -89,6 +111,7 @@
 }
 
 /* TODO */
+
 /* Show metadata and postings where it was explicitly toggled with the indicators. */
 .journal > li.show-full-entry .postings,
 .journal > li.show-full-entry .metadata {
@@ -106,28 +129,6 @@
 
 .journal .transaction:hover {
   background: var(--journal-hover-highlight);
-}
-
-/* Metadata */
-.journal .metadata {
-  padding: 2px 0;
-  margin: 0;
-  font-size: 0.9em;
-}
-
-.journal .metadata dt {
-  float: left;
-  width: auto;
-  min-width: 4rem;
-  margin-right: 6px;
-  margin-left: 9rem;
-  color: var(--journal-metadata);
-  cursor: pointer;
-}
-
-.journal .metadata dd {
-  margin-left: 15rem;
-  cursor: pointer;
 }
 
 /* There's three number columns (units, cost, price).

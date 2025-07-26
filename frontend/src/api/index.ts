@@ -44,9 +44,9 @@ export async function put<T extends keyof PutAPIInputs>(
     body instanceof FormData
       ? { body }
       : {
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      };
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        };
   const $urlForRaw = store_get(urlForRaw);
   const url = $urlForRaw(`api/${endpoint}`);
   const json = await fetchJSON(url, { method: "PUT", ...opts });

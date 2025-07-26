@@ -1,18 +1,19 @@
 <script lang="ts">
-  import type { Entry } from "../entries";
-  import { _ } from "../i18n";
-  import JournalEntry from "./JournalEntry.svelte";
-  import {
-    journalShow as journalShowStore,
-    journalSortOrder,
-    type JournalShowEntry,
-    type JournalSortOrder,
-  } from "../stores/journal";
-  import { DateColumn, Sorter, StringColumn, type SortColumn } from "../sort";
-  import JournalFilters from "./JournalFilters.svelte";
+  import { createVirtualizer } from "@tanstack/svelte-virtual";
   import { onDestroy, onMount } from "svelte";
   import { derived } from "svelte/store";
-  import { createVirtualizer } from "@tanstack/svelte-virtual";
+
+  import type { Entry } from "../entries";
+  import { _ } from "../i18n";
+  import { DateColumn, type SortColumn, Sorter, StringColumn } from "../sort";
+  import {
+    journalShow as journalShowStore,
+    type JournalShowEntry,
+    type JournalSortOrder,
+    journalSortOrder,
+  } from "../stores/journal";
+  import JournalEntry from "./JournalEntry.svelte";
+  import JournalFilters from "./JournalFilters.svelte";
 
   interface Props {
     entries: Entry[];
@@ -60,7 +61,7 @@
       // TODO: remove logging
       console.time("filter");
       const filtered = entries.filter((e) => {
-        if (journalShow.has(e.t.toLowerCase() as any)) {
+        if (journalShow.has(e.t.toLowerCase() as JournalShowEntry)) {
           if (e.t === "Transaction") {
             let flagOpt: JournalShowEntry;
             switch (e.flag) {
@@ -76,12 +77,17 @@
             return journalShow.has(flagOpt);
           } else if (e.t === "Document") {
             if (e.tags) {
-              if (e.tags.includes("discovered"))
+              if (e.tags.includes("discovered")) {
                 return journalShow.has("discovered");
-              if (e.tags.includes("linked")) return journalShow.has("linked");
+              }
+              if (e.tags.includes("linked")) {
+                return journalShow.has("linked");
+              }
             }
           } else if (e.t === "Custom") {
-            if (e.type === "budget") return journalShow.has("budget");
+            if (e.type === "budget") {
+              return journalShow.has("budget");
+            }
           }
           return true;
         }
@@ -98,7 +104,9 @@
     });
   });
 
-  onDestroy(() => unsub());
+  onDestroy(() => {
+    unsub();
+  });
 
   function headerClick(e: MouseEvent & { currentTarget: HTMLSpanElement }) {
     const name = e.currentTarget.getAttribute("data-sort-name");
@@ -113,6 +121,13 @@
   function depend<T, R>(t: T, fn: (t: T) => R) {
     return fn(t);
   }
+
+  const getSortedEntry = $derived(
+    depend(sortedEntries, (sortedEntries) => (i: number) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return sortedEntries[i]!;
+    }),
+  );
 
   let virtualizer = $derived(
     createVirtualizer({
@@ -130,7 +145,11 @@
   let items = $derived($virtualizer.getVirtualItems());
 
   $effect(() => {
-    if (lis.length) lis.forEach((li) => $virtualizer.measureElement(li));
+    if (lis.length) {
+      lis.forEach((li) => {
+        $virtualizer.measureElement(li);
+      });
+    }
   });
 </script>
 
@@ -189,10 +208,10 @@
         class="vlist-items"
         style="transform: translateY({items[0]?.start ?? 0}px);"
       >
-        {#each items as row}
+        {#each items as row (row.index)}
           <JournalEntry
             index={row.index}
-            e={sortedEntries[row.index]!}
+            e={getSortedEntry(row.index)}
             {showChangeAndBalance}
             journalShow={$journalShow}
             bind:li={lis[row.index]}
@@ -206,8 +225,8 @@
 <style>
   .vlist-outer {
     height: 1000px;
-    overflow-y: auto;
     contain: strict;
+    overflow-y: auto;
   }
 
   .vlist-inner {

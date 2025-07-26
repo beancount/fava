@@ -83,7 +83,7 @@ export class FavaJournal extends HTMLElement {
     }
 
     this.unsubscribe = journalShow.subscribe((show) => {
-      const classes = [...show].map((s) => `show-${s}`).join(" ");
+      const classes = [...show].map((s) => (s ? `show-${s}` : "")).join(" ");
       ol.className = `flex-table journal ssr ${classes}`;
     });
     const component = mount(JournalFilters, { target: this, anchor: ol });

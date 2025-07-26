@@ -25,7 +25,7 @@ export class Posting {
     readonly meta: EntryMetadata,
     readonly account: string,
     readonly amount: string,
-  ) { }
+  ) {}
 
   /** Create a new empty Posting. */
   static empty(): Posting {
@@ -81,7 +81,7 @@ abstract class EntryBase<T extends string> {
     readonly entry_hash: string,
     readonly sortFlag: string,
     readonly sortNarration: string,
-  ) { }
+  ) {}
 
   /** Clone. */
   clone(): this {
@@ -187,7 +187,14 @@ export class Document extends EntryBase<"Document"> {
     readonly tags: string[] | null,
     readonly links: string[] | null,
   ) {
-    super("Document", meta, date, entry_hash, "Doc", `${account} ${basename(filename)} ${tags?.join(" ") ?? ""}`);
+    super(
+      "Document",
+      meta,
+      date,
+      entry_hash,
+      "Doc",
+      `${account} ${basename(filename)} ${tags?.join(" ") ?? ""}`,
+    );
   }
 
   private static raw_validator = object({
@@ -339,7 +346,14 @@ export class Price extends EntryBase<"Price"> {
     readonly amount: RawAmount,
   ) {
     // TODO: validate narration
-    super("Price", meta, date, entry_hash, "pri", `${currency} is ${amount.number} ${amount.currency}`);
+    super(
+      "Price",
+      meta,
+      date,
+      entry_hash,
+      "pri",
+      `${currency} is ${amount.number} ${amount.currency}`,
+    );
   }
 
   private static raw_validator = object({
@@ -367,7 +381,14 @@ export class Pad extends EntryBase<"Pad"> {
     readonly account: string,
     readonly source_account: string,
   ) {
-    super("Pad", meta, date, entry_hash, "pad", `${account} from ${source_account}`);
+    super(
+      "Pad",
+      meta,
+      date,
+      entry_hash,
+      "pad",
+      `${account} from ${source_account}`,
+    );
   }
 
   private static raw_validator = object({
@@ -424,7 +445,14 @@ export class Custom extends EntryBase<"Custom"> {
     readonly values: unknown[],
   ) {
     // TODO: custom attr
-    super("Custom", meta, date, entry_hash, "cus", `${type} ${values.join(" ")}`);
+    super(
+      "Custom",
+      meta,
+      date,
+      entry_hash,
+      "cus",
+      `${type} ${values.join(" ")}`,
+    );
   }
 
   private static raw_validator = object({
@@ -459,7 +487,14 @@ export class Transaction extends EntryBase<"Transaction"> {
     readonly links: string[],
     readonly postings: readonly Posting[],
   ) {
-    super("Transaction", meta, date, entry_hash, flag, `${payee} ${narration} ${tags.join(" ")}`);
+    super(
+      "Transaction",
+      meta,
+      date,
+      entry_hash,
+      flag,
+      `${payee} ${narration} ${tags.join(" ")}`,
+    );
   }
 
   /** Create a new empty Transaction entry on the date. */
