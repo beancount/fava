@@ -44,8 +44,8 @@ dependencies = [
     "click>=7,<9",
     "markdown2>=2.3.0,<3",
     "ply>=3.4",
+    "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
-    "orjson>=3.11.0",
 ]
 
 [project.urls]
