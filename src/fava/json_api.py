@@ -29,6 +29,7 @@ from flask_babel import gettext
 from fava.beans.abc import Document
 from fava.beans.abc import Event
 from fava.context import g
+from fava.core import EntryNotFoundForHashError
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.filters import FilterError
@@ -185,6 +186,11 @@ def _(error: OSError) -> Response:  # pragma: no cover
 @json_api.errorhandler(ValidationError)
 def _(error: ValidationError) -> Response:
     return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
+
+
+@json_api.errorhandler(EntryNotFoundForHashError)
+def _(error: EntryNotFoundForHashError) -> Response:
+    return json_err(error.message, HTTPStatus.NOT_FOUND)
 
 
 def validate_func_arguments(

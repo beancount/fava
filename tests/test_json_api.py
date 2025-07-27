@@ -272,6 +272,16 @@ def test_api_context(
         HTTPStatus.BAD_REQUEST,
     )
 
+    response = test_client.get(
+        "/long-example/api/context",
+        query_string={"entry_hash": "not_found"},
+    )
+    assert_api_error(
+        response,
+        'No entry found for hash "not_found"',
+        HTTPStatus.NOT_FOUND,
+    )
+
     balance_entry_hash = hash_entry(
         example_ledger.all_entries_by_type.Balance[0]
     )
