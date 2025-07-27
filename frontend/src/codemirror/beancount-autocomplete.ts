@@ -54,7 +54,7 @@ export const beancountCompletion: CompletionSource = (context) => {
     };
   }
 
-  const indented = context.matchBefore(/^\s+[A-Z]\S*/);
+  const indented = context.matchBefore(/^\s+\S+/);
   if (indented) {
     const indentation = indented.text.length - indented.text.trimStart().length;
     return {

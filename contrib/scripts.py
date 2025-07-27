@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING
 import requests
 from beancount.parser.options import OPTIONS_DEFAULTS
 from beanquery import connect
-from beanquery import query_compile  # type: ignore[attr-defined]
-from beanquery.parser.parser import KEYWORDS  # type: ignore[import-untyped]
+from beanquery import query_compile
+from beanquery.parser.parser import KEYWORDS
 from click import echo
 from click import group
 from click import UsageError

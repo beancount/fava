@@ -41,18 +41,18 @@ export default tseslint.config(
       "@typescript-eslint/promise-function-async": ON,
       "@typescript-eslint/strict-boolean-expressions": ON,
       curly: [ON, "all"],
-      eqeqeq: [ON, "smart"],
+      eqeqeq: [ON, "always", { null: "never" }],
       "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
       "@typescript-eslint/naming-convention": [
         ON,
         {
           selector: "variable",
-          format: ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
+          format: ["camelCase", "snake_case", "UPPER_CASE"],
           leadingUnderscore: "allow",
         },
         {
           selector: "function",
-          format: ["camelCase", "PascalCase", "snake_case"],
+          format: ["camelCase", "snake_case"],
         },
         {
           selector: "typeLike",

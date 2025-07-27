@@ -106,7 +106,7 @@
     // Update diagnostics, showing errors in the editor
     // Only show errors for this file, or general errors (AKA no source)
     const errorsForFile = $errors.filter(
-      (err) => err.source === null || err.source.filename === file_path,
+      (err) => err.source == null || err.source.filename === file_path,
     );
     editor.dispatch(setErrors(editor.state, errorsForFile));
   });

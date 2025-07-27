@@ -150,6 +150,18 @@ files = [
     "tests",
 ]
 
+[[tool.mypy.overrides]]
+module = ["beanquery.*"]
+follow_untyped_imports = true
+
+[[tool.mypy.overrides]]
+module = ["flask_babel.*"]
+follow_untyped_imports = true
+
+[[tool.mypy.overrides]]
+module = ["markdown2.*"]
+follow_untyped_imports = true
+
 [tool.pytest.ini_options]
 # filterwarnings = "ignore:.*locked_cached_property.*deprecated:DeprecationWarning"
 testpaths = ["tests"]

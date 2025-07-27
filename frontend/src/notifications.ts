@@ -5,7 +5,7 @@ import { log_error } from "./log";
 const notificationList = (() => {
   let value: HTMLDivElement | null = null;
   return () => {
-    if (value === null) {
+    if (value == null) {
       value = document.createElement("div");
       value.className = "notifications";
       value.style.right = "10px";

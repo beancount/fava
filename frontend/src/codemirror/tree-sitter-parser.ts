@@ -58,7 +58,7 @@ function ts_edit(
 }
 
 /** This node prop is used to store the TS tree on the root node of the Lezer tree for reuse. */
-const TSTreeProp = new NodeProp<TSTree>({ perNode: true });
+const TS_TREE_PROP = new NodeProp<TSTree>({ perNode: true });
 
 class TSParserError extends Error {}
 
@@ -254,7 +254,7 @@ class Parse implements PartialParse {
       tree.children,
       tree.positions,
       tree.length,
-      [[TSTreeProp, ts_tree]],
+      [[TS_TREE_PROP, ts_tree]],
     );
     return tree_with_ts_tree_prop;
   }
@@ -269,7 +269,7 @@ class Parse implements PartialParse {
     }
     const edit = input_edit_for_fragments(fragments, input_length);
     const old_tree = fragments[0].tree;
-    const edited_old_ts_tree = old_tree.prop(TSTreeProp)?.copy();
+    const edited_old_ts_tree = old_tree.prop(TS_TREE_PROP)?.copy();
 
     if (edit) {
       if (!edited_old_ts_tree) {

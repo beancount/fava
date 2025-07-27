@@ -64,12 +64,13 @@
     entry = payee_transaction.set("date", entry.date);
   }
   async function autocompleteSelectNarration() {
-    if (entry.payee || entry.postings.every((p) => !p.is_empty())) {
+    if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
     const data = await get("narration_transaction", {
       narration: narration,
     });
+    data.set("date", entry.date);
     entry = data;
     narration = entry.get_narration_tags_links();
   }

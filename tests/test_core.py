@@ -9,8 +9,8 @@ from fava.beans.funcs import hash_entry
 from fava.core import EntryNotFoundForHashError
 from fava.core import FilteredLedger
 from fava.helpers import FavaAPIError
-from fava.util.date import Interval
 from fava.util.date import local_today
+from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -40,7 +40,7 @@ def test_filtered_ledger(
     assert filtered.prices("EUR", "USD")
     assert filtered.prices("UNKNOWN1", "UNKNOWN2") == []
     assert filtered.date_range is None
-    assert not filtered.interval_ranges(Interval.MONTH)
+    assert not filtered.interval_ranges(Month)
 
     all_entries = FilteredLedger(small_example_ledger)
     closed_acc = "Assets:Account1"
