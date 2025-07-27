@@ -1,6 +1,7 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
+import { notify_err } from "../notifications";
 import { type SortableJournal, sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
@@ -111,13 +112,18 @@ export class FavaJournal extends HTMLElement {
     const url = new URL(window.location.href);
     url.searchParams.set("partial", "true");
 
-    const promises: Promise<NodeList>[] = [];
+    let errorShown = false;
+    const promises: Promise<NodeList | never[]>[] = [];
     for (let page = 2; page <= total; page++) {
       url.searchParams.set("page", page.toString());
       promises.push(
         fetch(url).then(async (response) => {
           if (!response.ok) {
-            throw new Error(`Failed to fetch page ${page.toString()}`);
+            if (!errorShown) {
+              notify_err(new Error("Failed to fetch some journal pages"));
+              errorShown = true;
+            }
+            return [];
           }
           const html = await response.text();
           const parser = new DOMParser();
