@@ -303,6 +303,7 @@ export class Router extends Events<"page-loaded"> {
         return;
       }
       if (link.getAttribute("href")?.charAt(0) === "#") {
+        window.history.replaceState(null, "", link.getAttribute("href"));
         return;
       }
       if (is_external_link(link)) {
