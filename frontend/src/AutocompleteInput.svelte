@@ -199,7 +199,7 @@
             mousedown(ev, suggestion);
           }}
         >
-          {#each fuzzywrapped as [type, text] (`${type}-${text}`)}
+          {#each fuzzywrapped as [type, text], i (i)}
             {#if type === "text"}
               {text}
             {:else}
