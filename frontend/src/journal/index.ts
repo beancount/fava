@@ -1,7 +1,7 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
-import { getCurrentJournalSort, sortableJournal, sortJournal } from "../sort";
+import { type SortableJournal, sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
@@ -76,6 +76,8 @@ export class FavaJournal extends HTMLElement {
   /** Unsubscribe store listener. */
   unsubscribe?: () => void;
 
+  sortableJournal?: SortableJournal;
+
   connectedCallback(): void {
     const ol = this.querySelector("ol");
     if (!ol) {
@@ -96,7 +98,7 @@ export class FavaJournal extends HTMLElement {
       void unmount(component);
     };
 
-    sortableJournal(ol);
+    this.sortableJournal = sortableJournal(ol);
     delegate(this, "click", "li", handleClick);
   }
 
@@ -135,12 +137,13 @@ export class FavaJournal extends HTMLElement {
       // items appending.
       setTimeout(() => {
         sorting = false;
-        const current_sort = getCurrentJournalSort(ol);
-        if (
-          current_sort &&
-          (current_sort.name !== "date" || current_sort.order !== "desc")
-        ) {
-          sortJournal(ol);
+        if (this.sortableJournal) {
+          const [column, order] = this.sortableJournal.getOrder();
+          // The data is already sorted by date desc, so no need to sort again
+          // if that's the current order.
+          if (column !== "date" || order !== "desc") {
+            this.sortableJournal.sort();
+          }
         }
       });
     }
