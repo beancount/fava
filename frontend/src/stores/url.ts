@@ -43,7 +43,7 @@ export const syncedSearchParams: Readable<URLSearchParams> = derived(
 
 export function closeOverlay(): void {
   if (window.location.hash) {
-    window.history.pushState(null, "", "#");
+    window.history.replaceState(null, "", "#");
   }
   urlHash.set("");
 }
