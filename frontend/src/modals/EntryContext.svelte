@@ -76,5 +76,7 @@
   code {
     display: inline-block;
     max-width: 80%;
+    padding: 2px 4px;
+    vertical-align: top;
   }
 </style>
