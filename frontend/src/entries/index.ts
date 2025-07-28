@@ -150,6 +150,7 @@ export class Balance extends EntryBase<"Balance"> {
     entry_hash: string,
     readonly account: string,
     readonly amount: RawAmount,
+    readonly diff_amount: Amount | null,
   ) {
     // TODO: diff amount
     super("Balance", meta, date, entry_hash, "Bal", account);
@@ -157,7 +158,7 @@ export class Balance extends EntryBase<"Balance"> {
 
   /** Create a new empty Balance entry on the date. */
   static empty(date: string): Balance {
-    return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty());
+    return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty(), null);
   }
 
   private static raw_validator = object({
@@ -167,12 +168,13 @@ export class Balance extends EntryBase<"Balance"> {
     entry_hash: string,
     account: string,
     amount: RawAmount.validator,
+    diff_amount: optional(Amount.validator)
   });
 
   static validator: Validator<Balance> = (json) =>
     Balance.raw_validator(json).map(
-      ({ date, meta, account, amount, entry_hash }) =>
-        new Balance(meta, date, entry_hash, account, amount),
+      ({ date, meta, account, amount, diff_amount, entry_hash }) =>
+        new Balance(meta, date, entry_hash, account, amount, diff_amount),
     );
 }
 

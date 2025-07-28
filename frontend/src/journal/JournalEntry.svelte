@@ -2,7 +2,7 @@
   /* eslint-disable @typescript-eslint/no-confusing-void-expression */
   import type { Document, EntryMetadata, Transaction } from "../entries";
   import { type Entry } from "../entries";
-  import type { RawAmount } from "../entries/amount";
+  import type { Amount, RawAmount } from "../entries/amount";
   import { urlFor, urlForAccount } from "../helpers";
   import { basename } from "../lib/paths";
   import { currency_name } from "../stores";
@@ -46,9 +46,31 @@
     }
     return liClasses;
   });
+
+  const unitRegex = /([\d\.]+)\s+(\w+)/;
+  const costRegex = /\{([\d\.]+)\s+(\w+),\s([\w\-]+)\}/;
+  const priceRegex = /@\s([\d\.]+)\s+(\w+)/;
+
+  type PostingAmounts = [
+    [amount: string, currency: string],
+    [costAmount: string, costCurrency: string, costDate: string] | null,
+    [priceAmount: string, priceCurrency: string] | null,
+  ];
+
+  function splitPostingAmount(str: string): PostingAmounts {
+    const amount = str.match(unitRegex)!;
+    const cost = str.match(costRegex);
+    const price = str.match(priceRegex);
+
+    return [
+      [amount[1], amount[2]],
+      cost ? [cost[1], cost[2], cost[3]] : null,
+      price ? [price[1], price[2]] : null,
+    ] as PostingAmounts;
+  }
 </script>
 
-{#snippet amount(amount: RawAmount, cls: string)}
+{#snippet amount(amount: Amount | RawAmount, cls: string)}
   {#if !amount.number}
     <span class={cls}></span>
   {:else}
@@ -137,7 +159,7 @@
   {:else if e.t === "Custom"}
     <strong>{e.type}</strong>
     <!-- TODO custom attributes -->
-    {#each e.values as value (value)}
+    {#each e.values as value, index (index)}
       {value}
     {/each}
   {:else if e.t === "Document"}
@@ -153,15 +175,30 @@
     {@render tagsLinks(e)}
   {:else if e.t === "Balance"}
     {@render accountLink(e.account)}
-    <!-- TODO diff_amount -->
-  {:else if e.t === "Transaction"}
-    <strong class="payee">{e.payee}</strong>
-    {#if e.payee && e.narration}
-      <span class="separator"></span>
+    {#if e.diff_amount}
+      <span class="spacer"></span>
+      accumulated
+      <span class="num">
+        {$ctx.amount(
+          +e.amount.number + e.diff_amount.number,
+          e.amount.currency,
+        )}
+      </span>
     {/if}
-    {e.narration}
+  {:else if e.t === "Transaction"}
+    <strong class="payee">{e.payee}</strong>{#if e.payee && e.narration}<span
+        class="separator"
+      ></span>{/if}{e.narration}
     {@render tagsLinks(e)}
   {/if}
+{/snippet}
+
+{#snippet postingAmount([unit, cost, price]: PostingAmounts)}
+  <span class="num">{$ctx.amount(+unit[0], unit[1])}</span>
+  <span class="num"
+    >{#if cost}{$ctx.amount(+cost[0], cost[1])}, {cost[2]}{/if}</span
+  >
+  <span class="num">{price ? $ctx.amount(+price[0], price[1]) : ""}</span>
 {/snippet}
 
 <li class={liClasses} bind:this={li} data-index={index}>
@@ -191,9 +228,12 @@
       {/if}
     </span>
     {#if e.t === "Balance"}
-      <!-- TODO: diff_amount -->
-      {@render amount(e.amount, "num bal")}
-      <span class="change num"></span>
+      {@render amount(e.amount, "num bal" + (e.diff_amount ? " pending" : ""))}
+      {#if e.diff_amount}
+        {@render amount(e.diff_amount, "change num bal pending")}
+      {:else}
+        <span class="change num"></span>
+      {/if}
       {#if !showChangeAndBalance}
         <span class="change num"></span>
       {/if}
@@ -220,10 +260,7 @@
             >
               {@render accountLink(posting.account)}
             </span>
-            <!-- TODO: cost and price -->
-            <span class="num">{posting.amount}</span>
-            <span class="num"></span>
-            <span class="num"></span>
+            {@render postingAmount(splitPostingAmount(posting.amount))}
           </p>
         </li>
       {/each}
