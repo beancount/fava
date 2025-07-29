@@ -1,7 +1,9 @@
 import { mount, unmount } from "svelte";
+import { get as store_get } from "svelte/store";
 
 import { delegate } from "../lib/events";
 import { notify_err } from "../notifications";
+import { router } from "../router";
 import { type SortableJournal, sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
@@ -19,8 +21,10 @@ export function escape_for_regex(value: string): string {
  * as a regex must be escaped.
  */
 function addFilter(value: string): void {
-  fql_filter.update((fql_filter_val) =>
-    fql_filter_val ? `${fql_filter_val} ${value}` : value,
+  const $fql_filter = store_get(fql_filter);
+  router.set_search_param(
+    "filter",
+    $fql_filter ? `${$fql_filter} ${value}` : value,
   );
 }
 

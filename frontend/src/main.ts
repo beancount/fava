@@ -36,9 +36,9 @@ import { getScriptTagValue } from "./lib/dom";
 import { log_error } from "./log";
 import { notify, notify_err } from "./notifications";
 import { frontend_routes } from "./reports/routes";
-import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
+import { router } from "./router";
 import { initSidebar } from "./sidebar";
-import { has_changes, updatePageTitle } from "./sidebar/page-title";
+import { has_changes } from "./sidebar/page-title";
 import { SortableTable } from "./sort/sortable-table";
 import { errors, ledgerData } from "./stores";
 import { init_color_scheme } from "./stores/color_scheme";
@@ -65,7 +65,6 @@ function defineCustomElements() {
 
 router.on("page-loaded", () => {
   read_mtime();
-  updatePageTitle();
   has_changes.set(false);
   handleExtensionPageLoad();
 });
@@ -81,7 +80,7 @@ function onChanges() {
     .catch((e: unknown) => {
       notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
     });
-  if (store_get(auto_reload) && !router.hasInteruptHandler) {
+  if (store_get(auto_reload) && !router.has_interrupt_handler) {
     router.reload();
   } else {
     get("errors").then((v) => {
@@ -125,8 +124,6 @@ function init(): void {
   });
 
   router.init(frontend_routes);
-  setStoreValuesFromURL();
-  syncStoreValuesToURL();
   initSidebar();
   initGlobalKeyboardShortcuts();
   defineCustomElements();

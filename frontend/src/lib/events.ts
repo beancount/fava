@@ -67,6 +67,18 @@ export class Events<T = string> {
  * @param selector - The DOM selector to match.
  * @param callback - The event listener to execute on a match.
  */
+export function delegate<K extends keyof HTMLElementEventMap>(
+  element: HTMLElement,
+  type: K,
+  selector: string,
+  callback: (e: HTMLElementEventMap[K], c: Element) => void,
+): void;
+export function delegate<K extends keyof DocumentEventMap>(
+  element: Document,
+  type: K,
+  selector: string,
+  callback: (e: DocumentEventMap[K], c: Element) => void,
+): void;
 export function delegate(
   element: HTMLElement | Document,
   type: string,

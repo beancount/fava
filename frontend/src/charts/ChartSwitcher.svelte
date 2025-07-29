@@ -2,7 +2,8 @@
   import { _ } from "../i18n";
   import type { KeySpec } from "../keyboard-shortcuts";
   import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { lastActiveChartName, showCharts } from "../stores/chart";
+  import { lastActiveChartName } from "../stores/chart";
+  import { show_charts } from "../stores/url";
   import type { FavaChart } from ".";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
@@ -37,7 +38,7 @@
   <Chart chart={active_chart}>
     <ConversionAndInterval />
   </Chart>
-  <div hidden={!$showCharts}>
+  <div hidden={!$show_charts}>
     {#each charts as chart, index (chart.name)}
       <button
         type="button"

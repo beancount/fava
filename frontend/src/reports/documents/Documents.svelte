@@ -8,7 +8,7 @@
   import { basename } from "../../lib/paths";
   import { stratify } from "../../lib/tree";
   import ModalBase from "../../modals/ModalBase.svelte";
-  import router from "../../router";
+  import { router } from "../../router";
   import type { DocumentsReportProps } from ".";
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";

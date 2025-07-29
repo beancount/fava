@@ -9,7 +9,7 @@
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { modKey } from "../../keyboard-shortcuts";
-  import router from "../../router";
+  import { router } from "../../router";
   import { insert_entry } from "../../stores/fava_options";
   import { sources } from "../../stores/options";
   import AppMenu from "./AppMenu.svelte";

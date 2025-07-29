@@ -1,8 +1,9 @@
 <script lang="ts">
   import { _, format } from "../i18n";
   import { getInterval, intervalLabel, INTERVALS } from "../lib/interval";
-  import { conversion, interval } from "../stores";
+  import { router } from "../router";
   import { conversions } from "../stores/chart";
+  import { conversion, interval } from "../stores/url";
   import SelectCombobox from "./SelectCombobox.svelte";
 
   const conversion_description = (option: string) => {
@@ -23,14 +24,24 @@
 </script>
 
 <SelectCombobox
-  bind:value={$conversion}
+  bind:value={
+    () => $conversion,
+    (value: string) => {
+      router.set_search_param("conversion", value);
+    }
+  }
   options={$conversions}
   description={conversion_description}
   multiple_select={is_currency_conversion}
 />
 
 <SelectCombobox
-  bind:value={$interval}
+  bind:value={
+    () => $interval,
+    (value: string) => {
+      router.set_search_param("interval", value);
+    }
+  }
   options={INTERVALS}
   description={(o: string) => intervalLabel(getInterval(o))}
 />

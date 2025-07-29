@@ -7,7 +7,7 @@
   import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { notify, notify_err } from "../../notifications";
-  import router from "../../router";
+  import { router } from "../../router";
   import { import_config } from "../../stores/fava_options";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import type { ImportReportProps } from ".";
@@ -50,7 +50,7 @@
       ? "There are unfinished imports, are you sure you want to continue?"
       : null;
 
-  onMount(() => router.addInteruptHandler(preventNavigation));
+  onMount(() => router.add_interrupt_handler(preventNavigation));
 
   /**
    * Move the given file to the new file name (and remove from the list).

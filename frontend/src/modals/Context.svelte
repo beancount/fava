@@ -4,12 +4,12 @@
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { _ } from "../i18n";
   import ReportLoadError from "../reports/ReportLoadError.svelte";
-  import { urlHash } from "../stores/url";
+  import { hash } from "../stores/url";
   import EntryContext from "./EntryContext.svelte";
   import ModalBase from "./ModalBase.svelte";
 
-  let shown = $derived($urlHash.startsWith("context"));
-  let entry_hash = $derived(shown ? $urlHash.slice(8) : "");
+  let shown = $derived($hash.startsWith("context"));
+  let entry_hash = $derived(shown ? $hash.slice(8) : "");
   let content = $derived(shown ? get("context", { entry_hash }) : null);
 </script>
 

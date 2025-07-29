@@ -77,7 +77,7 @@ export const holdings = new Route<HoldingsReportProps>(
   "holdings",
   Holdings,
   async (url) => {
-    const [, key = ""] = getUrlPath(url)?.split("/") ?? [];
+    const [, key = ""] = getUrlPath(url).unwrap().split("/");
     const aggregation_key = to_report_type(key);
     const query_string = QUERIES[aggregation_key];
     const query_result_table = await get("query", {

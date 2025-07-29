@@ -9,7 +9,7 @@
   import type { Action } from "svelte/action";
 
   import { attemptFocus, getFocusableElements } from "../lib/focus";
-  import { closeOverlay } from "../stores/url";
+  import { router } from "../router";
 
   interface Props {
     shown: boolean;
@@ -18,7 +18,12 @@
     children: Snippet;
   }
 
-  let { shown, focus, closeHandler = closeOverlay, children }: Props = $props();
+  let {
+    shown,
+    focus,
+    closeHandler = router.close_overlay,
+    children,
+  }: Props = $props();
 
   /**
    * A Svelte action to handle focus within a modal.

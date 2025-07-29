@@ -2,7 +2,7 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { urlForAccount } from "../helpers";
   import { _ } from "../i18n";
-  import router from "../router";
+  import { router } from "../router";
   import { accounts } from "../stores";
 
   let value = $state("");

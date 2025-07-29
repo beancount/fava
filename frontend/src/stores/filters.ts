@@ -1,11 +1,22 @@
-import { derived, writable } from "svelte/store";
+import { derived } from "svelte/store";
+
+import { searchParams } from "./url";
 
 /** The time filter. */
-export const time_filter = writable("");
+export const time_filter = derived(
+  searchParams,
+  ($searchParams) => $searchParams.get("time") ?? "",
+);
 /** The account filter. */
-export const account_filter = writable("");
+export const account_filter = derived(
+  searchParams,
+  ($searchParams) => $searchParams.get("account") ?? "",
+);
 /** The filter with our custom query syntax. */
-export const fql_filter = writable("");
+export const fql_filter = derived(
+  searchParams,
+  ($searchParams) => $searchParams.get("filter") ?? "",
+);
 
 /** The three entry filters that Fava supports. */
 export interface Filters extends Record<string, string | undefined> {

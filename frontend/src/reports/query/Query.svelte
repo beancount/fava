@@ -4,7 +4,7 @@
   import { get } from "../../api";
   import { err, ok, type Result } from "../../lib/result";
   import { log_error } from "../../log";
-  import router from "../../router";
+  import { router } from "../../router";
   import { filter_params } from "../../stores/filters";
   import { query_shell_history } from "../../stores/query";
   import { searchParams } from "../../stores/url";

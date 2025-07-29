@@ -10,7 +10,7 @@
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
   import { notify, notify_err } from "../notifications";
-  import router from "../router";
+  import { router } from "../router";
   import { documents } from "../stores/options";
   import ModalBase from "./ModalBase.svelte";
 

@@ -4,8 +4,9 @@
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format";
   import { _ } from "../i18n";
+  import { router } from "../router";
   import { addEntryContinue } from "../stores/editor";
-  import { closeOverlay, urlHash } from "../stores/url";
+  import { hash } from "../stores/url";
   import ModalBase from "./ModalBase.svelte";
 
   /** The entry types which have support adding in the modal. */
@@ -29,11 +30,11 @@
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     entry = entry.constructor.empty(added_entry_date);
     if (!$addEntryContinue) {
-      closeOverlay();
+      router.close_overlay();
     }
   }
 
-  let shown = $derived($urlHash === "add-transaction");
+  let shown = $derived($hash === "add-transaction");
 </script>
 
 <ModalBase {shown} focus=".payee input">

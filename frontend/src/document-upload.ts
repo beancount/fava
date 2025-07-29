@@ -18,10 +18,7 @@ import { notify, notify_err } from "./notifications";
  * We want to allow a drop if the dragged thing is either a file that could be
  * dragged from a file manager or a URL (as dragged from a document link in Fava).
  */
-function dragover(event: Event, closestTarget: Element): void {
-  if (!(event instanceof DragEvent)) {
-    return;
-  }
+function dragover(event: DragEvent, closestTarget: Element): void {
   const types = event.dataTransfer?.types ?? [];
   if (types.includes("Files") || types.includes("text/uri-list")) {
     closestTarget.classList.add("dragover");
@@ -31,10 +28,7 @@ function dragover(event: Event, closestTarget: Element): void {
 delegate(document, "dragenter", ".droptarget", dragover);
 delegate(document, "dragover", ".droptarget", dragover);
 
-function dragleave(event: Event, closestTarget: Element): void {
-  if (!(event instanceof DragEvent)) {
-    return;
-  }
+function dragleave(event: DragEvent, closestTarget: Element): void {
   closestTarget.classList.remove("dragover");
   event.preventDefault();
 }
@@ -50,10 +44,7 @@ interface DroppedFile {
 }
 export const files: Writable<DroppedFile[]> = writable([]);
 
-function drop(event: Event, target: Element): void {
-  if (!(event instanceof DragEvent)) {
-    return;
-  }
+function drop(event: DragEvent, target: Element): void {
   target.classList.remove("dragover");
   event.preventDefault();
   event.stopPropagation();

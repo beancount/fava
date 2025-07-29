@@ -1,10 +1,10 @@
 <script lang="ts">
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
-  import { urlHash } from "../stores/url";
+  import { hash } from "../stores/url";
   import ModalBase from "./ModalBase.svelte";
 
-  let shown = $derived($urlHash === "export");
+  let shown = $derived($hash === "export");
 </script>
 
 <ModalBase {shown}>

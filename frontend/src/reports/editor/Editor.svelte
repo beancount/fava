@@ -12,7 +12,7 @@
   import SaveButton from "../../editor/SaveButton.svelte";
   import { log_error } from "../../log";
   import { notify_err } from "../../notifications";
-  import router from "../../router";
+  import { router } from "../../router";
   import { errors } from "../../stores";
   import { insert_entry } from "../../stores/fava_options";
   import type { EditorReportProps } from ".";
@@ -116,7 +116,7 @@
       ? "There are unsaved changes. Are you sure you want to leave?"
       : null;
 
-  onMount(() => router.addInteruptHandler(checkEditorChanges));
+  onMount(() => router.add_interrupt_handler(checkEditorChanges));
 </script>
 
 <form

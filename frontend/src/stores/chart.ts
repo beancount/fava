@@ -9,9 +9,6 @@ import { currencies_sorted } from ".";
 import { conversion_currencies } from "./fava_options";
 import { operating_currency } from "./options";
 
-/** Whether the charts should be shown - this applies globally to all charts. */
-export const showCharts = writable(true);
-
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
 export const lastActiveChartName = writable<string | null>(null);
 

@@ -149,7 +149,7 @@ export function handleExtensionPageLoad(): void {
       })
       .catch(log_error);
   }
-  const path = getUrlPath(window.location) ?? "";
+  const path = getUrlPath(window.location).unwrap_or("");
   if (path.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {

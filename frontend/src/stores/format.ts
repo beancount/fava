@@ -10,8 +10,9 @@ import {
   replaceNumbers,
   timeFilterDateFormat,
 } from "../format";
-import { incognito, interval, precisions } from ".";
+import { incognito, precisions } from ".";
 import { locale } from "./fava_options";
+import { interval } from "./url";
 
 const short_format = format(".3s");
 

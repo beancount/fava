@@ -4,9 +4,6 @@
 
 import { derived, writable } from "svelte/store";
 
-import { getScriptTagValue } from "../lib/dom";
-import { string } from "../lib/validation";
-
 /** The page title, can either be the title itself or `account:{name}` */
 export const raw_page_title = writable("");
 
@@ -30,13 +27,3 @@ export const page_title = derived(
     return { title: $raw_page_title, type: "plain" };
   },
 );
-
-/**
- * Update page (next to our icon) and the html document `<title>`.
- */
-export function updatePageTitle(): void {
-  const v = getScriptTagValue("#page-title", string);
-  if (v.is_ok) {
-    raw_page_title.set(v.value);
-  }
-}

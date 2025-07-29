@@ -25,7 +25,7 @@ export const account_report = new Route<AccountReportProps>(
   "account",
   AccountReport,
   async (url) => {
-    const [, account = ""] = getUrlPath(url)?.split("/") ?? [];
+    const [, account = ""] = getUrlPath(url).unwrap().split("/");
     const report_type = to_report_type(url.searchParams.get("r"));
     const res = await get("account_report", {
       ...getURLFilters(url),
@@ -34,11 +34,8 @@ export const account_report = new Route<AccountReportProps>(
     });
     return { ...res, account, report_type };
   },
-  (route) => {
-    if (route.url) {
-      const [, account] = getUrlPath(route.url)?.split("/") ?? [];
-      return `account:${account ?? "ERROR"}`;
-    }
-    throw new Error("Internal error: Expected route to have URL.");
+  (url) => {
+    const [, account] = getUrlPath(url).unwrap().split("/");
+    return `account:${account ?? "ERROR"}`;
   },
 );

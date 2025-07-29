@@ -5,9 +5,8 @@
   import { initBeancountEditor } from "../codemirror/setup";
   import { _ } from "../i18n";
   import { notify_err } from "../notifications";
-  import router from "../router";
+  import { router } from "../router";
   import { reloadAfterSavingEntrySlice } from "../stores/editor";
-  import { closeOverlay } from "../stores/url";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 
@@ -43,7 +42,7 @@
       if ($reloadAfterSavingEntrySlice) {
         router.reload();
       }
-      closeOverlay();
+      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Saving failed: ${err.message}`);
     } finally {
@@ -59,7 +58,7 @@
       if ($reloadAfterSavingEntrySlice) {
         router.reload();
       }
-      closeOverlay();
+      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Deleting failed: ${err.message}`);
     } finally {

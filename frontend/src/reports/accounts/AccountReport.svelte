@@ -6,7 +6,7 @@
   import { _ } from "../../i18n";
   import { is_non_empty } from "../../lib/array";
   import { intervalLabel } from "../../lib/interval";
-  import { interval } from "../../stores";
+  import { interval } from "../../stores/url";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import type { AccountReportProps } from ".";
 

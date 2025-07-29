@@ -12,7 +12,7 @@ class FetchError extends Error {}
 
 /** Wrapper around fetch with some default options */
 export async function fetch(
-  input: string,
+  input: string | URL,
   init: RequestInit = {},
 ): Promise<Response> {
   return window.fetch(input, { credentials: "same-origin", ...init });
