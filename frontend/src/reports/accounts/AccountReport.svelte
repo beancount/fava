@@ -9,6 +9,7 @@
   import { interval } from "../../stores";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import type { AccountReportProps } from ".";
+  import JournalTable from "../../journal/JournalTable.svelte";
 
   let {
     account,
@@ -28,11 +29,11 @@
   let interval_label = $derived(intervalLabel($interval).toLowerCase());
 </script>
 
-{#if chartData}
-  <ChartSwitcher charts={chartData} />
-{/if}
+{#snippet header()}
+  {#if chartData}
+    <ChartSwitcher charts={chartData} />
+  {/if}
 
-<div class="droptarget" data-account-name={account}>
   <div class="headerline">
     <h3>
       {#if report_type !== "journal"}
@@ -65,15 +66,21 @@
       {/if}
     </h3>
   </div>
-  {#if report_type === "journal"}
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    {@html journal}
-  {:else if interval_balances && is_non_empty(interval_balances) && budgets && dates}
-    <IntervalTreeTable
-      trees={interval_balances}
-      {dates}
-      {budgets}
-      {accumulate}
-    />
-  {/if}
-</div>
+{/snippet}
+
+{#if report_type === "journal" && journal}
+  <JournalTable entries={journal} showChangeAndBalance={true} {header} />
+{:else}
+  <div class="droptarget" data-account-name={account}>
+    {@render header()}
+
+    {#if interval_balances && is_non_empty(interval_balances) && budgets && dates}
+      <IntervalTreeTable
+        trees={interval_balances}
+        {dates}
+        {budgets}
+        {accumulate}
+      />
+    {/if}
+  </div>
+{/if}

@@ -1,5 +1,5 @@
 import { get } from "../../api";
-import type { AccountBudget } from "../../api/validators";
+import type { AccountBudget, AccountJournalEntry } from "../../api/validators";
 import type { AccountTreeNode } from "../../charts/hierarchy";
 import { getUrlPath } from "../../helpers";
 import { getURLFilters } from "../../stores/filters";
@@ -15,7 +15,7 @@ export interface AccountReportProps {
   account: string;
   report_type: AccountReportType;
   charts: unknown;
-  journal: string | null;
+  journal: AccountJournalEntry[] | null;
   interval_balances: AccountTreeNode[] | null;
   dates: { begin: Date; end: Date }[] | null;
   budgets: Record<string, AccountBudget[]> | null;

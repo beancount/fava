@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { AccountJournalEntry } from "../api/validators";
   /* eslint-disable @typescript-eslint/no-confusing-void-expression */
   import type { Document, EntryMetadata, Transaction } from "../entries";
   import { type Entry } from "../entries";
@@ -11,7 +12,7 @@
 
   interface Props {
     index: number;
-    e: Entry;
+    entry: Entry | AccountJournalEntry;
     showChangeAndBalance: boolean;
     journalShow: Set<JournalShowEntry>;
     li?: HTMLLIElement | undefined;
@@ -19,11 +20,15 @@
 
   let {
     index,
-    e,
+    entry,
     showChangeAndBalance,
     journalShow,
     li = $bindable<HTMLLIElement>(),
   }: Props = $props();
+
+  const [e, change, balance] = $derived(
+    Array.isArray(entry) ? entry : [entry, null, null],
+  );
 
   const FLAG_TO_TYPES: Record<string, string> = {
     "*": "cleared",
@@ -56,9 +61,9 @@
     return liClasses;
   });
 
-  const unitRegex = /([\d\.]+)\s+(\w+)/;
-  const costRegex = /\{([\d\.]+)\s+(\w+),\s([\w\-]+)\}/;
-  const priceRegex = /@\s([\d\.]+)\s+(\w+)/;
+  const unitRegex = /([\d\.\-]+)\s+(\w+)/;
+  const costRegex = /\{([\d\.\-]+)\s+(\w+),\s([\w\-]+)\}/;
+  const priceRegex = /@\s([\d\.\-]+)\s+(\w+)/;
 
   type PostingAmounts = [
     [amount: string, currency: string],
@@ -247,7 +252,18 @@
       {/if}
     {/if}
     {#if showChangeAndBalance}
-      <!-- TODO -->
+      {#if e.t === "Transaction"}
+        <span class="change num">
+          {#each Object.entries(change ?? {}) as [currency, number]}
+            {$ctx.amount(number, currency)}<br />
+          {/each}
+        </span>
+      {/if}
+      <span class="num">
+        {#each Object.entries(balance ?? {}) as [currency, number]}
+          {$ctx.amount(number, currency)}<br />
+        {/each}
+      </span>
     {/if}
   </p>
   {@render metadata(e.meta, e.entry_hash)}

@@ -152,6 +152,17 @@ const account_budget = object({
 });
 export type AccountBudget = ValidationT<typeof account_budget>;
 
+const simple_counter_inventory = record(number)
+export type SimpleCounterInventory = ValidationT<typeof simple_counter_inventory>
+
+const account_journal_entry = tuple(
+  entryValidator,
+  simple_counter_inventory,
+  simple_counter_inventory,
+);
+/** [entry, change, balance] */
+export type AccountJournalEntry = ValidationT<typeof account_journal_entry>;
+
 /** One of the Beancount source files. */
 export interface SourceFile {
   readonly file_path: string;
@@ -174,7 +185,7 @@ export const getAPIValidators = {
   balance_sheet: tree_report,
   account_report: object({
     charts: unknown,
-    journal: optional(string),
+    journal: optional(array(account_journal_entry)),
     dates: optional(array(date_range)),
     interval_balances: optional(array(account_hierarchy_validator)),
     budgets: optional(record(array(account_budget))),

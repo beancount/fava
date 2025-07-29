@@ -112,9 +112,12 @@ export class NumberColumn<T> implements SortColumn<T> {
   }
 }
 /** A SortColumn for objects with a string date property. */
-export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
-  constructor(override readonly name: string) {
-    super(name, (d: T) => new Date(d.date).valueOf());
+export class DateColumn<T> extends NumberColumn<T> {
+  constructor(
+    override readonly name: string,
+    value: (row: Readonly<T>) => string
+  ) {
+    super(name, (d: T) => new Date(value(d)).valueOf());
   }
 }
 /** A SortColumn for strings. */

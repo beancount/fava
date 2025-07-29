@@ -687,7 +687,9 @@ class AccountReportJournal:
     """Data for the journal account report."""
 
     charts: Sequence[ChartData]
-    journal: str
+    journal: Sequence[
+        tuple[Directive, Mapping[str, Decimal], Mapping[str, Decimal]]
+    ]
 
 
 @dataclass(frozen=True)
@@ -781,8 +783,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             budgets=budgets,
         )
 
-    journal = get_template_attribute("_journal_table.html", "journal_table")
-    entries = g.ledger.account_journal(
+    journal = g.ledger.account_journal(
         g.filtered,
         account_name,
         g.conversion,
@@ -790,5 +791,5 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     )
     return AccountReportJournal(
         charts,
-        journal=journal(entries, show_change_and_balance=True),
+        journal=[[serialise(e[0]), e[1], e[2]] for e in journal]
     )

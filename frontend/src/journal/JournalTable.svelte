@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createVirtualizer } from "@tanstack/svelte-virtual";
-  import { onDestroy } from "svelte";
+  import { onDestroy, type Snippet } from "svelte";
   import { derived } from "svelte/store";
 
   import type { Entry } from "../entries";
@@ -14,13 +14,20 @@
   } from "../stores/journal";
   import JournalEntry from "./JournalEntry.svelte";
   import JournalFilters from "./JournalFilters.svelte";
+  import type { AccountJournalEntry } from "../api/validators";
 
+  type E = Entry | AccountJournalEntry;
   interface Props {
-    entries: Entry[];
+    entries: E[];
     showChangeAndBalance?: boolean;
+    header?: Snippet;
   }
 
-  const { entries, showChangeAndBalance = false }: Props = $props();
+  const { entries, showChangeAndBalance = false, header }: Props = $props();
+
+  function entry(e: E | Readonly<E>): Entry {
+    return Array.isArray(e) ? e[0] : (e as Entry);
+  }
 
   let head = $state<HTMLLIElement>();
   $effect(() => {
@@ -33,27 +40,28 @@
     });
   });
 
-  let sortedEntries = $state.raw<Entry[]>([]);
+  let sortedEntries = $state.raw<E[]>([]);
   const journalShow = derived(journalShowStore, (t) => new Set(t));
   const filter = derived([journalSortOrder, journalShow], (it) => it);
   const unsub = filter.subscribe(([journalSortOrder, journalShow]) => {
-    let column: SortColumn<Entry>;
+    let column: SortColumn<E>;
     switch (journalSortOrder[0]) {
       case "flag":
-        column = new StringColumn("flag", (e) => e.sortFlag);
+        column = new StringColumn<E>("flag", (e) => entry(e).sortFlag);
         break;
       case "narration":
-        column = new StringColumn("narration", (e) => e.sortNarration);
+        column = new StringColumn("narration", (e) => entry(e).sortNarration);
         break;
       default:
-        column = new DateColumn("date");
+        column = new DateColumn("date", (e) => entry(e).date);
         break;
     }
     const sorter = new Sorter(column, journalSortOrder[1] ?? "asc");
 
     // TODO: remove logging
     console.time("filter");
-    const filtered = entries.filter((e) => {
+    const filtered = entries.filter((t) => {
+      const e = entry(t);
       if (journalShow.has(e.t.toLowerCase() as JournalShowEntry)) {
         if (e.t === "Transaction") {
           let flagOpt: JournalShowEntry;
@@ -93,7 +101,7 @@
     const sorted = sorter.sort(filtered);
     console.timeEnd("sort");
 
-    sortedEntries = sorted as Entry[];
+    sortedEntries = sorted as E[];
   });
 
   onDestroy(() => {
@@ -127,7 +135,9 @@
       count: sortedEntries.length + 1,
       getItemKey: depend(
         sortedEntries,
-        (sortedEntries) => (i) => sortedEntries[i]?.entry_hash ?? i,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        (sortedEntries) => (i) =>
+          i === 0 ? "head" : entry(sortedEntries[i - 1]!).entry_hash,
       ),
       getScrollElement: depend(vlistOuter, (ol) => () => ol ?? null),
       estimateSize: () => 50,
@@ -137,6 +147,7 @@
   let items = $derived($virtualizer.getVirtualItems());
 
   $effect(() => {
+    if (head) $virtualizer.measureElement(head);
     if (vlistItems.length) {
       vlistItems.forEach((li) => {
         $virtualizer.measureElement(li);
@@ -158,6 +169,7 @@
         {#each items as row (row.index)}
           {#if row.index === 0}
             <li class="head" bind:this={head} data-index="0">
+              {@render header?.()}
               <div class="filter-container">
                 <JournalFilters />
               </div>
@@ -208,7 +220,7 @@
           {:else}
             <JournalEntry
               index={row.index}
-              e={getSortedEntry(row.index - 1)}
+              entry={getSortedEntry(row.index - 1)}
               {showChangeAndBalance}
               journalShow={$journalShow}
               bind:li={vlistItems[row.index]}

@@ -23,7 +23,7 @@
   }
 
   const columns = [
-    new DateColumn<Document>(_("Date")),
+    new DateColumn<Document>(_("Date"), (d) => d.date),
     new StringColumn<Document>(_("Name"), (d) => name(d)),
   ] as const;
   let sorter = $state(new Sorter(columns[0], "desc"));
