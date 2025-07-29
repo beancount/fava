@@ -42,7 +42,7 @@
 {% set ledger = ledger or g.ledger %}
 {% autoescape false %}
 <fava-journal>
-<ol class="flex-table journal">
+<ol class="flex-table journal ssr">
     <li class="head">
         <p>
         <span class="datecell" data-sort="num" data-sort-name="date" data-order="asc">{{ _('Date') }}</span>

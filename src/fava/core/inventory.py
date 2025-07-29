@@ -58,9 +58,6 @@ class SimpleCounterInventory(dict[str, Decimal]):
         else:
             self[key] = new_num
 
-    def __iter__(self) -> Iterator[str]:
-        raise NotImplementedError
-
     def __neg__(self) -> SimpleCounterInventory:
         return SimpleCounterInventory({key: -num for key, num in self.items()})
 

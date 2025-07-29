@@ -1,3 +1,4 @@
+import { basename } from "../lib/paths";
 import type { ValidationT, Validator } from "../lib/validation";
 import {
   array,
@@ -24,11 +25,12 @@ export class Posting {
     readonly meta: EntryMetadata,
     readonly account: string,
     readonly amount: string,
+    readonly flag: string | null,
   ) {}
 
   /** Create a new empty Posting. */
   static empty(): Posting {
-    return new Posting(new EntryMetadata(), "", "");
+    return new Posting(new EntryMetadata(), "", "", null);
   }
 
   is_empty(): boolean {
@@ -37,7 +39,7 @@ export class Posting {
 
   /** Set a property and return an updated copy. */
   set<T extends keyof Posting>(key: T, value: Posting[T]): Posting {
-    const copy = new Posting(this.meta, this.account, this.amount);
+    const copy = new Posting(this.meta, this.account, this.amount, this.flag);
     copy[key] = value;
     return copy;
   }
@@ -46,11 +48,13 @@ export class Posting {
     meta: defaultValue(EntryMetadata.validator, () => new EntryMetadata()),
     account: string,
     amount: string,
+    flag: optional_string,
   });
 
   static validator: Validator<Posting> = (json) =>
     Posting.raw_validator(json).map(
-      ({ meta, account, amount }) => new Posting(meta, account, amount),
+      ({ meta, account, amount, flag }) =>
+        new Posting(meta, account, amount, flag),
     );
 }
 
@@ -78,6 +82,8 @@ abstract class EntryBase<T extends string> {
     readonly meta: EntryMetadata,
     readonly date: string,
     readonly entry_hash: string,
+    readonly sortFlag: string,
+    readonly sortNarration: string,
   ) {}
 
   /** Clone. */
@@ -92,7 +98,7 @@ abstract class EntryBase<T extends string> {
   }
 
   /** Set a property and return an updated copy. */
-  set<T extends keyof typeof this>(key: T, value: (typeof this)[T]): this {
+  set<K extends keyof typeof this>(key: K, value: (typeof this)[K]): this {
     const copy = this.clone();
     copy[key] = value;
     return copy;
@@ -113,6 +119,32 @@ abstract class EntryBase<T extends string> {
   }
 }
 
+/** A commodity. */
+export class Commodity extends EntryBase<"Commodity"> {
+  private constructor(
+    meta: EntryMetadata,
+    date: string,
+    entry_hash: string,
+    readonly currency: string,
+  ) {
+    super("Commodity", meta, date, entry_hash, "com", currency);
+  }
+
+  private static raw_validator = object({
+    t: constant("Commodity"),
+    meta: EntryMetadata.validator,
+    date: string,
+    entry_hash: string,
+    currency: string,
+  });
+
+  static validator: Validator<Commodity> = (json) =>
+    Commodity.raw_validator(json).map(
+      ({ meta, date, entry_hash, currency }) =>
+        new Commodity(meta, date, entry_hash, currency),
+    );
+}
+
 /** A balance. */
 export class Balance extends EntryBase<"Balance"> {
   private constructor(
@@ -121,13 +153,22 @@ export class Balance extends EntryBase<"Balance"> {
     entry_hash: string,
     readonly account: string,
     readonly amount: RawAmount,
+    readonly diff_amount: Amount | null,
   ) {
-    super("Balance", meta, date, entry_hash);
+    // TODO: diff amount
+    super("Balance", meta, date, entry_hash, "Bal", account);
   }
 
   /** Create a new empty Balance entry on the date. */
   static empty(date: string): Balance {
-    return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty());
+    return new Balance(
+      new EntryMetadata(),
+      date,
+      "",
+      "",
+      RawAmount.empty(),
+      null,
+    );
   }
 
   private static raw_validator = object({
@@ -137,12 +178,13 @@ export class Balance extends EntryBase<"Balance"> {
     entry_hash: string,
     account: string,
     amount: RawAmount.validator,
+    diff_amount: optional(Amount.validator),
   });
 
   static validator: Validator<Balance> = (json) =>
     Balance.raw_validator(json).map(
-      ({ date, meta, account, amount, entry_hash }) =>
-        new Balance(meta, date, entry_hash, account, amount),
+      ({ date, meta, account, amount, diff_amount, entry_hash }) =>
+        new Balance(meta, date, entry_hash, account, amount, diff_amount),
     );
 }
 
@@ -157,7 +199,14 @@ export class Document extends EntryBase<"Document"> {
     readonly tags: string[] | null,
     readonly links: string[] | null,
   ) {
-    super("Document", meta, date, entry_hash);
+    super(
+      "Document",
+      meta,
+      date,
+      entry_hash,
+      "Doc",
+      `${account} ${basename(filename)} ${tags?.join(" ") ?? ""}`,
+    );
   }
 
   private static raw_validator = object({
@@ -187,7 +236,7 @@ export class Event extends EntryBase<"Event"> {
     readonly type: string,
     readonly description: string,
   ) {
-    super("Event", meta, date, entry_hash);
+    super("Event", meta, date, entry_hash, "eve", description);
   }
 
   private static raw_validator = object({
@@ -217,7 +266,7 @@ export class Note extends EntryBase<"Note"> {
     readonly tags: string[] | null,
     readonly links: string[] | null,
   ) {
-    super("Note", meta, date, entry_hash);
+    super("Note", meta, date, entry_hash, "Note", comment);
   }
 
   /** Create a new empty Note entry on the date. */
@@ -253,7 +302,7 @@ export class Open extends EntryBase<"Open"> {
     readonly currencies: string[] | null,
     readonly booking: string | null,
   ) {
-    super("Open", meta, date, entry_hash);
+    super("Open", meta, date, entry_hash, "Open", account);
   }
 
   private static raw_validator = object({
@@ -281,7 +330,7 @@ export class Close extends EntryBase<"Close"> {
     entry_hash: string,
     readonly account: string,
   ) {
-    super("Close", meta, date, entry_hash);
+    super("Close", meta, date, entry_hash, "Close", account);
   }
 
   private static raw_validator = object({
@@ -308,7 +357,15 @@ export class Price extends EntryBase<"Price"> {
     readonly currency: string,
     readonly amount: RawAmount,
   ) {
-    super("Price", meta, date, entry_hash);
+    // TODO: validate narration
+    super(
+      "Price",
+      meta,
+      date,
+      entry_hash,
+      "pri",
+      `${currency} is ${amount.number} ${amount.currency}`,
+    );
   }
 
   private static raw_validator = object({
@@ -336,7 +393,14 @@ export class Pad extends EntryBase<"Pad"> {
     readonly account: string,
     readonly source_account: string,
   ) {
-    super("Pad", meta, date, entry_hash);
+    super(
+      "Pad",
+      meta,
+      date,
+      entry_hash,
+      "pad",
+      `${account} from ${source_account}`,
+    );
   }
 
   private static raw_validator = object({
@@ -364,7 +428,7 @@ export class Query extends EntryBase<"Query"> {
     readonly name: string,
     readonly query_string: string,
   ) {
-    super("Query", meta, date, entry_hash);
+    super("Query", meta, date, entry_hash, "que", name);
   }
 
   private static raw_validator = object({
@@ -392,7 +456,15 @@ export class Custom extends EntryBase<"Custom"> {
     readonly type: string, // This is the custom directive type string
     readonly values: unknown[],
   ) {
-    super("Custom", meta, date, entry_hash);
+    // TODO: custom attr
+    super(
+      "Custom",
+      meta,
+      date,
+      entry_hash,
+      "cus",
+      `${type} ${values.join(" ")}`,
+    );
   }
 
   private static raw_validator = object({
@@ -427,7 +499,14 @@ export class Transaction extends EntryBase<"Transaction"> {
     readonly links: string[],
     readonly postings: readonly Posting[],
   ) {
-    super("Transaction", meta, date, entry_hash);
+    super(
+      "Transaction",
+      meta,
+      date,
+      entry_hash,
+      flag,
+      `${payee} ${narration} ${tags.join(" ")}`,
+    );
   }
 
   /** Create a new empty Transaction entry on the date. */
@@ -545,6 +624,7 @@ export class Transaction extends EntryBase<"Transaction"> {
 export const entryValidator = tagged_union("t", {
   Balance: Balance.validator,
   Close: Close.validator,
+  Commodity: Commodity.validator,
   Custom: Custom.validator,
   Document: Document.validator,
   Event: Event.validator,

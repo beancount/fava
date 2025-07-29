@@ -323,6 +323,11 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         """Get the account report."""
         return render_template("_layout.html", content="")
 
+    @fava_app.route("/<bfile>/journal2/")
+    def journal2() -> str:
+        """Client-side-rendered journal."""
+        return render_template("_layout.html", content="")
+
     @fava_app.route("/<bfile>/document/", methods=["GET"])
     def document() -> Response:
         """Download a document."""

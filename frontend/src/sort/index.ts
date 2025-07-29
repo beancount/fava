@@ -14,7 +14,7 @@
 import { permute } from "d3-array";
 import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal";
+import { type JournalSortOrder, journalSortOrder } from "../stores/journal";
 
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
@@ -112,9 +112,12 @@ export class NumberColumn<T> implements SortColumn<T> {
   }
 }
 /** A SortColumn for objects with a string date property. */
-export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
-  constructor(override readonly name: string) {
-    super(name, (d: T) => new Date(d.date).valueOf());
+export class DateColumn<T> extends NumberColumn<T> {
+  constructor(
+    override readonly name: string,
+    value: (row: Readonly<T>) => string,
+  ) {
+    super(name, (d: T) => new Date(value(d)).valueOf());
   }
 }
 /** A SortColumn for strings. */
@@ -206,14 +209,14 @@ export function sortableJournal(ol: HTMLOListElement): void {
       );
     };
     if (name === initialColumn) {
-      sort(initialOrder);
+      sort(initialOrder ?? "asc");
     }
 
     header.addEventListener("click", () => {
       const order =
         header.getAttribute("data-order") === "asc" ? "desc" : "asc";
       sort(order);
-      journalSortOrder.set([name, order]);
+      journalSortOrder.set([name as JournalSortOrder[0], order]);
     });
   });
 }
