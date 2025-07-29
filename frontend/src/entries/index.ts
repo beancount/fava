@@ -25,11 +25,12 @@ export class Posting {
     readonly meta: EntryMetadata,
     readonly account: string,
     readonly amount: string,
+    readonly flag: string | null
   ) {}
 
   /** Create a new empty Posting. */
   static empty(): Posting {
-    return new Posting(new EntryMetadata(), "", "");
+    return new Posting(new EntryMetadata(), "", "", null);
   }
 
   is_empty(): boolean {
@@ -38,7 +39,7 @@ export class Posting {
 
   /** Set a property and return an updated copy. */
   set<T extends keyof Posting>(key: T, value: Posting[T]): Posting {
-    const copy = new Posting(this.meta, this.account, this.amount);
+    const copy = new Posting(this.meta, this.account, this.amount, this.flag);
     copy[key] = value;
     return copy;
   }
@@ -47,11 +48,12 @@ export class Posting {
     meta: defaultValue(EntryMetadata.validator, () => new EntryMetadata()),
     account: string,
     amount: string,
+    flag: optional_string,
   });
 
   static validator: Validator<Posting> = (json) =>
     Posting.raw_validator(json).map(
-      ({ meta, account, amount }) => new Posting(meta, account, amount),
+      ({ meta, account, amount, flag }) => new Posting(meta, account, amount, flag),
     );
 }
 

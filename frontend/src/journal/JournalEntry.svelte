@@ -25,6 +25,15 @@
     li = $bindable<HTMLLIElement>(),
   }: Props = $props();
 
+  const FLAG_TO_TYPES: Record<string, string> = {
+    "*": "cleared",
+    "!": "pending",
+  };
+
+  function flagToTypes(flag: string) {
+    return FLAG_TO_TYPES[flag] ?? "other";
+  }
+
   let liClasses = $derived.by(() => {
     const t = e.t;
     let liClasses = t.toLowerCase();
@@ -32,7 +41,7 @@
       liClasses += ` ${e.type}`;
     }
     if (t === "Transaction") {
-      liClasses += ` ${e.flag}`;
+      liClasses += ` ${flagToTypes(e.flag)}`;
     }
 
     if (t === "Transaction" || t === "Note" || t === "Document") {
@@ -131,7 +140,7 @@
 
 {#snippet tagsLinks(entry: Document | Transaction)}
   {#each entry.tags?.toSorted() ?? [] as tag (tag)}
-    <span class="tag">{tag}</span>
+    <span class="tag">#{tag}</span>
   {/each}
   {#each entry.links?.toSorted() ?? [] as link (link)}
     <span class="link">^{link}</span>
@@ -221,8 +230,7 @@
       {@render metadataIndicators(e.meta)}
       {#if e.t === "Transaction"}
         {#each e.postings as posting, index (index)}
-          <!-- TODO: posting flags -->
-          <span></span>
+          <span class={posting.flag ? flagToTypes(posting.flag) : null}></span>
           {@render metadataIndicators(posting.meta)}
         {/each}
       {/if}
@@ -246,11 +254,10 @@
   {#if journalShow.has("postings") && e.t === "Transaction" && e.postings.length > 0}
     <ul class="postings">
       {#each e.postings as posting, index (index)}
-        <!-- TODO: posting flags -->
-        <li>
+        <li class={posting.flag ? flagToTypes(posting.flag) : null}>
           <p>
             <span class="datecell"></span>
-            <span class="flag"></span>
+            <span class="flag">{posting.flag ?? ""}</span>
             <!-- TODO: it uses the entry hash, is this correct? -->
             <span
               class="description droptarget"

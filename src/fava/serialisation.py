@@ -102,6 +102,9 @@ def _(posting: Posting) -> Any:
     ret: dict[str, Any] = {"account": posting.account, "amount": position_str}
     if posting.meta:
         ret["meta"] = copy(posting.meta)
+
+    if posting.flag:
+        ret["flag"] = posting.flag
     return ret
 
 
