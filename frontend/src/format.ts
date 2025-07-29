@@ -16,16 +16,21 @@ export function localeFormatter(
   locale: string | null,
   precision = 2,
 ): (num: number) => string {
+  let f;
   if (locale == null) {
-    return format(`.${precision.toString()}f`);
+    f = format(`.${precision.toString()}f`);
+  } else {
+    // this needs to be between 0 and 20
+    const digits = Math.max(0, Math.min(precision, 20));
+    const fmt = new Intl.NumberFormat(locale.replace("_", "-"), {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
+    f = fmt.format.bind(fmt);
   }
-  // this needs to be between 0 and 20
-  const digits = Math.max(0, Math.min(precision, 20));
-  const fmt = new Intl.NumberFormat(locale.replace("_", "-"), {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  });
-  return fmt.format.bind(fmt);
+
+  // replace unicode minus sign with ascii hyphen
+  return (num) => f(num).replace("−", "-");
 }
 
 const formatterPer = format(".2f");
