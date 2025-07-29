@@ -115,7 +115,7 @@ export class NumberColumn<T> implements SortColumn<T> {
 export class DateColumn<T> extends NumberColumn<T> {
   constructor(
     override readonly name: string,
-    value: (row: Readonly<T>) => string
+    value: (row: Readonly<T>) => string,
   ) {
     super(name, (d: T) => new Date(value(d)).valueOf());
   }

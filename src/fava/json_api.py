@@ -21,7 +21,6 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
-from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 from flask_babel import gettext
@@ -790,6 +789,5 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         with_children=g.ledger.fava_options.account_journal_include_children,
     )
     return AccountReportJournal(
-        charts,
-        journal=[[serialise(e[0]), e[1], e[2]] for e in journal]
+        charts, journal=[[serialise(e[0]), e[1], e[2]] for e in journal]
     )

@@ -25,7 +25,7 @@ export class Posting {
     readonly meta: EntryMetadata,
     readonly account: string,
     readonly amount: string,
-    readonly flag: string | null
+    readonly flag: string | null,
   ) {}
 
   /** Create a new empty Posting. */
@@ -53,7 +53,8 @@ export class Posting {
 
   static validator: Validator<Posting> = (json) =>
     Posting.raw_validator(json).map(
-      ({ meta, account, amount, flag }) => new Posting(meta, account, amount, flag),
+      ({ meta, account, amount, flag }) =>
+        new Posting(meta, account, amount, flag),
     );
 }
 
@@ -160,7 +161,14 @@ export class Balance extends EntryBase<"Balance"> {
 
   /** Create a new empty Balance entry on the date. */
   static empty(date: string): Balance {
-    return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty(), null);
+    return new Balance(
+      new EntryMetadata(),
+      date,
+      "",
+      "",
+      RawAmount.empty(),
+      null,
+    );
   }
 
   private static raw_validator = object({
@@ -170,7 +178,7 @@ export class Balance extends EntryBase<"Balance"> {
     entry_hash: string,
     account: string,
     amount: RawAmount.validator,
-    diff_amount: optional(Amount.validator)
+    diff_amount: optional(Amount.validator),
   });
 
   static validator: Validator<Balance> = (json) =>

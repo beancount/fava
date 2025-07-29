@@ -61,9 +61,9 @@
     return liClasses;
   });
 
-  const unitRegex = /([\d\.\-]+)\s+(\w+)/;
-  const costRegex = /\{([\d\.\-]+)\s+(\w+),\s([\w\-]+)\}/;
-  const priceRegex = /@\s([\d\.\-]+)\s+(\w+)/;
+  const unitRegex = /([\d.-]+)\s+(\w+)/;
+  const costRegex = /\{([\d.-]+)\s+(\w+),\s([\w-]+)\}/;
+  const priceRegex = /@\s([\d.-]+)\s+(\w+)/;
 
   type PostingAmounts = [
     [amount: string, currency: string],
