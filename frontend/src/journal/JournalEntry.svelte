@@ -6,7 +6,7 @@
   import type { Amount, RawAmount } from "../entries/amount";
   import { urlFor, urlForAccount } from "../helpers";
   import { basename } from "../lib/paths";
-  import { accounts_set, currency_name } from "../stores";
+  import { currency_name } from "../stores";
   import { ctx } from "../stores/format";
   import type { JournalShowEntry } from "../stores/journal";
 

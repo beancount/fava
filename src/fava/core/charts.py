@@ -66,7 +66,6 @@ def dumps(obj: Any, **_kwargs: Any) -> str:
     return simplejson_dumps(
         obj,
         indent="  ",
-        sort_keys=True,
         default=_json_default,
     )
 

@@ -5,7 +5,7 @@
 
   import type { Entry } from "../entries";
   import { _ } from "../i18n";
-  import { DateColumn, type SortColumn, Sorter, StringColumn } from "../sort";
+  import { Sorter, StringColumn } from "../sort";
   import {
     journalShow as journalShowStore,
     type JournalShowEntry,
@@ -43,20 +43,26 @@
   let sortedEntries = $state.raw<E[]>([]);
   const journalShow = derived(journalShowStore, (t) => new Set(t));
   const filter = derived([journalSortOrder, journalShow], (it) => it);
-  const unsub = filter.subscribe(([journalSortOrder, journalShow]) => {
-    let column: SortColumn<E>;
-    switch (journalSortOrder[0]) {
+  const unsub = filter.subscribe(([[sortColumn, sortOrder], journalShow]) => {
+    let column: (e: Entry) => string;
+    switch (sortColumn) {
       case "flag":
-        column = new StringColumn<E>("flag", (e) => entry(e).sortFlag);
+        column = (e) => e.sortFlag;
         break;
       case "narration":
-        column = new StringColumn("narration", (e) => entry(e).sortNarration);
+        column = (e) => e.sortNarration;
         break;
       default:
-        column = new DateColumn("date", (e) => entry(e).date);
+        column = (e) => e.date;
         break;
     }
-    const sorter = new Sorter(column, journalSortOrder[1] ?? "asc");
+    const sorter = new Sorter<E>(
+      new StringColumn(
+        "",
+        (e, i, a) => column(entry(e)) + i.toString().padStart(a.length, "0"),
+      ),
+      sortOrder ?? "asc",
+    );
 
     const filtered = entries.filter((t) => {
       const e = entry(t);

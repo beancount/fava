@@ -45,7 +45,7 @@ export class Sorter<T = unknown> {
   constructor(
     readonly column: SortColumn<T>,
     readonly order: SortOrder,
-  ) {}
+  ) { }
 
   /** Get a new sorter by switching to a possibly different column. */
   switchColumn(column: SortColumn<T>): Sorter<T> {
@@ -77,7 +77,7 @@ export function sort_by_strings<T>(
  */
 function sort_internal<T, U>(
   data: readonly T[],
-  value: (row: T) => U,
+  value: (row: T, index: number, array: readonly T[]) => U,
   compare: (a: U, b: U) => number,
   direction: SortDirection,
 ): T[] {
@@ -91,7 +91,7 @@ function sort_internal<T, U>(
 
 /** A SortColumn that does no sorting. */
 export class UnsortedColumn<T> implements SortColumn<T> {
-  constructor(readonly name: string) {}
+  constructor(readonly name: string) { }
 
   sort(data: readonly T[]): readonly T[] {
     return data;
@@ -104,8 +104,8 @@ export class NumberColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>) => number,
-  ) {}
+    private readonly value: (row: Readonly<T>, index: number, array: readonly T[]) => number,
+  ) { }
 
   sort(data: readonly T[], direction: SortDirection): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
@@ -115,9 +115,9 @@ export class NumberColumn<T> implements SortColumn<T> {
 export class DateColumn<T> extends NumberColumn<T> {
   constructor(
     override readonly name: string,
-    value: (row: Readonly<T>) => string
+    value: (row: Readonly<T>, index: number, array: readonly T[]) => string,
   ) {
-    super(name, (d: T) => new Date(value(d)).valueOf());
+    super(name, (t, i, a) => new Date(value(t, i, a)).valueOf());
   }
 }
 /** A SortColumn for strings. */
@@ -126,8 +126,8 @@ export class StringColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>) => string,
-  ) {}
+    private readonly value: (row: Readonly<T>, index: number, array: readonly T[]) => string,
+  ) { }
 
   sort(data: readonly T[], direction: 1 | -1): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
