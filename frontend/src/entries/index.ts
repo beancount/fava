@@ -26,7 +26,7 @@ export class Posting {
     readonly account: string,
     readonly amount: string,
     readonly flag: string | null
-  ) {}
+  ) { }
 
   /** Create a new empty Posting. */
   static empty(): Posting {
@@ -83,7 +83,7 @@ abstract class EntryBase<T extends string> {
     readonly entry_hash: string,
     readonly sortFlag: string,
     readonly sortNarration: string,
-  ) {}
+  ) { }
 
   /** Clone. */
   clone(): this {
@@ -154,7 +154,6 @@ export class Balance extends EntryBase<"Balance"> {
     readonly amount: RawAmount,
     readonly diff_amount: Amount | null,
   ) {
-    // TODO: diff amount
     super("Balance", meta, date, entry_hash, "Bal", account);
   }
 
@@ -439,6 +438,31 @@ export class Query extends EntryBase<"Query"> {
     );
 }
 
+export class CustomValue {
+  constructor(
+    readonly dtype: string,
+    readonly value: unknown,
+  ) { }
+
+  toString(): string {
+    if (this.dtype === "<class 'beancount.core.amount.Amount'>") {
+      const a = this.value as Amount
+      return `${a.number.toString()} ${a.currency}`
+    }
+    return this.value as string
+  }
+
+  private static raw_validator = object({
+    dtype: string,
+    value: unknown,
+  });
+
+  static validator: Validator<CustomValue> = (json) =>
+    CustomValue.raw_validator(json).map(
+      ({ dtype, value }) => new CustomValue(dtype, value),
+    );
+}
+
 /** A Custom entry. */
 export class Custom extends EntryBase<"Custom"> {
   constructor(
@@ -446,9 +470,8 @@ export class Custom extends EntryBase<"Custom"> {
     date: string,
     entry_hash: string,
     readonly type: string, // This is the custom directive type string
-    readonly values: unknown[],
+    readonly values: CustomValue[],
   ) {
-    // TODO: custom attr
     super(
       "Custom",
       meta,
@@ -465,7 +488,7 @@ export class Custom extends EntryBase<"Custom"> {
     date: string,
     entry_hash: string,
     type: string,
-    values: array(unknown),
+    values: array(CustomValue.validator),
   });
 
   static validator: Validator<Custom> = (json) =>

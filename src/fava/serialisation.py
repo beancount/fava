@@ -68,7 +68,9 @@ def _(entry: Custom) -> Any:
     ret = entry._asdict()  # type: ignore[attr-defined]
     ret["t"] = "Custom"
     ret["entry_hash"] = hash_entry(entry)
-    ret["values"] = [v.value for v in entry.values]
+    ret["values"] = [
+        {"dtype": str(v.dtype), "value": v.value} for v in entry.values
+    ]
     return ret
 
 

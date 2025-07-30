@@ -58,8 +58,6 @@
     }
     const sorter = new Sorter(column, journalSortOrder[1] ?? "asc");
 
-    // TODO: remove logging
-    console.time("filter");
     const filtered = entries.filter((t) => {
       const e = entry(t);
       if (journalShow.has(e.t.toLowerCase() as JournalShowEntry)) {
@@ -94,14 +92,8 @@
       }
       return false;
     });
-    console.timeEnd("filter");
 
-    // TODO: remove logging
-    console.time("sort");
-    const sorted = sorter.sort(filtered);
-    console.timeEnd("sort");
-
-    sortedEntries = sorted as E[];
+    sortedEntries = sorter.sort(filtered) as E[];
   });
 
   onDestroy(() => {

@@ -6,7 +6,7 @@
   import type { Amount, RawAmount } from "../entries/amount";
   import { urlFor, urlForAccount } from "../helpers";
   import { basename } from "../lib/paths";
-  import { currency_name } from "../stores";
+  import { accounts_set, currency_name } from "../stores";
   import { ctx } from "../stores/format";
   import type { JournalShowEntry } from "../stores/journal";
 
@@ -172,9 +172,14 @@
     )}
   {:else if e.t === "Custom"}
     <strong>{e.type}</strong>
-    <!-- TODO custom attributes -->
-    {#each e.values as value, index (index)}
-      {value}
+    {#each e.values as { dtype, value }, index (index)}
+      {#if index > 0}&nbsp;{/if}{#if dtype === "<AccountDummy>"}
+        {@render accountLink(value as string)}
+      {:else if dtype === "<class 'beancount.core.amount.Amount'>"}
+        {@render amount(value as Amount, "num")}
+      {:else if dtype === "<class 'str'>"}"{value}"
+      {:else if dtype === "<class 'bool'>"}{value}
+      {:else if dtype === "<class 'datetime.date'>"}{value}{/if}
     {/each}
   {:else if e.t === "Document"}
     {@render accountLink(e.account)}
