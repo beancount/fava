@@ -1,7 +1,8 @@
 import { mount, unmount } from "svelte";
 
 import { delegate } from "../lib/events";
-import { sortableJournal } from "../sort";
+import { notify_err } from "../notifications";
+import { type SortableJournal, sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
 import { journalShow } from "../stores/journal";
 import JournalFilters from "./JournalFilters.svelte";
@@ -76,10 +77,17 @@ export class FavaJournal extends HTMLElement {
   /** Unsubscribe store listener. */
   unsubscribe?: () => void;
 
+  sortableJournal?: SortableJournal;
+
   connectedCallback(): void {
     const ol = this.querySelector("ol");
     if (!ol) {
       throw new Error("fava-journal is missing its <ol>");
+    }
+
+    const total_pages = this.getAttribute("total-pages");
+    if (total_pages != null) {
+      void this.fetchAllPages(ol, parseInt(total_pages));
     }
 
     this.unsubscribe = journalShow.subscribe((show) => {
@@ -91,12 +99,59 @@ export class FavaJournal extends HTMLElement {
       void unmount(component);
     };
 
-    sortableJournal(ol);
+    this.sortableJournal = sortableJournal(ol);
     delegate(this, "click", "li", handleClick);
   }
 
   disconnectedCallback(): void {
     this.unsubscribe?.();
     this.unmount?.();
+  }
+
+  async fetchAllPages(ol: HTMLOListElement, total: number): Promise<void> {
+    const url = new URL(window.location.href);
+    url.searchParams.set("partial", "true");
+
+    let errorShown = false;
+    const promises: Promise<NodeList | never[]>[] = [];
+    for (let page = 2; page <= total; page++) {
+      url.searchParams.set("page", page.toString());
+      promises.push(
+        fetch(url).then(async (response) => {
+          if (!response.ok) {
+            if (!errorShown) {
+              notify_err(new Error("Failed to fetch some journal pages"));
+              errorShown = true;
+            }
+            return [];
+          }
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          return doc.querySelectorAll("ol.journal > li:not(.head)");
+        }),
+      );
+    }
+    let sorting = false;
+    for (const promise of promises) {
+      ol.append(...(await promise));
+      if (sorting) {
+        continue;
+      }
+      sorting = true;
+      // Batch sorting to avoid repeatedly sorting in-between consecutive
+      // items appending.
+      setTimeout(() => {
+        sorting = false;
+        if (this.sortableJournal) {
+          const [column, order] = this.sortableJournal.getOrder();
+          // The data is already sorted by date desc, so no need to sort again
+          // if that's the current order.
+          if (column !== "date" || order !== "desc") {
+            this.sortableJournal.sort();
+          }
+        }
+      });
+    }
   }
 }
