@@ -214,7 +214,7 @@ class FilteredLedger:
 
     def paginate_journal(
         self, page: int, per_page: int = 1000
-    ) -> tuple[Sequence[Directive], int, int]:
+    ) -> tuple[Sequence[tuple[int, Directive]], int]:
         """Get entries for a journal page with pagination info.
 
         Args:
@@ -222,20 +222,22 @@ class FilteredLedger:
             per_page: Number of entries per page.
 
         Returns:
-            A tuple of (page_entries, start_index, total_pages)
-            where page_entries are the entries for this page in reverse
-            chronological order, start_index is the starting index for
-            display purposes, total_pages is the total number of pages.
+            JournalPage with page_entries as (global_index, directive) tuples
+            in reverse chronological order total_pages.
         """
         entries = self.entries
         num_entries = len(entries)
-        start = (page - 1) * per_page
-        end = page * per_page
+        page_start = (page - 1) * per_page
+        page_end = min(page * per_page, num_entries)
 
-        # Get entries in reverse chronological order (newest first)
-        page_entries = entries[-(start + 1) : -(end + 1) : -1]
+        # Get chronological slice from the end, then reverse for display.
+        start = num_entries - page_end
+        end = num_entries - page_start
+        page_entries = [(i, entries[i]) for i in range(start, end)]
+        page_entries.reverse()
+
         total_pages = ceil(num_entries / per_page)
-        return page_entries, start, total_pages
+        return page_entries, total_pages
 
 
 class FavaLedger:

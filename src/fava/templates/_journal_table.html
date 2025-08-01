@@ -38,10 +38,10 @@
 {% for link_ in entry.links|sort %}<span class="link">^{{ link_ }}</span>{% endfor %}
 {%- endmacro %}
 
-{% macro journal_table(entries, show_change_and_balance=False, ledger=None, paginated=None, start=0) %}
+{% macro journal_table(entries, show_change_and_balance=False, ledger=None, total_pages=None) %}
 {% set ledger = ledger or g.ledger %}
 {% autoescape false %}
-<fava-journal{% if paginated %} paginated="{{ paginated }}"{% endif %}>
+<fava-journal{% if total_pages is not none %} total-pages="{{ total_pages }}"{% endif %}>
 <ol class="flex-table journal">
     <li class="head">
         <p>
@@ -54,8 +54,11 @@
         </p>
     </li>
 {% for entry in entries %}
+    {% set index = loop.index %}
     {% if show_change_and_balance %}
         {% set entry, change, balance = entry %}
+    {% elif total_pages is not none %}
+        {% set index, entry = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
     {% set metadata_items = entry.meta|meta_items %}
@@ -63,7 +66,7 @@
     {% set entry_hash = entry|hash_entry %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
-        <span class="datecell" data-sort-value="{{ -(start + loop.index) }}"><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
+        <span class="datecell" data-sort-value="{{ index }}"><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
         <span class="description{% if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-entry-date="{{ entry.date }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif %}>
         {% if type == 'open' or type == 'close' %}

@@ -6,7 +6,6 @@
 
 {% block content %}
 {% set page = request.args.get('page', default="1")|int %}
-{% set page_entries, start, total_pages = g.filtered.paginate_journal(page) %}
-{% set paginated = total_pages if total_pages > 1 and not request.args.get('page') else None %}
-{{ journal_table.journal_table(page_entries, paginated=paginated, start=start) }}
+{% set page_entries, total_pages = g.filtered.paginate_journal(page) %}
+{{ journal_table.journal_table(page_entries, total_pages=total_pages) }}
 {% endblock %}

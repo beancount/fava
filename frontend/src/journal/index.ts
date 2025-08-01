@@ -85,9 +85,9 @@ export class FavaJournal extends HTMLElement {
       throw new Error("fava-journal is missing its <ol>");
     }
 
-    const paginated = this.getAttribute("paginated");
-    if (paginated != null) {
-      void this.fetchAllPages(ol, parseInt(paginated));
+    const total_pages = this.getAttribute("total-pages");
+    if (total_pages != null) {
+      void this.fetchAllPages(ol, parseInt(total_pages));
     }
 
     this.unsubscribe = journalShow.subscribe((show) => {
