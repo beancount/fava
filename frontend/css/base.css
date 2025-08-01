@@ -34,7 +34,6 @@ dl {
 code,
 pre {
   font-family: var(--font-family-monospaced);
-  white-space: pre;
   background-color: var(--code-background);
   border: 1px solid var(--border);
   border-radius: 3px;
@@ -48,6 +47,7 @@ code {
 pre {
   padding: 6px 10px;
   overflow: auto;
+  white-space: pre;
 }
 
 pre code {
