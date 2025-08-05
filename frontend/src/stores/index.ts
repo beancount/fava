@@ -60,3 +60,6 @@ export const years = derived_array(ledgerData, (v) => v.years);
 export const currencies_sorted = derived_array(currencies, ($currencies) =>
   $currencies.toSorted(),
 );
+
+/** Whether to hide the global header and handle it manually. */
+export const hideHeader = writable(false);

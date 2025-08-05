@@ -42,7 +42,7 @@
 
   let liClasses = $derived.by(() => {
     const t = e.t;
-    let liClasses = t.toLowerCase();
+    let liClasses = `entry ${t.toLowerCase()}`;
     if (t === "Custom") {
       liClasses += ` ${e.type}`;
     }
@@ -339,3 +339,15 @@
     </ul>
   {/if}
 </li>
+
+<style>
+  .entry {
+    padding: 0 1.5em;
+  }
+
+  @media (width <= 767px) {
+    .entry {
+      padding: 0 1em;
+    }
+  }
+</style>

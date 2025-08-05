@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createVirtualizer } from "@tanstack/svelte-virtual";
-  import { onDestroy, type Snippet } from "svelte";
+  import { onDestroy, onMount, tick, type Snippet } from "svelte";
   import { derived, writable } from "svelte/store";
 
   import type { Entry } from "../entries";
@@ -15,6 +15,8 @@
   import JournalEntry from "./JournalEntry.svelte";
   import JournalFilters from "./JournalFilters.svelte";
   import type { AccountJournalEntry } from "../api/validators";
+  import Header from "../sidebar/Header.svelte";
+  import { hideHeader } from "../stores";
 
   type E = Entry | AccountJournalEntry;
   interface Props {
@@ -161,68 +163,98 @@
       });
     }
   });
+
+  let mobileHeader = $state(false);
+  onMount(() => {
+    const mediaQuery = window.matchMedia("(width <= 767px)");
+    const onChange = () => {
+      // Wait for update tick so keyboard shortcut not duplicated.
+      if (mediaQuery.matches) {
+        $hideHeader = true;
+        tick().then(() => mobileHeader = true);
+      } else {
+        mobileHeader = false;
+        tick().then(() => $hideHeader = false);
+      }
+    };
+
+    mediaQuery.addEventListener("change", onChange);
+    onChange();
+
+    onDestroy(() => {
+      $hideHeader = false;
+      mediaQuery.removeEventListener("change", onChange);
+    });
+  });
 </script>
 
 <div class="fixed-fullsize-container">
   <div bind:this={vlistOuter} class="vlist-outer">
     <div
-      class="flex-table journal vlist-inner"
+      class="flex-table vlist-inner"
       style="height: {$virtualizer.getTotalSize()}px;"
     >
       <ol
-        class="vlist-items"
+        class="vlist-items journal"
         style="transform: translateY({items[0]?.start ?? 0}px);"
       >
         {#each items as row (row.index)}
           {#if row.index === 0}
             <li class="head" bind:this={head} data-index="0">
-              {@render header?.()}
-              <div class="filter-container">
+              {#if mobileHeader}
+                <div class="header-mobile">
+                  <Header />
+                </div>
+              {/if}
+              <div class="container">
+                {@render header?.()}
                 <JournalFilters />
               </div>
-              <p>
-                <!-- TODO: ARIA tags -->
-                <span
-                  class="datecell"
-                  data-sort="date"
-                  data-sort-name="date"
-                  onclick={headerClick}
-                  aria-hidden="true"
-                >
-                  {_("Date")}
-                </span>
-                <span
-                  class="flag"
-                  data-sort="string"
-                  data-sort-name="flag"
-                  onclick={headerClick}
-                  aria-hidden="true"
-                >
-                  {_("F")}
-                </span>
-                <span
-                  class="description"
-                  data-sort="string"
-                  data-sort-name="narration"
-                  onclick={headerClick}
-                  aria-hidden="true"
-                >
-                  {_("Payee")}/{_("Narration")}
-                </span>
-                <span class="num">{_("Units")}</span>
-                <span class="cost num">
-                  {_("Cost")}
-                  {#if showChangeAndBalance}
-                    / {_("Change")}
-                  {/if}
-                </span>
-                <span class="num">
-                  {_("Price")}
-                  {#if showChangeAndBalance}
-                    / {_("Balance")}
-                  {/if}
-                </span>
-              </p>
+              <div class="table-head">
+                <p>
+                  <!-- TODO: ARIA tags -->
+                  <span
+                    class="datecell"
+                    data-sort="date"
+                    data-sort-name="date"
+                    onclick={headerClick}
+                    aria-hidden="true"
+                  >
+                    {_("Date")}
+                  </span>
+                  <span
+                    class="flag"
+                    data-sort="string"
+                    data-sort-name="flag"
+                    onclick={headerClick}
+                    aria-hidden="true"
+                  >
+                    {_("F")}
+                  </span>
+                  <span
+                    class="description"
+                    data-sort="string"
+                    data-sort-name="narration"
+                    onclick={headerClick}
+                    aria-hidden="true"
+                  >
+                    {_("Payee")}/{_("Narration")}
+                  </span>
+                  <span class="num">{_("Units")}</span>
+                  <span class="cost num">
+                    {_("Cost")}
+                    {#if showChangeAndBalance}
+                      / {_("Change")}
+                    {/if}
+                  </span>
+                  <span class="num">
+                    {_("Price")}
+                    {#if showChangeAndBalance}
+                      / {_("Balance")}
+                    {/if}
+                  </span>
+                </p>
+              </div>
             </li>
           {:else}
             <JournalEntry
@@ -240,15 +272,9 @@
 </div>
 
 <style>
-  .fixed-fullsize-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
   .vlist-outer {
     height: 100%;
-    padding: 1.5em;
+    /* padding: 1.5em; */
     contain: strict;
     overflow-y: auto;
   }
@@ -266,7 +292,22 @@
     width: 100%;
   }
 
-  .filter-container {
-    margin-bottom: 0.25rem;
+  .head > .container {
+    padding: 1.5em 1.5em 0 1.5em;
+    margin-bottom: 0.25em;
+  }
+
+  .head .table-head {
+    padding: 0 1.5em;
+  }
+
+  @media (width <= 767px) {
+    .head > .container {
+      padding: 1em 1em 0 1em;
+    }
+
+    .head .table-head {
+      padding: 0 1em;
+    }
   }
 </style>
