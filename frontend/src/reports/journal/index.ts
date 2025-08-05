@@ -10,7 +10,7 @@ export interface JournalProps {
 }
 
 export const journal = new Route<JournalProps>(
-  "journal2",
+  "journal",
   Journal,
   async (url) => {
     const entries = await get("journal", getURLFilters(url));
