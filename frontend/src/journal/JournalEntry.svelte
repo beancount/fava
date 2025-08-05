@@ -1,6 +1,7 @@
 <script lang="ts">
+  import type { MouseEventHandler } from "svelte/elements";
+  import { addFilter, escape_for_regex } from ".";
   import type { AccountJournalEntry } from "../api/validators";
-  /* eslint-disable @typescript-eslint/no-confusing-void-expression */
   import type { Document, EntryMetadata, Transaction } from "../entries";
   import { type Entry } from "../entries";
   import type { Amount, RawAmount } from "../entries/amount";
@@ -82,6 +83,47 @@
       price ? [price[1], price[2]] : null,
     ] as PostingAmounts;
   }
+
+  let indicatorToggle = $state(false);
+  let showMetadata = $derived(indicatorToggle || journalShow.has("metadata"));
+  let showPostings = $derived(indicatorToggle || journalShow.has("postings"));
+  function indicatorClick() {
+    indicatorToggle = !indicatorToggle;
+  }
+
+  type ClickHandler = MouseEventHandler<HTMLElement>;
+
+  const clickTagLink: ClickHandler = ({ currentTarget }) =>
+    addFilter(currentTarget.innerText);
+
+  // Note: any special characters in the payee string are escaped so the
+  // filter matches against the payee literally.
+  const clickPayee: ClickHandler = ({ currentTarget }) =>
+    addFilter(`payee:"^${escape_for_regex(currentTarget.innerText)}$"`);
+
+  const clickMetaKey: ClickHandler = ({ currentTarget }) => {
+    const expr = `${currentTarget.innerText}""`;
+    if (currentTarget.closest(".postings")) {
+      // Posting metadata.
+      addFilter(`any(${expr})`);
+    } else {
+      // Entry metadata.
+      addFilter(expr);
+    }
+  };
+
+  const clickMetaVal: ClickHandler = ({ currentTarget }) => {
+    const key = (currentTarget.previousElementSibling as HTMLElement).innerText;
+    const value = `"^${escape_for_regex(currentTarget.innerText)}$"`;
+    const expr = `${key}${value}`;
+    if (currentTarget.closest(".postings")) {
+      // Posting metadata.
+      addFilter(`any(${expr})`);
+    } else {
+      // Entry metadata.
+      addFilter(expr);
+    }
+  };
 </script>
 
 {#snippet amount(amount: Amount | RawAmount, cls: string)}
@@ -107,13 +149,13 @@
 {/snippet}
 
 {#snippet metadata(metadata: EntryMetadata, entryHash: string)}
-  {#if journalShow.has("metadata")}
+  {#if showMetadata}
     {@const entries = metadata.entries()}
     {#if entries.length > 0}
       <dl class="metadata">
-        {#each metadata.entries() as [key, value] (key)}
-          <dt>{key}:</dt>
-          <dd>
+        {#each entries as [key, value] (key)}
+          <dt onclick={clickMetaKey} aria-hidden="true">{key}:</dt>
+          <dd onclick={clickMetaVal} aria-hidden="true">
             {#if key.startsWith("document")}
               <a
                 class="filename"
@@ -145,10 +187,10 @@
 
 {#snippet tagsLinks(entry: Document | Transaction)}
   {#each entry.tags?.toSorted() ?? [] as tag (tag)}
-    <span class="tag">#{tag}</span>
+    <span class="tag" onclick={clickTagLink} aria-hidden="true">#{tag}</span>
   {/each}
   {#each entry.links?.toSorted() ?? [] as link (link)}
-    <span class="link">^{link}</span>
+    <span class="link" onclick={clickTagLink} aria-hidden="true">^{link}</span>
   {/each}
 {/snippet}
 
@@ -205,8 +247,9 @@
       </span>
     {/if}
   {:else if e.t === "Transaction"}
-    <strong class="payee">{e.payee}</strong>{#if e.payee && e.narration}<span
-        class="separator"
+    <strong class="payee" onclick={clickPayee} aria-hidden="true"
+      >{e.payee}</strong
+    >{#if e.payee && e.narration}<span class="separator"
       ></span>{/if}{e.narration}
     {@render tagsLinks(e)}
   {/if}
@@ -236,7 +279,7 @@
     {:else}
       <span class="description">{@render description()}</span>
     {/if}
-    <span class="indicators">
+    <span class="indicators" onclick={indicatorClick} aria-hidden="true">
       {@render metadataIndicators(e.meta)}
       {#if e.t === "Transaction"}
         {#each e.postings as posting, index (index)}
@@ -272,7 +315,7 @@
     {/if}
   </p>
   {@render metadata(e.meta, e.entry_hash)}
-  {#if journalShow.has("postings") && e.t === "Transaction" && e.postings.length > 0}
+  {#if showPostings && e.t === "Transaction" && e.postings.length > 0}
     <ul class="postings">
       {#each e.postings as posting, index (index)}
         <li class={posting.flag ? flagToTypes(posting.flag) : null}>
@@ -290,6 +333,7 @@
             </span>
             {@render postingAmount(splitPostingAmount(posting.amount))}
           </p>
+          {@render metadata(posting.meta, e.entry_hash)}
         </li>
       {/each}
     </ul>
