@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createVirtualizer } from "@tanstack/svelte-virtual";
   import { onDestroy, type Snippet } from "svelte";
-  import { derived } from "svelte/store";
+  import { derived, writable } from "svelte/store";
 
   import type { Entry } from "../entries";
   import { _ } from "../i18n";
@@ -23,7 +23,11 @@
     header?: Snippet;
   }
 
-  const { entries, showChangeAndBalance = false, header }: Props = $props();
+  const {
+    entries: entriesProp,
+    showChangeAndBalance = false,
+    header,
+  }: Props = $props();
 
   function entry(e: E | Readonly<E>): Entry {
     return Array.isArray(e) ? e[0] : (e as Entry);
@@ -41,70 +45,75 @@
   });
 
   let sortedEntries = $state.raw<E[]>([]);
+
+  // Use manual stores as using $derived is slow here.
+  const entries = writable(entriesProp);
   const journalShow = derived(journalShowStore, (t) => new Set(t));
-  const filter = derived([journalSortOrder, journalShow], (it) => it);
-  const unsub = filter.subscribe(([[sortColumn, sortOrder], journalShow]) => {
-    let column: (e: Entry) => string;
-    switch (sortColumn) {
-      case "flag":
-        column = (e) => e.sortFlag;
-        break;
-      case "narration":
-        column = (e) => e.sortNarration;
-        break;
-      default:
-        column = (e) => e.date;
-        break;
-    }
-    const sorter = new Sorter<E>(
-      new StringColumn(
-        "",
-        (e, i, a) => column(entry(e)) + i.toString().padStart(a.length, "0"),
-      ),
-      sortOrder ?? "asc",
-    );
-
-    const filtered = entries.filter((t) => {
-      const e = entry(t);
-      if (journalShow.has(e.t.toLowerCase() as JournalShowEntry)) {
-        if (e.t === "Transaction") {
-          let flagOpt: JournalShowEntry;
-          switch (e.flag) {
-            case "*":
-              flagOpt = "cleared";
-              break;
-            case "!":
-              flagOpt = "pending";
-              break;
-            default:
-              flagOpt = "other";
-          }
-          return journalShow.has(flagOpt);
-        } else if (e.t === "Document") {
-          if (e.tags) {
-            if (e.tags.includes("discovered")) {
-              return journalShow.has("discovered");
-            }
-            if (e.tags.includes("linked")) {
-              return journalShow.has("linked");
-            }
-          }
-        } else if (e.t === "Custom") {
-          if (e.type === "budget") {
-            return journalShow.has("budget");
-          }
-        }
-        return true;
+  const filter = derived([journalSortOrder, journalShow, entries], (it) => it);
+  const unsub = filter.subscribe(
+    ([[sortColumn, sortOrder], journalShow, entries]) => {
+      let column: (e: Entry) => string;
+      switch (sortColumn) {
+        case "flag":
+          column = (e) => e.sortFlag;
+          break;
+        case "narration":
+          column = (e) => e.sortNarration;
+          break;
+        default:
+          column = (e) => e.date;
+          break;
       }
-      return false;
-    });
+      const sorter = new Sorter<E>(
+        new StringColumn(
+          "",
+          (e, i, a) => column(entry(e)) + i.toString().padStart(a.length, "0"),
+        ),
+        sortOrder ?? "asc",
+      );
 
-    sortedEntries = sorter.sort(filtered) as E[];
-  });
+      const filtered = entries.filter((t) => {
+        const e = entry(t);
+        if (journalShow.has(e.t.toLowerCase() as JournalShowEntry)) {
+          if (e.t === "Transaction") {
+            let flagOpt: JournalShowEntry;
+            switch (e.flag) {
+              case "*":
+                flagOpt = "cleared";
+                break;
+              case "!":
+                flagOpt = "pending";
+                break;
+              default:
+                flagOpt = "other";
+            }
+            return journalShow.has(flagOpt);
+          } else if (e.t === "Document") {
+            if (e.tags) {
+              if (e.tags.includes("discovered")) {
+                return journalShow.has("discovered");
+              }
+              if (e.tags.includes("linked")) {
+                return journalShow.has("linked");
+              }
+            }
+          } else if (e.t === "Custom") {
+            if (e.type === "budget") {
+              return journalShow.has("budget");
+            }
+          }
+          return true;
+        }
+        return false;
+      });
 
-  onDestroy(() => {
-    unsub();
-  });
+      sortedEntries = sorter.sort(filtered) as E[];
+    },
+  );
+
+  // Update the manual store when the prop update.
+  $effect(() => entries.set(entriesProp));
+  onDestroy(() => unsub());
 
   function headerClick(e: MouseEvent & { currentTarget: HTMLSpanElement }) {
     const name = e.currentTarget.getAttribute("data-sort-name");
