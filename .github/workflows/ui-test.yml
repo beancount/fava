@@ -53,7 +53,7 @@ jobs:
 
       - name: Run Selenium tests (with virtual display)
         env:
-          HEADLESS: true
+          HEADLESS: "true"
           Fava_URL: http://54.73.240.131:5000/example-beancount-file/income_statement/
         run: |
           ls
