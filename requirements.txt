@@ -1,0 +1,14 @@
+# Web automation
+selenium==4.23.1
+webdriver-manager==4.0.1
+
+# Testing framework
+pytest==8.3.2
+pytest-html==4.1.1
+pytest-xdist==3.6.1  # Parallel test execution
+
+# Environment variables handling (optional, in case you store URLs/tokens in .env)
+python-dotenv==1.0.1
+
+# Optional: If you use waits with CSS selectors / XPath
+lxml==5.2.1
