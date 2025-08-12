@@ -56,5 +56,5 @@ jobs:
           Fava_URL: http://54.73.240.131:5000/example-beancount-file/income_statement/
         run: |
           ls
-          cd UI_Testing/
+          cd UI_Testing
           pytest 
