@@ -52,7 +52,6 @@ jobs:
           sudo apt-get install -y google-chrome-stable
 
       - name: Run Selenium tests (with virtual display)
-        working-directory: FavaTesting
         env:
           Fava_URL: http://54.73.240.131:5000/example-beancount-file/income_statement/
         run: |
