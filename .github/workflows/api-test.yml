@@ -31,21 +31,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Wait until remote Fava is reachable
-        run: |
-          set -e
-          for i in {1..60}; do
-            if curl -fsS "$BASE_URL/$LEDGER_SLUG/income_statement/" >/dev/null; then
-              echo "Remote Fava is up"; exit 0
-            fi
-            echo "Waiting for remote Fava... ($i)"; sleep 2
-          done
-          echo "Fava not reachable"; exit 1
-
-      - name: Run API/UI tests
-        working-directory: API_Testing
+      - name: Run API tests
         env:
           BASE_URL: ${{ env.BASE_URL }}
           LEDGER_SLUG: ${{ env.LEDGER_SLUG }}
         run: |
+          
+          cd API_Testing
           pytest -q
