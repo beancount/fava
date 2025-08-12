@@ -36,6 +36,6 @@ jobs:
           BASE_URL: ${{ env.BASE_URL }}
           LEDGER_SLUG: ${{ env.LEDGER_SLUG }}
         run: |
-          ls
+          
           cd API_Testing
           pytest -q
