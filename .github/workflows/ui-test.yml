@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1 # Fetch only the latest commit to speed up the checkout process
-          repository: ahdsab/Fava  
+          repository: ahdsab/FavaTesting
           token: ${{ secrets.TESTING_GITHUB_TOKEN }}  # Use the token to access the repo
       
       - name: Set up Python
