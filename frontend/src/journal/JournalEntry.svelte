@@ -1,6 +1,8 @@
 <script lang="ts">
+  /* eslint-disable @typescript-eslint/no-confusing-void-expression */
+
   import type { MouseEventHandler } from "svelte/elements";
-  import { addFilter, escape_for_regex } from ".";
+
   import type { AccountJournalEntry } from "../api/validators";
   import type { Document, EntryMetadata, Transaction } from "../entries";
   import { type Entry } from "../entries";
@@ -10,6 +12,7 @@
   import { currency_name } from "../stores";
   import { ctx } from "../stores/format";
   import type { JournalShowEntry } from "../stores/journal";
+  import { addFilter, escape_for_regex } from ".";
 
   interface Props {
     index: number;
@@ -62,9 +65,9 @@
     return liClasses;
   });
 
-  const unitRegex = /([\d\.\-]+)\s+(\w+)/;
-  const costRegex = /\{([\d\.\-]+)\s+(\w+),\s([\w\-]+)\}/;
-  const priceRegex = /@\s([\d\.\-]+)\s+(\w+)/;
+  const unitRegex = /([\d.-]+)\s+(\w+)/;
+  const costRegex = /\{([\d.-]+)\s+(\w+),\s([\w-]+)\}/;
+  const priceRegex = /@\s([\d.-]+)\s+(\w+)/;
 
   type PostingAmounts = [
     [amount: string, currency: string],
@@ -73,9 +76,10 @@
   ];
 
   function splitPostingAmount(str: string): PostingAmounts {
-    const amount = str.match(unitRegex)!;
-    const cost = str.match(costRegex);
-    const price = str.match(priceRegex);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const amount = unitRegex.exec(str)!;
+    const cost = costRegex.exec(str);
+    const price = priceRegex.exec(str);
 
     return [
       [amount[1], amount[2]],
@@ -93,13 +97,15 @@
 
   type ClickHandler = MouseEventHandler<HTMLElement>;
 
-  const clickTagLink: ClickHandler = ({ currentTarget }) =>
+  const clickTagLink: ClickHandler = ({ currentTarget }) => {
     addFilter(currentTarget.innerText);
+  };
 
   // Note: any special characters in the payee string are escaped so the
   // filter matches against the payee literally.
-  const clickPayee: ClickHandler = ({ currentTarget }) =>
+  const clickPayee: ClickHandler = ({ currentTarget }) => {
     addFilter(`payee:"^${escape_for_regex(currentTarget.innerText)}$"`);
+  };
 
   const clickMetaKey: ClickHandler = ({ currentTarget }) => {
     const expr = `${currentTarget.innerText}""`;
@@ -127,6 +133,7 @@
 </script>
 
 {#snippet amount(amount: Amount | RawAmount, cls: string)}
+  <!-- eslint-disable-next-line @typescript-eslint/strict-boolean-expressions -->
   {#if !amount.number}
     <span class={cls}></span>
   {:else}
@@ -283,7 +290,8 @@
       {@render metadataIndicators(e.meta)}
       {#if e.t === "Transaction"}
         {#each e.postings as posting, index (index)}
-          <span class={posting.flag ? flagToTypes(posting.flag) : null}></span>
+          <span class={posting.flag != null ? flagToTypes(posting.flag) : null}
+          ></span>
           {@render metadataIndicators(posting.meta)}
         {/each}
       {/if}
@@ -302,15 +310,21 @@
     {#if showChangeAndBalance}
       {#if e.t === "Transaction"}
         <span class="change num">
-          {#each Object.entries(change ?? {}) as [currency, number]}
-            {$ctx.amount(number, currency)}<br />
-          {/each}
+          {#if change}
+            {#each Object.entries(change) as [currency, number], index (index)}
+              <!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
+              {$ctx.amount(number, currency)}<br />
+            {/each}
+          {/if}
         </span>
       {/if}
       <span class="num">
-        {#each Object.entries(balance ?? {}) as [currency, number]}
-          {$ctx.amount(number, currency)}<br />
-        {/each}
+        {#if balance}
+          {#each Object.entries(balance) as [currency, number], index (index)}
+            <!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
+            {$ctx.amount(number, currency)}<br />
+          {/each}
+        {/if}
       </span>
     {/if}
   </p>
@@ -318,7 +332,7 @@
   {#if showPostings && e.t === "Transaction" && e.postings.length > 0}
     <ul class="postings">
       {#each e.postings as posting, index (index)}
-        <li class={posting.flag ? flagToTypes(posting.flag) : null}>
+        <li class={posting.flag != null ? flagToTypes(posting.flag) : null}>
           <p>
             <span class="datecell"></span>
             <span class="flag">{posting.flag ?? ""}</span>

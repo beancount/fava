@@ -1,15 +1,17 @@
 <script lang="ts">
+  /* eslint-disable @typescript-eslint/no-confusing-void-expression */
+
   import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { chartContext } from "../../charts/context";
   import { urlForAccount } from "../../helpers";
   import { _ } from "../../i18n";
+  import JournalTable from "../../journal/JournalTable.svelte";
   import { is_non_empty } from "../../lib/array";
   import { intervalLabel } from "../../lib/interval";
   import { interval } from "../../stores";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import type { AccountReportProps } from ".";
-  import JournalTable from "../../journal/JournalTable.svelte";
 
   let {
     account,

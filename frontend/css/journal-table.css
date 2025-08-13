@@ -42,7 +42,7 @@
 }
 
 .journal .head .container {
-  padding: 1.5em 1.5em 0 1.5em;
+  padding: 1.5em 1.5em 0;
   margin-bottom: 0.25em;
 }
 
@@ -222,7 +222,7 @@
   }
 
   .journal .head .container {
-    padding: 1em 1em 0 1em;
+    padding: 1em 1em 0;
   }
 
   .journal .head .table-head {

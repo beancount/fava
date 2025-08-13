@@ -45,7 +45,7 @@ export class Sorter<T = unknown> {
   constructor(
     readonly column: SortColumn<T>,
     readonly order: SortOrder,
-  ) { }
+  ) {}
 
   /** Get a new sorter by switching to a possibly different column. */
   switchColumn(column: SortColumn<T>): Sorter<T> {
@@ -91,7 +91,7 @@ function sort_internal<T, U>(
 
 /** A SortColumn that does no sorting. */
 export class UnsortedColumn<T> implements SortColumn<T> {
-  constructor(readonly name: string) { }
+  constructor(readonly name: string) {}
 
   sort(data: readonly T[]): readonly T[] {
     return data;
@@ -104,8 +104,12 @@ export class NumberColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>, index: number, array: readonly T[]) => number,
-  ) { }
+    private readonly value: (
+      row: Readonly<T>,
+      index: number,
+      array: readonly T[],
+    ) => number,
+  ) {}
 
   sort(data: readonly T[], direction: SortDirection): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
@@ -126,8 +130,12 @@ export class StringColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>, index: number, array: readonly T[]) => string,
-  ) { }
+    private readonly value: (
+      row: Readonly<T>,
+      index: number,
+      array: readonly T[],
+    ) => string,
+  ) {}
 
   sort(data: readonly T[], direction: 1 | -1): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);

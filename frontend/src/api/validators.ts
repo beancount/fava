@@ -152,8 +152,10 @@ const account_budget = object({
 });
 export type AccountBudget = ValidationT<typeof account_budget>;
 
-const simple_counter_inventory = record(number)
-export type SimpleCounterInventory = ValidationT<typeof simple_counter_inventory>
+const simple_counter_inventory = record(number);
+export type SimpleCounterInventory = ValidationT<
+  typeof simple_counter_inventory
+>;
 
 const account_journal_entry = tuple(
   entryValidator,

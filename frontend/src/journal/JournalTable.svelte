@@ -1,11 +1,14 @@
 <script lang="ts">
   import { createVirtualizer } from "@tanstack/svelte-virtual";
-  import { onDestroy, onMount, tick, type Snippet } from "svelte";
+  import { onDestroy, onMount, type Snippet, tick } from "svelte";
   import { derived, writable } from "svelte/store";
 
+  import type { AccountJournalEntry } from "../api/validators";
   import type { Entry } from "../entries";
   import { _ } from "../i18n";
+  import Header from "../sidebar/Header.svelte";
   import { Sorter, StringColumn } from "../sort";
+  import { hideHeader } from "../stores";
   import {
     journalShow as journalShowStore,
     type JournalShowEntry,
@@ -14,9 +17,6 @@
   } from "../stores/journal";
   import JournalEntry from "./JournalEntry.svelte";
   import JournalFilters from "./JournalFilters.svelte";
-  import type { AccountJournalEntry } from "../api/validators";
-  import Header from "../sidebar/Header.svelte";
-  import { hideHeader } from "../stores";
 
   type E = Entry | AccountJournalEntry;
   interface Props {
@@ -114,8 +114,12 @@
   );
 
   // Update the manual store when the prop update.
-  $effect(() => entries.set(entriesProp));
-  onDestroy(() => unsub());
+  $effect(() => {
+    entries.set(entriesProp);
+  });
+  onDestroy(() => {
+    unsub();
+  });
 
   function headerClick(e: MouseEvent & { currentTarget: HTMLSpanElement }) {
     const name = e.currentTarget.getAttribute("data-sort-name");
@@ -144,8 +148,9 @@
       count: sortedEntries.length + 1,
       getItemKey: depend(
         sortedEntries,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         (sortedEntries) => (i) =>
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           i === 0 ? "head" : entry(sortedEntries[i - 1]!).entry_hash,
       ),
       getScrollElement: depend(vlistOuter, (ol) => () => ol ?? null),
@@ -156,7 +161,9 @@
   let items = $derived($virtualizer.getVirtualItems());
 
   $effect(() => {
-    if (head) $virtualizer.measureElement(head);
+    if (head) {
+      $virtualizer.measureElement(head);
+    }
     if (vlistItems.length) {
       vlistItems.forEach((li) => {
         $virtualizer.measureElement(li);
@@ -171,10 +178,14 @@
       // Wait for update tick so keyboard shortcut not duplicated.
       if (mediaQuery.matches) {
         $hideHeader = true;
-        tick().then(() => mobileHeader = true);
+        void tick().then(() => {
+          mobileHeader = true;
+        });
       } else {
         mobileHeader = false;
-        tick().then(() => $hideHeader = false);
+        void tick().then(() => {
+          $hideHeader = false;
+        });
       }
     };
 

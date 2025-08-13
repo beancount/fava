@@ -16,7 +16,7 @@ export function localeFormatter(
   locale: string | null,
   precision = 2,
 ): (num: number) => string {
-  let f;
+  let f: (value: number) => string;
   if (locale == null) {
     f = format(`.${precision.toString()}f`);
   } else {
