@@ -65,7 +65,7 @@
   }: Props = $props();
 
   const uid = $props.id();
-  const autocomple_id = `combobox-autocomplete-${uid.toString()}`;
+  const autocomple_id = `combobox-autocomplete-${uid}`;
 
   let hidden = $state.raw(true);
   let index = $state.raw(-1);

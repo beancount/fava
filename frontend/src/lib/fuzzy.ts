@@ -23,7 +23,7 @@ export function fuzzytest(pattern: string, text: string): number {
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
       pindex += 1;
-      localScore += +1;
+      localScore += 1;
     } else {
       localScore = 0;
     }

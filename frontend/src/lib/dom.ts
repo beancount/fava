@@ -20,7 +20,7 @@ function getScriptTagJSON(
   if (!el) {
     return err(new ScriptTagNotFoundError(selector));
   }
-  return parseJSON(el.textContent ?? "");
+  return parseJSON(el.textContent);
 }
 
 /**

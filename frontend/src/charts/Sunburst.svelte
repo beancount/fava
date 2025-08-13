@@ -69,7 +69,7 @@
   }}
   role="img"
 >
-  <circle style="opacity:0" r={radius} />
+  <circle r={radius} />
   <text class="account" text-anchor="middle">
     {(current ?? root).data.account}
   </text>
@@ -96,6 +96,10 @@
 </g>
 
 <style>
+  circle {
+    opacity: 0;
+  }
+
   .half {
     opacity: 0.5;
   }
