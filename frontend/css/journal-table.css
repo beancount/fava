@@ -41,6 +41,19 @@
   margin-top: 0.25rem;
 }
 
+.journal .head .container {
+  padding: 1.5em 1.5em 0;
+  margin-bottom: 0.25em;
+}
+
+.journal .head .table-head {
+  padding: 0 1.5em;
+}
+
+.journal .entry {
+  padding: 0 1.5em;
+}
+
 .journal p,
 .journal dl {
   border-bottom: thin solid var(--table-border);
@@ -59,52 +72,6 @@
 .journal .postings .num {
   overflow: auto;
   line-height: 16px;
-}
-
-.journal > li,
-.journal.show-custom .custom.budget,
-.journal.show-document .document.discovered,
-.journal.show-document .document.linked,
-.journal .metadata,
-.journal .postings {
-  display: none;
-}
-
-.journal .head,
-.journal.show-balance .balance,
-.journal.show-close .close,
-.journal.show-custom .custom,
-.journal.show-document .document,
-.journal.show-note .note,
-.journal.show-open .open,
-.journal.show-pad .pad,
-.journal.show-query .query {
-  display: block;
-}
-
-/* Show metadata and postings if it was toggled for the whole journal. */
-.journal.show-metadata .metadata,
-.journal.show-postings .postings {
-  display: block;
-}
-
-/* Show metadata and postings where it was explicitly toggled with the indicators. */
-.journal > li.show-full-entry .postings,
-.journal > li.show-full-entry .metadata {
-  display: block;
-}
-
-.journal.show-transaction.show-cleared .transaction.cleared,
-.journal.show-transaction.show-pending .transaction.pending,
-.journal.show-transaction.show-other .transaction.other,
-.journal.show-document.show-discovered .document.discovered,
-.journal.show-document.show-linked .document.linked,
-.journal.show-custom.show-budget .custom.budget {
-  display: block;
-}
-
-.journal .transaction:hover {
-  background: var(--journal-hover-highlight);
 }
 
 /* Metadata */
@@ -127,6 +94,10 @@
 .journal .metadata dd {
   margin-left: 15rem;
   cursor: pointer;
+}
+
+.journal .transaction:hover {
+  background: var(--journal-hover-highlight);
 }
 
 /* There's three number columns (units, cost, price).
@@ -248,6 +219,18 @@
 @media (width <= 767px) {
   .journal p {
     flex-wrap: wrap;
+  }
+
+  .journal .head .container {
+    padding: 1em 1em 0;
+  }
+
+  .journal .head .table-head {
+    padding: 0 1em;
+  }
+
+  .journal .entry {
+    padding: 0 1.5em;
   }
 
   /* show a colored top border for all entries */

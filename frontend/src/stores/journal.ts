@@ -1,7 +1,31 @@
 import { localStorageSyncedStore } from "../lib/store";
-import { array, constants, string, tuple } from "../lib/validation";
+import { array, constants, tuple, type ValidationT } from "../lib/validation";
 
-const defaultValue = [
+const journalShowEntryValidator = constants(
+  "open",
+  "close",
+  "transaction",
+  "cleared",
+  "pending",
+  "other",
+  "balance",
+  "note",
+  "document",
+  "discovered",
+  "linked",
+  "pad",
+  "query",
+  "statement",
+  "custom",
+  "budget",
+  "metadata",
+  "postings",
+  null,
+);
+
+export type JournalShowEntry = ValidationT<typeof journalShowEntryValidator>;
+
+const defaultValue: JournalShowEntry[] = [
   "balance",
   "budget",
   "cleared",
@@ -18,15 +42,21 @@ const defaultValue = [
 /** The types of entries to show in the journal. */
 export const journalShow = localStorageSyncedStore(
   "journal-show",
-  array(string),
+  array(journalShowEntryValidator),
   () => defaultValue,
 );
 
-const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
+const sortOrderValidator = tuple(
+  constants("date", "flag", "narration", null),
+  constants("asc", "desc", null),
+);
+export type JournalSortOrder = ValidationT<typeof sortOrderValidator>;
+
+const defaultSortOrder: JournalSortOrder = ["date", "desc"];
 
 /** The column and order that the journal should be sorted in. */
 export const journalSortOrder = localStorageSyncedStore(
   "journal-sort-order",
-  tuple(string, constants("asc", "desc")),
+  sortOrderValidator,
   () => defaultSortOrder,
 );

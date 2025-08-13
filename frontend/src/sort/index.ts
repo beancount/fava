@@ -14,7 +14,7 @@
 import { permute } from "d3-array";
 import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal";
+import { type JournalSortOrder, journalSortOrder } from "../stores/journal";
 
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
@@ -77,7 +77,7 @@ export function sort_by_strings<T>(
  */
 function sort_internal<T, U>(
   data: readonly T[],
-  value: (row: T) => U,
+  value: (row: T, index: number, array: readonly T[]) => U,
   compare: (a: U, b: U) => number,
   direction: SortDirection,
 ): T[] {
@@ -104,7 +104,11 @@ export class NumberColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>) => number,
+    private readonly value: (
+      row: Readonly<T>,
+      index: number,
+      array: readonly T[],
+    ) => number,
   ) {}
 
   sort(data: readonly T[], direction: SortDirection): readonly T[] {
@@ -112,9 +116,12 @@ export class NumberColumn<T> implements SortColumn<T> {
   }
 }
 /** A SortColumn for objects with a string date property. */
-export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
-  constructor(override readonly name: string) {
-    super(name, (d: T) => new Date(d.date).valueOf());
+export class DateColumn<T> extends NumberColumn<T> {
+  constructor(
+    override readonly name: string,
+    value: (row: Readonly<T>, index: number, array: readonly T[]) => string,
+  ) {
+    super(name, (t, i, a) => new Date(value(t, i, a)).valueOf());
   }
 }
 /** A SortColumn for strings. */
@@ -123,7 +130,11 @@ export class StringColumn<T> implements SortColumn<T> {
 
   constructor(
     readonly name: string,
-    private readonly value: (row: Readonly<T>) => string,
+    private readonly value: (
+      row: Readonly<T>,
+      index: number,
+      array: readonly T[],
+    ) => string,
   ) {}
 
   sort(data: readonly T[], direction: 1 | -1): readonly T[] {
@@ -206,14 +217,14 @@ export function sortableJournal(ol: HTMLOListElement): void {
       );
     };
     if (name === initialColumn) {
-      sort(initialOrder);
+      sort(initialOrder ?? "asc");
     }
 
     header.addEventListener("click", () => {
       const order =
         header.getAttribute("data-order") === "asc" ? "desc" : "asc";
       sort(order);
-      journalSortOrder.set([name, order]);
+      journalSortOrder.set([name as JournalSortOrder[0], order]);
     });
   });
 }

@@ -21,7 +21,6 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
-from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 from flask_babel import gettext
@@ -693,7 +692,9 @@ class AccountReportJournal:
     """Data for the journal account report."""
 
     charts: Sequence[ChartData]
-    journal: str
+    journal: Sequence[
+        tuple[Directive, Mapping[str, Decimal], Mapping[str, Decimal]]
+    ]
 
 
 @dataclass(frozen=True)
@@ -787,8 +788,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             budgets=budgets,
         )
 
-    journal = get_template_attribute("_journal_table.html", "journal_table")
-    entries = g.ledger.account_journal(
+    journal = g.ledger.account_journal(
         g.filtered,
         account_name,
         g.conversion,
@@ -796,5 +796,5 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     )
     return AccountReportJournal(
         charts,
-        journal=journal(entries, show_change_and_balance=True),
+        journal=[[serialise(e[0]), e[1], e[2]] for e in journal],  # type: ignore[misc]
     )

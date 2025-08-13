@@ -17,7 +17,7 @@ export function escape_for_regex(value: string): string {
  * Add a filter to the existing list of filters. Any parts that are interpreted
  * as a regex must be escaped.
  */
-function addFilter(value: string): void {
+export function addFilter(value: string): void {
   fql_filter.update((fql_filter_val) =>
     fql_filter_val ? `${fql_filter_val} ${value}` : value,
   );
@@ -83,8 +83,8 @@ export class FavaJournal extends HTMLElement {
     }
 
     this.unsubscribe = journalShow.subscribe((show) => {
-      const classes = [...show].map((s) => `show-${s}`).join(" ");
-      ol.className = `flex-table journal ${classes}`;
+      const classes = [...show].map((s) => (s ? `show-${s}` : "")).join(" ");
+      ol.className = `flex-table journal ssr ${classes}`;
     });
     const component = mount(JournalFilters, { target: this, anchor: ol });
     this.unmount = () => {

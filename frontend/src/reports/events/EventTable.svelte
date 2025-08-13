@@ -11,7 +11,7 @@
   let { events }: Props = $props();
 
   const columns = [
-    new DateColumn<Event>(_("Date")),
+    new DateColumn<Event>(_("Date"), (d) => d.date),
     new StringColumn<Event>(_("Description"), (d) => d.description),
   ] as const;
   let sorter = $state(new Sorter(columns[0], "desc"));
