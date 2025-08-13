@@ -6,7 +6,7 @@
       "!**/src/fava/**/*.html",
       "!**/tests/__snapshots__/**/*.json"
     ]
-  },
+  }, 
   "vcs": {
     "enabled": true,
     "clientKind": "git",
