@@ -274,7 +274,6 @@
 <style>
   .vlist-outer {
     height: 100%;
-    /* padding: 1.5em; */
     contain: strict;
     overflow-y: auto;
   }
@@ -290,24 +289,5 @@
     top: 0;
     left: 0;
     width: 100%;
-  }
-
-  .head > .container {
-    padding: 1.5em 1.5em 0 1.5em;
-    margin-bottom: 0.25em;
-  }
-
-  .head .table-head {
-    padding: 0 1.5em;
-  }
-
-  @media (width <= 767px) {
-    .head > .container {
-      padding: 1em 1em 0 1em;
-    }
-
-    .head .table-head {
-      padding: 0 1em;
-    }
   }
 </style>

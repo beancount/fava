@@ -339,15 +339,3 @@
     </ul>
   {/if}
 </li>
-
-<style>
-  .entry {
-    padding: 0 1.5em;
-  }
-
-  @media (width <= 767px) {
-    .entry {
-      padding: 0 1em;
-    }
-  }
-</style>

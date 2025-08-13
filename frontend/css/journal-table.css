@@ -41,6 +41,19 @@
   margin-top: 0.25rem;
 }
 
+.journal .head .container {
+  padding: 1.5em 1.5em 0 1.5em;
+  margin-bottom: 0.25em;
+}
+
+.journal .head .table-head {
+  padding: 0 1.5em;
+}
+
+.journal .entry {
+  padding: 0 1.5em;
+}
+
 .journal p,
 .journal dl {
   border-bottom: thin solid var(--table-border);
@@ -81,50 +94,6 @@
 .journal .metadata dd {
   margin-left: 15rem;
   cursor: pointer;
-}
-
-.journal.ssr > li,
-.journal.ssr.show-custom .custom.budget,
-.journal.ssr.show-document .document.discovered,
-.journal.ssr.show-document .document.linked,
-.journal.ssr .metadata,
-.journal.ssr .postings {
-  display: none;
-}
-
-.journal.ssr .head,
-.journal.ssr.show-balance .balance,
-.journal.ssr.show-close .close,
-.journal.ssr.show-custom .custom,
-.journal.ssr.show-document .document,
-.journal.ssr.show-note .note,
-.journal.ssr.show-open .open,
-.journal.ssr.show-pad .pad,
-.journal.ssr.show-query .query {
-  display: block;
-}
-
-/* Show metadata and postings if it was toggled for the whole journal. */
-.journal.ssr.show-metadata .metadata,
-.journal.ssr.show-postings .postings {
-  display: block;
-}
-
-/* TODO */
-
-/* Show metadata and postings where it was explicitly toggled with the indicators. */
-.journal > li.show-full-entry .postings,
-.journal > li.show-full-entry .metadata {
-  display: block;
-}
-
-.journal.ssr.show-transaction.show-cleared .transaction.cleared,
-.journal.ssr.show-transaction.show-pending .transaction.pending,
-.journal.ssr.show-transaction.show-other .transaction.other,
-.journal.ssr.show-document.show-discovered .document.discovered,
-.journal.ssr.show-document.show-linked .document.linked,
-.journal.ssr.show-custom.show-budget .custom.budget {
-  display: block;
 }
 
 .journal .transaction:hover {
@@ -250,6 +219,18 @@
 @media (width <= 767px) {
   .journal p {
     flex-wrap: wrap;
+  }
+
+  .journal .head .container {
+    padding: 1em 1em 0 1em;
+  }
+
+  .journal .head .table-head {
+    padding: 0 1em;
+  }
+
+  .journal .entry {
+    padding: 0 1.5em;
   }
 
   /* show a colored top border for all entries */
