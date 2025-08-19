@@ -1,4 +1,4 @@
-import { stratify } from "../lib/tree.ts";
+import { stratifyAccounts } from "../lib/tree.ts";
 import type {
   Inventory,
   QueryResultTable,
@@ -23,7 +23,7 @@ export function getQueryChart(
     const grouped = (table.rows as [string, Inventory][]).map(
       ([group, inv]) => ({ group, balance: inv.value }),
     );
-    const root = stratify(
+    const root = stratifyAccounts(
       grouped,
       (d) => d.group,
       (account, d) => ({ account, balance: d?.balance ?? {} }),
