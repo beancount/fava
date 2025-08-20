@@ -3,6 +3,7 @@
   import { _ } from "../../i18n";
   import { NumberColumn, Sorter } from "../../sort";
   import SortHeader from "../../sort/SortHeader.svelte";
+  import { currency_name } from "../../stores";
   import { ctx } from "../../stores/format";
 
   type T = [Date, number];
@@ -34,7 +35,9 @@
     {#each sorted_prices as [date, value] (date)}
       <tr>
         <td>{day(date)}</td>
-        <td class="num">{$ctx.amount(value, quote)}</td>
+        <td class="num" title={$currency_name(quote)}
+          >{$ctx.amount(value, quote)}</td
+        >
       </tr>
     {/each}
   </tbody>
