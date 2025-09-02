@@ -138,10 +138,16 @@
       } else {
         value = "";
       }
-    } else if (event.key === "ArrowUp") {
+    } else if (
+      event.key === "ArrowUp" ||
+      (event.ctrlKey && event.key.toLowerCase() === "p")
+    ) {
       event.preventDefault();
       index = index === 0 ? filteredSuggestions.length - 1 : index - 1;
-    } else if (event.key === "ArrowDown") {
+    } else if (
+      event.key === "ArrowDown" ||
+      (event.ctrlKey && event.key.toLowerCase() === "n")
+    ) {
       event.preventDefault();
       index = index === filteredSuggestions.length - 1 ? 0 : index + 1;
     }
