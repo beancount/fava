@@ -7,6 +7,7 @@ from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
 from itertools import takewhile
+from math import ceil
 from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -210,6 +211,33 @@ class FilteredLedger:
         if close_date is None:
             return False
         return close_date < date_range.end if date_range else True
+
+    def paginate_journal(
+        self, page: int, per_page: int = 1000
+    ) -> tuple[Sequence[tuple[int, Directive]], int]:
+        """Get entries for a journal page with pagination info.
+
+        Args:
+            page: Page number (1-indexed).
+            per_page: Number of entries per page.
+
+        Returns:
+            JournalPage with page_entries as (global_index, directive) tuples
+            in reverse chronological order total_pages.
+        """
+        entries = self.entries
+        num_entries = len(entries)
+        page_start = (page - 1) * per_page
+        page_end = min(page * per_page, num_entries)
+
+        # Get chronological slice from the end, then reverse for display.
+        start = num_entries - page_end
+        end = num_entries - page_start
+        page_entries = [(i, entries[i]) for i in range(start, end)]
+        page_entries.reverse()
+
+        total_pages = ceil(num_entries / per_page)
+        return page_entries, total_pages
 
 
 class FavaLedger:

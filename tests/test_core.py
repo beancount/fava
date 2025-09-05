@@ -139,3 +139,28 @@ def test_commodity_names(example_ledger: FavaLedger) -> None:
     assert example_ledger.commodities.name("USD") == "US Dollar"
     assert example_ledger.commodities.name("NOCOMMODITY") == "NOCOMMODITY"
     assert example_ledger.commodities.name("VMMXX") == "VMMXX"
+
+
+def test_paginate_journal(small_example_ledger: FavaLedger) -> None:
+    filtered = FilteredLedger(small_example_ledger)
+    total_entries = len(filtered.entries)
+    if total_entries < 4:
+        pytest.skip("Need at least 4 entries for this test")
+
+    per_page = 2
+    expected_total_pages = (total_entries + per_page - 1) // per_page
+
+    all_indices = []
+    all_entries = []
+    for page in range(1, expected_total_pages + 1):
+        page_entries, total_pages = filtered.paginate_journal(page, per_page)
+        assert total_pages == expected_total_pages
+        assert page_entries
+        all_indices.extend([entry_tuple[0] for entry_tuple in page_entries])
+        all_entries.extend(
+            [id(entry_tuple[1]) for entry_tuple in page_entries]
+        )
+
+    assert len(set(all_indices)) == total_entries
+    assert all(0 <= idx < total_entries for idx in all_indices)
+    assert len(set(all_entries)) == total_entries
