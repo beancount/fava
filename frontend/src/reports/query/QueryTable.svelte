@@ -10,7 +10,7 @@
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
   import { Sorter, UnsortedColumn } from "../../sort";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { accounts_set } from "../../stores";
+  import { accounts_set, currency_name } from "../../stores";
   import { ctx, num } from "../../stores/format";
   import type { QueryCell, QueryResultTable } from "./query_table";
   import { Inventory } from "./query_table";
@@ -87,19 +87,25 @@
               {day(value)}
             </td>
           {:else if value instanceof Amount}
-            <td class="num">
+            <td class="num" title={$currency_name(value.currency)}>
               {value.str($ctx)}
             </td>
           {:else if value instanceof Position}
             <td class="num">
-              {value.units.str($ctx)}
+              <span title={$currency_name(value.units.currency)}>
+                {value.units.str($ctx)}
+              </span>
               {#if value.cost}
-                &lbrace;{value.cost.str($ctx)}&rbrace;{/if}
+                &lbrace;<span title={$currency_name(value.cost.currency)}>
+                  {value.cost.str($ctx)}
+                </span>&rbrace;{/if}
             </td>
           {:else if value instanceof Inventory}
             <td class="num">
               {#each Object.entries(value.value) as [currency, number] (currency)}
-                {$ctx.amount(number, currency)}
+                <span title={$currency_name(currency)}
+                  >{$ctx.amount(number, currency)}</span
+                >
                 <br />
               {/each}
             </td>
