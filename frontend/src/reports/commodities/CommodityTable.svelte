@@ -21,6 +21,7 @@
   let sorter = $state(new Sorter(columns[0], "desc"));
 
   let sorted_prices = $derived(sorter.sort(prices));
+  let quote_name = $derived($currency_name(quote));
 </script>
 
 <table>
@@ -35,9 +36,9 @@
     {#each sorted_prices as [date, value] (date)}
       <tr>
         <td>{day(date)}</td>
-        <td class="num" title={$currency_name(quote)}
-          >{$ctx.amount(value, quote)}</td
-        >
+        <td class="num" title={quote_name}>
+          {$ctx.amount(value, quote)}
+        </td>
       </tr>
     {/each}
   </tbody>

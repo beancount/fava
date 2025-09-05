@@ -92,13 +92,13 @@
             </td>
           {:else if value instanceof Position}
             <td class="num">
-              <span title={$currency_name(value.units.currency)}
-                >{value.units.str($ctx)}</span
-              >
+              <span title={$currency_name(value.units.currency)}>
+                {value.units.str($ctx)}
+              </span>
               {#if value.cost}
-                &lbrace;<span title={$currency_name(value.cost.currency)}
-                  >{value.cost.str($ctx)}</span
-                >&rbrace;{/if}
+                &lbrace;<span title={$currency_name(value.cost.currency)}>
+                  {value.cost.str($ctx)}
+                </span>&rbrace;{/if}
             </td>
           {:else if value instanceof Inventory}
             <td class="num">
