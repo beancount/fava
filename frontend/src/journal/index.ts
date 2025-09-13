@@ -87,7 +87,7 @@ export class FavaJournal extends HTMLElement {
 
     const total_pages = this.getAttribute("total-pages");
     if (total_pages != null) {
-      void this.fetchAllPages(ol, parseInt(total_pages));
+      void this.fetchAllPages(ol, parseInt(total_pages, 10));
     }
 
     this.unsubscribe = journalShow.subscribe((show) => {
