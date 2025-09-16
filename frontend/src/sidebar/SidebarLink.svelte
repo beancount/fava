@@ -22,7 +22,7 @@
 </script>
 
 <li>
-  <a class:selected {href} use:keyboardShortcut={key} data-remote={remote}>
+  <a class:selected {href} {@attach keyboardShortcut(key)} data-remote={remote}>
     {name}
     {#if bubble && bubble[0] > 0}
       <span class="bubble" class:error={bubble[1] === "error"}>

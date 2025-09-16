@@ -157,7 +157,7 @@
     aria-controls={autocomple_id}
     bind:value
     bind:this={input}
-    use:keyboardShortcut={key}
+    {@attach keyboardShortcut(key)}
     onblur={(event) => {
       hidden = true;
       onBlur?.(event.currentTarget);

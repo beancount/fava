@@ -50,7 +50,7 @@
   {#each nodes as d (d.data.account)}
     {@const account = d.data.account}
     <g
-      use:followingTooltip={() => tooltipText(d)}
+      {@attach followingTooltip(() => tooltipText(d))}
       class:current={current != null ? current.startsWith(account) : false}
     >
       <a

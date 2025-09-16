@@ -94,7 +94,7 @@
       <g
         class="group"
         class:desaturate={group.date > today}
-        use:followingTooltip={() => chart.tooltipText($ctx, group)}
+        {@attach followingTooltip(() => chart.tooltipText($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
         <rect
@@ -164,13 +164,14 @@
                   y={y(Math.max(bar[0], bar[1]))}
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={colorScale(account)}
-                  use:followingTooltip={() =>
+                  {@attach followingTooltip(() =>
                     chart.tooltipTextAccount(
                       $ctx,
                       bar.data,
                       account,
                       $chartToggledCurrencies,
-                    )}
+                    ),
+                  )}
                 />
               {/each}
             </g>

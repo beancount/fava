@@ -65,7 +65,7 @@
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
   <g
-    use:positionedTooltip={tooltipFindNode}
+    {@attach positionedTooltip(tooltipFindNode)}
     transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />

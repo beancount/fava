@@ -1,7 +1,5 @@
 <script lang="ts">
-  import type { HierarchyRectangularNode } from "d3-hierarchy";
   import { treemap } from "d3-hierarchy";
-  import type { Action } from "svelte/action";
 
   import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
@@ -48,20 +46,6 @@
       domHelpers.em(d.data.account),
     ];
   }
-
-  /** Hide account names that are too long. */
-  const setVisibility: Action<
-    SVGTextElement,
-    HierarchyRectangularNode<AccountHierarchyDatum>
-  > = (node, param) => {
-    function update(d: HierarchyRectangularNode<AccountHierarchyDatum>) {
-      const length = node.getComputedTextLength();
-      node.style.visibility =
-        d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? "visible" : "hidden";
-    }
-    update(param);
-    return { update };
-  };
 </script>
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
@@ -69,16 +53,23 @@
     {@const account = d.data.account}
     <g
       transform={`translate(${d.x0.toString()},${d.y0.toString()})`}
-      use:followingTooltip={() => tooltipText(d)}
+      {@attach followingTooltip(() => tooltipText(d))}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <a href={$urlForAccount(account)}>
         <text
-          use:setVisibility={d}
           dy=".5em"
           x={(d.x1 - d.x0) / 2}
           y={(d.y1 - d.y0) / 2}
           text-anchor="middle"
+          {@attach (node: SVGTextElement) => {
+            // Hide account names that are too long.
+            const length = node.getComputedTextLength();
+            node.style.visibility =
+              d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14
+                ? "visible"
+                : "hidden";
+          }}
         >
           {leaf(account)}
         </text>

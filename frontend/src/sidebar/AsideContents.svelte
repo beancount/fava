@@ -59,7 +59,7 @@
       href="#add-transaction"
       class="secondary add-transaction"
       title={_("Add Journal Entry")}
-      use:keyboardShortcut={"n"}>+</a
+      {@attach keyboardShortcut("n")}>+</a
     >
   </Link>
   {#if $errors.length > 0}

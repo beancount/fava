@@ -88,7 +88,7 @@
 </script>
 
 <form onsubmit={save}>
-  <div class="editor" use:renderEditor></div>
+  <div class="editor" {@attach renderEditor}></div>
   <div class="flex-row">
     <span class="spacer"></span>
     <label>

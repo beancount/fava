@@ -33,8 +33,8 @@
     submit();
   }}
 >
-  <div use:renderEditor></div>
-  <button type="submit" use:keyboardShortcut={"Control+Enter"}>
+  <div {@attach renderEditor}></div>
+  <button type="submit" {@attach keyboardShortcut("Control+Enter")}>
     {_("Submit")}
   </button>
 </form>

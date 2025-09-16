@@ -32,7 +32,7 @@
   });
 </script>
 
-<div use:renderEditor></div>
+<div {@attach renderEditor}></div>
 
 <style>
   div {

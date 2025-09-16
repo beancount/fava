@@ -47,8 +47,8 @@
         onclick={() => {
           $lastActiveChartName = chart.name;
         }}
-        use:keyboardShortcut={shortcutPrevious(index)}
-        use:keyboardShortcut={shortcutNext(index)}
+        {@attach keyboardShortcut(shortcutPrevious(index))}
+        {@attach keyboardShortcut(shortcutNext(index))}
       >
         {chart.name}
       </button>

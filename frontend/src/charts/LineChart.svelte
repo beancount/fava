@@ -90,7 +90,7 @@
     <feBlend in2="SourceGraphic" />
   </filter>
   <g
-    use:positionedTooltip={tooltipFindNode}
+    {@attach positionedTooltip(tooltipFindNode)}
     transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />

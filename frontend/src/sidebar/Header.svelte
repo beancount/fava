@@ -32,7 +32,7 @@
     type="button"
     hidden={!$has_changes}
     class="reload-page"
-    use:keyboardShortcut={"r"}
+    {@attach keyboardShortcut("r")}
     onclick={router.reload}
   >
     &#8635;
