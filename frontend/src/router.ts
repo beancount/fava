@@ -8,17 +8,14 @@
 import type { Readable } from "svelte/store";
 import { writable } from "svelte/store";
 
+import { handleExtensionPageLoad } from "./extensions";
 import { getUrlPath } from "./helpers";
 import { assert_is_error } from "./lib/errors";
-import { delegate, Events } from "./lib/events";
+import { delegate } from "./lib/events";
 import { log_error } from "./log";
-import {
-  backend_route,
-  type BaseRoute,
-  ErrorRoute,
-  type FrontendRoute,
-} from "./reports/route";
-import { raw_page_title } from "./sidebar/page-title";
+import type { RenderedReport } from "./reports/route";
+import { backend_route, ErrorRoute, type FrontendRoute } from "./reports/route";
+import { has_changes, raw_page_title } from "./sidebar/page-title";
 import { current_url } from "./stores/url";
 
 /** Whether this is a left-button click without any modifier keys pressed. */
@@ -64,7 +61,7 @@ const is_loading_internal = writable(false);
 /** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading: Readable<boolean> = is_loading_internal;
 
-export class Router extends Events<"page-loaded"> {
+export class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
 
@@ -75,7 +72,7 @@ export class Router extends Events<"page-loaded"> {
   #frontend_routes: FrontendRoute[] = [];
 
   /** The currently rendered route. */
-  #current_route?: BaseRoute | undefined;
+  #current_report?: RenderedReport | undefined;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -86,8 +83,6 @@ export class Router extends Events<"page-loaded"> {
   #interrupt_handlers = new Set<() => string | null>();
 
   constructor() {
-    super();
-
     const article = document.querySelector("article");
     if (!article) {
       throw new Error("<article> element is missing from markup");
@@ -149,7 +144,7 @@ export class Router extends Events<"page-loaded"> {
    * Render the route for the given URL.
    */
   async #render_route(url: URL, before_render?: () => void): Promise<void> {
-    const previous = this.#current_route;
+    const previous = this.#current_report;
     const relative_path = getUrlPath(url).unwrap();
     const report = relative_path.slice(0, relative_path.indexOf("/"));
     const route =
@@ -157,15 +152,23 @@ export class Router extends Events<"page-loaded"> {
 
     is_loading_internal.set(true);
     try {
-      await route.render(this.#article, url, previous, before_render);
-      this.#current_route = route;
+      this.#current_report = await route.render(
+        this.#article,
+        url,
+        previous,
+        before_render,
+      );
     } catch (error: unknown) {
       assert_is_error(error);
       const error_route = new ErrorRoute(error);
-      error_route.render(this.#article, url, previous, before_render);
-      this.#current_route = error_route;
+      this.#current_report = error_route.render(
+        this.#article,
+        url,
+        previous,
+        before_render,
+      );
     }
-    raw_page_title.set(this.#current_route.get_title(url));
+    raw_page_title.set(this.#current_report.title);
     is_loading_internal.set(false);
   }
 
@@ -233,6 +236,8 @@ export class Router extends Events<"page-loaded"> {
     window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
     delegate(document, "click", "a", this.#intercept_link_click);
+
+    handleExtensionPageLoad();
   }
 
   /**
@@ -276,7 +281,9 @@ export class Router extends Events<"page-loaded"> {
         };
     await this.#render_route(url, before_render);
 
-    this.trigger("page-loaded");
+    has_changes.set(false);
+    handleExtensionPageLoad();
+
     const hash = this.current.hash.slice(1);
     if (hash) {
       document.getElementById(hash)?.scrollIntoView();

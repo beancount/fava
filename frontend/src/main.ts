@@ -28,7 +28,6 @@ import { get } from "./api";
 import { ledgerDataValidator } from "./api/validators";
 import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./codemirror/setup";
-import { handleExtensionPageLoad } from "./extensions";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
@@ -62,12 +61,6 @@ function defineCustomElements() {
   // for extension compatibility
   customElements.define("tree-table", TreeTableCustomElement);
 }
-
-router.on("page-loaded", () => {
-  read_mtime();
-  has_changes.set(false);
-  handleExtensionPageLoad();
-});
 
 /**
  * Update the ledger data and errors; Reload if automatic reloading is configured.
@@ -132,8 +125,6 @@ function init(): void {
   ledgerData.subscribe((val) => {
     errors.set(val.errors);
   });
-
-  router.trigger("page-loaded");
 
   init_color_scheme();
 }
