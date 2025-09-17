@@ -12,15 +12,17 @@
   interface Props {
     /** The account node to render the name cell for. */
     node: AccountTreeNode;
+    /** The chain of folded accounts. If not given, defaults to `[node]`. */
+    chain?: readonly AccountTreeNode[];
   }
 
-  let { node }: Props = $props();
+  let { node, chain = [node] }: Props = $props();
 
   let { account, children } = $derived(node);
   let is_toggled = $derived($toggled_accounts.has(account));
 </script>
 
-<span class="droptarget" data-account-name={account}>
+<span class="account-cell droptarget" data-account-name={account}>
   {#if children.length > 0}
     <button
       type="button"
@@ -32,9 +34,16 @@
       {is_toggled ? "▸" : "▾"}
     </button>
   {/if}
-  <a href={$urlForAccount(account)} class="account">
-    {leaf(account)}
-  </a>
+  <span class="account-name">
+    {#each chain as link_node, i (link_node.account)}
+      <a href={$urlForAccount(link_node.account)} class="account">
+        {leaf(link_node.account)}
+      </a>
+      {#if i < chain.length - 1}
+        <span class="sep">/</span>
+      {/if}
+    {/each}
+  </span>
   <AccountIndicator {account} small />
 </span>
 
@@ -45,11 +54,18 @@
     color: var(--treetable-expander);
   }
 
-  a {
+  .account-name {
+    display: inline-flex;
+    flex-wrap: wrap;
     margin-left: 1em;
   }
 
-  span {
+  .sep {
+    padding: 0 0.2em;
+    opacity: 0.6;
+  }
+
+  .account-cell {
     display: flex;
     flex: 1;
     align-items: center;
@@ -59,35 +75,35 @@
   }
 
   /* Indent each level of account by one more 1em. */
-  :global(ol ol) span {
+  :global(ol ol) .account-cell {
     --account-indent: 1em;
   }
 
-  :global(ol ol ol) span {
+  :global(ol ol ol) .account-cell {
     --account-indent: 2em;
   }
 
-  :global(ol ol ol ol) span {
+  :global(ol ol ol ol) .account-cell {
     --account-indent: 3em;
   }
 
-  :global(ol ol ol ol ol) span {
+  :global(ol ol ol ol ol) .account-cell {
     --account-indent: 4em;
   }
 
-  :global(ol ol ol ol ol ol) span {
+  :global(ol ol ol ol ol ol) .account-cell {
     --account-indent: 5em;
   }
 
-  :global(ol ol ol ol ol ol ol) span {
+  :global(ol ol ol ol ol ol ol) .account-cell {
     --account-indent: 6em;
   }
 
-  :global(ol ol ol ol ol ol ol ol) span {
+  :global(ol ol ol ol ol ol ol ol) .account-cell {
     --account-indent: 7em;
   }
 
-  :global(ol ol ol ol ol ol ol ol ol) span {
+  :global(ol ol ol ol ol ol ol ol ol) .account-cell {
     --account-indent: 8em;
   }
 </style>
