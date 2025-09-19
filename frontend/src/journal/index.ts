@@ -1,7 +1,10 @@
+import { range } from "d3-array";
 import { mount, unmount } from "svelte";
 import { get as store_get } from "svelte/store";
 
 import { delegate } from "../lib/events";
+import { fetch, handleText } from "../lib/fetch";
+import { log_error } from "../log";
 import { notify_err } from "../notifications";
 import { router } from "../router";
 import { type SortableJournal, sortableJournal } from "../sort";
@@ -112,30 +115,40 @@ export class FavaJournal extends HTMLElement {
     this.unmount?.();
   }
 
-  async fetchAllPages(ol: HTMLOListElement, total: number): Promise<void> {
-    const url = new URL(window.location.href);
-    url.searchParams.set("partial", "true");
-
+  private async fetchAllPages(
+    ol: HTMLOListElement,
+    total: number,
+  ): Promise<void> {
+    const { current } = router;
+    const parser = new DOMParser();
+    const pages = range(2, total + 1);
+    const pages_and_urls = pages.map((page): [number, URL] => {
+      const page_url = new URL(current);
+      page_url.searchParams.set("partial", "true");
+      page_url.searchParams.set("page", page.toString());
+      return [page, page_url];
+    });
     let errorShown = false;
-    const promises: Promise<NodeList | never[]>[] = [];
-    for (let page = 2; page <= total; page++) {
-      url.searchParams.set("page", page.toString());
-      promises.push(
-        fetch(url).then(async (response) => {
-          if (!response.ok) {
+
+    const promises = pages_and_urls.map(async ([page, page_url]) => {
+      return fetch(page_url)
+        .then(handleText)
+        .then(
+          (html) => {
+            const doc = parser.parseFromString(html, "text/html");
+            return doc.querySelectorAll("ol.journal > li:not(.head)");
+          },
+          (error: unknown) => {
+            log_error(`Failed to fetch page ${page.toString()}`, error);
             if (!errorShown) {
               notify_err(new Error("Failed to fetch some journal pages"));
               errorShown = true;
             }
             return [];
-          }
-          const html = await response.text();
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
-          return doc.querySelectorAll("ol.journal > li:not(.head)");
-        }),
-      );
-    }
+          },
+        );
+    });
+
     let sorting = false;
     for (const promise of promises) {
       ol.append(...(await promise));

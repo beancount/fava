@@ -144,8 +144,7 @@ def test_commodity_names(example_ledger: FavaLedger) -> None:
 def test_paginate_journal(small_example_ledger: FavaLedger) -> None:
     filtered = FilteredLedger(small_example_ledger)
     total_entries = len(filtered.entries)
-    if total_entries < 4:
-        pytest.skip("Need at least 4 entries for this test")
+    assert total_entries > 4, "Need at least 4 entries for this test"
 
     per_page = 2
     expected_total_pages = (total_entries + per_page - 1) // per_page

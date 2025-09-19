@@ -6,8 +6,8 @@ from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
+from itertools import islice
 from itertools import takewhile
-from math import ceil
 from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -100,6 +100,7 @@ class FilteredLedger:
         "__dict__",  # for the cached_property decorator
         "_date_first",
         "_date_last",
+        "_pages",
         "date_range",
         "entries",
         "ledger",
@@ -117,6 +118,7 @@ class FilteredLedger:
     ) -> None:
         self.ledger = ledger
         self.date_range: DateRange | None = None
+        self._pages: list[Sequence[tuple[int, Directive]]] | None = None
 
         entries = ledger.all_entries
         if account:
@@ -225,19 +227,14 @@ class FilteredLedger:
             JournalPage with page_entries as (global_index, directive) tuples
             in reverse chronological order total_pages.
         """
-        entries = self.entries
-        num_entries = len(entries)
-        page_start = (page - 1) * per_page
-        page_end = min(page * per_page, num_entries)
-
-        # Get chronological slice from the end, then reverse for display.
-        start = num_entries - page_end
-        end = num_entries - page_start
-        page_entries = [(i, entries[i]) for i in range(start, end)]
-        page_entries.reverse()
-
-        total_pages = ceil(num_entries / per_page)
-        return page_entries, total_pages
+        if self._pages is None:
+            self._pages = []
+            enumerated = reversed(list(enumerate(self.entries)))
+            while batch := tuple(islice(enumerated, per_page)):
+                self._pages.append(batch)
+        if not self._pages and page == 1:
+            return [], 0
+        return self._pages[page - 1], len(self._pages)
 
 
 class FavaLedger:
