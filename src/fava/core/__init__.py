@@ -499,7 +499,7 @@ class FavaLedger:
         *,
         with_children: bool,
     ) -> Iterable[
-        tuple[Directive, SimpleCounterInventory, SimpleCounterInventory]
+        tuple[int, Directive, SimpleCounterInventory, SimpleCounterInventory]
     ]:
         """Journal for an account.
 
@@ -519,7 +519,7 @@ class FavaLedger:
 
         prices = self.prices
         balance = CounterInventory()
-        for entry in filtered.entries:
+        for index, entry in enumerate(filtered.entries):
             change = CounterInventory()
             entry_is_relevant = False
             postings = getattr(entry, "postings", None)
@@ -534,6 +534,7 @@ class FavaLedger:
 
             if entry_is_relevant:
                 yield (
+                    index,
                     entry,
                     cost_or_value(change, conversion, prices, entry.date),
                     cost_or_value(balance, conversion, prices, entry.date),
