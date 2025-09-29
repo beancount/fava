@@ -41,6 +41,18 @@ jobs:
           key: ${{ secrets.Fava_EC2_SSH_KEY }}
           script: |
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            
+            # Clean up everything including named volumes
+            sudo docker volume rm $(sudo docker volume ls -q) 2>/dev/null || true
+
+            sudo docker stop $(sudo docker ps -aq) 2>/dev/null || true
+            sudo docker rm $(sudo docker ps -aq) 2>/dev/null || true
+
+            # Remove all images to free space
+            sudo docker rmi $(sudo docker images -q) 2>/dev/null || true
+
+            # Clean up networks (volumes already removed above)
+            sudo docker network prune -f || true
 
             sudo docker run -d --rm -p  5001:5000 ${{ secrets.DOCKERHUB_USERNAME }}/fava:${{ env.FAVA_IMAGE_TAG }}
 
