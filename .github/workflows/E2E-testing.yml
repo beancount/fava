@@ -91,3 +91,43 @@ jobs:
           cd API_Testing
           pytest -q
 
+  ui-tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Fetch only the latest commit to speed up the checkout process
+          repository: ahdsab/FavaTesting
+          token: ${{ secrets.TESTING_GITHUB_TOKEN }}  # Use the token to access the repo
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up Google Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Install Xvfb (virtual display)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Run Selenium tests (with virtual display)
+        env:
+          HEADLESS: "true"
+          Fava_URL: http://54.73.240.131:5001/example-beancount-file/income_statement/
+        run: |
+          ls
+          cd UI_Testing
+          pytest 
