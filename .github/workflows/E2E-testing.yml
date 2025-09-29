@@ -28,7 +28,7 @@ jobs:
 
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
 
-          ocker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
 
           # Save the tag for later steps
           echo "FAVA_IMAGE_TAG=$TAG" >> $GITHUB_ENV
