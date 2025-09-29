@@ -6,19 +6,19 @@ on:
       - main
   workflow_dispatch:
 
-  jobs:
-    deploy:
+jobs:
+  deploy:
     runs-on: ubuntu-latest
     outputs:
       Fava_image_tag: ${{ steps.docker_image_build.outputs.tag }}
 
-      steps:
-        - name: Checkout repository(ahdsab/Fava)
-          uses: actions/checkout@v4
-        
-        - name: Build Docker image
-          id: docker_image_build
-          run: |
+    steps:
+      - name: Checkout repository (ahdsab/Fava)
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        id: docker_image_build
+        run: |
           echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
           # Use short commit SHA (first 7 characters)
@@ -26,11 +26,9 @@ on:
           TAG="${SHORT_SHA}-$(date +%Y%m%d-%H%M%S)"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/Fava:$TAG .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
 
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/Fava:$TAG
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
 
           # Save the tag for later steps
           echo "FAVA_IMAGE_TAG=$TAG" >> $GITHUB_ENV
-
-      
