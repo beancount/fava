@@ -42,7 +42,7 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-            sudo docker run --rm -p 5001:5000 ${{ secrets.DOCKERHUB_USERNAME }}/fava:${{ env.FAVA_IMAGE_TAG }}
+            sudo docker run -d --rm -p  5001:5000 ${{ secrets.DOCKERHUB_USERNAME }}/fava:${{ env.FAVA_IMAGE_TAG }}
 
   api-tests:
     runs-on: ubuntu-latest
