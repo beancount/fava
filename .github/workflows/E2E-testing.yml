@@ -26,9 +26,9 @@ jobs:
           TAG="${SHORT_SHA}-$(date +%Y%m%d-%H%M%S)"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-          sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
 
-          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
+          ocker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
 
           # Save the tag for later steps
           echo "FAVA_IMAGE_TAG=$TAG" >> $GITHUB_ENV
