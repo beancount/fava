@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository (ahdsab/Fava)
         uses: actions/checkout@v4
 
-      - name: Build Docker image
+      - name: Build and push Docker image
         id: docker_image_build
         run: |
           echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -26,9 +26,20 @@ jobs:
           TAG="${SHORT_SHA}-$(date +%Y%m%d-%H%M%S)"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
+          sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG .
 
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
+          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/fava:$TAG
 
           # Save the tag for later steps
           echo "FAVA_IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FAVA_EC2_HOST_IP }}
+          username: ubuntu
+          key: ${{ secrets.Fava_EC2_SSH_KEY }}
+          script: |
+            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            sudo docker run --rm -p 5001:5000 ${{ secrets.DOCKERHUB_USERNAME }}/fava:${{ env.FAVA_IMAGE_TAG }}
