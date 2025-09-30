@@ -1,0 +1,58 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install Python tools
+        run: |
+          pip install ruff black mypy
+      
+      - name: Install Node.js tools
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: Run Python linting
+        run: |
+          ruff check .
+          ruff format --check .
+      
+      - name: Run MyPy
+        run: mypy .
+      
+      - name: Run JavaScript/TypeScript linting
+        run: |
+          cd frontend
+          npx biome check --error-on-warnings
+          npx eslint . --config eslint.config.mjs --max-warnings 0
+      
+      - name: Run CSS linting
+        run: |
+          cd frontend
+          npx stylelint "**/*.{css,svelte}" --fix
+      
+      - name: Run Prettier
+        run: |
+          cd frontend
+          npx prettier --check --list-different .
+      
+      - name: Run Markdown formatting
+        run: |
+          pip install mdformat mdformat-gfm
+          mdformat --check --wrap 80 .
