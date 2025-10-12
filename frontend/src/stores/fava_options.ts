@@ -59,6 +59,10 @@ export const auto_reload = derived(
   fava_options,
   ($fava_options) => $fava_options.auto_reload,
 );
+export const invert_gains_losses_colors = derived(
+  fava_options,
+  ($fava_options) => $fava_options.invert_gains_losses_colors,
+);
 // TODO: equality comparison
 export const insert_entry = derived(
   fava_options,

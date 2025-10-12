@@ -79,8 +79,10 @@
   --treetable-expander: light-dark(hsl(210deg 30% 45%), hsl(210deg 30% 55%));
 
   /* Amount differences. */
-  --diff-negative: light-dark(hsl(0deg 48% 40%), hsl(0deg 48% 60%));
-  --diff-positive: light-dark(hsl(125deg 48% 40%), hsl(125deg 48% 60%));
+  --diff-red: light-dark(hsl(0deg 48% 40%), hsl(0deg 48% 60%));
+  --diff-green: light-dark(hsl(125deg 48% 40%), hsl(125deg 48% 60%));
+  --diff-negative: var(--diff-red);
+  --diff-positive: var(--diff-green);
 
   /* Editor elements */
   --editor-activeline: light-dark(
@@ -125,6 +127,11 @@
   /* Help pages */
   --help-sidebar-background: var(--background-darker);
   --help-sidebar-border: var(--border-lighter);
+}
+
+:root.invert-gains-losses {
+  --diff-negative: var(--diff-green);
+  --diff-positive: var(--diff-red);
 }
 
 .journal .balance {
