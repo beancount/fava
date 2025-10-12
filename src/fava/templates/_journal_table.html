@@ -54,10 +54,9 @@
         </p>
     </li>
 {% for entry in entries %}
-    {% set index = loop.index %}
     {% if show_change_and_balance %}
-        {% set entry, change, balance = entry %}
-    {% elif total_pages is not none %}
+        {% set index, entry, change, balance = entry %}
+    {% else %}
         {% set index, entry = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
