@@ -31,7 +31,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm install --global npm@latest
       - run: cd frontend && npm ci
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - run: uv build
       - name: Publish release
         if: github.event_name == 'push' && github.ref_type == 'tag'

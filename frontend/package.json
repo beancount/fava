@@ -42,7 +42,7 @@
     "@types/d3-shape": "^3.0.2",
     "@types/d3-time": "^3.0.0",
     "@types/d3-time-format": "^4.0.0",
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^22.1.0",
     "c8": "^10.1.2",
     "chokidar": "^4.0.0",
