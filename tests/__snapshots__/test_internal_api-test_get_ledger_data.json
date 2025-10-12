@@ -912,6 +912,7 @@
     "import_dirs": [],
     "indent": 2,
     "insert_entry": [],
+    "invert_gains_losses_colors": false,
     "invert_income_liabilities_equity": false,
     "language": null,
     "locale": null,
