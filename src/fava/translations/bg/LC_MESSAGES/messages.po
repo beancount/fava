@@ -12,21 +12,21 @@ msgstr ""
 msgid "Errors"
 msgstr "Грешки"
 
-#: frontend/src/sidebar/FilterForm.svelte:68
+#: frontend/src/sidebar/FilterForm.svelte:82
 msgid "Time"
 msgstr "Време"
 
 #: frontend/src/entry-forms/AccountInput.svelte:47
-#: frontend/src/modals/DocumentUpload.svelte:67
+#: frontend/src/modals/DocumentUpload.svelte:66
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
-#: frontend/src/sidebar/FilterForm.svelte:79
+#: frontend/src/sidebar/FilterForm.svelte:93
 #: src/fava/templates/statistics.html:26
 msgid "Account"
 msgstr "Сметка"
 
-#: frontend/src/entry-forms/Transaction.svelte:86
-#: frontend/src/entry-forms/Transaction.svelte:89
+#: frontend/src/entry-forms/Transaction.svelte:110
+#: frontend/src/entry-forms/Transaction.svelte:113
 #: src/fava/templates/_journal_table.html:50
 msgid "Payee"
 msgstr "Бенефициент"
@@ -74,7 +74,7 @@ msgstr "Стоки"
 msgid "Events"
 msgstr "Събития"
 
-#: frontend/src/reports/editor/index.ts:28
+#: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
 msgstr "Редактор"
@@ -93,7 +93,7 @@ msgstr "Статистика"
 msgid "Help"
 msgstr "Помощ"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:17
+#: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: frontend/src/reports/documents/Table.svelte:26
 #: frontend/src/reports/events/EventTable.svelte:14
 #: src/fava/templates/_journal_table.html:48
@@ -104,7 +104,7 @@ msgstr "Дата"
 msgid "F"
 msgstr "Ф"
 
-#: frontend/src/reports/commodities/CommodityTable.svelte:18
+#: frontend/src/reports/commodities/CommodityTable.svelte:19
 #: src/fava/templates/_journal_table.html:53
 msgid "Price"
 msgstr "Цена"
@@ -118,14 +118,14 @@ msgid "Change"
 msgstr "Промяна"
 
 #: frontend/src/entry-forms/Balance.svelte:29
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:15
 #: src/fava/templates/_journal_table.html:53
 #: src/fava/templates/statistics.html:30
 msgid "Balance"
 msgstr "Баланс"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/modals/AddEntry.svelte:66
 #: frontend/src/reports/import/Extract.svelte:116
 msgid "Save"
 msgstr "Запази"
@@ -134,15 +134,15 @@ msgstr "Запази"
 msgid "Saving..."
 msgstr "Запазване..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:82
 msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:22
+#: frontend/src/tree-table/AccountCellHeader.svelte:34
 msgid "Expand all accounts"
 msgstr "Разгъни всички сметки"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:27
+#: frontend/src/tree-table/AccountCellHeader.svelte:39
 msgid "Expand all"
 msgstr "Разгъни всички"
 
@@ -152,7 +152,7 @@ msgstr "Счетоводен Дневник"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:52
 #: frontend/src/reports/accounts/AccountReport.svelte:55
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:722
 msgid "Changes"
 msgstr "Промени"
 
@@ -165,7 +165,7 @@ msgstr "Баланс"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Показване на %(file)s:%(lineno)s на източника"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:48
+#: frontend/src/reports/editor/EditorMenu.svelte:43
 #: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
 msgstr "Файл"
@@ -176,6 +176,7 @@ msgid "Line"
 msgstr "Ред"
 
 #: frontend/src/reports/errors/Errors.svelte:24
+#: frontend/src/reports/route.ts:93
 msgid "Error"
 msgstr "Грешка"
 
@@ -215,16 +216,16 @@ msgstr "Валута на разходите"
 msgid "Holdings by"
 msgstr "Стопанства от"
 
-#: frontend/src/stores/accounts.ts:21 src/fava/json_api.py:577
-#: src/fava/json_api.py:597
+#: frontend/src/stores/accounts.ts:109 src/fava/json_api.py:604
+#: src/fava/json_api.py:624
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
-#: src/fava/json_api.py:583
+#: src/fava/json_api.py:610
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:589
+#: src/fava/json_api.py:616
 msgid "Expenses"
 msgstr "Разходи"
 
@@ -278,8 +279,8 @@ msgstr "Тип"
 msgid "# Entries"
 msgstr "Записи"
 
-#: frontend/src/entry-forms/Transaction.svelte:101
-#: frontend/src/entry-forms/Transaction.svelte:105
+#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:128
 #: src/fava/templates/_journal_table.html:50
 msgid "Narration"
 msgstr "Основание"
@@ -293,7 +294,7 @@ msgstr "Количество"
 msgid "Import"
 msgstr "Внасяне"
 
-#: frontend/src/journal/JournalFilters.svelte:41
+#: frontend/src/journal/JournalFilters.svelte:42
 msgid "Budget entries"
 msgstr "Бюджетни вписвания"
 
@@ -309,7 +310,7 @@ msgstr "Извадка"
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "... въведи BQL заявка. 'help' за изброяване на наличните команди."
 
-#: frontend/src/journal/JournalFilters.svelte:42
+#: frontend/src/journal/JournalFilters.svelte:43
 msgid "Metadata"
 msgstr "Метаданни"
 
@@ -319,7 +320,7 @@ msgid "Add metadata"
 msgstr "Добави метаданни"
 
 #: frontend/src/entry-forms/Note.svelte:28
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/modals/AddEntry.svelte:16
 msgid "Note"
 msgstr "Бележка"
 
@@ -327,6 +328,7 @@ msgstr "Бележка"
 msgid "Location"
 msgstr "Положение"
 
+#: frontend/src/modals/Context.svelte:39
 #: frontend/src/modals/EntryContext.svelte:28
 msgid "Context"
 msgstr "Контекст"
@@ -339,61 +341,61 @@ msgstr "Баланс преди запис"
 msgid "Balances after entry"
 msgstr "Баланс след запис"
 
-#: frontend/src/journal/JournalFilters.svelte:24
+#: frontend/src/journal/JournalFilters.svelte:25
 msgid "Cleared transactions"
 msgstr "Потвърдени транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:25
+#: frontend/src/journal/JournalFilters.svelte:26
 msgid "Pending transactions"
 msgstr "Непотвърдени транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:26
+#: frontend/src/journal/JournalFilters.svelte:27
 msgid "Other transactions"
 msgstr "Други транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:33
+#: frontend/src/journal/JournalFilters.svelte:34
 msgid "Documents with a #discovered tag"
 msgstr "Документи с #discovered таг"
 
-#: frontend/src/entry-forms/Transaction.svelte:130
-#: frontend/src/journal/JournalFilters.svelte:43
+#: frontend/src/entry-forms/Transaction.svelte:155
+#: frontend/src/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Публикации"
 
-#: frontend/src/modals/DocumentUpload.svelte:49
+#: frontend/src/modals/DocumentUpload.svelte:48
 msgid "Upload file(s)"
 msgstr "Качване на файл(ове)"
 
-#: frontend/src/modals/DocumentUpload.svelte:71
+#: frontend/src/modals/DocumentUpload.svelte:70
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
 msgstr "Качване"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:62
+#: frontend/src/reports/editor/EditorMenu.svelte:57
 msgid "Align Amounts"
 msgstr "Подравняване на празното пространство между сумите"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:68
+#: frontend/src/reports/editor/EditorMenu.svelte:63
 msgid "Toggle Comment (selection)"
 msgstr "Превключи коментар (на избраното)"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:74
+#: frontend/src/reports/editor/EditorMenu.svelte:69
 msgid "Open all folds"
 msgstr "Разпъни всички категории"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:80
+#: frontend/src/reports/editor/EditorMenu.svelte:75
 msgid "Close all folds"
 msgstr "Събери всички категории"
 
-#: frontend/src/reports/options/Options.svelte:11
+#: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
 msgstr "Fava настройки"
 
-#: frontend/src/reports/options/Options.svelte:12
+#: frontend/src/reports/options/Options.svelte:21
 msgid "help"
 msgstr "помощ"
 
-#: frontend/src/reports/options/Options.svelte:16
+#: frontend/src/reports/options/Options.svelte:25
 msgid "Beancount options"
 msgstr "Beancount настройки"
 
@@ -401,7 +403,7 @@ msgstr "Beancount настройки"
 msgid "Submit"
 msgstr "Изпрати"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:11
+#: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Задръжте Shift, докато кликате, за да разширите всички поднива.\n"
@@ -411,7 +413,7 @@ msgstr "Задръжте Shift, докато кликате, за да разш�
 msgid "Export"
 msgstr "Изнасяне"
 
-#: frontend/src/sidebar/FilterForm.svelte:90
+#: frontend/src/sidebar/FilterForm.svelte:104
 msgid "Filter by tag, payee, ..."
 msgstr "Филтриране по таг, бенефициент, ..."
 
@@ -419,27 +421,27 @@ msgstr "Филтриране по таг, бенефициент, ..."
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Изтеглете филтрираните в момента записи като Beancount файл"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:123
 msgid "Yearly"
 msgstr "Годишен"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:104
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:143
 msgid "Quarterly"
 msgstr "Тримесечен"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:105
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
 msgid "Monthly"
 msgstr "Месечен"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:106
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
 msgid "Weekly"
 msgstr "Седмичен"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:107
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:215
 msgid "Daily"
 msgstr "Дневен"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:60
+#: frontend/src/reports/editor/EditorMenu.svelte:55
 msgid "Edit"
 msgstr "Редактиране"
 
@@ -447,28 +449,28 @@ msgstr "Редактиране"
 msgid "Amount"
 msgstr "Сума"
 
-#: frontend/src/journal/JournalFilters.svelte:37
+#: frontend/src/journal/JournalFilters.svelte:38
 msgid "Documents with a #linked tag"
 msgstr "Документи с #linked таг"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
+#: frontend/src/charts/ConversionAndInterval.svelte:12
 msgid "At Cost"
 msgstr "На Цена"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:13
+#: frontend/src/charts/ConversionAndInterval.svelte:14
 msgid "At Market Value"
 msgstr "По Пазарна Стойност"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:15
+#: frontend/src/charts/ConversionAndInterval.svelte:16
 #: src/fava/templates/_journal_table.html:51
 msgid "Units"
 msgstr "Единици"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:28
 msgid "Treemap"
 msgstr "Дървовидна диаграма"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:29
 msgid "Sunburst"
 msgstr "Пръстеновиднa диаграмa"
 
@@ -476,21 +478,21 @@ msgstr "Пръстеновиднa диаграмa"
 msgid "Should be one of the declared accounts"
 msgstr "Трябва да е една от декларираните сметки"
 
-#: frontend/src/charts/ChartSwitcher.svelte:24
+#: frontend/src/charts/ChartSwitcher.svelte:25
 #: frontend/src/reports/import/Extract.svelte:101
 msgid "Previous"
 msgstr "Предишен"
 
-#: frontend/src/charts/ChartSwitcher.svelte:31
+#: frontend/src/charts/ChartSwitcher.svelte:32
 #: frontend/src/reports/import/Extract.svelte:106
 msgid "Next"
 msgstr "Следващ"
 
-#: frontend/src/modals/AddEntry.svelte:13
+#: frontend/src/modals/AddEntry.svelte:14
 msgid "Transaction"
 msgstr "Транзакция"
 
-#: frontend/src/modals/AddEntry.svelte:42
+#: frontend/src/modals/AddEntry.svelte:43
 msgid "Add"
 msgstr "Добави"
 
@@ -541,11 +543,11 @@ msgstr "Да се изтрие ли този файл?"
 msgid "No files were found for import."
 msgstr "Не бяха намерени файлове за внасяне."
 
-#: frontend/src/journal/JournalFilters.svelte:7
+#: frontend/src/journal/JournalFilters.svelte:8
 msgid "Toggle %(type)s entries"
 msgstr "Превключи %(type)s записи"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:17
+#: frontend/src/charts/ConversionAndInterval.svelte:18
 msgid "Converted to %(currency)s"
 msgstr "Преобразуване в %(currency)s"
 
@@ -557,15 +559,15 @@ msgstr "Стълбовидна диаграма с натрупване"
 msgid "Single Bars"
 msgstr "Стълбовидна диаграма без натрупване"
 
-#: frontend/src/charts/HierarchyContainer.svelte:28
+#: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
 msgstr "Диаграмата е празна."
 
-#: frontend/src/journal/JournalFilters.svelte:42
+#: frontend/src/journal/JournalFilters.svelte:43
 msgid "Toggle metadata"
 msgstr "Превключи метаданни"
 
-#: frontend/src/journal/JournalFilters.svelte:43
+#: frontend/src/journal/JournalFilters.svelte:44
 msgid "Toggle postings"
 msgstr "Превключи публикации"
 
@@ -577,11 +579,11 @@ msgstr "Нетна Стойност"
 msgid "Account Balance"
 msgstr "Баланс по сметката"
 
-#: frontend/src/editor/SliceEditor.svelte:97
+#: frontend/src/editor/SliceEditor.svelte:96
 msgid "reload"
 msgstr "презареди"
 
-#: frontend/src/modals/AddEntry.svelte:63
+#: frontend/src/modals/AddEntry.svelte:64
 msgid "continue"
 msgstr "продължи"
 
@@ -604,5 +606,13 @@ msgstr ""
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
+msgstr ""
+
+#: frontend/src/reports/options/Options.svelte:13
+msgid "Color scheme"
+msgstr ""
+
+#: frontend/src/stores/chart.ts:30
+msgid "Icicle"
 msgstr ""
 
