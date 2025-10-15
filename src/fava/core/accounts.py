@@ -100,7 +100,7 @@ class AccountData:
 
     #: Uptodate status. Is only computed if the account has a
     #: "fava-uptodate-indication" meta attribute.
-    uptodate_status: str | None = None
+    uptodate_status: Literal["green", "yellow", "red"] | None = None
 
     #: Balance directive if this account has an uptodate status.
     balance_string: str | None = None

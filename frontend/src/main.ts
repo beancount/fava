@@ -55,9 +55,10 @@ function defineCustomElements() {
   });
   customElements.define("copyable-text", CopyableText);
   customElements.define("fava-journal", FavaJournal);
-  customElements.define("sortable-table", SortableTable, { extends: "table" });
   customElements.define("svelte-component", SvelteCustomElement);
 
+  // for extension compatibility (only used in _query_table.html)
+  customElements.define("sortable-table", SortableTable, { extends: "table" });
   // for extension compatibility
   customElements.define("tree-table", TreeTableCustomElement);
 }

@@ -30,9 +30,11 @@ from fava.beans.abc import Document
 from fava.beans.abc import Event
 from fava.context import g
 from fava.core import EntryNotFoundForHashError
+from fava.core.conversion import units
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.filters import FilterError
+from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
@@ -53,6 +55,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Directive
     from fava.core.ingest import FileImporters
+    from fava.core.inventory import SimpleCounterInventory
     from fava.core.query import QueryResultTable
     from fava.core.query import QueryResultText
     from fava.core.tree import SerialisedTreeNode
@@ -799,4 +802,37 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     return AccountReportJournal(
         charts,
         journal=journal(entries, show_change_and_balance=True),
+    )
+
+
+@dataclass(frozen=True)
+class Statistics:
+    """Data for the statistics report."""
+
+    all_balance_directives: str
+    balances: Mapping[str, SimpleCounterInventory]
+    entries_by_type: Mapping[str, int]
+
+
+@api_endpoint
+def get_statistics() -> Statistics:
+    """Get the data for the statistics report."""
+    g.ledger.changed()
+
+    entries_by_type = {
+        type_: len(entries)
+        for type_, entries in group_entries_by_type(g.filtered.entries)
+        ._asdict()
+        .items()
+    }
+
+    balances = {
+        account_name: units(node.balance)
+        for account_name, node in g.filtered.root_tree.items()
+    }
+
+    return Statistics(
+        all_balance_directives=g.ledger.accounts.all_balance_directives(),
+        balances=balances,
+        entries_by_type=entries_by_type,
     )

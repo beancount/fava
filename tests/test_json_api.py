@@ -816,6 +816,7 @@ def test_api_filter_error(
                 "?interval=day&conversion=at_value&a=Assets&r=balances"
             ),
         ),
+        ("statistics", "/long-example/api/statistics"),
         ("options", "/long-example/api/options"),
     ],
 )

@@ -76,7 +76,6 @@ setup_logging()
 
 SERVER_SIDE_REPORTS = [
     "journal",
-    "statistics",
 ]
 
 CLIENT_SIDE_REPORTS = [
@@ -91,6 +90,7 @@ CLIENT_SIDE_REPORTS = [
     "income_statement",
     "options",
     "query",
+    "statistics",
     "trial_balance",
 ]
 

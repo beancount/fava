@@ -10,6 +10,7 @@ import type { ValidationT } from "../lib/validation";
 import {
   array,
   boolean,
+  constants,
   date,
   number,
   object,
@@ -19,7 +20,7 @@ import {
   tuple,
   unknown,
 } from "../lib/validation";
-import { query_validator } from "../reports/query/query_table";
+import { Inventory, query_validator } from "../reports/query/query_table";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {
@@ -39,14 +40,15 @@ const error_validator = object<BeancountError>({
 });
 
 /** Validator for the details for a single account. */
-const account_details = record(
-  object({
-    balance_string: optional(string),
-    close_date: optional(date),
-    last_entry: optional(object({ date, entry_hash: string })),
-    uptodate_status: optional(string),
-  }),
-);
+const account_detail = object({
+  balance_string: optional(string),
+  close_date: optional(date),
+  last_entry: optional(object({ date, entry_hash: string })),
+  uptodate_status: optional(constants("green", "yellow", "red")),
+});
+const account_details = record(account_detail);
+
+export type AccountDetail = ValidationT<typeof account_detail>;
 
 /** Validator for the Fava options that are used in the frontend. */
 const fava_options = object({
@@ -202,6 +204,11 @@ export const getAPIValidators = {
   narrations: array(string),
   query: query_validator,
   source,
+  statistics: object({
+    all_balance_directives: string,
+    entries_by_type: record(number),
+    balances: record(Inventory.validator),
+  }),
   trial_balance: tree_report,
 };
 

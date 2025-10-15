@@ -79,6 +79,7 @@ interface GetAPIParams {
   narrations: undefined;
   query: Filters & { query_string: string };
   source: { filename: string };
+  statistics: Filters;
 }
 
 /**

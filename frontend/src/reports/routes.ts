@@ -9,6 +9,7 @@ import { import_report } from "./import";
 import { options } from "./options";
 import { query } from "./query";
 import type { FrontendRoute } from "./route";
+import { statistics } from "./statistics";
 import { balance_sheet, income_statement, trial_balance } from "./tree_reports";
 
 /**
@@ -32,5 +33,6 @@ export const frontend_routes: FrontendRoute[] = [
   income_statement,
   options,
   query,
+  statistics,
   trial_balance,
 ];
