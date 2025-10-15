@@ -41,7 +41,7 @@ import { has_changes } from "./sidebar/page-title";
 import { SortableTable } from "./sort/sortable-table";
 import { errors, ledgerData } from "./stores";
 import { init_color_scheme } from "./stores/color_scheme";
-import { auto_reload } from "./stores/fava_options";
+import { auto_reload, invert_gains_losses_colors } from "./stores/fava_options";
 import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element";
@@ -127,6 +127,10 @@ function init(): void {
   });
 
   init_color_scheme();
+
+  invert_gains_losses_colors.subscribe(($invert) => {
+    document.documentElement.classList.toggle("invert-gains-losses", $invert);
+  });
 }
 
 init();

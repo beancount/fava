@@ -247,6 +247,21 @@ Set the directories to be scanned by the Beancount import mechanism.
 
 ______________________________________________________________________
 
+## `invert-gains-losses-colors`
+
+Default: `false`
+
+By default, Fava uses green for unrealized gains (positive values) and red for
+unrealized losses (negative values) in the Balance Sheet and Trial Balance when
+displaying at market value.
+
+Set this to `true` to invert the color scheme, using red for gains and green for
+losses. This is useful for users from regions where the opposite convention is
+used, such as Chinese stock markets where red represents gains and green
+represents losses.
+
+______________________________________________________________________
+
 ## `invert-income-liabilities-equity`
 
 Default: False

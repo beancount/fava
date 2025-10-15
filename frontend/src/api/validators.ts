@@ -56,6 +56,7 @@ const fava_options = object({
   collapse_pattern: array(string),
   import_config: optional(string),
   indent: number,
+  invert_gains_losses_colors: boolean,
   invert_income_liabilities_equity: boolean,
   show_closed_accounts: boolean,
   show_accounts_with_zero_balance: boolean,

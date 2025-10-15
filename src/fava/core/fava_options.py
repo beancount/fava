@@ -102,6 +102,7 @@ class FavaOptions:
     import_dirs: tuple[str, ...] = ()
     indent: int = 2
     insert_entry: Sequence[InsertEntryOption] = field(default_factory=list)
+    invert_gains_losses_colors: bool = False
     invert_income_liabilities_equity: bool = False
     language: str | None = None
     locale: str | None = None
