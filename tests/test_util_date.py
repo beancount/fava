@@ -386,7 +386,7 @@ def test_month_offset(
 ) -> None:
     start_date = fromisoformat(date_input)
     if expected is None:
-        with pytest.raises(ValueError, match="day is out of range"):
+        with pytest.raises(ValueError, match=r"day .* range"):
             month_offset(start_date, offset)
     else:
         assert str(month_offset(start_date, offset)) == expected
