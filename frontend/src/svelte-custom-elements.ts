@@ -103,9 +103,7 @@ export class SvelteCustomElement extends HTMLElement {
     const script = this.querySelector("script");
     this.destroy = comp.render(
       this,
-      script && script.type === "application/json"
-        ? JSON.parse(script.innerHTML)
-        : null,
+      script?.type === "application/json" ? JSON.parse(script.innerHTML) : null,
     );
   }
 
