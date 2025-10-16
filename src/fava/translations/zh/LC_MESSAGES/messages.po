@@ -614,5 +614,5 @@ msgstr ""
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "冰柱图"
 
