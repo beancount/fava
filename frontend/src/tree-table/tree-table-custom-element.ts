@@ -1,4 +1,4 @@
-import { delegate } from "../lib/events";
+import { delegate } from "../lib/events.ts";
 
 /**
  * Account trees.

@@ -1,10 +1,14 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { _ } from "../i18n";
-  import { escape_for_regex } from "../journal";
-  import { router, set_query_param } from "../router";
-  import { accounts, links, payees, tags, years } from "../stores";
-  import { account_filter, fql_filter, time_filter } from "../stores/filters";
+  import { _ } from "../i18n.ts";
+  import { escape_for_regex } from "../journal/index.ts";
+  import { router, set_query_param } from "../router.ts";
+  import {
+    account_filter,
+    fql_filter,
+    time_filter,
+  } from "../stores/filters.ts";
+  import { accounts, links, payees, tags, years } from "../stores/index.ts";
 
   let fql_filter_suggestions = $derived([
     ...$tags.map((tag) => `#${tag}`),

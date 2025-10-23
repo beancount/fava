@@ -4,7 +4,7 @@ import { flushSync, mount } from "svelte";
 import { test } from "uvu";
 
 import AutocompleteInput from "../src/AutocompleteInput.svelte";
-import { setup_jsdom } from "./dom";
+import { setup_jsdom } from "./dom.ts";
 
 test.before.each(setup_jsdom);
 

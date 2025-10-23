@@ -2,9 +2,9 @@ import { get as store_get, writable } from "svelte/store";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { derived_array, localStorageSyncedStore } from "../src/lib/store";
-import { string } from "../src/lib/validation";
-import { setup_jsdom } from "./dom";
+import { derived_array, localStorageSyncedStore } from "../src/lib/store.ts";
+import { string } from "../src/lib/validation.ts";
+import { setup_jsdom } from "./dom.ts";
 
 test.before.each(setup_jsdom);
 

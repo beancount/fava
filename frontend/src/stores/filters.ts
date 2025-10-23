@@ -1,6 +1,6 @@
 import { derived } from "svelte/store";
 
-import { searchParams } from "./url";
+import { searchParams } from "./url.ts";
 
 /** The time filter. */
 export const time_filter = derived(

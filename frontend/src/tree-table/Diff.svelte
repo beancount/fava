@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ctx } from "../stores/format";
+  import { ctx } from "../stores/format.ts";
 
   interface Props {
     /** Difference to show. */

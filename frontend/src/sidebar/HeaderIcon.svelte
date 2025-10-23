@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { is_loading } from "../router";
+  import { is_loading } from "../router.ts";
 </script>
 
 <svg

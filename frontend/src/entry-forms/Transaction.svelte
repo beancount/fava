@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { get } from "../api";
+  import { get } from "../api/index.ts";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { EntryMetadata, Transaction } from "../entries";
-  import { Posting } from "../entries";
-  import { _ } from "../i18n";
-  import { move } from "../lib/array";
-  import { notify_err } from "../notifications";
-  import { payees } from "../stores";
+  import type { EntryMetadata, Transaction } from "../entries/index.ts";
+  import { Posting } from "../entries/index.ts";
+  import { _ } from "../i18n.ts";
+  import { move } from "../lib/array.ts";
+  import { notify_err } from "../notifications.ts";
+  import { payees } from "../stores/index.ts";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";

@@ -1,12 +1,12 @@
 import { sort } from "d3-array";
 
-import type { FormatterContext } from "../format";
-import { day } from "../format";
-import type { Result } from "../lib/result";
-import type { ValidationError } from "../lib/validation";
-import { array, date, number, object, record } from "../lib/validation";
-import type { TooltipContent } from "./tooltip";
-import { domHelpers } from "./tooltip";
+import type { FormatterContext } from "../format.ts";
+import { day } from "../format.ts";
+import type { Result } from "../lib/result.ts";
+import type { ValidationError } from "../lib/validation.ts";
+import { array, date, number, object, record } from "../lib/validation.ts";
+import type { TooltipContent } from "./tooltip.ts";
+import { domHelpers } from "./tooltip.ts";
 
 /**
  * A single data point on a line or area chart.
@@ -33,18 +33,22 @@ interface LineChartSeries {
  */
 export class LineChart {
   readonly type = "linechart";
-
   readonly series_names: readonly string[];
+  readonly name: string | null;
+  private readonly data: readonly LineChartSeries[];
+  readonly tooltipText: (
+    c: FormatterContext,
+    d: LineChartDatum,
+  ) => TooltipContent;
 
   constructor(
-    readonly name: string | null,
-    private readonly data: readonly LineChartSeries[],
-    readonly tooltipText: (
-      c: FormatterContext,
-      d: LineChartDatum,
-    ) => TooltipContent,
+    name: string | null,
+    data: readonly LineChartSeries[],
+    tooltipText: (c: FormatterContext, d: LineChartDatum) => TooltipContent,
   ) {
+    this.name = name;
     this.data = sort(data, (d) => -d.values.length);
+    this.tooltipText = tooltipText;
     this.series_names = this.data.map((series) => series.name);
   }
 

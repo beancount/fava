@@ -1,7 +1,7 @@
 import { derived } from "svelte/store";
 
-import { derived_array } from "../lib/store";
-import { ledgerData } from ".";
+import { derived_array } from "../lib/store.ts";
+import { ledgerData } from "./index.ts";
 
 /** Fava's options */
 const fava_options = derived(ledgerData, (v) => v.fava_options);

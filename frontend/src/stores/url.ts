@@ -1,6 +1,6 @@
 import { derived, writable } from "svelte/store";
 
-import { getInterval } from "../lib/interval";
+import { getInterval } from "../lib/interval.ts";
 
 /** The current URL. Should only be updated by the router. */
 export const current_url = writable<URL>();

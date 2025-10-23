@@ -2,13 +2,18 @@
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
-  import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
-  import type { Entry } from "../../entries";
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { notify, notify_err } from "../../notifications";
-  import { router } from "../../router";
-  import { import_config } from "../../stores/fava_options";
+  import {
+    deleteDocument,
+    get,
+    moveDocument,
+    saveEntries,
+  } from "../../api/index.ts";
+  import type { Entry } from "../../entries/index.ts";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { notify, notify_err } from "../../notifications.ts";
+  import { router } from "../../router.ts";
+  import { import_config } from "../../stores/fava_options.ts";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import type { ImportReportProps } from ".";
   import Extract from "./Extract.svelte";

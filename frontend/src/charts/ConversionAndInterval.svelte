@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { _, format } from "../i18n";
-  import { getInterval, intervalLabel, INTERVALS } from "../lib/interval";
-  import { router } from "../router";
-  import { conversions } from "../stores/chart";
-  import { conversion, interval } from "../stores/url";
+  import { _, format } from "../i18n.ts";
+  import { getInterval, intervalLabel, INTERVALS } from "../lib/interval.ts";
+  import { router } from "../router.ts";
+  import { conversions } from "../stores/chart.ts";
+  import { conversion, interval } from "../stores/url.ts";
   import SelectCombobox from "./SelectCombobox.svelte";
 
   const conversion_description = (option: string) => {

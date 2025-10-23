@@ -1,12 +1,12 @@
 import { type Component, mount, unmount } from "svelte";
 
-import { _ } from "../i18n";
-import { getScriptTagValue } from "../lib/dom";
-import { fetch, handleText } from "../lib/fetch";
-import { string } from "../lib/validation";
-import { read_mtime } from "../stores/mtime";
+import { _ } from "../i18n.ts";
+import { getScriptTagValue } from "../lib/dom.ts";
+import { fetch, handleText } from "../lib/fetch.ts";
+import { string } from "../lib/validation.ts";
+import { read_mtime } from "../stores/mtime.ts";
 import ReportLoadError from "./ReportLoadError.svelte";
-import { updateable_props } from "./route.svelte";
+import { updateable_props } from "./route.svelte.ts";
 
 export interface BaseRoute {
   /** Load data and render the component for this route to the given target. */
@@ -19,18 +19,23 @@ export interface BaseRoute {
 }
 
 export class RenderedReport {
+  readonly route: BaseRoute;
+  readonly url: URL;
+  readonly title: string;
+  readonly destroy: () => void;
+
   /**
    * A succesfully rendered report.
    * @param route - The route that is rendered.
    * @param url - The URL that is rendered.
    * @param title - The title for this report.
    */
-  constructor(
-    readonly route: BaseRoute,
-    readonly url: URL,
-    readonly title: string,
-    readonly destroy: () => void,
-  ) {}
+  constructor(route: BaseRoute, url: URL, title: string, destroy: () => void) {
+    this.route = route;
+    this.url = url;
+    this.title = title;
+    this.destroy = destroy;
+  }
 }
 
 class BackendRenderedReport extends RenderedReport {
@@ -76,7 +81,11 @@ class BackendRoute implements BaseRoute {
  * Render an error message.
  */
 export class ErrorRoute implements BaseRoute {
-  constructor(private readonly error: Error) {}
+  private readonly error: Error;
+
+  constructor(error: Error) {
+    this.error = error;
+  }
 
   render(
     target: HTMLElement,
@@ -108,6 +117,10 @@ export interface FrontendRoute extends BaseRoute {
 // to be correctly inferred from the imported svelte components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Route<T extends Record<string, any>> implements FrontendRoute {
+  readonly report: string;
+  private readonly Component: Component<T>;
+  private readonly load: (url: URL) => T | Promise<T>;
+  readonly get_title: (url: URL) => string;
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
     | {
@@ -124,11 +137,16 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
    * @param get_title function to get the page title.
    */
   constructor(
-    readonly report: string,
-    private readonly Component: Component<T>,
-    private readonly load: (url: URL) => T | Promise<T>,
-    readonly get_title: (url: URL) => string,
-  ) {}
+    report: string,
+    Component: Component<T>,
+    load: (url: URL) => T | Promise<T>,
+    get_title: (url: URL) => string,
+  ) {
+    this.report = report;
+    this.Component = Component;
+    this.load = load;
+    this.get_title = get_title;
+  }
 
   async render(
     target: HTMLElement,

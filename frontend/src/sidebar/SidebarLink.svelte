@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { urlFor } from "../helpers";
-  import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { pathname } from "../stores/url";
+  import { urlFor } from "../helpers.ts";
+  import type { KeySpec } from "../keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { pathname } from "../stores/url.ts";
 
   interface Props {
     report: string;

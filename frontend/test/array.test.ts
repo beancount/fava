@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { is_non_empty, move } from "../src/lib/array";
+import { is_non_empty, move } from "../src/lib/array.ts";
 
 test("check array is non-empty", () => {
   assert.not(is_non_empty([]));

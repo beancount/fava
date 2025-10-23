@@ -12,9 +12,13 @@
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
 -->
 <script lang="ts">
-  import type { KeySpec } from "./keyboard-shortcuts";
-  import { keyboardShortcut } from "./keyboard-shortcuts";
-  import { fuzzyfilter, fuzzywrap, type FuzzyWrappedText } from "./lib/fuzzy";
+  import type { KeySpec } from "./keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "./keyboard-shortcuts.ts";
+  import {
+    fuzzyfilter,
+    fuzzywrap,
+    type FuzzyWrappedText,
+  } from "./lib/fuzzy.ts";
 
   interface Props {
     /** The currently entered value (bindable). */

@@ -1,8 +1,8 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import type { Result } from "../src/lib/result";
-import { collect, Err, err, Ok, ok } from "../src/lib/result";
+import type { Result } from "../src/lib/result.ts";
+import { collect, Err, err, Ok, ok } from "../src/lib/result.ts";
 
 test("basic result operations", () => {
   const obj = { a: "a" };

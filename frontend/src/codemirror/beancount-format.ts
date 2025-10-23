@@ -1,8 +1,8 @@
 import type { Command } from "@codemirror/view";
 
-import { put } from "../api";
-import { notify_err } from "../notifications";
-import { replaceContents } from "./editor-transactions";
+import { put } from "../api/index.ts";
+import { notify_err } from "../notifications.ts";
+import { replaceContents } from "./editor-transactions.ts";
 
 export const beancountFormat: Command = (cm) => {
   put("format_source", { source: cm.state.sliceDoc() }).then(

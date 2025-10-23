@@ -1,8 +1,8 @@
-import { get } from "../../api";
-import { _ } from "../../i18n";
-import { getURLFilters } from "../../stores/filters";
-import type { Inventory, QueryResultTable } from "../query/query_table";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import { _ } from "../../i18n.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import type { Inventory, QueryResultTable } from "../query/query_table.ts";
+import { Route } from "../route.ts";
 import Statistics from "./Statistics.svelte";
 
 export interface StatisticsReportProps {

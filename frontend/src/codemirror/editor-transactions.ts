@@ -7,7 +7,7 @@ import { setDiagnostics } from "@codemirror/lint";
 import type { EditorState, TransactionSpec } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 
-import type { BeancountError } from "../api/validators";
+import type { BeancountError } from "../api/validators.ts";
 
 /**
  * Returns a transaction to completely replace the contents of the editor with the given value.

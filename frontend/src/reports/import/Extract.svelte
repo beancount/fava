@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Entry as EntryType } from "../../entries";
+  import type { Entry as EntryType } from "../../entries/index.ts";
   import Entry from "../../entry-forms/Entry.svelte";
-  import { _ } from "../../i18n";
+  import { _ } from "../../i18n.ts";
   import ModalBase from "../../modals/ModalBase.svelte";
 
   interface Props {

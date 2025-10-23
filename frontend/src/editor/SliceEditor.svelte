@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { LanguageSupport } from "@codemirror/language";
 
-  import { doDelete, put } from "../api";
-  import { initBeancountEditor } from "../codemirror/setup";
-  import { _ } from "../i18n";
-  import { notify_err } from "../notifications";
-  import { router } from "../router";
-  import { reloadAfterSavingEntrySlice } from "../stores/editor";
+  import { doDelete, put } from "../api/index.ts";
+  import { initBeancountEditor } from "../codemirror/setup.ts";
+  import { _ } from "../i18n.ts";
+  import { notify_err } from "../notifications.ts";
+  import { router } from "../router.ts";
+  import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 

@@ -1,7 +1,7 @@
-import { get } from "../../api";
-import { todayAsString } from "../../format";
-import { _ } from "../../i18n";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import { todayAsString } from "../../format.ts";
+import { _ } from "../../i18n.ts";
+import { Route } from "../route.ts";
 import ImportSvelte from "./Import.svelte";
 
 /**

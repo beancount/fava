@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { stratify } from "../src/lib/tree";
+import { stratify } from "../src/lib/tree.ts";
 
 test("tree: stratify", () => {
   const empty = stratify(

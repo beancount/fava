@@ -1,9 +1,9 @@
-import { get } from "../../api";
-import type { AccountBudget } from "../../api/validators";
-import type { AccountTreeNode } from "../../charts/hierarchy";
-import { getUrlPath } from "../../helpers";
-import { getURLFilters } from "../../stores/filters";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import type { AccountBudget } from "../../api/validators.ts";
+import type { AccountTreeNode } from "../../charts/hierarchy.ts";
+import { getUrlPath } from "../../helpers.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import { Route } from "../route.ts";
 import AccountReport from "./AccountReport.svelte";
 
 export type AccountReportType = "journal" | "balances" | "changes";

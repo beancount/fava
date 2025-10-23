@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { EntryMetadata } from "../entries";
-  import { _ } from "../i18n";
+  import type { EntryMetadata } from "../entries/index.ts";
+  import { _ } from "../i18n.ts";
 
   interface Props {
     meta: EntryMetadata;

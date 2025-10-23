@@ -1,9 +1,9 @@
 <script lang="ts" module>
-  import { _, format } from "../i18n";
-  import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { toggle } from "../lib/set";
-  import { journalShow } from "../stores/journal";
+  import { _, format } from "../i18n.ts";
+  import type { KeySpec } from "../keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { toggle } from "../lib/set.ts";
+  import { journalShow } from "../stores/journal.ts";
 
   const toggleText = _("Toggle %(type)s entries");
 

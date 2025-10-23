@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import chokidar from "chokidar";
@@ -33,6 +34,7 @@ async function runBuild(dev: boolean) {
     outfile: "../src/fava/static/app.js",
     conditions: dev ? ["development"] : ["production"],
     external: ["fs/promises", "module"], // for web-tree-sitter
+    resolveExtensions: [], // enforce explicit extensions
     loader: {
       ".wasm": "file",
       ".woff": "empty",

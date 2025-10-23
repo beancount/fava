@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { replaceContents } from "../../codemirror/editor-transactions";
-  import { initQueryEditor } from "../../codemirror/setup";
-  import { _ } from "../../i18n";
-  import { keyboardShortcut } from "../../keyboard-shortcuts";
+  import { replaceContents } from "../../codemirror/editor-transactions.ts";
+  import { initQueryEditor } from "../../codemirror/setup.ts";
+  import { _ } from "../../i18n.ts";
+  import { keyboardShortcut } from "../../keyboard-shortcuts.ts";
 
   interface Props {
     value: string;

@@ -1,20 +1,20 @@
 <script lang="ts">
-  import type { AccountDetail } from "../../api/validators";
-  import { day } from "../../format";
-  import { urlForAccount } from "../../helpers";
-  import { _ } from "../../i18n";
+  import type { AccountDetail } from "../../api/validators.ts";
+  import { day } from "../../format.ts";
+  import { urlForAccount } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
   import {
     NumberColumn,
     Sorter,
     StringColumn,
     UnsortedColumn,
-  } from "../../sort";
+  } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { account_details, currency_name } from "../../stores";
-  import { ctx } from "../../stores/format";
-  import { name_assets, name_liabilities } from "../../stores/options";
-  import type { Inventory } from "../query/query_table";
+  import { ctx } from "../../stores/format.ts";
+  import { account_details, currency_name } from "../../stores/index.ts";
+  import { name_assets, name_liabilities } from "../../stores/options.ts";
+  import type { Inventory } from "../query/query_table.ts";
 
   let { balances }: { balances: Record<string, Inventory> } = $props();
 

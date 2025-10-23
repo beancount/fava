@@ -2,10 +2,10 @@ import { get as store_get } from "svelte/store";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { getUrlPath, urlForAccount, urlForInternal } from "../src/helpers";
-import { ok } from "../src/lib/result";
-import { base_url } from "../src/stores/index";
-import { initialiseLedgerData } from "./helpers";
+import { getUrlPath, urlForAccount, urlForInternal } from "../src/helpers.ts";
+import { ok } from "../src/lib/result.ts";
+import { base_url } from "../src/stores/index.ts";
+import { initialiseLedgerData } from "./helpers.ts";
 
 test.before(initialiseLedgerData);
 

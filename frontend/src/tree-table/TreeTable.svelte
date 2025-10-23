@@ -1,13 +1,13 @@
 <script lang="ts">
   import { writable } from "svelte/store";
 
-  import type { AccountTreeNode } from "../charts/hierarchy";
-  import { _ } from "../i18n";
-  import { currency_name } from "../stores";
-  import { invert_account } from "../stores/accounts";
-  import { operating_currency } from "../stores/options";
+  import type { AccountTreeNode } from "../charts/hierarchy.ts";
+  import { _ } from "../i18n.ts";
+  import { invert_account } from "../stores/accounts.ts";
+  import { currency_name } from "../stores/index.ts";
+  import { operating_currency } from "../stores/options.ts";
   import AccountCellHeader from "./AccountCellHeader.svelte";
-  import { get_not_shown, setTreeTableNotShownContext } from "./helpers";
+  import { get_not_shown, setTreeTableNotShownContext } from "./helpers.ts";
   import TreeTableNode from "./TreeTableNode.svelte";
 
   interface Props {

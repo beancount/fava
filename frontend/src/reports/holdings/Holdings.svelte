@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
   import QueryLinks from "../query/QueryLinks.svelte";
   import QueryTable from "../query/QueryTable.svelte";
   import type { HoldingsReportProps } from ".";

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
-  import { chartContext } from "../../charts/context";
+  import { chartContext } from "../../charts/context.ts";
+  import { parseChartData } from "../../charts/index.ts";
   import TreeTable from "../../tree-table/TreeTable.svelte";
   import type { TreeReportProps } from ".";
 

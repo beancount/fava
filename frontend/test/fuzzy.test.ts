@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy";
+import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy.ts";
 
 test("fuzzy test", () => {
   assert.ok(fuzzytest("asdf", "asdfasdf"));

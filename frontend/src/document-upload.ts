@@ -6,11 +6,11 @@
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
-import { put } from "./api";
-import { todayAsString } from "./format";
-import { delegate } from "./lib/events";
-import { basename, documentHasAccount } from "./lib/paths";
-import { notify, notify_err } from "./notifications";
+import { put } from "./api/index.ts";
+import { todayAsString } from "./format.ts";
+import { delegate } from "./lib/events.ts";
+import { basename, documentHasAccount } from "./lib/paths.ts";
+import { notify, notify_err } from "./notifications.ts";
 
 /**
  * Handle a dragenter or dragover event.

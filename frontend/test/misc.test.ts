@@ -1,10 +1,10 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { is_non_empty, last_element } from "../src/lib/array";
-import { errorWithCauses } from "../src/lib/errors";
-import { getInterval } from "../src/lib/interval";
-import { parseJSON } from "../src/lib/json";
+import { is_non_empty, last_element } from "../src/lib/array.ts";
+import { errorWithCauses } from "../src/lib/errors.ts";
+import { getInterval } from "../src/lib/interval.ts";
+import { parseJSON } from "../src/lib/json.ts";
 
 test("validate interval", () => {
   assert.equal(getInterval("year"), "year");

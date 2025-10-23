@@ -15,7 +15,7 @@ import {
   tagged_union,
   tuple,
   ValidationError,
-} from "../src/lib/validation";
+} from "../src/lib/validation.ts";
 
 test("validate boolean", () => {
   assert.equal(boolean(true).unwrap(), true);

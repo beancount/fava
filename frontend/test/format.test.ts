@@ -6,7 +6,7 @@ import {
   formatter_context,
   localeFormatter,
   timeFilterDateFormat,
-} from "../src/format";
+} from "../src/format.ts";
 
 test("locale number formatting", () => {
   const f = localeFormatter(null);

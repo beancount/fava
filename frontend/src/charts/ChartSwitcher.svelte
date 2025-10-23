@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { lastActiveChartName } from "../stores/chart";
-  import { show_charts } from "../stores/url";
+  import { _ } from "../i18n.ts";
+  import type { KeySpec } from "../keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { lastActiveChartName } from "../stores/chart.ts";
+  import { show_charts } from "../stores/url.ts";
   import type { FavaChart } from ".";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";

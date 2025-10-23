@@ -6,8 +6,8 @@ import type {
 import { syntaxTree } from "@codemirror/language";
 import { get as store_get } from "svelte/store";
 
-import { accounts, currencies, links, payees, tags } from "../stores";
-import { beancountSnippets } from "./beancount-snippets";
+import { accounts, currencies, links, payees, tags } from "../stores/index.ts";
+import { beancountSnippets } from "./beancount-snippets.ts";
 
 const undatedDirectives = ["option", "plugin", "include"];
 const datedDirectives = [

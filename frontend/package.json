@@ -4,15 +4,15 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node --import ./setup.mjs build.ts",
-    "dev": "node --import ./setup.mjs build.ts --watch",
-    "sync-pre-commit": "node --import ./setup.mjs sync-pre-commit.ts",
-    "sync-github-actions": "node --import ./setup.mjs sync-github-actions.ts",
+    "build": "node build.ts",
+    "dev": "node build.ts --watch",
+    "sync-pre-commit": "node sync-pre-commit.ts",
+    "sync-github-actions": "node sync-github-actions.ts",
     "test": "c8 node --conditions browser --import ./setup.mjs ./node_modules/uvu/bin.js test",
     "test:watch": "watchlist --eager src test -- npm test"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.18"
   },
   "c8": {
     "all": true,

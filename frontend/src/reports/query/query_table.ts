@@ -1,9 +1,9 @@
 import { sum } from "d3-array";
 
-import { Amount } from "../../entries";
-import { Position } from "../../entries/position";
-import { collect } from "../../lib/result";
-import type { ValidationT, Validator } from "../../lib/validation";
+import { Amount } from "../../entries/index.ts";
+import { Position } from "../../entries/position.ts";
+import { collect } from "../../lib/result.ts";
+import type { ValidationT, Validator } from "../../lib/validation.ts";
 import {
   array,
   boolean,
@@ -18,8 +18,8 @@ import {
   string,
   tagged_union,
   unknown,
-} from "../../lib/validation";
-import { NumberColumn, StringColumn } from "../../sort";
+} from "../../lib/validation.ts";
+import { NumberColumn, StringColumn } from "../../sort/index.ts";
 
 const query_column_type = constants(
   "bool",
@@ -55,7 +55,11 @@ const query_table_raw = object({
 const optional_number_record = optional(record(number));
 
 export class Inventory {
-  constructor(readonly value: Record<string, number>) {}
+  readonly value: Record<string, number>;
+
+  constructor(value: Record<string, number>) {
+    this.value = value;
+  }
 
   static validator: Validator<Inventory> = (json) =>
     optional_number_record(json).map((v) => new Inventory(v ?? {}));
@@ -73,27 +77,37 @@ export type QueryCell =
   | string;
 
 class StringSortedQueryColumn<T> extends StringColumn<QueryCell[]> {
-  dtype: QueryColumnType;
+  readonly dtype: QueryColumnType;
+  readonly index: number;
+  readonly validator: Validator<T>;
+
   constructor(
     type: QueryType,
-    readonly index: number,
-    readonly validator: Validator<T>,
+    index: number,
+    validator: Validator<T>,
     str_value_for_sorting: (v: T) => string,
   ) {
     super(type.name, (row) => str_value_for_sorting(row[index] as T));
+    this.index = index;
+    this.validator = validator;
     this.dtype = type.dtype;
   }
 }
 
 class NumberSortedQueryColumn<T> extends NumberColumn<QueryCell[]> {
-  dtype: QueryColumnType;
+  readonly dtype: QueryColumnType;
+  readonly index: number;
+  readonly validator: Validator<T>;
+
   constructor(
     type: QueryType,
-    readonly index: number,
-    readonly validator: Validator<T>,
+    index: number,
+    validator: Validator<T>,
     num_value_for_sorting: (v: T) => number,
   ) {
     super(type.name, (row) => num_value_for_sorting(row[index] as T));
+    this.index = index;
+    this.validator = validator;
     this.dtype = type.dtype;
   }
 }

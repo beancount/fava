@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { day } from "../format";
-  import { urlForAccount } from "../helpers";
-  import { ancestors, leaf } from "../lib/account";
-  import { account_details } from "../stores";
+  import { day } from "../format.ts";
+  import { urlForAccount } from "../helpers.ts";
+  import { ancestors, leaf } from "../lib/account.ts";
+  import { account_details } from "../stores/index.ts";
   import AccountIndicator from "./AccountIndicator.svelte";
 
   interface Props {

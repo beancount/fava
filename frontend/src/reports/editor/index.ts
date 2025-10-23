@@ -1,10 +1,10 @@
 import type { LanguageSupport } from "@codemirror/language";
 
-import { get } from "../../api";
-import type { SourceFile } from "../../api/validators";
-import { getBeancountLanguageSupport } from "../../codemirror/beancount";
-import { _ } from "../../i18n";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import type { SourceFile } from "../../api/validators.ts";
+import { getBeancountLanguageSupport } from "../../codemirror/beancount.ts";
+import { _ } from "../../i18n.ts";
+import { Route } from "../route.ts";
 import Editor from "./Editor.svelte";
 
 export interface EditorReportProps {

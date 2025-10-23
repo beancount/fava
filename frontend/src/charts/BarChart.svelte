@@ -3,11 +3,11 @@
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
-  import { urlForAccount } from "../helpers";
-  import { barChartMode, chartToggledCurrencies } from "../stores/chart";
-  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format";
+  import { urlForAccount } from "../helpers.ts";
+  import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
+  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
-  import type { BarChart } from "./bar";
+  import type { BarChart } from "./bar.ts";
   import {
     currenciesScale,
     filterTicks,
@@ -15,8 +15,8 @@
     includeZero,
     padExtent,
     urlForTimeFilter,
-  } from "./helpers";
-  import { followingTooltip } from "./tooltip";
+  } from "./helpers.ts";
+  import { followingTooltip } from "./tooltip.ts";
 
   interface Props {
     chart: BarChart;

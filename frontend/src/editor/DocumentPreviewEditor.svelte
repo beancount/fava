@@ -4,9 +4,9 @@
   at the given URL.
 -->
 <script lang="ts">
-  import { replaceContents } from "../codemirror/editor-transactions";
-  import { initDocumentPreviewEditor } from "../codemirror/setup";
-  import { fetch, handleText } from "../lib/fetch";
+  import { replaceContents } from "../codemirror/editor-transactions.ts";
+  import { initDocumentPreviewEditor } from "../codemirror/setup.ts";
+  import { fetch, handleText } from "../lib/fetch.ts";
 
   interface Props {
     /** The URL to load the editor contents from. */

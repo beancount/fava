@@ -1,5 +1,5 @@
-import { localStorageSyncedStore } from "../lib/store";
-import { array, constants, string, tuple } from "../lib/validation";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import { array, constants, string, tuple } from "../lib/validation.ts";
 
 const defaultValue = [
   "balance",

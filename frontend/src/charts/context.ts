@@ -1,9 +1,9 @@
 import { derived } from "svelte/store";
 
-import { currencies } from "../stores";
-import { currentDateFormat } from "../stores/format";
-import { operating_currency } from "../stores/options";
-import { conversion } from "../stores/url";
+import { currentDateFormat } from "../stores/format.ts";
+import { currencies } from "../stores/index.ts";
+import { operating_currency } from "../stores/options.ts";
+import { conversion } from "../stores/url.ts";
 
 /** Context data for parsing and rendering of the charts. */
 export interface ChartContext {

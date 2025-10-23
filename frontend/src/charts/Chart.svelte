@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { router } from "../router";
+  import { router } from "../router.ts";
   import {
     barChartMode,
     chartToggledCurrencies,
     hierarchyChartMode,
     lineChartMode,
-  } from "../stores/chart";
-  import { show_charts } from "../stores/url";
+  } from "../stores/chart.ts";
+  import { show_charts } from "../stores/url.ts";
   import type { FavaChart } from ".";
   import BarChart from "./BarChart.svelte";
   import ChartLegend from "./ChartLegend.svelte";

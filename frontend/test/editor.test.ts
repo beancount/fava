@@ -7,7 +7,7 @@ import {
   replaceContents,
   scrollToLine,
   setErrors,
-} from "../src/codemirror/editor-transactions";
+} from "../src/codemirror/editor-transactions.ts";
 
 test("replace editor contents", () => {
   const state = EditorState.create({ doc: "test\n" });

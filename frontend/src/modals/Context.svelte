@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { get } from "../api";
-  import { getBeancountLanguageSupport } from "../codemirror/beancount";
+  import { get } from "../api/index.ts";
+  import { getBeancountLanguageSupport } from "../codemirror/beancount.ts";
   import SliceEditor from "../editor/SliceEditor.svelte";
-  import { _ } from "../i18n";
+  import { _ } from "../i18n.ts";
   import ReportLoadError from "../reports/ReportLoadError.svelte";
-  import { hash } from "../stores/url";
+  import { hash } from "../stores/url.ts";
   import EntryContext from "./EntryContext.svelte";
   import ModalBase from "./ModalBase.svelte";
 

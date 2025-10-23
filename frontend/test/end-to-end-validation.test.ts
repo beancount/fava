@@ -2,16 +2,16 @@ import { get as store_get } from "svelte/store";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { getAPIValidators } from "../src/api/validators";
-import { chartContext } from "../src/charts/context";
+import { getAPIValidators } from "../src/api/validators.ts";
+import { chartContext } from "../src/charts/context.ts";
 import {
   currenciesScale,
   sunburstScale,
   treemapScale,
-} from "../src/charts/helpers";
-import { conversions } from "../src/stores/chart";
-import { currencies, ledgerData } from "../src/stores/index";
-import { initialiseLedgerData, loadJSONSnapshot } from "./helpers";
+} from "../src/charts/helpers.ts";
+import { conversions } from "../src/stores/chart.ts";
+import { currencies, ledgerData } from "../src/stores/index.ts";
+import { initialiseLedgerData, loadJSONSnapshot } from "./helpers.ts";
 
 test.before(initialiseLedgerData);
 

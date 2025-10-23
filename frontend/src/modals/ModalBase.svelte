@@ -8,8 +8,8 @@
   import type { Snippet } from "svelte";
   import type { Attachment } from "svelte/attachments";
 
-  import { attemptFocus, getFocusableElements } from "../lib/focus";
-  import { router } from "../router";
+  import { attemptFocus, getFocusableElements } from "../lib/focus.ts";
+  import { router } from "../router.ts";
 
   interface Props {
     shown: boolean;

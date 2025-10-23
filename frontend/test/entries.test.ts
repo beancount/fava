@@ -11,9 +11,9 @@ import {
   Note,
   Posting,
   Transaction,
-} from "../src/entries/index";
-import { Position } from "../src/entries/position";
-import { formatter_context } from "../src/format";
+} from "../src/entries/index.ts";
+import { Position } from "../src/entries/position.ts";
+import { formatter_context } from "../src/format.ts";
 
 test("metadata: basic operations", () => {
   const meta = new EntryMetadata({ key: "value" });

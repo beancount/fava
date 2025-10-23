@@ -1,8 +1,8 @@
-import { get } from "../../api";
-import type { AccountTreeNode } from "../../charts/hierarchy";
-import { _ } from "../../i18n";
-import { getURLFilters } from "../../stores/filters";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import type { AccountTreeNode } from "../../charts/hierarchy.ts";
+import { _ } from "../../i18n.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import { Route } from "../route.ts";
 import BalanceSheet from "./BalanceSheet.svelte";
 import IncomeStatement from "./IncomeStatement.svelte";
 import TrialBalance from "./TrialBalance.svelte";

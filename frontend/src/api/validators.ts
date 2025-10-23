@@ -1,12 +1,12 @@
-import { account_hierarchy_validator } from "../charts/hierarchy";
+import { account_hierarchy_validator } from "../charts/hierarchy.ts";
 import {
   Document,
   entryBaseValidator,
   entryValidator,
   Event,
   Transaction,
-} from "../entries";
-import type { ValidationT } from "../lib/validation";
+} from "../entries/index.ts";
+import type { ValidationT } from "../lib/validation.ts";
 import {
   array,
   boolean,
@@ -19,8 +19,8 @@ import {
   string,
   tuple,
   unknown,
-} from "../lib/validation";
-import { Inventory, query_validator } from "../reports/query/query_table";
+} from "../lib/validation.ts";
+import { Inventory, query_validator } from "../reports/query/query_table.ts";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {

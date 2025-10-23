@@ -1,14 +1,18 @@
 import type { Readable } from "svelte/store";
 import { derived, get as store_get, writable } from "svelte/store";
 
-import { _ } from "../i18n";
-import { is_descendant, is_descendant_or_equal, parent } from "../lib/account";
-import { account_details, accounts_internal } from ".";
+import { _ } from "../i18n.ts";
+import {
+  is_descendant,
+  is_descendant_or_equal,
+  parent,
+} from "../lib/account.ts";
 import {
   collapse_pattern,
   invert_income_liabilities_equity,
-} from "./fava_options";
-import { name_equity, name_income, name_liabilities } from "./options";
+} from "./fava_options.ts";
+import { account_details, accounts_internal } from "./index.ts";
+import { name_equity, name_income, name_liabilities } from "./options.ts";
 
 /** The accounts that are toggled via the collapse-pattern option. */
 const collapsed_accounts: Readable<readonly string[]> = derived(

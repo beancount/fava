@@ -5,7 +5,7 @@
 import { format } from "d3-format";
 import { timeFormat, utcFormat } from "d3-time-format";
 
-import type { Interval } from "./lib/interval";
+import type { Interval } from "./lib/interval.ts";
 
 /**
  * A number formatting function for a locale.

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import { hierarchyChartMode } from "../stores/chart";
-  import type { HierarchyChart } from "./hierarchy";
+  import { _ } from "../i18n.ts";
+  import { hierarchyChartMode } from "../stores/chart.ts";
+  import type { HierarchyChart } from "./hierarchy.ts";
   import Icicle from "./Icicle.svelte";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";

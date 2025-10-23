@@ -4,18 +4,18 @@
  * The charts heavily use d3 libraries.
  */
 
-import { collect, err, type Result } from "../lib/result";
-import type { ValidationError } from "../lib/validation";
-import { array, object, string, unknown } from "../lib/validation";
-import type { BarChart } from "./bar";
-import { bar } from "./bar";
-import type { ChartContext } from "./context";
-import type { HierarchyChart } from "./hierarchy";
-import { hierarchy } from "./hierarchy";
-import type { LineChart } from "./line";
-import { balances } from "./line";
-import type { ScatterPlot } from "./scatterplot";
-import { scatterplot } from "./scatterplot";
+import { collect, err, type Result } from "../lib/result.ts";
+import type { ValidationError } from "../lib/validation.ts";
+import { array, object, string, unknown } from "../lib/validation.ts";
+import type { BarChart } from "./bar.ts";
+import { bar } from "./bar.ts";
+import type { ChartContext } from "./context.ts";
+import type { HierarchyChart } from "./hierarchy.ts";
+import { hierarchy } from "./hierarchy.ts";
+import type { LineChart } from "./line.ts";
+import { balances } from "./line.ts";
+import type { ScatterPlot } from "./scatterplot.ts";
+import { scatterplot } from "./scatterplot.ts";
 
 const parsers: Record<
   string,

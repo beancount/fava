@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { saveEntries } from "../api";
-  import { Balance, Note, Transaction } from "../entries";
+  import { saveEntries } from "../api/index.ts";
+  import { Balance, Note, Transaction } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
-  import { todayAsString } from "../format";
-  import { _ } from "../i18n";
-  import { router } from "../router";
-  import { addEntryContinue } from "../stores/editor";
-  import { hash } from "../stores/url";
+  import { todayAsString } from "../format.ts";
+  import { _ } from "../i18n.ts";
+  import { router } from "../router.ts";
+  import { addEntryContinue } from "../stores/editor.ts";
+  import { hash } from "../stores/url.ts";
   import ModalBase from "./ModalBase.svelte";
 
   /** The entry types which have support adding in the modal. */

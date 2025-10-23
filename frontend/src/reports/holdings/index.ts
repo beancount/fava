@@ -1,9 +1,9 @@
-import { get } from "../../api";
-import { getUrlPath } from "../../helpers";
-import { _ } from "../../i18n";
-import { getURLFilters } from "../../stores/filters";
-import type { QueryResultTable } from "../query/query_table";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import { getUrlPath } from "../../helpers.ts";
+import { _ } from "../../i18n.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import type { QueryResultTable } from "../query/query_table.ts";
+import { Route } from "../route.ts";
 import Holdings from "./Holdings.svelte";
 
 export type HoldingsReportType =

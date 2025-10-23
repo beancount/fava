@@ -1,16 +1,16 @@
 <script lang="ts">
   import { treemap } from "d3-hierarchy";
 
-  import { formatPercentage } from "../format";
-  import { urlForAccount } from "../helpers";
-  import { leaf } from "../lib/account";
-  import { ctx } from "../stores/format";
-  import { treemapScale } from "./helpers";
+  import { formatPercentage } from "../format.ts";
+  import { urlForAccount } from "../helpers.ts";
+  import { leaf } from "../lib/account.ts";
+  import { ctx } from "../stores/format.ts";
+  import { treemapScale } from "./helpers.ts";
   import type {
     AccountHierarchyDatum,
     AccountHierarchyNode,
-  } from "./hierarchy";
-  import { domHelpers, followingTooltip } from "./tooltip";
+  } from "./hierarchy.ts";
+  import { domHelpers, followingTooltip } from "./tooltip.ts";
 
   interface Props {
     data: AccountHierarchyNode;

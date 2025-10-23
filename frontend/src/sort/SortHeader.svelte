@@ -3,7 +3,7 @@
   A `<th>` table header for a sortable column.
 -->
 <script lang="ts">
-  import { type SortColumn, type Sorter, UnsortedColumn } from ".";
+  import { type SortColumn, type Sorter, UnsortedColumn } from "./index.ts";
 
   interface Props {
     /** The current sorter. */

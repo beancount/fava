@@ -1,6 +1,6 @@
-import { _ } from "../i18n";
-import { localStorageSyncedStore } from "../lib/store";
-import { constants, type ValidationT } from "../lib/validation";
+import { _ } from "../i18n.ts";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import { constants, type ValidationT } from "../lib/validation.ts";
 
 const color_scheme_validator = constants("light dark", "dark", "light");
 

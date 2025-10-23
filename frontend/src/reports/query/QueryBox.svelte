@@ -4,10 +4,10 @@
 -->
 <script lang="ts">
   import Chart from "../../charts/Chart.svelte";
-  import { chartContext } from "../../charts/context";
-  import { getQueryChart } from "../../charts/query-charts";
-  import type { Result } from "../../lib/result";
-  import type { QueryResult } from "./query_table";
+  import { chartContext } from "../../charts/context.ts";
+  import { getQueryChart } from "../../charts/query-charts.ts";
+  import type { Result } from "../../lib/result.ts";
+  import type { QueryResult } from "./query_table.ts";
   import QueryLinks from "./QueryLinks.svelte";
   import QueryTable from "./QueryTable.svelte";
   import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";

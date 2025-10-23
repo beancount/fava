@@ -1,15 +1,15 @@
 import { get as store_get } from "svelte/store";
 
-import type { Entry } from "../entries";
-import { urlForRaw } from "../helpers";
-import { fetchJSON } from "../lib/fetch";
-import type { ValidationT } from "../lib/validation";
-import { string } from "../lib/validation";
-import { notify, notify_err } from "../notifications";
-import { router } from "../router";
-import type { Filters, FiltersConversionInterval } from "../stores/filters";
-import type { GetAPIValidators, SourceFile } from "./validators";
-import { getAPIValidators } from "./validators";
+import type { Entry } from "../entries/index.ts";
+import { urlForRaw } from "../helpers.ts";
+import { fetchJSON } from "../lib/fetch.ts";
+import type { ValidationT } from "../lib/validation.ts";
+import { string } from "../lib/validation.ts";
+import { notify, notify_err } from "../notifications.ts";
+import { router } from "../router.ts";
+import type { Filters, FiltersConversionInterval } from "../stores/filters.ts";
+import type { GetAPIValidators, SourceFile } from "./validators.ts";
+import { getAPIValidators } from "./validators.ts";
 
 class InvalidResponseDataError extends Error {
   constructor(cause: Error) {

@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { toggle } from "../src/lib/set";
+import { toggle } from "../src/lib/set.ts";
 
 test("toggle set elements", () => {
   assert.equal(toggle(new Set([0, 1]), 0), new Set([1]));

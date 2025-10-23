@@ -1,6 +1,6 @@
 <script lang="ts">
   import AccountPageTitle from "./AccountPageTitle.svelte";
-  import { page_title } from "./page-title";
+  import { page_title } from "./page-title.ts";
 
   let { title, type } = $derived($page_title);
 

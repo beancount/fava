@@ -1,10 +1,10 @@
 import { derived, get as store_get } from "svelte/store";
 
-import type { Result } from "./lib/result";
-import { err, ok } from "./lib/result";
-import { base_url } from "./stores";
-import { use_external_editor } from "./stores/fava_options";
-import { syncedSearchParams } from "./stores/url";
+import type { Result } from "./lib/result.ts";
+import { err, ok } from "./lib/result.ts";
+import { use_external_editor } from "./stores/fava_options.ts";
+import { base_url } from "./stores/index.ts";
+import { syncedSearchParams } from "./stores/url.ts";
 
 /**
  * Get the URL path relative to the base url of the current ledger.

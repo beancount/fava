@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
   import QueryTable from "../query/QueryTable.svelte";
-  import { postings_per_account_query, type StatisticsReportProps } from ".";
   import EntriesByType from "./EntriesByType.svelte";
+  import {
+    postings_per_account_query,
+    type StatisticsReportProps,
+  } from "./index.ts";
   import UpdateActivity from "./UpdateActivity.svelte";
 
   let {

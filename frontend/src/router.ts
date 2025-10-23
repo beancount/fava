@@ -8,15 +8,19 @@
 import type { Readable } from "svelte/store";
 import { writable } from "svelte/store";
 
-import { handleExtensionPageLoad } from "./extensions";
-import { getUrlPath } from "./helpers";
-import { assert_is_error } from "./lib/errors";
-import { delegate } from "./lib/events";
-import { log_error } from "./log";
-import type { RenderedReport } from "./reports/route";
-import { backend_route, ErrorRoute, type FrontendRoute } from "./reports/route";
-import { has_changes, raw_page_title } from "./sidebar/page-title";
-import { current_url } from "./stores/url";
+import { handleExtensionPageLoad } from "./extensions.ts";
+import { getUrlPath } from "./helpers.ts";
+import { assert_is_error } from "./lib/errors.ts";
+import { delegate } from "./lib/events.ts";
+import { log_error } from "./log.ts";
+import type { RenderedReport } from "./reports/route.ts";
+import {
+  backend_route,
+  ErrorRoute,
+  type FrontendRoute,
+} from "./reports/route.ts";
+import { has_changes, raw_page_title } from "./sidebar/page-title.ts";
+import { current_url } from "./stores/url.ts";
 
 /** Whether this is a left-button click without any modifier keys pressed. */
 const is_normal_click = (event: MouseEvent) =>

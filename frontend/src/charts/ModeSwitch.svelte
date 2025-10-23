@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends string">
-  import type { LocalStoreSyncedStore } from "../lib/store";
+  import type { LocalStoreSyncedStore } from "../lib/store.ts";
 
   interface Props {
     /** The store to show a switch for. */

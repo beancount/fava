@@ -1,8 +1,8 @@
 <script lang="ts">
   import ModeSwitch from "../../charts/ModeSwitch.svelte";
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { color_scheme } from "../../stores/color_scheme";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { color_scheme } from "../../stores/color_scheme.ts";
   import type { OptionsReportProps } from ".";
   import OptionsTable from "./OptionsTable.svelte";
 

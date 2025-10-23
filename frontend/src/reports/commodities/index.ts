@@ -1,12 +1,12 @@
-import { get } from "../../api";
-import type { Commodities } from "../../api/validators";
-import type { FavaChart } from "../../charts";
-import { LineChart } from "../../charts/line";
-import { domHelpers } from "../../charts/tooltip";
-import { day } from "../../format";
-import { _ } from "../../i18n";
-import { getURLFilters } from "../../stores/filters";
-import { Route } from "../route";
+import { get } from "../../api/index.ts";
+import type { Commodities } from "../../api/validators.ts";
+import type { FavaChart } from "../../charts/index.ts";
+import { LineChart } from "../../charts/line.ts";
+import { domHelpers } from "../../charts/tooltip.ts";
+import { day } from "../../format.ts";
+import { _ } from "../../i18n.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import { Route } from "../route.ts";
 import CommoditiesSvelte from "./Commodities.svelte";
 
 export interface CommoditiesReportProps {

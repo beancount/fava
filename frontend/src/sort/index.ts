@@ -14,7 +14,7 @@
 import { permute } from "d3-array";
 import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal";
+import { journalSortOrder } from "../stores/journal.ts";
 
 type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
@@ -42,10 +42,13 @@ export interface SortColumn<T = unknown> {
 
 /** A sorter of tabular data, is specified by a SortColumn and an order to sort by. */
 export class Sorter<T = unknown> {
-  constructor(
-    readonly column: SortColumn<T>,
-    readonly order: SortOrder,
-  ) {}
+  readonly column: SortColumn<T>;
+  readonly order: SortOrder;
+
+  constructor(column: SortColumn<T>, order: SortOrder) {
+    this.column = column;
+    this.order = order;
+  }
 
   /** Get a new sorter by switching to a possibly different column. */
   switchColumn(column: SortColumn<T>): Sorter<T> {
@@ -91,7 +94,10 @@ function sort_internal<T, U>(
 
 /** A SortColumn that does no sorting. */
 export class UnsortedColumn<T> implements SortColumn<T> {
-  constructor(readonly name: string) {}
+  readonly name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
 
   sort(data: readonly T[]): readonly T[] {
     return data;
@@ -101,11 +107,13 @@ export class UnsortedColumn<T> implements SortColumn<T> {
 /** A SortColumn for numbers. */
 export class NumberColumn<T> implements SortColumn<T> {
   private compare = (a: number, b: number): number => a - b;
+  readonly name: string;
+  private readonly value: (row: Readonly<T>) => number;
 
-  constructor(
-    readonly name: string,
-    private readonly value: (row: Readonly<T>) => number,
-  ) {}
+  constructor(name: string, value: (row: Readonly<T>) => number) {
+    this.name = name;
+    this.value = value;
+  }
 
   sort(data: readonly T[], direction: SortDirection): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
@@ -113,18 +121,20 @@ export class NumberColumn<T> implements SortColumn<T> {
 }
 /** A SortColumn for objects with a string date property. */
 export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
-  constructor(override readonly name: string) {
+  constructor(name: string) {
     super(name, (d: T) => new Date(d.date).valueOf());
   }
 }
 /** A SortColumn for strings. */
 export class StringColumn<T> implements SortColumn<T> {
   private compare = compare_strings;
+  readonly name: string;
+  private readonly value: (row: Readonly<T>) => string;
 
-  constructor(
-    readonly name: string,
-    private readonly value: (row: Readonly<T>) => string,
-  ) {}
+  constructor(name: string, value: (row: Readonly<T>) => string) {
+    this.name = name;
+    this.value = value;
+  }
 
   sort(data: readonly T[], direction: 1 | -1): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);

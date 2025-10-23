@@ -1,6 +1,6 @@
-import type { Result } from "../lib/result";
-import type { ValidationError } from "../lib/validation";
-import { array, date, object, string } from "../lib/validation";
+import type { Result } from "../lib/result.ts";
+import type { ValidationError } from "../lib/validation.ts";
+import { array, date, object, string } from "../lib/validation.ts";
 
 /** Data point for the scatterplot (events). */
 export interface ScatterPlotDatum {
@@ -11,11 +11,13 @@ export interface ScatterPlotDatum {
 
 export class ScatterPlot {
   readonly type = "scatterplot";
+  readonly name: string | null;
+  readonly data: readonly ScatterPlotDatum[];
 
-  constructor(
-    readonly name: string | null,
-    readonly data: readonly ScatterPlotDatum[],
-  ) {}
+  constructor(name: string | null, data: readonly ScatterPlotDatum[]) {
+    this.name = name;
+    this.data = data;
+  }
 }
 
 const scatterplot_validator = array<ScatterPlotDatum>(

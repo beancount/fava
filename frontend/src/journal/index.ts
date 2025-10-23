@@ -2,14 +2,14 @@ import { range } from "d3-array";
 import { mount, unmount } from "svelte";
 import { get as store_get } from "svelte/store";
 
-import { delegate } from "../lib/events";
-import { fetch, handleText } from "../lib/fetch";
-import { log_error } from "../log";
-import { notify_err } from "../notifications";
-import { router } from "../router";
-import { type SortableJournal, sortableJournal } from "../sort";
-import { fql_filter } from "../stores/filters";
-import { journalShow } from "../stores/journal";
+import { delegate } from "../lib/events.ts";
+import { fetch, handleText } from "../lib/fetch.ts";
+import { log_error } from "../log.ts";
+import { notify_err } from "../notifications.ts";
+import { router } from "../router.ts";
+import { type SortableJournal, sortableJournal } from "../sort/index.ts";
+import { fql_filter } from "../stores/filters.ts";
+import { journalShow } from "../stores/journal.ts";
 import JournalFilters from "./JournalFilters.svelte";
 
 /**

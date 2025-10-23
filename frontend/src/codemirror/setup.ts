@@ -38,15 +38,15 @@ import {
 import type { Attachment } from "svelte/attachments";
 import { get as store_get } from "svelte/store";
 
-import { log_error } from "../log";
-import { currency_column, indent } from "../stores/fava_options";
-import { getBeancountLanguageSupport } from "./beancount";
+import { log_error } from "../log.ts";
+import { currency_column, indent } from "../stores/fava_options.ts";
+import { getBeancountLanguageSupport } from "./beancount.ts";
 import {
   beancountEditorHighlight,
   beancountQueryHighlight,
-} from "./beancount-highlight";
-import { bql } from "./bql";
-import { rulerPlugin } from "./ruler";
+} from "./beancount-highlight.ts";
+import { bql } from "./bql.ts";
+import { rulerPlugin } from "./ruler.ts";
 
 const baseExtensions = [
   lineNumbers(),

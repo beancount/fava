@@ -1,5 +1,5 @@
-import { errorWithCauses } from "./lib/errors";
-import { log_error } from "./log";
+import { errorWithCauses } from "./lib/errors.ts";
+import { log_error } from "./log.ts";
 
 /** The notification list div, lazily created. */
 const notificationList = (() => {

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Event } from "../../entries";
-  import { _ } from "../../i18n";
-  import { DateColumn, Sorter, StringColumn } from "../../sort";
+  import type { Event } from "../../entries/index.ts";
+  import { _ } from "../../i18n.ts";
+  import { DateColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
 
   interface Props {

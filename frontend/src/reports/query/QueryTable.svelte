@@ -3,17 +3,17 @@
   A query result table.
 -->
 <script lang="ts">
-  import { Amount, Position } from "../../entries";
-  import { day } from "../../format";
-  import { urlForAccount } from "../../helpers";
-  import { is_empty } from "../../lib/objects";
+  import { Amount, Position } from "../../entries/index.ts";
+  import { day } from "../../format.ts";
+  import { urlForAccount } from "../../helpers.ts";
+  import { is_empty } from "../../lib/objects.ts";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
-  import { Sorter, UnsortedColumn } from "../../sort";
+  import { Sorter, UnsortedColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { accounts_set, currency_name } from "../../stores";
-  import { ctx, num } from "../../stores/format";
-  import type { QueryCell, QueryResultTable } from "./query_table";
-  import { Inventory } from "./query_table";
+  import { ctx, num } from "../../stores/format.ts";
+  import { accounts_set, currency_name } from "../../stores/index.ts";
+  import type { QueryCell, QueryResultTable } from "./query_table.ts";
+  import { Inventory } from "./query_table.ts";
 
   interface Props {
     /** The table to render. */

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { sum } from "d3-array";
 
-  import { _ } from "../../i18n";
-  import { NumberColumn, Sorter, StringColumn } from "../../sort";
+  import { _ } from "../../i18n.ts";
+  import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
 
   let { entries_by_type }: { entries_by_type: Record<string, number> } =

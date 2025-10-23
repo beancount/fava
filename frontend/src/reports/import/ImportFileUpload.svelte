@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { put } from "../../api";
-  import { _ } from "../../i18n";
-  import { notify, notify_err } from "../../notifications";
-  import { router } from "../../router";
+  import { put } from "../../api/index.ts";
+  import { _ } from "../../i18n.ts";
+  import { notify, notify_err } from "../../notifications.ts";
+  import { router } from "../../router.ts";
 
   let input: HTMLInputElement | undefined = $state.raw();
 

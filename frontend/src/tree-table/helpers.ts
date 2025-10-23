@@ -2,15 +2,15 @@ import { getContext, setContext } from "svelte";
 import type { Readable } from "svelte/store";
 import { derived } from "svelte/store";
 
-import type { AccountTreeNode } from "../charts/hierarchy";
-import { is_empty } from "../lib/objects";
-import { accounts_set } from "../stores";
-import { is_closed_account } from "../stores/accounts";
+import type { AccountTreeNode } from "../charts/hierarchy.ts";
+import { is_empty } from "../lib/objects.ts";
+import { is_closed_account } from "../stores/accounts.ts";
 import {
   show_accounts_with_zero_balance,
   show_accounts_with_zero_transactions,
   show_closed_accounts,
-} from "../stores/fava_options";
+} from "../stores/fava_options.ts";
+import { accounts_set } from "../stores/index.ts";
 
 const key = Symbol("tree-table");
 

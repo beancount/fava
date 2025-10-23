@@ -1,9 +1,9 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { urlForAccount } from "../helpers";
-  import { _ } from "../i18n";
-  import { router } from "../router";
-  import { accounts } from "../stores";
+  import { urlForAccount } from "../helpers.ts";
+  import { _ } from "../i18n.ts";
+  import { router } from "../router.ts";
+  import { accounts } from "../stores/index.ts";
 
   let value = $state("");
 

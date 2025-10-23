@@ -2,13 +2,13 @@
   import { intersection, min } from "d3-array";
   import { writable } from "svelte/store";
 
-  import type { AccountBudget } from "../api/validators";
-  import type { AccountTreeNode } from "../charts/hierarchy";
-  import { urlForAccount } from "../helpers";
-  import type { NonEmptyArray } from "../lib/array";
-  import { currentTimeFilterDateFormat } from "../stores/format";
+  import type { AccountBudget } from "../api/validators.ts";
+  import type { AccountTreeNode } from "../charts/hierarchy.ts";
+  import { urlForAccount } from "../helpers.ts";
+  import type { NonEmptyArray } from "../lib/array.ts";
+  import { currentTimeFilterDateFormat } from "../stores/format.ts";
   import AccountCellHeader from "./AccountCellHeader.svelte";
-  import { get_not_shown, setTreeTableNotShownContext } from "./helpers";
+  import { get_not_shown, setTreeTableNotShownContext } from "./helpers.ts";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
 
   interface Props {

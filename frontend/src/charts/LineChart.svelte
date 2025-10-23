@@ -5,13 +5,13 @@
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { area, curveStepAfter, line } from "d3-shape";
 
-  import { chartToggledCurrencies, lineChartMode } from "../stores/chart";
-  import { ctx, short } from "../stores/format";
+  import { chartToggledCurrencies, lineChartMode } from "../stores/chart.ts";
+  import { ctx, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
-  import { currenciesScale, includeZero, padExtent } from "./helpers";
-  import type { LineChart, LineChartDatum } from "./line";
-  import type { TooltipFindNode } from "./tooltip";
-  import { positionedTooltip } from "./tooltip";
+  import { currenciesScale, includeZero, padExtent } from "./helpers.ts";
+  import type { LineChart, LineChartDatum } from "./line.ts";
+  import type { TooltipFindNode } from "./tooltip.ts";
+  import { positionedTooltip } from "./tooltip.ts";
 
   interface Props {
     chart: LineChart;

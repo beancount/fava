@@ -6,7 +6,7 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { object, string } from "./src/lib/validation";
+import { object, string } from "./src/lib/validation.ts";
 
 const workflows = join(
   fileURLToPath(import.meta.url),

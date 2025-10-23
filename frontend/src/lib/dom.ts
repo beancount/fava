@@ -1,7 +1,7 @@
-import { parseJSON } from "./json";
-import type { Result } from "./result";
-import { err } from "./result";
-import type { ValidationError, Validator } from "./validation";
+import { parseJSON } from "./json.ts";
+import type { Result } from "./result.ts";
+import { err } from "./result.ts";
+import type { ValidationError, Validator } from "./validation.ts";
 
 class ScriptTagNotFoundError extends Error {
   constructor(selector: string) {

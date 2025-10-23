@@ -8,7 +8,7 @@ import {
   is_descendant_or_equal,
   leaf,
   parent,
-} from "../src/lib/account";
+} from "../src/lib/account.ts";
 
 test("account: split account names", () => {
   assert.equal(ancestors("Assets:Cash:Sub"), [

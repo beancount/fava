@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
-  import { chartContext } from "../../charts/context";
-  import { urlForAccount } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { is_non_empty } from "../../lib/array";
-  import { intervalLabel } from "../../lib/interval";
-  import { interval } from "../../stores/url";
+  import { chartContext } from "../../charts/context.ts";
+  import { parseChartData } from "../../charts/index.ts";
+  import { urlForAccount } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { is_non_empty } from "../../lib/array.ts";
+  import { intervalLabel } from "../../lib/interval.ts";
+  import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import type { AccountReportProps } from ".";
 

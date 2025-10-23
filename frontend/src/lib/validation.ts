@@ -5,8 +5,8 @@
  * an API, is of a specified type.
  */
 
-import type { Ok, Result } from "./result";
-import { err, ok } from "./result";
+import type { Ok, Result } from "./result.ts";
+import { err, ok } from "./result.ts";
 
 export class ValidationError extends Error {}
 export class PrimitiveValidationError extends ValidationError {

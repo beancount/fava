@@ -1,5 +1,5 @@
-import type { Result } from "./result";
-import { err, ok } from "./result";
+import type { Result } from "./result.ts";
+import { err, ok } from "./result.ts";
 
 /**
  * Parse a JSON string into an object.

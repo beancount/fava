@@ -5,29 +5,37 @@
 import { type Component, mount, unmount } from "svelte";
 import { get as store_get } from "svelte/store";
 
-import type { FavaChart } from "./charts";
-import { parseChartData } from "./charts";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
-import { chartContext } from "./charts/context";
+import { chartContext } from "./charts/context.ts";
 import {
   account_hierarchy_validator,
   type AccountTreeNode,
-} from "./charts/hierarchy";
-import { domHelpers } from "./charts/tooltip";
-import type { Result } from "./lib/result";
-import { log_error } from "./log";
-import type { QueryResultTable } from "./reports/query/query_table";
-import { query_table_validator } from "./reports/query/query_table";
+} from "./charts/hierarchy.ts";
+import type { FavaChart } from "./charts/index.ts";
+import { parseChartData } from "./charts/index.ts";
+import { domHelpers } from "./charts/tooltip.ts";
+import type { Result } from "./lib/result.ts";
+import { log_error } from "./log.ts";
+import type { QueryResultTable } from "./reports/query/query_table.ts";
+import { query_table_validator } from "./reports/query/query_table.ts";
 import QueryTable from "./reports/query/QueryTable.svelte";
 import TreeTable from "./tree-table/TreeTable.svelte";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */
 class SvelteCustomElementComponent<T extends Record<string, unknown>> {
+  readonly type: string;
+  private readonly Component: Component<T>;
+  private readonly validate: (data: unknown) => Result<T, Error>;
+
   constructor(
-    readonly type: string,
-    private readonly Component: Component<T>,
-    private readonly validate: (data: unknown) => Result<T, Error>,
-  ) {}
+    type: string,
+    Component: Component<T>,
+    validate: (data: unknown) => Result<T, Error>,
+  ) {
+    this.type = type;
+    this.Component = Component;
+    this.validate = validate;
+  }
 
   /** Load data and render the component for this route to the given target. */
   render(target: SvelteCustomElement, data: unknown): (() => void) | undefined {

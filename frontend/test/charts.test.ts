@@ -1,19 +1,19 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { bar } from "../src/charts/bar";
+import { bar } from "../src/charts/bar.ts";
 import {
   colors10,
   colors15,
   filterTicks,
   includeZero,
   padExtent,
-} from "../src/charts/helpers";
-import { hierarchy, HierarchyChart } from "../src/charts/hierarchy";
-import { parseChartData } from "../src/charts/index";
-import { balances, LineChart } from "../src/charts/line";
-import { ScatterPlot, scatterplot } from "../src/charts/scatterplot";
-import { loadJSONSnapshot } from "./helpers";
+} from "../src/charts/helpers.ts";
+import { hierarchy, HierarchyChart } from "../src/charts/hierarchy.ts";
+import { parseChartData } from "../src/charts/index.ts";
+import { balances, LineChart } from "../src/charts/line.ts";
+import { ScatterPlot, scatterplot } from "../src/charts/scatterplot.ts";
+import { loadJSONSnapshot } from "./helpers.ts";
 
 test("chart helpers (filter ticks)", () => {
   assert.equal(filterTicks(["1", "2", "3"], 2), ["1", "3"]);

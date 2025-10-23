@@ -1,4 +1,4 @@
-import { log_error } from "../log";
+import { log_error } from "../log.ts";
 
 /** Render the message of an error, with causes if set. */
 export function errorWithCauses(error: Error): string {

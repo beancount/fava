@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { basename, documentHasAccount, ext } from "../src/lib/paths";
+import { basename, documentHasAccount, ext } from "../src/lib/paths.ts";
 
 test("get basename of file", () => {
   assert.is(basename("/home/Assets/Cash/document.pdf"), "document.pdf");

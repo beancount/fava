@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { _ } from "../i18n.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
 
   interface Props {
     /** Whether anything is changed - the button is disabled otherwise. */

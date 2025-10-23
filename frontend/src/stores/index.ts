@@ -1,8 +1,8 @@
 import { derived, type Readable, writable } from "svelte/store";
 
-import type { BeancountError, LedgerData } from "../api/validators";
-import { get_internal_accounts } from "../lib/account";
-import { derived_array } from "../lib/store";
+import type { BeancountError, LedgerData } from "../api/validators.ts";
+import { get_internal_accounts } from "../lib/account.ts";
+import { derived_array } from "../lib/store.ts";
 
 /** The Beancount errors. */
 export const errors = writable<readonly BeancountError[]>([]);

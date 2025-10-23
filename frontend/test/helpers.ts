@@ -2,10 +2,10 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ledgerDataValidator } from "../src/api/validators";
-import { parseJSON } from "../src/lib/json";
-import { ledgerData } from "../src/stores/index";
-import { current_url } from "../src/stores/url";
+import { ledgerDataValidator } from "../src/api/validators.ts";
+import { parseJSON } from "../src/lib/json.ts";
+import { ledgerData } from "../src/stores/index.ts";
+import { current_url } from "../src/stores/url.ts";
 
 /** Load the Python test snapshot output with the given name and parse as JSON. */
 export async function loadJSONSnapshot(

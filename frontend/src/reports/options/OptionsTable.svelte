@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { _ } from "../../i18n";
-  import { Sorter, StringColumn } from "../../sort";
+  import { _ } from "../../i18n.ts";
+  import { Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
 
   type T = [string, string];

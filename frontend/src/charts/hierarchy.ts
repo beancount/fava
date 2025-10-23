@@ -4,9 +4,9 @@ import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
-import type { Result } from "../lib/result";
-import type { TreeNode } from "../lib/tree";
-import type { ValidationError, Validator } from "../lib/validation";
+import type { Result } from "../lib/result.ts";
+import type { TreeNode } from "../lib/tree.ts";
+import type { ValidationError, Validator } from "../lib/validation.ts";
 import {
   array,
   boolean,
@@ -18,10 +18,10 @@ import {
   record,
   string,
   unknown,
-} from "../lib/validation";
-import { notify_warn } from "../notifications";
-import { sort_by_strings } from "../sort";
-import type { ChartContext } from "./context";
+} from "../lib/validation.ts";
+import { notify_warn } from "../notifications.ts";
+import { sort_by_strings } from "../sort/index.ts";
+import type { ChartContext } from "./context.ts";
 
 /** The data provided with a fava.core.tree.SerialisedTreeNode. */
 export type AccountTreeNode = TreeNode<{
@@ -69,17 +69,19 @@ export function addInternalNodesAsLeaves({
 
 export class HierarchyChart {
   readonly type = "hierarchy";
-
   /** All currencies for which we have an hierarchy. */
   readonly currencies: readonly string[];
-
   /** The currency to show the treemap of. */
   readonly treemap_currency: Writable<string> | null;
+  readonly name: string | null;
+  readonly data: ReadonlyMap<string, AccountHierarchyNode>;
 
   constructor(
-    readonly name: string | null,
-    readonly data: ReadonlyMap<string, AccountHierarchyNode>,
+    name: string | null,
+    data: ReadonlyMap<string, AccountHierarchyNode>,
   ) {
+    this.name = name;
+    this.data = data;
     this.currencies = [...this.data.keys()];
     const first_currency = this.currencies[0];
     this.treemap_currency =

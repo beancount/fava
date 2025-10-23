@@ -1,5 +1,5 @@
-import { localStorageSyncedStore } from "../lib/store";
-import { boolean } from "../lib/validation";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import { boolean } from "../lib/validation.ts";
 
 /** Whether to reload after saving an entry in the slice editor. */
 export const reloadAfterSavingEntrySlice = localStorageSyncedStore(

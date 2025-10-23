@@ -1,12 +1,12 @@
-import { log_error } from "../log";
-import { set_mtime } from "../stores/mtime";
+import { log_error } from "../log.ts";
+import { set_mtime } from "../stores/mtime.ts";
 import {
   defaultValue,
   isJsonObject,
   object,
   string,
   unknown,
-} from "./validation";
+} from "./validation.ts";
 
 class FetchError extends Error {}
 

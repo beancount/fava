@@ -1,10 +1,10 @@
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
-import type { StrictEquality } from "./equals";
-import { shallow_equal } from "./equals";
-import { parseJSON } from "./json";
-import type { Validator } from "./validation";
+import type { StrictEquality } from "./equals.ts";
+import { shallow_equal } from "./equals.ts";
+import { parseJSON } from "./json.ts";
+import type { Validator } from "./validation.ts";
 
 /**
  * Create a derived store that does a shallow array equality check.

@@ -10,8 +10,8 @@ import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 import {
   input_edit_for_fragments,
   LezerTSParser,
-} from "../src/codemirror/tree-sitter-parser";
-import { is_non_empty } from "../src/lib/array";
+} from "../src/codemirror/tree-sitter-parser.ts";
+import { is_non_empty } from "../src/lib/array.ts";
 
 async function load(): Promise<TSParser> {
   await TSParser.init();
