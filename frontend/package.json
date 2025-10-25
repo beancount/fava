@@ -28,6 +28,9 @@
       "src"
     ]
   },
+  "overrides": {
+    "parse5": "^7.3.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@tsconfig/strictest": "^2.0.5",
@@ -51,7 +54,7 @@
     "eslint": "^9.27.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-svelte": "^3.1.0",
-    "jsdom": "27.0.0",
+    "jsdom": "^27.0.0",
     "postcss-html": "^1.0.1",
     "prettier": "^3.0.0",
     "prettier-plugin-svelte": "^3.0.0",
