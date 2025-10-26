@@ -2,7 +2,7 @@
   import type { EditorView } from "@codemirror/view";
   import { onMount, untrack } from "svelte";
 
-  import { get, put } from "../../api/index.ts";
+  import { get_errors, put_source } from "../../api/index.ts";
   import {
     replaceContents,
     scrollToLine,
@@ -40,14 +40,14 @@
   async function save(cm: EditorView) {
     saving = true;
     try {
-      sha256sum = await put("source", {
+      sha256sum = await put_source({
         file_path,
         source: cm.state.sliceDoc(),
         sha256sum,
       });
       changed = false;
       cm.focus();
-      get("errors").then((v) => {
+      get_errors().then((v) => {
         errors.set(v);
       }, log_error);
     } catch (error) {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { get } from "../../api/index.ts";
+  import { get_query } from "../../api/index.ts";
   import { err, ok, type Result } from "../../lib/result.ts";
   import { log_error } from "../../log.ts";
   import { router } from "../../router.ts";
@@ -50,7 +50,7 @@
     }
     query_shell_history.add(query);
     router.set_search_param("query_string", query);
-    get("query", { query_string: query, ...$filter_params })
+    get_query({ query_string: query, ...$filter_params })
       .then(
         (res) => ok(res),
         (error: unknown) =>
@@ -71,7 +71,7 @@
       .map(([query]) => query);
     results = {};
     for (const query of to_rerun) {
-      get("query", { query_string: query, ...$filter_params })
+      get_query({ query_string: query, ...$filter_params })
         .then(
           (res) => ok(res),
           (error: unknown) =>

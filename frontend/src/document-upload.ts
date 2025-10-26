@@ -6,7 +6,7 @@
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
-import { put } from "./api/index.ts";
+import { put_attach_document } from "./api/index.ts";
 import { todayAsString } from "./format.ts";
 import { delegate } from "./lib/events.ts";
 import { basename, documentHasAccount } from "./lib/paths.ts";
@@ -83,7 +83,7 @@ function drop(event: DragEvent, target: Element): void {
       ) {
         filename = basename(filename);
       }
-      put("attach_document", { filename, entry_hash: targetEntry }).then(
+      put_attach_document({ filename, entry_hash: targetEntry }).then(
         notify,
         (error: unknown) => {
           notify_err(

@@ -3,14 +3,15 @@
   import { SvelteMap } from "svelte/reactivity";
 
   import {
-    deleteDocument,
-    get,
-    moveDocument,
-    saveEntries,
+    delete_document,
+    get_extract,
+    move_document,
+    save_entries,
   } from "../../api/index.ts";
   import type { Entry } from "../../entries/index.ts";
   import { urlFor } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
+  import { is_non_empty } from "../../lib/array.ts";
   import { notify, notify_err } from "../../notifications.ts";
   import { router } from "../../router.ts";
   import { import_config } from "../../stores/fava_options.ts";
@@ -61,7 +62,7 @@
    * Move the given file to the new file name (and remove from the list).
    */
   async function move(filename: string, account: string, newName: string) {
-    const moved = await moveDocument(filename, account, newName);
+    const moved = await move_document(filename, account, newName);
     if (moved) {
       router.reload();
     }
@@ -74,7 +75,7 @@
     if (!window.confirm(_("Delete this file?"))) {
       return;
     }
-    const removed = await deleteDocument(filename);
+    const removed = await delete_document(filename);
     if (removed) {
       if (selected === filename) {
         selected = null;
@@ -94,7 +95,7 @@
       return;
     }
     try {
-      entries = await get("extract", { filename, importer });
+      entries = await get_extract({ filename, importer });
       if (entries.length) {
         extract_cache.set(file_importer_key, entries);
       } else {
@@ -115,7 +116,9 @@
       extract_cache.delete(key);
     }
     entries = [];
-    await saveEntries(without_duplicates);
+    if (is_non_empty(without_duplicates)) {
+      await save_entries(without_duplicates);
+    }
   }
 </script>
 

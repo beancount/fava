@@ -1,6 +1,6 @@
 import type { LanguageSupport } from "@codemirror/language";
 
-import { get } from "../../api/index.ts";
+import { get_source } from "../../api/index.ts";
 import type { SourceFile } from "../../api/validators.ts";
 import { getBeancountLanguageSupport } from "../../codemirror/beancount.ts";
 import { _ } from "../../i18n.ts";
@@ -20,7 +20,7 @@ export const editor = new Route<EditorReportProps>(
     const line = url.searchParams.get("line");
     const line_search_param = line != null ? Number.parseInt(line, 10) : null;
     return Promise.all([
-      get("source", {
+      get_source({
         filename: url.searchParams.get("file_path") ?? "",
       }),
       getBeancountLanguageSupport(),

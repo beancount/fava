@@ -1,4 +1,4 @@
-import { get } from "../../api/index.ts";
+import { get_account_report } from "../../api/index.ts";
 import type { AccountBudget } from "../../api/validators.ts";
 import type { AccountTreeNode } from "../../charts/hierarchy.ts";
 import { getUrlPath } from "../../helpers.ts";
@@ -27,7 +27,7 @@ export const account_report = new Route<AccountReportProps>(
   async (url) => {
     const [, account = ""] = getUrlPath(url).unwrap().split("/");
     const report_type = to_report_type(url.searchParams.get("r"));
-    const res = await get("account_report", {
+    const res = await get_account_report({
       ...getURLFilters(url),
       a: account,
       r: report_type,

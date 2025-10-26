@@ -24,7 +24,7 @@ import "@ungap/custom-elements";
 
 import { get as store_get } from "svelte/store";
 
-import { get } from "./api/index.ts";
+import { get_changed, get_errors, get_ledger_data } from "./api/index.ts";
 import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
 import { BeancountTextarea } from "./codemirror/setup.ts";
@@ -70,7 +70,7 @@ function defineCustomElements() {
  * Update the ledger data and errors; Reload if automatic reloading is configured.
  */
 function onChanges() {
-  get("ledger_data")
+  get_ledger_data()
     .then((v) => {
       ledgerData.set(v);
     })
@@ -80,7 +80,7 @@ function onChanges() {
   if (store_get(auto_reload) && !router.has_interrupt_handler) {
     router.reload();
   } else {
-    get("errors").then((v) => {
+    get_errors().then((v) => {
       errors.set(v);
     }, log_error);
     notify(_("File change detected. Click to reload."), "warning", () => {
@@ -98,7 +98,7 @@ function onChanges() {
  * This will be scheduled every 5 seconds.
  */
 function pollForChanges(): void {
-  get("changed").catch(log_error);
+  get_changed().catch(log_error);
 }
 
 function init(): void {

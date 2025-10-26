@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { saveEntries } from "../api/index.ts";
+  import { save_entries } from "../api/index.ts";
   import { Balance, Note, Transaction } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format.ts";
@@ -23,7 +23,7 @@
 
   async function submit(event: SubmitEvent) {
     event.preventDefault();
-    await saveEntries([entry]);
+    await save_entries([entry]);
     const added_entry_date = entry.date;
     // Reuse the date of the entry that was just added.
     // @ts-expect-error all these entries have that static method, but TS is not able to determine that

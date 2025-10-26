@@ -1,11 +1,11 @@
 import type { Command } from "@codemirror/view";
 
-import { put } from "../api/index.ts";
+import { put_format_source } from "../api/index.ts";
 import { notify_err } from "../notifications.ts";
 import { replaceContents } from "./editor-transactions.ts";
 
 export const beancountFormat: Command = (cm) => {
-  put("format_source", { source: cm.state.sliceDoc() }).then(
+  put_format_source({ source: cm.state.sliceDoc() }).then(
     (data) => {
       cm.dispatch(replaceContents(cm.state, data));
     },

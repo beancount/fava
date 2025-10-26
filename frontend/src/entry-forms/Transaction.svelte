@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { get } from "../api/index.ts";
+  import {
+    get_narration_transaction,
+    get_narrations,
+    get_payee_accounts,
+    get_payee_transaction,
+  } from "../api/index.ts";
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import type { EntryMetadata, Transaction } from "../entries/index.ts";
   import { Posting } from "../entries/index.ts";
@@ -23,7 +28,7 @@
     if (payee) {
       suggestions = undefined;
       if ($payees.includes(payee)) {
-        get("payee_accounts", { payee })
+        get_payee_accounts({ payee })
           .then((s) => {
             suggestions = s;
           })
@@ -41,7 +46,7 @@
   let narration = $derived(entry.get_narration_tags_links());
   let narration_suggestions: string[] = $state.raw([]);
   $effect(() => {
-    get("narrations")
+    get_narrations()
       .then((s) => {
         narration_suggestions = s;
       })
@@ -58,7 +63,7 @@
     if (entry.narration || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const payee_transaction = await get("payee_transaction", {
+    const payee_transaction = await get_payee_transaction({
       payee: entry.payee,
     });
     entry = payee_transaction.set("date", entry.date);
@@ -67,7 +72,7 @@
     if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const data = await get("narration_transaction", { narration });
+    const data = await get_narration_transaction({ narration });
     data.set("date", entry.date);
     entry = data;
     narration = entry.get_narration_tags_links();
