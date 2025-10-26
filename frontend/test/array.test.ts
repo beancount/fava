@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { is_non_empty, move } from "../src/lib/array.ts";
 
@@ -15,5 +14,3 @@ test("move array elements", () => {
   deepEqual(moved, [0, 2, 1, 3]);
   deepEqual(initital, [0, 1, 2, 3]);
 });
-
-test.run();

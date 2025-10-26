@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import {
   Amount,
@@ -250,5 +249,3 @@ test("transaction: combine narration, tags, and links", () => {
   deepEqual(parsed.tags, ["tag"]);
   deepEqual(parsed.links, ["link"]);
 });
-
-test.run();

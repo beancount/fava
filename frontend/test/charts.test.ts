@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { bar } from "../src/charts/bar.ts";
 import {
@@ -330,5 +329,3 @@ test("only use currencies in records for bar chart", () => {
     },
   ]);
 });
-
-test.run();

@@ -1,7 +1,7 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
+import { before, test } from "node:test";
 
 import { get as store_get } from "svelte/store";
-import { test } from "uvu";
 
 import { getAPIValidators } from "../src/api/validators.ts";
 import { chartContext } from "../src/charts/context.ts";
@@ -14,7 +14,7 @@ import { conversions } from "../src/stores/chart.ts";
 import { currencies, ledgerData } from "../src/stores/index.ts";
 import { initialiseLedgerData, loadJSONSnapshot } from "./helpers.ts";
 
-test.before(initialiseLedgerData);
+before(initialiseLedgerData);
 
 test("validate ledger data", () => {
   const res = store_get(ledgerData);
@@ -68,5 +68,3 @@ test("validate journal", async () => {
   const entries = res.unwrap();
   equal(entries.length, 25);
 });
-
-test.run();

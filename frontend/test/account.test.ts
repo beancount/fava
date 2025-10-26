@@ -1,6 +1,5 @@
 import { deepEqual, equal } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import {
   ancestors,
@@ -63,5 +62,3 @@ test("account: check whether account is descendant of another", () => {
   equal(false, is_true_descendant_of_assets("Assets"));
   equal(true, is_true_descendant_of_assets("Assets:Cash"));
 });
-
-test.run();

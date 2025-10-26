@@ -1,10 +1,10 @@
 import { equal, ok } from "node:assert/strict";
 import { join } from "node:path";
+import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import type { Tree } from "@lezer/common";
 import { TreeFragment } from "@lezer/common";
-import { test } from "uvu";
 import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
 import {
@@ -124,5 +124,3 @@ test("parse a single price directive", async () => {
   // Advance directly returns the tree.
   ok(partial_parse.advance());
 });
-
-test.run();

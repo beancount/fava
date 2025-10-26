@@ -1,6 +1,5 @@
 import { deepEqual, equal } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import {
   dateFormat,
@@ -78,5 +77,3 @@ test("human-readable date formatting", () => {
   equal(year(janfirst), "2020");
   equal(year(date), "2020");
 });
-
-test.run();

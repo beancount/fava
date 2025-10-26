@@ -1,13 +1,13 @@
 import { deepEqual, equal, throws } from "node:assert/strict";
+import { beforeEach, test } from "node:test";
 
 import { get as store_get, writable } from "svelte/store";
-import { test } from "uvu";
 
 import { derived_array, localStorageSyncedStore } from "../src/lib/store.ts";
 import { string } from "../src/lib/validation.ts";
 import { setup_jsdom } from "./dom.ts";
 
-test.before.each(setup_jsdom);
+beforeEach(setup_jsdom);
 
 test("derived store", () => {
   const source = writable<string[]>([]);
@@ -89,5 +89,3 @@ test("localStorage-synced stores", () => {
     localStorageSyncedStore("test-store", string, () => "value");
   });
 });
-
-test.run();

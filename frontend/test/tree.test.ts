@@ -1,6 +1,5 @@
 import { deepEqual } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { stratify } from "../src/lib/tree.ts";
 
@@ -52,5 +51,3 @@ test("tree: stratify", () => {
     },
   );
 });
-
-test.run();

@@ -1,7 +1,7 @@
 import { equal, ok } from "node:assert/strict";
+import { test } from "node:test";
 
 import { get as store_get } from "svelte/store";
-import { test } from "uvu";
 
 import { getUrlPath, urlForAccount, urlForInternal } from "../src/helpers.ts";
 import { base_url } from "../src/stores/index.ts";
@@ -37,5 +37,3 @@ test("extract relative path from URL", () => {
     "Ä€/asdf",
   );
 });
-
-test.run();

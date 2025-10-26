@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { is_non_empty, last_element } from "../src/lib/array.ts";
 import { errorWithCauses } from "../src/lib/errors.ts";
@@ -33,5 +32,3 @@ test("print out error with causes", () => {
   equal(errorWithCauses(err1), "a reason");
   equal(errorWithCauses(err2), "b reason\n  Caused by: a reason");
 });
-
-test.run();

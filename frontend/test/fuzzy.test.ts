@@ -1,6 +1,5 @@
 import { deepEqual, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy.ts";
 
@@ -80,5 +79,3 @@ test("fuzzy wap", () => {
     ["match", "as"],
   ]);
 });
-
-test.run();

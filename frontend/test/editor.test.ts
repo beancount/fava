@@ -1,8 +1,8 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
+import { test } from "node:test";
 
 import { setDiagnosticsEffect } from "@codemirror/lint";
 import { EditorState } from "@codemirror/state";
-import { test } from "uvu";
 
 import {
   replaceContents,
@@ -82,5 +82,3 @@ test("set errors", () => {
     },
   ]);
 });
-
-test.run();

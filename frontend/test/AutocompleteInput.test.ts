@@ -1,12 +1,12 @@
 import { equal, ok } from "node:assert/strict";
+import { beforeEach, test } from "node:test";
 
 import { flushSync, mount } from "svelte";
-import { test } from "uvu";
 
 import AutocompleteInput from "../src/AutocompleteInput.svelte";
 import { setup_jsdom } from "./dom.ts";
 
-test.before.each(setup_jsdom);
+beforeEach(setup_jsdom);
 
 test("AutocompleteInput: renders no suggestions if none match", () => {
   mount(AutocompleteInput, {
@@ -41,5 +41,3 @@ test("AutocompleteInput: renders with matching suggestions", () => {
   const ul = document.body.querySelector("ul");
   equal(ul?.firstElementChild?.textContent, "apple");
 });
-
-test.run();

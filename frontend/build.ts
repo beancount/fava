@@ -83,8 +83,9 @@ const filename = fileURLToPath(import.meta.url);
 const is_main = resolve(process.argv[1] ?? "") === filename;
 
 if (is_main) {
-  const dev = process.argv.includes("--watch");
-  runBuild(dev).catch((e: unknown) => {
+  const watch = process.argv.includes("--watch");
+
+  runBuild(watch).catch((e: unknown) => {
     console.error(e);
   });
 }

@@ -66,6 +66,12 @@ export default defineConfig(
     },
   },
   {
+    files: ["**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-floating-promises": OFF,
+    },
+  },
+  {
     files: ["**/*.svelte", "**/*.svelte.ts"],
     languageOptions: {
       parser: svelteParser,

@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import {
   boolean,
@@ -129,5 +128,3 @@ test("validate object", () => {
   ok(val({ str: 1 }).is_err);
   ok(val(1).is_err);
 });
-
-test.run();

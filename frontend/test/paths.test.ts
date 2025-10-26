@@ -1,6 +1,5 @@
 import { equal } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import { basename, documentHasAccount, ext } from "../src/lib/paths.ts";
 
@@ -39,5 +38,3 @@ test("detect account of document", () => {
     documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
   );
 });
-
-test.run();

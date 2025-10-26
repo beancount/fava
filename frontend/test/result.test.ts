@@ -1,6 +1,5 @@
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
-
-import { test } from "uvu";
+import { test } from "node:test";
 
 import type { Result } from "../src/lib/result.ts";
 import { collect, Err, err, Ok, ok as res_ok } from "../src/lib/result.ts";
@@ -35,5 +34,3 @@ test("collect results", () => {
   const e = err("e");
   equal(collect([a, b, e]), e);
 });
-
-test.run();
