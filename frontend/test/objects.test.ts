@@ -1,11 +1,12 @@
+import { equal, ok } from "node:assert/strict";
+
 import { test } from "uvu";
-import * as assert from "uvu/assert";
 
 import { is_empty } from "../src/lib/objects.ts";
 
 test("check whether objects are empty", () => {
-  assert.ok(is_empty({}));
-  assert.not(is_empty({ asdf: "asdf" }));
+  ok(is_empty({}));
+  equal(is_empty({ asdf: "asdf" }), false);
 });
 
 test.run();

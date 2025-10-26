@@ -1,29 +1,30 @@
+import { deepEqual, ok } from "node:assert/strict";
+
 import { test } from "uvu";
-import * as assert from "uvu/assert";
 
 import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy.ts";
 
 test("fuzzy test", () => {
-  assert.ok(fuzzytest("asdf", "asdfasdf"));
-  assert.ok(fuzzytest("asdf", "ASDFASDF"));
+  ok(fuzzytest("asdf", "asdfasdf"));
+  ok(fuzzytest("asdf", "ASDFASDF"));
   // "smart-case" matching
-  assert.ok(fuzzytest("Asdf", "ASDFASDF") < fuzzytest("asdf", "ASDFASDF"));
-  assert.ok(fuzzytest("ASDF", "ASDFASDF") === fuzzytest("asdf", "ASDFASDF"));
+  ok(fuzzytest("Asdf", "ASDFASDF") < fuzzytest("asdf", "ASDFASDF"));
+  ok(fuzzytest("ASDF", "ASDFASDF") === fuzzytest("asdf", "ASDFASDF"));
 
-  assert.ok(!fuzzytest("Asdf", "asdfasdf"));
-  assert.ok(fuzzytest("asdf", "a;lks;lk;lkd;lk;flkj;l"));
-  assert.ok(!fuzzytest("asdf", "sdfsdf"));
-  assert.ok(!fuzzytest("a", "sdfsdf"));
+  ok(!fuzzytest("Asdf", "asdfasdf"));
+  ok(fuzzytest("asdf", "a;lks;lk;lkd;lk;flkj;l"));
+  ok(!fuzzytest("asdf", "sdfsdf"));
+  ok(!fuzzytest("a", "sdfsdf"));
 });
 
 test("fuzzy filter", () => {
-  assert.equal(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
-  assert.equal(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
-  assert.equal(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
+  deepEqual(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
+  deepEqual(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
+  deepEqual(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
     "asdfasdf",
     "assdfsdf",
   ]);
-  assert.equal(
+  deepEqual(
     fuzzyfilter("asdf", [
       "test",
       "asdfasdf",
@@ -37,44 +38,44 @@ test("fuzzy filter", () => {
 });
 
 test("fuzzy wap", () => {
-  assert.equal(fuzzywrap("", "tenotest"), [["text", "tenotest"]]);
-  assert.equal(fuzzywrap("", "<>tenotest"), [["text", "<>tenotest"]]);
+  deepEqual(fuzzywrap("", "tenotest"), [["text", "tenotest"]]);
+  deepEqual(fuzzywrap("", "<>tenotest"), [["text", "<>tenotest"]]);
 
-  assert.equal(fuzzywrap("test", "tenotest"), [
+  deepEqual(fuzzywrap("test", "tenotest"), [
     ["text", "teno"],
     ["match", "test"],
   ]);
   // no match for case sensitive pattern:
-  assert.equal(fuzzywrap("tesT", "test"), [["text", "test"]]);
-  assert.equal(fuzzywrap("sdf", "nomatch"), [["text", "nomatch"]]);
-  assert.equal(fuzzywrap("test", "tetest"), [
+  deepEqual(fuzzywrap("tesT", "test"), [["text", "test"]]);
+  deepEqual(fuzzywrap("sdf", "nomatch"), [["text", "nomatch"]]);
+  deepEqual(fuzzywrap("test", "tetest"), [
     ["text", "te"],
     ["match", "test"],
   ]);
-  assert.equal(fuzzywrap("test", "teTEST"), [
+  deepEqual(fuzzywrap("test", "teTEST"), [
     ["text", "te"],
     ["match", "TEST"],
   ]);
-  assert.equal(fuzzywrap("a", "asdfasdf"), [
+  deepEqual(fuzzywrap("a", "asdfasdf"), [
     ["match", "a"],
     ["text", "sdfasdf"],
   ]);
-  assert.equal(fuzzywrap("as", "asdfasdf"), [
+  deepEqual(fuzzywrap("as", "asdfasdf"), [
     ["match", "as"],
     ["text", "dfasdf"],
   ]);
-  assert.equal(fuzzywrap("as", "as"), [["match", "as"]]);
-  assert.equal(fuzzywrap("te", "tae"), [
+  deepEqual(fuzzywrap("as", "as"), [["match", "as"]]);
+  deepEqual(fuzzywrap("te", "tae"), [
     ["match", "t"],
     ["text", "a"],
     ["match", "e"],
   ]);
-  assert.equal(fuzzywrap("te", "ta<e"), [
+  deepEqual(fuzzywrap("te", "ta<e"), [
     ["match", "t"],
     ["text", "a<"],
     ["match", "e"],
   ]);
-  assert.equal(fuzzywrap("as", "<span>as"), [
+  deepEqual(fuzzywrap("as", "<span>as"), [
     ["text", "<span>"],
     ["match", "as"],
   ]);

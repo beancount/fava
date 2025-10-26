@@ -1,5 +1,6 @@
+import { deepEqual, equal, ok } from "node:assert/strict";
+
 import { test } from "uvu";
-import * as assert from "uvu/assert";
 
 import { is_non_empty, last_element } from "../src/lib/array.ts";
 import { errorWithCauses } from "../src/lib/errors.ts";
@@ -7,30 +8,30 @@ import { getInterval } from "../src/lib/interval.ts";
 import { parseJSON } from "../src/lib/json.ts";
 
 test("validate interval", () => {
-  assert.equal(getInterval("year"), "year");
-  assert.equal(getInterval("yasdfaear"), "month");
+  equal(getInterval("year"), "year");
+  equal(getInterval("yasdfaear"), "month");
 });
 
 test("parse json", () => {
-  assert.equal(parseJSON("{}").unwrap(), {});
+  deepEqual(parseJSON("{}").unwrap(), {});
 
   const invalid = parseJSON("invalid").unwrap_err();
-  assert.instance(invalid, SyntaxError);
+  ok(invalid instanceof SyntaxError);
 });
 
 test("non-empty array helpers", () => {
-  assert.is(is_non_empty([]), false);
+  equal(is_non_empty([]), false);
   const a = [false, true];
-  assert.ok(is_non_empty(a));
-  assert.is(last_element(a), true);
+  ok(is_non_empty(a));
+  equal(last_element(a), true);
 });
 
 test("print out error with causes", () => {
   const err1 = new Error("a reason");
   const err2 = new Error("b reason", { cause: err1 });
 
-  assert.equal(errorWithCauses(err1), "a reason");
-  assert.equal(errorWithCauses(err2), "b reason\n  Caused by: a reason");
+  equal(errorWithCauses(err1), "a reason");
+  equal(errorWithCauses(err2), "b reason\n  Caused by: a reason");
 });
 
 test.run();

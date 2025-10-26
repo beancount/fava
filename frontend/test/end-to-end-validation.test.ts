@@ -1,6 +1,7 @@
+import { deepEqual, equal, ok } from "node:assert/strict";
+
 import { get as store_get } from "svelte/store";
 import { test } from "uvu";
-import * as assert from "uvu/assert";
 
 import { getAPIValidators } from "../src/api/validators.ts";
 import { chartContext } from "../src/charts/context.ts";
@@ -18,14 +19,14 @@ test.before(initialiseLedgerData);
 test("validate ledger data", () => {
   const res = store_get(ledgerData);
 
-  assert.equal(res.accounts[0], "Liabilities:US:Chase:Slate");
+  equal(res.accounts[0], "Liabilities:US:Chase:Slate");
 
   const $conversions = store_get(conversions);
-  assert.equal($conversions[0], "at_cost");
+  equal($conversions[0], "at_cost");
 
-  assert.equal(store_get(treemapScale).domain(), res.accounts);
-  assert.equal(store_get(sunburstScale).domain(), res.accounts);
-  assert.equal(
+  deepEqual(store_get(treemapScale).domain(), res.accounts);
+  deepEqual(store_get(sunburstScale).domain(), res.accounts);
+  equal(
     store_get(sunburstScale)("Liabilities:US:Chase:Slate"),
     "rgb(126, 174, 253)",
   );
@@ -43,29 +44,29 @@ test("validate ledger data", () => {
     "ABC",
     "XYZ",
   ];
-  assert.equal(store_get(currencies), all_currencies);
+  deepEqual(store_get(currencies), all_currencies);
   // Operating currency first, then sorted
-  assert.equal(store_get(currenciesScale).domain().slice(0, 3), [
+  deepEqual(store_get(currenciesScale).domain().slice(0, 3), [
     "USD",
     "ABC",
     "GLD",
   ]);
 
-  assert.equal(store_get(chartContext).currencies, ["USD"]);
+  deepEqual(store_get(chartContext).currencies, ["USD"]);
 });
 
 test("validate events", async () => {
   const data = await loadJSONSnapshot("test_json_api-test_api-events.json");
   const res = getAPIValidators.events(data);
-  assert.equal(res.unwrap()[0]?.type, "employer");
+  equal(res.unwrap()[0]?.type, "employer");
 });
 
 test("validate journal", async () => {
   const data = await loadJSONSnapshot("test_json_api-test_api-journal.json");
   const res = getAPIValidators.journal(data);
-  assert.ok(res.is_ok);
+  ok(res.is_ok);
   const entries = res.unwrap();
-  assert.equal(entries.length, 25);
+  equal(entries.length, 25);
 });
 
 test.run();
