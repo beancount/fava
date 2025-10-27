@@ -9,10 +9,10 @@
     lineChartMode,
   } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
-  import type { FavaChart } from ".";
   import BarChart from "./BarChart.svelte";
   import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
+  import type { FavaChart } from "./index.ts";
   import LineChart from "./LineChart.svelte";
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";

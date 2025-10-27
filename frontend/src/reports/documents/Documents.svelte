@@ -9,9 +9,9 @@
   import { stratify } from "../../lib/tree.ts";
   import ModalBase from "../../modals/ModalBase.svelte";
   import { router } from "../../router.ts";
-  import type { DocumentsReportProps } from ".";
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
+  import type { DocumentsReportProps } from "./index.ts";
   import Table from "./Table.svelte";
 
   let { documents }: DocumentsReportProps = $props();

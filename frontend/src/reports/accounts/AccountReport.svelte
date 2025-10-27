@@ -8,7 +8,7 @@
   import { intervalLabel } from "../../lib/interval.ts";
   import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
-  import type { AccountReportProps } from ".";
+  import type { AccountReportProps } from "./index.ts";
 
   let {
     account,

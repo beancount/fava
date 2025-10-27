@@ -15,10 +15,10 @@
   import { router } from "../../router.ts";
   import { import_config } from "../../stores/fava_options.ts";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-  import type { ImportReportProps } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
   import ImportFileUpload from "./ImportFileUpload.svelte";
+  import type { ImportReportProps } from "./index.ts";
 
   let { files }: ImportReportProps = $props();
 

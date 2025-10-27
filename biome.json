@@ -1,10 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
   "files": {
     "includes": [
       "**",
-      "!**/src/fava/**/*.html",
-      "!**/tests/__snapshots__/**/*.json"
+      "!docs/templates/**/*.html",
+      "!src/fava/**/*.html",
+      "!tests/__snapshots__/**/*.json"
     ]
   },
   "vcs": {
@@ -12,19 +13,32 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
   "formatter": {
     "includes": ["**", "!**/frontend/src/**/*.svelte"],
     "useEditorconfig": true
   },
-  "assist": { "actions": { "source": { "organizeImports": "off" } } },
   "linter": {
+    "domains": {
+      "project": "recommended"
+    },
     "rules": {
       "recommended": true,
+      "correctness": {
+        "useImportExtensions": "on"
+      },
       "suspicious": {
         "noExplicitAny": "off"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useConsistentObjectDefinitions": "on"
       }
     }
   },
@@ -38,8 +52,7 @@
             "noUnusedVariables": "off"
           },
           "style": {
-            "useConst": "off",
-            "useImportType": "off"
+            "useConst": "off"
           }
         }
       }

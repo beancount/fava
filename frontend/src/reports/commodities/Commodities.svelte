@@ -1,8 +1,8 @@
 <script lang="ts">
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { currency_name } from "../../stores/index.ts";
-  import type { CommoditiesReportProps } from ".";
   import CommodityTable from "./CommodityTable.svelte";
+  import type { CommoditiesReportProps } from "./index.ts";
 
   let { charts, commodities }: CommoditiesReportProps = $props();
 </script>

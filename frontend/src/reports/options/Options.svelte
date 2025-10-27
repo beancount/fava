@@ -3,7 +3,7 @@
   import { urlFor } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { color_scheme } from "../../stores/color_scheme.ts";
-  import type { OptionsReportProps } from ".";
+  import type { OptionsReportProps } from "./index.ts";
   import OptionsTable from "./OptionsTable.svelte";
 
   let { fava_options, beancount_options }: OptionsReportProps = $props();

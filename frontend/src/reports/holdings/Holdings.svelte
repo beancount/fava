@@ -3,7 +3,7 @@
   import { _ } from "../../i18n.ts";
   import QueryLinks from "../query/QueryLinks.svelte";
   import QueryTable from "../query/QueryTable.svelte";
-  import type { HoldingsReportProps } from ".";
+  import type { HoldingsReportProps } from "./index.ts";
 
   let {
     aggregation_key,

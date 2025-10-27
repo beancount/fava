@@ -67,9 +67,7 @@
     if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const data = await get("narration_transaction", {
-      narration: narration,
-    });
+    const data = await get("narration_transaction", { narration });
     data.set("date", entry.date);
     entry = data;
     narration = entry.get_narration_tags_links();

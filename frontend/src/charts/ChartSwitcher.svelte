@@ -4,9 +4,9 @@
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
   import { lastActiveChartName } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
-  import type { FavaChart } from ".";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
+  import type { FavaChart } from "./index.ts";
 
   interface Props {
     charts: readonly FavaChart[];

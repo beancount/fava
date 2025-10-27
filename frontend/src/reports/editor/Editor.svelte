@@ -15,8 +15,8 @@
   import { router } from "../../router.ts";
   import { insert_entry } from "../../stores/fava_options.ts";
   import { errors } from "../../stores/index.ts";
-  import type { EditorReportProps } from ".";
   import EditorMenu from "./EditorMenu.svelte";
+  import type { EditorReportProps } from "./index.ts";
 
   let {
     source,

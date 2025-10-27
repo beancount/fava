@@ -4,8 +4,8 @@
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { ScatterPlot } from "../../charts/scatterplot.ts";
   import { _, format } from "../../i18n.ts";
-  import type { EventsReportProps } from ".";
   import EventTable from "./EventTable.svelte";
+  import type { EventsReportProps } from "./index.ts";
 
   let { events }: EventsReportProps = $props();
 
