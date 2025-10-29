@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LanguageSupport } from "@codemirror/language";
 
-  import { doDelete, put } from "../api/index.ts";
+  import { delete_source_slice, put_source_slice } from "../api/index.ts";
   import { initBeancountEditor } from "../codemirror/setup.ts";
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
@@ -34,7 +34,7 @@
     event?.preventDefault();
     saving = true;
     try {
-      sha256sum = await put("source_slice", {
+      sha256sum = await put_source_slice({
         entry_hash,
         source: currentSlice,
         sha256sum,
@@ -53,7 +53,7 @@
   async function deleteSlice() {
     deleting = true;
     try {
-      await doDelete("source_slice", { entry_hash, sha256sum });
+      await delete_source_slice({ entry_hash, sha256sum });
       entry_hash = "";
       if ($reloadAfterSavingEntrySlice) {
         router.reload();

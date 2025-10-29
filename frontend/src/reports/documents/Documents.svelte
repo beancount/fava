@@ -1,7 +1,7 @@
 <script lang="ts">
   import { group } from "d3-array";
 
-  import { moveDocument } from "../../api/index.ts";
+  import { move_document } from "../../api/index.ts";
   import type { Document } from "../../entries/index.ts";
   import AccountInput from "../../entry-forms/AccountInput.svelte";
   import { _ } from "../../i18n.ts";
@@ -50,7 +50,7 @@
   async function move(event: SubmitEvent) {
     event.preventDefault();
     if (moving) {
-      const moved = await moveDocument(
+      const moved = await move_document(
         moving.filename,
         moving.account,
         moving.newName,

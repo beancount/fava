@@ -1,4 +1,4 @@
-import { get } from "../../api/index.ts";
+import { get_commodities } from "../../api/index.ts";
 import type { Commodities } from "../../api/validators.ts";
 import type { FavaChart } from "../../charts/index.ts";
 import { LineChart } from "../../charts/line.ts";
@@ -18,7 +18,7 @@ export const commodities = new Route<CommoditiesReportProps>(
   "commodities",
   CommoditiesSvelte,
   async (url) =>
-    get("commodities", getURLFilters(url)).then((cs) => {
+    get_commodities(getURLFilters(url)).then((cs) => {
       const charts = cs.map(({ base, quote, prices }) => {
         const name = `${base} / ${quote}`;
         const values = prices.map((d) => ({ name, date: d[0], value: d[1] }));

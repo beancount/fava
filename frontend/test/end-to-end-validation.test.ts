@@ -3,13 +3,14 @@ import { before, test } from "node:test";
 
 import { get as store_get } from "svelte/store";
 
-import { getAPIValidators } from "../src/api/validators.ts";
 import { chartContext } from "../src/charts/context.ts";
 import {
   currenciesScale,
   sunburstScale,
   treemapScale,
 } from "../src/charts/helpers.ts";
+import { entryValidator, Event } from "../src/entries/index.ts";
+import { array } from "../src/lib/validation.ts";
 import { conversions } from "../src/stores/chart.ts";
 import { currencies, ledgerData } from "../src/stores/index.ts";
 import { initialiseLedgerData, loadJSONSnapshot } from "./helpers.ts";
@@ -57,13 +58,13 @@ test("validate ledger data", () => {
 
 test("validate events", async () => {
   const data = await loadJSONSnapshot("test_json_api-test_api-events.json");
-  const res = getAPIValidators.events(data);
+  const res = array(Event.validator)(data);
   equal(res.unwrap()[0]?.type, "employer");
 });
 
 test("validate journal", async () => {
   const data = await loadJSONSnapshot("test_json_api-test_api-journal.json");
-  const res = getAPIValidators.journal(data);
+  const res = array(entryValidator)(data);
   ok(res.is_ok);
   const entries = res.unwrap();
   equal(entries.length, 25);

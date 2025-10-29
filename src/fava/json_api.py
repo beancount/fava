@@ -87,6 +87,13 @@ class IncorrectTypeValidationError(ValidationError):
         )
 
 
+class InvalidJsonRequestError(ValidationError):
+    """Validation failed due to invalid JSON in body."""
+
+    def __init__(self) -> None:
+        super().__init__("Invalid JSON body.")
+
+
 def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
     res = jsonify({"error": msg})
@@ -261,8 +268,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
             if method == "put":
                 request_json = request.get_json(silent=True)
                 if request_json is None:
-                    msg = "Invalid JSON request."
-                    raise FavaAPIError(msg)
+                    raise InvalidJsonRequestError
                 data = request_json
             else:
                 data = request.args
@@ -324,8 +330,8 @@ def get_context(entry_hash: str) -> Context:
 
 
 @api_endpoint
-def get_move(account: str, new_name: str, filename: str) -> str:
-    """Move a file."""
+def put_move(account: str, new_name: str, filename: str) -> str:
+    """Move a document."""
     if not g.ledger.options["documents"]:
         raise DocumentDirectoryMissingError
 

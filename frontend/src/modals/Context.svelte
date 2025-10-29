@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { get } from "../api/index.ts";
+  import { get_context } from "../api/index.ts";
   import { getBeancountLanguageSupport } from "../codemirror/beancount.ts";
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { _ } from "../i18n.ts";
@@ -10,7 +10,7 @@
 
   let shown = $derived($hash.startsWith("context"));
   let entry_hash = $derived(shown ? $hash.slice(8) : "");
-  let content = $derived(shown ? get("context", { entry_hash }) : null);
+  let content = $derived(shown ? get_context({ entry_hash }) : null);
 </script>
 
 <ModalBase {shown}>

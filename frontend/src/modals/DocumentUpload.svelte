@@ -5,7 +5,7 @@
   the file name.
 -->
 <script lang="ts">
-  import { put } from "../api/index.ts";
+  import { put_add_document } from "../api/index.ts";
   import { account, files, hash } from "../document-upload.ts";
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n.ts";
@@ -33,7 +33,7 @@
         formData.append("hash", $hash);
         formData.append("folder", documents_folder);
         formData.append("file", dataTransferFile, name);
-        return put("add_document", formData).then(notify, (error: unknown) => {
+        return put_add_document(formData).then(notify, (error: unknown) => {
           notify_err(error, (err) => `Upload error: ${err.message}`);
         });
       }),

@@ -1,11 +1,5 @@
 import { account_hierarchy_validator } from "../charts/hierarchy.ts";
-import {
-  Document,
-  entryBaseValidator,
-  entryValidator,
-  Event,
-  Transaction,
-} from "../entries/index.ts";
+import { entryBaseValidator } from "../entries/index.ts";
 import type { ValidationT } from "../lib/validation.ts";
 import {
   array,
@@ -20,7 +14,7 @@ import {
   tuple,
   unknown,
 } from "../lib/validation.ts";
-import { Inventory, query_validator } from "../reports/query/query_table.ts";
+import { Inventory } from "../reports/query/query_table.ts";
 
 /** A Beancount error that should be shown to the user in the list of errors. */
 export interface BeancountError {
@@ -33,7 +27,7 @@ export interface BeancountError {
 }
 
 /** Validator for a BeancountError. */
-const error_validator = object<BeancountError>({
+export const error_validator = object<BeancountError>({
   type: string,
   message: string,
   source: optional(object({ filename: string, lineno: number })),
@@ -118,7 +112,7 @@ export const ledgerDataValidator = object({
 
 export type LedgerData = ValidationT<typeof ledgerDataValidator>;
 
-const importable_files_validator = array(
+export const importable_files_validator = array(
   object({
     name: string,
     basename: string,
@@ -135,13 +129,13 @@ const importable_files_validator = array(
 
 const date_range = object({ begin: date, end: date });
 
-const commodities = array(
+export const commodities_validator = array(
   object({ base: string, quote: string, prices: array(tuple(date, number)) }),
 );
 
-export type Commodities = ValidationT<typeof commodities>;
+export type Commodities = ValidationT<typeof commodities_validator>;
 
-const context = object({
+export const context_validator = object({
   entry: entryBaseValidator,
   balances_before: optional(record(array(string))),
   balances_after: optional(record(array(string))),
@@ -161,55 +155,33 @@ export interface SourceFile {
   readonly sha256sum: string;
   readonly source: string;
 }
-const source = object<SourceFile>({
+export const source_validator = object<SourceFile>({
   file_path: string,
   sha256sum: string,
   source: string,
 });
 
-const tree_report = object({
+export const tree_report_validator = object({
   charts: unknown,
   trees: array(account_hierarchy_validator),
   date_range: optional(date_range),
 });
 
-export const getAPIValidators = {
-  balance_sheet: tree_report,
-  account_report: object({
-    charts: unknown,
-    journal: optional(string),
-    dates: optional(array(date_range)),
-    interval_balances: optional(array(account_hierarchy_validator)),
-    budgets: optional(record(array(account_budget))),
-  }),
-  changed: boolean,
-  commodities,
-  context,
-  documents: array(Document.validator),
-  errors: array(error_validator),
-  events: array(Event.validator),
-  extract: array(entryValidator),
-  imports: importable_files_validator,
-  income_statement: tree_report,
-  journal: array(entryValidator),
-  ledger_data: ledgerDataValidator,
-  move: string,
-  options: object({
-    fava_options: record(string),
-    beancount_options: record(string),
-  }),
-  payee_accounts: array(string),
-  payee_transaction: Transaction.validator,
-  narration_transaction: Transaction.validator,
-  narrations: array(string),
-  query: query_validator,
-  source,
-  statistics: object({
-    all_balance_directives: string,
-    entries_by_type: record(number),
-    balances: record(Inventory.validator),
-  }),
-  trial_balance: tree_report,
-};
+export const account_report_validator = object({
+  charts: unknown,
+  journal: optional(string),
+  dates: optional(array(date_range)),
+  interval_balances: optional(array(account_hierarchy_validator)),
+  budgets: optional(record(array(account_budget))),
+});
 
-export type GetAPIValidators = typeof getAPIValidators;
+export const statistics_validator = object({
+  all_balance_directives: string,
+  entries_by_type: record(number),
+  balances: record(Inventory.validator),
+});
+
+export const options_validator = object({
+  fava_options: record(string),
+  beancount_options: record(string),
+});

@@ -19,7 +19,7 @@ export const fql_filter = derived(
 );
 
 /** The three entry filters that Fava supports. */
-export interface Filters extends Record<string, string | undefined> {
+export interface Filters extends Record<string, string> {
   account: string;
   filter: string;
   time: string;
