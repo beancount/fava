@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
 from datetime import date
-from datetime import timedelta
 from decimal import Decimal
 from re import Pattern
 from typing import Any
@@ -25,7 +24,7 @@ from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.helpers import slice_entry_dates
-from fava.core.conversion import cost_or_value
+from fava.core.conversion import conversion_from_str
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
@@ -39,10 +38,10 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.tree import SerialisedTreeNode
+    from fava.util.date import DateRange
     from fava.util.date import Interval
 
 
-ONE_DAY = timedelta(days=1)
 ZERO = Decimal()
 
 
@@ -111,19 +110,24 @@ class ChartModule(FavaModule):
         self,
         filtered: FilteredLedger,
         account_name: str,
-        conversion: str | Conversion,
-        begin: date | None = None,
-        end: date | None = None,
+        conversion: Conversion,
+        date_range: DateRange | None = None,
     ) -> SerialisedTreeNode:
         """Render an account tree."""
-        if begin is not None and end is not None:
-            tree = Tree(slice_entry_dates(filtered.entries, begin, end))
+        if date_range is not None:
+            tree = Tree(
+                slice_entry_dates(
+                    filtered.entries, date_range.begin, date_range.end
+                )
+            )
         else:
             tree = filtered.root_tree
         return tree.get(account_name).serialise(
             conversion,
             self.ledger.prices,
-            end - ONE_DAY if end is not None else None,
+            date_range.end_inclusive
+            if date_range is not None
+            else filtered.end_date,
         )
 
     @listify
@@ -148,6 +152,7 @@ class ChartModule(FavaModule):
         Yields:
             The balances and budgets for the intervals.
         """
+        conv = conversion_from_str(conversion)
         prices = self.ledger.prices
 
         # limit the bar charts to 100 intervals
@@ -168,16 +173,14 @@ class ChartModule(FavaModule):
                             posting,
                         )
                         inventory.add_position(posting)
-            balance = cost_or_value(
+            balance = conv.apply(
                 inventory,
-                conversion,
                 prices,
                 date_range.end_inclusive,
             )
             account_balances = {
-                account: cost_or_value(
+                account: conv.apply(
                     acct_value,
-                    conversion,
                     prices,
                     date_range.end_inclusive,
                 )
@@ -224,6 +227,7 @@ class ChartModule(FavaModule):
             account has changed containing the balance (in units) of the
             account at that date.
         """
+        conv = conversion_from_str(conversion)
 
         def _balances() -> Iterable[tuple[date, CounterInventory]]:
             last_date = None
@@ -249,7 +253,7 @@ class ChartModule(FavaModule):
         prices = self.ledger.prices
 
         for d, running_bal in _balances():
-            balance = cost_or_value(running_bal, conversion, prices, d)
+            balance = conv.apply(running_bal, prices, d)
             currencies = set(balance.keys())
             if last_currencies:
                 for currency in last_currencies - currencies:
@@ -276,6 +280,7 @@ class ChartModule(FavaModule):
             net worth (Assets + Liabilities) separately converted to all
             operating currencies.
         """
+        conv = conversion_from_str(conversion)
         transactions = (
             entry
             for entry in filtered.entries
@@ -302,9 +307,8 @@ class ChartModule(FavaModule):
                 txn = next(transactions, None)
             yield DateAndBalance(
                 date_range.end_inclusive,
-                cost_or_value(
+                conv.apply(
                     inventory,
-                    conversion,
                     prices,
                     date_range.end_inclusive,
                 ),

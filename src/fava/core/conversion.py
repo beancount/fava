@@ -23,11 +23,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.inventory import CounterInventory
 
 
-def get_units(pos: Position) -> Amount:
-    """Return the units of a Position."""
-    return pos.units
-
-
 def get_cost(pos: Position) -> Amount:
     """Return the total cost of a Position."""
     cost_ = pos.cost
@@ -116,23 +111,6 @@ def convert_position(
     return units_
 
 
-def simple_units(
-    inventory: Inventory,
-) -> SimpleCounterInventory:
-    """Get the units of an inventory."""
-    res = SimpleCounterInventory()
-    for pos in inventory:
-        res.add(pos.units.currency, pos.units.number)
-    return res
-
-
-def units(
-    inventory: CounterInventory,
-) -> SimpleCounterInventory:
-    """Get the units of an inventory."""
-    return inventory.reduce(get_units)
-
-
 class Conversion(ABC):
     """A conversion."""
 
@@ -143,14 +121,14 @@ class Conversion(ABC):
         prices: FavaPriceMap,
         date: datetime.date | None = None,
     ) -> SimpleCounterInventory:
-        """Apply the conversion to an inventory."""
+        """Apply the conversion to an inventory (CounterInventory)."""
 
 
 class _AtCostConversion(Conversion):
     def apply(
         self,
         inventory: CounterInventory,
-        prices: FavaPriceMap,  # noqa: ARG002
+        prices: FavaPriceMap | None = None,  # noqa: ARG002
         date: datetime.date | None = None,  # noqa: ARG002
     ) -> SimpleCounterInventory:
         return inventory.reduce(get_cost)
@@ -170,10 +148,23 @@ class _UnitsConversion(Conversion):
     def apply(
         self,
         inventory: CounterInventory,
-        prices: FavaPriceMap,  # noqa: ARG002
+        prices: FavaPriceMap | None = None,  # noqa: ARG002
         date: datetime.date | None = None,  # noqa: ARG002
     ) -> SimpleCounterInventory:
-        return inventory.reduce(get_units)
+        counter = SimpleCounterInventory()
+        for (currency, _cost), number in inventory.items():
+            counter.add(currency, number)
+        return counter
+
+    def apply_inventory(
+        self,
+        inventory: Inventory,
+    ) -> SimpleCounterInventory:
+        """Apply the conversion to an Beancount Inventory."""
+        counter = SimpleCounterInventory()
+        for pos in inventory:
+            counter.add(pos.units.currency, pos.units.number)
+        return counter
 
 
 class _CurrencyConversion(Conversion):
@@ -204,8 +195,10 @@ AT_VALUE = _AtValueConversion()
 UNITS = _UnitsConversion()
 
 
-def conversion_from_str(value: str) -> Conversion:
+def conversion_from_str(value: str | Conversion) -> Conversion:
     """Parse a conversion string."""
+    if not isinstance(value, str):
+        return value
     if value == "at_cost":
         return AT_COST
     if value == "at_value":
@@ -223,7 +216,5 @@ def cost_or_value(
     date: datetime.date | None = None,
 ) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
-    if isinstance(conversion, str):
-        conversion = conversion_from_str(conversion)
-
+    conversion = conversion_from_str(conversion)
     return conversion.apply(inventory, prices, date)

@@ -35,8 +35,8 @@ class TaggedUnionObjectValidationError extends ValidationError {
   }
 }
 class TaggedUnionInvalidTagValidationError extends ValidationError {
-  constructor() {
-    super("Validation of tagged union failed: invalid tag.");
+  constructor(tag: string) {
+    super(`Validation of tagged union failed: invalid tag ${tag}.`);
   }
 }
 class TaggedUnionValidationError extends ValidationError {
@@ -196,11 +196,11 @@ export function tagged_union<T>(
       return err(new TaggedUnionObjectValidationError());
     }
     const tag_value = json[tag];
-    if (
-      typeof tag_value !== "string" ||
-      !Object.hasOwn(validators, tag_value)
-    ) {
-      return err(new TaggedUnionInvalidTagValidationError());
+    if (typeof tag_value !== "string") {
+      return err(new TaggedUnionInvalidTagValidationError("- not a string"));
+    }
+    if (!Object.hasOwn(validators, tag_value)) {
+      return err(new TaggedUnionInvalidTagValidationError(tag_value));
     }
     const res = validators[tag_value as keyof T](json);
     return res.is_ok

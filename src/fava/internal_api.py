@@ -19,7 +19,6 @@ from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
-    from datetime import date
     from typing import Literal
 
     from fava.beans.abc import Meta
@@ -31,6 +30,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.fava_options import FavaOptions
     from fava.core.tree import SerialisedTreeNode
     from fava.helpers import BeancountError
+    from fava.util.date import DateRange
     from fava.util.date import Interval
 
 
@@ -180,8 +180,8 @@ class ChartApi:
     @staticmethod
     def hierarchy(
         account_name: str,
-        begin_date: date | None = None,
-        end_date: date | None = None,
+        *,
+        date_range: DateRange | None = None,
         label: str | None = None,
     ) -> ChartData:
         """Generate data for an account hierarchy chart."""
@@ -191,8 +191,7 @@ class ChartApi:
                 g.filtered,
                 account_name,
                 g.conv,
-                begin_date,
-                end_date or g.filtered.end_date,
+                date_range,
             ),
         )
 

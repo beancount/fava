@@ -31,7 +31,7 @@ from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.commodities import CommoditiesModule
-from fava.core.conversion import cost_or_value
+from fava.core.conversion import conversion_from_str
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
 from fava.core.file import _incomplete_sortkey
@@ -511,8 +511,9 @@ class FavaLedger:
                            the account.
 
         Yields:
-            Tuples of ``(entry, change, balance)``.
+            Tuples of ``(index, entry, change, balance)``.
         """
+        conv = conversion_from_str(conversion)
         relevant_account = account_tester(
             account_name, with_children=with_children
         )
@@ -536,8 +537,8 @@ class FavaLedger:
                 yield (
                     index,
                     entry,
-                    cost_or_value(change, conversion, prices, entry.date),
-                    cost_or_value(balance, conversion, prices, entry.date),
+                    conv.apply(change, prices, entry.date),
+                    conv.apply(balance, prices, entry.date),
                 )
 
     def get_entry(self, entry_hash: str) -> Directive:

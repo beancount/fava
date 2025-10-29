@@ -49,7 +49,6 @@ from fava import template_filters
 from fava._ctx_globals_class import Context
 from fava.beans import funcs
 from fava.context import g
-from fava.core import conversion
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
 from fava.core.documents import is_document_or_import_file
@@ -232,7 +231,6 @@ def _setup_template_config(fava_app: Flask, *, incognito: bool) -> None:
     }
 
     # Add template filters
-    fava_app.add_template_filter(conversion.units)
     fava_app.add_template_filter(funcs.hash_entry)
     fava_app.add_template_filter(template_filters.basename)
     fava_app.add_template_filter(template_filters.flag_to_type)

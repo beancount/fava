@@ -30,7 +30,7 @@ from fava.beans.abc import Document
 from fava.beans.abc import Event
 from fava.context import g
 from fava.core import EntryNotFoundForHashError
-from fava.core.conversion import units
+from fava.core.conversion import UNITS
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.filters import FilterError
@@ -745,8 +745,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         charts.extend(
             ChartApi.hierarchy(
                 account_name,
-                date_range.begin,
-                date_range.end,
+                date_range=date_range,
                 label=g.interval.format_date(date_range.begin),
             )
             for date_range in dates[:3]
@@ -783,7 +782,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             charts,
             interval_balances=[
                 tree.get(account_name).serialise(
-                    g.conversion,
+                    g.conv,
                     g.ledger.prices,
                     date_range.end_inclusive,
                     with_cost=False,
@@ -801,7 +800,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         g.ledger.account_journal(
             g.filtered,
             account_name,
-            g.conversion,
+            g.conv,
             with_children=g.ledger.fava_options.account_journal_include_children,
         )
     )
@@ -833,7 +832,7 @@ def get_statistics() -> Statistics:
     }
 
     balances = {
-        account_name: units(node.balance)
+        account_name: UNITS.apply(node.balance)
         for account_name, node in g.filtered.root_tree.items()
     }
 

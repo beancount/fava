@@ -4,6 +4,7 @@ import {
   get_trial_balance,
 } from "../../api/index.ts";
 import type { AccountTreeNode } from "../../charts/hierarchy.ts";
+import type { ParsedFavaChart } from "../../charts/index.ts";
 import { _ } from "../../i18n.ts";
 import { getURLFilters } from "../../stores/filters.ts";
 import { Route } from "../route.ts";
@@ -12,7 +13,7 @@ import IncomeStatement from "./IncomeStatement.svelte";
 import TrialBalance from "./TrialBalance.svelte";
 
 export interface TreeReportProps {
-  charts: unknown;
+  charts: ParsedFavaChart[];
   trees: AccountTreeNode[];
   date_range: { begin: Date; end: Date } | null;
 }

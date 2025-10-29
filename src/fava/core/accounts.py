@@ -10,7 +10,7 @@ from fava.beans.abc import Balance
 from fava.beans.abc import Close
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.funcs import hash_entry
-from fava.core.conversion import units
+from fava.core.conversion import UNITS
 from fava.core.group_entries import group_entries_by_account
 from fava.core.group_entries import TransactionPosting
 from fava.core.module_base import FavaModule
@@ -72,7 +72,7 @@ def balance_string(tree_node: TreeNode) -> str:
     account = tree_node.name
     today = str(local_today())
     res = ""
-    for currency, number in units(tree_node.balance).items():
+    for currency, number in UNITS.apply(tree_node.balance).items():
         res += f"{today} balance {account:<28} {number:>15} {currency}\n"
     return res
 

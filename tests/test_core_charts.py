@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from fava.core.conversion import AT_COST
 from fava.util.date import Day
 from fava.util.date import Month
 
@@ -91,7 +92,7 @@ def test_net_worth_off_by_one(
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
     filtered = example_ledger.get_filtered()
-    data = example_ledger.charts.hierarchy(filtered, "Assets", "at_cost")
+    data = example_ledger.charts.hierarchy(filtered, "Assets", AT_COST)
     assert data.balance_children == {
         "IRAUSD": Decimal("7200.00"),
         "USD": Decimal("94320.27840"),

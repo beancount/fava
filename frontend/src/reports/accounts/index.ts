@@ -1,6 +1,7 @@
 import { get_account_report } from "../../api/index.ts";
 import type { AccountBudget } from "../../api/validators.ts";
 import type { AccountTreeNode } from "../../charts/hierarchy.ts";
+import type { ParsedFavaChart } from "../../charts/index.ts";
 import { getUrlPath } from "../../helpers.ts";
 import { getURLFilters } from "../../stores/filters.ts";
 import { Route } from "../route.ts";
@@ -14,7 +15,7 @@ const to_report_type = (s: string | null): AccountReportType =>
 export interface AccountReportProps {
   account: string;
   report_type: AccountReportType;
-  charts: unknown;
+  charts: ParsedFavaChart[];
   journal: string | null;
   interval_balances: AccountTreeNode[] | null;
   dates: { begin: Date; end: Date }[] | null;

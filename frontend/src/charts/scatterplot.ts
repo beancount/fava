@@ -1,6 +1,6 @@
-import type { Result } from "../lib/result.ts";
-import type { ValidationError } from "../lib/validation.ts";
+import type { Validator } from "../lib/validation.ts";
 import { array, date, object, string } from "../lib/validation.ts";
+import type { ParsedFavaChart } from "./index.ts";
 
 /** Data point for the scatterplot (events). */
 export interface ScatterPlotDatum {
@@ -9,26 +9,29 @@ export interface ScatterPlotDatum {
   readonly description: string;
 }
 
-export class ScatterPlot {
+const scatterplot_validator = object({
+  label: string,
+  data: array<ScatterPlotDatum>(
+    object({ type: string, date, description: string }),
+  ),
+});
+
+export class ScatterPlot implements ParsedFavaChart {
   readonly type = "scatterplot";
-  readonly name: string | null;
+  readonly label: string | null;
   readonly data: readonly ScatterPlotDatum[];
 
-  constructor(name: string | null, data: readonly ScatterPlotDatum[]) {
-    this.name = name;
+  constructor(label: string | null, data: readonly ScatterPlotDatum[]) {
+    this.label = label;
     this.data = data;
   }
-}
 
-const scatterplot_validator = array<ScatterPlotDatum>(
-  object({ type: string, date, description: string }),
-);
+  static validator: Validator<ScatterPlot> = (json) =>
+    scatterplot_validator(json).map(
+      ({ label, data }) => new ScatterPlot(label, data),
+    );
 
-export function scatterplot(
-  label: string | null,
-  json: unknown,
-): Result<ScatterPlot, ValidationError> {
-  return scatterplot_validator(json).map(
-    (value) => new ScatterPlot(label, value),
-  );
+  with_context(): this {
+    return this;
+  }
 }

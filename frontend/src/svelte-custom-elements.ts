@@ -3,16 +3,14 @@
  */
 
 import { type Component, mount, unmount } from "svelte";
-import { get as store_get } from "svelte/store";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
-import { chartContext } from "./charts/context.ts";
 import {
   account_hierarchy_validator,
   type AccountTreeNode,
 } from "./charts/hierarchy.ts";
-import type { FavaChart } from "./charts/index.ts";
-import { parseChartData } from "./charts/index.ts";
+import type { ParsedFavaChart } from "./charts/index.ts";
+import { chart_validator } from "./charts/index.ts";
 import { domHelpers } from "./charts/tooltip.ts";
 import type { Result } from "./lib/result.ts";
 import { log_error } from "./log.ts";
@@ -58,13 +56,10 @@ class SvelteCustomElementComponent<T extends Record<string, unknown>> {
 }
 
 const components = [
-  new SvelteCustomElementComponent<{ charts: readonly FavaChart[] }>(
+  new SvelteCustomElementComponent<{ charts: readonly ParsedFavaChart[] }>(
     "charts",
     ChartSwitcher,
-    (data) =>
-      parseChartData(data, store_get(chartContext)).map((charts) => ({
-        charts,
-      })),
+    (data) => chart_validator(data).map((charts) => ({ charts })),
   ),
   new SvelteCustomElementComponent<{ table: QueryResultTable }>(
     "query-table",

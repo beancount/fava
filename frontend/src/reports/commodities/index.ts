@@ -1,6 +1,5 @@
 import { get_commodities } from "../../api/index.ts";
 import type { Commodities } from "../../api/validators.ts";
-import type { FavaChart } from "../../charts/index.ts";
 import { LineChart } from "../../charts/line.ts";
 import { domHelpers } from "../../charts/tooltip.ts";
 import { day } from "../../format.ts";
@@ -10,7 +9,7 @@ import { Route } from "../route.ts";
 import CommoditiesSvelte from "./Commodities.svelte";
 
 export interface CommoditiesReportProps {
-  charts: FavaChart[];
+  charts: LineChart[];
   commodities: Commodities;
 }
 

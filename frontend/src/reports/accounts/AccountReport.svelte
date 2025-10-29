@@ -1,7 +1,5 @@
 <script lang="ts">
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
-  import { chartContext } from "../../charts/context.ts";
-  import { parseChartData } from "../../charts/index.ts";
   import { urlForAccount } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
@@ -21,16 +19,10 @@
   }: AccountReportProps = $props();
 
   let accumulate = $derived(report_type === "balances");
-
-  let chartData = $derived(
-    parseChartData(charts, $chartContext).unwrap_or(null),
-  );
   let interval_label = $derived(intervalLabel($interval).toLowerCase());
 </script>
 
-{#if chartData}
-  <ChartSwitcher charts={chartData} />
-{/if}
+<ChartSwitcher {charts} />
 
 <div class="droptarget" data-account-name={account}>
   <div class="headerline">

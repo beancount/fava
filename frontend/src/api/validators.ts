@@ -1,4 +1,5 @@
 import { account_hierarchy_validator } from "../charts/hierarchy.ts";
+import { chart_validator } from "../charts/index.ts";
 import { entryBaseValidator } from "../entries/index.ts";
 import type { ValidationT } from "../lib/validation.ts";
 import {
@@ -12,7 +13,6 @@ import {
   record,
   string,
   tuple,
-  unknown,
 } from "../lib/validation.ts";
 import { Inventory } from "../reports/query/query_table.ts";
 
@@ -162,13 +162,13 @@ export const source_validator = object<SourceFile>({
 });
 
 export const tree_report_validator = object({
-  charts: unknown,
+  charts: chart_validator,
   trees: array(account_hierarchy_validator),
   date_range: optional(date_range),
 });
 
 export const account_report_validator = object({
-  charts: unknown,
+  charts: chart_validator,
   journal: optional(string),
   dates: optional(array(date_range)),
   interval_balances: optional(array(account_hierarchy_validator)),

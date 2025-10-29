@@ -1,7 +1,7 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { test } from "node:test";
 
-import { bar } from "../src/charts/bar.ts";
+import { ParsedBarChart } from "../src/charts/bar.ts";
 import {
   colors10,
   colors15,
@@ -9,10 +9,13 @@ import {
   includeZero,
   padExtent,
 } from "../src/charts/helpers.ts";
-import { hierarchy, HierarchyChart } from "../src/charts/hierarchy.ts";
-import { parseChartData } from "../src/charts/index.ts";
-import { balances, LineChart } from "../src/charts/line.ts";
-import { ScatterPlot, scatterplot } from "../src/charts/scatterplot.ts";
+import {
+  HierarchyChart,
+  ParsedHierarchyChart,
+} from "../src/charts/hierarchy.ts";
+import { chart_validator } from "../src/charts/index.ts";
+import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
+import { ScatterPlot } from "../src/charts/scatterplot.ts";
 import { loadJSONSnapshot } from "./helpers.ts";
 
 test("chart helpers (filter ticks)", () => {
@@ -39,21 +42,23 @@ test("chart helpers (pad extent)", () => {
 
 test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
-  ok(hierarchy("name", "", ctx).is_err);
+  ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
-  const parsed = parseChartData(data, ctx).unwrap()[0];
+  const parsed = chart_validator(data).unwrap()[0]?.with_context(ctx);
   ok(parsed instanceof HierarchyChart);
   deepEqual(parsed.currencies, ["USD"]);
   ok(parsed.data.get("USD"));
 });
 
 test("handle data for balances chart", () => {
-  ok(balances("name", "").is_err);
+  ok(ParsedLineChart.validator({ label: "name", data: "" }).is_err);
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
     { date: "2000-02-01", balance: { EUR: 10 } },
   ];
-  const parsed = balances("name", data).unwrap();
+  const parsed = ParsedLineChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context();
   ok(parsed instanceof LineChart);
   deepEqual(parsed.filter([]), [
     {
@@ -71,11 +76,15 @@ test("handle data for balances chart", () => {
 });
 
 test("handle data for scatterplot chart", () => {
-  ok(scatterplot("name", "").is_err);
+  ok(ScatterPlot.validator("asdfasdf").is_err);
+  ok(ScatterPlot.validator({ label: "name", data: "" }).is_err);
   const data: unknown = [
     { type: "test", date: "2000-01-01", description: "desc" },
   ];
-  const parsed = scatterplot("name", data).unwrap();
+  const parsed = ScatterPlot.validator({ label: "name", data })
+    .unwrap()
+    .with_context();
+  ok(parsed instanceof ScatterPlot);
   deepEqual(
     parsed,
     new ScatterPlot("name", [
@@ -107,7 +116,9 @@ test("handle data for bar chart with stacked data", () => {
     },
   ];
   const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx).unwrap();
+  const chart = ParsedBarChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context(ctx);
   equal(true, chart.hasStackedData);
   deepEqual(chart.accounts, [
     "Expenses:Dining",
@@ -262,7 +273,9 @@ test("handle data for bar chart without stacked data", () => {
   ];
   // even without the operating currencies, the two most popular ones will be selected
   const ctx = { currencies: [], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx).unwrap();
+  const chart = ParsedBarChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context(ctx);
   equal(false, chart.hasStackedData);
   deepEqual(chart.filter([]).stacks, [
     ["EUR", []],
@@ -302,7 +315,9 @@ test("only use currencies in records for bar chart", () => {
     },
   ];
   const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = bar("name", data, ctx).unwrap();
+  const chart = ParsedBarChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context(ctx);
   equal(false, chart.hasStackedData);
   deepEqual(chart.filter([]).stacks, [
     ["USD", []],
