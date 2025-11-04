@@ -9,10 +9,7 @@ import {
   includeZero,
   padExtent,
 } from "../src/charts/helpers.ts";
-import {
-  HierarchyChart,
-  ParsedHierarchyChart,
-} from "../src/charts/hierarchy.ts";
+import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
 import { chart_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
@@ -44,10 +41,15 @@ test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
-  const parsed = chart_validator(data).unwrap()[0]?.with_context(ctx);
-  ok(parsed instanceof HierarchyChart);
-  deepEqual(parsed.currencies, ["USD"]);
-  ok(parsed.data.get("USD"));
+  const validated = chart_validator(data).unwrap();
+
+  const [hierarchy, balances, net_worth] = validated;
+  ok(hierarchy instanceof ParsedHierarchyChart);
+  ok(balances instanceof ParsedLineChart);
+  ok(net_worth instanceof ParsedLineChart);
+  const hierarchy_with_context = hierarchy.with_context(ctx);
+  deepEqual(hierarchy_with_context.currencies, ["USD"]);
+  ok(hierarchy_with_context.data.get("USD"));
 });
 
 test("handle data for balances chart", () => {

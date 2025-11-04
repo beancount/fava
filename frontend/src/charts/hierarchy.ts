@@ -122,6 +122,10 @@ export class ParsedHierarchyChart implements ParsedFavaChart {
     this.data = data;
   }
 
+  static from_node = (node: AccountTreeNode): ParsedHierarchyChart => {
+    return new ParsedHierarchyChart(node.account, node);
+  };
+
   static validator: Validator<ParsedHierarchyChart> = (json) =>
     hierarchy_validator(json).map(
       ({ label, data }) => new ParsedHierarchyChart(label, data),

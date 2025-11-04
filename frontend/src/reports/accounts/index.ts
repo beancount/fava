@@ -28,12 +28,12 @@ export const account_report = new Route<AccountReportProps>(
   async (url) => {
     const [, account = ""] = getUrlPath(url).unwrap().split("/");
     const report_type = to_report_type(url.searchParams.get("r"));
-    const res = await get_account_report({
+    const report = await get_account_report({
       ...getURLFilters(url),
       a: account,
       r: report_type,
     });
-    return { ...res, account, report_type };
+    return { ...report, account, report_type };
   },
   (url) => {
     const [, account] = getUrlPath(url).unwrap().split("/");

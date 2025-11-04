@@ -27,7 +27,6 @@ from fava.beans.helpers import slice_entry_dates
 from fava.core.conversion import conversion_from_str
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
-from fava.core.tree import Tree
 from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -38,7 +37,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.conversion import Conversion
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.tree import SerialisedTreeNode
-    from fava.util.date import DateRange
     from fava.util.date import Interval
 
 
@@ -111,23 +109,11 @@ class ChartModule(FavaModule):
         filtered: FilteredLedger,
         account_name: str,
         conversion: Conversion,
-        date_range: DateRange | None = None,
     ) -> SerialisedTreeNode:
         """Render an account tree."""
-        if date_range is not None:
-            tree = Tree(
-                slice_entry_dates(
-                    filtered.entries, date_range.begin, date_range.end
-                )
-            )
-        else:
-            tree = filtered.root_tree
+        tree = filtered.root_tree
         return tree.get(account_name).serialise(
-            conversion,
-            self.ledger.prices,
-            date_range.end_inclusive
-            if date_range is not None
-            else filtered.end_date,
+            conversion, self.ledger.prices, filtered.end_date
         )
 
     @listify

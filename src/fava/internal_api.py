@@ -30,7 +30,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.fava_options import FavaOptions
     from fava.core.tree import SerialisedTreeNode
     from fava.helpers import BeancountError
-    from fava.util.date import DateRange
     from fava.util.date import Interval
 
 
@@ -181,7 +180,6 @@ class ChartApi:
     def hierarchy(
         account_name: str,
         *,
-        date_range: DateRange | None = None,
         label: str | None = None,
     ) -> ChartData:
         """Generate data for an account hierarchy chart."""
@@ -191,7 +189,6 @@ class ChartApi:
                 g.filtered,
                 account_name,
                 g.conv,
-                date_range,
             ),
         )
 

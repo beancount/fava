@@ -1,9 +1,11 @@
 <script lang="ts">
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
+  import { ParsedHierarchyChart } from "../../charts/hierarchy.ts";
   import { urlForAccount } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
   import { intervalLabel } from "../../lib/interval.ts";
+  import { currentTimeFilterDateFormat } from "../../stores/format.ts";
   import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import type { AccountReportProps } from "./index.ts";
@@ -20,9 +22,28 @@
 
   let accumulate = $derived(report_type === "balances");
   let interval_label = $derived(intervalLabel($interval).toLowerCase());
+
+  let all_charts = $derived(
+    interval_balances && dates
+      ? [
+          ...charts,
+          ...interval_balances
+            .slice(0, 3)
+            .map(
+              (node, index) =>
+                new ParsedHierarchyChart(
+                  $currentTimeFilterDateFormat(
+                    dates[index]?.begin ?? new Date(),
+                  ),
+                  node,
+                ),
+            ),
+        ]
+      : charts,
+  );
 </script>
 
-<ChartSwitcher {charts} />
+<ChartSwitcher charts={all_charts} />
 
 <div class="droptarget" data-account-name={account}>
   <div class="headerline">

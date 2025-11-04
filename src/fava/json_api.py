@@ -624,8 +624,6 @@ def get_income_statement() -> TreeReport:
             options["name_expenses"],
             label=f"{gettext('Expenses')} ({g.interval.label})",
         ),
-        ChartApi.hierarchy(options["name_income"]),
-        ChartApi.hierarchy(options["name_expenses"]),
     ]
     root_tree = g.filtered.root_tree
     trees = [
@@ -647,12 +645,7 @@ def get_balance_sheet() -> TreeReport:
     g.ledger.changed()
     options = g.ledger.options
 
-    charts = [
-        ChartApi.net_worth(),
-        ChartApi.hierarchy(options["name_assets"]),
-        ChartApi.hierarchy(options["name_liabilities"]),
-        ChartApi.hierarchy(options["name_equity"]),
-    ]
+    charts = [ChartApi.net_worth()]
     root_tree_closed = g.filtered.root_tree_closed
     trees = [
         root_tree_closed.get(options["name_assets"]),
@@ -671,20 +664,12 @@ def get_balance_sheet() -> TreeReport:
 def get_trial_balance() -> TreeReport:
     """Get the data for the trial balance."""
     g.ledger.changed()
-    options = g.ledger.options
 
-    charts = [
-        ChartApi.hierarchy(options["name_income"]),
-        ChartApi.hierarchy(options["name_expenses"]),
-        ChartApi.hierarchy(options["name_assets"]),
-        ChartApi.hierarchy(options["name_liabilities"]),
-        ChartApi.hierarchy(options["name_equity"]),
-    ]
     trees = [g.filtered.root_tree.get("")]
 
     return TreeReport(
         g.filtered.date_range,
-        charts,
+        charts=[],
         trees=[tree.serialise_with_context() for tree in trees],
     )
 
@@ -739,16 +724,6 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             g.interval,
             account_name,
             accumulate=accumulate,
-        )
-
-        charts.append(ChartApi.hierarchy(account_name))
-        charts.extend(
-            ChartApi.hierarchy(
-                account_name,
-                date_range=date_range,
-                label=g.interval.format_date(date_range.begin),
-            )
-            for date_range in dates[:3]
         )
 
         all_accounts = (
