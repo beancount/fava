@@ -3,7 +3,7 @@ import { mount, unmount } from "svelte";
 import { get as store_get } from "svelte/store";
 
 import { delegate } from "../lib/events.ts";
-import { fetch, handleText } from "../lib/fetch.ts";
+import { fetch_text } from "../lib/fetch.ts";
 import { log_error } from "../log.ts";
 import { notify_err } from "../notifications.ts";
 import { router } from "../router.ts";
@@ -131,22 +131,20 @@ export class FavaJournal extends HTMLElement {
     let errorShown = false;
 
     const promises = pages_and_urls.map(async ([page, page_url]) => {
-      return fetch(page_url)
-        .then(handleText)
-        .then(
-          (html) => {
-            const doc = parser.parseFromString(html, "text/html");
-            return doc.querySelectorAll("ol.journal > li:not(.head)");
-          },
-          (error: unknown) => {
-            log_error(`Failed to fetch page ${page.toString()}`, error);
-            if (!errorShown) {
-              notify_err(new Error("Failed to fetch some journal pages"));
-              errorShown = true;
-            }
-            return [];
-          },
-        );
+      return fetch_text(page_url).then(
+        (html) => {
+          const doc = parser.parseFromString(html, "text/html");
+          return doc.querySelectorAll("ol.journal > li:not(.head)");
+        },
+        (error: unknown) => {
+          log_error(`Failed to fetch page ${page.toString()}`, error);
+          if (!errorShown) {
+            notify_err(new Error("Failed to fetch some journal pages"));
+            errorShown = true;
+          }
+          return [];
+        },
+      );
     });
 
     let sorting = false;

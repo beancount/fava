@@ -28,7 +28,7 @@ interface BaseResult<T, E> {
   or_else<F>(op: (v: E) => T): Result<T, F>;
 
   /** Returns the contained Ok value or throw an Error for Err. */
-  unwrap(): T;
+  unwrap(unwrap_error?: new (error: E) => Error): T;
 
   /** Returns the contained Err value or throw an Error for Ok. */
   unwrap_err(): E;
@@ -105,7 +105,10 @@ export class Err<E> implements BaseResult<never, E> {
     return new Err(op(this.error));
   }
 
-  unwrap(): never {
+  unwrap(unwrap_error?: new (error: E) => Error): never {
+    if (unwrap_error) {
+      throw new unwrap_error(this.error);
+    }
     throw new Error("unwrap() called on error.");
   }
 

@@ -7,15 +7,15 @@ import {
   Event,
   Transaction,
 } from "../entries/index.ts";
-import { urlForRaw } from "../helpers.ts";
 import type { NonEmptyArray } from "../lib/array.ts";
-import { fetchJSON } from "../lib/fetch.ts";
+import { fetch_json } from "../lib/fetch.ts";
 import type { Validator } from "../lib/validation.ts";
 import { array, boolean, string } from "../lib/validation.ts";
 import { notify, notify_err } from "../notifications.ts";
 import { query_validator } from "../reports/query/query_table.ts";
 import { router } from "../router.ts";
-import type { Filters, FiltersConversionInterval } from "../stores/filters.ts";
+import { base_url } from "../stores/index.ts";
+import { set_mtime } from "../stores/mtime.ts";
 import {
   account_report_validator,
   commodities_validator,
@@ -77,24 +77,73 @@ type PutEndpoint =
 
 type ApiEndpoint = DeleteEndpoint | GetEndpoint | PutEndpoint;
 
+type ApiParam =
+  | "a"
+  | "account"
+  | "conversion"
+  | "entry_hash"
+  | "filename"
+  | "filter"
+  | "importer"
+  | "interval"
+  | "narration"
+  | "payee"
+  | "query_string"
+  | "r"
+  | "sha256sum"
+  | "time";
+
+type ApiParams = Readonly<Record<ApiParam, string>>;
+
+function api_url(endpoint: ApiEndpoint): URL;
+function api_url(
+  endpoint: ApiEndpoint,
+  accepted_params: readonly ApiParam[],
+  params: Partial<ApiParams>,
+): URL;
+function api_url(
+  endpoint: ApiEndpoint,
+  accepted_params?: readonly ApiParam[],
+  params?: Partial<ApiParams>,
+): URL {
+  const $base_url = store_get(base_url);
+  const url = new URL(`${$base_url}api/${endpoint}`, window.location.href);
+  if (accepted_params && params) {
+    for (const key of accepted_params) {
+      const value = params[key];
+      if (value != null && value) {
+        url.searchParams.set(key, value);
+      }
+    }
+  }
+  return url;
+}
+
+async function fetch_and_handle_api_call<R>(
+  url: URL,
+  init: RequestInit,
+  validator: Validator<R>,
+): Promise<R> {
+  const json = await fetch_json(url, init);
+  if (typeof json.mtime === "string") {
+    set_mtime(json.mtime);
+  }
+  const res = validator(json.data);
+  return res.unwrap(InvalidResponseDataError);
+}
+
 /**
  * Define a function to call the endpoint with the required parameters.
  */
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-function define_endpoint<T extends Record<string, string>, R>(
+function define_endpoint<T extends readonly ApiParam[], R>(
   endpoint: ApiEndpoint,
   validator: Validator<R>,
+  accepted_params: T,
   method: "DELETE" | "GET" | "PUT" = "GET",
-): (params: T) => Promise<R> {
+): (params: Pick<ApiParams, T[number]>) => Promise<R> {
   return async (params) => {
-    const $urlForRaw = store_get(urlForRaw);
-    const url = $urlForRaw(`api/${endpoint}`, params);
-    const json = await fetchJSON(url, { method });
-    const res = validator(json);
-    if (res.is_ok) {
-      return res.value;
-    }
-    throw new InvalidResponseDataError(res.error);
+    const url = api_url(endpoint, accepted_params, params);
+    return fetch_and_handle_api_call(url, { method }, validator);
   };
 }
 
@@ -106,88 +155,93 @@ function define_paramless_endpoint<R>(
   validator: Validator<R>,
 ): () => Promise<R> {
   return async () => {
-    const $urlForRaw = store_get(urlForRaw);
-    const url = $urlForRaw(`api/${endpoint}`);
-    const json = await fetchJSON(url, { method: "GET" });
-    const res = validator(json);
-    if (res.is_ok) {
-      return res.value;
-    }
-    throw new InvalidResponseDataError(res.error);
+    const url = api_url(endpoint);
+    return fetch_and_handle_api_call(url, { method: "GET" }, validator);
   };
 }
 
 /**
- * Define a function to call the PUT endpoint with the required typed parameters.
+ * Define a function to call the PUT endpoint with FormData.
  */
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-function define_put<T>(endpoint: PutEndpoint): (body: T) => Promise<string> {
+function define_put_form(
+  endpoint: PutEndpoint,
+): (body: FormData) => Promise<string> {
   return async (body) => {
-    const opts: RequestInit =
-      body instanceof FormData
-        ? { body }
-        : {
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          };
-    const $urlForRaw = store_get(urlForRaw);
-    const url = $urlForRaw(`api/${endpoint}`);
-    const json = await fetchJSON(url, { method: "PUT", ...opts });
-    const res = string(json);
-    if (res.is_ok) {
-      return res.value;
-    }
-    throw new InvalidResponseDataError(res.error);
+    const url = api_url(endpoint);
+    return fetch_and_handle_api_call(url, { method: "PUT", body }, string);
   };
 }
 
-// With the use of satisfies and this helper type we can achieve partial type inference
-// on the endpoint definitions below.
-type Api<T> = (params: T) => unknown;
+/**
+ * Define a function to call the PUT endpoint with a JSON body.
+ */
+function define_put_json(
+  endpoint: PutEndpoint,
+): (body: unknown) => Promise<string> {
+  return async (body) => {
+    const url = api_url(endpoint);
+    return fetch_and_handle_api_call(
+      url,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      },
+      string,
+    );
+  };
+}
 
 // DELETE endpoints
 
 const delete_document_raw = define_endpoint(
   "document",
   string,
+  ["filename"],
   "DELETE",
-) satisfies Api<{
-  filename: string;
-}>;
+);
 export const delete_source_slice = define_endpoint(
   "source_slice",
   string,
+  ["entry_hash", "sha256sum"],
   "DELETE",
-) satisfies Api<{
-  entry_hash: string;
-  sha256sum: string;
-}>;
+);
+
+const filters = ["account", "filter", "time"] as const;
+const filters_conversion_interval = [
+  "account",
+  "conversion",
+  "filter",
+  "interval",
+  "time",
+] as const;
 
 // GET endpoints
 
 export const get_account_report = define_endpoint(
   "account_report",
   account_report_validator,
-) satisfies Api<FiltersConversionInterval & { a: string; r: string }>;
+  [...filters_conversion_interval, "a", "r"],
+);
 export const get_balance_sheet = define_endpoint(
   "balance_sheet",
   tree_report_validator,
-) satisfies Api<FiltersConversionInterval>;
+  filters_conversion_interval,
+);
 export const get_changed = define_paramless_endpoint("changed", boolean);
 export const get_commodities = define_endpoint(
   "commodities",
   commodities_validator,
-) satisfies Api<Filters>;
-export const get_context = define_endpoint(
-  "context",
-  context_validator,
-) satisfies Api<{
-  entry_hash: string;
-}>;
+  filters,
+);
+export const get_context = define_endpoint("context", context_validator, [
+  "entry_hash",
+]);
 export const get_documents = define_endpoint(
   "documents",
   array(Document.validator),
-) satisfies Api<Filters>;
+  filters,
+);
 export const get_errors = define_paramless_endpoint(
   "errors",
   array(error_validator),
@@ -195,11 +249,12 @@ export const get_errors = define_paramless_endpoint(
 export const get_events = define_endpoint(
   "events",
   array(Event.validator),
-) satisfies Api<Filters>;
-export const get_extract = define_endpoint(
-  "extract",
-  array(entryValidator),
-) satisfies Api<{ filename: string; importer: string }>;
+  filters,
+);
+export const get_extract = define_endpoint("extract", array(entryValidator), [
+  "filename",
+  "importer",
+]);
 export const get_imports = define_paramless_endpoint(
   "imports",
   importable_files_validator,
@@ -207,7 +262,8 @@ export const get_imports = define_paramless_endpoint(
 export const get_income_statement = define_endpoint(
   "income_statement",
   tree_report_validator,
-) satisfies Api<FiltersConversionInterval>;
+  filters_conversion_interval,
+);
 export const get_ledger_data = define_paramless_endpoint(
   "ledger_data",
   ledgerDataValidator,
@@ -215,7 +271,8 @@ export const get_ledger_data = define_paramless_endpoint(
 export const get_narration_transaction = define_endpoint(
   "narration_transaction",
   Transaction.validator,
-) satisfies Api<{ narration: string }>;
+  ["narration"],
+);
 export const get_narrations = define_paramless_endpoint(
   "narrations",
   array(string),
@@ -227,54 +284,56 @@ export const get_options = define_paramless_endpoint(
 export const get_payee_accounts = define_endpoint(
   "payee_accounts",
   array(string),
-) satisfies Api<{ payee: string }>;
+  ["payee"],
+);
 export const get_payee_transaction = define_endpoint(
   "payee_transaction",
   Transaction.validator,
-) satisfies Api<{ payee: string }>;
-export const get_query = define_endpoint(
-  "query",
-  query_validator,
-) satisfies Api<Filters & { query_string: string }>;
-export const get_source = define_endpoint(
-  "source",
-  source_validator,
-) satisfies Api<{ filename: string }>;
+  ["payee"],
+);
+export const get_query = define_endpoint("query", query_validator, [
+  ...filters,
+  "query_string",
+]);
+export const get_source = define_endpoint("source", source_validator, [
+  "filename",
+]);
 export const get_statistics = define_endpoint(
   "statistics",
   statistics_validator,
-) satisfies Api<Filters>;
+  filters,
+);
 export const get_trial_balance = define_endpoint(
   "trial_balance",
   tree_report_validator,
-) satisfies Api<FiltersConversionInterval>;
+  filters_conversion_interval,
+);
+
+type Put<T> = (body: T) => Promise<string>;
 
 // PUT endpoints
 
-export const put_add_document = define_put<FormData>("add_document");
-const put_add_entries = define_put<{ entries: NonEmptyArray<Entry> }>(
-  "add_entries",
-);
-export const put_attach_document = define_put<{
+export const put_add_document = define_put_form("add_document");
+const put_add_entries: Put<{ entries: NonEmptyArray<Entry> }> =
+  define_put_json("add_entries");
+export const put_attach_document: Put<{
   filename: string;
   entry_hash: string;
-}>("attach_document");
-export const put_format_source = define_put<{ source: string }>(
-  "format_source",
-);
-const put_move = define_put<{
+}> = define_put_json("attach_document");
+export const put_format_source: Put<{ source: string }> =
+  define_put_json("format_source");
+const put_move: Put<{
   filename: string;
   account: string;
   new_name: string;
-}>("move");
-export const put_source = define_put<SourceFile>("source");
-export const put_source_slice = define_put<{
+}> = define_put_json("move");
+export const put_source: Put<SourceFile> = define_put_json("source");
+export const put_source_slice: Put<{
   entry_hash: string;
   source: string;
   sha256sum: string;
-}>("source_slice");
-export const put_upload_import_file =
-  define_put<FormData>("upload_import_file");
+}> = define_put_json("source_slice");
+export const put_upload_import_file = define_put_form("upload_import_file");
 
 /**
  * Move a file, either in an import directory or a document.

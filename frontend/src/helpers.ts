@@ -6,17 +6,23 @@ import { use_external_editor } from "./stores/fava_options.ts";
 import { base_url } from "./stores/index.ts";
 import { syncedSearchParams } from "./stores/url.ts";
 
+class NonRelativeUrlPathError extends Error {
+  constructor(pathname: string, $base_url: string) {
+    super(`Path '${pathname}' not relative to base url '${$base_url}'.`);
+  }
+}
+
 /**
  * Get the URL path relative to the base url of the current ledger.
  */
 export function getUrlPath(
   url: Pick<URL | Location, "pathname">,
-): Result<string, string> {
+): Result<string, NonRelativeUrlPathError> {
   const { pathname } = url;
   const $base_url = store_get(base_url);
   return $base_url && pathname.startsWith($base_url)
     ? ok(decodeURI(pathname.slice($base_url.length)))
-    : err(`Path '${pathname}' not relative to base url '${$base_url}'.`);
+    : err(new NonRelativeUrlPathError(pathname, $base_url));
 }
 
 /**

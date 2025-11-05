@@ -2,7 +2,7 @@ import { type Component, mount, unmount } from "svelte";
 
 import { _ } from "../i18n.ts";
 import { getScriptTagValue } from "../lib/dom.ts";
-import { fetch, handleText } from "../lib/fetch.ts";
+import { fetch_text } from "../lib/fetch.ts";
 import { string } from "../lib/validation.ts";
 import { read_mtime } from "../stores/mtime.ts";
 import ReportLoadError from "./ReportLoadError.svelte";
@@ -65,7 +65,7 @@ class BackendRoute implements BaseRoute {
     }
     const get_url = new URL(url);
     get_url.searchParams.set("partial", "true");
-    const content = await fetch(get_url).then(handleText);
+    const content = await fetch_text(get_url);
     if (previous.route !== this) {
       previous.destroy();
     }

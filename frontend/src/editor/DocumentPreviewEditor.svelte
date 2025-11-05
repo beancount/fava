@@ -6,7 +6,7 @@
 <script lang="ts">
   import { replaceContents } from "../codemirror/editor-transactions.ts";
   import { initDocumentPreviewEditor } from "../codemirror/setup.ts";
-  import { fetch, handleText } from "../lib/fetch.ts";
+  import { fetch_text } from "../lib/fetch.ts";
 
   interface Props {
     /** The URL to load the editor contents from. */
@@ -24,11 +24,9 @@
   };
 
   $effect(() => {
-    fetch(url)
-      .then(handleText)
-      .then(set_editor_content, () => {
-        set_editor_content(`Loading ${url} failed...`);
-      });
+    fetch_text(url).then(set_editor_content, () => {
+      set_editor_content(`Loading ${url} failed...`);
+    });
   });
 </script>
 

@@ -1,6 +1,11 @@
 <script lang="ts">
   import { _, format } from "../i18n.ts";
-  import { getInterval, intervalLabel, INTERVALS } from "../lib/interval.ts";
+  import {
+    DEFAULT_INTERVAL,
+    getInterval,
+    intervalLabel,
+    INTERVALS,
+  } from "../lib/interval.ts";
   import { router } from "../router.ts";
   import { conversions } from "../stores/chart.ts";
   import { conversion, interval } from "../stores/url.ts";
@@ -27,7 +32,7 @@
   bind:value={
     () => $conversion,
     (value: string) => {
-      router.set_search_param("conversion", value);
+      router.set_search_param("conversion", value === "at_cost" ? "" : value);
     }
   }
   options={$conversions}
@@ -39,7 +44,10 @@
   bind:value={
     () => $interval,
     (value: string) => {
-      router.set_search_param("interval", value);
+      router.set_search_param(
+        "interval",
+        value === DEFAULT_INTERVAL ? "" : value,
+      );
     }
   }
   options={INTERVALS}

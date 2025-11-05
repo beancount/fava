@@ -6,7 +6,6 @@
 import { get as store_get } from "svelte/store";
 
 import { getUrlPath, urlForRaw } from "./helpers.ts";
-import { fetch } from "./lib/fetch.ts";
 import { log_error } from "./log.ts";
 import { extensions } from "./stores/index.ts";
 
