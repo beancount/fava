@@ -104,6 +104,7 @@ export const ledgerDataValidator = object({
   payees: array(string),
   precisions: record(number),
   sidebar_links: array(tuple(string, string)),
+  filter_presets: array(tuple(string, string, string)),
   tags: array(string),
   upcoming_events_count: number,
   user_queries: array(object({ name: string, query_string: string })),

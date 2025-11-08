@@ -4,12 +4,14 @@
   import { ledgerData } from "../stores/index.ts";
   import { ledger_title } from "../stores/options.ts";
   import FilterForm from "./FilterForm.svelte";
+  import FilterPresets from "./FilterPresets.svelte";
   import HeaderIcon from "./HeaderIcon.svelte";
   import { has_changes } from "./page-title.ts";
   import PageTitle from "./PageTitle.svelte";
 
   let other_ledgers = $derived($ledgerData.other_ledgers);
   let has_dropdown = $derived(other_ledgers.length);
+  let has_filter_presets = $derived($ledgerData.filter_presets.length > 0);
 </script>
 
 <header>
@@ -39,6 +41,9 @@
   </button>
   <span class="spacer"></span>
   <FilterForm />
+  {#if has_filter_presets}
+    <FilterPresets />
+  {/if}
 </header>
 
 <style>

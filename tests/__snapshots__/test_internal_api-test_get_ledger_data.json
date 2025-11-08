@@ -925,6 +925,7 @@
     "uptodate_indicator_grey_lookback_days": 60,
     "use_external_editor": false
   },
+  "filter_presets": [],
   "have_excel": true,
   "incognito": false,
   "links": [
