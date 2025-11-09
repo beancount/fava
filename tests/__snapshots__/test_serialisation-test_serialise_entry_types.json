@@ -2,32 +2,18 @@
   {
     "date": "2012-12-12",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 20
-    },
+    "meta": { "filename": "<string>", "lineno": 20 },
     "t": "Custom",
     "type": "string",
-    "values": [
-      {
-        "currency": "EUR",
-        "number": 1
-      },
-      false
-    ]
+    "values": [{ "currency": "EUR", "number": 1 }, false]
   },
   {
     "account": "Assets:Cash",
     "booking": "Booking.STRICT",
-    "currencies": [
-      "USD"
-    ],
+    "currencies": ["USD"],
     "date": "2017-12-11",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 2
-    },
+    "meta": { "filename": "<string>", "lineno": 2 },
     "t": "Open"
   },
   {
@@ -36,10 +22,7 @@
     "entry_hash": "ENTRY_HASH",
     "meta": {
       "account-value": "Assets:Cash",
-      "amount-value": {
-        "currency": "USD",
-        "number": 10
-      },
+      "amount-value": { "currency": "USD", "number": 10 },
       "bool-value": true,
       "currency-value": "USD",
       "date-value": "2022-12-12",
@@ -53,36 +36,21 @@
   },
   {
     "account": "Assets:Cash",
-    "amount": {
-      "currency": "USD",
-      "number": "1"
-    },
+    "amount": { "currency": "USD", "number": "1" },
     "date": "2017-12-13",
-    "diff_amount": {
-      "currency": "USD",
-      "number": -1
-    },
+    "diff_amount": { "currency": "USD", "number": -1 },
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 3
-    },
+    "meta": { "filename": "<string>", "lineno": 3 },
     "t": "Balance",
     "tolerance": null
   },
   {
     "account": "Assets:Cash",
-    "amount": {
-      "currency": "USD",
-      "number": "1"
-    },
+    "amount": { "currency": "USD", "number": "1" },
     "date": "2017-12-14",
     "diff_amount": null,
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 4
-    },
+    "meta": { "filename": "<string>", "lineno": 4 },
     "t": "Balance",
     "tolerance": 1.0
   },
@@ -91,17 +59,10 @@
     "date": "2017-12-16",
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/filename",
-    "links": [
-      "link"
-    ],
-    "meta": {
-      "filename": "<string>",
-      "lineno": 5
-    },
+    "links": ["link"],
+    "meta": { "filename": "<string>", "lineno": 5 },
     "t": "Document",
-    "tags": [
-      "tag"
-    ]
+    "tags": ["tag"]
   },
   {
     "account": "Assets:Cash",
@@ -109,10 +70,7 @@
     "date": "2017-12-20",
     "entry_hash": "ENTRY_HASH",
     "links": [],
-    "meta": {
-      "filename": "<string>",
-      "lineno": 14
-    },
+    "meta": { "filename": "<string>", "lineno": 14 },
     "t": "Note",
     "tags": []
   },
@@ -120,10 +78,7 @@
     "account": "Assets:Cash",
     "date": "2017-12-21",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 15
-    },
+    "meta": { "filename": "<string>", "lineno": 15 },
     "source_account": "Assets:OtherCash",
     "t": "Pad"
   },
@@ -131,43 +86,28 @@
     "account": "Assets:Cash",
     "date": "2017-12-22",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 16
-    },
+    "meta": { "filename": "<string>", "lineno": 16 },
     "t": "Close"
   },
   {
     "currency": "USD",
     "date": "2018-12-15",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 18
-    },
+    "meta": { "filename": "<string>", "lineno": 18 },
     "t": "Commodity"
   },
   {
-    "amount": {
-      "currency": "EUR",
-      "number": "1"
-    },
+    "amount": { "currency": "EUR", "number": "1" },
     "currency": "USD",
     "date": "2018-12-16",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 19
-    },
+    "meta": { "filename": "<string>", "lineno": 19 },
     "t": "Price"
   },
   {
     "date": "2019-12-12",
     "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "<string>",
-      "lineno": 22
-    },
+    "meta": { "filename": "<string>", "lineno": 22 },
     "name": "query name",
     "query_string": "journal",
     "t": "Query"

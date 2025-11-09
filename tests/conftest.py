@@ -20,6 +20,7 @@ from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.budgets import parse_budgets
 from fava.core.charts import dumps
+from fava.core.charts import loads
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -49,6 +50,12 @@ if TYPE_CHECKING:  # pragma: no cover
             json: bool = ...,
         ) -> None:
             """Check snapshot."""
+
+    class CompareFunc(Protocol):
+        """Callable protocol for the compare_snapshot."""
+
+        def __call__(self, name: str, expected: str, /, *, json: bool) -> None:
+            """Compare snapshot."""
 
 
 @pytest.fixture(scope="session")
@@ -82,7 +89,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 @pytest.fixture(scope="session")
 def compare_snapshot(
     request: pytest.FixtureRequest,
-) -> Generator[Callable[[str, str], None], None, None]:
+) -> Generator[CompareFunc, None, None]:
     """Compare on-disk snapshots, possibly updating if configured."""
     snap_dir = Path(__file__).parent / "__snapshots__"
     if not snap_dir.exists():
@@ -91,16 +98,18 @@ def compare_snapshot(
     should_update = request.config.getoption("SNAPSHOT_UPDATE")
     seen_snapshots = set()
 
-    def check_snapshot(name: str, expected: str) -> None:
+    def check_snapshot(name: str, expected: str, *, json: bool) -> None:
         snap_file = snap_dir / name
         seen_snapshots.add(snap_file)
 
         contents = snap_file.read_text("utf-8") if snap_file.exists() else ""
+        expected_to_compare = loads(expected) if json else expected
+        contents_to_compare = loads(contents) if json else contents
         if should_update:
-            if expected != contents:
+            if expected_to_compare != contents_to_compare:
                 snap_file.write_text(expected, "utf-8")
         else:
-            assert expected == contents, (
+            assert expected_to_compare == contents_to_compare, (
                 "Snaphot test failed. Snapshots can be updated with "
                 "`pytest --snapshot-update`"
             )
@@ -135,7 +144,7 @@ class SnapCount:
 def snapshot(
     request: pytest.FixtureRequest,
     test_data_dir: Path,
-    compare_snapshot: Callable[[str, str], None],
+    compare_snapshot: CompareFunc,
 ) -> SnapshotFunc:
     """Create a snaphot for some given data."""
     fn_name = request.function.__name__
@@ -166,7 +175,7 @@ def snapshot(
         today = local_today()
         out = out.replace(str(today), "TODAY")
         # replace entry hashes
-        out = re.sub(r'_hash": "[0-9a-f]+', '_hash": "ENTRY_HASH', out)
+        out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
         out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
         out = re.sub(
             r"data-entry=\\\"[0-9a-f]+", 'data-entry=\\"ENTRY_HASH', out
@@ -190,7 +199,7 @@ def snapshot(
             else:
                 out = out.replace(dir_path, replacement)
 
-        compare_snapshot(filename, out)
+        compare_snapshot(filename, out, json=json)
 
     return snapshot_data
 

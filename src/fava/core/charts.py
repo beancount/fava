@@ -61,10 +61,7 @@ def _json_default(o: Any) -> Any:
 def dumps(obj: Any, **_kwargs: Any) -> str:
     """Dump as a JSON string."""
     return simplejson_dumps(
-        obj,
-        indent="  ",
-        sort_keys=True,
-        default=_json_default,
+        obj, sort_keys=True, separators=(",", ":"), default=_json_default
     )
 
 
@@ -77,7 +74,9 @@ class FavaJSONProvider(JSONProvider):
     """Use custom JSON encoder and decoder."""
 
     def dumps(self, obj: Any, **_kwargs: Any) -> str:  # noqa: D102
-        return dumps(obj)
+        return simplejson_dumps(
+            obj, sort_keys=True, separators=(",", ":"), default=_json_default
+        )
 
     def loads(self, s: str | bytes, **_kwargs: Any) -> Any:  # noqa: D102
         return simplejson_loads(s)

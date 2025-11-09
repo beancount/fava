@@ -4,8 +4,8 @@
       "account": "Assets",
       "balance": {},
       "balance_children": {
-        "IRAUSD": 7200.00,
-        "USD": 94320.27840,
+        "IRAUSD": 7200.0,
+        "USD": 94320.2784,
         "VACHR": -82
       },
       "children": [
@@ -38,8 +38,8 @@
           "account": "Assets:US",
           "balance": {},
           "balance_children": {
-            "IRAUSD": 7200.00,
-            "USD": 94220.27840,
+            "IRAUSD": 7200.0,
+            "USD": 94220.2784,
             "VACHR": -82
           },
           "children": [
@@ -174,16 +174,16 @@
               "account": "Assets:US:Federal",
               "balance": {},
               "balance_children": {
-                "IRAUSD": 7200.00
+                "IRAUSD": 7200.0
               },
               "children": [
                 {
                   "account": "Assets:US:Federal:PreTax401k",
                   "balance": {
-                    "IRAUSD": 7200.00
+                    "IRAUSD": 7200.0
                   },
                   "balance_children": {
-                    "IRAUSD": 7200.00
+                    "IRAUSD": 7200.0
                   },
                   "children": [],
                   "cost": null,
@@ -199,7 +199,7 @@
               "account": "Assets:US:Vanguard",
               "balance": {},
               "balance_children": {
-                "USD": 69449.94840
+                "USD": 69449.9484
               },
               "children": [
                 {
@@ -263,13 +263,13 @@
     "data": [
       {
         "balance": {
-          "USD": 1200.00
+          "USD": 1200.0
         },
         "date": "2014-01-02"
       },
       {
         "balance": {
-          "USD": 1800.00
+          "USD": 1800.0
         },
         "date": "2014-01-03"
       },
@@ -371,13 +371,13 @@
       },
       {
         "balance": {
-          "USD": 1200.00
+          "USD": 1200.0
         },
         "date": "2014-03-27"
       },
       {
         "balance": {
-          "USD": 1800.00
+          "USD": 1800.0
         },
         "date": "2014-03-28"
       },
@@ -947,13 +947,13 @@
       },
       {
         "balance": {
-          "USD": 1200.00
+          "USD": 1200.0
         },
         "date": "2016-05-05"
       },
       {
         "balance": {
-          "USD": 1800.00
+          "USD": 1800.0
         },
         "date": "2016-05-06"
       },
@@ -1979,23 +1979,23 @@
       },
       {
         "balance": {
-          "IRAUSD": 13900.00,
-          "USD": 9739.82380,
+          "IRAUSD": 13900.0,
+          "USD": 9739.8238,
           "VACHR": 15
         },
         "date": "2014-01-31"
       },
       {
         "balance": {
-          "IRAUSD": 11500.00,
-          "USD": 12845.44190,
+          "IRAUSD": 11500.0,
+          "USD": 12845.4419,
           "VACHR": 25
         },
         "date": "2014-02-28"
       },
       {
         "balance": {
-          "IRAUSD": 9100.00,
+          "IRAUSD": 9100.0,
           "USD": 15856.61131,
           "VACHR": 35
         },
@@ -2003,7 +2003,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 6700.00,
+          "IRAUSD": 6700.0,
           "USD": 18894.46987,
           "VACHR": 45
         },
@@ -2011,7 +2011,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 4300.00,
+          "IRAUSD": 4300.0,
           "USD": 21917.52623,
           "VACHR": 55
         },
@@ -2019,7 +2019,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 1900.00,
+          "IRAUSD": 1900.0,
           "USD": 24777.17297,
           "VACHR": 65
         },
@@ -2069,7 +2069,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 14400.00,
+          "IRAUSD": 14400.0,
           "USD": 45486.68415,
           "VACHR": 145
         },
@@ -2077,7 +2077,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 12000.00,
+          "IRAUSD": 12000.0,
           "USD": 48449.06921,
           "VACHR": 35
         },
@@ -2085,15 +2085,15 @@
       },
       {
         "balance": {
-          "IRAUSD": 9600.00,
-          "USD": 50912.29610,
+          "IRAUSD": 9600.0,
+          "USD": 50912.2961,
           "VACHR": 45
         },
         "date": "2015-03-31"
       },
       {
         "balance": {
-          "IRAUSD": 7200.00,
+          "IRAUSD": 7200.0,
           "USD": 53938.56674,
           "VACHR": 55
         },
@@ -2101,7 +2101,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 4800.00,
+          "IRAUSD": 4800.0,
           "USD": 56894.58778,
           "VACHR": 65
         },
@@ -2109,7 +2109,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 2400.00,
+          "IRAUSD": 2400.0,
           "USD": 59934.30292,
           "VACHR": 75
         },
@@ -2159,7 +2159,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 15600.00,
+          "IRAUSD": 15600.0,
           "USD": 80207.02527,
           "VACHR": 3
         },
@@ -2167,7 +2167,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 13200.00,
+          "IRAUSD": 13200.0,
           "USD": 83292.76211,
           "VACHR": 13
         },
@@ -2175,7 +2175,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 10800.00,
+          "IRAUSD": 10800.0,
           "USD": 85825.90013,
           "VACHR": 23
         },
@@ -2183,7 +2183,7 @@
       },
       {
         "balance": {
-          "IRAUSD": 8400.00,
+          "IRAUSD": 8400.0,
           "USD": 88311.91008,
           "VACHR": -87
         },
@@ -2191,8 +2191,8 @@
       },
       {
         "balance": {
-          "IRAUSD": 7200.00,
-          "USD": 91384.62840,
+          "IRAUSD": 7200.0,
+          "USD": 91384.6284,
           "VACHR": -82
         },
         "date": "2016-05-31"
@@ -2635,7 +2635,7 @@
             "USD": -72.96
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1800.00
+            "USD": -1800.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -13846.14
@@ -2649,7 +2649,7 @@
         },
         "balance": {
           "IRAUSD": -17500,
-          "USD": -15719.10,
+          "USD": -15719.1,
           "VACHR": -15
         },
         "budgets": {},
@@ -2661,7 +2661,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2671,7 +2671,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2683,7 +2683,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2693,7 +2693,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2705,7 +2705,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2715,7 +2715,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2727,7 +2727,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2737,7 +2737,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2749,7 +2749,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2759,7 +2759,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2771,7 +2771,7 @@
             "USD": -72.96
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -950.00
+            "USD": -950.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -13846.14
@@ -2781,7 +2781,7 @@
           }
         },
         "balance": {
-          "USD": -14869.10,
+          "USD": -14869.1,
           "VACHR": -15
         },
         "budgets": {},
@@ -2800,7 +2800,7 @@
           }
         },
         "balance": {
-          "USD": -9279.40,
+          "USD": -9279.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2820,7 +2820,7 @@
           "Income:US:ETrade:Dividends": {}
         },
         "balance": {
-          "USD": -9279.40,
+          "USD": -9279.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2839,7 +2839,7 @@
           }
         },
         "balance": {
-          "USD": -9279.40,
+          "USD": -9279.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2858,7 +2858,7 @@
           }
         },
         "balance": {
-          "USD": -9279.40,
+          "USD": -9279.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2895,7 +2895,7 @@
             "USD": -72.96
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1800.00
+            "USD": -1800.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -13846.14
@@ -2909,7 +2909,7 @@
         },
         "balance": {
           "IRAUSD": -18000,
-          "USD": -15719.10,
+          "USD": -15719.1,
           "VACHR": -15
         },
         "budgets": {},
@@ -2921,7 +2921,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2931,7 +2931,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2943,7 +2943,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2968,7 +2968,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -2978,7 +2978,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -2990,7 +2990,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3000,7 +3000,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -3012,7 +3012,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3024,7 +3024,7 @@
             "USD": -53.88
           },
           "Income:US:ETrade:Gains": {
-            "USD": 0.40
+            "USD": 0.4
           }
         },
         "balance": {
@@ -3040,7 +3040,7 @@
             "USD": -72.96
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -13846.14
@@ -3050,7 +3050,7 @@
           }
         },
         "balance": {
-          "USD": -15119.10,
+          "USD": -15119.1,
           "VACHR": -15
         },
         "budgets": {},
@@ -3069,7 +3069,7 @@
           }
         },
         "balance": {
-          "USD": -9279.40,
+          "USD": -9279.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -3087,11 +3087,11 @@
             "VACHR": -10
           },
           "Income:US:ETrade:Dividends": {
-            "USD": -67.30
+            "USD": -67.3
           }
         },
         "balance": {
-          "USD": -9346.70,
+          "USD": -9346.7,
           "VACHR": -10
         },
         "budgets": {},
@@ -3172,7 +3172,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3201,7 +3201,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3211,7 +3211,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -3223,7 +3223,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3248,7 +3248,7 @@
             "USD": -48.64
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -1200.00
+            "USD": -1200.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -9230.76
@@ -3258,7 +3258,7 @@
           }
         },
         "balance": {
-          "USD": -10479.40,
+          "USD": -10479.4,
           "VACHR": -10
         },
         "budgets": {},
@@ -3270,7 +3270,7 @@
             "USD": -24.32
           },
           "Income:US:BayBook:Match401k": {
-            "USD": -600.00
+            "USD": -600.0
           },
           "Income:US:BayBook:Salary": {
             "USD": -4615.38
@@ -3280,7 +3280,7 @@
           }
         },
         "balance": {
-          "USD": -5239.70,
+          "USD": -5239.7,
           "VACHR": -5
         },
         "budgets": {},

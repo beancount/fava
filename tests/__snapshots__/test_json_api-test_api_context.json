@@ -1,8 +1,6 @@
 {
   "balances_after": {
-    "Assets:US:Vanguard:Cash": [
-      "1320.01 USD"
-    ],
+    "Assets:US:Vanguard:Cash": ["1320.01 USD"],
     "Assets:US:Vanguard:VBMPX": [
       "28.192 VBMPX {25.54 USD, 2015-06-08}",
       "28.158 VBMPX {25.57 USD, 2015-06-22}",
@@ -46,9 +44,7 @@
     ]
   },
   "balances_before": {
-    "Assets:US:Vanguard:Cash": [
-      "1800.00 USD"
-    ],
+    "Assets:US:Vanguard:Cash": ["1800.00 USD"],
     "Assets:US:Vanguard:VBMPX": [
       "28.192 VBMPX {25.54 USD, 2015-06-08}",
       "28.158 VBMPX {25.57 USD, 2015-06-22}",

@@ -65,7 +65,7 @@ test-py-old-deps:
 .PHONY: update-snapshots
 update-snapshots:
 	uv run pytest --snapshot-update --snapshot-clean
-	uv run pytest
+	uv run pre-commit run -a biome-check
 
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints

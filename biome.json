@@ -1,12 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
   "files": {
-    "includes": [
-      "**",
-      "!docs/templates/**/*.html",
-      "!src/fava/**/*.html",
-      "!tests/__snapshots__/**/*.json"
-    ]
+    "includes": ["**", "!docs/templates/**/*.html", "!src/fava/**/*.html"]
   },
   "vcs": {
     "enabled": true,

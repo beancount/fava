@@ -26,14 +26,8 @@
     "narration": "Payment to Company XYZ REF: 31000161205-6944556-0000463",
     "payee": "",
     "postings": [
-      {
-        "account": "",
-        "amount": "50.00 EUR"
-      },
-      {
-        "account": "Assets:Checking",
-        "amount": "-50.00 EUR"
-      }
+      { "account": "", "amount": "50.00 EUR" },
+      { "account": "Assets:Checking", "amount": "-50.00 EUR" }
     ],
     "t": "Transaction",
     "tags": []
@@ -51,24 +45,15 @@
     "narration": " BANKOMAT  00000483 K2 UM 11:56",
     "payee": "",
     "postings": [
-      {
-        "account": "",
-        "amount": "100.00 EUR"
-      },
-      {
-        "account": "Assets:Checking",
-        "amount": "-100.00 EUR"
-      }
+      { "account": "", "amount": "100.00 EUR" },
+      { "account": "Assets:Checking", "amount": "-100.00 EUR" }
     ],
     "t": "Transaction",
     "tags": []
   },
   {
     "account": "Assets:Checking",
-    "amount": {
-      "currency": "USD",
-      "number": "10"
-    },
+    "amount": { "currency": "USD", "number": "10" },
     "date": "2022-12-12",
     "diff_amount": null,
     "entry_hash": "ENTRY_HASH",
