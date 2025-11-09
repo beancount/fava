@@ -34,7 +34,7 @@
     "@types/jsdom": "^27.0.0",
     "@types/node": "^22.1.0",
     "chokidar": "^4.0.0",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.26.0",
     "esbuild-svelte": "^0.9.0",
     "eslint": "^9.27.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
