@@ -222,6 +222,10 @@ button,
   border-radius: 0;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 .button {
   display: inline-block;
 }

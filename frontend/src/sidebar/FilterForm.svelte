@@ -1,7 +1,7 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n.ts";
-  import { escape_for_regex } from "../journal/index.ts";
+  import { escape_for_regex } from "../lib/regex.ts";
   import { router, set_query_param } from "../router.ts";
   import {
     account_filter,

@@ -12,11 +12,8 @@
  */
 
 import { permute } from "d3-array";
-import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal.ts";
-
-type SortOrder = "asc" | "desc";
+export type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
 
 export const get_direction = (o: SortOrder): SortDirection =>
@@ -179,74 +176,4 @@ export function sortElements<T extends Element>(
     fragment.appendChild(el);
   });
   parent.appendChild(fragment);
-}
-
-export interface SortableJournal {
-  getOrder: () => [string, SortOrder];
-  sort: () => void;
-}
-
-/**
- * Make the Fava journal sortable.
- * @param ol - the <ol> element.
- */
-export function sortableJournal(ol: HTMLOListElement): SortableJournal {
-  const head = ol.querySelector(".head");
-  if (!head) {
-    throw new Error("Journal is missing header.");
-  }
-  let currentSorting:
-    | {
-        order: [string, SortOrder];
-        sort: () => void;
-      }
-    | undefined;
-  const headers = head.querySelectorAll("span[data-sort]");
-  const [initialColumn, initialOrder] = store_get(journalSortOrder);
-  headers.forEach((header) => {
-    const headerClass = header.classList[0];
-    const name = header.getAttribute("data-sort-name");
-    const type = header.getAttribute("data-sort");
-    if (headerClass == null || name == null || type == null) {
-      throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
-    }
-
-    const sort = (order: SortOrder) => {
-      sortElements<HTMLLIElement>(
-        ol,
-        [].slice.call(ol.children, 1),
-        (li) => li.querySelector(`.${headerClass}`),
-        get_direction(order),
-        type,
-      );
-    };
-    const applySort = (order: SortOrder) => {
-      // update displayed sort order
-      headers.forEach((el) => {
-        el.removeAttribute("data-order");
-      });
-      header.setAttribute("data-order", order);
-      currentSorting = {
-        order: [name, order],
-        sort: () => {
-          sort(order);
-        },
-      };
-      currentSorting.sort();
-    };
-    if (name === initialColumn) {
-      applySort(initialOrder);
-    }
-
-    header.addEventListener("click", () => {
-      const order =
-        header.getAttribute("data-order") === "asc" ? "desc" : "asc";
-      applySort(order);
-      journalSortOrder.set([name, order]);
-    });
-  });
-  return {
-    getOrder: () => currentSorting?.order ?? ["", "desc"],
-    sort: () => currentSorting?.sort(),
-  };
 }

@@ -104,7 +104,9 @@ def compare_snapshot(
 
         contents = snap_file.read_text("utf-8") if snap_file.exists() else ""
         expected_to_compare = loads(expected) if json else expected
-        contents_to_compare = loads(contents) if json else contents
+        contents_to_compare = (
+            loads(contents) if json and contents else contents
+        )
         if should_update:
             if expected_to_compare != contents_to_compare:
                 snap_file.write_text(expected, "utf-8")
@@ -177,9 +179,7 @@ def snapshot(
         # replace entry hashes
         out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
         out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
-        out = re.sub(
-            r"data-entry=\\\"[0-9a-f]+", 'data-entry=\\"ENTRY_HASH', out
-        )
+        out = re.sub(r"data-entry='[0-9a-f]+", "data-entry='ENTRY_HASH", out)
         # replace mtimes
         out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
         out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)

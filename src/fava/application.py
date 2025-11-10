@@ -73,10 +73,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
 setup_logging()
 
-SERVER_SIDE_REPORTS = [
-    "journal",
-]
-
 CLIENT_SIDE_REPORTS = [
     "balance_sheet",
     "commodities",
@@ -86,6 +82,7 @@ CLIENT_SIDE_REPORTS = [
     "events",
     "holdings",
     "import",
+    "journal",
     "income_statement",
     "options",
     "query",
@@ -350,8 +347,6 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         """Endpoint for most reports."""
         if report_name in CLIENT_SIDE_REPORTS:
             return render_template("_layout.html", content="")
-        if report_name in SERVER_SIDE_REPORTS:
-            return render_template(f"{report_name}.html")
         return abort(404)
 
     @fava_app.route(

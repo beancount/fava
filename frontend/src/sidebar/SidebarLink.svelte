@@ -7,10 +7,15 @@
   import { pathname } from "../stores/url.ts";
 
   interface Props {
+    /** Report to generate the URL for. */
     report: string;
+    /** Name to display for this link. */
     name: string;
+    /** Key combination for the link. */
     key?: KeySpec;
+    /** Whether this is a remote link (for which we do not intercept clicks). */
     remote?: true;
+    /** Show a bubble with a number */
     bubble?: [number, "error" | "info"];
     children?: Snippet;
   }

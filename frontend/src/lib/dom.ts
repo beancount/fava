@@ -34,3 +34,12 @@ export function getScriptTagValue<T>(
 ): Result<T, ScriptTagNotFoundError | SyntaxError | ValidationError> {
   return getScriptTagJSON(selector).and_then(validator);
 }
+
+/**
+ * Create a document fragment from a string of HTML.
+ */
+export function fragment_from_string(html: string): DocumentFragment {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  return template.content;
+}

@@ -117,6 +117,15 @@ class FavaJSONAPIError(FavaAPIError):
         """HTTP status that should be used for the response."""
 
 
+class NotFoundError(FavaJSONAPIError):
+    """Not found."""
+
+    status = HTTPStatus.NOT_FOUND
+
+    def __init__(self) -> None:
+        super().__init__("Not found.")
+
+
 class TargetPathAlreadyExistsError(FavaJSONAPIError):
     """The given path already exists."""
 
@@ -519,6 +528,36 @@ def get_journal() -> Sequence[Directive]:
     return [serialise(e) for e in g.filtered.entries]
 
 
+@dataclass(frozen=True)
+class JournalPage:
+    """A rendered journal page."""
+
+    page: int
+    total_pages: int
+    journal: str
+
+
+@api_endpoint
+def get_journal_page(page: str, order: str) -> JournalPage:
+    """Get the HTML contents for a Journal page."""
+    page_number = int(page)
+    journal_table_contents = get_template_attribute(
+        "_journal_table.html", "journal_table_contents"
+    )
+    if page == "1":
+        g.ledger.changed()
+    journal_page = g.filtered.paginate_journal(
+        page_number, order="asc" if order == "asc" else "desc"
+    )
+    if journal_page is None:
+        raise NotFoundError
+    return JournalPage(
+        page=page_number,
+        total_pages=journal_page.total_pages,
+        journal=journal_table_contents(journal_page.entries),
+    )
+
+
 @api_endpoint
 def get_events() -> Sequence[Event]:
     """Get all (filtered) events."""
@@ -770,7 +809,9 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             budgets=budgets,
         )
 
-    journal = get_template_attribute("_journal_table.html", "journal_table")
+    journal_table_contents = get_template_attribute(
+        "_journal_table.html", "journal_table_contents"
+    )
     entries = reversed(
         g.ledger.account_journal(
             g.filtered,
@@ -781,7 +822,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     )
     return AccountReportJournal(
         charts,
-        journal=journal(entries, show_change_and_balance=True),
+        journal=journal_table_contents(entries, show_change_and_balance=True),
     )
 
 

@@ -782,6 +782,15 @@ def test_api_commodities_empty(
     assert not data
 
 
+def test_api_journal_page_not_found(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/journal_page?page=1000&order=desc"
+    )
+    assert_api_error(response, status=HTTPStatus.NOT_FOUND)
+
+
 def test_api_filter_error(
     test_client: FlaskClient,
 ) -> None:

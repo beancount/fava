@@ -8,6 +8,7 @@
   import { currentTimeFilterDateFormat } from "../../stores/format.ts";
   import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
+  import JournalTable from "../journal/JournalTable.svelte";
   import type { AccountReportProps } from "./index.ts";
 
   let {
@@ -78,9 +79,12 @@
       {/if}
     </h3>
   </div>
-  {#if report_type === "journal"}
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    {@html journal}
+  {#if report_type === "journal" && journal != null}
+    <JournalTable
+      {journal}
+      initial_sort={["date", "desc"]}
+      show_change_and_balance={true}
+    />
   {:else if interval_balances && is_non_empty(interval_balances) && budgets && dates}
     <IntervalTreeTable
       trees={interval_balances}

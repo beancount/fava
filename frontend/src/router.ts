@@ -5,8 +5,8 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
-import type { Readable } from "svelte/store";
-import { writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
 import { handleExtensionPageLoad } from "./extensions.ts";
 import { getUrlPath } from "./helpers.ts";
@@ -61,9 +61,48 @@ export function set_query_param(
   }
 }
 
-const is_loading_internal = writable(false);
+class LoadingState {
+  is_loading: Readable<boolean>;
+  #current: Writable<Set<symbol>>;
+
+  constructor() {
+    this.#current = writable(new Set());
+    this.is_loading = derived(this.#current, ($current) => $current.size > 0);
+  }
+
+  /**
+   * Run the given async function, showing a loading indicator for its duration.
+   */
+  async run<T>(func: () => T | Promise<T>): Promise<T> {
+    const promise = func();
+    return this.await(promise);
+  }
+
+  /**
+   * Await the given promise, showing a loading indicator for its duration.
+   */
+  async await<T>(promise: T | Promise<T>): Promise<T> {
+    const tracker = Symbol();
+    try {
+      this.#current.update((s) => {
+        const new_s = new Set(s);
+        new_s.add(tracker);
+        return new_s;
+      });
+      return await promise;
+    } finally {
+      this.#current.update((s) => {
+        const new_s = new Set(s);
+        new_s.delete(tracker);
+        return new_s;
+      });
+    }
+  }
+}
+
+export const loading_state = new LoadingState();
 /** Whether the logo should be spinning to indicate that something is loading. */
-export const is_loading: Readable<boolean> = is_loading_internal;
+export const is_loading = loading_state.is_loading;
 
 export class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
@@ -154,13 +193,9 @@ export class Router {
     const route =
       this.#frontend_routes.find((r) => r.report === report) ?? backend_route;
 
-    is_loading_internal.set(true);
     try {
-      this.#current_report = await route.render(
-        this.#article,
-        url,
-        previous,
-        before_render,
+      this.#current_report = await loading_state.await(
+        route.render(this.#article, url, previous, before_render),
       );
     } catch (error: unknown) {
       assert_is_error(error);
@@ -173,7 +208,6 @@ export class Router {
       );
     }
     raw_page_title.set(this.#current_report.title);
-    is_loading_internal.set(false);
   }
 
   #beforeunload = () => (event: BeforeUnloadEvent) => {

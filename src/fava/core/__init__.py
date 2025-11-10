@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import date
 from datetime import timedelta
 from functools import cached_property
@@ -58,6 +59,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Mapping
     from collections.abc import Sequence
     from decimal import Decimal
+    from typing import Literal
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
@@ -93,6 +95,14 @@ class StatementMetadataInvalidError(FavaAPIError):
         )
 
 
+@dataclass(frozen=True)
+class JournalPage:
+    """A page of journal entries."""
+
+    entries: Sequence[tuple[int, Directive]]
+    total_pages: int
+
+
 class FilteredLedger:
     """Filtered Beancount ledger."""
 
@@ -118,7 +128,14 @@ class FilteredLedger:
     ) -> None:
         self.ledger = ledger
         self.date_range: DateRange | None = None
-        self._pages: list[Sequence[tuple[int, Directive]]] | None = None
+        self._pages: (
+            tuple[
+                int,
+                Literal["asc", "desc"],
+                list[Sequence[tuple[int, Directive]]],
+            ]
+            | None
+        ) = None
 
         entries = ledger.all_entries
         if account:
@@ -161,6 +178,11 @@ class FilteredLedger:
         entries = [*self.entries, *self.ledger.all_entries_by_type.Price]
         entries.sort(key=_incomplete_sortkey)
         return entries
+
+    @cached_property
+    def entries_without_prices(self) -> Sequence[Directive]:
+        """The filtered entries, without prices for journals."""
+        return [e for e in self.entries if not isinstance(e, Price)]
 
     @cached_property
     def root_tree(self) -> Tree:
@@ -215,26 +237,43 @@ class FilteredLedger:
         return close_date < date_range.end if date_range else True
 
     def paginate_journal(
-        self, page: int, per_page: int = 1000
-    ) -> tuple[Sequence[tuple[int, Directive]], int]:
+        self,
+        page: int,
+        per_page: int = 1000,
+        order: Literal["asc", "desc"] = "desc",
+    ) -> JournalPage | None:
         """Get entries for a journal page with pagination info.
 
         Args:
             page: Page number (1-indexed).
+            order: Datewise order to sort in
             per_page: Number of entries per page.
 
         Returns:
-            JournalPage with page_entries as (global_index, directive) tuples
-            in reverse chronological order total_pages.
+            A JournalPage, containing a list of entries as (global_index,
+            directive) tuples in reverse chronological order and the total
+            number of pages.
         """
-        if self._pages is None:
-            self._pages = []
-            enumerated = reversed(list(enumerate(self.entries)))
-            while batch := tuple(islice(enumerated, per_page)):
-                self._pages.append(batch)
-        if not self._pages and page == 1:
-            return [], 0
-        return self._pages[page - 1], len(self._pages)
+        if (
+            self._pages is None
+            or self._pages[0] != per_page
+            or self._pages[1] != order
+        ):
+            pages: list[Sequence[tuple[int, Directive]]] = []
+            enumerated = list(enumerate(self.entries_without_prices))
+            entries = (
+                iter(enumerated) if order == "asc" else reversed(enumerated)
+            )
+            while batch := tuple(islice(entries, per_page)):
+                pages.append(batch)
+            if not pages:
+                pages.append([])
+            self._pages = (per_page, order, pages)
+        _per_pages, _order, pages = self._pages
+        total = len(pages)
+        if page > total:
+            return None
+        return JournalPage(pages[page - 1], total)
 
 
 class FavaLedger:
@@ -520,7 +559,7 @@ class FavaLedger:
 
         prices = self.prices
         balance = CounterInventory()
-        for index, entry in enumerate(filtered.entries):
+        for index, entry in enumerate(filtered.entries_without_prices):
             change = CounterInventory()
             entry_is_relevant = False
             postings = getattr(entry, "postings", None)

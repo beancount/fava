@@ -29,7 +29,6 @@ import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
 import { BeancountTextarea } from "./codemirror/setup.ts";
 import { _ } from "./i18n.ts";
-import { FavaJournal } from "./journal/index.ts";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts.ts";
 import { getScriptTagValue } from "./lib/dom.ts";
 import { log_error } from "./log.ts";
@@ -57,7 +56,6 @@ function defineCustomElements() {
     extends: "textarea",
   });
   customElements.define("copyable-text", CopyableText);
-  customElements.define("fava-journal", FavaJournal);
   customElements.define("svelte-component", SvelteCustomElement);
 
   // for extension compatibility (only used in _query_table.html)

@@ -10,7 +10,7 @@ import {
 import type { NonEmptyArray } from "../lib/array.ts";
 import { fetch_json } from "../lib/fetch.ts";
 import type { Validator } from "../lib/validation.ts";
-import { array, boolean, string } from "../lib/validation.ts";
+import { array, boolean, number, object, string } from "../lib/validation.ts";
 import { notify, notify_err } from "../notifications.ts";
 import { query_validator } from "../reports/query/query_table.ts";
 import { router } from "../router.ts";
@@ -55,6 +55,7 @@ type GetEndpoint =
   | "extract"
   | "imports"
   | "income_statement"
+  | "journal_page"
   | "trial_balance"
   | "ledger_data"
   | "options"
@@ -77,23 +78,25 @@ type PutEndpoint =
 
 type ApiEndpoint = DeleteEndpoint | GetEndpoint | PutEndpoint;
 
-type ApiParam =
-  | "a"
-  | "account"
-  | "conversion"
-  | "entry_hash"
-  | "filename"
-  | "filter"
-  | "importer"
-  | "interval"
-  | "narration"
-  | "payee"
-  | "query_string"
-  | "r"
-  | "sha256sum"
-  | "time";
-
-type ApiParams = Readonly<Record<ApiParam, string>>;
+type ApiParams = Partial<{
+  a: string;
+  account: string;
+  conversion: string;
+  entry_hash: string;
+  filename: string;
+  filter: string;
+  importer: string;
+  interval: string;
+  narration: string;
+  order: "asc" | "desc";
+  page: number;
+  payee: string;
+  query_string: string;
+  r: string;
+  sha256sum: string;
+  time: string;
+}>;
+type ApiParam = keyof ApiParams;
 
 function api_url(endpoint: ApiEndpoint): URL;
 function api_url(
@@ -111,8 +114,8 @@ function api_url(
   if (accepted_params && params) {
     for (const key of accepted_params) {
       const value = params[key];
-      if (value != null && value) {
-        url.searchParams.set(key, value);
+      if (value != null && value !== "") {
+        url.searchParams.set(key, value.toString());
       }
     }
   }
@@ -263,6 +266,11 @@ export const get_income_statement = define_endpoint(
   "income_statement",
   tree_report_validator,
   filters_conversion_interval,
+);
+export const get_journal_page = define_endpoint(
+  "journal_page",
+  object({ journal: string, total_pages: number }),
+  [...filters_conversion_interval, "page", "order"],
 );
 export const get_ledger_data = define_paramless_endpoint(
   "ledger_data",

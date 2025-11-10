@@ -6,6 +6,7 @@ import { errors } from "./errors/index.ts";
 import { events } from "./events/index.ts";
 import { holdings } from "./holdings/index.ts";
 import { import_report } from "./import/index.ts";
+import { journal } from "./journal/index.ts";
 import { options } from "./options/index.ts";
 import { query } from "./query/index.ts";
 import type { FrontendRoute } from "./route.ts";
@@ -35,6 +36,7 @@ export const frontend_routes: FrontendRoute[] = [
   holdings,
   import_report,
   income_statement,
+  journal,
   options,
   query,
   statistics,
