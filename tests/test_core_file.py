@@ -22,6 +22,7 @@ from fava.core.file import _file_newline_character
 from fava.core.file import _incomplete_sortkey
 from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
+from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
@@ -161,6 +162,13 @@ def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
 """
     )
 
+    auto_account = ledger_in_tmp_path.all_entries[0]
+    auto_account_hash = hash_entry(auto_account)
+    with pytest.raises(GeneratedEntryError):
+        ledger_in_tmp_path.file.insert_metadata(
+            auto_account_hash, "document", "doc"
+        )
+
 
 def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
@@ -179,6 +187,10 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     assert filename.read_text("utf-8") != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
     assert filename.read_text("utf-8") == contents
+
+    auto_account = ledger_in_tmp_path.all_entries[0]
+    with pytest.raises(GeneratedEntryError):
+        get_entry_slice(auto_account)
 
 
 def test_delete_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:

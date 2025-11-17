@@ -301,8 +301,15 @@ def test_api_context(
             and entry.date == datetime.date(2016, 5, 9)
         ),
     )
+
     response = test_client.get(
         "/long-example/api/context",
+        query_string={"entry_hash": entry_hash},
+    )
+    data = assert_api_success(response)
+    snapshot(data, json=True)
+    response = test_client.get(
+        "/long-example/api/source_slice",
         query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
@@ -316,6 +323,12 @@ def test_api_context(
     data = assert_api_success(response)
     snapshot(data, json=True)
     assert not data.get("balances_before")
+    response = test_client.get(
+        "/long-example/api/source_slice",
+        query_string={"entry_hash": entry_hash},
+    )
+    data = assert_api_success(response)
+    snapshot(data, json=True)
 
 
 def test_api_payee_accounts(
@@ -431,6 +444,16 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     assert "Trying to read a non-source file" in err_msg
 
 
+def test_api_get_source_slice_unprocessable(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/edit-example/api/source_slice?entry_hash=ba17fb171c2ef1789d8def32f58bf21f"
+    )
+    assert_api_error(
+        response,
+        status=HTTPStatus.UNPROCESSABLE_ENTITY,
+    )
+
+
 def test_api_put_source_bad_request(test_client: FlaskClient) -> None:
     response = test_client.put("/example/api/source")
     assert_api_error(
@@ -495,7 +518,7 @@ def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
     assert first_txn.payee == "Kin Soy"
     entry_hash = hash_entry(first_txn)
     response = test_client.get(
-        "/edit-example/api/context",
+        "/edit-example/api/source_slice",
         query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)

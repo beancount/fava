@@ -1,5 +1,3 @@
-import { delegate } from "../lib/events.ts";
-
 /**
  * Account trees.
  *
@@ -19,11 +17,12 @@ export class TreeTableCustomElement extends HTMLElement {
       });
     });
 
-    delegate(this, "click", "span.has-children", (event) => {
+    this.addEventListener("click", (event) => {
       const { target } = event;
       if (
         !(target instanceof HTMLElement) ||
-        target instanceof HTMLAnchorElement
+        target instanceof HTMLAnchorElement ||
+        !target.closest("span.has-children")
       ) {
         return;
       }

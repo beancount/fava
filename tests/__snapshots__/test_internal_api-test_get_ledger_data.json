@@ -755,6 +755,7 @@
     "title": "Long Example"
   },
   "other_ledgers": [
+    ["Edit Example", "/edit-example/"],
     ["Example", "/example/"],
     ["Extension Report", "/extension-report/"],
     ["import", "/import/"],

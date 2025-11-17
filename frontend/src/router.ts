@@ -10,8 +10,8 @@ import { derived, writable } from "svelte/store";
 
 import { handleExtensionPageLoad } from "./extensions.ts";
 import { getUrlPath } from "./helpers.ts";
+import { get_el } from "./lib/dom.ts";
 import { assert_is_error } from "./lib/errors.ts";
-import { delegate } from "./lib/events.ts";
 import { log_error } from "./log.ts";
 import type { RenderedReport } from "./reports/route.ts";
 import {
@@ -239,7 +239,10 @@ export class Router {
    *  - the link starts with a hash '#', or
    *  - the link has a `data-remote` attribute.
    */
-  #intercept_link_click = (event: PointerEvent, link: Element): void => {
+  #intercept_link_click = (event: PointerEvent): void => {
+    // closest('a') does not include SVGAElement in the response type, so override
+    // https://github.com/microsoft/TypeScript/issues/51844
+    const link: unknown = get_el(event.target)?.closest("a");
     if (!(link instanceof HTMLAnchorElement || link instanceof SVGAElement)) {
       return;
     }
@@ -273,7 +276,7 @@ export class Router {
 
     window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
-    delegate(document, "click", "a", this.#intercept_link_click);
+    document.addEventListener("click", this.#intercept_link_click);
 
     handleExtensionPageLoad();
   }

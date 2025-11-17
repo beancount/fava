@@ -73,6 +73,13 @@ class ExternallyChangedError(FavaAPIError):
         super().__init__(f"The file at '{path}' changed externally.")
 
 
+class GeneratedEntryError(FavaAPIError):
+    """The entry is generated and cannot be edited."""
+
+    def __init__(self) -> None:
+        super().__init__("The entry is generated and cannot be edited.")
+
+
 class InvalidUnicodeError(FavaAPIError):
     """The source file contains invalid unicode."""
 
@@ -80,6 +87,14 @@ class InvalidUnicodeError(FavaAPIError):
         super().__init__(
             f"The source file contains invalid unicode: {reason}.",
         )
+
+
+def _get_position(entry: Directive) -> tuple[Path, int]:
+    """Get the entry position, checking for generated entries."""
+    filename, lineno = get_position(entry)
+    if filename.startswith("<") or not lineno:
+        raise GeneratedEntryError
+    return Path(filename), lineno
 
 
 def _file_newline_character(path: Path) -> str:
@@ -174,8 +189,7 @@ class FileModule(FavaModule):
             entry = self.ledger.get_entry(entry_hash)
             key = next_key(basekey, entry.meta)
             indent = self.ledger.fava_options.indent
-            filename, lineno = get_position(entry)
-            path = Path(filename)
+            path, lineno = _get_position(entry)
             insert_metadata_in_file(path, lineno, indent, key, value)
             self.ledger.watcher.notify(path)
             self.ledger.extensions.after_insert_metadata(entry, key, value)
@@ -338,9 +352,11 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
     Returns:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
+
+    Raises:
+        GeneratedEntryError: If the entry is generated and cannot be edited.
     """
-    filename, lineno = get_position(entry)
-    path = Path(filename)
+    path, lineno = _get_position(entry)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
@@ -367,9 +383,9 @@ def save_entry_slice(
 
     Raises:
         ExternallyChangedError: If the file was changed externally.
+        GeneratedEntryError: If the entry is generated and cannot be edited.
     """
-    filename, lineno = get_position(entry)
-    path = Path(filename)
+    path, lineno = _get_position(entry)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 
@@ -403,9 +419,9 @@ def delete_entry_slice(
 
     Raises:
         ExternallyChangedError: If the file was changed externally.
+        GeneratedEntryError: If the entry is generated and cannot be edited.
     """
-    filename, lineno = get_position(entry)
-    path = Path(filename)
+    path, lineno = _get_position(entry)
     with path.open(encoding="utf-8") as file:
         lines = file.readlines()
 

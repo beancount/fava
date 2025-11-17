@@ -43,3 +43,13 @@ export function fragment_from_string(html: string): DocumentFragment {
   template.innerHTML = html;
   return template.content;
 }
+
+/**
+ * Get the containing element for an `EventTarget`.
+ */
+export function get_el(target: EventTarget | null): Element | null {
+  if (target instanceof Node) {
+    return target instanceof Element ? target : target.parentElement;
+  }
+  return null;
+}

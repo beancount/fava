@@ -37,7 +37,6 @@ from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
 from fava.core.file import _incomplete_sortkey
 from fava.core.file import FileModule
-from fava.core.file import get_entry_slice
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import TimeFilter
@@ -299,6 +298,7 @@ class FavaLedger:
         "fava_options_errors",
         "file",
         "format_decimal",
+        "get_entry",
         "get_filtered",
         "ingest",
         "load_errors",
@@ -335,6 +335,7 @@ class FavaLedger:
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
         self.get_filtered = lru_cache(maxsize=16)(self._get_filtered)
+        self.get_entry = lru_cache(maxsize=16)(self._get_entry)
 
         #: An :class:`AttributesModule` instance.
         self.attributes = AttributesModule(self)
@@ -380,6 +381,7 @@ class FavaLedger:
             is_encrypted=self._is_encrypted,
         )
         self.get_filtered.cache_clear()
+        self.get_entry.cache_clear()
 
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
         self.prices = FavaPriceMap(self.all_entries_by_type.Price)
@@ -580,7 +582,7 @@ class FavaLedger:
                     conv.apply(balance, prices, entry.date),
                 )
 
-    def get_entry(self, entry_hash: str) -> Directive:
+    def _get_entry(self, entry_hash: str) -> Directive:
         """Find an entry.
 
         Arguments:
@@ -608,8 +610,6 @@ class FavaLedger:
         Directive,
         Mapping[str, Sequence[str]] | None,
         Mapping[str, Sequence[str]] | None,
-        str,
-        str,
     ]:
         """Context for an entry.
 
@@ -623,10 +623,9 @@ class FavaLedger:
             the balances before and after the entry of the affected accounts.
         """
         entry = self.get_entry(entry_hash)
-        source_slice, sha256sum = get_entry_slice(entry)
 
         if not isinstance(entry, (Balance, Transaction)):
-            return entry, None, None, source_slice, sha256sum
+            return entry, None, None
 
         entry_accounts = get_entry_accounts(entry)
         balances = {account: Inventory() for account in entry_accounts}
@@ -643,12 +642,12 @@ class FavaLedger:
         before = {acc: visualise(inv) for acc, inv in balances.items()}
 
         if isinstance(entry, Balance):
-            return entry, before, None, source_slice, sha256sum
+            return entry, before, None
 
         for posting in entry.postings:
             balances[posting.account].add_position(posting)  # type: ignore[arg-type]
         after = {acc: visualise(inv) for acc, inv in balances.items()}
-        return entry, before, after, source_slice, sha256sum
+        return entry, before, after
 
     def commodity_pairs(self) -> Sequence[tuple[str, str]]:
         """List pairs of commodities.

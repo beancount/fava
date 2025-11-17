@@ -1,18 +1,4 @@
 {
-  "balances_after": null,
-  "balances_before": null,
-  "entry": {
-    "account": "Expenses:Food:Alcohol",
-    "booking": null,
-    "currencies": null,
-    "date": "1980-05-12",
-    "entry_hash": "ENTRY_HASH",
-    "meta": {
-      "filename": "TEST_DATA_DIR/long-example.beancount",
-      "lineno": 5057
-    },
-    "t": "Open"
-  },
-  "sha256sum": "7198a732bba60e03bfebbf4368637a66260d384e80c9af182390e419d4a0bbc8",
-  "slice": "1980-05-12 open Expenses:Food:Alcohol"
+  "sha256sum": "b8d184b8ffadddbdc915a9dbf7e4d94a045ed99d2af148ec815727c3b136906e",
+  "slice": "2016-05-09 * \"Investing 40% of cash in VBMPX\"\n  Assets:US:Vanguard:VBMPX                         15.957 VBMPX {30.08 USD}\n  Assets:US:Vanguard:Cash                         -479.99 USD"
 }

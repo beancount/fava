@@ -52,14 +52,10 @@ def assert_success(response: TestResponse) -> str:
     return response.get_data(as_text=True)
 
 
-def test_client_side_reports(
-    test_client: FlaskClient,
-    snapshot: SnapshotFunc,
-) -> None:
+def test_client_side_reports(test_client: FlaskClient) -> None:
     """The client-side rendered reports are generated."""
     response = test_client.get("/long-example/documents/")
     documents_html = assert_success(response)
-    snapshot(documents_html)
 
     response = test_client.get("/long-example/account/Assets/")
     assert documents_html == assert_success(response)

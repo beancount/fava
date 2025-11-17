@@ -212,6 +212,7 @@ def app(test_data_dir: Path) -> Flask:
             test_data_dir / filename
             for filename in [
                 "long-example.beancount",
+                "edit-example.beancount",
                 "example.beancount",
                 "extension-report-example.beancount",
                 "import.beancount",

@@ -33,6 +33,8 @@ from fava.core import EntryNotFoundForHashError
 from fava.core.conversion import UNITS
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.file import GeneratedEntryError
+from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import filepath_in_primary_imports_folder
@@ -212,6 +214,11 @@ def _(error: EntryNotFoundForHashError) -> Response:
     return json_err(error.message, HTTPStatus.NOT_FOUND)
 
 
+@json_api.errorhandler(GeneratedEntryError)
+def _(error: GeneratedEntryError) -> Response:
+    return json_err(error.message, HTTPStatus.UNPROCESSABLE_ENTITY)
+
+
 def validate_func_arguments(
     func: Callable[..., Any],
 ) -> Callable[[Mapping[str, str]], list[str]] | None:
@@ -327,15 +334,29 @@ class Context:
     entry: Any
     balances_before: Mapping[str, Sequence[str]] | None
     balances_after: Mapping[str, Sequence[str]] | None
-    sha256sum: str
-    slice: str
 
 
 @api_endpoint
 def get_context(entry_hash: str) -> Context:
     """Entry context."""
-    entry, before, after, slice_, sha256sum = g.ledger.context(entry_hash)
-    return Context(serialise(entry), before, after, sha256sum, slice_)
+    entry, before, after = g.ledger.context(entry_hash)
+    return Context(serialise(entry), before, after)
+
+
+@dataclass(frozen=True)
+class SourceSlice:
+    """Source slice for an entry."""
+
+    sha256sum: str
+    slice: str
+
+
+@api_endpoint
+def get_source_slice(entry_hash: str) -> SourceSlice:
+    """Entry slice."""
+    entry = g.ledger.get_entry(entry_hash)
+    source_slice, sha256sum = get_entry_slice(entry)
+    return SourceSlice(sha256sum, source_slice)
 
 
 @api_endpoint
@@ -383,8 +404,17 @@ def get_narrations() -> Sequence[str]:
     return g.ledger.attributes.narrations
 
 
+@dataclass(frozen=True)
+class SourceFile:
+    """Source slice for an entry."""
+
+    file_path: str
+    sha256sum: str
+    source: str
+
+
 @api_endpoint
-def get_source() -> Mapping[str, str]:
+def get_source() -> SourceFile:
     """Load one of the source files."""
     file_path = (
         request.args.get("filename", "")
@@ -392,7 +422,7 @@ def get_source() -> Mapping[str, str]:
         or g.ledger.beancount_file_path
     )
     source, sha256sum = g.ledger.file.get_source(Path(file_path))
-    return {"source": source, "sha256sum": sha256sum, "file_path": file_path}
+    return SourceFile(file_path=file_path, sha256sum=sha256sum, source=source)
 
 
 @api_endpoint

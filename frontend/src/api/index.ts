@@ -306,6 +306,11 @@ export const get_query = define_endpoint("query", query_validator, [
 export const get_source = define_endpoint("source", source_validator, [
   "filename",
 ]);
+export const get_source_slice = define_endpoint(
+  "source_slice",
+  object({ slice: string, sha256sum: string }),
+  ["entry_hash"],
+);
 export const get_statistics = define_endpoint(
   "statistics",
   statistics_validator,

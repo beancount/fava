@@ -1,0 +1,16 @@
+{
+  "balances_after": null,
+  "balances_before": null,
+  "entry": {
+    "account": "Expenses:Food:Alcohol",
+    "booking": null,
+    "currencies": null,
+    "date": "1980-05-12",
+    "entry_hash": "ENTRY_HASH",
+    "meta": {
+      "filename": "TEST_DATA_DIR/long-example.beancount",
+      "lineno": 5057
+    },
+    "t": "Open"
+  }
+}

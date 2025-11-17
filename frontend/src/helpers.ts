@@ -6,7 +6,7 @@ import { use_external_editor } from "./stores/fava_options.ts";
 import { base_url } from "./stores/index.ts";
 import { syncedSearchParams } from "./stores/url.ts";
 
-class NonRelativeUrlPathError extends Error {
+export class NonRelativeUrlPathError extends Error {
   constructor(pathname: string, $base_url: string) {
     super(`Path '${pathname}' not relative to base url '${$base_url}'.`);
   }

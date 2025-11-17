@@ -314,6 +314,11 @@ button.round,
 
 .dragover {
   background-color: var(--dragover-background);
+
+  * {
+    /* Avoid drag events firing on child elements */
+    pointer-events: none;
+  }
 }
 
 .headerline {

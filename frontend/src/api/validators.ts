@@ -139,8 +139,6 @@ export const context_validator = object({
   entry: entryBaseValidator,
   balances_before: optional(record(array(string))),
   balances_after: optional(record(array(string))),
-  sha256sum: string,
-  slice: string,
 });
 
 const account_budget = object({
