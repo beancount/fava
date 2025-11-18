@@ -384,10 +384,10 @@ def get_narrations() -> Sequence[str]:
 
 
 @api_endpoint
-def get_source(filename: str) -> Mapping[str, str]:
+def get_source() -> Mapping[str, str]:
     """Load one of the source files."""
     file_path = (
-        filename
+        request.args.get("filename", "")
         or g.ledger.fava_options.default_file
         or g.ledger.beancount_file_path
     )

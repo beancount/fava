@@ -417,10 +417,7 @@ def test_api_move(test_client: FlaskClient) -> None:
 
 
 def test_api_get_source_invalid_unicode(test_client: FlaskClient) -> None:
-    response = test_client.get(
-        "/invalid-unicode/api/source",
-        query_string={"filename": ""},
-    )
+    response = test_client.get("/invalid-unicode/api/source")
     err_msg = assert_api_error(response)
     assert "The source file contains invalid unicode" in err_msg
 
@@ -454,7 +451,7 @@ def test_api_source(app_in_tmp_dir: Flask) -> None:
     sha256sum = _sha256_str(source)
 
     # read
-    response = test_client.get(url, query_string={"filename": ""})
+    response = test_client.get(url)
     data = assert_api_success(response)
     assert data["source"] == source
 
