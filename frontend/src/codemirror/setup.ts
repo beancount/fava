@@ -3,6 +3,7 @@ import {
   closeBrackets,
   closeBracketsKeymap,
   completionKeymap,
+  moveCompletionSelection,
 } from "@codemirror/autocomplete";
 import {
   defaultKeymap,
@@ -64,6 +65,8 @@ const baseExtensions = [
   highlightSelectionMatches(),
   lintGutter(),
   keymap.of([
+    { key: "Control-n", run: moveCompletionSelection(true) },
+    { key: "Control-p", run: moveCompletionSelection(false) },
     ...closeBracketsKeymap,
     ...defaultKeymap,
     ...searchKeymap,
