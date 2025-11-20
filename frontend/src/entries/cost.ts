@@ -1,4 +1,4 @@
-import { day as format_day, type FormatterContext } from "../format";
+import { day as format_day, type FormatterContext } from "../format.ts";
 import {
   date,
   number,
@@ -7,16 +7,26 @@ import {
   optional_string,
   string,
   type Validator,
-} from "../lib/validation";
+} from "../lib/validation.ts";
 
 /** A cost is a pair of number and currency with date and an optional label. */
 export class Cost {
+  readonly number: number;
+  readonly currency: string;
+  readonly date: Date | null;
+  readonly label: string | null;
+
   constructor(
-    readonly number: number,
-    readonly currency: string,
-    readonly date: Date | null,
-    readonly label: string | null,
-  ) {}
+    number: number,
+    currency: string,
+    date: Date | null,
+    label: string | null,
+  ) {
+    this.number = number;
+    this.currency = currency;
+    this.date = date;
+    this.label = label;
+  }
 
   /** Render to a string. */
   str($ctx: FormatterContext): string {

@@ -9,8 +9,8 @@ from fava.beans.funcs import hash_entry
 from fava.core import EntryNotFoundForHashError
 from fava.core import FilteredLedger
 from fava.helpers import FavaAPIError
-from fava.util.date import Interval
 from fava.util.date import local_today
+from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
@@ -40,7 +40,7 @@ def test_filtered_ledger(
     assert filtered.prices("EUR", "USD")
     assert filtered.prices("UNKNOWN1", "UNKNOWN2") == []
     assert filtered.date_range is None
-    assert not filtered.interval_ranges(Interval.MONTH)
+    assert not filtered.interval_ranges(Month)
 
     all_entries = FilteredLedger(small_example_ledger)
     closed_acc = "Assets:Account1"
@@ -139,3 +139,36 @@ def test_commodity_names(example_ledger: FavaLedger) -> None:
     assert example_ledger.commodities.name("USD") == "US Dollar"
     assert example_ledger.commodities.name("NOCOMMODITY") == "NOCOMMODITY"
     assert example_ledger.commodities.name("VMMXX") == "VMMXX"
+
+
+def test_paginate_journal(small_example_ledger: FavaLedger) -> None:
+    empty = FilteredLedger(small_example_ledger, filter="never")
+    first_page = empty.paginate_journal(1)
+    assert first_page
+    assert not first_page.entries
+    assert first_page.total_pages == 1
+
+    filtered = FilteredLedger(small_example_ledger)
+    total_entries = len(filtered.entries_without_prices)
+    assert total_entries > 4, "Need at least 4 entries for this test"
+
+    per_page = 2
+    expected_total_pages = (total_entries + per_page - 1) // per_page
+
+    all_indices = []
+    all_entries = []
+    for page in range(1, expected_total_pages + 1):
+        journal_page = filtered.paginate_journal(page, per_page)
+        assert journal_page
+        assert journal_page.total_pages == expected_total_pages
+        assert journal_page.entries
+        all_indices.extend(
+            [entry_tuple[0] for entry_tuple in journal_page.entries]
+        )
+        all_entries.extend(
+            [id(entry_tuple[1]) for entry_tuple in journal_page.entries]
+        )
+
+    assert len(set(all_indices)) == total_entries
+    assert all(0 <= idx < total_entries for idx in all_indices)
+    assert len(set(all_entries)) == total_entries

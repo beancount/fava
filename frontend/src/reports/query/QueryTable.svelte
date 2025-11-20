@@ -3,17 +3,17 @@
   A query result table.
 -->
 <script lang="ts">
-  import { Amount, Position } from "../../entries";
-  import { day } from "../../format";
-  import { urlForAccount } from "../../helpers";
-  import { is_empty } from "../../lib/objects";
+  import { Amount, Position } from "../../entries/index.ts";
+  import { day } from "../../format.ts";
+  import { urlForAccount } from "../../helpers.ts";
+  import { is_empty } from "../../lib/objects.ts";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
-  import { Sorter, UnsortedColumn } from "../../sort";
+  import { Sorter, UnsortedColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { accounts_set } from "../../stores";
-  import { ctx, num } from "../../stores/format";
-  import type { QueryCell, QueryResultTable } from "./query_table";
-  import { Inventory } from "./query_table";
+  import { ctx, num } from "../../stores/format.ts";
+  import { accounts_set, currency_name } from "../../stores/index.ts";
+  import type { QueryCell, QueryResultTable } from "./query_table.ts";
+  import { Inventory } from "./query_table.ts";
 
   interface Props {
     /** The table to render. */
@@ -55,7 +55,7 @@
     {#each sorted_rows as row (row)}
       <tr>
         {#each row as value, index (index)}
-          {#if value === null}
+          {#if value == null}
             <td>&nbsp;</td>
           {:else if typeof value === "boolean"}
             <td>
@@ -87,19 +87,25 @@
               {day(value)}
             </td>
           {:else if value instanceof Amount}
-            <td class="num">
+            <td class="num" title={$currency_name(value.currency)}>
               {value.str($ctx)}
             </td>
           {:else if value instanceof Position}
             <td class="num">
-              {value.units.str($ctx)}
+              <span title={$currency_name(value.units.currency)}>
+                {value.units.str($ctx)}
+              </span>
               {#if value.cost}
-                &lbrace;{value.cost.str($ctx)}&rbrace;{/if}
+                &lbrace;<span title={$currency_name(value.cost.currency)}>
+                  {value.cost.str($ctx)}
+                </span>&rbrace;{/if}
             </td>
           {:else if value instanceof Inventory}
             <td class="num">
               {#each Object.entries(value.value) as [currency, number] (currency)}
-                {$ctx.amount(number, currency)}
+                <span title={$currency_name(currency)}
+                  >{$ctx.amount(number, currency)}</span
+                >
                 <br />
               {/each}
             </td>

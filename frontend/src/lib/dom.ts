@@ -1,7 +1,7 @@
-import { parseJSON } from "./json";
-import type { Result } from "./result";
-import { err } from "./result";
-import type { ValidationError, Validator } from "./validation";
+import { parseJSON } from "./json.ts";
+import type { Result } from "./result.ts";
+import { err } from "./result.ts";
+import type { ValidationError, Validator } from "./validation.ts";
 
 class ScriptTagNotFoundError extends Error {
   constructor(selector: string) {
@@ -20,7 +20,7 @@ function getScriptTagJSON(
   if (!el) {
     return err(new ScriptTagNotFoundError(selector));
   }
-  return parseJSON(el.textContent ?? "");
+  return parseJSON(el.textContent);
 }
 
 /**
@@ -33,4 +33,13 @@ export function getScriptTagValue<T>(
   validator: Validator<T>,
 ): Result<T, ScriptTagNotFoundError | SyntaxError | ValidationError> {
   return getScriptTagJSON(selector).and_then(validator);
+}
+
+/**
+ * Create a document fragment from a string of HTML.
+ */
+export function fragment_from_string(html: string): DocumentFragment {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  return template.content;
 }

@@ -3,7 +3,9 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from fava.util.date import Interval
+from fava.core.conversion import AT_COST
+from fava.util.date import Day
+from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -20,7 +22,7 @@ def test_interval_totals(
     for conversion in ["at_cost", "USD"]:
         data = small_example_ledger.charts.interval_totals(
             filtered,
-            Interval.MONTH,
+            Month,
             "Expenses",
             conversion,
         )
@@ -35,7 +37,7 @@ def test_interval_totals_inverted(
     for conversion in ["at_cost", "USD"]:
         data = small_example_ledger.charts.interval_totals(
             filtered,
-            Interval.MONTH,
+            Month,
             "Expenses",
             conversion,
             invert=True,
@@ -65,7 +67,7 @@ def test_linechart_data(
 
 def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
-    data = example_ledger.charts.net_worth(filtered, Interval.MONTH, "USD")
+    data = example_ledger.charts.net_worth(filtered, Month, "USD")
     snapshot(data, json=True)
 
 
@@ -78,19 +80,20 @@ def test_net_worth_off_by_one(
     assert not off_by_one.errors
     assert len(off_by_one_filtered.entries) == 9
 
-    for interval in [Interval.DAY, Interval.MONTH]:
+    for interval in [Day, Month]:
         data = off_by_one.charts.net_worth(
             off_by_one_filtered,
             interval,
             "at_value",
         )
-        assert len(data) == 4 if interval == Interval.DAY else 1
+        assert len(data) == 4 if interval == Day else 1
         snapshot(data, json=True)
 
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
     filtered = example_ledger.get_filtered()
-    data = example_ledger.charts.hierarchy(filtered, "Assets", "at_cost")
+
+    data = example_ledger.charts.hierarchy(filtered, "Assets", AT_COST)
     assert data.balance_children == {
         "IRAUSD": Decimal("7200.00"),
         "USD": Decimal("94320.27840"),

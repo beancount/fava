@@ -42,10 +42,7 @@
         "VHT": 20
       }
     ],
-    [
-      "Assets:US:Federal:PreTax401k",
-      {}
-    ],
+    ["Assets:US:Federal:PreTax401k", {}],
     [
       "Assets:US:Vanguard:Cash",
       {

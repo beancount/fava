@@ -1,7 +1,7 @@
-import { test } from "uvu";
-import * as assert from "uvu/assert";
+import { deepEqual } from "node:assert/strict";
+import { test } from "node:test";
 
-import { stratify } from "../src/lib/tree";
+import { stratify } from "../src/lib/tree.ts";
 
 test("tree: stratify", () => {
   const empty = stratify(
@@ -9,20 +9,20 @@ test("tree: stratify", () => {
     () => "",
     () => null,
   );
-  assert.equal(empty, { children: [] });
+  deepEqual(empty, { children: [] });
   const emptyWithData = stratify(
     [],
     () => "",
     () => ({ test: "test" }),
   );
-  assert.equal(emptyWithData, { children: [], test: "test" });
+  deepEqual(emptyWithData, { children: [], test: "test" });
   const tree = stratify(
     ["aName:cName", "aName", "aName:bName"],
     (s) => s,
     (name) => ({ name }),
   );
 
-  assert.equal(tree, {
+  deepEqual(tree, {
     children: [
       {
         children: [
@@ -34,7 +34,7 @@ test("tree: stratify", () => {
     ],
     name: "",
   });
-  assert.equal(
+  deepEqual(
     stratify(
       ["Assets:Cash"],
       (s) => s,
@@ -51,5 +51,3 @@ test("tree: stratify", () => {
     },
   );
 });
-
-test.run();

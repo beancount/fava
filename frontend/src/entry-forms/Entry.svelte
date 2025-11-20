@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Entry } from "../entries";
-  import { Balance, Note, Transaction } from "../entries";
+  import type { Entry } from "../entries/index.ts";
+  import { Balance, Note, Transaction } from "../entries/index.ts";
   import BalanceSvelte from "./Balance.svelte";
   import NoteSvelte from "./Note.svelte";
   import TransactionSvelte from "./Transaction.svelte";

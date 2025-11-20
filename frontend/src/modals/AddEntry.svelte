@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { saveEntries } from "../api";
-  import { Balance, Note, Transaction } from "../entries";
+  import { save_entries } from "../api/index.ts";
+  import { Balance, Note, Transaction } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
-  import { todayAsString } from "../format";
-  import { _ } from "../i18n";
-  import { addEntryContinue } from "../stores/editor";
-  import { closeOverlay, urlHash } from "../stores/url";
+  import { todayAsString } from "../format.ts";
+  import { _ } from "../i18n.ts";
+  import { router } from "../router.ts";
+  import { addEntryContinue } from "../stores/editor.ts";
+  import { hash } from "../stores/url.ts";
   import ModalBase from "./ModalBase.svelte";
 
   /** The entry types which have support adding in the modal. */
@@ -22,18 +23,18 @@
 
   async function submit(event: SubmitEvent) {
     event.preventDefault();
-    await saveEntries([entry]);
+    await save_entries([entry]);
     const added_entry_date = entry.date;
     // Reuse the date of the entry that was just added.
     // @ts-expect-error all these entries have that static method, but TS is not able to determine that
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     entry = entry.constructor.empty(added_entry_date);
     if (!$addEntryContinue) {
-      closeOverlay();
+      router.close_overlay();
     }
   }
 
-  let shown = $derived($urlHash === "add-transaction");
+  let shown = $derived($hash === "add-transaction");
 </script>
 
 <ModalBase {shown} focus=".payee input">

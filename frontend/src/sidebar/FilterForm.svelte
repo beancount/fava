@@ -1,9 +1,14 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { _ } from "../i18n";
-  import { escape_for_regex } from "../journal";
-  import { accounts, links, payees, tags, years } from "../stores";
-  import { account_filter, fql_filter, time_filter } from "../stores/filters";
+  import { _ } from "../i18n.ts";
+  import { escape_for_regex } from "../lib/regex.ts";
+  import { router, set_query_param } from "../router.ts";
+  import {
+    account_filter,
+    fql_filter,
+    time_filter,
+  } from "../stores/filters.ts";
+  import { accounts, links, payees, tags, years } from "../stores/index.ts";
 
   let fql_filter_suggestions = $derived([
     ...$tags.map((tag) => `#${tag}`),
@@ -42,6 +47,9 @@
     time_filter_value = v;
   });
 
+  /** Set the target we want to navigate to to avoid duplicate navigation. */
+  let target: URL | null = null;
+
   /**
    * Submit the filter form.
    *
@@ -51,9 +59,19 @@
    * it seems to work around a Safari bug, see #809 and #1528.
    */
   function submit() {
-    account_filter.set(account_filter_value);
-    fql_filter.set(fql_filter_value);
-    time_filter.set(time_filter_value);
+    const url = new URL(router.current);
+    set_query_param(url, "account", account_filter_value);
+    set_query_param(url, "filter", fql_filter_value);
+    set_query_param(url, "time", time_filter_value);
+    if (url.href !== router.current.href) {
+      target = url;
+      setTimeout(() => {
+        if (target) {
+          router.navigate(target);
+          target = null;
+        }
+      });
+    }
   }
 </script>
 

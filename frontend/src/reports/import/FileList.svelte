@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Entry } from "../../entries";
+  import type { Entry } from "../../entries/index.ts";
   import AccountInput from "../../entry-forms/AccountInput.svelte";
-  import { _ } from "../../i18n";
-  import type { ProcessedImportableFile } from ".";
+  import { _ } from "../../i18n.ts";
+  import type { ProcessedImportableFile } from "./index.ts";
 
   interface Props {
     files: ProcessedImportableFile[];

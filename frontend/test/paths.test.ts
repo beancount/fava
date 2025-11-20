@@ -1,42 +1,40 @@
-import { test } from "uvu";
-import * as assert from "uvu/assert";
+import { equal } from "node:assert/strict";
+import { test } from "node:test";
 
-import { basename, documentHasAccount, ext } from "../src/lib/paths";
+import { basename, documentHasAccount, ext } from "../src/lib/paths.ts";
 
 test("get basename of file", () => {
-  assert.is(basename("/home/Assets/Cash/document.pdf"), "document.pdf");
-  assert.is(basename("/home/Assets/Cash/document ä.pdf"), "document ä.pdf");
-  assert.is(basename("C:\\Assets\\Cash\\document.pdf"), "document.pdf");
-  assert.is(basename("C:\\Assets\\document asdf.pdf"), "document asdf.pdf");
+  equal(basename("/home/Assets/Cash/document.pdf"), "document.pdf");
+  equal(basename("/home/Assets/Cash/document ä.pdf"), "document ä.pdf");
+  equal(basename("C:\\Assets\\Cash\\document.pdf"), "document.pdf");
+  equal(basename("C:\\Assets\\document asdf.pdf"), "document asdf.pdf");
 });
 
 test("get file extension", () => {
-  assert.is(ext("/home/Assets/Cash/document.pdf"), "pdf");
-  assert.is(ext("/home/Assets/Cash/document.test.asdf.pdf"), "pdf");
-  assert.is(ext("/home/Assets/Cash/document.test.asdf.c1a"), "c1a");
-  assert.is(ext("/home/Assets/Ca.sh/document"), "");
-  assert.is(ext("/home/Assets/Cash/document ä.pdf"), "pdf");
-  assert.is(ext("C:\\Assets\\Cash\\document.pdf"), "pdf");
-  assert.is(ext("C:\\Assets\\document asdf.pdf"), "pdf");
+  equal(ext("/home/Assets/Cash/document.pdf"), "pdf");
+  equal(ext("/home/Assets/Cash/document.test.asdf.pdf"), "pdf");
+  equal(ext("/home/Assets/Cash/document.test.asdf.c1a"), "c1a");
+  equal(ext("/home/Assets/Ca.sh/document"), "");
+  equal(ext("/home/Assets/Cash/document ä.pdf"), "pdf");
+  equal(ext("C:\\Assets\\Cash\\document.pdf"), "pdf");
+  equal(ext("C:\\Assets\\document asdf.pdf"), "pdf");
 });
 
 test("detect account of document", () => {
-  assert.is(
+  equal(
     true,
     documentHasAccount("/home/Assets/Cash/document.pdf", "Assets:Cash"),
   );
-  assert.is(
+  equal(
     false,
     documentHasAccount("/home/Assets/Test/Cash/document.pdf", "Assets:Cash"),
   );
-  assert.is(
+  equal(
     true,
     documentHasAccount("C:\\Assets\\Cash\\document.pdf", "Assets:Cash"),
   );
-  assert.is(
+  equal(
     false,
     documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
   );
 });
-
-test.run();

@@ -10,9 +10,8 @@ from typing import TYPE_CHECKING
 from fava.beans.abc import Open
 from fava.beans.account import parent as account_parent
 from fava.context import g
+from fava.core.conversion import AT_COST
 from fava.core.conversion import AT_VALUE
-from fava.core.conversion import cost_or_value
-from fava.core.conversion import get_cost
 from fava.core.inventory import CounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -61,7 +60,7 @@ class TreeNode:
 
     def serialise(
         self,
-        conversion: str | Conversion,
+        conversion: Conversion,
         prices: FavaPriceMap,
         end: datetime.date | None,
         *,
@@ -82,18 +81,18 @@ class TreeNode:
         return (
             SerialisedTreeNode(
                 self.name,
-                cost_or_value(self.balance, conversion, prices, end),
-                cost_or_value(self.balance_children, conversion, prices, end),
+                conversion.apply(self.balance, prices, end),
+                conversion.apply(self.balance_children, prices, end),
                 children,
                 self.has_txns,
-                self.balance.reduce(get_cost),
-                self.balance_children.reduce(get_cost),
+                AT_COST.apply(self.balance),
+                AT_COST.apply(self.balance_children),
             )
             if with_cost
             else SerialisedTreeNode(
                 self.name,
-                cost_or_value(self.balance, conversion, prices, end),
-                cost_or_value(self.balance_children, conversion, prices, end),
+                conversion.apply(self.balance, prices, end),
+                conversion.apply(self.balance_children, prices, end),
                 children,
                 self.has_txns,
             )
@@ -237,9 +236,9 @@ class Tree(dict[str, TreeNode]):
         conversions = CounterInventory(
             {
                 (currency, None): -number
-                for currency, number in self.get("")
-                .balance_children.reduce(get_cost)
-                .items()
+                for currency, number in AT_COST.apply(
+                    self.get("").balance_children
+                ).items()
             },
         )
 

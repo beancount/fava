@@ -1,7 +1,7 @@
 import { derived } from "svelte/store";
 
-import { derived_array } from "../lib/store";
-import { ledgerData } from ".";
+import { derived_array } from "../lib/store.ts";
+import { ledgerData } from "./index.ts";
 
 /** Fava's options */
 const fava_options = derived(ledgerData, (v) => v.fava_options);
@@ -58,6 +58,10 @@ export const use_external_editor = derived(
 export const auto_reload = derived(
   fava_options,
   ($fava_options) => $fava_options.auto_reload,
+);
+export const invert_gains_losses_colors = derived(
+  fava_options,
+  ($fava_options) => $fava_options.invert_gains_losses_colors,
 );
 // TODO: equality comparison
 export const insert_entry = derived(

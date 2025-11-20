@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import date
 from datetime import timedelta
 from functools import cached_property
 from functools import lru_cache
+from itertools import islice
 from itertools import takewhile
 from os.path import normpath
 from pathlib import Path
@@ -30,7 +32,7 @@ from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.commodities import CommoditiesModule
-from fava.core.conversion import cost_or_value
+from fava.core.conversion import conversion_from_str
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
 from fava.core.file import _incomplete_sortkey
@@ -57,6 +59,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Mapping
     from collections.abc import Sequence
     from decimal import Decimal
+    from typing import Literal
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
@@ -92,6 +95,14 @@ class StatementMetadataInvalidError(FavaAPIError):
         )
 
 
+@dataclass(frozen=True)
+class JournalPage:
+    """A page of journal entries."""
+
+    entries: Sequence[tuple[int, Directive]]
+    total_pages: int
+
+
 class FilteredLedger:
     """Filtered Beancount ledger."""
 
@@ -99,6 +110,7 @@ class FilteredLedger:
         "__dict__",  # for the cached_property decorator
         "_date_first",
         "_date_last",
+        "_pages",
         "date_range",
         "entries",
         "ledger",
@@ -116,6 +128,14 @@ class FilteredLedger:
     ) -> None:
         self.ledger = ledger
         self.date_range: DateRange | None = None
+        self._pages: (
+            tuple[
+                int,
+                Literal["asc", "desc"],
+                list[Sequence[tuple[int, Directive]]],
+            ]
+            | None
+        ) = None
 
         entries = ledger.all_entries
         if account:
@@ -158,6 +178,11 @@ class FilteredLedger:
         entries = [*self.entries, *self.ledger.all_entries_by_type.Price]
         entries.sort(key=_incomplete_sortkey)
         return entries
+
+    @cached_property
+    def entries_without_prices(self) -> Sequence[Directive]:
+        """The filtered entries, without prices for journals."""
+        return [e for e in self.entries if not isinstance(e, Price)]
 
     @cached_property
     def root_tree(self) -> Tree:
@@ -210,6 +235,45 @@ class FilteredLedger:
         if close_date is None:
             return False
         return close_date < date_range.end if date_range else True
+
+    def paginate_journal(
+        self,
+        page: int,
+        per_page: int = 1000,
+        order: Literal["asc", "desc"] = "desc",
+    ) -> JournalPage | None:
+        """Get entries for a journal page with pagination info.
+
+        Args:
+            page: Page number (1-indexed).
+            order: Datewise order to sort in
+            per_page: Number of entries per page.
+
+        Returns:
+            A JournalPage, containing a list of entries as (global_index,
+            directive) tuples in reverse chronological order and the total
+            number of pages.
+        """
+        if (
+            self._pages is None
+            or self._pages[0] != per_page
+            or self._pages[1] != order
+        ):
+            pages: list[Sequence[tuple[int, Directive]]] = []
+            enumerated = list(enumerate(self.entries_without_prices))
+            entries = (
+                iter(enumerated) if order == "asc" else reversed(enumerated)
+            )
+            while batch := tuple(islice(entries, per_page)):
+                pages.append(batch)
+            if not pages:
+                pages.append([])
+            self._pages = (per_page, order, pages)
+        _per_pages, _order, pages = self._pages
+        total = len(pages)
+        if page > total:
+            return None
+        return JournalPage(pages[page - 1], total)
 
 
 class FavaLedger:
@@ -474,7 +538,7 @@ class FavaLedger:
         *,
         with_children: bool,
     ) -> Iterable[
-        tuple[Directive, SimpleCounterInventory, SimpleCounterInventory]
+        tuple[int, Directive, SimpleCounterInventory, SimpleCounterInventory]
     ]:
         """Journal for an account.
 
@@ -486,15 +550,16 @@ class FavaLedger:
                            the account.
 
         Yields:
-            Tuples of ``(entry, change, balance)``.
+            Tuples of ``(index, entry, change, balance)``.
         """
+        conv = conversion_from_str(conversion)
         relevant_account = account_tester(
             account_name, with_children=with_children
         )
 
         prices = self.prices
         balance = CounterInventory()
-        for entry in filtered.entries:
+        for index, entry in enumerate(filtered.entries_without_prices):
             change = CounterInventory()
             entry_is_relevant = False
             postings = getattr(entry, "postings", None)
@@ -509,9 +574,10 @@ class FavaLedger:
 
             if entry_is_relevant:
                 yield (
+                    index,
                     entry,
-                    cost_or_value(change, conversion, prices, entry.date),
-                    cost_or_value(balance, conversion, prices, entry.date),
+                    conv.apply(change, prices, entry.date),
+                    conv.apply(balance, prices, entry.date),
                 )
 
     def get_entry(self, entry_hash: str) -> Directive:

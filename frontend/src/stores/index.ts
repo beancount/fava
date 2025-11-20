@@ -1,14 +1,8 @@
 import { derived, type Readable, writable } from "svelte/store";
 
-import type { BeancountError, LedgerData } from "../api/validators";
-import { get_internal_accounts } from "../lib/account";
-import { DEFAULT_INTERVAL } from "../lib/interval";
-import { derived_array } from "../lib/store";
-
-/** The current conversion used for reports. */
-export const conversion = writable("");
-/** The current interval used for reports. */
-export const interval = writable(DEFAULT_INTERVAL);
+import type { BeancountError, LedgerData } from "../api/validators.ts";
+import { get_internal_accounts } from "../lib/account.ts";
+import { derived_array } from "../lib/store.ts";
 
 /** The Beancount errors. */
 export const errors = writable<readonly BeancountError[]>([]);

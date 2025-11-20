@@ -4,12 +4,12 @@
   import { quadtree } from "d3-quadtree";
   import { scalePoint, scaleUtc } from "d3-scale";
 
-  import { day } from "../format";
+  import { day } from "../format.ts";
   import Axis from "./Axis.svelte";
-  import { scatterplotScale } from "./helpers";
-  import type { ScatterPlot, ScatterPlotDatum } from "./scatterplot";
-  import type { TooltipFindNode } from "./tooltip";
-  import { domHelpers, positionedTooltip } from "./tooltip";
+  import { scatterplotScale } from "./helpers.ts";
+  import type { ScatterPlot, ScatterPlotDatum } from "./scatterplot.ts";
+  import type { TooltipFindNode } from "./tooltip.ts";
+  import { domHelpers, positionedTooltip } from "./tooltip.ts";
 
   interface Props {
     chart: ScatterPlot;
@@ -65,7 +65,7 @@
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
   <g
-    use:positionedTooltip={tooltipFindNode}
+    {@attach positionedTooltip(tooltipFindNode)}
     transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />

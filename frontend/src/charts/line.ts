@@ -1,12 +1,19 @@
 import { sort } from "d3-array";
 
-import type { FormatterContext } from "../format";
-import { day } from "../format";
-import type { Result } from "../lib/result";
-import type { ValidationError } from "../lib/validation";
-import { array, date, number, object, record } from "../lib/validation";
-import type { TooltipContent } from "./tooltip";
-import { domHelpers } from "./tooltip";
+import type { FormatterContext } from "../format.ts";
+import { day } from "../format.ts";
+import type { Validator } from "../lib/validation.ts";
+import {
+  array,
+  date,
+  number,
+  object,
+  record,
+  string,
+} from "../lib/validation.ts";
+import type { ParsedFavaChart } from "./index.ts";
+import type { TooltipContent } from "./tooltip.ts";
+import { domHelpers } from "./tooltip.ts";
 
 /**
  * A single data point on a line or area chart.
@@ -33,18 +40,22 @@ interface LineChartSeries {
  */
 export class LineChart {
   readonly type = "linechart";
-
   readonly series_names: readonly string[];
+  readonly label: string | null;
+  private readonly data: readonly LineChartSeries[];
+  readonly tooltipText: (
+    c: FormatterContext,
+    d: LineChartDatum,
+  ) => TooltipContent;
 
   constructor(
-    readonly name: string | null,
-    private readonly data: readonly LineChartSeries[],
-    readonly tooltipText: (
-      c: FormatterContext,
-      d: LineChartDatum,
-    ) => TooltipContent,
+    label: string | null,
+    data: readonly LineChartSeries[],
+    tooltipText: (c: FormatterContext, d: LineChartDatum) => TooltipContent,
   ) {
+    this.label = label;
     this.data = sort(data, (d) => -d.values.length);
+    this.tooltipText = tooltipText;
     this.series_names = this.data.map((series) => series.name);
   }
 
@@ -53,42 +64,54 @@ export class LineChart {
     const hidden_names_set = new Set(hidden_names);
     return this.data.filter((series) => !hidden_names_set.has(series.name));
   }
-}
 
-const balances_validator = array(object({ date, balance: record(number) }));
-
-export function balances_from_parsed_data(
-  label: string | null,
-  parsed_data: { date: Date; balance: Record<string, number> }[],
-): LineChart {
-  const groups = new Map<string, LineChartDatum[]>();
-  for (const { date: date_val, balance } of parsed_data) {
-    Object.entries(balance).forEach(([currency, value]) => {
-      const group = groups.get(currency);
-      const datum = { date: date_val, value, name: currency };
-      if (group) {
-        group.push(datum);
-      } else {
-        groups.set(currency, [datum]);
-      }
-    });
+  with_context(): this {
+    return this;
   }
-  const data = [...groups.entries()].map(([name, values]) => ({
-    name,
-    values,
-  }));
-
-  return new LineChart(label, data, (c, d) => [
-    domHelpers.t(c.amount(d.value, d.name)),
-    domHelpers.em(day(d.date)),
-  ]);
 }
 
-export function balances(
-  label: string | null,
-  json: unknown,
-): Result<LineChart, ValidationError> {
-  return balances_validator(json).map((parsedData) =>
-    balances_from_parsed_data(label, parsedData),
-  );
+const balances_validator = object({
+  label: string,
+  data: array(object({ date, balance: record(number) })),
+});
+
+type ParsedLineChartData = { date: Date; balance: Record<string, number> }[];
+
+export class ParsedLineChart implements ParsedFavaChart {
+  readonly label: string | null;
+  readonly data: ParsedLineChartData;
+
+  constructor(label: string | null, data: ParsedLineChartData) {
+    this.label = label;
+    this.data = data;
+  }
+
+  static validator: Validator<ParsedLineChart> = (json) =>
+    balances_validator(json).map(
+      ({ label, data }) => new ParsedLineChart(label, data),
+    );
+
+  with_context(): LineChart {
+    const groups = new Map<string, LineChartDatum[]>();
+    for (const { date: date_val, balance } of this.data) {
+      Object.entries(balance).forEach(([currency, value]) => {
+        const group = groups.get(currency);
+        const datum = { date: date_val, value, name: currency };
+        if (group) {
+          group.push(datum);
+        } else {
+          groups.set(currency, [datum]);
+        }
+      });
+    }
+    const data = [...groups.entries()].map(([name, values]) => ({
+      name,
+      values,
+    }));
+
+    return new LineChart(this.label, data, (c, d) => [
+      domHelpers.t(c.amount(d.value, d.name)),
+      domHelpers.em(day(d.date)),
+    ]);
+  }
 }

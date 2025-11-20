@@ -12,11 +12,8 @@
  */
 
 import { permute } from "d3-array";
-import { get as store_get } from "svelte/store";
 
-import { journalSortOrder } from "../stores/journal";
-
-type SortOrder = "asc" | "desc";
+export type SortOrder = "asc" | "desc";
 type SortDirection = 1 | -1;
 
 export const get_direction = (o: SortOrder): SortDirection =>
@@ -42,10 +39,13 @@ export interface SortColumn<T = unknown> {
 
 /** A sorter of tabular data, is specified by a SortColumn and an order to sort by. */
 export class Sorter<T = unknown> {
-  constructor(
-    readonly column: SortColumn<T>,
-    readonly order: SortOrder,
-  ) {}
+  readonly column: SortColumn<T>;
+  readonly order: SortOrder;
+
+  constructor(column: SortColumn<T>, order: SortOrder) {
+    this.column = column;
+    this.order = order;
+  }
 
   /** Get a new sorter by switching to a possibly different column. */
   switchColumn(column: SortColumn<T>): Sorter<T> {
@@ -91,7 +91,10 @@ function sort_internal<T, U>(
 
 /** A SortColumn that does no sorting. */
 export class UnsortedColumn<T> implements SortColumn<T> {
-  constructor(readonly name: string) {}
+  readonly name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
 
   sort(data: readonly T[]): readonly T[] {
     return data;
@@ -101,11 +104,13 @@ export class UnsortedColumn<T> implements SortColumn<T> {
 /** A SortColumn for numbers. */
 export class NumberColumn<T> implements SortColumn<T> {
   private compare = (a: number, b: number): number => a - b;
+  readonly name: string;
+  private readonly value: (row: Readonly<T>) => number;
 
-  constructor(
-    readonly name: string,
-    private readonly value: (row: Readonly<T>) => number,
-  ) {}
+  constructor(name: string, value: (row: Readonly<T>) => number) {
+    this.name = name;
+    this.value = value;
+  }
 
   sort(data: readonly T[], direction: SortDirection): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
@@ -113,18 +118,20 @@ export class NumberColumn<T> implements SortColumn<T> {
 }
 /** A SortColumn for objects with a string date property. */
 export class DateColumn<T extends { date: string }> extends NumberColumn<T> {
-  constructor(override readonly name: string) {
+  constructor(name: string) {
     super(name, (d: T) => new Date(d.date).valueOf());
   }
 }
 /** A SortColumn for strings. */
 export class StringColumn<T> implements SortColumn<T> {
   private compare = compare_strings;
+  readonly name: string;
+  private readonly value: (row: Readonly<T>) => string;
 
-  constructor(
-    readonly name: string,
-    private readonly value: (row: Readonly<T>) => string,
-  ) {}
+  constructor(name: string, value: (row: Readonly<T>) => string) {
+    this.name = name;
+    this.value = value;
+  }
 
   sort(data: readonly T[], direction: 1 | -1): readonly T[] {
     return sort_internal(data, this.value, this.compare, direction);
@@ -169,51 +176,4 @@ export function sortElements<T extends Element>(
     fragment.appendChild(el);
   });
   parent.appendChild(fragment);
-}
-
-/**
- * Make the Fava journal sortable.
- * @param ol - the <ol> element.
- */
-export function sortableJournal(ol: HTMLOListElement): void {
-  const head = ol.querySelector(".head");
-  if (!head) {
-    throw new Error("Journal is missing header.");
-  }
-  const headers = head.querySelectorAll("span[data-sort]");
-  const [initialColumn, initialOrder] = store_get(journalSortOrder);
-  headers.forEach((header) => {
-    const headerClass = header.classList[0];
-    const name = header.getAttribute("data-sort-name");
-    const type = header.getAttribute("data-sort");
-    if (headerClass == null || name == null || type == null) {
-      throw new Error(`Journal has invalid header: ${header.innerHTML}.`);
-    }
-
-    const sort = (order: SortOrder) => {
-      // update displayed sort order
-      headers.forEach((el) => {
-        el.removeAttribute("data-order");
-      });
-      header.setAttribute("data-order", order);
-      // sort elements
-      sortElements<HTMLLIElement>(
-        ol,
-        [].slice.call(ol.children, 1),
-        (li) => li.querySelector(`.${headerClass}`),
-        get_direction(order),
-        type,
-      );
-    };
-    if (name === initialColumn) {
-      sort(initialOrder);
-    }
-
-    header.addEventListener("click", () => {
-      const order =
-        header.getAttribute("data-order") === "asc" ? "desc" : "asc";
-      sort(order);
-      journalSortOrder.set([name, order]);
-    });
-  });
 }

@@ -1,76 +1,77 @@
 from __future__ import annotations
 
 from datetime import date
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
 
 from fava.util.date import DateRange
 from fava.util.date import dateranges
+from fava.util.date import Day
 from fava.util.date import FiscalYearEnd
 from fava.util.date import get_fiscal_period
-from fava.util.date import get_next_interval
-from fava.util.date import get_prev_interval
-from fava.util.date import Interval
 from fava.util.date import interval_ends
+from fava.util.date import INTERVALS
 from fava.util.date import InvalidDateRangeError
+from fava.util.date import Month
 from fava.util.date import month_offset
-from fava.util.date import number_of_days_in_period
 from fava.util.date import parse_date
 from fava.util.date import parse_fye_string
+from fava.util.date import Quarter
 from fava.util.date import substitute
+from fava.util.date import Week
+from fava.util.date import Year
+
+if TYPE_CHECKING:
+    from fava.util.date import Interval
+
+
+fromisoformat = date.fromisoformat
 
 
 def test_interval() -> None:
-    assert Interval.get("month") is Interval.MONTH
-    assert Interval.get("year") is Interval.YEAR
-    assert Interval.get("YEAR") is Interval.YEAR
-    assert Interval.get("asdfasdf") is Interval.MONTH
-
-
-def _to_date(string: str) -> date:
-    """Convert a string in ISO 8601 format into a datetime.date object."""
-    return date.fromisoformat(string)
+    assert INTERVALS.get("month") is Month
+    assert INTERVALS.get("year") is Year
+    assert INTERVALS.get("asdfasdf") is None
+    assert Year.label
+    assert Quarter.label
+    assert Month.label
+    assert Week.label
+    assert Day.label
 
 
 @pytest.mark.parametrize(
-    ("input_date_string", "interval", "expect", "expect_filter"),
+    ("input_date_string", "interval", "expect"),
     [
-        ("2016-01-01", Interval.DAY, "2016-01-01", "2016-01-01"),
-        ("2016-01-04", Interval.WEEK, "2016W01", "2016-W01"),
-        ("2016-01-04", Interval.MONTH, "Jan 2016", "2016-01"),
-        ("2016-01-04", Interval.QUARTER, "2016Q1", "2016-Q1"),
-        ("2016-01-04", Interval.YEAR, "2016", "2016"),
+        ("2016-01-01", Day, "2016-01-01"),
+        ("2016-01-04", Week, "2016-W01"),
+        ("2016-01-04", Month, "2016-01"),
+        ("2016-01-04", Quarter, "2016-Q1"),
+        ("2016-01-04", Year, "2016"),
     ],
 )
 def test_interval_format(
     input_date_string: str,
     interval: Interval,
     expect: str,
-    expect_filter: str,
 ) -> None:
-    assert interval.format_date(_to_date(input_date_string)) == expect
-    assert (
-        interval.format_date_filter(_to_date(input_date_string))
-        == expect_filter
-    )
+    assert interval.format_date(fromisoformat(input_date_string)) == expect
 
 
 @pytest.mark.parametrize(
     ("input_date_string", "interval", "expect"),
     [
-        ("2016-01-01", Interval.DAY, "2016-01-02"),
-        ("2016-01-01", Interval.WEEK, "2016-01-04"),
-        ("2016-01-01", Interval.MONTH, "2016-02-01"),
-        ("2016-01-01", Interval.QUARTER, "2016-04-01"),
-        ("2016-01-01", Interval.YEAR, "2017-01-01"),
-        ("2016-12-31", Interval.DAY, "2017-01-01"),
-        ("2016-12-31", Interval.WEEK, "2017-01-02"),
-        ("2016-12-31", Interval.MONTH, "2017-01-01"),
-        ("2016-12-31", Interval.QUARTER, "2017-01-01"),
-        ("2016-12-31", Interval.YEAR, "2017-01-01"),
-        ("9999-12-31", Interval.QUARTER, "9999-12-31"),
-        ("9999-12-31", Interval.YEAR, "9999-12-31"),
+        ("2016-01-01", Day, "2016-01-02"),
+        ("2016-01-01", Week, "2016-01-04"),
+        ("2016-01-01", Month, "2016-02-01"),
+        ("2016-01-01", Quarter, "2016-04-01"),
+        ("2016-01-01", Year, "2017-01-01"),
+        ("2016-12-31", Day, "2017-01-01"),
+        ("2016-12-31", Week, "2017-01-02"),
+        ("2016-12-31", Month, "2017-01-01"),
+        ("2016-12-31", Quarter, "2017-01-01"),
+        ("2016-12-31", Year, "2017-01-01"),
     ],
 )
 def test_get_next_interval(
@@ -78,25 +79,30 @@ def test_get_next_interval(
     interval: Interval,
     expect: str,
 ) -> None:
-    get = get_next_interval(_to_date(input_date_string), interval)
-    assert get == _to_date(expect)
+    res = interval.get_next(fromisoformat(input_date_string))
+    assert res == fromisoformat(expect)
+
+
+def test_get_next_interval_max() -> None:
+    for interval in set(INTERVALS.values()):
+        assert interval.get_next(date.max) == date.max
 
 
 @pytest.mark.parametrize(
     ("input_date_string", "interval", "expect"),
     [
-        ("2016-01-01", Interval.DAY, "2016-01-01"),
-        ("2016-01-01", Interval.WEEK, "2015-12-28"),
-        ("2016-01-01", Interval.MONTH, "2016-01-01"),
-        ("2016-01-01", Interval.QUARTER, "2016-01-01"),
-        ("2016-01-01", Interval.YEAR, "2016-01-01"),
-        ("2016-12-31", Interval.DAY, "2016-12-31"),
-        ("2016-12-31", Interval.WEEK, "2016-12-26"),
-        ("2016-12-31", Interval.MONTH, "2016-12-01"),
-        ("2016-12-31", Interval.QUARTER, "2016-10-01"),
-        ("2016-12-31", Interval.YEAR, "2016-01-01"),
-        ("9999-12-31", Interval.QUARTER, "9999-10-01"),
-        ("9999-12-31", Interval.YEAR, "9999-01-01"),
+        ("2016-01-01", Day, "2016-01-01"),
+        ("2016-01-01", Week, "2015-12-28"),
+        ("2016-01-01", Month, "2016-01-01"),
+        ("2016-01-01", Quarter, "2016-01-01"),
+        ("2016-01-01", Year, "2016-01-01"),
+        ("2016-12-31", Day, "2016-12-31"),
+        ("2016-12-31", Week, "2016-12-26"),
+        ("2016-12-31", Month, "2016-12-01"),
+        ("2016-12-31", Quarter, "2016-10-01"),
+        ("2016-12-31", Year, "2016-01-01"),
+        ("9999-12-31", Quarter, "9999-10-01"),
+        ("9999-12-31", Year, "9999-01-01"),
     ],
 )
 def test_get_prev_interval(
@@ -104,8 +110,8 @@ def test_get_prev_interval(
     interval: Interval,
     expect: str,
 ) -> None:
-    get = get_prev_interval(_to_date(input_date_string), interval)
-    assert get == _to_date(expect)
+    res = interval.get_prev(fromisoformat(input_date_string))
+    assert res == fromisoformat(expect)
 
 
 @pytest.mark.parametrize(
@@ -114,7 +120,7 @@ def test_get_prev_interval(
         (
             "2014-03-05",
             "2014-05-05",
-            Interval.MONTH,
+            Month,
             [
                 "2014-03-01",
                 "2014-04-01",
@@ -131,7 +137,7 @@ def test_get_prev_interval(
         (
             "2014-01-01",
             "2014-05-01",
-            Interval.MONTH,
+            Month,
             [
                 "2014-01-01",
                 "2014-02-01",
@@ -150,7 +156,7 @@ def test_get_prev_interval(
         (
             "2014-03-05",
             "2014-05-05",
-            Interval.YEAR,
+            Year,
             [
                 "2014-01-01",
                 "2015-01-01",
@@ -163,7 +169,7 @@ def test_get_prev_interval(
         (
             "2014-01-01",
             "2014-05-01",
-            Interval.YEAR,
+            Year,
             [
                 "2014-01-01",
                 "2015-01-01",
@@ -182,14 +188,14 @@ def test_interval_tuples(
     expect_complete: list[str],
     expect_exact: list[str],
 ) -> None:
-    begin_date = _to_date(begin)
-    end_date = _to_date(end)
+    begin_date = fromisoformat(begin)
+    end_date = fromisoformat(end)
     assert list(
         interval_ends(begin_date, end_date, interval, complete=True),
-    ) == [_to_date(d) for d in expect_complete]
+    ) == [fromisoformat(d) for d in expect_complete]
     assert list(
         interval_ends(begin_date, end_date, interval, complete=False),
-    ) == [_to_date(d) for d in expect_exact]
+    ) == [fromisoformat(d) for d in expect_exact]
 
 
 def test_dateranges_single_date() -> None:
@@ -197,9 +203,9 @@ def test_dateranges_single_date() -> None:
     with pytest.raises(InvalidDateRangeError):
         DateRange(date_, date_)
     with pytest.raises(InvalidDateRangeError):
-        list(interval_ends(date_, date_, Interval.MONTH, complete=True))
+        list(interval_ends(date_, date_, Month, complete=True))
     with pytest.raises(InvalidDateRangeError):
-        dateranges(date_, date_, Interval.MONTH, complete=True)
+        dateranges(date_, date_, Month, complete=True)
 
 
 @pytest.mark.parametrize(
@@ -226,12 +232,8 @@ def test_dateranges_single_date() -> None:
     ],
 )
 def test_substitute(string: str, output: str) -> None:
-    # Mock the imported datetime.date in fava.util.date module
-    # Ref:
-    # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = _to_date("2016-06-24")
-        mock_date.side_effect = date
+    with mock.patch("fava.util.date.local_today") as mock_local_today:
+        mock_local_today.return_value = fromisoformat("2016-06-24")
         assert substitute(string) == output
 
 
@@ -272,7 +274,7 @@ def test_fiscal_substitute(
 ) -> None:
     fye = parse_fye_string(fye_str)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = _to_date(test_date)
+        mock_date.today.return_value = fromisoformat(test_date)
         mock_date.side_effect = date
         if output is None:
             with pytest.raises(
@@ -303,7 +305,7 @@ def test_fiscal_substitute(
     ],
 )
 def test_parse_date(expect_start: str, expect_end: str, text: str) -> None:
-    expected = (_to_date(expect_start), _to_date(expect_end))
+    expected = (fromisoformat(expect_start), fromisoformat(expect_end))
     assert parse_date(text, FiscalYearEnd(6, 30)) == expected
     if "FY" not in text:
         assert parse_date(text, None) == expected
@@ -330,9 +332,9 @@ def test_parse_date_relative(
     expect_end: str,
     text: str,
 ) -> None:
-    start, end = _to_date(expect_start), _to_date(expect_end)
+    start, end = fromisoformat(expect_start), fromisoformat(expect_end)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = _to_date("2016-06-24")
+        mock_date.today.return_value = fromisoformat("2016-06-24")
         mock_date.side_effect = date
         assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
 
@@ -340,23 +342,23 @@ def test_parse_date_relative(
 @pytest.mark.parametrize(
     ("interval", "date_str", "expect"),
     [
-        (Interval.DAY, "2016-05-01", 1),
-        (Interval.DAY, "2016-05-31", 1),
-        (Interval.WEEK, "2016-05-01", 7),
-        (Interval.WEEK, "2016-05-31", 7),
-        (Interval.MONTH, "2016-05-02", 31),
-        (Interval.MONTH, "2016-05-31", 31),
-        (Interval.MONTH, "2016-06-11", 30),
-        (Interval.MONTH, "2016-07-31", 31),
-        (Interval.MONTH, "2016-02-01", 29),
-        (Interval.MONTH, "2015-02-01", 28),
-        (Interval.MONTH, "2016-01-01", 31),
-        (Interval.QUARTER, "2015-02-01", 90),
-        (Interval.QUARTER, "2015-05-01", 91),
-        (Interval.QUARTER, "2016-02-01", 91),
-        (Interval.QUARTER, "2016-12-01", 92),
-        (Interval.YEAR, "2015-02-01", 365),
-        (Interval.YEAR, "2016-01-01", 366),
+        (Day, "2016-05-01", 1),
+        (Day, "2016-05-31", 1),
+        (Week, "2016-05-01", 7),
+        (Week, "2016-05-31", 7),
+        (Month, "2016-05-02", 31),
+        (Month, "2016-05-31", 31),
+        (Month, "2016-06-11", 30),
+        (Month, "2016-07-31", 31),
+        (Month, "2016-02-01", 29),
+        (Month, "2015-02-01", 28),
+        (Month, "2016-01-01", 31),
+        (Quarter, "2015-02-01", 90),
+        (Quarter, "2015-05-01", 91),
+        (Quarter, "2016-02-01", 91),
+        (Quarter, "2016-12-01", 92),
+        (Year, "2015-02-01", 365),
+        (Year, "2016-01-01", 366),
     ],
 )
 def test_number_of_days_in_period(
@@ -364,7 +366,7 @@ def test_number_of_days_in_period(
     date_str: str,
     expect: int,
 ) -> None:
-    assert number_of_days_in_period(interval, _to_date(date_str)) == expect
+    assert interval.number_of_days(fromisoformat(date_str)) == expect
 
 
 @pytest.mark.parametrize(
@@ -382,9 +384,9 @@ def test_month_offset(
     offset: int,
     expected: str | None,
 ) -> None:
-    start_date = _to_date(date_input)
+    start_date = fromisoformat(date_input)
     if expected is None:
-        with pytest.raises(ValueError, match="day is out of range"):
+        with pytest.raises(ValueError, match=r"day .* range"):
             month_offset(start_date, offset)
     else:
         assert str(month_offset(start_date, offset)) == expected

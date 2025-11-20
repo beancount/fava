@@ -2,14 +2,14 @@
   @component
    A modal dialog.
 
-   This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
+   This tries to follow https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/.
 -->
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import type { Action } from "svelte/action";
+  import type { Attachment } from "svelte/attachments";
 
-  import { attemptFocus, getFocusableElements } from "../lib/focus";
-  import { closeOverlay } from "../stores/url";
+  import { attemptFocus, getFocusableElements } from "../lib/focus.ts";
+  import { router } from "../router.ts";
 
   interface Props {
     shown: boolean;
@@ -18,12 +18,17 @@
     children: Snippet;
   }
 
-  let { shown, focus, closeHandler = closeOverlay, children }: Props = $props();
+  let {
+    shown,
+    focus,
+    closeHandler = router.close_overlay,
+    children,
+  }: Props = $props();
 
   /**
    * A Svelte action to handle focus within a modal.
    */
-  const handleFocus: Action = (el) => {
+  const handleFocus: Attachment<HTMLDivElement> = (el) => {
     const keydown = (ev: KeyboardEvent) => {
       if (ev.key === "Tab") {
         const focusable = getFocusableElements(el);
@@ -41,6 +46,7 @@
         closeHandler();
       }
     };
+
     document.addEventListener("keydown", keydown);
 
     const selectorFocusEl = focus != null ? el.querySelector(focus) : undefined;
@@ -49,10 +55,8 @@
       attemptFocus(focusEl);
     }
 
-    return {
-      destroy: () => {
-        document.removeEventListener("keydown", keydown);
-      },
+    return () => {
+      document.removeEventListener("keydown", keydown);
     };
   };
 </script>
@@ -60,7 +64,7 @@
 {#if shown}
   <div class="overlay">
     <div class="background" onclick={closeHandler} aria-hidden="true"></div>
-    <div class="content" use:handleFocus role="dialog" aria-modal="true">
+    <div class="content" role="dialog" aria-modal="true" {@attach handleFocus}>
       {@render children()}
       <button type="button" class="muted close" onclick={closeHandler}>
         x

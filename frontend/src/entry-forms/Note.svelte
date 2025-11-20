@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { EntryMetadata, Note } from "../entries";
-  import { _ } from "../i18n";
+  import type { EntryMetadata, Note } from "../entries/index.ts";
+  import { _ } from "../i18n.ts";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";

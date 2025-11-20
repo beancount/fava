@@ -1,13 +1,12 @@
 <script lang="ts">
   import type { LanguageSupport } from "@codemirror/language";
 
-  import { doDelete, put } from "../api";
-  import { initBeancountEditor } from "../codemirror/setup";
-  import { _ } from "../i18n";
-  import { notify_err } from "../notifications";
-  import router from "../router";
-  import { reloadAfterSavingEntrySlice } from "../stores/editor";
-  import { closeOverlay } from "../stores/url";
+  import { delete_source_slice, put_source_slice } from "../api/index.ts";
+  import { initBeancountEditor } from "../codemirror/setup.ts";
+  import { _ } from "../i18n.ts";
+  import { notify_err } from "../notifications.ts";
+  import { router } from "../router.ts";
+  import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 
@@ -35,7 +34,7 @@
     event?.preventDefault();
     saving = true;
     try {
-      sha256sum = await put("source_slice", {
+      sha256sum = await put_source_slice({
         entry_hash,
         source: currentSlice,
         sha256sum,
@@ -43,7 +42,7 @@
       if ($reloadAfterSavingEntrySlice) {
         router.reload();
       }
-      closeOverlay();
+      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Saving failed: ${err.message}`);
     } finally {
@@ -54,12 +53,12 @@
   async function deleteSlice() {
     deleting = true;
     try {
-      await doDelete("source_slice", { entry_hash, sha256sum });
+      await delete_source_slice({ entry_hash, sha256sum });
       entry_hash = "";
       if ($reloadAfterSavingEntrySlice) {
         router.reload();
       }
-      closeOverlay();
+      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Deleting failed: ${err.message}`);
     } finally {
@@ -89,7 +88,7 @@
 </script>
 
 <form onsubmit={save}>
-  <div class="editor" use:renderEditor></div>
+  <div class="editor" {@attach renderEditor}></div>
   <div class="flex-row">
     <span class="spacer"></span>
     <label>

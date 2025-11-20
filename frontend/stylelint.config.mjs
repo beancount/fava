@@ -6,6 +6,8 @@ const config = {
       files: ["*.svelte", "**/*.svelte"],
       customSyntax: "postcss-html",
       rules: {
+        // false positives in stylelint 16.23.1:
+        "no-invalid-position-declaration": null,
         "selector-pseudo-class-no-unknown": [
           true,
           { ignorePseudoClasses: ["global"] },

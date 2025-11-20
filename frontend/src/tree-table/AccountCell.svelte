@@ -3,11 +3,11 @@
     Account name cell.
 -->
 <script lang="ts">
-  import type { AccountTreeNode } from "../charts/hierarchy";
-  import { urlForAccount } from "../helpers";
-  import { leaf } from "../lib/account";
+  import type { AccountTreeNode } from "../charts/hierarchy.ts";
+  import { urlForAccount } from "../helpers.ts";
+  import { leaf } from "../lib/account.ts";
   import AccountIndicator from "../sidebar/AccountIndicator.svelte";
-  import { toggle_account, toggled_accounts } from "../stores/accounts";
+  import { toggle_account, toggled_accounts } from "../stores/accounts.ts";
 
   interface Props {
     /** The account node to render the name cell for. */

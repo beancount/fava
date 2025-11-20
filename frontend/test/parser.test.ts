@@ -1,17 +1,17 @@
+import { equal, ok } from "node:assert/strict";
 import { join } from "node:path";
+import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import type { Tree } from "@lezer/common";
 import { TreeFragment } from "@lezer/common";
-import { test } from "uvu";
-import * as assert from "uvu/assert";
 import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
 import {
   input_edit_for_fragments,
   LezerTSParser,
-} from "../src/codemirror/tree-sitter-parser";
-import { is_non_empty } from "../src/lib/array";
+} from "../src/codemirror/tree-sitter-parser.ts";
+import { is_non_empty } from "../src/lib/array.ts";
 
 async function load(): Promise<TSParser> {
   await TSParser.init();
@@ -36,10 +36,10 @@ test("deduce an deletion at the end", () => {
     [new TreeFragment(0, 315, { length: 733 } as Tree, 0, false, true)],
     315,
   );
-  assert.ok(edit);
-  assert.equal(edit.startIndex, 314);
-  assert.equal(edit.oldEndIndex, 733);
-  assert.equal(edit.newEndIndex, 315);
+  ok(edit);
+  equal(edit.startIndex, 314);
+  equal(edit.oldEndIndex, 733);
+  equal(edit.newEndIndex, 315);
 });
 
 test("deduce an deletion at the start", () => {
@@ -47,10 +47,10 @@ test("deduce an deletion at the start", () => {
     [new TreeFragment(0, 418, { length: 733 } as Tree, 315, true, false)],
     315,
   );
-  assert.ok(edit);
-  assert.equal(edit.startIndex, 0);
-  assert.equal(edit.oldEndIndex, 316);
-  assert.equal(edit.newEndIndex, 1);
+  ok(edit);
+  equal(edit.startIndex, 0);
+  equal(edit.oldEndIndex, 316);
+  equal(edit.newEndIndex, 1);
 });
 
 test("deduce a deletion in the middle", () => {
@@ -62,10 +62,10 @@ test("deduce a deletion in the middle", () => {
     ],
     422,
   );
-  assert.ok(edit);
-  assert.equal(edit.startIndex, 163);
-  assert.equal(edit.oldEndIndex, 476);
-  assert.equal(edit.newEndIndex, 165);
+  ok(edit);
+  equal(edit.startIndex, 163);
+  equal(edit.oldEndIndex, 476);
+  equal(edit.newEndIndex, 165);
 });
 
 test("deduce an insertion in the middle", () => {
@@ -77,10 +77,10 @@ test("deduce an insertion in the middle", () => {
     ],
     733,
   );
-  assert.ok(edit);
-  assert.equal(edit.startIndex, 163);
-  assert.equal(edit.oldEndIndex, 165);
-  assert.equal(edit.newEndIndex, 476);
+  ok(edit);
+  equal(edit.startIndex, 163);
+  equal(edit.oldEndIndex, 165);
+  equal(edit.newEndIndex, 476);
 });
 
 test("parse that reuses a single fragment", async () => {
@@ -88,8 +88,8 @@ test("parse that reuses a single fragment", async () => {
   const parser = new LezerTSParser(ts_parser, [], "beancount_file");
   const line = "2012-12-12 price USD 1 EUR\n";
   const tree = parser.parse(line + line);
-  assert.equal(tree.length, line.length * 2);
-  assert.snapshot(
+  equal(tree.length, line.length * 2);
+  equal(
     tree_string(tree),
     "beancount_file(price(date,PRICE,currency,amount(number,currency)),price(date,PRICE,currency,amount(number,currency)))",
   );
@@ -97,14 +97,14 @@ test("parse that reuses a single fragment", async () => {
   fragments = TreeFragment.applyChanges(fragments, [
     { fromA: 0, toA: line.length, fromB: 0, toB: 0 },
   ]);
-  assert.equal(fragments.length, 1);
-  assert.ok(is_non_empty(fragments));
+  equal(fragments.length, 1);
+  ok(is_non_empty(fragments));
   const edit = input_edit_for_fragments(fragments, line.length);
-  assert.equal(edit?.startIndex, 0);
-  assert.equal(edit?.oldEndIndex, line.length + 1);
-  assert.equal(edit?.newEndIndex, 1);
+  equal(edit?.startIndex, 0);
+  equal(edit.oldEndIndex, line.length + 1);
+  equal(edit.newEndIndex, 1);
   const new_tree = parser.parse(line, fragments);
-  assert.snapshot(
+  equal(
     tree_string(new_tree),
     "beancount_file(price(date,PRICE,currency,amount(number,currency)))",
   );
@@ -115,14 +115,12 @@ test("parse a single price directive", async () => {
   const parser = new LezerTSParser(ts_parser, [], "beancount_file");
   const line = "2012-12-12 price USD 1 EUR\n";
   const tree = parser.parse(line);
-  assert.snapshot(
+  equal(
     tree_string(tree),
     "beancount_file(price(date,PRICE,currency,amount(number,currency)))",
   );
 
   const partial_parse = parser.startParse(line);
   // Advance directly returns the tree.
-  assert.ok(partial_parse.advance());
+  ok(partial_parse.advance());
 });
-
-test.run();

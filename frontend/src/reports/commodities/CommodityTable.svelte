@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { day } from "../../format";
-  import { _ } from "../../i18n";
-  import { NumberColumn, Sorter } from "../../sort";
+  import { day } from "../../format.ts";
+  import { _ } from "../../i18n.ts";
+  import { NumberColumn, Sorter } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { ctx } from "../../stores/format";
+  import { ctx } from "../../stores/format.ts";
+  import { currency_name } from "../../stores/index.ts";
 
   type T = [Date, number];
   interface Props {
@@ -20,6 +21,7 @@
   let sorter = $state(new Sorter(columns[0], "desc"));
 
   let sorted_prices = $derived(sorter.sort(prices));
+  let quote_name = $derived($currency_name(quote));
 </script>
 
 <table>
@@ -34,7 +36,9 @@
     {#each sorted_prices as [date, value] (date)}
       <tr>
         <td>{day(date)}</td>
-        <td class="num">{$ctx.amount(value, quote)}</td>
+        <td class="num" title={quote_name}>
+          {$ctx.amount(value, quote)}
+        </td>
       </tr>
     {/each}
   </tbody>

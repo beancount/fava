@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { put } from "../../api";
-  import { _ } from "../../i18n";
-  import { notify, notify_err } from "../../notifications";
-  import router from "../../router";
+  import { put_upload_import_file } from "../../api/index.ts";
+  import { _ } from "../../i18n.ts";
+  import { notify, notify_err } from "../../notifications.ts";
+  import { router } from "../../router.ts";
 
   let input: HTMLInputElement | undefined = $state.raw();
 
@@ -16,7 +16,7 @@
       Array.from(input.files).map(async (file) => {
         const formData = new FormData();
         formData.append("file", file, file.name);
-        return put("upload_import_file", formData).then(
+        return put_upload_import_file(formData).then(
           notify,
           (error: unknown) => {
             notify_err(error, (err) => `Upload error: ${err.message}`);

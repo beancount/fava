@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { errorWithCauses } from "../lib/errors";
+  import { errorWithCauses } from "../lib/errors.ts";
 
   interface Props {
     title: string;

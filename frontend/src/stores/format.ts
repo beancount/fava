@@ -2,16 +2,17 @@ import { format } from "d3-format";
 import type { NumberValue } from "d3-scale";
 import { derived } from "svelte/store";
 
-import type { FormatterContext } from "../format";
+import type { FormatterContext } from "../format.ts";
 import {
   dateFormat,
   formatter_context,
   localeFormatter,
   replaceNumbers,
   timeFilterDateFormat,
-} from "../format";
-import { incognito, interval, precisions } from ".";
-import { locale } from "./fava_options";
+} from "../format.ts";
+import { locale } from "./fava_options.ts";
+import { incognito, precisions } from "./index.ts";
+import { interval } from "./url.ts";
 
 const short_format = format(".3s");
 

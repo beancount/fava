@@ -1,7 +1,7 @@
-import { get } from "../../api";
-import { todayAsString } from "../../format";
-import { _ } from "../../i18n";
-import { Route } from "../route";
+import { get_imports } from "../../api/index.ts";
+import { todayAsString } from "../../format.ts";
+import { _ } from "../../i18n.ts";
+import { Route } from "../route.ts";
 import ImportSvelte from "./Import.svelte";
 
 /**
@@ -35,7 +35,7 @@ export const import_report = new Route<ImportReportProps>(
   "import",
   ImportSvelte,
   async () =>
-    get("imports", undefined)
+    get_imports()
       .then((files) => {
         // Initially set the file names for all importable files.
         const today = todayAsString();

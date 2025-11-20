@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { parseChartData } from "../../charts";
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
-  import { chartContext } from "../../charts/context";
-  import { urlForAccount } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { is_non_empty } from "../../lib/array";
-  import { intervalLabel } from "../../lib/interval";
-  import { interval } from "../../stores";
+  import { ParsedHierarchyChart } from "../../charts/hierarchy.ts";
+  import { urlForAccount } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { is_non_empty } from "../../lib/array.ts";
+  import { intervalLabel } from "../../lib/interval.ts";
+  import { currentTimeFilterDateFormat } from "../../stores/format.ts";
+  import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
-  import type { AccountReportProps } from ".";
+  import JournalTable from "../journal/JournalTable.svelte";
+  import type { AccountReportProps } from "./index.ts";
 
   let {
     account,
@@ -21,16 +22,29 @@
   }: AccountReportProps = $props();
 
   let accumulate = $derived(report_type === "balances");
-
-  let chartData = $derived(
-    parseChartData(charts, $chartContext).unwrap_or(null),
-  );
   let interval_label = $derived(intervalLabel($interval).toLowerCase());
+
+  let all_charts = $derived(
+    interval_balances && dates
+      ? [
+          ...charts,
+          ...interval_balances
+            .slice(0, 3)
+            .map(
+              (node, index) =>
+                new ParsedHierarchyChart(
+                  $currentTimeFilterDateFormat(
+                    dates[index]?.begin ?? new Date(),
+                  ),
+                  node,
+                ),
+            ),
+        ]
+      : charts,
+  );
 </script>
 
-{#if chartData}
-  <ChartSwitcher charts={chartData} />
-{/if}
+<ChartSwitcher charts={all_charts} />
 
 <div class="droptarget" data-account-name={account}>
   <div class="headerline">
@@ -65,9 +79,12 @@
       {/if}
     </h3>
   </div>
-  {#if report_type === "journal"}
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    {@html journal}
+  {#if report_type === "journal" && journal != null}
+    <JournalTable
+      {journal}
+      initial_sort={["date", "desc"]}
+      show_change_and_balance={true}
+    />
   {:else if interval_balances && is_non_empty(interval_balances) && budgets && dates}
     <IntervalTreeTable
       trees={interval_balances}

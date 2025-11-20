@@ -15,9 +15,10 @@ from fava.core.conversion import _CurrencyConversion
 from fava.core.conversion import Conversion
 from fava.core.conversion import conversion_from_str
 from fava.core.conversion import convert_position
+from fava.core.conversion import cost_or_value
 from fava.core.conversion import get_cost
 from fava.core.conversion import get_market_value
-from fava.core.conversion import get_units
+from fava.core.conversion import UNITS
 from fava.core.inventory import _Amount
 from fava.core.inventory import _Cost
 from fava.core.inventory import _Position
@@ -95,7 +96,9 @@ def test_conversion_from_string(
     ],
 )
 def test_get_units(position: str, expected: str) -> None:
-    assert get_units(_pos(position)) == _amt(expected)
+    inv = _inv(position)
+    res = _simple_inv(expected)
+    assert UNITS.apply(inv) == res
 
 
 @pytest.mark.parametrize(
@@ -221,8 +224,6 @@ def test_conversion(
     )
     inv = _inv(inventory)
     conv = conversion_from_str(conversion)
-    assert conv.apply(
-        inv,
-        prices=prices,
-        date=conversion_date,
-    ) == _simple_inv(expected)
+    res = _simple_inv(expected)
+    assert conv.apply(inv, prices=prices, date=conversion_date) == res
+    assert cost_or_value(inv, conv, prices=prices, date=conversion_date) == res

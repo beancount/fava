@@ -1,16 +1,13 @@
 import { derived, writable } from "svelte/store";
 
-import { _ } from "../i18n";
-import iso4217currencies from "../lib/iso4217";
-import { localStorageSyncedStore } from "../lib/store";
-import type { ValidationT } from "../lib/validation";
-import { array, constants, string } from "../lib/validation";
-import { currencies_sorted } from ".";
-import { conversion_currencies } from "./fava_options";
-import { operating_currency } from "./options";
-
-/** Whether the charts should be shown - this applies globally to all charts. */
-export const showCharts = writable(true);
+import { _ } from "../i18n.ts";
+import iso4217currencies from "../lib/iso4217.ts";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import type { ValidationT } from "../lib/validation.ts";
+import { array, constants, string } from "../lib/validation.ts";
+import { conversion_currencies } from "./fava_options.ts";
+import { currencies_sorted } from "./index.ts";
+import { operating_currency } from "./options.ts";
 
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
 export const lastActiveChartName = writable<string | null>(null);

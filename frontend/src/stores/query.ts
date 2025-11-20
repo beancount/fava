@@ -1,5 +1,5 @@
-import { localStorageSyncedStore } from "../lib/store";
-import { array, string } from "../lib/validation";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import { array, string } from "../lib/validation.ts";
 
 const { update, set, subscribe } = localStorageSyncedStore(
   "query-history",

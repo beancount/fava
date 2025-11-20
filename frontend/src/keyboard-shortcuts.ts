@@ -1,7 +1,4 @@
-import { tick } from "svelte";
-import type { Action } from "svelte/action";
-
-import { log_error } from "./log";
+import type { Attachment } from "svelte/attachments";
 
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
@@ -40,7 +37,7 @@ function showTooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
     const key = el.getAttribute("data-key");
-    if (el instanceof HTMLElement && key !== null) {
+    if (el instanceof HTMLElement && key != null) {
       removes.push(showTooltip(el, key));
     }
   });
@@ -205,43 +202,25 @@ function bindKey(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
 }
 
 /**
- * A svelte action to attach a global keyboard shortcut.
+ * A svelte attachment to attach a global keyboard shortcut.
  *
  * This will attach a listener for the given key (or key sequence of length 2).
  * This listener will focus the given node if it is an <input> element and
  * trigger a click on it otherwise.
  */
-export const keyboardShortcut: Action<HTMLElement, KeySpec | undefined> = (
-  node,
-  spec,
-) => {
-  const setup = (s?: KeySpec) => {
-    if (s != null) {
-      node.setAttribute("data-key", getKeySpecDescription(s));
-      const unbind = bindKey(s, node);
-      return () => {
-        unbind();
-        node.removeAttribute("data-key");
-      };
-    }
+export const keyboardShortcut = (
+  spec?: KeySpec,
+): Attachment<HTMLElement> | null => {
+  if (spec == null) {
+    return null;
+  }
+  return (node) => {
+    node.setAttribute("data-key", getKeySpecDescription(spec));
+    const unbind = bindKey(spec, node);
     return () => {
-      // pass
+      unbind();
+      node.removeAttribute("data-key");
     };
-  };
-  let destroy = setup(spec);
-
-  return {
-    destroy,
-    update(new_spec) {
-      destroy();
-      // Await tick so that key bindings that might have been removed from other
-      // elements in the same render are gone.
-      tick()
-        .then(() => {
-          destroy = setup(new_spec);
-        })
-        .catch(log_error);
-    },
   };
 };
 

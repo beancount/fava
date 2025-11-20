@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { leaf } from "../../lib/account";
-  import type { TreeNode } from "../../lib/tree";
-  import { toggle_account, toggled_accounts } from "../../stores/accounts";
+  import { leaf } from "../../lib/account.ts";
+  import type { TreeNode } from "../../lib/tree.ts";
+  import { toggle_account, toggled_accounts } from "../../stores/accounts.ts";
   import Accounts from "./Accounts.svelte";
-  import { selectedAccount } from "./stores";
+  import { selectedAccount } from "./stores.ts";
 
   interface Props {
     node: TreeNode<{ name: string; count: number }>;

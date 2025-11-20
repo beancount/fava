@@ -11,8 +11,7 @@ from typing import TYPE_CHECKING
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import days_in_daterange
-from fava.util.date import Interval
-from fava.util.date import number_of_days_in_period
+from fava.util.date import INTERVALS
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -21,6 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Custom
     from fava.core import FavaLedger
+    from fava.util.date import Interval
 
 
 class Budget(NamedTuple):
@@ -100,17 +100,9 @@ def parse_budgets(
     budgets: BudgetDict = defaultdict(list)
     errors = []
 
-    interval_map = {
-        "daily": Interval.DAY,
-        "weekly": Interval.WEEK,
-        "monthly": Interval.MONTH,
-        "quarterly": Interval.QUARTER,
-        "yearly": Interval.YEAR,
-    }
-
     for entry in (entry for entry in custom_entries if entry.type == "budget"):
         try:
-            interval = interval_map.get(str(entry.values[1].value))
+            interval = INTERVALS.get(str(entry.values[1].value).lower())
             if not interval:
                 errors.append(
                     BudgetError(
@@ -182,7 +174,7 @@ def calculate_budget(
     for day in days_in_daterange(date_from, date_to):
         matches = _matching_budgets(budget_list, day)
         for budget in matches.values():
-            days_in_period = number_of_days_in_period(budget.period, day)
+            days_in_period = budget.period.number_of_days(day)
             currency_dict[budget.currency] += budget.number / days_in_period
     return dict(currency_dict)
 

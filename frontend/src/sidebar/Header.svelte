@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import router from "../router";
-  import { ledgerData } from "../stores";
-  import { ledger_title } from "../stores/options";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { router } from "../router.ts";
+  import { ledgerData } from "../stores/index.ts";
+  import { ledger_title } from "../stores/options.ts";
   import FilterForm from "./FilterForm.svelte";
   import HeaderIcon from "./HeaderIcon.svelte";
-  import { has_changes } from "./page-title";
+  import { has_changes } from "./page-title.ts";
   import PageTitle from "./PageTitle.svelte";
 
   let other_ledgers = $derived($ledgerData.other_ledgers);
@@ -32,8 +32,8 @@
     type="button"
     hidden={!$has_changes}
     class="reload-page"
-    use:keyboardShortcut={"r"}
-    onclick={router.reload.bind(router)}
+    {@attach keyboardShortcut("r")}
+    onclick={router.reload}
   >
     &#8635;
   </button>

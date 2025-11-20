@@ -1,12 +1,17 @@
 <script lang="ts">
-  import { get } from "../api";
+  import {
+    get_narration_transaction,
+    get_narrations,
+    get_payee_accounts,
+    get_payee_transaction,
+  } from "../api/index.ts";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { EntryMetadata, Transaction } from "../entries";
-  import { Posting } from "../entries";
-  import { _ } from "../i18n";
-  import { move } from "../lib/array";
-  import { notify_err } from "../notifications";
-  import { payees } from "../stores";
+  import type { EntryMetadata, Transaction } from "../entries/index.ts";
+  import { Posting } from "../entries/index.ts";
+  import { _ } from "../i18n.ts";
+  import { move } from "../lib/array.ts";
+  import { notify_err } from "../notifications.ts";
+  import { payees } from "../stores/index.ts";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
@@ -23,7 +28,7 @@
     if (payee) {
       suggestions = undefined;
       if ($payees.includes(payee)) {
-        get("payee_accounts", { payee })
+        get_payee_accounts({ payee })
           .then((s) => {
             suggestions = s;
           })
@@ -41,7 +46,7 @@
   let narration = $derived(entry.get_narration_tags_links());
   let narration_suggestions: string[] = $state.raw([]);
   $effect(() => {
-    get("narrations")
+    get_narrations()
       .then((s) => {
         narration_suggestions = s;
       })
@@ -58,18 +63,17 @@
     if (entry.narration || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const payee_transaction = await get("payee_transaction", {
+    const payee_transaction = await get_payee_transaction({
       payee: entry.payee,
     });
     entry = payee_transaction.set("date", entry.date);
   }
   async function autocompleteSelectNarration() {
-    if (entry.payee || entry.postings.every((p) => !p.is_empty())) {
+    if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const data = await get("narration_transaction", {
-      narration: narration,
-    });
+    const data = await get_narration_transaction({ narration });
+    data.set("date", entry.date);
     entry = data;
     narration = entry.get_narration_tags_links();
   }

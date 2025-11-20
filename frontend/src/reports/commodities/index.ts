@@ -1,16 +1,15 @@
-import { get } from "../../api";
-import type { Commodities } from "../../api/validators";
-import type { FavaChart } from "../../charts";
-import { LineChart } from "../../charts/line";
-import { domHelpers } from "../../charts/tooltip";
-import { day } from "../../format";
-import { _ } from "../../i18n";
-import { getURLFilters } from "../../stores/filters";
-import { Route } from "../route";
+import { get_commodities } from "../../api/index.ts";
+import type { Commodities } from "../../api/validators.ts";
+import { LineChart } from "../../charts/line.ts";
+import { domHelpers } from "../../charts/tooltip.ts";
+import { day } from "../../format.ts";
+import { _ } from "../../i18n.ts";
+import { getURLFilters } from "../../stores/filters.ts";
+import { Route } from "../route.ts";
 import CommoditiesSvelte from "./Commodities.svelte";
 
 export interface CommoditiesReportProps {
-  charts: FavaChart[];
+  charts: LineChart[];
   commodities: Commodities;
 }
 
@@ -18,7 +17,7 @@ export const commodities = new Route<CommoditiesReportProps>(
   "commodities",
   CommoditiesSvelte,
   async (url) =>
-    get("commodities", getURLFilters(url)).then((cs) => {
+    get_commodities(getURLFilters(url)).then((cs) => {
       const charts = cs.map(({ base, quote, prices }) => {
         const name = `${base} / ${quote}`;
         const values = prices.map((d) => ({ name, date: d[0], value: d[1] }));

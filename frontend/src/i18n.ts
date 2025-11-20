@@ -1,7 +1,7 @@
-import { getScriptTagValue } from "./lib/dom";
-import { ok } from "./lib/result";
-import { record, string } from "./lib/validation";
-import { log_error } from "./log";
+import { getScriptTagValue } from "./lib/dom.ts";
+import { ok } from "./lib/result.ts";
+import { record, string } from "./lib/validation.ts";
+import { log_error } from "./log.ts";
 
 let translations: Record<string, string> | undefined;
 const validator = record(string);

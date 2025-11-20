@@ -4,14 +4,14 @@
   import type { EditorView } from "@codemirror/view";
   import type { Snippet } from "svelte";
 
-  import { beancountFormat } from "../../codemirror/beancount-format";
-  import { scrollToLine } from "../../codemirror/editor-transactions";
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { modKey } from "../../keyboard-shortcuts";
-  import router from "../../router";
-  import { insert_entry } from "../../stores/fava_options";
-  import { sources } from "../../stores/options";
+  import { beancountFormat } from "../../codemirror/beancount-format.ts";
+  import { scrollToLine } from "../../codemirror/editor-transactions.ts";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { modKey } from "../../keyboard-shortcuts.ts";
+  import { router } from "../../router.ts";
+  import { insert_entry } from "../../stores/fava_options.ts";
+  import { sources } from "../../stores/options.ts";
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
   import AppMenuSubItem from "./AppMenuSubItem.svelte";

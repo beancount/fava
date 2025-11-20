@@ -24,28 +24,29 @@ import "@ungap/custom-elements";
 
 import { get as store_get } from "svelte/store";
 
-import { get } from "./api";
-import { ledgerDataValidator } from "./api/validators";
-import { CopyableText } from "./clipboard";
-import { BeancountTextarea } from "./codemirror/setup";
-import { handleExtensionPageLoad } from "./extensions";
-import { _ } from "./i18n";
-import { FavaJournal } from "./journal";
-import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
-import { getScriptTagValue } from "./lib/dom";
-import { log_error } from "./log";
-import { notify, notify_err } from "./notifications";
-import { frontend_routes } from "./reports/routes";
-import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
-import { initSidebar } from "./sidebar";
-import { has_changes, updatePageTitle } from "./sidebar/page-title";
-import { SortableTable } from "./sort/sortable-table";
-import { errors, ledgerData } from "./stores";
-import { init_color_scheme } from "./stores/color_scheme";
-import { auto_reload } from "./stores/fava_options";
-import { ledger_mtime, read_mtime } from "./stores/mtime";
-import { SvelteCustomElement } from "./svelte-custom-elements";
-import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element";
+import { get_changed, get_errors, get_ledger_data } from "./api/index.ts";
+import { ledgerDataValidator } from "./api/validators.ts";
+import { CopyableText } from "./clipboard.ts";
+import { BeancountTextarea } from "./codemirror/setup.ts";
+import { _ } from "./i18n.ts";
+import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts.ts";
+import { getScriptTagValue } from "./lib/dom.ts";
+import { log_error } from "./log.ts";
+import { notify, notify_err } from "./notifications.ts";
+import { frontend_routes } from "./reports/routes.ts";
+import { router } from "./router.ts";
+import { initSidebar } from "./sidebar/index.ts";
+import { has_changes } from "./sidebar/page-title.ts";
+import { SortableTable } from "./sort/sortable-table.ts";
+import { init_color_scheme } from "./stores/color_scheme.ts";
+import {
+  auto_reload,
+  invert_gains_losses_colors,
+} from "./stores/fava_options.ts";
+import { errors, ledgerData } from "./stores/index.ts";
+import { ledger_mtime, read_mtime } from "./stores/mtime.ts";
+import { SvelteCustomElement } from "./svelte-custom-elements.ts";
+import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element.ts";
 
 /**
  * Define the custom elements that Fava uses.
@@ -55,36 +56,29 @@ function defineCustomElements() {
     extends: "textarea",
   });
   customElements.define("copyable-text", CopyableText);
-  customElements.define("fava-journal", FavaJournal);
-  customElements.define("sortable-table", SortableTable, { extends: "table" });
   customElements.define("svelte-component", SvelteCustomElement);
 
+  // for extension compatibility (only used in _query_table.html)
+  customElements.define("sortable-table", SortableTable, { extends: "table" });
   // for extension compatibility
   customElements.define("tree-table", TreeTableCustomElement);
 }
-
-router.on("page-loaded", () => {
-  read_mtime();
-  updatePageTitle();
-  has_changes.set(false);
-  handleExtensionPageLoad();
-});
 
 /**
  * Update the ledger data and errors; Reload if automatic reloading is configured.
  */
 function onChanges() {
-  get("ledger_data")
+  get_ledger_data()
     .then((v) => {
       ledgerData.set(v);
     })
     .catch((e: unknown) => {
       notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
     });
-  if (store_get(auto_reload) && !router.hasInteruptHandler) {
+  if (store_get(auto_reload) && !router.has_interrupt_handler) {
     router.reload();
   } else {
-    get("errors").then((v) => {
+    get_errors().then((v) => {
       errors.set(v);
     }, log_error);
     notify(_("File change detected. Click to reload."), "warning", () => {
@@ -102,7 +96,7 @@ function onChanges() {
  * This will be scheduled every 5 seconds.
  */
 function pollForChanges(): void {
-  get("changed").catch(log_error);
+  get_changed().catch(log_error);
 }
 
 function init(): void {
@@ -125,8 +119,6 @@ function init(): void {
   });
 
   router.init(frontend_routes);
-  setStoreValuesFromURL();
-  syncStoreValuesToURL();
   initSidebar();
   initGlobalKeyboardShortcuts();
   defineCustomElements();
@@ -136,9 +128,11 @@ function init(): void {
     errors.set(val.errors);
   });
 
-  router.trigger("page-loaded");
-
   init_color_scheme();
+
+  invert_gains_losses_colors.subscribe(($invert) => {
+    document.documentElement.classList.toggle("invert-gains-losses", $invert);
+  });
 }
 
 init();

@@ -1,4 +1,4 @@
-import { log_error } from "./log";
+import { log_error } from "./log.ts";
 
 export class CopyableText extends HTMLElement {
   constructor() {

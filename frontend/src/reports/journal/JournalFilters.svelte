@@ -1,9 +1,9 @@
 <script lang="ts" module>
-  import { _, format } from "../i18n";
-  import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { toggle } from "../lib/set";
-  import { journalShow } from "../stores/journal";
+  import { _, format } from "../../i18n.ts";
+  import type { KeySpec } from "../../keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "../../keyboard-shortcuts.ts";
+  import { toggle } from "../../lib/set.ts";
+  import { journal_show } from "../../stores/journal.ts";
 
   const toggleText = _("Toggle %(type)s entries");
 
@@ -46,10 +46,10 @@
 </script>
 
 <script lang="ts">
-  let shownSet = $derived(new Set($journalShow));
+  let shownSet = $derived(new Set($journal_show));
 
   function toggle_type(type: string) {
-    journalShow.update((show) => {
+    journal_show.update((show) => {
       const set = new Set(show);
       toggle(set, type);
       // Also toggle all entries that have `type` as their supertype.
@@ -70,7 +70,7 @@
     <button
       type="button"
       title={title ?? format(toggleText, { type: button_text })}
-      use:keyboardShortcut={shortcut}
+      {@attach keyboardShortcut(shortcut)}
       class:inactive={!active(type, supertype)}
       onclick={() => {
         toggle_type(type);

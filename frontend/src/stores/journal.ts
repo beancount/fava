@@ -1,7 +1,8 @@
-import { localStorageSyncedStore } from "../lib/store";
-import { array, constants, string, tuple } from "../lib/validation";
+import { localStorageSyncedStore } from "../lib/store.ts";
+import { array, constants, string, tuple } from "../lib/validation.ts";
+import type { JournalSortColumn } from "../reports/journal/sort.ts";
 
-const defaultValue = [
+const default_journal_show = [
   "balance",
   "budget",
   "cleared",
@@ -16,17 +17,18 @@ const defaultValue = [
 ];
 
 /** The types of entries to show in the journal. */
-export const journalShow = localStorageSyncedStore(
+export const journal_show = localStorageSyncedStore(
   "journal-show",
   array(string),
-  () => defaultValue,
+  () => default_journal_show,
 );
 
-const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
+export type JournalSort = [JournalSortColumn, "asc" | "desc"];
+const default_journal_sort: JournalSort = ["date", "desc"];
 
 /** The column and order that the journal should be sorted in. */
-export const journalSortOrder = localStorageSyncedStore(
+export const journal_sort = localStorageSyncedStore<JournalSort>(
   "journal-sort-order",
-  tuple(string, constants("asc", "desc")),
-  () => defaultSortOrder,
+  tuple(constants("date", "flag", "narration"), constants("asc", "desc")),
+  () => default_journal_sort,
 );

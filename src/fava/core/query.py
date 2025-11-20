@@ -11,7 +11,7 @@ from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
 from beancount.core.position import Position
 
-from fava.core.conversion import simple_units
+from fava.core.conversion import UNITS
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
@@ -155,7 +155,7 @@ class InventoryColumn(BaseColumn):
         val: Inventory | None,
     ) -> SimpleCounterInventory | None:
         """Serialise an inventory."""
-        return simple_units(val) if val is not None else None
+        return UNITS.apply_inventory(val) if val is not None else None
 
 
 COLUMNS = {

@@ -23,9 +23,9 @@ import type {
   TreeCursor as TSTreeCursor,
 } from "web-tree-sitter";
 
-import type { NonEmptyArray } from "../lib/array";
-import { is_non_empty, last_element } from "../lib/array";
-import { assert, log_error } from "../log";
+import type { NonEmptyArray } from "../lib/array.ts";
+import { is_non_empty, last_element } from "../lib/array.ts";
+import { assert, log_error } from "../log.ts";
 
 /** The Lezer NodeType for error nodes. */
 const error = NodeType.define({
@@ -58,7 +58,7 @@ function ts_edit(
 }
 
 /** This node prop is used to store the TS tree on the root node of the Lezer tree for reuse. */
-const TSTreeProp = new NodeProp<TSTree>({ perNode: true });
+const TS_TREE_PROP = new NodeProp<TSTree>({ perNode: true });
 
 class TSParserError extends Error {}
 
@@ -130,17 +130,26 @@ const PARSE_CACHE = new WeakMap<Text, Tree>();
  * allow for a faster incremental parse.
  */
 class Parse implements PartialParse {
+  readonly ts_parser: TSParser;
+  readonly node_types: NodeType[];
+  readonly input: Input;
+  readonly fragments: readonly TreeFragment[];
+  readonly ranges: readonly { from: number; to: number }[];
   stoppedAt: number | null = null;
-
   parsedPos = 0;
 
   constructor(
-    readonly ts_parser: TSParser,
-    readonly node_types: NodeType[],
-    readonly input: Input,
-    readonly fragments: readonly TreeFragment[],
-    readonly ranges: readonly { from: number; to: number }[],
+    ts_parser: TSParser,
+    node_types: NodeType[],
+    input: Input,
+    fragments: readonly TreeFragment[],
+    ranges: readonly { from: number; to: number }[],
   ) {
+    this.ts_parser = ts_parser;
+    this.node_types = node_types;
+    this.input = input;
+    this.fragments = fragments;
+    this.ranges = ranges;
     if (
       ranges.length !== 1 ||
       ranges[0]?.from !== 0 ||
@@ -254,7 +263,7 @@ class Parse implements PartialParse {
       tree.children,
       tree.positions,
       tree.length,
-      [[TSTreeProp, ts_tree]],
+      [[TS_TREE_PROP, ts_tree]],
     );
     return tree_with_ts_tree_prop;
   }
@@ -269,7 +278,7 @@ class Parse implements PartialParse {
     }
     const edit = input_edit_for_fragments(fragments, input_length);
     const old_tree = fragments[0].tree;
-    const edited_old_ts_tree = old_tree.prop(TSTreeProp)?.copy();
+    const edited_old_ts_tree = old_tree.prop(TS_TREE_PROP)?.copy();
 
     if (edit) {
       if (!edited_old_ts_tree) {
@@ -376,13 +385,11 @@ class Parse implements PartialParse {
 export class LezerTSParser extends Parser {
   /** The Lezer NodeTypes - all node types from the TS grammar with props assigned. */
   private node_types: NodeType[];
+  readonly ts_parser: TSParser;
 
-  constructor(
-    readonly ts_parser: TSParser,
-    props: NodePropSource[],
-    top_node: string,
-  ) {
+  constructor(ts_parser: TSParser, props: NodePropSource[], top_node: string) {
     super();
+    this.ts_parser = ts_parser;
 
     const { language } = ts_parser;
     if (language == null) {

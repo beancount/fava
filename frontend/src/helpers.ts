@@ -1,19 +1,28 @@
 import { derived, get as store_get } from "svelte/store";
 
-import { base_url } from "./stores";
-import { use_external_editor } from "./stores/fava_options";
-import { syncedSearchParams } from "./stores/url";
+import type { Result } from "./lib/result.ts";
+import { err, ok } from "./lib/result.ts";
+import { use_external_editor } from "./stores/fava_options.ts";
+import { base_url } from "./stores/index.ts";
+import { syncedSearchParams } from "./stores/url.ts";
+
+class NonRelativeUrlPathError extends Error {
+  constructor(pathname: string, $base_url: string) {
+    super(`Path '${pathname}' not relative to base url '${$base_url}'.`);
+  }
+}
 
 /**
  * Get the URL path relative to the base url of the current ledger.
  */
 export function getUrlPath(
   url: Pick<URL | Location, "pathname">,
-): string | null {
+): Result<string, NonRelativeUrlPathError> {
+  const { pathname } = url;
   const $base_url = store_get(base_url);
-  return $base_url && url.pathname.startsWith($base_url)
-    ? decodeURI(url.pathname.slice($base_url.length))
-    : null;
+  return $base_url && pathname.startsWith($base_url)
+    ? ok(decodeURI(pathname.slice($base_url.length)))
+    : err(new NonRelativeUrlPathError(pathname, $base_url));
 }
 
 /**

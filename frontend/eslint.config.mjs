@@ -1,6 +1,7 @@
 // @ts-check
 
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintPluginSvelte from "eslint-plugin-svelte";
 import svelteParser from "svelte-eslint-parser";
@@ -15,7 +16,7 @@ const tsParserOptions = {
   extraFileExtensions: [".svelte"],
 };
 
-export default tseslint.config(
+export default defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
@@ -41,18 +42,18 @@ export default tseslint.config(
       "@typescript-eslint/promise-function-async": ON,
       "@typescript-eslint/strict-boolean-expressions": ON,
       curly: [ON, "all"],
-      eqeqeq: [ON, "smart"],
+      eqeqeq: [ON, "always", { null: "never" }],
       "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
       "@typescript-eslint/naming-convention": [
         ON,
         {
           selector: "variable",
-          format: ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
+          format: ["camelCase", "snake_case", "UPPER_CASE"],
           leadingUnderscore: "allow",
         },
         {
           selector: "function",
-          format: ["camelCase", "PascalCase", "snake_case"],
+          format: ["camelCase", "snake_case"],
         },
         {
           selector: "typeLike",
@@ -62,6 +63,12 @@ export default tseslint.config(
       // Sort import statements and members alphabetically.
       "simple-import-sort/imports": ON,
       "simple-import-sort/exports": ON,
+    },
+  },
+  {
+    files: ["**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-floating-promises": OFF,
     },
   },
   {

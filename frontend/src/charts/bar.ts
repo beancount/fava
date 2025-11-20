@@ -2,13 +2,20 @@ import { rollup } from "d3-array";
 import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
-import type { FormatterContext } from "../format";
-import type { Result } from "../lib/result";
-import type { ValidationError, ValidationT } from "../lib/validation";
-import { array, date, number, object, record } from "../lib/validation";
-import type { ChartContext } from "./context";
-import type { TooltipContent } from "./tooltip";
-import { domHelpers } from "./tooltip";
+import type { FormatterContext } from "../format.ts";
+import type { ValidationT, Validator } from "../lib/validation.ts";
+import {
+  array,
+  date,
+  number,
+  object,
+  record,
+  string,
+} from "../lib/validation.ts";
+import type { ChartContext } from "./context.ts";
+import type { ParsedFavaChart } from "./index.ts";
+import type { TooltipContent } from "./tooltip.ts";
+import { domHelpers } from "./tooltip.ts";
 
 export interface BarChartDatumValue {
   currency: string;
@@ -28,36 +35,29 @@ export interface BarChartDatum {
   account_balances: Record<string, Record<string, number>>;
 }
 
-const bar_validator = array(
-  object({
-    date,
-    budgets: record(number),
-    balance: record(number),
-    account_balances: record(record(number)),
-  }),
-);
-
-type ParsedBarChartData = ValidationT<typeof bar_validator>;
-
 export class BarChart {
   readonly type = "barchart";
-
   /** The accounts that occur in some bar.  */
   readonly accounts: string[];
-
   /** For each currency, the stacks (one series per account) */
   private readonly stacks: [
     currency: string,
     stacks: Series<BarChartDatum, string>[],
   ][];
+  readonly label: string | null;
+  /** The currencies that are shown in this bar chart. */
+  readonly currencies: readonly string[];
+  /** The data for the (single) bars for all the intervals in this chart. */
+  private readonly bar_groups: BarChartDatum[];
 
   constructor(
-    readonly name: string | null,
-    /** The currencies that are shown in this bar chart. */
-    readonly currencies: readonly string[],
-    /** The data for the (single) bars for all the intervals in this chart. */
-    private readonly bar_groups: BarChartDatum[],
+    label: string | null,
+    currencies: readonly string[],
+    bar_groups: BarChartDatum[],
   ) {
+    this.label = label;
+    this.currencies = currencies;
+    this.bar_groups = bar_groups;
     this.accounts = Array.from(
       new Set(bar_groups.map((d) => Object.keys(d.account_balances)).flat(2)),
     ).sort();
@@ -164,18 +164,37 @@ function currencies_to_show(
   return to_show;
 }
 
-/**
- * Try to parse a bar chart.
- */
-export function bar(
-  label: string | null,
-  json: unknown,
-  $chartContext: ChartContext,
-): Result<BarChart, ValidationError> {
-  return bar_validator(json).map((parsedData) => {
-    const currencies = currencies_to_show(parsedData, $chartContext);
+const bar_validator = array(
+  object({
+    date,
+    budgets: record(number),
+    balance: record(number),
+    account_balances: record(record(number)),
+  }),
+);
 
-    const bar_groups = parsedData.map((interval) => ({
+type ParsedBarChartData = ValidationT<typeof bar_validator>;
+
+const bar_chart_validator = object({ label: string, data: bar_validator });
+
+export class ParsedBarChart implements ParsedFavaChart {
+  readonly label: string | null;
+  readonly data: ParsedBarChartData;
+
+  constructor(label: string | null, data: ParsedBarChartData) {
+    this.label = label;
+    this.data = data;
+  }
+
+  static validator: Validator<ParsedBarChart> = (json) =>
+    bar_chart_validator(json).map(
+      ({ label, data }) => new ParsedBarChart(label, data),
+    );
+
+  with_context($chartContext: ChartContext): BarChart {
+    const currencies = currencies_to_show(this.data, $chartContext);
+
+    const bar_groups = this.data.map((interval) => ({
       values: currencies.map((currency) => ({
         currency,
         value: interval.balance[currency] ?? 0,
@@ -186,6 +205,6 @@ export function bar(
       account_balances: interval.account_balances,
     }));
 
-    return new BarChart(label, currencies, bar_groups);
-  });
+    return new BarChart(this.label, currencies, bar_groups);
+  }
 }

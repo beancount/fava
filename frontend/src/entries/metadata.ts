@@ -1,7 +1,7 @@
-import { is_empty } from "../lib/objects";
-import { ok } from "../lib/result";
-import type { SafeValidator, Validator } from "../lib/validation";
-import { record } from "../lib/validation";
+import { is_empty } from "../lib/objects.ts";
+import { ok } from "../lib/result.ts";
+import type { SafeValidator, Validator } from "../lib/validation.ts";
+import { record } from "../lib/validation.ts";
 
 export type MetadataValue = string | boolean | number;
 

@@ -1,5 +1,5 @@
-import { test } from "uvu";
-import * as assert from "uvu/assert";
+import { deepEqual, equal } from "node:assert/strict";
+import { test } from "node:test";
 
 import {
   ancestors,
@@ -8,30 +8,30 @@ import {
   is_descendant_or_equal,
   leaf,
   parent,
-} from "../src/lib/account";
+} from "../src/lib/account.ts";
 
 test("account: split account names", () => {
-  assert.equal(ancestors("Assets:Cash:Sub"), [
+  deepEqual(ancestors("Assets:Cash:Sub"), [
     "Assets",
     "Assets:Cash",
     "Assets:Cash:Sub",
   ]);
-  assert.equal(ancestors("Assets:Cash"), ["Assets", "Assets:Cash"]);
-  assert.equal(ancestors("Assets"), ["Assets"]);
-  assert.equal(ancestors(""), []);
+  deepEqual(ancestors("Assets:Cash"), ["Assets", "Assets:Cash"]);
+  deepEqual(ancestors("Assets"), ["Assets"]);
+  deepEqual(ancestors(""), []);
 
-  assert.is(parent("Assets:Cash:Sub"), "Assets:Cash");
-  assert.is(parent("Assets:Cash"), "Assets");
-  assert.is(parent("Assets"), "");
-  assert.is(parent(""), "");
+  equal(parent("Assets:Cash:Sub"), "Assets:Cash");
+  equal(parent("Assets:Cash"), "Assets");
+  equal(parent("Assets"), "");
+  equal(parent(""), "");
 
-  assert.is(leaf("asd:asdf"), "asdf");
-  assert.is(leaf("asd"), "asd");
-  assert.is(leaf(""), "");
+  equal(leaf("asd:asdf"), "asdf");
+  equal(leaf("asd"), "asd");
+  equal(leaf(""), "");
 });
 
 test("account: get internal accounts", () => {
-  assert.equal(
+  deepEqual(
     get_internal_accounts([
       "Assets:Cash:Sub",
       "Income:Something",
@@ -43,24 +43,22 @@ test("account: get internal accounts", () => {
 
 test("account: check whether account is descendant of another", () => {
   const is_descendant_of_root = is_descendant_or_equal("");
-  assert.is(true, is_descendant_of_root("A"));
-  assert.is(true, is_descendant_of_root("A:Test"));
+  equal(true, is_descendant_of_root("A"));
+  equal(true, is_descendant_of_root("A:Test"));
   const is_descendant_of_assets = is_descendant_or_equal("Assets");
-  assert.is(true, is_descendant_of_assets("Assets"));
-  assert.is(true, is_descendant_of_assets("Assets:Cash"));
-  assert.is(false, is_descendant_of_assets("AssetsOther"));
-  assert.is(false, is_descendant_of_assets("Income:Other"));
+  equal(true, is_descendant_of_assets("Assets"));
+  equal(true, is_descendant_of_assets("Assets:Cash"));
+  equal(false, is_descendant_of_assets("AssetsOther"));
+  equal(false, is_descendant_of_assets("Income:Other"));
   const is_descendant_of_assets_cash = is_descendant_or_equal("Assets:Cash");
-  assert.is(true, is_descendant_of_assets_cash("Assets:Cash"));
-  assert.is(false, is_descendant_of_assets_cash("Assets"));
+  equal(true, is_descendant_of_assets_cash("Assets:Cash"));
+  equal(false, is_descendant_of_assets_cash("Assets"));
 
   const is_true_descendant_of_root = is_descendant("");
-  assert.is(true, is_true_descendant_of_root("A"));
-  assert.is(true, is_true_descendant_of_root("A:Test"));
-  assert.is(false, is_true_descendant_of_root(""));
+  equal(true, is_true_descendant_of_root("A"));
+  equal(true, is_true_descendant_of_root("A:Test"));
+  equal(false, is_true_descendant_of_root(""));
   const is_true_descendant_of_assets = is_descendant("Assets");
-  assert.is(false, is_true_descendant_of_assets("Assets"));
-  assert.is(true, is_true_descendant_of_assets("Assets:Cash"));
+  equal(false, is_true_descendant_of_assets("Assets"));
+  equal(true, is_true_descendant_of_assets("Assets:Cash"));
 });
-
-test.run();

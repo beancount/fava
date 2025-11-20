@@ -1,15 +1,21 @@
-import { account_report } from "./accounts";
-import { commodities } from "./commodities";
-import { documents } from "./documents";
-import { editor } from "./editor";
-import { errors } from "./errors";
-import { events } from "./events";
-import { holdings } from "./holdings";
-import { import_report } from "./import";
-import { options } from "./options";
-import { query } from "./query";
-import type { FrontendRoute } from "./route";
-import { balance_sheet, income_statement, trial_balance } from "./tree_reports";
+import { account_report } from "./accounts/index.ts";
+import { commodities } from "./commodities/index.ts";
+import { documents } from "./documents/index.ts";
+import { editor } from "./editor/index.ts";
+import { errors } from "./errors/index.ts";
+import { events } from "./events/index.ts";
+import { holdings } from "./holdings/index.ts";
+import { import_report } from "./import/index.ts";
+import { journal } from "./journal/index.ts";
+import { options } from "./options/index.ts";
+import { query } from "./query/index.ts";
+import type { FrontendRoute } from "./route.ts";
+import { statistics } from "./statistics/index.ts";
+import {
+  balance_sheet,
+  income_statement,
+  trial_balance,
+} from "./tree_reports/index.ts";
 
 /**
  * This is a list of routes to render in the frontend. For those that we render
@@ -30,7 +36,9 @@ export const frontend_routes: FrontendRoute[] = [
   holdings,
   import_report,
   income_statement,
+  journal,
   options,
   query,
+  statistics,
   trial_balance,
 ];

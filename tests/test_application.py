@@ -12,7 +12,6 @@ from beancount import __version__ as beancount_version
 
 from fava import __version__ as fava_version
 from fava.application import create_app
-from fava.application import SERVER_SIDE_REPORTS
 from fava.application import static_url
 from fava.beans import create
 from fava.beans.funcs import hash_entry
@@ -35,30 +34,22 @@ FILTER_COMBINATIONS = [
 ]
 
 
+@pytest.mark.parametrize(("filters"), FILTER_COMBINATIONS)
+def test_reports(
+    test_client: FlaskClient,
+    filters: dict[str, str],
+) -> None:
+    """The APIs work without error (content isn't checked here)."""
+    response = test_client.get(
+        "/long-example/api/journal", query_string=filters
+    )
+    assert_success(response)
+
+
 def assert_success(response: TestResponse) -> str:
     """Asserts that the request was successful and return the data."""
     assert response.status_code == HTTPStatus.OK.value
     return response.get_data(as_text=True)
-
-
-@pytest.mark.parametrize(
-    ("report", "filters"),
-    [
-        (report, filters)
-        for report in SERVER_SIDE_REPORTS
-        for filters in FILTER_COMBINATIONS
-    ],
-)
-def test_reports(
-    test_client: FlaskClient,
-    report: str,
-    filters: dict[str, str],
-) -> None:
-    """The standard reports work without error (content isn't checked here)."""
-    response = test_client.get(
-        f"/long-example/{report}/", query_string=filters
-    )
-    assert_success(response)
 
 
 def test_client_side_reports(
@@ -275,7 +266,7 @@ def test_incognito(test_data_dir: Path) -> None:
     """Numbers get obfuscated in incognito mode."""
     app = create_app([test_data_dir / "example.beancount"], incognito=True)
     test_client = app.test_client()
-    response = test_client.get("/example/journal/")
+    response = test_client.get("/example/api/journal_page?page=1&order=desc")
     assert "XXX" in assert_success(response)
 
     response = test_client.get("/example/api/commodities")

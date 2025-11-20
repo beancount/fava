@@ -1,8 +1,8 @@
 <script lang="ts">
   import { timeDay } from "d3-time";
 
-  import { account_details } from "../stores";
-  import { uptodate_indicator_grey_lookback_days } from "../stores/fava_options";
+  import { uptodate_indicator_grey_lookback_days } from "../stores/fava_options.ts";
+  import { account_details } from "../stores/index.ts";
 
   interface Props {
     /** The account name. */

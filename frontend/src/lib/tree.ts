@@ -1,4 +1,4 @@
-import { parent } from "./account";
+import { parent } from "./account.ts";
 
 /**
  * A tree node.

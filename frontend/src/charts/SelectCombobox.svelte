@@ -41,7 +41,7 @@
   let ul: HTMLUListElement | undefined = $state();
 
   const uid = $props.id();
-  const listbox_id = `combobox-listbox-${uid.toString()}`;
+  const listbox_id = `combobox-listbox-${uid}`;
 
   const SEPARATOR = ",";
   let values = $derived(value.split(SEPARATOR));

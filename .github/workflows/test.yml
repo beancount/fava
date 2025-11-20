@@ -27,12 +27,15 @@ jobs:
           - os: "windows-latest"
             make_target: "test-py"
             py: "3.13"
+          - os: "ubuntu-latest"
+            make_target: "test-py"
+            py: "3.14"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.py }}
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - run: touch src/fava/static/app.js
       - run: make ${{ matrix.make_target }}
   test-js:
@@ -41,10 +44,10 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
-          node-version: "22.16.0"
+          node-version: "lts/*"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
       - run: cd frontend && npm ci
@@ -53,16 +56,16 @@ jobs:
   lint-js:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: "22.16.0"
+          node-version: "lts/*"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - run: cd frontend && npm ci
       - run: uv run --no-dev --group pre-commit pre-commit run -a eslint
       - run: cd frontend; npx tsc
@@ -70,10 +73,10 @@ jobs:
   lint-python:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - run: touch src/fava/static/app.js
       - run: make mypy

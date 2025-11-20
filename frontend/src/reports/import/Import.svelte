@@ -2,18 +2,24 @@
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
-  import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
-  import type { Entry } from "../../entries";
-  import { urlFor } from "../../helpers";
-  import { _ } from "../../i18n";
-  import { notify, notify_err } from "../../notifications";
-  import router from "../../router";
-  import { import_config } from "../../stores/fava_options";
+  import {
+    delete_document,
+    get_extract,
+    move_document,
+    save_entries,
+  } from "../../api/index.ts";
+  import type { Entry } from "../../entries/index.ts";
+  import { urlFor } from "../../helpers.ts";
+  import { _ } from "../../i18n.ts";
+  import { is_non_empty } from "../../lib/array.ts";
+  import { notify, notify_err } from "../../notifications.ts";
+  import { router } from "../../router.ts";
+  import { import_config } from "../../stores/fava_options.ts";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-  import type { ImportReportProps } from ".";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
   import ImportFileUpload from "./ImportFileUpload.svelte";
+  import type { ImportReportProps } from "./index.ts";
 
   let { files }: ImportReportProps = $props();
 
@@ -50,13 +56,13 @@
       ? "There are unfinished imports, are you sure you want to continue?"
       : null;
 
-  onMount(() => router.addInteruptHandler(preventNavigation));
+  onMount(() => router.add_interrupt_handler(preventNavigation));
 
   /**
    * Move the given file to the new file name (and remove from the list).
    */
   async function move(filename: string, account: string, newName: string) {
-    const moved = await moveDocument(filename, account, newName);
+    const moved = await move_document(filename, account, newName);
     if (moved) {
       router.reload();
     }
@@ -69,7 +75,7 @@
     if (!window.confirm(_("Delete this file?"))) {
       return;
     }
-    const removed = await deleteDocument(filename);
+    const removed = await delete_document(filename);
     if (removed) {
       if (selected === filename) {
         selected = null;
@@ -89,7 +95,7 @@
       return;
     }
     try {
-      entries = await get("extract", { filename, importer });
+      entries = await get_extract({ filename, importer });
       if (entries.length) {
         extract_cache.set(file_importer_key, entries);
       } else {
@@ -110,7 +116,9 @@
       extract_cache.delete(key);
     }
     entries = [];
-    await saveEntries(without_duplicates);
+    if (is_non_empty(without_duplicates)) {
+      await save_entries(without_duplicates);
+    }
   }
 </script>
 

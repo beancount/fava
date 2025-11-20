@@ -3,11 +3,11 @@
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
-  import { urlForAccount } from "../helpers";
-  import { barChartMode, chartToggledCurrencies } from "../stores/chart";
-  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format";
+  import { urlForAccount } from "../helpers.ts";
+  import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
+  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
-  import type { BarChart } from "./bar";
+  import type { BarChart } from "./bar.ts";
   import {
     currenciesScale,
     filterTicks,
@@ -15,8 +15,8 @@
     includeZero,
     padExtent,
     urlForTimeFilter,
-  } from "./helpers";
-  import { followingTooltip } from "./tooltip";
+  } from "./helpers.ts";
+  import { followingTooltip } from "./tooltip.ts";
 
   interface Props {
     chart: BarChart;
@@ -94,7 +94,7 @@
       <g
         class="group"
         class:desaturate={group.date > today}
-        use:followingTooltip={() => chart.tooltipText($ctx, group)}
+        {@attach followingTooltip(() => chart.tooltipText($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
         <rect
@@ -164,13 +164,14 @@
                   y={y(Math.max(bar[0], bar[1]))}
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={colorScale(account)}
-                  use:followingTooltip={() =>
+                  {@attach followingTooltip(() =>
                     chart.tooltipTextAccount(
                       $ctx,
                       bar.data,
                       account,
                       $chartToggledCurrencies,
-                    )}
+                    ),
+                  )}
                 />
               {/each}
             </g>

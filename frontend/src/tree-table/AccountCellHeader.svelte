@@ -5,9 +5,9 @@
 <script lang="ts">
   import { some } from "d3-array";
 
-  import { _ } from "../i18n";
-  import { is_descendant_or_equal } from "../lib/account";
-  import { expand_all, toggled_accounts } from "../stores/accounts";
+  import { _ } from "../i18n.ts";
+  import { is_descendant_or_equal } from "../lib/account.ts";
+  import { expand_all, toggled_accounts } from "../stores/accounts.ts";
 
   interface Props {
     /** The account this tree is rendered for. */

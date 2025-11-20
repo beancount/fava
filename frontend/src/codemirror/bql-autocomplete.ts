@@ -1,6 +1,6 @@
 import type { CompletionSource } from "@codemirror/autocomplete";
 
-import bqlGrammar from "./bql-grammar";
+import bqlGrammar from "./bql-grammar.ts";
 
 const { columns, functions, keywords } = bqlGrammar;
 

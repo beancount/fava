@@ -5,14 +5,17 @@
 
 import { get as store_get } from "svelte/store";
 
-import { getUrlPath, urlForRaw } from "./helpers";
-import { fetch } from "./lib/fetch";
-import { log_error } from "./log";
-import { extensions } from "./stores";
+import { getUrlPath, urlForRaw } from "./helpers.ts";
+import { log_error } from "./log.ts";
+import { extensions } from "./stores/index.ts";
 
 /** Helpers to make requests. */
 export class ExtensionApi {
-  constructor(private readonly name: string) {}
+  private readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
 
   /** Send a request to an extension endpoint. */
   async request(
@@ -91,10 +94,13 @@ export interface ExtensionModule {
 }
 
 class ExtensionData {
-  constructor(
-    private readonly extension: ExtensionModule,
-    private readonly context: ExtensionContext,
-  ) {}
+  private readonly extension: ExtensionModule;
+  private readonly context: ExtensionContext;
+
+  constructor(extension: ExtensionModule, context: ExtensionContext) {
+    this.extension = extension;
+    this.context = context;
+  }
 
   async init(): Promise<void> {
     await this.extension.init?.(this.context);
@@ -149,7 +155,7 @@ export function handleExtensionPageLoad(): void {
       })
       .catch(log_error);
   }
-  const path = getUrlPath(window.location) ?? "";
+  const path = getUrlPath(window.location).unwrap_or("");
   if (path.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {

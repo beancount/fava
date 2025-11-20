@@ -9,16 +9,16 @@ from __future__ import annotations
 
 import datetime
 import re
+from abc import ABC
+from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import Enum
 from itertools import tee
 from typing import TYPE_CHECKING
 
-from flask_babel import gettext  # type: ignore[import-untyped]
+from flask_babel import gettext
 
 from fava.util import listify
-from fava.util.unreachable import assert_never
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
@@ -88,119 +88,166 @@ class FyeHasNoQuartersError(ValueError):
 END_OF_YEAR = FiscalYearEnd(12, 31)
 
 
-class Interval(Enum):
-    """The possible intervals."""
+class Interval(ABC):
+    """An interval."""
 
-    YEAR = "year"
-    QUARTER = "quarter"
-    MONTH = "month"
-    WEEK = "week"
-    DAY = "day"
+    @property
+    @abstractmethod
+    def label(self) -> str:
+        """The label for the interval."""
+
+    @abstractmethod
+    def format_date(self, date: datetime.date) -> str:
+        """Format a date for this interval for the Fava time filter."""
+
+    @abstractmethod
+    def get_prev(self, date: datetime.date) -> datetime.date:
+        """Get the start date of the interval in which the date falls."""
+
+    @abstractmethod
+    def get_next(self, date: datetime.date) -> datetime.date:
+        """Get the start date of the next interval following the date."""
+
+    def number_of_days(self, date: datetime.date) -> int:
+        """Get number of days in the surrounding interval."""
+        start = self.get_prev(date)
+        end = self.get_next(start)
+        return (end - start).days
+
+
+class _IntervalYear(Interval):
+    """A year interval."""
 
     @property
     def label(self) -> str:
-        """The label for the interval."""
-        labels: dict[Interval, str] = {
-            Interval.YEAR: gettext("Yearly"),
-            Interval.QUARTER: gettext("Quarterly"),
-            Interval.MONTH: gettext("Monthly"),
-            Interval.WEEK: gettext("Weekly"),
-            Interval.DAY: gettext("Daily"),
-        }
-        return labels[self]
-
-    @staticmethod
-    def get(string: str) -> Interval:
-        """Return the enum member for a string."""
-        try:
-            return Interval[string.upper()]
-        except KeyError:
-            return Interval.MONTH
+        return gettext("Yearly")
 
     def format_date(self, date: datetime.date) -> str:
-        """Format a date for this interval for human consumption."""
-        if self is Interval.YEAR:
-            return date.strftime("%Y")
-        if self is Interval.QUARTER:
-            return f"{date.year}Q{(date.month - 1) // 3 + 1}"
-        if self is Interval.MONTH:
-            return date.strftime("%b %Y")
-        if self is Interval.WEEK:
-            return date.strftime("%GW%V")
-        return date.strftime("%Y-%m-%d")
+        return date.strftime("%Y")
 
-    def format_date_filter(self, date: datetime.date) -> str:
-        """Format a date for this interval for the Fava time filter."""
-        if self is Interval.YEAR:
-            return date.strftime("%Y")
-        if self is Interval.QUARTER:
-            return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
-        if self is Interval.MONTH:
-            return date.strftime("%Y-%m")
-        if self is Interval.WEEK:
-            return date.strftime("%G-W%V")
-        return date.strftime("%Y-%m-%d")
-
-
-def get_prev_interval(
-    date: datetime.date,
-    interval: Interval,
-) -> datetime.date:
-    """Get the start date of the interval in which the date falls.
-
-    Args:
-        date: A date.
-        interval: An interval.
-
-    Returns:
-        The start date of the `interval` before `date`.
-    """
-    if interval is Interval.YEAR:
+    def get_prev(self, date: datetime.date) -> datetime.date:
         return datetime.date(date.year, 1, 1)
-    if interval is Interval.QUARTER:
+
+    def get_next(self, date: datetime.date) -> datetime.date:
+        try:
+            return datetime.date(date.year + 1, 1, 1)
+        except ValueError:
+            return datetime.date.max
+
+
+class _IntervalQuarter(Interval):
+    """A quarter interval."""
+
+    @property
+    def label(self) -> str:
+        return gettext("Quarterly")
+
+    def format_date(self, date: datetime.date) -> str:
+        return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
+
+    def get_prev(self, date: datetime.date) -> datetime.date:
         for i in [10, 7, 4]:
             if date.month > i:
                 return datetime.date(date.year, i, 1)
         return datetime.date(date.year, 1, 1)
-    if interval is Interval.MONTH:
+
+    def get_next(self, date: datetime.date) -> datetime.date:
+        for i in [4, 7, 10]:
+            if date.month < i:
+                return datetime.date(date.year, i, 1)
+        try:
+            return datetime.date(date.year + 1, 1, 1)
+        except ValueError:
+            return datetime.date.max
+
+
+class _IntervalMonth(Interval):
+    """A month interval."""
+
+    @property
+    def label(self) -> str:
+        return gettext("Monthly")
+
+    def format_date(self, date: datetime.date) -> str:
+        return date.strftime("%Y-%m")
+
+    def get_prev(self, date: datetime.date) -> datetime.date:
         return datetime.date(date.year, date.month, 1)
-    if interval is Interval.WEEK:
-        return date - timedelta(date.weekday())
-    return date
 
-
-def get_next_interval(  # noqa: PLR0911
-    date: datetime.date,
-    interval: Interval,
-) -> datetime.date:
-    """Get the start date of the next interval.
-
-    Args:
-        date: A date.
-        interval: An interval.
-
-    Returns:
-        The start date of the next `interval` after `date`.
-    """
-    try:
-        if interval is Interval.YEAR:
-            return datetime.date(date.year + 1, 1, 1)
-        if interval is Interval.QUARTER:
-            for i in [4, 7, 10]:
-                if date.month < i:
-                    return datetime.date(date.year, i, 1)
-            return datetime.date(date.year + 1, 1, 1)
-        if interval is Interval.MONTH:
+    def get_next(self, date: datetime.date) -> datetime.date:
+        try:
             month = (date.month % 12) + 1
             year = date.year + (date.month + 1 > 12)
             return datetime.date(year, month, 1)
-        if interval is Interval.WEEK:
+        except ValueError:
+            return datetime.date.max
+
+
+class _IntervalWeek(Interval):
+    """A week interval."""
+
+    @property
+    def label(self) -> str:
+        return gettext("Weekly")
+
+    def format_date(self, date: datetime.date) -> str:
+        return date.strftime("%G-W%V")
+
+    def get_prev(self, date: datetime.date) -> datetime.date:
+        return date - timedelta(date.weekday())
+
+    def get_next(self, date: datetime.date) -> datetime.date:
+        try:
             return date + timedelta(7 - date.weekday())
-        if interval is Interval.DAY:
+        except OverflowError:
+            return datetime.date.max
+
+    def number_of_days(self, date: datetime.date) -> int:  # noqa: ARG002
+        """Get number of days in the surrounding interval."""
+        return 7
+
+
+class _IntervalDay(Interval):
+    """A day interval."""
+
+    @property
+    def label(self) -> str:
+        return gettext("Daily")
+
+    def format_date(self, date: datetime.date) -> str:
+        return date.strftime("%Y-%m-%d")
+
+    def get_prev(self, date: datetime.date) -> datetime.date:
+        return date
+
+    def get_next(self, date: datetime.date) -> datetime.date:
+        try:
             return date + timedelta(1)
-        return assert_never(interval)  # pragma: no cover
-    except (ValueError, OverflowError):
-        return datetime.date.max
+        except OverflowError:
+            return datetime.date.max
+
+    def number_of_days(self, date: datetime.date) -> int:  # noqa: ARG002
+        return 1
+
+
+Year = _IntervalYear()
+Quarter = _IntervalQuarter()
+Month = _IntervalMonth()
+Week = _IntervalWeek()
+Day = _IntervalDay()
+
+INTERVALS = {
+    "year": Year,
+    "yearly": Year,
+    "quarter": Quarter,
+    "quarterly": Quarter,
+    "month": Month,
+    "monthly": Month,
+    "week": Week,
+    "weekly": Week,
+    "day": Day,
+    "daily": Day,
+}
 
 
 class InvalidDateRangeError(ValueError):
@@ -224,10 +271,10 @@ def interval_ends(
     """
     if begin >= end:
         raise InvalidDateRangeError
-    current = get_prev_interval(begin, interval) if complete else begin
+    current = interval.get_prev(begin) if complete else begin
     while current < end:
         yield current
-        current = get_next_interval(current, interval)
+        current = interval.get_next(current)
     yield current if complete else end
 
 
@@ -387,19 +434,19 @@ def parse_date(  # noqa: PLR0911
     if match:
         year = int(match.group(0))
         start = datetime.date(year, 1, 1)
-        return start, get_next_interval(start, Interval.YEAR)
+        return start, Year.get_next(start)
 
     match = MONTH_RE.match(string)
     if match:
         year, month = map(int, match.group(1, 2))
         start = datetime.date(year, month, 1)
-        return start, get_next_interval(start, Interval.MONTH)
+        return start, Month.get_next(start)
 
     match = DAY_RE.match(string)
     if match:
         year, month, day = map(int, match.group(1, 2, 3))
         start = datetime.date(year, month, day)
-        return start, get_next_interval(start, Interval.DAY)
+        return start, Day.get_next(start)
 
     match = WEEK_RE.match(string)
     if match:
@@ -409,7 +456,7 @@ def parse_date(  # noqa: PLR0911
             .replace(tzinfo=datetime.timezone.utc)
             .date()
         )
-        return start, get_next_interval(start, Interval.WEEK)
+        return start, Week.get_next(start)
 
     match = QUARTER_RE.match(string)
     if match:
@@ -417,7 +464,7 @@ def parse_date(  # noqa: PLR0911
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return (
             quarter_first_day,
-            get_next_interval(quarter_first_day, Interval.QUARTER),
+            Quarter.get_next(quarter_first_day),
         )
 
     match = FY_RE.match(string)
@@ -520,23 +567,3 @@ def days_in_daterange(
     """
     for diff in range((end_date - start_date).days):
         yield start_date + timedelta(diff)
-
-
-def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
-    """Get number of days in the surrounding interval.
-
-    Args:
-        interval: An interval.
-        date: A date.
-
-    Returns:
-        A number, the number of days surrounding the given date in the
-        interval.
-    """
-    if interval is Interval.DAY:
-        return 1
-    if interval is Interval.WEEK:
-        return 7
-    start = get_prev_interval(date, interval)
-    end = get_next_interval(start, interval)
-    return (end - start).days

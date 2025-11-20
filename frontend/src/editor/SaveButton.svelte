@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { _ } from "../i18n.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
 
   interface Props {
     /** Whether anything is changed - the button is disabled otherwise. */
@@ -17,7 +17,7 @@
 <button
   type="submit"
   disabled={!changed}
-  use:keyboardShortcut={{ key: "Control+s", mac: "Meta+s" }}
+  {@attach keyboardShortcut({ key: "Control+s", mac: "Meta+s" })}
 >
   {buttonContent}
 </button>

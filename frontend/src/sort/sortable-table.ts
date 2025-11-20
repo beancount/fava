@@ -1,4 +1,4 @@
-import { get_direction, sortElements } from ".";
+import { get_direction, sortElements } from "./index.ts";
 
 export class SortableTable extends HTMLTableElement {
   constructor() {

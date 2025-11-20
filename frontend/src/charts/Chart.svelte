@@ -1,17 +1,18 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
+  import { router } from "../router.ts";
   import {
     barChartMode,
     chartToggledCurrencies,
     hierarchyChartMode,
     lineChartMode,
-    showCharts,
-  } from "../stores/chart";
-  import type { FavaChart } from ".";
+  } from "../stores/chart.ts";
+  import { show_charts } from "../stores/url.ts";
   import BarChart from "./BarChart.svelte";
   import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
+  import type { FavaChart } from "./index.ts";
   import LineChart from "./LineChart.svelte";
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
@@ -30,7 +31,7 @@
 </script>
 
 <div class="flex-row">
-  {#if $showCharts}
+  {#if $show_charts}
     {#if chart.type === "barchart"}
       <ChartLegend
         legend={chart.currencies}
@@ -66,13 +67,13 @@
     type="button"
     class="show-charts"
     onclick={() => {
-      showCharts.update((v) => !v);
+      router.set_search_param("charts", $show_charts ? "false" : "");
     }}
   >
-    {$showCharts ? "▼" : "◀"}
+    {$show_charts ? "▼" : "◀"}
   </button>
 </div>
-<div hidden={!$showCharts} bind:clientWidth={width}>
+<div hidden={!$show_charts} bind:clientWidth={width}>
   {#if width}
     {#if chart.type === "barchart"}
       <BarChart {chart} {width} />

@@ -20,8 +20,8 @@
 
 <script lang="ts">
   import DocumentPreviewEditor from "../../editor/DocumentPreviewEditor.svelte";
-  import { urlForRaw } from "../../helpers";
-  import { ext } from "../../lib/paths";
+  import { urlForRaw } from "../../helpers.ts";
+  import { ext } from "../../lib/paths.ts";
 
   interface Props {
     filename: string;

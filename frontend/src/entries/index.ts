@@ -1,4 +1,4 @@
-import type { ValidationT, Validator } from "../lib/validation";
+import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
   constant,
@@ -9,22 +9,26 @@ import {
   string,
   tagged_union,
   unknown,
-} from "../lib/validation";
-import { Amount, RawAmount } from "./amount";
-import { Cost } from "./cost";
-import type { MetadataValue } from "./metadata";
-import { EntryMetadata } from "./metadata";
-import { Position } from "./position";
+} from "../lib/validation.ts";
+import { Amount, RawAmount } from "./amount.ts";
+import { Cost } from "./cost.ts";
+import type { MetadataValue } from "./metadata.ts";
+import { EntryMetadata } from "./metadata.ts";
+import { Position } from "./position.ts";
 
 export { Amount, Cost, EntryMetadata, Position };
 
 /** A posting. */
 export class Posting {
-  private constructor(
-    readonly meta: EntryMetadata,
-    readonly account: string,
-    readonly amount: string,
-  ) {}
+  readonly meta: EntryMetadata;
+  readonly account: string;
+  readonly amount: string;
+
+  private constructor(meta: EntryMetadata, account: string, amount: string) {
+    this.meta = meta;
+    this.account = account;
+    this.amount = amount;
+  }
 
   /** Create a new empty Posting. */
   static empty(): Posting {
@@ -73,12 +77,17 @@ const string_array_validator = array(string);
 const optional_string_array_validator = optional(string_array_validator);
 
 abstract class EntryBase<T extends string> {
-  constructor(
-    readonly t: T,
-    readonly meta: EntryMetadata,
-    readonly date: string,
-    readonly entry_hash: string,
-  ) {}
+  readonly t: T;
+  readonly meta: EntryMetadata;
+  readonly date: string;
+  readonly entry_hash: string;
+
+  constructor(t: T, meta: EntryMetadata, date: string, entry_hash: string) {
+    this.t = t;
+    this.meta = meta;
+    this.date = date;
+    this.entry_hash = entry_hash;
+  }
 
   /** Clone. */
   clone(): this {
@@ -115,14 +124,19 @@ abstract class EntryBase<T extends string> {
 
 /** A balance. */
 export class Balance extends EntryBase<"Balance"> {
+  readonly account: string;
+  readonly amount: RawAmount;
+
   private constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
-    readonly amount: RawAmount,
+    account: string,
+    amount: RawAmount,
   ) {
     super("Balance", meta, date, entry_hash);
+    this.account = account;
+    this.amount = amount;
   }
 
   /** Create a new empty Balance entry on the date. */
@@ -148,16 +162,25 @@ export class Balance extends EntryBase<"Balance"> {
 
 /** A document. */
 export class Document extends EntryBase<"Document"> {
+  readonly account: string;
+  readonly filename: string;
+  readonly tags: string[] | null;
+  readonly links: string[] | null;
+
   private constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
-    readonly filename: string,
-    readonly tags: string[] | null,
-    readonly links: string[] | null,
+    account: string,
+    filename: string,
+    tags: string[] | null,
+    links: string[] | null,
   ) {
     super("Document", meta, date, entry_hash);
+    this.account = account;
+    this.filename = filename;
+    this.tags = tags;
+    this.links = links;
   }
 
   private static raw_validator = object({
@@ -180,14 +203,19 @@ export class Document extends EntryBase<"Document"> {
 
 /** An event. */
 export class Event extends EntryBase<"Event"> {
+  readonly type: string;
+  readonly description: string;
+
   private constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly type: string,
-    readonly description: string,
+    type: string,
+    description: string,
   ) {
     super("Event", meta, date, entry_hash);
+    this.type = type;
+    this.description = description;
   }
 
   private static raw_validator = object({
@@ -208,16 +236,25 @@ export class Event extends EntryBase<"Event"> {
 
 /** A note. */
 export class Note extends EntryBase<"Note"> {
+  readonly account: string;
+  readonly comment: string;
+  readonly tags: string[] | null;
+  readonly links: string[] | null;
+
   private constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
-    readonly comment: string,
-    readonly tags: string[] | null,
-    readonly links: string[] | null,
+    account: string,
+    comment: string,
+    tags: string[] | null,
+    links: string[] | null,
   ) {
     super("Note", meta, date, entry_hash);
+    this.account = account;
+    this.comment = comment;
+    this.tags = tags;
+    this.links = links;
   }
 
   /** Create a new empty Note entry on the date. */
@@ -245,15 +282,22 @@ export class Note extends EntryBase<"Note"> {
 
 /** An Open entry. */
 export class Open extends EntryBase<"Open"> {
+  readonly account: string;
+  readonly currencies: string[] | null;
+  readonly booking: string | null;
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
-    readonly currencies: string[] | null,
-    readonly booking: string | null,
+    account: string,
+    currencies: string[] | null,
+    booking: string | null,
   ) {
     super("Open", meta, date, entry_hash);
+    this.account = account;
+    this.currencies = currencies;
+    this.booking = booking;
   }
 
   private static raw_validator = object({
@@ -275,13 +319,16 @@ export class Open extends EntryBase<"Open"> {
 
 /** A Close entry. */
 export class Close extends EntryBase<"Close"> {
+  readonly account: string;
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
+    account: string,
   ) {
     super("Close", meta, date, entry_hash);
+    this.account = account;
   }
 
   private static raw_validator = object({
@@ -301,14 +348,19 @@ export class Close extends EntryBase<"Close"> {
 
 /** A Price entry. */
 export class Price extends EntryBase<"Price"> {
+  readonly currency: string;
+  readonly amount: RawAmount;
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly currency: string,
-    readonly amount: RawAmount,
+    currency: string,
+    amount: RawAmount,
   ) {
     super("Price", meta, date, entry_hash);
+    this.currency = currency;
+    this.amount = amount;
   }
 
   private static raw_validator = object({
@@ -329,14 +381,19 @@ export class Price extends EntryBase<"Price"> {
 
 /** A Pad entry. */
 export class Pad extends EntryBase<"Pad"> {
+  readonly account: string;
+  readonly source_account: string;
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly account: string,
-    readonly source_account: string,
+    account: string,
+    source_account: string,
   ) {
     super("Pad", meta, date, entry_hash);
+    this.account = account;
+    this.source_account = source_account;
   }
 
   private static raw_validator = object({
@@ -357,14 +414,19 @@ export class Pad extends EntryBase<"Pad"> {
 
 /** A Query entry. */
 export class Query extends EntryBase<"Query"> {
+  readonly name: string;
+  readonly query_string: string;
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly name: string,
-    readonly query_string: string,
+    name: string,
+    query_string: string,
   ) {
     super("Query", meta, date, entry_hash);
+    this.name = name;
+    this.query_string = query_string;
   }
 
   private static raw_validator = object({
@@ -385,14 +447,19 @@ export class Query extends EntryBase<"Query"> {
 
 /** A Custom entry. */
 export class Custom extends EntryBase<"Custom"> {
+  readonly type: string; // This is the custom directive type string
+  readonly values: unknown[];
+
   constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly type: string, // This is the custom directive type string
-    readonly values: unknown[],
+    type: string, // This is the custom directive type string
+    values: unknown[],
   ) {
     super("Custom", meta, date, entry_hash);
+    this.type = type;
+    this.values = values;
   }
 
   private static raw_validator = object({
@@ -416,18 +483,31 @@ const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
 
 /** A transaction. */
 export class Transaction extends EntryBase<"Transaction"> {
+  readonly flag: string;
+  readonly payee: string;
+  readonly narration: string;
+  readonly tags: string[];
+  readonly links: string[];
+  readonly postings: readonly Posting[];
+
   private constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
-    readonly flag: string,
-    readonly payee: string,
-    readonly narration: string,
-    readonly tags: string[],
-    readonly links: string[],
-    readonly postings: readonly Posting[],
+    flag: string,
+    payee: string,
+    narration: string,
+    tags: string[],
+    links: string[],
+    postings: readonly Posting[],
   ) {
     super("Transaction", meta, date, entry_hash);
+    this.flag = flag;
+    this.payee = payee;
+    this.narration = narration;
+    this.tags = tags;
+    this.links = links;
+    this.postings = postings;
   }
 
   /** Create a new empty Transaction entry on the date. */

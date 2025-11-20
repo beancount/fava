@@ -7,14 +7,14 @@ export function setup_jsdom(): void {
   if (!ran_once) {
     const { window } = new JSDOM("", { url: "http://localhost:3000" });
     const window_keys = Object.getOwnPropertyNames(window).filter(
-      (key) => !key.startsWith("_") && !(key in global),
+      (key) => !key.startsWith("_") && !(key in globalThis),
     );
     // @ts-expect-error Unexpected in Node
-    global.window = window;
+    globalThis.window = window;
     for (const key of window_keys) {
       // @ts-expect-error Unexpected in Node
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      global[key] = window[key];
+      globalThis[key] = window[key];
     }
     ran_once = true;
   }

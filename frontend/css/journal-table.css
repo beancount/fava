@@ -1,292 +1,292 @@
 /* stylelint-disable no-descending-specificity */
 
-.flex-table p,
-.flex-table li,
-.flex-table ul,
-.flex-table ol {
-  padding: 0;
-  margin: 0;
-}
+.flex-table {
+  p,
+  li,
+  ul,
+  ol {
+    padding: 0;
+    margin: 0;
+  }
 
-.flex-table p {
-  display: flex;
-}
+  p {
+    display: flex;
 
-.flex-table p > span {
-  flex-shrink: 0;
-  padding: 2px 4px;
-}
+    > * {
+      flex-shrink: 0;
+      padding: 2px 4px;
+    }
+  }
 
-.flex-table .num {
-  font-family: var(--font-family-monospaced);
-  text-align: right;
-}
+  .num {
+    font-family: var(--font-family-monospaced);
+    text-align: right;
+  }
 
-.flex-table .head p > span {
-  padding: 3px 4px;
-  color: var(--table-header-text);
-  background-color: var(--table-header-background);
-}
-
-.flex-table .head .num {
-  font-family: var(--font-family);
+  .head p > * {
+    padding: 3px 4px;
+    font-family: inherit;
+    color: var(--table-header-text);
+    background-color: var(--table-header-background);
+  }
 }
 
 .journal {
-  margin-top: 0.25rem;
-}
-
-.journal p,
-.journal dl {
-  border-bottom: thin solid var(--table-border);
-}
-
-.journal .payee {
-  cursor: pointer;
-}
-
-.journal .postings {
-  font-size: 0.9em;
-  background-color: var(--journal-postings);
-  opacity: 0.8;
-}
-
-.journal .postings .num {
-  overflow: auto;
-  line-height: 16px;
-}
-
-.journal > li,
-.journal.show-custom .custom.budget,
-.journal.show-document .document.discovered,
-.journal.show-document .document.linked,
-.journal .metadata,
-.journal .postings {
-  display: none;
-}
-
-.journal .head,
-.journal.show-balance .balance,
-.journal.show-close .close,
-.journal.show-custom .custom,
-.journal.show-document .document,
-.journal.show-note .note,
-.journal.show-open .open,
-.journal.show-pad .pad,
-.journal.show-query .query {
-  display: block;
-}
-
-/* Show metadata and postings if it was toggled for the whole journal. */
-.journal.show-metadata .metadata,
-.journal.show-postings .postings {
-  display: block;
-}
-
-/* Show metadata and postings where it was explicitly toggled with the indicators. */
-.journal > li.show-full-entry .postings,
-.journal > li.show-full-entry .metadata {
-  display: block;
-}
-
-.journal.show-transaction.show-cleared .transaction.cleared,
-.journal.show-transaction.show-pending .transaction.pending,
-.journal.show-transaction.show-other .transaction.other,
-.journal.show-document.show-discovered .document.discovered,
-.journal.show-document.show-linked .document.linked,
-.journal.show-custom.show-budget .custom.budget {
-  display: block;
-}
-
-.journal .transaction:hover {
-  background: var(--journal-hover-highlight);
-}
-
-/* Metadata */
-.journal .metadata {
-  padding: 2px 0;
-  margin: 0;
-  font-size: 0.9em;
-}
-
-.journal .metadata dt {
-  float: left;
-  width: auto;
-  min-width: 4rem;
-  margin-right: 6px;
-  margin-left: 9rem;
-  color: var(--journal-metadata);
-  cursor: pointer;
-}
-
-.journal .metadata dd {
-  margin-left: 15rem;
-  cursor: pointer;
-}
-
-/* There's three number columns (units, cost, price).
- * They should add about to about half of the width */
-.journal p > .num {
-  width: min(calc(15%), 20rem);
-  border-left: 1px solid var(--table-border);
-}
-
-.journal .datecell,
-.journal .flag {
-  text-align: center;
-  background-color: var(--entry-background);
-}
-
-.journal .datecell {
-  width: 6rem;
-  white-space: nowrap;
-}
-
-.journal .flag {
-  width: 3rem;
-}
-
-.journal .change {
-  font-weight: 500;
-}
-
-.journal .description {
-  flex: 1;
-  padding-left: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.journal .show-postings .description {
-  white-space: normal;
-}
-
-.journal .description .separator::before {
-  padding: 2px;
-  margin: 0 6px;
-  font-weight: bold;
-  color: var(--text-color-lighter);
-  content: "•";
-}
-
-.journal .description .num {
-  margin: 0 5px;
-}
-
-.journal .tag,
-.journal .link {
-  margin-left: 8px;
-  font-size: 0.9em;
-  cursor: pointer;
-}
-
-.journal .tag {
-  color: var(--journal-tag);
-}
-
-.journal .link {
-  color: var(--journal-link);
-}
-
-.journal .bal {
-  background-color: var(--entry-background);
-}
-
-.journal a:hover {
-  filter: brightness(80%);
-}
-
-.journal .filename,
-.journal .url {
-  font-family: var(--font-family-monospaced);
-  font-size: 0.9em;
-}
-
-.journal .document .filename {
-  margin-left: 1em;
-}
-
-.journal .indicators {
+  /* display flex seems to improve performance in Firefox. */
   display: flex;
-  flex-shrink: 3;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  cursor: pointer;
-}
+  flex-direction: column;
 
-.journal .indicators span {
-  min-width: 6px;
-  height: 6px;
-  padding: 0;
-  margin-right: 4px;
-  background-color: var(--journal-posting-indicator);
-  border-radius: 3px;
-}
+  p,
+  dl {
+    border-bottom: thin solid var(--table-border);
+  }
 
-.journal .indicators .pending,
-.journal .indicators .other {
-  background-color: var(--entry-background);
-}
+  > li,
+  &.show-custom .custom.budget,
+  &.show-document .document.discovered,
+  &.show-document .document.linked,
+  .metadata,
+  .postings {
+    display: none;
+  }
 
-.journal .indicators .metadata-indicator {
-  height: 16px;
-  padding: 0 6px;
-  font-size: 10px;
-  line-height: 16px;
-  color: var(--journal-metadata-indicator);
-  text-transform: lowercase;
-  border-radius: 20px;
+  & .head,
+  &.show-balance .balance,
+  &.show-close .close,
+  &.show-custom .custom,
+  &.show-document .document,
+  &.show-note .note,
+  &.show-open .open,
+  &.show-pad .pad,
+  &.show-query .query {
+    display: block;
+  }
+
+  /* Show metadata and postings if it was toggled for the whole journal. */
+  &.show-postings .postings,
+  &.show-metadata .metadata {
+    display: block;
+  }
+
+  /* Show metadata and postings where it was explicitly toggled with the indicators. */
+  li.show-full-entry .postings,
+  li.show-full-entry .metadata {
+    display: block;
+  }
+
+  &.show-transaction.show-cleared .transaction.cleared,
+  &.show-transaction.show-pending .transaction.pending,
+  &.show-transaction.show-other .transaction.other,
+  &.show-document.show-discovered .document.discovered,
+  &.show-document.show-linked .document.linked,
+  &.show-custom.show-budget .custom.budget {
+    display: block;
+  }
+
+  .payee {
+    cursor: pointer;
+  }
+
+  .postings {
+    font-size: 0.9em;
+    background-color: var(--journal-postings);
+    opacity: 0.8;
+
+    .num {
+      overflow: auto;
+      line-height: 1rem;
+    }
+  }
+
+  .transaction:hover {
+    background: var(--journal-hover-highlight);
+  }
+
+  /* Metadata */
+  .metadata {
+    font-size: 0.9em;
+
+    dt {
+      float: left;
+      width: auto;
+      min-width: 4rem;
+      padding: 2px 3px;
+      margin-left: 9rem;
+      color: var(--journal-metadata);
+      cursor: pointer;
+    }
+
+    dd {
+      padding: 2px 3px;
+      margin-left: 15rem;
+      cursor: pointer;
+    }
+  }
+
+  /* There's three number columns (units, cost, price).
+ * They should add about to about half of the width */
+  p > .num {
+    width: min(calc(15%), 20rem);
+    border-left: 1px solid var(--table-border);
+  }
+
+  .datecell,
+  .flag {
+    text-align: center;
+    background-color: var(--entry-background);
+  }
+
+  .datecell {
+    width: 6rem;
+    white-space: nowrap;
+  }
+
+  .flag {
+    width: 3rem;
+  }
+
+  .change {
+    font-weight: 500;
+  }
+
+  .description {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .separator::before {
+      padding: 2px;
+      margin: 0 6px;
+      font-weight: bold;
+      color: var(--text-color-lighter);
+      content: "•";
+    }
+
+    .num {
+      margin: 0 5px;
+    }
+  }
+
+  .show-postings .description {
+    white-space: normal;
+  }
+
+  .tag,
+  .link {
+    margin-left: 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+
+  .tag {
+    color: var(--journal-tag);
+  }
+
+  .link {
+    color: var(--journal-link);
+  }
+
+  .bal {
+    background-color: var(--entry-background);
+  }
+
+  a:hover {
+    filter: brightness(80%);
+  }
+
+  .filename,
+  .url {
+    font-family: var(--font-family-monospaced);
+    font-size: 0.9em;
+  }
+
+  .document .filename {
+    margin-left: 1em;
+  }
+
+  .indicators {
+    display: flex;
+    flex-shrink: 3;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+
+    span {
+      min-width: 6px;
+      height: 6px;
+      padding: 0;
+      margin-right: 4px;
+      background-color: var(--journal-posting-indicator);
+      border-radius: 3px;
+    }
+
+    .pending,
+    .other {
+      background-color: var(--entry-background);
+    }
+
+    .metadata-indicator {
+      height: 16px;
+      padding: 0 6px;
+      font-size: 10px;
+      line-height: 16px;
+      color: var(--journal-metadata-indicator);
+      text-transform: lowercase;
+      border-radius: 20px;
+    }
+  }
 }
 
 @media (width <= 767px) {
-  .journal p {
-    flex-wrap: wrap;
-  }
+  .journal {
+    p {
+      flex-wrap: wrap;
+    }
 
-  /* show a colored top border for all entries */
-  .journal > li > p {
-    border-top: thin solid var(--entry-background);
-  }
+    /* show a colored top border for all entries */
+    > li {
+      border-top: thin solid var(--entry-background);
+    }
 
-  .journal .head .flag {
-    flex-grow: 1;
-    text-align: left;
-  }
+    .head .flag {
+      flex-grow: 1;
+      text-align: left;
+    }
 
-  .journal .description {
-    flex: inherit;
-    order: 1; /* push to second row */
-    width: 100%;
-    padding-left: 0;
-  }
+    .description {
+      flex: inherit;
+      order: 1; /* push to second row */
+      width: 100%;
+    }
 
-  .journal .indicators {
-    flex-grow: 1;
-  }
+    .indicators {
+      flex-grow: 1;
+    }
 
-  .journal .balance .num {
-    width: 35%;
-  }
+    .balance .num {
+      width: 35%;
+    }
 
-  .journal .balance .change.num {
-    display: none;
-  }
+    .balance .change.num {
+      display: none;
+    }
 
-  .journal .postings .datecell,
-  .journal .postings .flag {
-    display: none;
-  }
+    .postings .datecell,
+    .postings .flag {
+      display: none;
+    }
 
-  .journal .postings .description {
-    flex-grow: 1;
-    order: inherit;
-    width: inherit;
-  }
+    .postings .description {
+      flex-grow: 1;
+      order: inherit;
+      width: inherit;
+    }
 
-  .journal .metadata dt,
-  .journal .metadata dd {
-    margin-left: initial;
+    .metadata dt,
+    .metadata dd {
+      margin-left: initial;
+    }
   }
 }

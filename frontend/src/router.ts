@@ -6,56 +6,116 @@
  */
 
 import type { Readable, Writable } from "svelte/store";
-import { writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
-import { getUrlPath } from "./helpers";
-import { delegate, Events } from "./lib/events";
-import { fetch, handleText } from "./lib/fetch";
-import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
-import { log_error } from "./log";
-import { notify_err } from "./notifications";
-import type { FrontendRoute } from "./reports/route";
-import { raw_page_title } from "./sidebar/page-title";
-import { conversion, interval } from "./stores";
-import { showCharts } from "./stores/chart";
-import { account_filter, fql_filter, time_filter } from "./stores/filters";
-import { pathname, search, urlHash } from "./stores/url";
+import { handleExtensionPageLoad } from "./extensions.ts";
+import { getUrlPath } from "./helpers.ts";
+import { assert_is_error } from "./lib/errors.ts";
+import { delegate } from "./lib/events.ts";
+import { log_error } from "./log.ts";
+import type { RenderedReport } from "./reports/route.ts";
+import {
+  backend_route,
+  ErrorRoute,
+  type FrontendRoute,
+} from "./reports/route.ts";
+import { has_changes, raw_page_title } from "./sidebar/page-title.ts";
+import { current_url } from "./stores/url.ts";
+
+/** Whether this is a left-button click without any modifier keys pressed. */
+const is_normal_click = (event: MouseEvent) =>
+  event.button === 0 &&
+  !event.altKey &&
+  !event.ctrlKey &&
+  !event.metaKey &&
+  !event.shiftKey;
+
+/** Whether this is an external link or has the `data-remote` attribute */
+const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
+  link.hasAttribute("data-remote") ||
+  (link instanceof HTMLAnchorElement &&
+    (link.host !== window.location.host || !link.protocol.startsWith("http")));
 
 /**
- * Set a store's inital value from the URL.
+ * The various query parameters used in Fava.
  */
-export function setStoreValuesFromURL(): void {
-  const params = new URL(window.location.href).searchParams;
-  account_filter.set(params.get("account") ?? "");
-  fql_filter.set(params.get("filter") ?? "");
-  time_filter.set(params.get("time") ?? "");
-  interval.set(getInterval(params.get("interval")));
-  conversion.set(params.get("conversion") ?? "at_cost");
-  showCharts.set(params.get("charts") !== "false");
+type FavaQueryParameters =
+  | "account"
+  | "charts"
+  | "conversion"
+  | "filter"
+  | "interval"
+  | "query_string"
+  | "time";
+
+/** Set a query parameter, mutating the URL in place. */
+export function set_query_param(
+  url: URL,
+  key: FavaQueryParameters,
+  value: string,
+): void {
+  if (value) {
+    url.searchParams.set(key, value);
+  } else {
+    url.searchParams.delete(key);
+  }
 }
 
-const is_loading_internal = writable(false);
+class LoadingState {
+  is_loading: Readable<boolean>;
+  #current: Writable<Set<symbol>>;
+
+  constructor() {
+    this.#current = writable(new Set());
+    this.is_loading = derived(this.#current, ($current) => $current.size > 0);
+  }
+
+  /**
+   * Run the given async function, showing a loading indicator for its duration.
+   */
+  async run<T>(func: () => T | Promise<T>): Promise<T> {
+    const promise = func();
+    return this.await(promise);
+  }
+
+  /**
+   * Await the given promise, showing a loading indicator for its duration.
+   */
+  async await<T>(promise: T | Promise<T>): Promise<T> {
+    const tracker = Symbol();
+    try {
+      this.#current.update((s) => {
+        const new_s = new Set(s);
+        new_s.add(tracker);
+        return new_s;
+      });
+      return await promise;
+    } finally {
+      this.#current.update((s) => {
+        const new_s = new Set(s);
+        new_s.delete(tracker);
+        return new_s;
+      });
+    }
+  }
+}
+
+export const loading_state = new LoadingState();
 /** Whether the logo should be spinning to indicate that something is loading. */
-export const is_loading: Readable<boolean> = is_loading_internal;
+export const is_loading = loading_state.is_loading;
 
-export class Router extends Events<"page-loaded"> {
-  /** The URL hash. */
-  private hash: string;
-
-  /** The URL pathname. */
-  private pathname: string;
-
-  /** The URL search string. */
-  private search: string;
+export class Router {
+  /** The current URL - internal, should always be accessed by getter/setter. */
+  #current: URL;
 
   /** The <article> element. */
-  private article: HTMLElement;
+  #article: HTMLElement;
 
   /** The frontend rendered routes. */
-  private frontend_routes?: FrontendRoute[];
+  #frontend_routes: FrontendRoute[] = [];
 
-  /** A possibly frontend rendered component. */
-  private frontend_route?: FrontendRoute | undefined;
+  /** The currently rendered route. */
+  #current_report?: RenderedReport | undefined;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -63,41 +123,49 @@ export class Router extends Events<"page-loaded"> {
    * If they return a string, that is displayed to the user in an alert to
    * confirm navigation.
    */
-  private interruptHandlers: Set<() => string | null>;
+  #interrupt_handlers = new Set<() => string | null>();
 
   constructor() {
-    super();
-
     const article = document.querySelector("article");
     if (!article) {
       throw new Error("<article> element is missing from markup");
     }
-    this.article = article;
+    this.#article = article;
 
-    this.hash = window.location.hash;
-    this.pathname = window.location.pathname;
-    this.search = window.location.search;
+    this.#current = new URL(window.location.href);
+    current_url.set(this.#current);
+  }
 
-    this.interruptHandlers = new Set();
+  /** The current URL. */
+  get current(): URL {
+    return this.#current;
+  }
+
+  /** Set the current URL. */
+  private set current(url: URL) {
+    if (this.#current.href !== url.href) {
+      this.#current = url;
+      current_url.set(url);
+    }
   }
 
   /**
    * Whether an interrupt handler is active like on the editor or import report.
    * Avoid auto-reloading in that case.
    */
-  get hasInteruptHandler(): boolean {
-    return this.interruptHandlers.size > 0;
+  get has_interrupt_handler(): boolean {
+    return this.#interrupt_handlers.size > 0;
   }
 
   /**
    * Add an interrupt handler. Returns a function that removes it.
-   * This can be used directly in a svelte onMount hook.
+   * This can be used directly in a Svelte onMount hook.
    */
-  addInteruptHandler(handler: () => string | null): () => void {
-    this.interruptHandlers.add(handler);
+  add_interrupt_handler(handler: () => string | null): () => void {
+    this.#interrupt_handlers.add(handler);
 
     return () => {
-      this.interruptHandlers.delete(handler);
+      this.#interrupt_handlers.delete(handler);
     };
   }
 
@@ -105,166 +173,62 @@ export class Router extends Events<"page-loaded"> {
    * Check whether any of the registered interruptHandlers wants to stop
    * navigation.
    */
-  private shouldInterrupt(): string | null {
-    for (const handler of this.interruptHandlers) {
-      const ret = handler();
-      if (ret != null) {
-        return ret;
+  #should_interrupt(): string | null {
+    for (const handler of this.#interrupt_handlers) {
+      const leave_message = handler();
+      if (leave_message != null) {
+        return leave_message;
       }
     }
     return null;
   }
 
-  private async frontendRender(url: URL): Promise<void> {
-    const report = getUrlPath(url);
-    const route = this.frontend_routes?.find(
-      (r) => report?.startsWith(`${r.report}/`) === true,
-    );
-    if (route) {
-      is_loading_internal.set(true);
-      try {
-        await route.render(this.article, url, this.frontend_route);
-      } finally {
-        is_loading_internal.set(false);
-      }
-      raw_page_title.set(route.title);
-    } else {
-      this.frontend_route?.destroy();
-    }
-    this.frontend_route = route;
-  }
-
   /**
-   * This should be called once when the page has been loaded. Initializes the
-   * router and takes over clicking on links.
+   * Render the route for the given URL.
    */
-  init(frontend_routes: FrontendRoute[]): void {
-    this.frontend_routes = frontend_routes;
-    urlHash.set(window.location.hash.slice(1));
-    this.updateState();
-
-    this.frontendRender(new URL(window.location.href)).catch(log_error);
-
-    window.addEventListener("beforeunload", (event) => {
-      const leaveMessage = this.shouldInterrupt();
-      if (leaveMessage != null) {
-        event.preventDefault();
-      }
-    });
-
-    window.addEventListener("popstate", () => {
-      urlHash.set(window.location.hash.slice(1));
-      if (
-        window.location.hash !== this.hash &&
-        window.location.pathname === this.pathname &&
-        window.location.search === this.search
-      ) {
-        this.updateState();
-      } else if (
-        window.location.pathname !== this.pathname ||
-        window.location.search !== this.search
-      ) {
-        this.loadURL(window.location.href, false).catch(log_error);
-        setStoreValuesFromURL();
-      }
-    });
-
-    this.takeOverLinks();
-  }
-
-  /**
-   * Go to URL. If load is `true`, load the page at URL, otherwise only update
-   * the current state.
-   */
-  navigate(url: string, load = true): void {
-    if (load) {
-      this.loadURL(url).catch(log_error);
-    } else {
-      window.history.pushState(null, "", url);
-      this.updateState();
-    }
-  }
-
-  /**
-   * Set the URL parameter and push a history state for it if changed.
-   */
-  set_search_param(key: string, value: string): void {
-    const url = new URL(window.location.href);
-    const current_value = url.searchParams.get(key) ?? "";
-    if (value !== current_value) {
-      if (value) {
-        url.searchParams.set(key, value);
-      } else {
-        url.searchParams.delete(key);
-      }
-      window.history.pushState(null, "", url);
-      this.updateState();
-    }
-  }
-
-  /*
-   * Replace <article> contents with the page at `url`.
-   *
-   * If `historyState` is false, do not create a history state and do not
-   * scroll to top.
-   */
-  private async loadURL(url: string, historyState = true): Promise<void> {
-    const leaveMessage = this.shouldInterrupt();
-    if (leaveMessage != null) {
-      if (!window.confirm(leaveMessage)) {
-        return;
-      }
-    }
-
-    const getUrl = new URL(url, window.location.href);
-
-    await this.frontendRender(getUrl);
+  async #render_route(url: URL, before_render?: () => void): Promise<void> {
+    const previous = this.#current_report;
+    const relative_path = getUrlPath(url).unwrap();
+    const report = relative_path.slice(0, relative_path.indexOf("/"));
+    const route =
+      this.#frontend_routes.find((r) => r.report === report) ?? backend_route;
 
     try {
-      if (!this.frontend_route) {
-        getUrl.searchParams.set("partial", "true");
-        is_loading_internal.set(true);
-        const content = await fetch(getUrl.toString()).then(handleText);
-        if (historyState) {
-          window.history.pushState(null, "", url);
-          window.scroll(0, 0);
-        }
-        this.updateState();
-        this.article.innerHTML = content;
-      } else {
-        if (historyState) {
-          window.history.pushState(null, "", url);
-          window.scroll(0, 0);
-        }
-        this.updateState();
-      }
-      this.trigger("page-loaded");
-      setStoreValuesFromURL();
-      const hash = window.location.hash.slice(1);
-      urlHash.set(hash);
-      if (hash) {
-        document.getElementById(hash)?.scrollIntoView();
-      }
-    } catch (error) {
-      notify_err(error, (e) => `Loading ${url} failed: ${e.message}`);
-    } finally {
-      is_loading_internal.set(false);
+      this.#current_report = await loading_state.await(
+        route.render(this.#article, url, previous, before_render),
+      );
+    } catch (error: unknown) {
+      assert_is_error(error);
+      const error_route = new ErrorRoute(error);
+      this.#current_report = error_route.render(
+        this.#article,
+        url,
+        previous,
+        before_render,
+      );
     }
+    raw_page_title.set(this.#current_report.title);
   }
 
-  /*
-   * Update the routers state.
-   *
-   * The routers state is used to distinguish between the user navigating the
-   * browser history or the hash changing.
-   */
-  private updateState(): void {
-    this.hash = window.location.hash;
-    this.pathname = window.location.pathname;
-    this.search = window.location.search;
-    pathname.set(this.pathname);
-    search.set(this.search);
-  }
+  #beforeunload = () => (event: BeforeUnloadEvent) => {
+    const leave_message = this.#should_interrupt();
+    if (leave_message != null) {
+      event.preventDefault();
+    }
+  };
+
+  #popstate = (): void => {
+    const target = new URL(window.location.href);
+    const { current } = this;
+    if (
+      target.pathname !== current.pathname ||
+      target.search !== current.search
+    ) {
+      this.#load_url(target).catch(log_error);
+    } else {
+      this.current = target;
+    }
+  };
 
   /*
    * Intercept all clicks on links (<a>) and .navigate() to the link instead.
@@ -275,90 +239,138 @@ export class Router extends Events<"page-loaded"> {
    *  - the link starts with a hash '#', or
    *  - the link has a `data-remote` attribute.
    */
-  private takeOverLinks(): void {
-    const is_normal_click = (event: MouseEvent) =>
-      event.button === 0 &&
-      !event.altKey &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.shiftKey;
+  #intercept_link_click = (event: PointerEvent, link: Element): void => {
+    if (!(link instanceof HTMLAnchorElement || link instanceof SVGAElement)) {
+      return;
+    }
+    if (!is_normal_click(event)) {
+      return;
+    }
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (link.getAttribute("href")?.charAt(0) === "#") {
+      return;
+    }
+    if (is_external_link(link)) {
+      return;
+    }
 
-    const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
-      link.hasAttribute("data-remote") ||
-      (link instanceof HTMLAnchorElement &&
-        (link.host !== window.location.host ||
-          !link.protocol.startsWith("http")));
+    event.preventDefault();
+    const href =
+      link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
 
-    delegate(document, "click", "a", (event, link) => {
-      if (
-        !(event instanceof MouseEvent) ||
-        !(link instanceof HTMLAnchorElement || link instanceof SVGAElement)
-      ) {
-        return;
-      }
-      if (!is_normal_click(event)) {
-        return;
-      }
-      if (event.defaultPrevented) {
-        return;
-      }
-      if (link.getAttribute("href")?.charAt(0) === "#") {
-        return;
-      }
-      if (is_external_link(link)) {
-        return;
-      }
+    this.navigate(href);
+  };
 
-      event.preventDefault();
-      const href =
-        link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
+  /**
+   * This should be called once when the page has been loaded. Initializes the
+   * router and takes over clicking on links.
+   */
+  init(frontend_routes: FrontendRoute[]): void {
+    this.#frontend_routes = frontend_routes;
+    this.#render_route(this.current).catch(log_error);
 
-      this.navigate(href);
-    });
+    window.addEventListener("beforeunload", this.#beforeunload);
+    window.addEventListener("popstate", this.#popstate);
+    delegate(document, "click", "a", this.#intercept_link_click);
+
+    handleExtensionPageLoad();
   }
+
+  /**
+   * Go to URL.
+   *
+   * If load is `true`, load the page at URL, otherwise only push
+   * a new history item update and update the current url.
+   */
+  navigate(url: string | URL, load = true): void {
+    const target =
+      url instanceof URL ? url : new URL(url, window.location.href);
+    if (load) {
+      this.#load_url(target).catch(log_error);
+    } else {
+      window.history.pushState(null, "", target);
+      this.current = target;
+    }
+  }
+
+  /**
+   * Replace `<article>` contents with the page at `url`.
+   *
+   * Might render in the frontend or load the whole page contents.
+   */
+  async #load_url(url: URL): Promise<void> {
+    const leave_message = this.#should_interrupt();
+    if (leave_message != null && !window.confirm(leave_message)) {
+      return;
+    }
+
+    const is_reload = url.href === this.current.href;
+    const before_render = is_reload
+      ? undefined
+      : () => {
+          // Push state and set current URL after loading the data but before rendering.
+          this.#article.scroll(0, 0);
+          if (url.href !== window.location.href) {
+            window.history.pushState(null, "", url);
+          }
+          this.current = url;
+        };
+    await this.#render_route(url, before_render);
+
+    has_changes.set(false);
+    handleExtensionPageLoad();
+
+    const hash = this.current.hash.slice(1);
+    if (hash) {
+      document.getElementById(hash)?.scrollIntoView();
+    }
+  }
+
+  /**
+   * Set the URL parameter and push a history state for it if changed.
+   *
+   * For `charts` and `query_string`, this will not load the target URL.
+   */
+  set_search_param(key: "charts", value: "false" | ""): void;
+  set_search_param(
+    key:
+      | "account"
+      | "conversion"
+      | "filter"
+      | "interval"
+      | "query_string"
+      | "time",
+    value: string,
+  ): void;
+  set_search_param(key: FavaQueryParameters, value: string): void {
+    const target = new URL(this.current);
+    set_query_param(target, key, value);
+    if (target.href !== this.current.href) {
+      const load = !(key === "charts" || key === "query_string");
+      this.navigate(target, load);
+    }
+  }
+
+  /**
+   * Close the modal overlay.
+   */
+  close_overlay = (): void => {
+    if (this.current.hash) {
+      const target = new URL(this.current);
+      target.hash = "";
+      this.navigate(target, false);
+    }
+  };
 
   /*
    * Reload the page.
    */
-  reload(): void {
-    this.loadURL(window.location.href, false).catch(log_error);
-  }
+  reload = (): void => {
+    this.#load_url(this.current).catch(log_error);
+  };
 }
 
-const router = new Router();
-export default router;
-
-/**
- * Sync a store value to the URL.
- *
- * Update and navigate to the URL on store changes.
- */
-function syncToURL<T extends boolean | string>(
-  store: Writable<T>,
-  name: string,
-  defaultValue: T,
-  shouldLoad = true,
-): void {
-  store.subscribe((val: T) => {
-    const newURL = new URL(window.location.href);
-    newURL.searchParams.set(name, val.toString());
-    if (val === "" || val === defaultValue) {
-      newURL.searchParams.delete(name);
-    }
-    if (newURL.href !== window.location.href) {
-      router.navigate(newURL.href, shouldLoad);
-    }
-  });
-}
-
-/**
- * Update URL on store changes.
- */
-export function syncStoreValuesToURL(): void {
-  syncToURL(account_filter, "account", "");
-  syncToURL(fql_filter, "filter", "");
-  syncToURL(time_filter, "time", "");
-  syncToURL(interval, "interval", DEFAULT_INTERVAL);
-  syncToURL(conversion, "conversion", "at_cost");
-  syncToURL(showCharts, "charts", true, false);
-}
+/** The Fava router. */
+export const router = new Router();

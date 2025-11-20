@@ -1,8 +1,8 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { EntryMetadata, Posting } from "../entries";
-  import { _ } from "../i18n";
-  import { currencies } from "../stores";
+  import type { EntryMetadata, Posting } from "../entries/index.ts";
+  import { _ } from "../i18n.ts";
+  import { currencies } from "../stores/index.ts";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";

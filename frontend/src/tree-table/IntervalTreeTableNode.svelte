@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { AccountBudget } from "../api/validators";
-  import type { AccountTreeNode } from "../charts/hierarchy";
-  import type { NonEmptyArray } from "../lib/array";
-  import { is_empty } from "../lib/objects";
-  import { currency_name } from "../stores";
-  import { toggled_accounts } from "../stores/accounts";
-  import { ctx } from "../stores/format";
+  import type { AccountBudget } from "../api/validators.ts";
+  import type { AccountTreeNode } from "../charts/hierarchy.ts";
+  import type { NonEmptyArray } from "../lib/array.ts";
+  import { is_empty } from "../lib/objects.ts";
+  import { toggled_accounts } from "../stores/accounts.ts";
+  import { ctx } from "../stores/format.ts";
+  import { currency_name } from "../stores/index.ts";
   import AccountCell from "./AccountCell.svelte";
   import Diff from "./Diff.svelte";
-  import { getTreeTableNotShownContext } from "./helpers";
+  import { getTreeTableNotShownContext } from "./helpers.ts";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
 
   interface Props {
@@ -32,7 +32,7 @@
 <li>
   <p>
     <AccountCell {node} />
-    {#each nodes as n, index (n.account)}
+    {#each nodes as n, index (index)}
       {@const account_budget = account_budgets?.[index]}
       {@const has_balance =
         !is_empty(n.balance) ||

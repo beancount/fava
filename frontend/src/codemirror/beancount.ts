@@ -10,14 +10,14 @@ import { styleTags, tags } from "@lezer/highlight";
 import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
 
 import ts_wasm from "../../node_modules/web-tree-sitter/tree-sitter.wasm";
-import { beancountCompletion } from "./beancount-autocomplete";
-import { beancountFold } from "./beancount-fold";
-import { beancountFormat } from "./beancount-format";
-import { beancountEditorHighlight } from "./beancount-highlight";
-import { beancountIndent } from "./beancount-indent";
+import { beancountCompletion } from "./beancount-autocomplete.ts";
+import { beancountFold } from "./beancount-fold.ts";
+import { beancountFormat } from "./beancount-format.ts";
+import { beancountEditorHighlight } from "./beancount-highlight.ts";
+import { beancountIndent } from "./beancount-indent.ts";
 // WASM build of tree-sitter grammar from https://github.com/yagebu/tree-sitter-beancount
 import ts_beancount_wasm from "./tree-sitter-beancount.wasm";
-import { LezerTSParser } from "./tree-sitter-parser";
+import { LezerTSParser } from "./tree-sitter-parser.ts";
 
 /** Import the tree-sitter and Beancount language WASM files and initialise the parser. */
 async function loadBeancountParser(): Promise<TSParser> {

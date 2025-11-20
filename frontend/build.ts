@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import chokidar from "chokidar";
@@ -33,6 +34,7 @@ async function runBuild(dev: boolean) {
     outfile: "../src/fava/static/app.js",
     conditions: dev ? ["development"] : ["production"],
     external: ["fs/promises", "module"], // for web-tree-sitter
+    resolveExtensions: [], // enforce explicit extensions
     loader: {
       ".wasm": "file",
       ".woff": "empty",
@@ -81,8 +83,9 @@ const filename = fileURLToPath(import.meta.url);
 const is_main = resolve(process.argv[1] ?? "") === filename;
 
 if (is_main) {
-  const dev = process.argv.includes("--watch");
-  runBuild(dev).catch((e: unknown) => {
+  const watch = process.argv.includes("--watch");
+
+  runBuild(watch).catch((e: unknown) => {
     console.error(e);
   });
 }

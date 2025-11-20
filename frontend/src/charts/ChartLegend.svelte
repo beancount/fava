@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Writable } from "svelte/store";
 
-  import { currenciesScale } from "./helpers";
+  import { currenciesScale } from "./helpers.ts";
 
   interface Props {
     /** The chart legend to show. */

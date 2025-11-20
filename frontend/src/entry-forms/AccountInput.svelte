@@ -1,9 +1,9 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { _ } from "../i18n";
-  import { date as validate_date } from "../lib/validation";
-  import { accounts, accounts_set } from "../stores";
-  import { is_closed_account } from "../stores/accounts";
+  import { _ } from "../i18n.ts";
+  import { date as validate_date } from "../lib/validation.ts";
+  import { is_closed_account } from "../stores/accounts.ts";
+  import { accounts, accounts_set } from "../stores/index.ts";
 
   interface Props {
     /** The account name input value. */

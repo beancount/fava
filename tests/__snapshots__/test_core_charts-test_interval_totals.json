@@ -2,11 +2,11 @@
   {
     "account_balances": {
       "Expenses:Others": {
-        "EUR": 280.00
+        "EUR": 280.0
       }
     },
     "balance": {
-      "EUR": 280.00
+      "EUR": 280.0
     },
     "budgets": {
       "EUR": 31.42857142857142857142857145
@@ -16,14 +16,14 @@
   {
     "account_balances": {
       "Expenses:Food": {
-        "EUR": 70.00
+        "EUR": 70.0
       },
       "Expenses:Others": {
-        "EUR": 10.00
+        "EUR": 10.0
       }
     },
     "balance": {
-      "EUR": 80.00
+      "EUR": 80.0
     },
     "budgets": {
       "EUR": 88.57142857142857142857142865

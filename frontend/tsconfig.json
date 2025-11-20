@@ -5,6 +5,8 @@
     "target": "ES2024",
     "module": "Preserve",
     "resolveJsonModule": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
     "allowJs": true,

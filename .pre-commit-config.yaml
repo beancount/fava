@@ -1,21 +1,22 @@
 ci:
+  autoupdate_schedule: quarterly
   skip: ["eslint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.1
+    rev: v0.14.5
     hooks:
       - id: ruff-check
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.22
+    rev: 1.0.0
     hooks:
       - id: mdformat
         args: ["--wrap", "80"]
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.0.6
+    rev: v2.3.5
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
@@ -30,7 +31,7 @@ repos:
         additional_dependencies:
           - "prettier@3.6.2"
           - "prettier-plugin-svelte@3.4.0"
-          - "svelte@5.35.0"
+          - "svelte@5.43.8"
       - id: stylelint
         name: stylelint
         language: node
@@ -38,9 +39,9 @@ repos:
         types_or: ["css", "svelte"]
         require_serial: true
         additional_dependencies:
-          - "stylelint@16.21.0"
-          - "stylelint-config-recess-order@7.1.0"
-          - "stylelint-config-standard@38.0.0"
+          - "stylelint@16.25.0"
+          - "stylelint-config-recess-order@7.4.0"
+          - "stylelint-config-standard@39.0.1"
           - "postcss-html@1.8.0"
       - id: eslint
         name: eslint

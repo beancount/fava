@@ -42,7 +42,7 @@ mostlyclean:
 # Run linters.
 .PHONY: lint
 lint: frontend/node_modules mypy
-	uv run pre-commit run -a
+	uv run pre-commit run -v -a
 	cd frontend; npm exec tsc
 	cd frontend; npm exec svelte-check
 
@@ -65,7 +65,7 @@ test-py-old-deps:
 .PHONY: update-snapshots
 update-snapshots:
 	uv run pytest --snapshot-update --snapshot-clean
-	uv run pytest
+	uv run pre-commit run -a biome-check
 
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints

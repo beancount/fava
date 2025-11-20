@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/denoland/deno/refs/heads/main/cli/schemas/config-file.v1.json",
+  "tasks": {
+    "build": "deno run --allow-env --allow-read=src --allow-run build.ts"
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "no-explicit-any",
+        "no-window",
+        "no-window-prefix",
+        "require-await"
+      ]
+    }
+  }
+}

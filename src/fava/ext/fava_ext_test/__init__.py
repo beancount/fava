@@ -17,7 +17,6 @@ from flask import jsonify
 
 from fava.context import g
 from fava.core.charts import DateAndBalance
-from fava.core.conversion import cost_or_value
 from fava.core.inventory import SimpleCounterInventory
 from fava.core.query import DecimalColumn
 from fava.core.query import QueryResultTable
@@ -59,7 +58,7 @@ def _portfolio_data(nodes: list[TreeNode]) -> QueryResultTable:
     account_balances: list[tuple[str, Decimal | None]] = []
     total = Decimal()
     for node in nodes:
-        balance = cost_or_value(node.balance, g.conv, g.ledger.prices)
+        balance = g.conv.apply(node.balance, g.ledger.prices)
         if currency in balance:
             balance_dec = balance[currency]
             total += balance_dec

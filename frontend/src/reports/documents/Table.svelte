@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Document } from "../../entries";
-  import { _ } from "../../i18n";
-  import { is_descendant_or_equal } from "../../lib/account";
-  import { basename } from "../../lib/paths";
-  import { DateColumn, Sorter, StringColumn } from "../../sort";
+  import type { Document } from "../../entries/index.ts";
+  import { _ } from "../../i18n.ts";
+  import { is_descendant_or_equal } from "../../lib/account.ts";
+  import { basename } from "../../lib/paths.ts";
+  import { DateColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { selectedAccount } from "./stores";
+  import { selectedAccount } from "./stores.ts";
 
   interface Props {
     data: Document[];

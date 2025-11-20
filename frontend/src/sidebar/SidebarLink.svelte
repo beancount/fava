@@ -1,16 +1,21 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { urlFor } from "../helpers";
-  import type { KeySpec } from "../keyboard-shortcuts";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { pathname } from "../stores/url";
+  import { urlFor } from "../helpers.ts";
+  import type { KeySpec } from "../keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { pathname } from "../stores/url.ts";
 
   interface Props {
+    /** Report to generate the URL for. */
     report: string;
+    /** Name to display for this link. */
     name: string;
+    /** Key combination for the link. */
     key?: KeySpec;
+    /** Whether this is a remote link (for which we do not intercept clicks). */
     remote?: true;
+    /** Show a bubble with a number */
     bubble?: [number, "error" | "info"];
     children?: Snippet;
   }
@@ -22,7 +27,7 @@
 </script>
 
 <li>
-  <a class:selected {href} use:keyboardShortcut={key} data-remote={remote}>
+  <a class:selected {href} {@attach keyboardShortcut(key)} data-remote={remote}>
     {name}
     {#if bubble && bubble[0] > 0}
       <span class="bubble" class:error={bubble[1] === "error"}>

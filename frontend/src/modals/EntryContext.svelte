@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { EntryBaseAttributes } from "../entries";
-  import { urlForAccount, urlForSource } from "../helpers";
-  import { _ } from "../i18n";
+  import type { EntryBaseAttributes } from "../entries/index.ts";
+  import { urlForAccount, urlForSource } from "../helpers.ts";
+  import { _ } from "../i18n.ts";
 
   type ContextBalance = Record<string, string[]>;
   interface Props {
@@ -71,3 +71,12 @@
     </div>
   </details>
 {/if}
+
+<style>
+  code {
+    display: inline-block;
+    max-width: 80%;
+    padding: 2px 4px;
+    vertical-align: top;
+  }
+</style>

@@ -2,21 +2,21 @@
   import type { EditorView } from "@codemirror/view";
   import { onMount, untrack } from "svelte";
 
-  import { get, put } from "../../api";
+  import { get_errors, put_source } from "../../api/index.ts";
   import {
     replaceContents,
     scrollToLine,
     setErrors,
-  } from "../../codemirror/editor-transactions";
-  import { initBeancountEditor } from "../../codemirror/setup";
+  } from "../../codemirror/editor-transactions.ts";
+  import { initBeancountEditor } from "../../codemirror/setup.ts";
   import SaveButton from "../../editor/SaveButton.svelte";
-  import { log_error } from "../../log";
-  import { notify_err } from "../../notifications";
-  import router from "../../router";
-  import { errors } from "../../stores";
-  import { insert_entry } from "../../stores/fava_options";
-  import type { EditorReportProps } from ".";
+  import { log_error } from "../../log.ts";
+  import { notify_err } from "../../notifications.ts";
+  import { router } from "../../router.ts";
+  import { insert_entry } from "../../stores/fava_options.ts";
+  import { errors } from "../../stores/index.ts";
   import EditorMenu from "./EditorMenu.svelte";
+  import type { EditorReportProps } from "./index.ts";
 
   let {
     source,
@@ -40,14 +40,14 @@
   async function save(cm: EditorView) {
     saving = true;
     try {
-      sha256sum = await put("source", {
+      sha256sum = await put_source({
         file_path,
         source: cm.state.sliceDoc(),
         sha256sum,
       });
       changed = false;
       cm.focus();
-      get("errors").then((v) => {
+      get_errors().then((v) => {
         errors.set(v);
       }, log_error);
     } catch (error) {
@@ -106,7 +106,7 @@
     // Update diagnostics, showing errors in the editor
     // Only show errors for this file, or general errors (AKA no source)
     const errorsForFile = $errors.filter(
-      (err) => err.source === null || err.source.filename === file_path,
+      (err) => err.source == null || err.source.filename === file_path,
     );
     editor.dispatch(setErrors(editor.state, errorsForFile));
   });
@@ -116,7 +116,7 @@
       ? "There are unsaved changes. Are you sure you want to leave?"
       : null;
 
-  onMount(() => router.addInteruptHandler(checkEditorChanges));
+  onMount(() => router.add_interrupt_handler(checkEditorChanges));
 </script>
 
 <form
@@ -129,7 +129,7 @@
   <EditorMenu {file_path} {editor}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
-  <div use:renderEditor></div>
+  <div {@attach renderEditor}></div>
 </form>
 
 <style>

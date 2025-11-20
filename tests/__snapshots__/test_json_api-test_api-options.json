@@ -12,7 +12,8 @@
     "booking_method": "Booking.STRICT",
     "commodities": "set()",
     "conversion_currency": "NOTHING",
-    "dcontext": "ABC             : sign=0   integer_max=1   fractional_common=0   fractional_max=0   \"0\" \"0\"\nGLD             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nIRAUSD          : sign=1   integer_max=5   fractional_common=2   fractional_max=2   \"-00000.00\" \"-00000.00\"\nITOT            : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nRGAGX           : sign=0   integer_max=1   fractional_common=3   fractional_max=3   \"0.000\" \"0.000\"\nUSD             : sign=1   integer_max=4   fractional_common=2   fractional_max=2   \"-0000.00\" \"-0000.00\"\nVACHR           : sign=1   integer_max=3   fractional_common=0   fractional_max=0   \"-000\" \"-000\"\nVBMPX           : sign=0   integer_max=2   fractional_common=3   fractional_max=3   \"00.000\" \"00.000\"\nVEA             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nVHT             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nXYZ             : sign=0   integer_max=1   fractional_common=0   fractional_max=0   \"0\" \"0\"\n__default__     : sign=0   integer_max=1   fractional_common=_   fractional_max=_   \"0.*\" \"0.*\"\n",
+    "dcontext": "ABC             : sign=1   integer_max=1   fractional_common=0   fractional_max=0   \"-0\" \"-0\"\nGLD             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nIRAUSD          : sign=1   integer_max=5   fractional_common=2   fractional_max=2   \"-00000.00\" \"-00000.00\"\nITOT            : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nRGAGX           : sign=1   integer_max=1   fractional_common=3   fractional_max=3   \"-0.000\" \"-0.000\"\nUSD             : sign=1   integer_max=4   fractional_common=2   fractional_max=2   \"-0000.00\" \"-0000.00\"\nVACHR           : sign=1   integer_max=3   fractional_common=0   fractional_max=0   \"-000\" \"-000\"\nVBMPX           : sign=1   integer_max=2   fractional_common=3   fractional_max=3   \"-00.000\" \"-00.000\"\nVEA             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nVHT             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nXYZ             : sign=1   integer_max=1   fractional_common=0   fractional_max=0   \"-0\" \"-0\"\n__default__     : sign=1   integer_max=1   fractional_common=_   fractional_max=_   \"-0.*\" \"-0.*\"\n",
+    "display_precision": "{}",
     "documents": "[]",
     "filename": "TEST_DATA_DIR/long-example.beancount",
     "include": "['TEST_DATA_DIR/long-example.beancount']",
@@ -32,7 +33,8 @@
     "plugin_processing_mode": "default",
     "pythonpath": "[]",
     "render_commas": "False",
-    "title": "Long Example"
+    "title": "Long Example",
+    "tolerance_multiplier": "0.5"
   },
   "fava_options": {
     "account-journal-include-children": "True",
@@ -47,6 +49,7 @@
     "import-dirs": "()",
     "indent": "2",
     "insert-entry": "[]",
+    "invert-gains-losses-colors": "False",
     "invert-income-liabilities-equity": "False",
     "language": "None",
     "locale": "None",

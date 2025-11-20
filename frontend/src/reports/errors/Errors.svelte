@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BeancountError } from "../../api/validators";
-  import { urlForAccount, urlForSource } from "../../helpers";
-  import { _, format } from "../../i18n";
-  import { NumberColumn, Sorter, StringColumn } from "../../sort";
+  import type { BeancountError } from "../../api/validators.ts";
+  import { urlForAccount, urlForSource } from "../../helpers.ts";
+  import { _, format } from "../../i18n.ts";
+  import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { accounts, errors } from "../../stores";
+  import { accounts, errors } from "../../stores/index.ts";
 
   let account_re = $derived(new RegExp(`(${$accounts.join("|")})`));
 

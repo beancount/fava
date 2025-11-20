@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ctx } from "../stores/format";
+  import { ctx } from "../stores/format.ts";
 
   interface Props {
     /** Difference to show. */
@@ -16,7 +16,7 @@
 
 <br />
 <span class:positive title={$ctx.amount(num, currency)}>
-  ({positive ? "+" : "-"}{$ctx.num(diff, currency)})
+  ({positive ? "+" : "-"}{$ctx.num(Math.abs(diff), currency)})
 </span>
 
 <style>

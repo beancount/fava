@@ -1,14 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { get } from "../../api";
-  import { err, ok, type Result } from "../../lib/result";
-  import { log_error } from "../../log";
-  import router from "../../router";
-  import { filter_params } from "../../stores/filters";
-  import { query_shell_history } from "../../stores/query";
-  import { searchParams } from "../../stores/url";
-  import type { QueryResult } from "./query_table";
+  import { get_query } from "../../api/index.ts";
+  import { err, ok, type Result } from "../../lib/result.ts";
+  import { log_error } from "../../log.ts";
+  import { router } from "../../router.ts";
+  import { filter_params } from "../../stores/filters.ts";
+  import { query_shell_history } from "../../stores/query.ts";
+  import { searchParams } from "../../stores/url.ts";
+  import type { QueryResult } from "./query_table.ts";
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
 
@@ -50,7 +50,7 @@
     }
     query_shell_history.add(query);
     router.set_search_param("query_string", query);
-    get("query", { query_string: query, ...$filter_params })
+    get_query({ query_string: query, ...$filter_params })
       .then(
         (res) => ok(res),
         (error: unknown) =>
@@ -71,7 +71,7 @@
       .map(([query]) => query);
     results = {};
     for (const query of to_rerun) {
-      get("query", { query_string: query, ...$filter_params })
+      get_query({ query_string: query, ...$filter_params })
         .then(
           (res) => ok(res),
           (error: unknown) =>

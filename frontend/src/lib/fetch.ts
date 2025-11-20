@@ -1,73 +1,65 @@
-import { log_error } from "../log";
-import { set_mtime } from "../stores/mtime";
-import {
-  defaultValue,
-  isJsonObject,
-  object,
-  string,
-  unknown,
-} from "./validation";
+import { isJsonObject, object, string } from "./validation.ts";
 
-class FetchError extends Error {}
+export class FetchError extends Error {}
 
-/** Wrapper around fetch with some default options */
-export async function fetch(
-  input: string,
-  init: RequestInit = {},
-): Promise<Response> {
-  return window.fetch(input, { credentials: "same-origin", ...init });
+export class FetchHTTPError extends FetchError {
+  readonly status: number;
+
+  constructor(message: string | null, status: number) {
+    super(
+      message != null
+        ? `HTTP ${status.toString()} - ${message}`
+        : `HTTP ${status.toString()}`,
+    );
+    this.status = status;
+  }
 }
 
+export class FetchInvalidResponseError extends FetchError {
+  constructor(msg: string) {
+    super(`Invalid response: ${msg}`);
+  }
+}
+
+const error_response_validator = object({ error: string });
+
 /**
- * Handles JSON content for a Promise returned by fetch, also handling an HTTP
- * error status.
+ * Fetch JSON content, also handling an HTTP error status.
+ *
+ * Checks for an object at the top JSON level. For errors, looks
+ * for an error message like `{ "error": "error message" }
  */
-async function handleJSON(
-  response: Response,
+export async function fetch_json(
+  input: URL,
+  init?: RequestInit,
 ): Promise<Record<string, unknown>> {
-  const data: unknown = await response.json().catch(() => null);
+  const response = await fetch(input, init);
+  const json: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new FetchError(
-      isJsonObject(data) && typeof data.error === "string"
-        ? data.error
-        : response.statusText,
+    throw new FetchHTTPError(
+      error_response_validator(json)
+        .map((d) => d.error)
+        .unwrap_or(null),
+      response.status,
     );
   }
-  if (!isJsonObject(data)) {
-    throw new FetchError("Invalid response: not a valid JSON object");
+  if (!isJsonObject(json)) {
+    throw new FetchInvalidResponseError("Not a valid JSON object");
   }
-  return data;
-}
-
-const response_validator = object({
-  data: unknown,
-  mtime: defaultValue(string, () => null),
-});
-
-export async function fetchJSON(
-  input: string,
-  init?: RequestInit,
-): Promise<unknown> {
-  const res = await fetch(input, init).then(handleJSON);
-  const validated = response_validator(res).unwrap_or(null);
-  if (validated) {
-    if (typeof validated.mtime === "string") {
-      set_mtime(validated.mtime);
-    }
-    return validated.data;
-  }
-  log_error(res);
-  throw new FetchError("Invalid response: missing data or mtime key.");
+  return json;
 }
 
 /**
- * Handles text content for a Promise returned by fetch, also handling an HTTP
- * error status.
+ * Fetch text content, also handling an HTTP error status.
  */
-export async function handleText(response: Response): Promise<string> {
+export async function fetch_text(
+  input: string | URL,
+  init?: RequestInit,
+): Promise<string> {
+  const response = await fetch(input, init);
   if (!response.ok) {
-    const msg = await response.text().catch(() => response.statusText);
-    throw new FetchError(msg);
+    const message = await response.text().catch(() => null);
+    throw new FetchHTTPError(message, response.status);
   }
   return response.text();
 }

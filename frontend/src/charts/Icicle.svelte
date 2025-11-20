@@ -1,16 +1,16 @@
 <script lang="ts">
   import { partition } from "d3-hierarchy";
 
-  import { formatPercentage } from "../format";
-  import { urlForAccount } from "../helpers";
-  import { leaf } from "../lib/account";
-  import { ctx } from "../stores/format";
-  import { sunburstScale } from "./helpers";
+  import { formatPercentage } from "../format.ts";
+  import { urlForAccount } from "../helpers.ts";
+  import { leaf } from "../lib/account.ts";
+  import { ctx } from "../stores/format.ts";
+  import { sunburstScale } from "./helpers.ts";
   import type {
     AccountHierarchyDatum,
     AccountHierarchyNode,
-  } from "./hierarchy";
-  import { domHelpers, followingTooltip } from "./tooltip";
+  } from "./hierarchy.ts";
+  import { domHelpers, followingTooltip } from "./tooltip.ts";
 
   interface Props {
     data: AccountHierarchyNode;
@@ -50,8 +50,8 @@
   {#each nodes as d (d.data.account)}
     {@const account = d.data.account}
     <g
-      use:followingTooltip={() => tooltipText(d)}
-      class:current={current !== null ? current.startsWith(account) : false}
+      {@attach followingTooltip(() => tooltipText(d))}
+      class:current={current != null ? current.startsWith(account) : false}
     >
       <a
         href={$urlForAccount(account)}

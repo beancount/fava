@@ -12,9 +12,13 @@
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
 -->
 <script lang="ts">
-  import type { KeySpec } from "./keyboard-shortcuts";
-  import { keyboardShortcut } from "./keyboard-shortcuts";
-  import { fuzzyfilter, fuzzywrap, type FuzzyWrappedText } from "./lib/fuzzy";
+  import type { KeySpec } from "./keyboard-shortcuts.ts";
+  import { keyboardShortcut } from "./keyboard-shortcuts.ts";
+  import {
+    fuzzyfilter,
+    fuzzywrap,
+    type FuzzyWrappedText,
+  } from "./lib/fuzzy.ts";
 
   interface Props {
     /** The currently entered value (bindable). */
@@ -65,7 +69,7 @@
   }: Props = $props();
 
   const uid = $props.id();
-  const autocomple_id = `combobox-autocomplete-${uid.toString()}`;
+  const autocomple_id = `combobox-autocomplete-${uid}`;
 
   let hidden = $state.raw(true);
   let index = $state.raw(-1);
@@ -157,7 +161,7 @@
     aria-controls={autocomple_id}
     bind:value
     bind:this={input}
-    use:keyboardShortcut={key}
+    {@attach keyboardShortcut(key)}
     onblur={(event) => {
       hidden = true;
       onBlur?.(event.currentTarget);
@@ -199,7 +203,7 @@
             mousedown(ev, suggestion);
           }}
         >
-          {#each fuzzywrapped as [type, text] (`${type}-${text}`)}
+          {#each fuzzywrapped as [type, text], i (i)}
             {#if type === "text"}
               {text}
             {:else}

@@ -1,4 +1,4 @@
-import { _ } from "../i18n";
+import { _ } from "../i18n.ts";
 
 export type Interval = "year" | "quarter" | "month" | "week" | "day";
 

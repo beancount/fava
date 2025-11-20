@@ -1,13 +1,16 @@
-import type { FormatterContext } from "../format";
-import type { Validator } from "../lib/validation";
-import { number, object, string } from "../lib/validation";
+import type { FormatterContext } from "../format.ts";
+import type { Validator } from "../lib/validation.ts";
+import { number, object, string } from "../lib/validation.ts";
 
 /** An amount is a pair of number and currency. */
 export class Amount {
-  constructor(
-    readonly number: number,
-    readonly currency: string,
-  ) {}
+  readonly number: number;
+  readonly currency: string;
+
+  constructor(number: number, currency: string) {
+    this.number = number;
+    this.currency = currency;
+  }
 
   /** Render to a string. */
   str($ctx: FormatterContext): string {
@@ -24,10 +27,13 @@ export class Amount {
 
 /** A raw amount is a pair of number (as a string) and currency. */
 export class RawAmount {
-  constructor(
-    readonly number: string,
-    readonly currency: string,
-  ) {}
+  readonly number: string;
+  readonly currency: string;
+
+  constructor(number: string, currency: string) {
+    this.number = number;
+    this.currency = currency;
+  }
 
   /** Set the currency return an updated copy. */
   set_currency(currency: string): RawAmount {

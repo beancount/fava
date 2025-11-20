@@ -5,8 +5,8 @@
  * an API, is of a specified type.
  */
 
-import type { Ok, Result } from "./result";
-import { err, ok } from "./result";
+import type { Ok, Result } from "./result.ts";
+import { err, ok } from "./result.ts";
 
 export class ValidationError extends Error {}
 export class PrimitiveValidationError extends ValidationError {
@@ -35,8 +35,8 @@ class TaggedUnionObjectValidationError extends ValidationError {
   }
 }
 class TaggedUnionInvalidTagValidationError extends ValidationError {
-  constructor() {
-    super("Validation of tagged union failed: invalid tag.");
+  constructor(tag: string) {
+    super(`Validation of tagged union failed: invalid tag ${tag}.`);
   }
 }
 class TaggedUnionValidationError extends ValidationError {
@@ -196,11 +196,11 @@ export function tagged_union<T>(
       return err(new TaggedUnionObjectValidationError());
     }
     const tag_value = json[tag];
-    if (
-      typeof tag_value !== "string" ||
-      !Object.hasOwn(validators, tag_value)
-    ) {
-      return err(new TaggedUnionInvalidTagValidationError());
+    if (typeof tag_value !== "string") {
+      return err(new TaggedUnionInvalidTagValidationError("- not a string"));
+    }
+    if (!Object.hasOwn(validators, tag_value)) {
+      return err(new TaggedUnionInvalidTagValidationError(tag_value));
     }
     const res = validators[tag_value as keyof T](json);
     return res.is_ok
@@ -275,7 +275,7 @@ export function tuple<const T extends unknown[]>(
  * Check whether the given object is a string-indexable object.
  */
 export function isJsonObject(json: unknown): json is Record<string, unknown> {
-  return typeof json === "object" && json !== null && !Array.isArray(json);
+  return typeof json === "object" && json != null && !Array.isArray(json);
 }
 
 /**

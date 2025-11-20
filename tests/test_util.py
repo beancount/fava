@@ -15,12 +15,24 @@ from fava.util import next_key
 from fava.util import send_file_inline
 from fava.util import simple_wsgi
 from fava.util import slugify
+from fava.util.unreachable import assert_never
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
     from pathlib import Path
 
     from flask import Flask
+
+
+def test_unreachable() -> None:
+    value = True
+    if value:
+        return
+    # This fails type-checking:
+    assert_never(value)  # type: ignore[arg-type]
+    if not value:
+        return
+    assert_never(value)
 
 
 def test_get_translations() -> None:

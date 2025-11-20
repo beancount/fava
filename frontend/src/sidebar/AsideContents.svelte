@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { urlFor } from "../helpers";
-  import { _ } from "../i18n";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { errors, extensions, ledgerData } from "../stores";
+  import { urlFor } from "../helpers.ts";
+  import { _ } from "../i18n.ts";
+  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { errors, extensions, ledgerData } from "../stores/index.ts";
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
 
@@ -59,7 +59,7 @@
       href="#add-transaction"
       class="secondary add-transaction"
       title={_("Add Journal Entry")}
-      use:keyboardShortcut={"n"}>+</a
+      {@attach keyboardShortcut("n")}>+</a
     >
   </Link>
   {#if $errors.length > 0}

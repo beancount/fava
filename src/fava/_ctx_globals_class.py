@@ -8,13 +8,15 @@ from typing import TYPE_CHECKING
 from flask import request
 
 from fava.core.conversion import conversion_from_str
-from fava.util.date import Interval
+from fava.util.date import INTERVALS
+from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
     from fava.ext import FavaExtensionBase
+    from fava.util.date import Interval
 
 
 class Context:
@@ -40,7 +42,7 @@ class Context:
     @cached_property
     def interval(self) -> Interval:
         """Interval to group by."""
-        return Interval.get(request.args.get("interval", ""))
+        return INTERVALS.get(request.args.get("interval", "").lower(), Month)
 
     @cached_property
     def filtered(self) -> FilteredLedger:

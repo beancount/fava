@@ -1,17 +1,17 @@
 <script lang="ts">
   import { group } from "d3-array";
 
-  import { moveDocument } from "../../api";
-  import type { Document } from "../../entries";
+  import { move_document } from "../../api/index.ts";
+  import type { Document } from "../../entries/index.ts";
   import AccountInput from "../../entry-forms/AccountInput.svelte";
-  import { _ } from "../../i18n";
-  import { basename } from "../../lib/paths";
-  import { stratify } from "../../lib/tree";
+  import { _ } from "../../i18n.ts";
+  import { basename } from "../../lib/paths.ts";
+  import { stratify } from "../../lib/tree.ts";
   import ModalBase from "../../modals/ModalBase.svelte";
-  import router from "../../router";
-  import type { DocumentsReportProps } from ".";
+  import { router } from "../../router.ts";
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
+  import type { DocumentsReportProps } from "./index.ts";
   import Table from "./Table.svelte";
 
   let { documents }: DocumentsReportProps = $props();
@@ -50,7 +50,7 @@
   async function move(event: SubmitEvent) {
     event.preventDefault();
     if (moving) {
-      const moved = await moveDocument(
+      const moved = await move_document(
         moving.filename,
         moving.account,
         moving.newName,

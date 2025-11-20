@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { initReadonlyQueryEditor } from "../../codemirror/setup";
+  import { initReadonlyQueryEditor } from "../../codemirror/setup.ts";
 
   interface Props {
     value: string;
@@ -11,7 +11,7 @@
   const { renderEditor } = initReadonlyQueryEditor(value);
 </script>
 
-<pre class:error use:renderEditor></pre>
+<pre class:error {@attach renderEditor}></pre>
 
 <style>
   .error {

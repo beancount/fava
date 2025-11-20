@@ -1,11 +1,11 @@
-import { errorWithCauses } from "./lib/errors";
-import { log_error } from "./log";
+import { errorWithCauses } from "./lib/errors.ts";
+import { log_error } from "./log.ts";
 
 /** The notification list div, lazily created. */
 const notificationList = (() => {
   let value: HTMLDivElement | null = null;
   return () => {
-    if (value === null) {
+    if (value == null) {
       value = document.createElement("div");
       value.className = "notifications";
       value.style.right = "10px";
