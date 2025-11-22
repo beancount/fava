@@ -11,7 +11,7 @@
   let meta_entries = $derived(meta.entries());
 </script>
 
-{#each meta_entries as [key, value], index (key)}
+{#each meta_entries as [key, value], index (index)}
   <div class="flex-row">
     <button
       type="button"
