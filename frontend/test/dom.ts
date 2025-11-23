@@ -16,6 +16,9 @@ export function setup_jsdom(): void {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       globalThis[key] = window[key];
     }
+    globalThis.StorageEvent = window.StorageEvent;
+    globalThis.localStorage = window.localStorage;
+    globalThis.sessionStorage = window.sessionStorage;
     ran_once = true;
   }
   window.document.title = "";
