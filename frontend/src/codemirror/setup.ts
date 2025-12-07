@@ -22,7 +22,6 @@ import {
 } from "@codemirror/language";
 import { lintGutter, lintKeymap } from "@codemirror/lint";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
-import type { Extension } from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
 import type { KeyBinding } from "@codemirror/view";
 import {
@@ -81,22 +80,14 @@ interface EditorAndAttachment {
   renderEditor: Attachment<HTMLDivElement | HTMLPreElement>;
 }
 
-function setup(
-  value: string | undefined,
-  extensions: Extension[],
-): EditorAndAttachment {
-  const view = new EditorView({
-    state: EditorState.create(
-      value !== undefined ? { doc: value, extensions } : { extensions },
-    ),
-  });
+function editor_attachment(editor: EditorView): EditorAndAttachment {
   return {
-    editor: view,
+    editor,
     renderEditor: (el) => {
-      el.appendChild(view.dom);
+      el.appendChild(editor.dom);
 
       return () => {
-        el.removeChild(view.dom);
+        el.removeChild(editor.dom);
       };
     },
   };
@@ -105,12 +96,16 @@ function setup(
 /**
  * A basic readonly editor for an asynchronously loaded document.
  */
-export function initDocumentPreviewEditor(value: string): EditorAndAttachment {
-  return setup(value, [
-    baseExtensions,
-    EditorState.readOnly.of(true),
-    placeholder("Loading..."),
-  ]);
+export function initDocumentPreviewEditor(): EditorAndAttachment {
+  return editor_attachment(
+    new EditorView({
+      extensions: [
+        baseExtensions,
+        EditorState.readOnly.of(true),
+        placeholder("Loading..."),
+      ],
+    }),
+  );
 }
 
 /**
@@ -121,11 +116,14 @@ export class BeancountTextarea extends HTMLTextAreaElement {
     super();
     getBeancountLanguageSupport()
       .then((beancount) => {
-        const { editor } = setup(this.value, [
-          beancount,
-          syntaxHighlighting(defaultHighlightStyle),
-          EditorView.editable.of(false),
-        ]);
+        const editor = new EditorView({
+          doc: this.value,
+          extensions: [
+            beancount,
+            syntaxHighlighting(defaultHighlightStyle),
+            EditorView.editable.of(false),
+          ],
+        });
         this.parentNode?.insertBefore(editor.dom, this);
         this.style.display = "none";
       })
@@ -140,64 +138,80 @@ export function initBeancountEditor(
   value: string,
   onDocChanges: (s: EditorState) => void,
   commands: KeyBinding[],
-  beancount: LanguageSupport,
+  beancount: () => LanguageSupport,
 ): EditorAndAttachment {
   const $indent = store_get(indent);
   const $currency_column = store_get(currency_column);
-  return setup(value, [
-    beancount,
-    indentUnit.of(" ".repeat($indent)),
-    ...($currency_column ? [rulerPlugin($currency_column - 1)] : []),
-    keymap.of(commands),
-    EditorView.updateListener.of((update) => {
-      if (update.docChanged) {
-        onDocChanges(update.state);
-      }
+  return editor_attachment(
+    new EditorView({
+      doc: value,
+      extensions: [
+        beancount(),
+        indentUnit.of(" ".repeat($indent)),
+        ...($currency_column ? [rulerPlugin($currency_column - 1)] : []),
+        keymap.of(commands),
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            onDocChanges(update.state);
+          }
+        }),
+        baseExtensions,
+        syntaxHighlighting(beancountEditorHighlight),
+      ],
     }),
-    baseExtensions,
-    syntaxHighlighting(beancountEditorHighlight),
-  ]);
+  );
 }
 
 /**
  * A basic readonly BQL editor that only does syntax highlighting.
  */
 export function initReadonlyQueryEditor(value: string): EditorAndAttachment {
-  return setup(value, [
-    bql,
-    syntaxHighlighting(beancountQueryHighlight),
-    EditorView.editable.of(false),
-  ]);
+  return editor_attachment(
+    new EditorView({
+      doc: value,
+      extensions: [
+        bql,
+        syntaxHighlighting(beancountQueryHighlight),
+        EditorView.editable.of(false),
+      ],
+    }),
+  );
 }
 
 /**
  * The main BQL editor.
  */
 export function initQueryEditor(
-  value: string | undefined,
+  value: string,
   onDocChanges: (s: EditorState) => void,
-  _placeholder: string,
-  submit: () => void,
+  placeholder_value: string,
+  get_submit: () => () => void,
 ): EditorAndAttachment {
-  return setup(value, [
-    bql,
-    EditorView.updateListener.of((update) => {
-      if (update.docChanged) {
-        onDocChanges(update.state);
-      }
+  return editor_attachment(
+    new EditorView({
+      doc: value,
+      extensions: [
+        bql,
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            onDocChanges(update.state);
+          }
+        }),
+        keymap.of([
+          {
+            key: "Control-Enter",
+            mac: "Meta-Enter",
+            run: () => {
+              const submit = get_submit();
+              submit();
+              return true;
+            },
+          },
+        ]),
+        placeholder(placeholder_value),
+        baseExtensions,
+        syntaxHighlighting(beancountQueryHighlight),
+      ],
     }),
-    keymap.of([
-      {
-        key: "Control-Enter",
-        mac: "Meta-Enter",
-        run: () => {
-          submit();
-          return true;
-        },
-      },
-    ]),
-    placeholder(_placeholder),
-    baseExtensions,
-    syntaxHighlighting(beancountQueryHighlight),
-  ]);
+  );
 }

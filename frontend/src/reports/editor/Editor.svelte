@@ -72,13 +72,12 @@
         },
       },
     ],
-    beancount_language_support,
+    () => beancount_language_support,
   );
 
   $effect(() => {
     // update editor contents if source changes
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    source;
+    void source;
     untrack(() => {
       editor.dispatch(replaceContents(editor.state, source.source));
       sha256sum = source.sha256sum;

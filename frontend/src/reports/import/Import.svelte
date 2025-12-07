@@ -23,11 +23,14 @@
 
   let { files }: ImportReportProps = $props();
 
-  /** Whether the `<details>` for the "other files" is open. */
-  let show_other_files = $state.raw(
-    // initially show the other files if no importable files are present
-    files.every((file) => !file.identified_by_importers),
+  // initially show the other files if no importable files are present
+  // svelte-ignore state_referenced_locally
+  const show_other_files_initially = files.every(
+    (file) => !file.identified_by_importers,
   );
+
+  /** Whether the `<details>` for the "other files" is open. */
+  let show_other_files = $state.raw(show_other_files_initially);
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = $state([]);

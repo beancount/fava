@@ -17,7 +17,7 @@
       value = state.sliceDoc();
     },
     _("...enter a BQL query. 'help' to list available commands."),
-    submit,
+    () => submit,
   );
 
   $effect(() => {

@@ -36,6 +36,8 @@
   /** Whether the list of options in the Combobox popup is hidden. */
   let hidden = $state(true);
   /** The index of the option that is currently focused */
+  // Use the initial index in options (options does not change).
+  // svelte-ignore state_referenced_locally
   let index = $state(options.indexOf(value));
   /** The popup list element. */
   let ul: HTMLUListElement | undefined = $state();

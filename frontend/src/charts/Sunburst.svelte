@@ -34,8 +34,7 @@
 
   $effect.pre(() => {
     // if-expression to run on each change of chart
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    data;
+    void data;
     untrack(() => {
       current = null;
     });

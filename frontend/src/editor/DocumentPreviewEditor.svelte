@@ -15,7 +15,7 @@
 
   let { url }: Props = $props();
 
-  const { editor, renderEditor } = initDocumentPreviewEditor("");
+  const { editor, renderEditor } = initDocumentPreviewEditor();
 
   const set_editor_content = (value: string) => {
     if (value !== editor.state.sliceDoc()) {

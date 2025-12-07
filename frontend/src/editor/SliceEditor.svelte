@@ -24,8 +24,12 @@
     sha256sum = $bindable(),
   }: Props = $props();
 
-  let currentSlice = $state(slice);
-  let changed = $derived(currentSlice !== slice);
+  // Keep the initital slice value to check for changes.
+  // svelte-ignore state_referenced_locally
+  const initial_slice = slice;
+
+  let currentSlice = $state(initial_slice);
+  let changed = $derived(currentSlice !== initial_slice);
 
   let saving = $state(false);
   let deleting = $state(false);
@@ -67,7 +71,7 @@
   }
 
   const { renderEditor } = initBeancountEditor(
-    slice,
+    initial_slice,
     (state) => {
       currentSlice = state.sliceDoc();
     },
@@ -83,7 +87,7 @@
         },
       },
     ],
-    beancount_language_support,
+    () => beancount_language_support,
   );
 </script>
 

@@ -11,9 +11,11 @@
   import { getTreeTableNotShownContext } from "./helpers.ts";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
 
+  type Nodes = NonEmptyArray<AccountTreeNode>;
+
   interface Props {
     /** The account nodes to show. */
-    nodes: NonEmptyArray<AccountTreeNode>;
+    nodes: Nodes;
     /** The budgets (per account a list per date range). */
     budgets: Record<string, AccountBudget[]>;
   }
@@ -70,9 +72,7 @@
       {#each children as child, index (child.account)}
         {#if !$not_shown.has(child.account)}
           <IntervalTreeTableNode
-            nodes={nodes.map(
-              (n) => n.children[index],
-            ) as unknown as NonEmptyArray}
+            nodes={nodes.map((n) => n.children[index]) as unknown as Nodes}
             {budgets}
           />
         {/if}
