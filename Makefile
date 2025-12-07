@@ -89,7 +89,8 @@ update-precommit:
 # Update github actions action versions.
 .PHONY: update-github-actions
 update-github-actions:
-	cd frontend; npm run sync-github-actions
+	uvx gha-update
+	uvx zizmor .github/workflows/*.yml
 
 # Update frontend deps, Python deps and pre-commit
 .PHONY: update
