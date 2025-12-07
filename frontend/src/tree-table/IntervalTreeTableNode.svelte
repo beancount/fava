@@ -72,7 +72,7 @@
           <IntervalTreeTableNode
             nodes={nodes.map(
               (n) => n.children[index],
-            ) as unknown as NonEmptyArray<AccountTreeNode>}
+            ) as unknown as NonEmptyArray}
             {budgets}
           />
         {/if}
