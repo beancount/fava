@@ -27,7 +27,7 @@ import { get as store_get } from "svelte/store";
 import { get_changed, get_errors, get_ledger_data } from "./api/index.ts";
 import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
-import { BeancountTextarea } from "./codemirror/setup.ts";
+import { BeancountTextarea } from "./codemirror/dom.ts";
 import { _ } from "./i18n.ts";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts.ts";
 import { getScriptTagValue } from "./lib/dom.ts";

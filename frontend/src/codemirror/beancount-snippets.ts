@@ -3,7 +3,7 @@ import { snippetCompletion } from "@codemirror/autocomplete";
 
 import { todayAsString } from "../format.ts";
 
-export const beancountSnippets: () => readonly Completion[] = () => {
+export const beancount_snippets: () => readonly Completion[] = () => {
   const today = todayAsString();
   return [
     snippetCompletion(

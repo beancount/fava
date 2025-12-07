@@ -5,15 +5,15 @@ import { setDiagnosticsEffect } from "@codemirror/lint";
 import { EditorState } from "@codemirror/state";
 
 import {
-  replaceContents,
-  scrollToLine,
-  setErrors,
+  replace_contents,
+  scroll_to_line,
+  set_errors,
 } from "../src/codemirror/editor-transactions.ts";
 
 test("replace editor contents", () => {
   const state = EditorState.create({ doc: "test\n" });
   equal(state.sliceDoc(), "test\n");
-  const transaction = state.update(replaceContents(state, "asdfasdf\n"));
+  const transaction = state.update(replace_contents(state, "asdfasdf\n"));
   equal(transaction.docChanged, true);
   equal(transaction.state.sliceDoc(), "asdfasdf\n");
 });
@@ -21,21 +21,21 @@ test("replace editor contents", () => {
 test("scroll to line", () => {
   const state = EditorState.create({ doc: "test\ntest\ntest\n" });
 
-  const second_line = state.update(scrollToLine(state, 2));
+  const second_line = state.update(scroll_to_line(state, 2));
   equal(second_line.docChanged, false);
   ok(second_line.selection);
   equal(second_line.state.selection.main.from, 5);
 
-  const last_line = state.update(scrollToLine(state, state.doc.lines));
+  const last_line = state.update(scroll_to_line(state, state.doc.lines));
   equal(last_line.docChanged, false);
   ok(last_line.selection);
   equal(last_line.state.selection.main.from, 15);
 
-  const after_end = state.update(scrollToLine(state, state.doc.lines + 1));
+  const after_end = state.update(scroll_to_line(state, state.doc.lines + 1));
   equal(after_end.docChanged, false);
   equal(after_end.selection, undefined);
 
-  const line_zero = state.update(scrollToLine(state, 0));
+  const line_zero = state.update(scroll_to_line(state, 0));
   equal(line_zero.docChanged, false);
   equal(line_zero.selection, undefined);
 });
@@ -44,7 +44,7 @@ test("set errors", () => {
   const state = EditorState.create({ doc: "test\ntest\ntest\n" });
 
   const transaction = state.update(
-    setErrors(state, [
+    set_errors(state, [
       { type: "type", message: "first error", source: null },
       {
         type: "type",

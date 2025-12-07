@@ -8,9 +8,12 @@
   import { filter_params } from "../../stores/filters.ts";
   import { query_shell_history } from "../../stores/query.ts";
   import { searchParams } from "../../stores/url.ts";
+  import type { QueryReportProps } from "./index.ts";
   import type { QueryResult } from "./query_table.ts";
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
+
+  let { codemirror_bql }: QueryReportProps = $props();
 
   /** The current query string in the editor. */
   let query_string = $state.raw("");
@@ -94,7 +97,7 @@
   }
 </script>
 
-<QueryEditor bind:value={query_string} {submit} />
+<QueryEditor bind:value={query_string} {submit} {codemirror_bql} />
 {#each $query_shell_history as query (query)}
   <QueryBox
     {query}
@@ -107,5 +110,6 @@
     ondelete={() => {
       delete_item(query);
     }}
+    {codemirror_bql}
   />
 {/each}

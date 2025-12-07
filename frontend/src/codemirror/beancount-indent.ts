@@ -1,6 +1,6 @@
 import { indentService } from "@codemirror/language";
 
-export const beancountIndent = indentService.of((context, pos) => {
+export const beancount_indent = indentService.of((context, pos) => {
   const textAfterPos = context.textAfterPos(pos);
   if (/^\s*\d\d\d\d/.exec(textAfterPos)) {
     // Lines starting with a date should not be indented.

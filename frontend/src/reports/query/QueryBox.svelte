@@ -6,6 +6,7 @@
   import Chart from "../../charts/Chart.svelte";
   import { chartContext } from "../../charts/context.ts";
   import { getQueryChart } from "../../charts/query-charts.ts";
+  import type { CodemirrorBql } from "../../codemirror/types.ts";
   import type { Result } from "../../lib/result.ts";
   import type { QueryResult } from "./query_table.ts";
   import QueryLinks from "./QueryLinks.svelte";
@@ -23,6 +24,7 @@
     onselect: () => void;
     /** Handler to run on 'delete' (clicking the x button). */
     ondelete: () => void;
+    codemirror_bql: CodemirrorBql;
   }
 
   let {
@@ -31,6 +33,7 @@
     open = $bindable(),
     onselect,
     ondelete,
+    codemirror_bql,
   }: Props = $props();
 
   let inactive = $derived(!result);
@@ -38,7 +41,11 @@
 
 <details bind:open>
   <summary class:inactive onclick={inactive ? onselect : null}>
-    <ReadonlyQueryEditor value={query} error={result?.is_err} />
+    <ReadonlyQueryEditor
+      value={query}
+      error={result?.is_err}
+      {codemirror_bql}
+    />
     <span class="spacer"></span>
     {#if result && result.is_ok && result.value.t === "table"}
       <QueryLinks {query} />

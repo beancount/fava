@@ -3,26 +3,22 @@
   import { onMount, untrack } from "svelte";
 
   import { get_errors, put_source } from "../../api/index.ts";
-  import {
-    replaceContents,
-    scrollToLine,
-    setErrors,
-  } from "../../codemirror/editor-transactions.ts";
-  import { initBeancountEditor } from "../../codemirror/setup.ts";
+  import { attach_editor } from "../../codemirror/dom.ts";
   import SaveButton from "../../editor/SaveButton.svelte";
   import { log_error } from "../../log.ts";
   import { notify_err } from "../../notifications.ts";
   import { router } from "../../router.ts";
-  import { insert_entry } from "../../stores/fava_options.ts";
+  import {
+    currency_column,
+    indent,
+    insert_entry,
+  } from "../../stores/fava_options.ts";
   import { errors } from "../../stores/index.ts";
   import EditorMenu from "./EditorMenu.svelte";
   import type { EditorReportProps } from "./index.ts";
 
-  let {
-    source,
-    beancount_language_support,
-    line_search_param,
-  }: EditorReportProps = $props();
+  let { source, line_search_param, codemirror_beancount }: EditorReportProps =
+    $props();
 
   let file_path = $derived(source.file_path);
 
@@ -57,7 +53,8 @@
     }
   }
 
-  const { editor, renderEditor } = initBeancountEditor(
+  // svelte-ignore state_referenced_locally
+  const editor = codemirror_beancount.init_beancount_editor(
     "",
     onDocChanges,
     [
@@ -72,14 +69,17 @@
         },
       },
     ],
-    () => beancount_language_support,
+    $indent,
+    $currency_column,
   );
 
   $effect(() => {
     // update editor contents if source changes
     void source;
     untrack(() => {
-      editor.dispatch(replaceContents(editor.state, source.source));
+      editor.dispatch(
+        codemirror_beancount.replace_contents(editor.state, source.source),
+      );
       sha256sum = source.sha256sum;
       editor.focus();
       changed = false;
@@ -98,7 +98,7 @@
     } else if (last_insert_opt) {
       line = last_insert_opt.lineno - 1;
     }
-    editor.dispatch(scrollToLine(editor.state, line));
+    editor.dispatch(codemirror_beancount.scroll_to_line(editor.state, line));
   });
 
   $effect(() => {
@@ -107,7 +107,9 @@
     const errorsForFile = $errors.filter(
       (err) => err.source == null || err.source.filename === file_path,
     );
-    editor.dispatch(setErrors(editor.state, errorsForFile));
+    editor.dispatch(
+      codemirror_beancount.set_errors(editor.state, errorsForFile),
+    );
   });
 
   const checkEditorChanges = () =>
@@ -125,10 +127,10 @@
     return save(editor);
   }}
 >
-  <EditorMenu {file_path} {editor}>
+  <EditorMenu {file_path} {editor} {codemirror_beancount}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
-  <div {@attach renderEditor}></div>
+  <div {@attach attach_editor(editor)}></div>
 </form>
 
 <style>

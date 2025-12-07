@@ -1,7 +1,7 @@
 import { HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
 
-export const beancountEditorHighlight = HighlightStyle.define([
+export const beancount_highlight = HighlightStyle.define([
   {
     // Dates
     tag: tags.special(tags.number),
@@ -62,43 +62,5 @@ export const beancountEditorHighlight = HighlightStyle.define([
     tag: tags.invalid,
     color: "var(--editor-invalid)",
     backgroundColor: "var(--editor-invalid-background)",
-  },
-]);
-
-export const beancountQueryHighlight = HighlightStyle.define([
-  {
-    // Keywords: Select, Where, And
-    tag: tags.keyword,
-    color: "var(--bql-keywords)",
-  },
-  {
-    // Values
-    tag: [
-      tags.typeName,
-      tags.className,
-      tags.number,
-      tags.changed,
-      tags.annotation,
-      tags.modifier,
-      tags.self,
-      tags.namespace,
-    ],
-    color: "var(--bql-values)",
-  },
-  {
-    // Strings
-    tag: [tags.processingInstruction, tags.string, tags.inserted],
-    color: "var(--bql-string)",
-  },
-  {
-    // Errors
-    tag: [
-      tags.name,
-      tags.deleted,
-      tags.character,
-      tags.propertyName,
-      tags.macroName,
-    ],
-    color: "var(--bql-errors)",
   },
 ]);

@@ -1,27 +1,27 @@
 <script lang="ts">
-  import type { LanguageSupport } from "@codemirror/language";
-
   import { delete_source_slice, put_source_slice } from "../api/index.ts";
-  import { initBeancountEditor } from "../codemirror/setup.ts";
+  import { attach_editor } from "../codemirror/dom.ts";
+  import type { CodemirrorBeancount } from "../codemirror/types.ts";
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
   import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
+  import { currency_column, indent } from "../stores/fava_options.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
 
   interface Props {
-    beancount_language_support: LanguageSupport;
     slice: string;
     entry_hash: string;
     sha256sum: string;
+    codemirror_beancount: CodemirrorBeancount;
   }
 
   let {
-    beancount_language_support,
     slice,
     entry_hash = $bindable(),
     sha256sum = $bindable(),
+    codemirror_beancount,
   }: Props = $props();
 
   // Keep the initital slice value to check for changes.
@@ -70,7 +70,8 @@
     }
   }
 
-  const { renderEditor } = initBeancountEditor(
+  // svelte-ignore state_referenced_locally
+  const editor = codemirror_beancount.init_beancount_editor(
     initial_slice,
     (state) => {
       currentSlice = state.sliceDoc();
@@ -87,12 +88,13 @@
         },
       },
     ],
-    () => beancount_language_support,
+    $indent,
+    $currency_column,
   );
 </script>
 
 <form onsubmit={save}>
-  <div class="editor" {@attach renderEditor}></div>
+  <div class="editor" {@attach attach_editor(editor)}></div>
   <div class="flex-row">
     <span class="spacer"></span>
     <label>

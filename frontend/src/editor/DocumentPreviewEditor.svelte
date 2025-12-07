@@ -4,22 +4,25 @@
   at the given URL.
 -->
 <script lang="ts">
-  import { replaceContents } from "../codemirror/editor-transactions.ts";
-  import { initDocumentPreviewEditor } from "../codemirror/setup.ts";
+  import { attach_editor } from "../codemirror/dom.ts";
+  import type { CodemirrorBql } from "../codemirror/types.ts";
   import { fetch_text } from "../lib/fetch.ts";
 
   interface Props {
+    /** Codemirror setup module */
+    codemirror_bql: CodemirrorBql;
     /** The URL to load the editor contents from. */
     url: string;
   }
 
-  let { url }: Props = $props();
+  let { url, codemirror_bql }: Props = $props();
 
-  const { editor, renderEditor } = initDocumentPreviewEditor();
+  // svelte-ignore state_referenced_locally
+  const editor = codemirror_bql.init_document_preview_editor();
 
   const set_editor_content = (value: string) => {
     if (value !== editor.state.sliceDoc()) {
-      editor.dispatch(replaceContents(editor.state, value));
+      editor.dispatch(codemirror_bql.replace_contents(editor.state, value));
     }
   };
 
@@ -30,7 +33,7 @@
   });
 </script>
 
-<div {@attach renderEditor}></div>
+<div {@attach attach_editor(editor)}></div>
 
 <style>
   div {

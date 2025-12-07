@@ -1,6 +1,5 @@
 <script lang="ts">
   import { get_context, get_source_slice } from "../api/index.ts";
-  import { getBeancountLanguageSupport } from "../codemirror/beancount.ts";
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { _ } from "../i18n.ts";
   import ReportLoadError from "../reports/ReportLoadError.svelte";
@@ -24,19 +23,15 @@
           <EntryContextBalances {balances_before} {balances_after} />
         {/if}
         {#if entry.meta.lineno !== "0" && !entry.meta.filename.startsWith("<")}
-          {#await get_source_slice({ entry_hash })}
+          {#await Promise.all( [get_source_slice( { entry_hash }, ), import("../codemirror/beancount.ts")], )}
             <p>Loading entry slice...</p>
-          {:then { slice, sha256sum }}
-            {#await getBeancountLanguageSupport() then beancount_language_support}
-              <SliceEditor
-                {entry_hash}
-                {slice}
-                {sha256sum}
-                {beancount_language_support}
-              />
-            {:catch}
-              Loading tree-sitter language failed...
-            {/await}
+          {:then [{ slice, sha256sum }, codemirror_beancount]}
+            <SliceEditor
+              {entry_hash}
+              {slice}
+              {sha256sum}
+              {codemirror_beancount}
+            />
           {:catch error}
             <ReportLoadError title={_("Context")} {error} />
           {/await}

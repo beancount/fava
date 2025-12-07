@@ -4,7 +4,7 @@ import { ViewPlugin } from "@codemirror/view";
 /**
  * This CodeMirror view plugin creates a ruler at (before) the given column.
  */
-export const rulerPlugin = (
+export const ruler_plugin = (
   column: number,
 ): ViewPlugin<{
   update(update: ViewUpdate): void;

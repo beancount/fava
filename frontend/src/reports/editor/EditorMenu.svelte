@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { toggleComment } from "@codemirror/commands";
-  import { foldAll, unfoldAll } from "@codemirror/language";
   import type { EditorView } from "@codemirror/view";
   import type { Snippet } from "svelte";
 
-  import { beancountFormat } from "../../codemirror/beancount-format.ts";
-  import { scrollToLine } from "../../codemirror/editor-transactions.ts";
+  import type { CodemirrorBeancount } from "../../codemirror/types.ts";
   import { urlFor } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { modKey } from "../../keyboard-shortcuts.ts";
@@ -20,10 +17,11 @@
   interface Props {
     file_path: string;
     editor: EditorView;
+    codemirror_beancount: CodemirrorBeancount;
     children: Snippet;
   }
 
-  let { file_path, editor, children }: Props = $props();
+  let { file_path, editor, codemirror_beancount, children }: Props = $props();
 
   function goToFileAndLine(filename: string, line?: number) {
     const url = $urlFor("editor/", { file_path: filename, line });
@@ -32,7 +30,7 @@
     router.navigate(url, load);
     if (!load && line != null) {
       // Scroll to line if we didn't change to a different file.
-      editor.dispatch(scrollToLine(editor.state, line));
+      editor.dispatch(codemirror_beancount.scroll_to_line(editor.state, line));
       editor.focus();
     }
   }
@@ -53,25 +51,27 @@
       {/each}
     </AppMenuItem>
     <AppMenuItem name={_("Edit")}>
-      <AppMenuSubItem action={() => beancountFormat(editor)}>
+      <AppMenuSubItem
+        action={() => codemirror_beancount.beancount_format(editor)}
+      >
         {_("Align Amounts")}
         {#snippet right()}
           <Key key={[modKey, "d"]} />
         {/snippet}
       </AppMenuSubItem>
-      <AppMenuSubItem action={() => toggleComment(editor)}>
+      <AppMenuSubItem action={() => codemirror_beancount.toggleComment(editor)}>
         {_("Toggle Comment (selection)")}
         {#snippet right()}
           <Key key={[modKey, "/"]} />
         {/snippet}
       </AppMenuSubItem>
-      <AppMenuSubItem action={() => unfoldAll(editor)}>
+      <AppMenuSubItem action={() => codemirror_beancount.unfoldAll(editor)}>
         {_("Open all folds")}
         {#snippet right()}
           <Key key={["Ctrl", "Alt", "]"]} />
         {/snippet}
       </AppMenuSubItem>
-      <AppMenuSubItem action={() => foldAll(editor)}>
+      <AppMenuSubItem action={() => codemirror_beancount.foldAll(editor)}>
         {_("Close all folds")}
         {#snippet right()}
           <Key key={["Ctrl", "Alt", "["]} />

@@ -1,5 +1,17 @@
+import type { CodemirrorBql } from "../../codemirror/types.ts";
 import { _ } from "../../i18n.ts";
-import { DatalessRoute } from "../route.ts";
+import { Route } from "../route.ts";
 import QuerySvelte from "./Query.svelte";
 
-export const query = new DatalessRoute("query", QuerySvelte, () => _("Query"));
+export interface QueryReportProps {
+  codemirror_bql: CodemirrorBql;
+}
+export const query = new Route<QueryReportProps>(
+  "query",
+  QuerySvelte,
+  async () => {
+    const codemirror_bql = await import("../../codemirror/bql.ts");
+    return { codemirror_bql };
+  },
+  () => _("Query"),
+);

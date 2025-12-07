@@ -12,7 +12,7 @@ import type { BeancountError } from "../api/validators.ts";
 /**
  * Returns a transaction to completely replace the contents of the editor with the given value.
  */
-export function replaceContents(
+export function replace_contents(
   state: EditorState,
   value: string,
 ): TransactionSpec {
@@ -24,7 +24,7 @@ export function replaceContents(
 /**
  * Returns a transaction to select the line with the given number and scroll it into view.
  */
-export function scrollToLine(
+export function scroll_to_line(
   state: EditorState,
   line: number,
 ): TransactionSpec {
@@ -41,7 +41,7 @@ export function scrollToLine(
 /**
  * Returns a transaction that set diagnostics for Beancount errors for in the editor, highlighting them.
  */
-export function setErrors(
+export function set_errors(
   state: EditorState,
   errors: BeancountError[],
 ): TransactionSpec {

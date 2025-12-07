@@ -1,89 +1,63 @@
 import {
-  defineLanguageFacet,
-  Language,
-  languageDataProp,
-  LanguageSupport,
+  defaultHighlightStyle,
+  indentUnit,
   syntaxHighlighting,
 } from "@codemirror/language";
-import { highlightTrailingWhitespace, keymap } from "@codemirror/view";
-import { styleTags, tags } from "@lezer/highlight";
-import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
+import { EditorState } from "@codemirror/state";
+import type { KeyBinding } from "@codemirror/view";
+import { EditorView, keymap } from "@codemirror/view";
 
-import ts_wasm from "../../node_modules/web-tree-sitter/tree-sitter.wasm";
-import { beancountCompletion } from "./beancount-autocomplete.ts";
-import { beancountFold } from "./beancount-fold.ts";
-import { beancountFormat } from "./beancount-format.ts";
-import { beancountEditorHighlight } from "./beancount-highlight.ts";
-import { beancountIndent } from "./beancount-indent.ts";
-// WASM build of tree-sitter grammar from https://github.com/yagebu/tree-sitter-beancount
-import ts_beancount_wasm from "./tree-sitter-beancount.wasm";
-import { LezerTSParser } from "./tree-sitter-parser.ts";
+import { base_extensions } from "./base-extensions.ts";
+import { beancount_highlight } from "./beancount-highlight.ts";
+import { beancount_language_support } from "./beancount-language.ts";
+import { ruler_plugin } from "./ruler.ts";
 
-/** Import the tree-sitter and Beancount language WASM files and initialise the parser. */
-async function loadBeancountParser(): Promise<TSParser> {
-  const ts = import.meta.resolve(ts_wasm);
-  const ts_beancount = import.meta.resolve(ts_beancount_wasm);
-  await TSParser.init({ locateFile: () => ts });
-  const lang = await TSLanguage.load(ts_beancount);
-  const parser = new TSParser();
-  parser.setLanguage(lang);
-  return parser;
+export { beancount_format } from "./beancount-format.ts";
+export {
+  replace_contents,
+  scroll_to_line,
+  set_errors,
+} from "./editor-transactions.ts";
+export { toggleComment } from "@codemirror/commands";
+export { foldAll, unfoldAll } from "@codemirror/language";
+
+export function init_textarea(el: HTMLTextAreaElement): void {
+  const editor = new EditorView({
+    doc: el.value,
+    extensions: [
+      beancount_language_support,
+      syntaxHighlighting(defaultHighlightStyle),
+      EditorState.readOnly.of(true),
+    ],
+  });
+  el.parentNode?.insertBefore(editor.dom, el);
+  el.style.display = "none";
 }
 
-const beancountLanguageFacet = defineLanguageFacet();
-const beancountLanguageSupportExtensions = [
-  beancountFold,
-  syntaxHighlighting(beancountEditorHighlight),
-  beancountIndent,
-  keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancountFormat }]),
-  beancountLanguageFacet.of({
-    autocomplete: beancountCompletion,
-    commentTokens: { line: ";" },
-    indentOnInput: /^\s+\d\d\d\d/,
-  }),
-  highlightTrailingWhitespace(),
-];
-
-/** The node props that allow for highlighting/coloring of the code. */
-const props = [
-  styleTags({
-    account: tags.className,
-    currency: tags.unit,
-    date: tags.special(tags.number),
-    string: tags.string,
-    "BALANCE CLOSE COMMODITY CUSTOM DOCUMENT EVENT NOTE OPEN PAD PRICE TRANSACTION QUERY":
-      tags.keyword,
-    "tag link": tags.labelName,
-    number: tags.number,
-    key: tags.propertyName,
-    bool: tags.bool,
-    "PUSHTAG POPTAG PUSHMETA POPMETA OPTION PLUGIN INCLUDE": tags.standard(
-      tags.string,
-    ),
-  }),
-  languageDataProp.add((type) =>
-    type.isTop ? beancountLanguageFacet : undefined,
-  ),
-];
-
-/** Only load the TSParser once. */
-let load_parser: Promise<TSParser> | null = null;
-
 /**
- * Get the LanguageSupport for Beancount.
- *
- * Since this might need to load the tree-sitter parser, this is async.
+ * A Beancount editor.
  */
-export async function getBeancountLanguageSupport(): Promise<LanguageSupport> {
-  load_parser ??= loadBeancountParser();
-  const ts_parser = await load_parser;
-  return new LanguageSupport(
-    new Language(
-      beancountLanguageFacet,
-      new LezerTSParser(ts_parser, props, "beancount_file"),
-      [],
-      "beancount",
-    ),
-    beancountLanguageSupportExtensions,
-  );
+export function init_beancount_editor(
+  value: string,
+  onDocChanges: (s: EditorState) => void,
+  commands: KeyBinding[],
+  $indent: number,
+  $currency_column: number,
+): EditorView {
+  return new EditorView({
+    doc: value,
+    extensions: [
+      beancount_language_support,
+      indentUnit.of(" ".repeat($indent)),
+      ...($currency_column ? [ruler_plugin($currency_column - 1)] : []),
+      keymap.of(commands),
+      EditorView.updateListener.of((update) => {
+        if (update.docChanged) {
+          onDocChanges(update.state);
+        }
+      }),
+      base_extensions,
+      syntaxHighlighting(beancount_highlight),
+    ],
+  });
 }

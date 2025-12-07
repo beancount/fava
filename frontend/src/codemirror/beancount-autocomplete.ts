@@ -7,10 +7,10 @@ import { syntaxTree } from "@codemirror/language";
 import { get as store_get } from "svelte/store";
 
 import { accounts, currencies, links, payees, tags } from "../stores/index.ts";
-import { beancountSnippets } from "./beancount-snippets.ts";
+import { beancount_snippets } from "./beancount-snippets.ts";
 
-const undatedDirectives = ["option", "plugin", "include"];
-const datedDirectives = [
+const undated_directives = ["option", "plugin", "include"];
+const dated_directives = [
   "*",
   "open",
   "close",
@@ -35,7 +35,7 @@ const res = (s: readonly string[], from: number): CompletionResult => ({
   from,
 });
 
-export const beancountCompletion: CompletionSource = (context) => {
+export const beancount_completion: CompletionSource = (context) => {
   const tag = context.matchBefore(/#[A-Za-z0-9\-_/.]*/);
   if (tag) {
     return {
@@ -66,13 +66,13 @@ export const beancountCompletion: CompletionSource = (context) => {
 
   const line = context.state.doc.lineAt(context.pos);
   if (context.matchBefore(/\d+/)) {
-    return { options: beancountSnippets(), from: line.from };
+    return { options: beancount_snippets(), from: line.from };
   }
 
   const currentWord = context.matchBefore(/\S*/);
   if (currentWord?.from === line.from && line.length > 0) {
     return {
-      options: opts(undatedDirectives),
+      options: opts(undated_directives),
       from: line.from,
       validFor: /\S+/,
     };
@@ -104,7 +104,7 @@ export const beancountCompletion: CompletionSource = (context) => {
 
   // complete directive names after a date.
   if (match("keyword", "date")) {
-    return res(datedDirectives, before.from);
+    return res(dated_directives, before.from);
   }
 
   if (
