@@ -8,7 +8,9 @@ following to your Beancount file.
 2016-04-14 custom "fava-option" "auto-reload" "true"
 2016-04-14 custom "fava-option" "currency-column" "100"</textarea></pre>
 
-Below is a list of all possible options for Fava.
+Below is a list of all possible options for Fava. In the Beancount documentation
+you can find the
+[list of Beancount options](https://beancount.github.io/docs/beancount_options_reference.html)
 
 ______________________________________________________________________
 
