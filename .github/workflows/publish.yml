@@ -34,6 +34,7 @@ jobs:
         with:
           enable-cache: false
       - run: uv build
+      - run: git diff --exit-code
       - name: Publish release
         if: github.event_name == 'push' && github.ref_type == 'tag'
         env:

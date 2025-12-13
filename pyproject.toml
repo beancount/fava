@@ -111,7 +111,7 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=67", "setuptools_scm>=8.0", "Babel>=2.7,<3", "wheel"]
+requires = ["setuptools>=80", "setuptools_scm>=8", "Babel>=2.7,<3", "wheel"]
 build-backend = "_build_backend"
 backend-path = ["."]
 

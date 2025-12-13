@@ -62,12 +62,7 @@ def _compile_frontend() -> None:
         msg = "npm is missing"
         raise RuntimeError(msg)
 
-    # Clean outpute directory before building
-    for p in Path("src/fava/static").iterdir():
-        if p.name != "favicon.ico":
-            p.unlink()
-
-    subprocess.run((npm, "install"), cwd="frontend", check=True)
+    subprocess.run((npm, "install", "--no-save"), cwd="frontend", check=True)
     Path("frontend/node_modules").touch()
     subprocess.run((npm, "run", "build"), cwd="frontend", check=True)
 
