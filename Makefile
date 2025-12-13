@@ -24,6 +24,8 @@ dev: .venv
 clean: mostlyclean
 	find src/fava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
 	find src/fava/translations -name '*.mo' -delete
+	rm -rf src/fava.egg-info
+	rm -rf src/fava/translations/messages.pot
 
 # Remove node_modules, caches, .tox, etc.
 .PHONY: mostlyclean
@@ -34,6 +36,7 @@ mostlyclean:
 	rm -rf .venv
 	rm -rf build
 	rm -rf dist
+	rm -rf docs/api
 	rm -rf htmlcov
 	rm -rf frontend/node_modules
 	find . -type f -name '*.py[c0]' -delete
