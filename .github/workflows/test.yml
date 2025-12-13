@@ -62,6 +62,18 @@ jobs:
       - run: cd frontend && npm ci
       - run: cd frontend && npm run build
       - run: cd frontend && npm test
+  deno-js:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+      - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
+        with:
+          deno-version: "v2.6.x"
+      - run: cd frontend && deno install
+      - run: cd frontend && deno lint
+      - run: cd frontend && deno run build
   lint-js:
     runs-on: "ubuntu-latest"
     steps:

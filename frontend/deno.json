@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/denoland/deno/refs/heads/main/cli/schemas/config-file.v1.json",
   "tasks": {
-    "build": "deno run --allow-env --allow-read=src --allow-run build.ts"
+    "build": "deno run --ignore-env --allow-read --allow-write=../src/fava/static --allow-run build.ts"
   },
   "lint": {
     "rules": {
