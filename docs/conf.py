@@ -9,7 +9,10 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
 ]
-intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "flask": ("https://flask.palletsprojects.com/", None),
+}
 
 # General information about the project.
 project = "Fava"
