@@ -17,11 +17,11 @@ import type {
 import { NodeProp, NodeType, Parser, Tree } from "@lezer/common";
 import { styleTags, tags } from "@lezer/highlight";
 import type {
-  Edit as TSEdit,
   Parser as TSParser,
   Tree as TSTree,
   TreeCursor as TSTreeCursor,
 } from "web-tree-sitter";
+import { Edit as TSEdit } from "web-tree-sitter";
 
 import type { NonEmptyArray } from "../lib/array.ts";
 import { is_non_empty, last_element } from "../lib/array.ts";
@@ -47,14 +47,14 @@ function ts_edit(
   oldEndIndex: number,
   newEndIndex: number,
 ): TSEdit {
-  return {
+  return new TSEdit({
     startIndex,
     oldEndIndex,
     newEndIndex,
     startPosition: dummyPosition,
     oldEndPosition: dummyPosition,
     newEndPosition: dummyPosition,
-  };
+  });
 }
 
 /** This node prop is used to store the TS tree on the root node of the Lezer tree for reuse. */

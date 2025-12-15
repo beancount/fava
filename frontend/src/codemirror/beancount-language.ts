@@ -8,8 +8,8 @@ import {
 import { highlightTrailingWhitespace, keymap } from "@codemirror/view";
 import { styleTags, tags } from "@lezer/highlight";
 import { Language as TSLanguage, Parser as TSParser } from "web-tree-sitter";
+import ts_wasm from "web-tree-sitter/web-tree-sitter.wasm";
 
-import ts_wasm from "../../node_modules/web-tree-sitter/tree-sitter.wasm";
 import { beancount_completion } from "./beancount-autocomplete.ts";
 import { beancount_fold } from "./beancount-fold.ts";
 import { beancount_format } from "./beancount-format.ts";

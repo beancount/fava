@@ -81,6 +81,7 @@ export default defineConfig(
       },
     },
     rules: {
+      "@typescript-eslint/no-useless-default-assignment": OFF,
       "svelte/button-has-type": ON,
     },
   },
