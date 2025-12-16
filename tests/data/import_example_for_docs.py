@@ -7,6 +7,7 @@ import csv
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
+from typing import TypeAlias
 
 import beangulp  # Importing tools
 from beancount.core import data  # Transaction, Posting, ...
@@ -19,7 +20,8 @@ if TYPE_CHECKING:
     Meta = beancount.core.data.Meta
     Transaction = beancount.core.data.Transaction
     Directive = beancount.core.data.Directive
-    Row = "Row"  # dynamically created NamedTuple, see docs of using functions
+    # dynamically created NamedTuple, see docs of using functions
+    Row: TypeAlias = "Row"
 
 
 class MyCSVImporter(csvbase.Importer):
