@@ -7,6 +7,7 @@ import csv
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
+from typing import TypeAlias
 
 import beangulp  # Importing tools
 import beangulp.importer
@@ -16,9 +17,12 @@ from beangulp.importers import csvbase
 if TYPE_CHECKING:
     import beancount
 
-    Meta = beancount.core.data.Meta
-    Transaction = beancount.core.data.Transaction
-    Row = "Row"  # a dynamically defined type based on NamedTuple
+    Importer: TypeAlias = beangulp.importer.Importer
+    Meta: TypeAlias = beancount.core.data.Meta
+    Transaction: TypeAlias = beancount.core.data.Transaction
+    Directive: TypeAlias = beancount.core.data.Directive
+    # dynamically created NamedTuple, see docs of using functions
+    Row: TypeAlias = "Row"
 
 
 class MyCSVImporter(csvbase.Importer):
@@ -159,8 +163,36 @@ class MyCSVImporter(csvbase.Importer):
 # All available importers, one for each file format you need to process
 CONFIG = [MyCSVImporter()]
 
-# Process beancount transaction objects after they have been extracted
-HOOKS = []
+
+# Hooks: Process beancount transaction objects after they have been extracted
+
+
+# ruff: noqa: ARG001
+def example_hook(
+    new_entries: list[tuple[str, list[Directive], str, Importer]],
+    existing_entries: list[Directive],
+) -> list[tuple[str, list[Directive], str, Importer]]:
+    """Example hook function.
+
+    Arguments:
+        new_entries: New entries. One tuple per input file. Note that for Fava,
+            this list will always have only one tuple as the user starts the
+            import from a single file via the user interface.
+        existing_entries: List of existing entries, for example to do
+            deduplication
+    """
+    out = []
+    # For each imported file:
+    for filename, entries, account, importer in new_entries:
+        # ... Edit entries (note that this is itself a list of Directives!),
+        # then ...
+        out.append((filename, entries, account, importer))
+
+    return out
+
+
+# List all hooks here
+HOOKS = [example_hook]
 
 # Allows to call this script as './import extract <filename.csv>'. Not needed
 # for Fava, but useful for debugging
