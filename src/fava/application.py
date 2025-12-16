@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import mimetypes
+import re
 from datetime import date
 from datetime import datetime
 from datetime import timezone
@@ -430,6 +431,9 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
                     html,
                     beancount_version=beancount_version,
                     fava_version=fava_version,
+                    fava_version_nodirty=re.sub(
+                        r"\.d[0-9]+$", "", fava_version
+                    ),
                 ),
             ),
             HELP_PAGES=HELP_PAGES,
