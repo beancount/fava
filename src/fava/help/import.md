@@ -54,10 +54,9 @@ Your import configuration must be a Python file that defines:
 See the example below and the help document
 [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
 for more information on how to write importers. Also, you can find an example of
-an import configuration on the \[Fava GitHub
-page\](https://github.com/beancount/fava/tree/{{ fava_version_nodirty
-}}/tests/data/import_example_for_docs.py). Hook functions are explained in more
-detail further down on this page.
+an import configuration on the
+[Fava GitHub page](https://github.com/beancount/fava/tree/%7B%7Bfava_version_nodirty%7D%7D/tests/data/import_example_for_docs.py).
+Hook functions are explained in more detail further down on this page.
 
 Fava currently only supports entries of type `Transaction`, `Balance`, and
 `Note`. Set the special metadata key `__source__` to display the corresponding
