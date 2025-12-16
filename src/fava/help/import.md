@@ -46,7 +46,8 @@ Your import configuration must be a Python file that defines:
 - `CONFIG`: A list of Importers that process your account statement files.
   Create subclasses of `beangulp.importers.Importer` with parsing logic for your
   specific account statement formats, then add instances of each class to this
-  list.
+  list. For CSV files, subclassing `beangulp.importers.csvbase.Importer` is 
+  recommended.
 
 - `HOOKS`: A list of functions to apply to all directives (e.g., transactions)
   after generation by any Importer.
