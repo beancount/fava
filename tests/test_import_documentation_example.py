@@ -4,6 +4,7 @@ from runpy import run_path
 from typing import TYPE_CHECKING
 
 import beangulp
+import beangulp.extract
 
 import fava
 from fava.core import FavaLedger
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 def test_example_import_cli(test_data_dir: Path) -> None:
     """Test that the importer is successful, when run directly on the data"""
-    ledger = FavaLedger(test_data_dir / "import_for_docs.beancount")
+    ledger = FavaLedger(str(test_data_dir / "import_for_docs.beancount"))
     mod = run_path(str(test_data_dir / "import_example_for_docs.py"))
     importer = mod["MyCSVImporter"]()
     file = test_data_dir / "import.csv"
@@ -34,7 +35,7 @@ def test_example_import_cli(test_data_dir: Path) -> None:
 
 
 def test_example_import(test_data_dir: Path) -> None:
-    ledger = FavaLedger(test_data_dir / "import_for_docs.beancount")
+    ledger = FavaLedger(str(test_data_dir / "import_for_docs.beancount"))
 
     # This tests needs multiple steps as the User clicks multiple buttons until
     # the import starts
@@ -49,9 +50,9 @@ def test_example_import(test_data_dir: Path) -> None:
     # Only one file matches the importer we have defined
     x = [e for e in x if len(e.importers) != 0]
     assert len(x) == 1
-    x = x[0]
+    x0 = x[0]
 
-    new_entries = ing.extract(x.name, x.importers[0].importer_name)
+    new_entries = ing.extract(x0.name, x0.importers[0].importer_name)
 
     assert len(new_entries) == 3, (
         "Number lines read from import.csv is not correct. "

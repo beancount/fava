@@ -10,16 +10,17 @@ from typing import TYPE_CHECKING
 from typing import TypeAlias
 
 import beangulp  # Importing tools
+import beangulp.importer
 from beancount.core import data  # Transaction, Posting, ...
 from beangulp.importers import csvbase
 
 if TYPE_CHECKING:
     import beancount
 
-    Importer = beangulp.importer.Importer
-    Meta = beancount.core.data.Meta
-    Transaction = beancount.core.data.Transaction
-    Directive = beancount.core.data.Directive
+    Importer: TypeAlias = beangulp.importer.Importer
+    Meta: TypeAlias = beancount.core.data.Meta
+    Transaction: TypeAlias = beancount.core.data.Transaction
+    Directive: TypeAlias = beancount.core.data.Directive
     # dynamically created NamedTuple, see docs of using functions
     Row: TypeAlias = "Row"
 
