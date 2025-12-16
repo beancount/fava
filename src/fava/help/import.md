@@ -73,7 +73,7 @@ receives the parameters `hook_fn(new_entries_list, existing_entries)` and
 returns the modified `new_entries_list`.
 
 The argument `new_entries_list` is itself a list of tuples. As Fava imports each
-file individually (in in contrast to the CLI of Beangulp), this list will always
+file individually (in contrast to the CLI of Beangulp), this list will always
 be of length 1.
 
 The tuples can can have two (old style, default) or four elements
