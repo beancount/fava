@@ -56,7 +56,7 @@ For more information on how to write importers, see
 - [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
   in the beancount manual.
 - The
-  [Example input configuration file](https://github.com/beancount/fava/tree/{{ fava_version_nodirty }}/tests/data/import_example_for_docs.py).
+  [Example input configuration file](https://github.com/beancount/fava/tree/{{ github_version }}/tests/data/import_example_for_docs.py).
 
 Hook functions are explained in more detail further down on this page.
 

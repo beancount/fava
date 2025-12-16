@@ -423,6 +423,17 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             contents,
             extras=["fenced-code-blocks", "tables", "header-ids"],
         )
+        # Convert git describe output into something to put in a GitHub URL
+        # remove dirty suffix
+        github_version = re.sub(r"\.g[0-9]+$", "", fava_version)
+        commit_hash = re.search(r"\+g([0-9a-f]+)", fava_version)
+        tag_name = re.search(r"^v[0-9]+(\.[0-9+]*)", fava_version)
+        if commit_hash:
+            github_version = commit_hash.group(1)
+        elif tag_name:
+            github_version = tag_name.group(1)
+        else:
+            github_version = "main"  # fallback to main branch
         return render_template(
             "help.html",
             page_slug=page_slug,
@@ -431,9 +442,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
                     html,
                     beancount_version=beancount_version,
                     fava_version=fava_version,
-                    fava_version_nodirty=re.sub(
-                        r"\.d[0-9]+$", "", fava_version
-                    ),
+                    github_version=github_version,
                 ),
             ),
             HELP_PAGES=HELP_PAGES,
