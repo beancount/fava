@@ -140,25 +140,22 @@
     {save}
   />
   <div class="fixed-fullsize-container">
-    <div class="filelist">
+    <div class="filelist flex-column">
       {#if files.length === 0}
         <p>{_("No files were found for import.")}</p>
       {/if}
       {#if importable_files.length > 0}
-        <div>
-          <h2>{_("Importable Files")}</h2>
-          <FileList
-            files={importable_files}
-            {extract_cache}
-            {file_accounts}
-            {file_names}
-            bind:selected
-            {move}
-            {remove}
-            {extract}
-          />
-        </div>
-        <hr />
+        <h2>{_("Importable Files")}</h2>
+        <FileList
+          files={importable_files}
+          {extract_cache}
+          {file_accounts}
+          {file_names}
+          bind:selected
+          {move}
+          {remove}
+          {extract}
+        />
       {/if}
       {#if other_files.length > 0}
         <details bind:open={show_other_files}>
@@ -198,9 +195,5 @@
 
   .filelist {
     padding: 1rem;
-  }
-
-  hr {
-    margin: 1rem 0;
   }
 </style>

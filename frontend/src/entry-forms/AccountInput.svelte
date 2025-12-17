@@ -12,19 +12,11 @@
     suggestions?: string[] | undefined;
     /** The date to enter this account for to exclude closed accounts. */
     date?: string | undefined;
-    /** An optional class name to assign to the input element. */
-    className?: string;
     /** Whether to mark the input as required. */
     required?: boolean;
   }
 
-  let {
-    value = $bindable(),
-    suggestions,
-    date,
-    className,
-    required,
-  }: Props = $props();
+  let { value = $bindable(), suggestions, date, required }: Props = $props();
 
   let checkValidity = $derived((val: string) =>
     !$accounts_set.size || $accounts_set.has(val) || (required !== true && !val)
@@ -46,7 +38,6 @@
 <AutocompleteInput
   placeholder={_("Account")}
   bind:value
-  {className}
   {checkValidity}
   {required}
   suggestions={filtered_suggestions}

@@ -12,7 +12,7 @@
   let { entry = $bindable() }: Props = $props();
 </script>
 
-<div>
+<div class="flex-column">
   <div class="flex-row">
     <input
       type="date"
@@ -27,7 +27,6 @@
     />
     <h4>{_("Note")}</h4>
     <AccountInput
-      className="grow"
       bind:value={
         () => entry.account,
         (account: string) => {
@@ -36,6 +35,7 @@
       }
       date={entry.date}
       required
+      --autocomplete-wrapper-flex="1"
     />
     <AddMetadataButton
       bind:meta={
@@ -47,8 +47,8 @@
     />
   </div>
   <textarea
-    name="comment"
     rows={2}
+    placeholder="Comment"
     bind:value={
       () => entry.comment,
       (comment: string) => {
@@ -68,9 +68,6 @@
 
 <style>
   textarea {
-    flex-grow: 1;
-    width: 100%;
-    padding: 8px;
-    font: inherit;
+    resize: vertical;
   }
 </style>

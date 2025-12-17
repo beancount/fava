@@ -59,8 +59,7 @@
 
 <style>
   div {
-    margin-bottom: 1.5em;
-    font-size: 1em;
+    margin-bottom: 1em;
     color: var(--text-color-lightest);
     text-align: center;
   }

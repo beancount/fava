@@ -38,7 +38,7 @@
 </script>
 
 <ModalBase {shown} focus=".payee input">
-  <form onsubmit={submit}>
+  <form onsubmit={submit} class="flex-column">
     <h3>
       {_("Add")}
       {#each entryTypes as [Cls, displayName] (displayName)}
@@ -69,6 +69,10 @@
 </ModalBase>
 
 <style>
+  h3 {
+    margin: 0;
+  }
+
   label span {
     margin-right: 1rem;
   }

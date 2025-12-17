@@ -76,6 +76,7 @@
 </script>
 
 <form
+  class="flex-row"
   onsubmit={(ev) => {
     ev.preventDefault();
     submit();
@@ -122,14 +123,11 @@
 
 <style>
   form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    margin: 0;
     color: var(--text-color);
 
     --placeholder-color: var(--header-placeholder-color);
     --placeholder-background: var(--header-placeholder-background);
+    --input-padding: 8px 25px 8px 10px;
   }
 
   form > :global(span) {
@@ -137,7 +135,6 @@
   }
 
   form :global(input) {
-    padding: 8px 25px 8px 10px;
     outline: none;
     background-color: var(--background);
     border: 0;
@@ -152,8 +149,8 @@
   }
 
   @media print {
-    form :global(input) {
-      padding: 8px 10px;
+    form {
+      --input-padding: 8px 10px;
     }
 
     form :global(input):placeholder-shown {

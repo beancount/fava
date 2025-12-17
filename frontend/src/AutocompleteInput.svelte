@@ -33,8 +33,6 @@
     valueSelector?: (val: string, input: HTMLInputElement) => string;
     /** Automatically adjust the size of the input element. */
     setSize?: boolean;
-    /** An optional class name to assign to the input element. */
-    className?: string | undefined;
     /** A key binding to add for this input. */
     key?: KeySpec;
     /** A function that checks the entered value for validity. */
@@ -58,7 +56,6 @@
     valueExtractor,
     valueSelector,
     setSize = false,
-    className,
     key,
     checkValidity,
     clearButton = false,
@@ -152,7 +149,7 @@
   }
 </script>
 
-<span class={className}>
+<span>
   <input
     type="text"
     autocomplete="off"
@@ -220,6 +217,7 @@
   span {
     position: relative;
     display: inline-block;
+    flex: var(--autocomplete-wrapper-flex, initial);
   }
 
   input {
@@ -227,18 +225,12 @@
   }
 
   ul {
-    position: absolute;
+    position: var(--autocomplete-list-position, absolute);
     z-index: var(--z-index-autocomplete);
     overflow: hidden auto;
     background-color: var(--background);
     border: 1px solid var(--border-darker);
     box-shadow: var(--box-shadow-dropdown);
-  }
-
-  :global(aside) ul {
-    /* the only way to get the list to overflow the
-       aside is to put it in fixed position */
-    position: fixed;
   }
 
   li {

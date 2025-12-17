@@ -86,7 +86,6 @@
     ×
   </button>
   <AccountInput
-    className="grow"
     bind:value={
       () => posting.account,
       (account: string) => {
@@ -95,9 +94,9 @@
     }
     {suggestions}
     {date}
+    --autocomplete-wrapper-flex="2"
   />
   <AutocompleteInput
-    className="amount"
     placeholder={_("Amount")}
     suggestions={amountSuggestions}
     bind:value={
@@ -106,6 +105,7 @@
         posting = posting.set("amount", amount);
       }
     }
+    --autocomplete-wrapper-flex="1"
   />
   <AddMetadataButton
     bind:meta={
@@ -115,15 +115,15 @@
       }
     }
   />
-  <EntryMetadataSvelte
-    bind:meta={
-      () => posting.meta,
-      (meta: EntryMetadata) => {
-        posting = posting.set("meta", meta);
-      }
-    }
-  />
 </div>
+<EntryMetadataSvelte
+  bind:meta={
+    () => posting.meta,
+    (meta: EntryMetadata) => {
+      posting = posting.set("meta", meta);
+    }
+  }
+/>
 
 <style>
   .drag {
@@ -131,7 +131,7 @@
   }
 
   div {
-    padding-left: 50px;
+    padding-left: 3rem;
     cursor: grab;
   }
 
@@ -141,10 +141,6 @@
 
   div:last-child .remove-row {
     visibility: hidden;
-  }
-
-  div :global(.amount) {
-    width: 220px;
   }
 
   @media (width <= 767px) {

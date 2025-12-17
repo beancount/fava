@@ -33,6 +33,7 @@
       }}
       required
     />
+    :
     <input
       type="text"
       class="value"
@@ -49,6 +50,7 @@
         onclick={() => {
           meta = meta.add();
         }}
+        aria-label={_("Add metadata")}
         title={_("Add metadata")}
       >
         +
@@ -59,17 +61,15 @@
 
 <style>
   div {
-    padding-left: 56px;
-    font-size: 0.8em;
+    padding-left: 3rem;
   }
 
   input.key {
-    width: 10em;
+    width: 12rem;
   }
 
   input.value {
     flex-grow: 1;
-    max-width: 15em;
   }
 
   @media (width <= 767px) {

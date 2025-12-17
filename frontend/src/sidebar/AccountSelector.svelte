@@ -21,7 +21,6 @@
     bind:value
     placeholder={_("Go to account")}
     suggestions={$accounts}
-    className="account-selector"
     key="g a"
     onSelect={select}
     onEnter={select}
@@ -29,8 +28,9 @@
 </li>
 
 <style>
-  :global(.account-selector input) {
-    padding: 0.25em 0.5em 0.25em 1em;
-    border: none;
+  li {
+    --input-border: none;
+    --input-padding: 0.25em 0.5em 0.25em 1em;
+    --autocomplete-list-position: fixed;
   }
 </style>

@@ -86,7 +86,7 @@
   });
 </script>
 
-<div>
+<div class="flex-column">
   <div class="flex-row">
     <input
       type="date"
@@ -110,9 +110,8 @@
       required
     />
     <label>
-      <span>{_("Payee")}:</span>
+      <span class="hide-on-desktop">{_("Payee")}:</span>
       <AutocompleteInput
-        className="payee"
         placeholder={_("Payee")}
         bind:value={
           () => entry.payee,
@@ -122,12 +121,12 @@
         }
         suggestions={$payees}
         onSelect={autocompleteSelectPayee}
+        --autocomplete-wrapper-flex="1"
       />
     </label>
-    <label>
-      <span>{_("Narration")}:</span>
+    <label class="narration">
+      <span class="hide-on-desktop">{_("Narration")}:</span>
       <AutocompleteInput
-        className="narration"
         placeholder={_("Narration")}
         bind:value={narration}
         suggestions={narration_suggestions}
@@ -138,6 +137,7 @@
         onBlur={() => {
           entry = entry.set_narration_tags_links(narration);
         }}
+        --autocomplete-wrapper-flex="2"
       />
       <AddMetadataButton
         bind:meta={
@@ -157,8 +157,8 @@
       }
     }
   />
-  <div class="flex-row">
-    <span class="label"> <span>{_("Postings")}:</span> </span>
+  <div class="flex-row hide-on-desktop">
+    <span class="label">{_("Postings")}:</span>
   </div>
   {#each entry.postings, index (index)}
     <!-- Using the indexed access (instead of `as posting` in the each) seems to track
@@ -194,19 +194,12 @@
     text-align: center;
   }
 
-  div :global(.payee) {
-    flex-grow: 1;
-    flex-basis: 100px;
-  }
-
-  label > span:first-child,
-  .label > span:first-child {
+  .hide-on-desktop {
     display: none;
   }
 
   @media (width <= 767px) {
-    label > span:first-child,
-    .label > span:first-child {
+    .hide-on-desktop {
       display: initial;
       width: 100%;
     }

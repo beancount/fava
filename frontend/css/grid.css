@@ -1,30 +1,38 @@
+:root {
+  --flex-gap: 0.5rem;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--flex-gap);
+
+  > h3 {
+    margin: 0;
+  }
+}
+
 .flex-row {
   display: flex;
   flex-wrap: wrap;
+  gap: var(--flex-gap);
   align-items: center;
-  margin: 0 -0.25rem;
-}
 
-.flex-row > * {
-  margin: 0.25rem;
-}
+  > h3 {
+    margin: 0;
+  }
 
-.flex-row > label {
-  display: contents;
-}
+  > label {
+    display: contents;
+  }
 
-.flex-row > label > * {
-  margin: 0.25rem;
-}
+  @media (hover: hover) and (width > 767px) {
+    .remove-row {
+      opacity: 0;
+    }
+  }
 
-.flex-row .grow {
-  flex-grow: 1;
-}
-
-.remove-row {
-  opacity: 0;
-}
-
-.flex-row:hover .remove-row {
-  opacity: 1;
+  &:hover .remove-row {
+    opacity: 1;
+  }
 }

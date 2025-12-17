@@ -93,7 +93,7 @@
   );
 </script>
 
-<form onsubmit={save}>
+<form onsubmit={save} class="flex-column">
   <div class="editor" {@attach attach_editor(editor)}></div>
   <div class="flex-row">
     <span class="spacer"></span>
@@ -107,12 +107,7 @@
 </form>
 
 <style>
-  label span {
-    margin-right: 1rem;
-  }
-
   .editor {
-    margin-bottom: 0.5rem;
     border: 1px solid var(--sidebar-border);
   }
 </style>

@@ -64,7 +64,7 @@
 
 <style>
   ol {
-    margin: 0.25rem 0 0;
+    margin: var(--flex-gap) 0 0;
   }
 
   button {

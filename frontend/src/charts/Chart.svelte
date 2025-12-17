@@ -88,6 +88,10 @@
 </div>
 
 <style>
+  .flex-row {
+    margin-bottom: var(--flex-gap);
+  }
+
   @media print {
     button.show-charts {
       display: none;

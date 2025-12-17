@@ -54,7 +54,7 @@
 </script>
 
 <ModalBase {shown} closeHandler={close}>
-  <form novalidate={duplicate} onsubmit={submitOrNext}>
+  <form class="flex-column" novalidate={duplicate} onsubmit={submitOrNext}>
     <h3>{_("Import")}</h3>
     {#if entry}
       <div class="flex-row">
@@ -115,8 +115,8 @@
           </button>
         {:else}<button type="submit">{_("Save")}</button>{/if}
       </div>
-      <hr />
       {#if entry.meta.get("__source__")}
+        <hr />
         <h3>
           {_("Source")}
           {#if entry.meta.lineno}({_("Line")}: {entry.meta.lineno}){/if}
@@ -129,11 +129,13 @@
 
 <style>
   pre {
+    margin: 0;
     font-size: 0.9em;
     white-space: pre-wrap;
   }
 
   .duplicate {
+    display: contents;
     opacity: 0.5;
   }
 </style>
