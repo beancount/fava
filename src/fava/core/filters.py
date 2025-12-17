@@ -437,7 +437,7 @@ class AdvancedFilter(EntryFilter):
             tokens = LEXER.lex(value)
             self._include = PARSE(
                 lexer="NONE",
-                tokenfunc=lambda toks=tokens: next(toks, None),
+                tokenfunc=lambda toks=tokens: next(toks, None),  # ty:ignore[invalid-argument-type]
             )
         except FilterError as exception:
             exception.message += value

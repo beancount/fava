@@ -48,7 +48,7 @@ def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     if isinstance(amt, str):
         return BEANCOUNT_A(amt)  # type: ignore[return-value]
     if hasattr(amt, "number") and hasattr(amt, "currency"):
-        return amt
+        return amt  # ty:ignore[invalid-return-type]
     if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
     return BeancountAmount(amt, currency)  # type: ignore[return-value]

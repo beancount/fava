@@ -44,7 +44,7 @@ mostlyclean:
 
 # Run linters.
 .PHONY: lint
-lint: frontend/node_modules mypy
+lint: frontend/node_modules ty
 	uv run pre-commit run -v -a
 	cd frontend; npm exec tsc
 	cd frontend; npm exec svelte-check
@@ -53,6 +53,11 @@ lint: frontend/node_modules mypy
 .PHONY: mypy
 mypy:
 	uv run --no-dev --group mypy mypy
+
+# Run ty for Python type-checking.
+.PHONY: ty
+ty:
+	uv run --no-dev --group ty ty check
 
 # Run tests.
 .PHONY: test test-js test-py test-py-old-deps

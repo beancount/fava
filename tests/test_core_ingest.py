@@ -22,6 +22,11 @@ from fava.helpers import FavaAPIError
 from fava.serialisation import serialise
 from fava.util.date import local_today
 
+try:
+    from typing import override
+except ImportError:  # pragma: no cover
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
@@ -46,13 +51,16 @@ class MinimalImporter(BeanImporterProtocol):
     def __init__(self, acc: str = "Assets:Checking") -> None:
         self.acc = acc
 
+    @override
     def name(self) -> str:
         return f"MinimalImporter({self.acc})"
 
+    @override
     def identify(self, file: FileMemo) -> bool:
         return self.acc in file.name
 
-    def file_account(self, _file: FileMemo) -> str:
+    @override
+    def file_account(self, file: FileMemo) -> str:
         return self.acc
 
 
@@ -70,7 +78,8 @@ def test_ingest_file_import_info_minimal_importer(test_data_dir: Path) -> None:
 
 
 class AccountNameErrors(MinimalImporter):
-    def file_account(self, _file: FileMemo) -> str:
+    @override
+    def file_account(self, file: FileMemo) -> str:
         msg = "Some error reason..."
         raise ValueError(msg)
 
@@ -87,7 +96,8 @@ def test_ingest_file_import_info_account_method_errors(
 
 
 class IdentifyErrors(MinimalImporter):
-    def identify(self, _file: FileMemo) -> bool:
+    @override
+    def identify(self, file: FileMemo) -> bool:
         msg = "IDENTIFY_ERRORS"
         raise ValueError(msg)
 
@@ -102,6 +112,7 @@ def test_ingest_identify_errors(test_data_dir: Path) -> None:
 
 
 class ImporterNameErrors(MinimalImporter):
+    @override
     def name(self) -> str:
         msg = "GET_NAME_WILL_ERROR"
         raise ValueError(msg)
@@ -115,6 +126,7 @@ def test_ingest_get_name_errors() -> None:
 
 
 class ImporterNameInvalidType(MinimalImporter):
+    @override
     def name(self) -> str:
         return False  # type: ignore[return-value]
 

@@ -330,6 +330,39 @@ class FavaLedger:
     #: Dict of list of all (unfiltered) entries by type.
     all_entries_by_type: EntriesByType
 
+    #: A :class:`.AccountDict` module - details about the accounts.
+    accounts: AccountDict
+
+    #: An :class:`AttributesModule` instance.
+    attributes: AttributesModule
+
+    #: A :class:`.BudgetModule` instance.
+    budgets: BudgetModule
+
+    #: A :class:`.ChartModule` instance.
+    charts: ChartModule
+
+    #: A :class:`.CommoditiesModule` instance.
+    commodities: CommoditiesModule
+
+    #: A :class:`.ExtensionModule` instance.
+    extensions: ExtensionModule
+
+    #: A :class:`.FileModule` instance.
+    file: FileModule
+
+    #: A :class:`.DecimalFormatModule` instance.
+    format_decimal: DecimalFormatModule
+
+    #: A :class:`.IngestModule` instance.
+    ingest: IngestModule
+
+    #: A :class:`.FavaMisc` instance.
+    misc: FavaMisc
+
+    #: A :class:`.QueryShell` instance.
+    query_shell: QueryShell
+
     def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
@@ -337,38 +370,17 @@ class FavaLedger:
         self.get_filtered = lru_cache(maxsize=16)(self._get_filtered)
         self.get_entry = lru_cache(maxsize=16)(self._get_entry)
 
-        #: An :class:`AttributesModule` instance.
-        self.attributes = AttributesModule(self)
-
-        #: A :class:`.BudgetModule` instance.
-        self.budgets = BudgetModule(self)
-
-        #: A :class:`.ChartModule` instance.
-        self.charts = ChartModule(self)
-
-        #: A :class:`.CommoditiesModule` instance.
-        self.commodities = CommoditiesModule(self)
-
-        #: A :class:`.ExtensionModule` instance.
-        self.extensions = ExtensionModule(self)
-
-        #: A :class:`.FileModule` instance.
-        self.file = FileModule(self)
-
-        #: A :class:`.IngestModule` instance.
-        self.ingest = IngestModule(self)
-
-        #: A :class:`.FavaMisc` instance.
-        self.misc = FavaMisc(self)
-
-        #: A :class:`.DecimalFormatModule` instance.
-        self.format_decimal = DecimalFormatModule(self)
-
-        #: A :class:`.QueryShell` instance.
-        self.query_shell = QueryShell(self)
-
-        #: A :class:`.AccountDict` module - details about the accounts.
         self.accounts = AccountDict(self)
+        self.attributes = AttributesModule(self)
+        self.budgets = BudgetModule(self)
+        self.charts = ChartModule(self)
+        self.commodities = CommoditiesModule(self)
+        self.extensions = ExtensionModule(self)
+        self.file = FileModule(self)
+        self.format_decimal = DecimalFormatModule(self)
+        self.ingest = IngestModule(self)
+        self.misc = FavaMisc(self)
+        self.query_shell = QueryShell(self)
 
         self.watcher = WatchfilesWatcher() if not poll_watcher else Watcher()
 

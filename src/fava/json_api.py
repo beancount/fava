@@ -271,9 +271,9 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     parameters are extracted from the URL query string and passed to the
     decorated endpoint handler.
     """
-    method, _, name = func.__name__.partition("_")
+    method, _, name = func.__name__.partition("_")  # ty:ignore[unresolved-attribute]
     if method not in {"get", "delete", "put"}:  # pragma: no cover
-        msg = f"Invalid endpoint function name: {func.__name__}"
+        msg = f"Invalid endpoint function name: {func.__name__}"  # ty:ignore[unresolved-attribute]
         raise ValueError(msg)
     validator = validate_func_arguments(func)
 

@@ -110,7 +110,7 @@ def test_api_add_document_and_move_and_delete(
         app.preprocess_request()
 
         # error when no documents dir is set
-        monkeypatch.setitem(g.ledger.options, "documents", [])
+        monkeypatch.setitem(g.ledger.options, "documents", [])  # ty:ignore[invalid-argument-type]
 
         response = test_client.put(add_url)
         assert_api_error(
@@ -120,7 +120,7 @@ def test_api_add_document_and_move_and_delete(
         )
 
         # upload to temporary directory
-        monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])
+        monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])  # ty:ignore[invalid-argument-type]
         monkeypatch.setattr(
             g.ledger.fava_options, "import_dirs", [str(account_dir)]
         )

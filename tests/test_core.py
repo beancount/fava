@@ -71,7 +71,7 @@ def test_paths_to_watch(
         [Path(example_ledger.beancount_file_path)],
         [],
     )
-    monkeypatch.setitem(example_ledger.options, "documents", ["folder"])
+    monkeypatch.setitem(example_ledger.options, "documents", ["folder"])  # ty:ignore[invalid-argument-type]
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
         [Path(example_ledger.beancount_file_path)],

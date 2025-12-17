@@ -85,7 +85,7 @@ def timefunc(
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        print(f"Ran {func.__name__} in {end - start}")  # noqa: T201
+        print(f"Ran {func.__name__} in {end - start}")  # noqa: T201  # ty:ignore[unresolved-attribute]
         return result
 
     return _wrapper

@@ -49,7 +49,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
     """Importer with the beangulp interface."""
 
     @override
-    def extract(self, filepath: str, existing: Any) -> list[Directive]:
+    def extract(self, filepath: str, existing: Any) -> list[Directive]:  # ty:ignore[invalid-method-override]
         entries: list[Directive] = []
         path = Path(filepath)
         account = self.account(filepath)

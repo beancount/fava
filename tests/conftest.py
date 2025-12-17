@@ -269,7 +269,7 @@ def _is_custom_entries_list(
 def load_doc_custom_entries(load_doc_entries: list[Directive]) -> list[Custom]:
     """Load the docstring as Beancount custom entries."""
     assert _is_custom_entries_list(load_doc_entries)
-    return load_doc_entries
+    return load_doc_entries  # ty:ignore[invalid-return-type]
 
 
 @pytest.fixture

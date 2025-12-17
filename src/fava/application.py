@@ -149,7 +149,7 @@ class _LedgerSlugLoader:
                 # avoid loading it already loaded while waiting for the lock
                 if self._ledgers is None:  # pragma: no cover
                     self._ledgers = self._load()
-        return self._ledgers
+        return self._ledgers  # ty:ignore[invalid-return-type]
 
     @property
     def ledgers_by_slug(self) -> dict[str, FavaLedger]:
@@ -379,7 +379,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         """Endpoint for extension reports."""
         ext = g.ledger.extensions.get_extension(extension_name)
         if ext is None or ext.report_title is None:
-            abort(404)
+            return abort(404)
 
         g.extension = ext
         template = ext.jinja_env.get_template(f"{ext.name}.html")
@@ -415,7 +415,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     def help_page(page_slug: str) -> str:
         """Fava's included documentation."""
         if page_slug not in HELP_PAGES:
-            abort(404)
+            return abort(404)
         help_path = Path(__file__).parent / "help" / (page_slug + ".md")
         contents = help_path.read_text(encoding="utf-8")
         html = markdown2.markdown(

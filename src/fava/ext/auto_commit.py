@@ -13,6 +13,11 @@ from typing import TYPE_CHECKING
 
 from fava.ext import FavaExtensionBase
 
+try:
+    from typing import override
+except ImportError:  # pragma: no cover
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
 
@@ -24,33 +29,38 @@ class AutoCommit(FavaExtensionBase):  # pragma: no cover
         cwd = Path(self.ledger.beancount_file_path).parent
         call(args, cwd=cwd, stdout=DEVNULL)
 
-    def after_write_source(self, path: str, _source: str) -> None:
+    @override
+    def after_write_source(self, path: str, source: str) -> None:
         """Add changed file to git and commit."""
         message = "autocommit: file saved"
         self._run(["git", "add", path])
         self._run(["git", "commit", "-m", message])
 
+    @override
     def after_insert_metadata(
         self,
-        _entry: Directive,
-        _key: str,
-        _value: str,
+        entry: Directive,
+        key: str,
+        value: str,
     ) -> None:
         """Commit all changes on `after_insert_metadata`."""
         message = "autocommit: metadata added"
         self._run(["git", "commit", "-am", message])
 
+    @override
     def after_insert_entry(self, entry: Directive) -> None:
         """Commit all changes on `after_insert_entry`."""
         message = f"autocommit: entry on {entry.date}"
         self._run(["git", "commit", "-am", message])
 
+    @override
     def after_delete_entry(self, entry: Directive) -> None:
         """Commit all changes on `after_delete_entry`."""
         message = f"autocommit: deleted entry on {entry.date}"
         self._run(["git", "commit", "-am", message])
 
-    def after_entry_modified(self, entry: Directive, _new_lines: str) -> None:
+    @override
+    def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Commit all changes on `after_entry_modified`."""
         message = f"autocommit: modified entry on {entry.date}"
         self._run(["git", "commit", "-am", message])

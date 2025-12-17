@@ -102,7 +102,7 @@ def link_documents(
             if hasattr(entry, "links"):
                 new_entries[index] = replace(
                     entry,
-                    links=add_to_set(entry.links, entry_link),
+                    links=add_to_set(entry.links, entry_link),  # ty:ignore[invalid-argument-type]
                 )
 
     return new_entries, errors
