@@ -69,7 +69,7 @@
 
   input.value {
     flex-grow: 1;
-    max-width: 15em;
+    max-width: 458px;
   }
 
   @media (width <= 767px) {

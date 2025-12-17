@@ -199,7 +199,11 @@
 
   div :global(.payee) {
     flex-grow: 1;
-    flex-basis: 100px;
+    flex-basis: 10%;
+  }
+
+  div :global(.narration) {
+    flex-grow: 5;
   }
 
   label > span:first-child,
