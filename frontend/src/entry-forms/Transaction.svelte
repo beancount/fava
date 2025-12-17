@@ -203,7 +203,7 @@
   }
 
   div :global(.narration) {
-    flex-grow: 5;
+    flex-grow: 2;
   }
 
   label > span:first-child,
