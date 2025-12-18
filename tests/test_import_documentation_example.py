@@ -4,7 +4,7 @@ from runpy import run_path
 from typing import TYPE_CHECKING
 
 import beangulp
-import beangulp.extract
+import beangulp.extract  # type: ignore[import-untyped]
 
 import fava
 from fava.core import FavaLedger
@@ -40,7 +40,7 @@ def test_example_import(test_data_dir: Path) -> None:
     # This tests needs multiple steps as the User clicks multiple buttons until
     # the import starts
 
-    ing = fava.core.IngestModule(ledger)
+    ing = fava.core.IngestModule(ledger)  # type: ignore[attr-defined]
     # Read import configuration as defined in the fava option "import-config"
     ing.load_file()
     # Identify (file, importer) pairs based on the files it sees in the import

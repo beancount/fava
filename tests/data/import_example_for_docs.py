@@ -1,4 +1,5 @@
 # ruff: noqa: ERA001, INP001, ARG002
+# mypy: disable-error-code="assignment"
 """An example import configuration with explanations."""
 
 from __future__ import annotations
@@ -6,23 +7,23 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import Any
 from typing import TYPE_CHECKING
 from typing import TypeAlias
 
 import beangulp  # Importing tools
-import beangulp.importer
 from beancount.core import data  # Transaction, Posting, ...
 from beangulp.importers import csvbase
 
 if TYPE_CHECKING:
     import beancount
 
-    Importer: TypeAlias = beangulp.importer.Importer
+    Importer: TypeAlias = beangulp.Importer
     Meta: TypeAlias = beancount.core.data.Meta
     Transaction: TypeAlias = beancount.core.data.Transaction
     Directive: TypeAlias = beancount.core.data.Directive
     # dynamically created NamedTuple, see docs of using functions
-    Row: TypeAlias = "Row"
+    Row: TypeAlias = Any
 
 
 class MyCSVImporter(csvbase.Importer):
@@ -149,7 +150,8 @@ class MyCSVImporter(csvbase.Importer):
         txn.postings.append(
             data.Posting(
                 "Expenses:Unknown",
-                -txn.postings[0].units,
+                # "and" handles case if .units is None
+                (txn.postings[0].units and -txn.postings[0].units),
                 None,
                 None,
                 None,
@@ -197,5 +199,5 @@ HOOKS = [example_hook]
 # Allows to call this script as './import extract <filename.csv>'. Not needed
 # for Fava, but useful for debugging
 if __name__ == "__main__":
-    ingest = beangulp.Ingest(CONFIG, HOOKS)
+    ingest = beangulp.Ingest(CONFIG, HOOKS)  # type: ignore[arg-type]
     ingest()
