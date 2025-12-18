@@ -66,7 +66,7 @@
 </script>
 
 <div
-  class="flex-row"
+  class="indent"
   class:drag
   {draggable}
   onmousemove={mousemove}
@@ -77,44 +77,46 @@
   ondrop={drop}
   role="group"
 >
-  <button
-    type="button"
-    class="muted round remove-row"
-    onclick={remove}
-    tabindex={-1}
-  >
-    ×
-  </button>
-  <AccountInput
-    className="grow"
-    bind:value={
-      () => posting.account,
-      (account: string) => {
-        posting = posting.set("account", account);
+  <div class="flex-row">
+    <button
+      type="button"
+      class="muted round remove-row"
+      onclick={remove}
+      tabindex={-1}
+    >
+      ×
+    </button>
+    <AccountInput
+      className="grow"
+      bind:value={
+        () => posting.account,
+        (account: string) => {
+          posting = posting.set("account", account);
+        }
       }
-    }
-    {suggestions}
-    {date}
-  />
-  <AutocompleteInput
-    className="amount"
-    placeholder={_("Amount")}
-    suggestions={amountSuggestions}
-    bind:value={
-      () => posting.amount,
-      (amount: string) => {
-        posting = posting.set("amount", amount);
+      {suggestions}
+      {date}
+    />
+    <AutocompleteInput
+      className="amount"
+      placeholder={_("Amount")}
+      suggestions={amountSuggestions}
+      bind:value={
+        () => posting.amount,
+        (amount: string) => {
+          posting = posting.set("amount", amount);
+        }
       }
-    }
-  />
-  <AddMetadataButton
-    bind:meta={
-      () => posting.meta,
-      (meta: EntryMetadata) => {
-        posting = posting.set("meta", meta);
+    />
+    <AddMetadataButton
+      bind:meta={
+        () => posting.meta,
+        (meta: EntryMetadata) => {
+          posting = posting.set("meta", meta);
+        }
       }
-    }
-  />
+    />
+  </div>
   <EntryMetadataSvelte
     bind:meta={
       () => posting.meta,
@@ -130,8 +132,11 @@
     box-shadow: var(--box-shadow-button);
   }
 
-  div {
+  .indent {
     padding-left: 50px;
+  }
+
+  [draggable="true"] {
     cursor: grab;
   }
 
@@ -139,7 +144,7 @@
     cursor: initial;
   }
 
-  div:last-child .remove-row {
+  div:last-child div .remove-row {
     visibility: hidden;
   }
 
@@ -148,7 +153,7 @@
   }
 
   @media (width <= 767px) {
-    div {
+    .indent {
       padding-left: 0;
     }
   }

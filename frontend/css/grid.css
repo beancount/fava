@@ -25,6 +25,13 @@
   opacity: 0;
 }
 
+/* Do not rely on mouse-over for touchscreens and small screens */
+@media (hover: none) or (width <= 767px) {
+  .remove-row {
+    opacity: 1;
+  }
+}
+
 .flex-row:hover .remove-row {
   opacity: 1;
 }
