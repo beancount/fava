@@ -184,8 +184,10 @@ def example_hook(
             deduplication
     """
     out = []
+    # For each imported file:
     for filename, entries, account, importer in new_entries:
-        # ... Edit entries (list of Directives), then ...
+        # ... Edit entries (note that this is itself a list of Directives!),
+        # then ...
         out.append((filename, entries, account, importer))
 
     return out
