@@ -12,7 +12,7 @@ repos:
     rev: 1.0.0
     hooks:
       - id: mdformat
-        args: ["--wrap", "80", "--exclude", "src/fava/help/import.md"]
+        args: ["--wrap", "80"]
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit

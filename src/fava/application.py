@@ -434,6 +434,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             github_version = tag_name.group(1)
         else:
             github_version = "main"  # fallback to main branch
+        github_url = f"https://github.com/beancount/fava/tree/{github_version}/tests/data/import_example_for_docs.py"
         return render_template(
             "help.html",
             page_slug=page_slug,
@@ -442,7 +443,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
                     html,
                     beancount_version=beancount_version,
                     fava_version=fava_version,
-                    github_version=github_version,
+                    github_url=github_url,
                 ),
             ),
             HELP_PAGES=HELP_PAGES,

@@ -46,7 +46,7 @@ Your import configuration must be a Python file that defines:
 - `CONFIG`: A list of Importers that process your account statement files.
   Create subclasses of `beangulp.importers.Importer` with parsing logic for your
   specific account statement formats, then add instances of each class to this
-  list. For CSV files, subclassing `beangulp.importers.csvbase.Importer` is 
+  list. For CSV files, subclassing `beangulp.importers.csvbase.Importer` is
   recommended.
 
 - `HOOKS`: A list of functions to apply to all directives (e.g., transactions)
@@ -56,8 +56,7 @@ For more information on how to write importers, see
 
 - [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
   in the beancount manual.
-- The
-  [Example input configuration file](https://github.com/beancount/fava/tree/{{ github_version }}/tests/data/import_example_for_docs.py).
+- The <a href="{{ github_url }}">Example input configuration file</a>
 
 Hook functions are explained in more detail further down on this page.
 
@@ -74,8 +73,8 @@ receives the parameters `hook_fn(new_entries_list, existing_entries)` and
 returns the modified `new_entries_list`.
 
 The argument `new_entries_list` is itself a list of tuples. As Fava imports each
-file individually (in contrast to the CLI of Beangulp), this list will always
-be of length 1.
+file individually (in contrast to the CLI of Beangulp), this list will always be
+of length 1.
 
 The tuples can can have two (old style, default) or four elements
 (beangulp-style). The type signature of the tuples is either
