@@ -425,15 +425,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         )
         # Convert git describe output into something to put in a GitHub URL
         # remove dirty suffix
-        github_version = re.sub(r"\.g[0-9]+$", "", fava_version)
-        commit_hash = re.search(r"\+g([0-9a-f]+)", fava_version)
-        tag_name = re.search(r"^v[0-9]+(\.[0-9+]*)", fava_version)
-        if commit_hash:
-            github_version = commit_hash.group(1)
-        elif tag_name:
-            github_version = tag_name.group(1)
-        else:
-            github_version = "main"  # fallback to main branch
+        github_version = _get_github_version(fava_version)
         github_url = f"https://github.com/beancount/fava/tree/{github_version}/tests/data/import_example_for_docs.py"
         return render_template(
             "help.html",
@@ -483,6 +475,31 @@ def _setup_babel(fava_app: Flask) -> None:
         return lang or request.accept_languages.best_match(["en", *LOCALES])
 
     Babel(fava_app, locale_selector=_get_locale)  # type: ignore[no-untyped-call]
+
+
+def _get_github_version(version_string: str) -> str:
+    """Convert a version string into a GitHub-compatible URL segment.
+
+    Args:
+        version_string: The version string, from setuptools_scm
+
+    Returns:
+        A string representing the commit hash, tag name, or 'main' as a
+        fallback.
+    """
+    # Remove the dirty suffix if present
+    cleaned_version = re.sub(r"\.g[0-9]+$", "", version_string)
+    cleaned_version = re.sub(r"^v", "", version_string)
+
+    # Extract commit hash or tag name
+    commit_hash = re.search(r"\+g([0-9a-f]+)", cleaned_version)
+    tag_name = re.search(r"^[0-9]+(\.[0-9]+)*", cleaned_version)
+
+    if commit_hash:
+        return commit_hash.group(1)
+    if tag_name:
+        return tag_name.group(0)
+    return "main"  # Fallback to main branch
 
 
 def create_app(
