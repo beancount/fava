@@ -40,7 +40,7 @@ def test_example_import(test_data_dir: Path) -> None:
     # This tests needs multiple steps as the User clicks multiple buttons until
     # the import starts
 
-    ing = fava.core.IngestModule(ledger)  # xxtype: ignore[attr-defined]
+    ing = fava.core.IngestModule(ledger)  # type: ignore[attr-defined]
     # Read import configuration as defined in the fava option "import-config"
     ing.load_file()
     # Identify (file, importer) pairs based on the files it sees in the import
