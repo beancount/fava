@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import importlib.metadata
 from runpy import run_path
 from typing import TYPE_CHECKING
 
 import beangulp
 import beangulp.extract  # type: ignore[import-untyped]
+import pytest
 
 import fava
 from fava.core import FavaLedger
@@ -12,7 +14,13 @@ from fava.core import FavaLedger
 if TYPE_CHECKING:
     from pathlib import Path
 
+beangulp_version = importlib.metadata.version("beangulp")
 
+
+@pytest.mark.skipif(
+    beangulp_version < "0.2.0",
+    reason="Documentation example requires beangulp 0.2.0",
+)
 def test_example_import_cli(test_data_dir: Path) -> None:
     """Test that the importer is successful, when run directly on the data"""
     ledger = FavaLedger(str(test_data_dir / "import_for_docs.beancount"))
@@ -34,6 +42,10 @@ def test_example_import_cli(test_data_dir: Path) -> None:
     ]
 
 
+@pytest.mark.skipif(
+    beangulp_version < "0.2.0",
+    reason="Documentation example requires beangulp 0.2.0",
+)
 def test_example_import(test_data_dir: Path) -> None:
     ledger = FavaLedger(str(test_data_dir / "import_for_docs.beancount"))
 
