@@ -132,6 +132,9 @@
         bind:value={narration}
         suggestions={narration_suggestions}
         onSelect={autocompleteSelectNarration}
+        onEnter={() => {
+          entry = entry.set_narration_tags_links(narration);
+        }}
         onBlur={() => {
           entry = entry.set_narration_tags_links(narration);
         }}
