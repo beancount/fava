@@ -129,13 +129,7 @@
       <AutocompleteInput
         className="narration"
         placeholder={_("Narration")}
-        bind:value={
-          () => entry.narration,
-          (newNarration: string) => {
-            narration = newNarration;
-            entry = entry.set_narration_tags_links(narration);
-          }
-        }
+        bind:value={narration}
         suggestions={narration_suggestions}
         onSelect={autocompleteSelectNarration}
         onBlur={() => {
