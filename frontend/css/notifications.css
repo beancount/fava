@@ -22,10 +22,10 @@
 }
 
 .notifications .warning {
-  color: hsl(0deg 0% 25%);
+  color: var(--dark-gray);
   background-color: var(--yellow);
 }
 
 .reload-page {
-  color: hsl(0deg 0% 25%);
+  color: var(--dark-gray);
 }
