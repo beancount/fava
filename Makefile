@@ -84,6 +84,11 @@ update-frontend-deps:
 	cd frontend; npm run sync-pre-commit
 	touch -m frontend/node_modules
 
+# Update the tree-sitter-beancount wasm build.
+.PHONY: update-tree-sitter-beancount
+update-tree-sitter-beancount:
+	curl -L -o frontend/src/codemirror/tree-sitter-beancount.wasm https://github.com/yagebu/tree-sitter-beancount/releases/download/v0.0.3/tree-sitter-beancount.wasm
+
 # Update pre-commit hooks
 .PHONY: update-precommit
 update-precommit:
