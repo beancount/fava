@@ -19,6 +19,7 @@
   --yellow: var(--warning);
   --green: hsl(151deg 100% 25%);
   --gray: hsl(0deg 0% 67%);
+  --dark-gray: hsl(0deg 0% 25%);
 
   /* Base colors (backgrounds) */
   --background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 15%));

@@ -22,6 +22,6 @@
 }
 
 .notifications .warning {
-  color: var(--text-color);
+  color: var(--dark-gray);
   background-color: var(--yellow);
 }

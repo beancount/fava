@@ -43,6 +43,7 @@
 
 <style>
   .reload-page {
+    color: var(--dark-gray);
     background-color: var(--warning);
   }
 
