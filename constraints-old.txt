@@ -158,6 +158,8 @@ texttable==0.8.1
     # via pyexcel
 tomli==1.0.0
     # via pytest
+typing-extensions==4.5.0
+    # via fava (pyproject.toml)
 watchfiles==0.20.0
     # via fava (pyproject.toml)
 werkzeug==2.2.0

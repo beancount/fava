@@ -479,6 +479,7 @@ dependencies = [
     { name = "markdown2" },
     { name = "ply" },
     { name = "simplejson" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
     { name = "watchfiles" },
     { name = "werkzeug" },
 ]
@@ -550,6 +551,7 @@ requires-dist = [
     { name = "pyexcel-ods3", marker = "extra == 'excel'", specifier = ">=0.5" },
     { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.5" },
     { name = "simplejson", specifier = ">=3.16.0,<4" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.5" },
     { name = "watchfiles", specifier = ">=0.20.0" },
     { name = "werkzeug", specifier = ">=2.2,<4" },
 ]

@@ -14,6 +14,11 @@ from beangulp import Importer
 from fava.beans import create
 from fava.beans.ingest import BeanImporterProtocol
 
+try:
+    from typing import override
+except ImportError:
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from typing import Any
@@ -27,20 +32,24 @@ DATE = datetime.date(2022, 12, 12)
 class TestBeangulpImporterNoExtraction(Importer):
     """Importer with the beangulp interface that doesn't extract entries."""
 
+    @override
     def identify(self, filepath: str) -> bool:
         return Path(filepath).name == "import.csv"
 
-    def account(self, filepath: str) -> str:  # noqa: ARG002
+    @override
+    def account(self, filepath: str) -> str:
         return "Assets:Checking"
 
-    def date(self, filepath: str) -> datetime.date:  # noqa: ARG002
+    @override
+    def date(self, filepath: str) -> datetime.date:
         return DATE
 
 
 class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
     """Importer with the beangulp interface."""
 
-    def extract(self, filepath: str, existing: Any) -> list[Directive]:  # noqa: ARG002
+    @override
+    def extract(self, filepath: str, existing: Any) -> list[Directive]:
         entries: list[Directive] = []
         path = Path(filepath)
         account = self.account(filepath)
@@ -107,18 +116,23 @@ class TestImporter(BeanImporterProtocol):
     account = "Assets:Checking"
     currency = "EUR"
 
+    @override
     def identify(self, file: FileMemo) -> bool:
         return Path(file.name).name == "import.csv"
 
+    @override
     def file_name(self, file: FileMemo) -> str:
         return f"examplebank.{Path(file.name).name}"
 
-    def file_account(self, file: FileMemo) -> str:  # noqa: ARG002
+    @override
+    def file_account(self, file: FileMemo) -> str:
         return self.account
 
-    def file_date(self, file: FileMemo) -> datetime.date:  # noqa: ARG002
+    @override
+    def file_date(self, file: FileMemo) -> datetime.date:
         return DATE
 
+    @override
     def extract(
         self,
         file: FileMemo,
@@ -129,9 +143,10 @@ class TestImporter(BeanImporterProtocol):
 
 
 class TestImporterThatErrorsOnExtract(TestImporter):
+    @override
     def extract(
         self,
-        file: FileMemo,  # noqa: ARG002
+        file: FileMemo,
         **_kwargs: Any,
     ) -> list[Directive]:
         raise TypeError

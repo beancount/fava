@@ -12,6 +12,11 @@ from typing import TYPE_CHECKING
 from fava.core.inventory import _Amount
 from fava.core.inventory import SimpleCounterInventory
 
+try:
+    from typing import override
+except ImportError:  # pragma: no cover
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
 
@@ -125,16 +130,18 @@ class Conversion(ABC):
 
 
 class _AtCostConversion(Conversion):
+    @override
     def apply(
         self,
         inventory: CounterInventory,
-        prices: FavaPriceMap | None = None,  # noqa: ARG002
-        date: datetime.date | None = None,  # noqa: ARG002
+        prices: FavaPriceMap | None = None,
+        date: datetime.date | None = None,
     ) -> SimpleCounterInventory:
         return inventory.reduce(get_cost)
 
 
 class _AtValueConversion(Conversion):
+    @override
     def apply(
         self,
         inventory: CounterInventory,
@@ -145,11 +152,12 @@ class _AtValueConversion(Conversion):
 
 
 class _UnitsConversion(Conversion):
+    @override
     def apply(
         self,
         inventory: CounterInventory,
-        prices: FavaPriceMap | None = None,  # noqa: ARG002
-        date: datetime.date | None = None,  # noqa: ARG002
+        prices: FavaPriceMap | None = None,
+        date: datetime.date | None = None,
     ) -> SimpleCounterInventory:
         counter = SimpleCounterInventory()
         for (currency, _cost), number in inventory.items():
@@ -173,6 +181,7 @@ class _CurrencyConversion(Conversion):
     def __init__(self, value: str) -> None:
         self._currencies = tuple(value.split(","))
 
+    @override
     def apply(
         self,
         inventory: CounterInventory,

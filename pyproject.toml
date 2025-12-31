@@ -47,6 +47,7 @@ dependencies = [
     "ply>=3.4",
     "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
+    "typing-extensions>=4.5; python_version<\"3.12\"",
 ]
 
 [project.urls]

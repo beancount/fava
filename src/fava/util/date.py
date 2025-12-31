@@ -20,6 +20,11 @@ from flask_babel import gettext
 
 from fava.util import listify
 
+try:
+    from typing import override
+except ImportError:  # pragma: no cover
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
     from collections.abc import Iterator
@@ -202,7 +207,8 @@ class _IntervalWeek(Interval):
         except OverflowError:
             return datetime.date.max
 
-    def number_of_days(self, date: datetime.date) -> int:  # noqa: ARG002
+    @override
+    def number_of_days(self, date: datetime.date) -> int:
         """Get number of days in the surrounding interval."""
         return 7
 
@@ -226,7 +232,8 @@ class _IntervalDay(Interval):
         except OverflowError:
             return datetime.date.max
 
-    def number_of_days(self, date: datetime.date) -> int:  # noqa: ARG002
+    @override
+    def number_of_days(self, date: datetime.date) -> int:
         return 1
 
 
