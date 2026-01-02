@@ -1,6 +1,7 @@
 import datetime
 from abc import ABC
 from abc import abstractmethod
+from collections.abc import Callable
 from collections.abc import Sequence
 
 from fava.beans.abc import Account
@@ -24,3 +25,23 @@ class Importer(ABC):
     def sort(
         self, entries: list[Directive], reverse: bool = False
     ) -> None: ...
+
+class Ingest:
+    def __init__(
+        self,
+        importer: Sequence[Importer],
+        hooks: Sequence[
+            Callable[
+                [
+                    Sequence[
+                        tuple[str, Sequence[Directive], str, Importer]
+                    ],  # new_entries
+                    Sequence[Directive],  # existing_entries
+                ],
+                Sequence[
+                    tuple[str, Sequence[Directive], str, Importer]
+                ],  # (return value)
+            ]
+        ],
+    ) -> None: ...
+    def __call__(self) -> None: ...
