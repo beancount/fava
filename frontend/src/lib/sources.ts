@@ -41,9 +41,11 @@ function compressTree(parent: SourceNode): SourceNode {
     }
 
     const newName = parent.name + onlyChild.name;
-    return compressTree(
-      { name: newName, path: onlyChild.path, children: onlyChild.children },
-    );
+    return compressTree({
+      name: newName,
+      path: onlyChild.path,
+      children: onlyChild.children,
+    });
   } else {
     const newChildren: SourceNode[] = [];
     for (const child of parent.children) {
@@ -52,4 +54,3 @@ function compressTree(parent: SourceNode): SourceNode {
     return { name: parent.name, path: parent.path, children: newChildren };
   }
 }
-
