@@ -89,3 +89,25 @@ def test_fava_options_language() -> None:
     with pytest.raises(UnsupportedLanguageOptionError):
         options.set_language("km")
     options.set_language("zh")
+
+
+def test_fava_options_import_dirs(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "import-dirs" "/path/with spaces/here"
+    2016-04-14 custom "fava-option" "import-dirs" "/another/path"
+    """
+    options, errors = parse_options(load_doc_custom_entries)
+    assert len(errors) == 0
+    assert list(options.import_dirs) == [
+        "/path/with spaces/here",
+        "/another/path",
+    ]
+
+
+def test_fava_options_set_import_dirs() -> None:
+    options = FavaOptions()
+    options.set_import_dirs("/path/with spaces")
+    options.set_import_dirs("/simple/path")
+    assert list(options.import_dirs) == ["/path/with spaces", "/simple/path"]
