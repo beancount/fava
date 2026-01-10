@@ -1,70 +1,27 @@
 {
   "budgets": {
     "Assets": [
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      }
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} }
     ],
     "Assets:Cash": [
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      }
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} }
     ],
     "Assets:Commodity": [
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      },
-      {
-        "budget": {},
-        "budget_children": {}
-      }
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} },
+      { "budget": {}, "budget_children": {} }
     ]
   },
   "charts": [
     {
-      "data": [
-        {
-          "balance": {
-            "USD": 101
-          },
-          "date": "2022-01-01"
-        }
-      ],
+      "data": [{ "balance": { "USD": 101 }, "date": "2022-01-01" }],
       "label": "Account Balance",
       "type": "balances"
     },
@@ -73,13 +30,9 @@
         {
           "account_balances": {
             "Assets:Cash": {},
-            "Assets:Commodity": {
-              "USD": 101
-            }
+            "Assets:Commodity": { "USD": 101 }
           },
-          "balance": {
-            "USD": 101
-          },
+          "balance": { "USD": 101 },
           "budgets": {},
           "date": "2022-01-01"
         },
@@ -107,30 +60,16 @@
     }
   ],
   "dates": [
-    {
-      "begin": "2022-01-04",
-      "end": "2022-01-05"
-    },
-    {
-      "begin": "2022-01-03",
-      "end": "2022-01-04"
-    },
-    {
-      "begin": "2022-01-02",
-      "end": "2022-01-03"
-    },
-    {
-      "begin": "2022-01-01",
-      "end": "2022-01-02"
-    }
+    { "begin": "2022-01-04", "end": "2022-01-05" },
+    { "begin": "2022-01-03", "end": "2022-01-04" },
+    { "begin": "2022-01-02", "end": "2022-01-03" },
+    { "begin": "2022-01-01", "end": "2022-01-02" }
   ],
   "interval_balances": [
     {
       "account": "Assets",
       "balance": {},
-      "balance_children": {
-        "USD": 104
-      },
+      "balance_children": { "USD": 104 },
       "children": [
         {
           "account": "Assets:Cash",
@@ -143,12 +82,8 @@
         },
         {
           "account": "Assets:Commodity",
-          "balance": {
-            "USD": 104
-          },
-          "balance_children": {
-            "USD": 104
-          },
+          "balance": { "USD": 104 },
+          "balance_children": { "USD": 104 },
           "children": [],
           "cost": null,
           "cost_children": null,
@@ -162,9 +97,7 @@
     {
       "account": "Assets",
       "balance": {},
-      "balance_children": {
-        "USD": 103
-      },
+      "balance_children": { "USD": 103 },
       "children": [
         {
           "account": "Assets:Cash",
@@ -177,12 +110,8 @@
         },
         {
           "account": "Assets:Commodity",
-          "balance": {
-            "USD": 103
-          },
-          "balance_children": {
-            "USD": 103
-          },
+          "balance": { "USD": 103 },
+          "balance_children": { "USD": 103 },
           "children": [],
           "cost": null,
           "cost_children": null,
@@ -196,9 +125,7 @@
     {
       "account": "Assets",
       "balance": {},
-      "balance_children": {
-        "USD": 102
-      },
+      "balance_children": { "USD": 102 },
       "children": [
         {
           "account": "Assets:Cash",
@@ -211,12 +138,8 @@
         },
         {
           "account": "Assets:Commodity",
-          "balance": {
-            "USD": 102
-          },
-          "balance_children": {
-            "USD": 102
-          },
+          "balance": { "USD": 102 },
+          "balance_children": { "USD": 102 },
           "children": [],
           "cost": null,
           "cost_children": null,
@@ -230,9 +153,7 @@
     {
       "account": "Assets",
       "balance": {},
-      "balance_children": {
-        "USD": 101
-      },
+      "balance_children": { "USD": 101 },
       "children": [
         {
           "account": "Assets:Cash",
@@ -245,12 +166,8 @@
         },
         {
           "account": "Assets:Commodity",
-          "balance": {
-            "USD": 101
-          },
-          "balance_children": {
-            "USD": 101
-          },
+          "balance": { "USD": 101 },
+          "balance_children": { "USD": 101 },
           "children": [],
           "cost": null,
           "cost_children": null,

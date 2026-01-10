@@ -6,16 +6,8 @@
       null,
       "Opening Balance for checking account",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 3453.18
-        }
-      },
-      {
-        "USD": 3453.18
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 3453.18 } },
+      { "USD": 3453.18 }
     ],
     [
       "2014-01-01",
@@ -23,13 +15,7 @@
       null,
       "Opening Balance for checking account",
       "Equity:Opening-Balances",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -3453.18
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": -3453.18 } },
       {}
     ],
     [
@@ -38,16 +24,8 @@
       null,
       "Allowed contributions for one year",
       "Income:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": -17500
-        }
-      },
-      {
-        "IRAUSD": -17500
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -17500 } },
+      { "IRAUSD": -17500 }
     ],
     [
       "2014-01-01",
@@ -55,13 +33,7 @@
       null,
       "Allowed contributions for one year",
       "Assets:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": 17500
-        }
-      },
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 17500 } },
       {}
     ],
     [
@@ -70,16 +42,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1350.6
-        }
-      },
-      {
-        "USD": 1350.6
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1350.6 } },
+      { "USD": 1350.6 }
     ],
     [
       "2014-01-02",
@@ -87,16 +51,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1200.0
-        }
-      },
-      {
-        "USD": 2550.6
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1200.0 } },
+      { "USD": 2550.6 }
     ],
     [
       "2014-01-02",
@@ -104,16 +60,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Salary",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -4615.38
-        }
-      },
-      {
-        "USD": -2064.78
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
+      { "USD": -2064.78 }
     ],
     [
       "2014-01-02",
@@ -121,16 +69,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -24.32
-        }
-      },
-      {
-        "USD": -2089.1
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -24.32 } },
+      { "USD": -2089.1 }
     ],
     [
       "2014-01-02",
@@ -138,16 +78,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Life:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 24.32
-        }
-      },
-      {
-        "USD": -2064.78
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 24.32 } },
+      { "USD": -2064.78 }
     ],
     [
       "2014-01-02",
@@ -155,16 +87,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Dental:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 2.9
-        }
-      },
-      {
-        "USD": -2061.88
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 2.9 } },
+      { "USD": -2061.88 }
     ],
     [
       "2014-01-02",
@@ -172,16 +96,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Medical:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 27.38
-        }
-      },
-      {
-        "USD": -2034.5
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 27.38 } },
+      { "USD": -2034.5 }
     ],
     [
       "2014-01-02",
@@ -189,16 +105,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Vision:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 42.3
-        }
-      },
-      {
-        "USD": -1992.2
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 42.3 } },
+      { "USD": -1992.2 }
     ],
     [
       "2014-01-02",
@@ -206,16 +114,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Medicare",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 106.62
-        }
-      },
-      {
-        "USD": -1885.58
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 106.62 } },
+      { "USD": -1885.58 }
     ],
     [
       "2014-01-02",
@@ -223,16 +123,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1062.92
-        }
-      },
-      {
-        "USD": -822.66
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1062.92 } },
+      { "USD": -822.66 }
     ],
     [
       "2014-01-02",
@@ -240,16 +132,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:State",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 365.08
-        }
-      },
-      {
-        "USD": -457.58
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 365.08 } },
+      { "USD": -457.58 }
     ],
     [
       "2014-01-02",
@@ -257,16 +141,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:CityNYC",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 174.92
-        }
-      },
-      {
-        "USD": -282.66
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 174.92 } },
+      { "USD": -282.66 }
     ],
     [
       "2014-01-02",
@@ -274,16 +150,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SDI",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1.12
-        }
-      },
-      {
-        "USD": -281.54
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1.12 } },
+      { "USD": -281.54 }
     ],
     [
       "2014-01-02",
@@ -291,13 +159,7 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SocSec",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 281.54
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
       {}
     ],
     [
@@ -306,16 +168,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": -1200.0
-        }
-      },
-      {
-        "IRAUSD": -1200.0
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "IRAUSD": -1200.0 }
     ],
     [
       "2014-01-02",
@@ -323,13 +177,7 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": 1200.0
-        }
-      },
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
       {}
     ],
     [
@@ -338,16 +186,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": 5
-        }
-      },
-      {
-        "VACHR": 5
-      }
+      { "cost": null, "units": { "currency": "VACHR", "number": 5 } },
+      { "VACHR": 5 }
     ],
     [
       "2014-01-02",
@@ -355,13 +195,7 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": -5
-        }
-      },
+      { "cost": null, "units": { "currency": "VACHR", "number": -5 } },
       {}
     ],
     [
@@ -370,16 +204,8 @@
       null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 600.0
-        }
-      },
-      {
-        "USD": 600.0
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 600.0 } },
+      { "USD": 600.0 }
     ],
     [
       "2014-01-03",
@@ -387,13 +213,7 @@
       null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -600.0
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": -600.0 } },
       {}
     ],
     [
@@ -402,16 +222,8 @@
       "BANK FEES",
       "Monthly bank fee",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -4.0
-        }
-      },
-      {
-        "USD": -4.0
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -4.0 } },
+      { "USD": -4.0 }
     ],
     [
       "2014-01-04",
@@ -419,13 +231,7 @@
       "BANK FEES",
       "Monthly bank fee",
       "Expenses:Financial:Fees",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 4.0
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": 4.0 } },
       {}
     ],
     [
@@ -434,16 +240,8 @@
       "Kin Soy",
       "Eating out with Joe",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -38.48
-        }
-      },
-      {
-        "USD": -38.48
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -38.48 } },
+      { "USD": -38.48 }
     ],
     [
       "2014-01-04",
@@ -451,13 +249,7 @@
       "Kin Soy",
       "Eating out with Joe",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 38.48
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": 38.48 } },
       {}
     ],
     [
@@ -466,16 +258,8 @@
       "RiverBank Properties",
       "Paying the rent",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -2400.0
-        }
-      },
-      {
-        "USD": -2400.0
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -2400.0 } },
+      { "USD": -2400.0 }
     ],
     [
       "2014-01-06",
@@ -483,13 +267,7 @@
       "RiverBank Properties",
       "Paying the rent",
       "Expenses:Home:Rent",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 2400.0
-        }
-      },
+      { "cost": null, "units": { "currency": "USD", "number": 2400.0 } },
       {}
     ],
     [
@@ -505,14 +283,9 @@
           "label": null,
           "number": 32.78
         },
-        "units": {
-          "currency": "VBMPX",
-          "number": 14.643
-        }
+        "units": { "currency": "VBMPX", "number": 14.643 }
       },
-      {
-        "VBMPX": 14.643
-      }
+      { "VBMPX": 14.643 }
     ],
     [
       "2014-01-06",
@@ -520,17 +293,8 @@
       null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -480.0
-        }
-      },
-      {
-        "USD": -480.0,
-        "VBMPX": 14.643
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -480.0 } },
+      { "USD": -480.0, "VBMPX": 14.643 }
     ],
     [
       "2014-01-06",
@@ -545,16 +309,9 @@
           "label": null,
           "number": 92.75
         },
-        "units": {
-          "currency": "RGAGX",
-          "number": 7.763
-        }
+        "units": { "currency": "RGAGX", "number": 7.763 }
       },
-      {
-        "RGAGX": 7.763,
-        "USD": -480.0,
-        "VBMPX": 14.643
-      }
+      { "RGAGX": 7.763, "USD": -480.0, "VBMPX": 14.643 }
     ],
     [
       "2014-01-06",
@@ -562,18 +319,8 @@
       null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -720.02
-        }
-      },
-      {
-        "RGAGX": 7.763,
-        "USD": -1200.02,
-        "VBMPX": 14.643
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -720.02 } },
+      { "RGAGX": 7.763, "USD": -1200.02, "VBMPX": 14.643 }
     ],
     [
       "2014-01-06",
@@ -588,16 +335,9 @@
           "label": null,
           "number": 32.78
         },
-        "units": {
-          "currency": "VBMPX",
-          "number": 7.321
-        }
+        "units": { "currency": "VBMPX", "number": 7.321 }
       },
-      {
-        "RGAGX": 7.763,
-        "USD": -1200.02,
-        "VBMPX": 21.964
-      }
+      { "RGAGX": 7.763, "USD": -1200.02, "VBMPX": 21.964 }
     ],
     [
       "2014-01-06",
@@ -605,18 +345,8 @@
       null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -239.98
-        }
-      },
-      {
-        "RGAGX": 7.763,
-        "USD": -1440.0,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -239.98 } },
+      { "RGAGX": 7.763, "USD": -1440.0, "VBMPX": 21.964 }
     ],
     [
       "2014-01-06",
@@ -631,16 +361,9 @@
           "label": null,
           "number": 92.75
         },
-        "units": {
-          "currency": "RGAGX",
-          "number": 3.881
-        }
+        "units": { "currency": "RGAGX", "number": 3.881 }
       },
-      {
-        "RGAGX": 11.644,
-        "USD": -1440.0,
-        "VBMPX": 21.964
-      }
+      { "RGAGX": 11.644, "USD": -1440.0, "VBMPX": 21.964 }
     ],
     [
       "2014-01-06",
@@ -648,18 +371,8 @@
       null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -359.96
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -359.96 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-08",
@@ -667,18 +380,8 @@
       "Chichipotle",
       "Eating out with Joe",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -23.57
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1823.53,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -23.57 } },
+      { "RGAGX": 11.644, "USD": -1823.53, "VBMPX": 21.964 }
     ],
     [
       "2014-01-08",
@@ -686,18 +389,8 @@
       "Chichipotle",
       "Eating out with Joe",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 23.57
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 23.57 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-09",
@@ -705,18 +398,8 @@
       "EDISON POWER",
       "",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -65.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1864.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -65.0 } },
+      { "RGAGX": 11.644, "USD": -1864.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-09",
@@ -724,18 +407,8 @@
       "EDISON POWER",
       "",
       "Expenses:Home:Electricity",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 65.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 65.0 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-10",
@@ -743,18 +416,8 @@
       "Corner Deli",
       "Buying groceries",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -73.28
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1873.24,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -73.28 } },
+      { "RGAGX": 11.644, "USD": -1873.24, "VBMPX": 21.964 }
     ],
     [
       "2014-01-10",
@@ -762,18 +425,8 @@
       "Corner Deli",
       "Buying groceries",
       "Expenses:Food:Groceries",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 73.28
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 73.28 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-11",
@@ -781,18 +434,8 @@
       "Goba Goba",
       "Eating out with Joe",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -30.94
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1830.9,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -30.94 } },
+      { "RGAGX": 11.644, "USD": -1830.9, "VBMPX": 21.964 }
     ],
     [
       "2014-01-11",
@@ -800,18 +443,8 @@
       "Goba Goba",
       "Eating out with Joe",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 30.94
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 30.94 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-11",
@@ -819,18 +452,8 @@
       "Chase:Slate",
       "Paying off credit card",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 166.27
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1633.69,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 166.27 } },
+      { "RGAGX": 11.644, "USD": -1633.69, "VBMPX": 21.964 }
     ],
     [
       "2014-01-11",
@@ -838,18 +461,8 @@
       "Chase:Slate",
       "Paying off credit card",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -166.27
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -166.27 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-12",
@@ -857,18 +470,8 @@
       "China Garden",
       "Eating out after work",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -24.94
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1824.9,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -24.94 } },
+      { "RGAGX": 11.644, "USD": -1824.9, "VBMPX": 21.964 }
     ],
     [
       "2014-01-12",
@@ -876,18 +479,8 @@
       "China Garden",
       "Eating out after work",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 24.94
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 24.94 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-14",
@@ -895,18 +488,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -34.92
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1834.88,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -34.92 } },
+      { "RGAGX": 11.644, "USD": -1834.88, "VBMPX": 21.964 }
     ],
     [
       "2014-01-14",
@@ -914,18 +497,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 34.92
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 34.92 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-15",
@@ -933,18 +506,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -37.13
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1837.09,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -37.13 } },
+      { "RGAGX": 11.644, "USD": -1837.09, "VBMPX": 21.964 }
     ],
     [
       "2014-01-15",
@@ -952,18 +515,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 37.13
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 37.13 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -971,18 +524,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -22.21
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1822.17,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -22.21 } },
+      { "RGAGX": 11.644, "USD": -1822.17, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -990,18 +533,8 @@
       "Goba Goba",
       "Eating out with Natasha",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 22.21
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 22.21 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1009,18 +542,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1350.6
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -449.36,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1350.6 } },
+      { "RGAGX": 11.644, "USD": -449.36, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1028,18 +551,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1200.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": 750.64,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1200.0 } },
+      { "RGAGX": 11.644, "USD": 750.64, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1047,18 +560,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Salary",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -4615.38
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3864.74,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
+      { "RGAGX": 11.644, "USD": -3864.74, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1066,18 +569,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -24.32
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3889.06,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -24.32 } },
+      { "RGAGX": 11.644, "USD": -3889.06, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1085,18 +578,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Life:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 24.32
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3864.74,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 24.32 } },
+      { "RGAGX": 11.644, "USD": -3864.74, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1104,18 +587,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Dental:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 2.9
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3861.84,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 2.9 } },
+      { "RGAGX": 11.644, "USD": -3861.84, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1123,18 +596,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Medical:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 27.38
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3834.46,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 27.38 } },
+      { "RGAGX": 11.644, "USD": -3834.46, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1142,18 +605,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Vision:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 42.3
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3792.16,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 42.3 } },
+      { "RGAGX": 11.644, "USD": -3792.16, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1161,18 +614,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Medicare",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 106.62
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -3685.54,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 106.62 } },
+      { "RGAGX": 11.644, "USD": -3685.54, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1180,18 +623,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1062.92
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -2622.62,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1062.92 } },
+      { "RGAGX": 11.644, "USD": -2622.62, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1199,18 +632,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:State",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 365.08
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -2257.54,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 365.08 } },
+      { "RGAGX": 11.644, "USD": -2257.54, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1218,18 +641,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:CityNYC",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 174.92
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -2082.62,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 174.92 } },
+      { "RGAGX": 11.644, "USD": -2082.62, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1237,18 +650,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SDI",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1.12
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -2081.5,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1.12 } },
+      { "RGAGX": 11.644, "USD": -2081.5, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1256,18 +659,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SocSec",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 281.54
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1275,19 +668,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": -1200.0
-        }
-      },
-      {
-        "IRAUSD": -1200.0,
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "IRAUSD": -1200.0, "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1295,18 +677,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": 1200.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1314,19 +686,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": 5
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VACHR": 5,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "VACHR", "number": 5 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VACHR": 5, "VBMPX": 21.964 }
     ],
     [
       "2014-01-16",
@@ -1334,18 +695,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": -5
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "VACHR", "number": -5 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-17",
@@ -1353,18 +704,8 @@
       null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 600.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1199.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 600.0 } },
+      { "RGAGX": 11.644, "USD": -1199.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-17",
@@ -1372,18 +713,8 @@
       null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -600.0
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -600.0 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-19",
@@ -1391,18 +722,8 @@
       "Verizon Wireless",
       "",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -85.14
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1885.1,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -85.14 } },
+      { "RGAGX": 11.644, "USD": -1885.1, "VBMPX": 21.964 }
     ],
     [
       "2014-01-19",
@@ -1410,18 +731,8 @@
       "Verizon Wireless",
       "",
       "Expenses:Home:Phone",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 85.14
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 85.14 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-19",
@@ -1429,18 +740,8 @@
       "Goba Goba",
       "Eating out",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -31.71
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1831.67,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -31.71 } },
+      { "RGAGX": 11.644, "USD": -1831.67, "VBMPX": 21.964 }
     ],
     [
       "2014-01-19",
@@ -1448,18 +749,8 @@
       "Goba Goba",
       "Eating out",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 31.71
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 21.964
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 31.71 } },
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 21.964 }
     ],
     [
       "2014-01-20",
@@ -1474,16 +765,9 @@
           "label": null,
           "number": 33.15
         },
-        "units": {
-          "currency": "VBMPX",
-          "number": 14.48
-        }
+        "units": { "currency": "VBMPX", "number": 14.48 }
       },
-      {
-        "RGAGX": 11.644,
-        "USD": -1799.96,
-        "VBMPX": 36.444
-      }
+      { "RGAGX": 11.644, "USD": -1799.96, "VBMPX": 36.444 }
     ],
     [
       "2014-01-20",
@@ -1491,18 +775,8 @@
       null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -480.01
-        }
-      },
-      {
-        "RGAGX": 11.644,
-        "USD": -2279.97,
-        "VBMPX": 36.444
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -480.01 } },
+      { "RGAGX": 11.644, "USD": -2279.97, "VBMPX": 36.444 }
     ],
     [
       "2014-01-20",
@@ -1517,16 +791,9 @@
           "label": null,
           "number": 92.12
         },
-        "units": {
-          "currency": "RGAGX",
-          "number": 7.816
-        }
+        "units": { "currency": "RGAGX", "number": 7.816 }
       },
-      {
-        "RGAGX": 19.46,
-        "USD": -2279.97,
-        "VBMPX": 36.444
-      }
+      { "RGAGX": 19.46, "USD": -2279.97, "VBMPX": 36.444 }
     ],
     [
       "2014-01-20",
@@ -1534,18 +801,8 @@
       null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -720.01
-        }
-      },
-      {
-        "RGAGX": 19.46,
-        "USD": -2999.98,
-        "VBMPX": 36.444
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -720.01 } },
+      { "RGAGX": 19.46, "USD": -2999.98, "VBMPX": 36.444 }
     ],
     [
       "2014-01-20",
@@ -1560,16 +817,9 @@
           "label": null,
           "number": 33.15
         },
-        "units": {
-          "currency": "VBMPX",
-          "number": 7.24
-        }
+        "units": { "currency": "VBMPX", "number": 7.24 }
       },
-      {
-        "RGAGX": 19.46,
-        "USD": -2999.98,
-        "VBMPX": 43.684
-      }
+      { "RGAGX": 19.46, "USD": -2999.98, "VBMPX": 43.684 }
     ],
     [
       "2014-01-20",
@@ -1577,18 +827,8 @@
       null,
       "Investing 40% of cash in VBMPX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -240.01
-        }
-      },
-      {
-        "RGAGX": 19.46,
-        "USD": -3239.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -240.01 } },
+      { "RGAGX": 19.46, "USD": -3239.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-20",
@@ -1603,16 +843,9 @@
           "label": null,
           "number": 92.12
         },
-        "units": {
-          "currency": "RGAGX",
-          "number": 3.908
-        }
+        "units": { "currency": "RGAGX", "number": 3.908 }
       },
-      {
-        "RGAGX": 23.368,
-        "USD": -3239.99,
-        "VBMPX": 43.684
-      }
+      { "RGAGX": 23.368, "USD": -3239.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-20",
@@ -1620,18 +853,8 @@
       null,
       "Investing 60% of cash in RGAGX",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -360.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -360.0 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-21",
@@ -1639,18 +862,8 @@
       "Good Moods Market",
       "Buying groceries",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -60.79
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3660.78,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -60.79 } },
+      { "RGAGX": 23.368, "USD": -3660.78, "VBMPX": 43.684 }
     ],
     [
       "2014-01-21",
@@ -1658,18 +871,8 @@
       "Good Moods Market",
       "Buying groceries",
       "Expenses:Food:Groceries",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 60.79
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 60.79 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-22",
@@ -1677,18 +880,8 @@
       "Wine-Tarner Cable",
       "",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -79.83
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3679.82,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -79.83 } },
+      { "RGAGX": 23.368, "USD": -3679.82, "VBMPX": 43.684 }
     ],
     [
       "2014-01-22",
@@ -1696,18 +889,8 @@
       "Wine-Tarner Cable",
       "",
       "Expenses:Home:Internet",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 79.83
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 79.83 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-23",
@@ -1715,18 +898,8 @@
       "Jewel of Morroco",
       "Eating out with Bill",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -22.64
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3622.63,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -22.64 } },
+      { "RGAGX": 23.368, "USD": -3622.63, "VBMPX": 43.684 }
     ],
     [
       "2014-01-23",
@@ -1734,18 +907,8 @@
       "Jewel of Morroco",
       "Eating out with Bill",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 22.64
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 22.64 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-25",
@@ -1753,18 +916,8 @@
       "Uncle Boons",
       "Eating out alone",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -48.63
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3648.62,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -48.63 } },
+      { "RGAGX": 23.368, "USD": -3648.62, "VBMPX": 43.684 }
     ],
     [
       "2014-01-25",
@@ -1772,18 +925,8 @@
       "Uncle Boons",
       "Eating out alone",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 48.63
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 48.63 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-28",
@@ -1791,18 +934,8 @@
       "Metro Transport Authority",
       "Tram tickets",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -120.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3719.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -120.0 } },
+      { "RGAGX": 23.368, "USD": -3719.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-28",
@@ -1810,18 +943,8 @@
       "Metro Transport Authority",
       "Tram tickets",
       "Expenses:Transport:Tram",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 120.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 120.0 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-29",
@@ -1829,18 +952,8 @@
       "Chichipotle",
       "Eating out alone",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -23.39
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3623.38,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -23.39 } },
+      { "RGAGX": 23.368, "USD": -3623.38, "VBMPX": 43.684 }
     ],
     [
       "2014-01-29",
@@ -1848,18 +961,8 @@
       "Chichipotle",
       "Eating out alone",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 23.39
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 23.39 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1867,18 +970,8 @@
       "Chichipotle",
       "Eating out with Julie",
       "Liabilities:US:Chase:Slate",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -38.56
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3638.55,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -38.56 } },
+      { "RGAGX": 23.368, "USD": -3638.55, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1886,18 +979,8 @@
       "Chichipotle",
       "Eating out with Julie",
       "Expenses:Food:Restaurant",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 38.56
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 38.56 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1905,18 +988,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BofA:Checking",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1350.6
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -2249.39,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1350.6 } },
+      { "RGAGX": 23.368, "USD": -2249.39, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1924,18 +997,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1200.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -1049.39,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1200.0 } },
+      { "RGAGX": 23.368, "USD": -1049.39, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1943,18 +1006,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Salary",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -4615.38
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5664.77,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -4615.38 } },
+      { "RGAGX": 23.368, "USD": -5664.77, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1962,18 +1015,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -24.32
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5689.09,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -24.32 } },
+      { "RGAGX": 23.368, "USD": -5689.09, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -1981,18 +1024,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Life:GroupTermLife",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 24.32
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5664.77,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 24.32 } },
+      { "RGAGX": 23.368, "USD": -5664.77, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2000,18 +1033,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Dental:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 2.9
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5661.87,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 2.9 } },
+      { "RGAGX": 23.368, "USD": -5661.87, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2019,18 +1042,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Medical:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 27.38
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5634.49,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 27.38 } },
+      { "RGAGX": 23.368, "USD": -5634.49, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2038,18 +1051,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Health:Vision:Insurance",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 42.3
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5592.19,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 42.3 } },
+      { "RGAGX": 23.368, "USD": -5592.19, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2057,18 +1060,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Medicare",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 106.62
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -5485.57,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 106.62 } },
+      { "RGAGX": 23.368, "USD": -5485.57, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2076,18 +1069,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1062.92
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -4422.65,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1062.92 } },
+      { "RGAGX": 23.368, "USD": -4422.65, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2095,18 +1078,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:State",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 365.08
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -4057.57,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 365.08 } },
+      { "RGAGX": 23.368, "USD": -4057.57, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2114,18 +1087,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:CityNYC",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 174.92
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3882.65,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 174.92 } },
+      { "RGAGX": 23.368, "USD": -3882.65, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2133,18 +1096,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SDI",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 1.12
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3881.53,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 1.12 } },
+      { "RGAGX": 23.368, "USD": -3881.53, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2152,18 +1105,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:SocSec",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 281.54
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 281.54 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2171,19 +1114,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": -1200.0
-        }
-      },
-      {
-        "IRAUSD": -1200.0,
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": -1200.0 } },
+      { "IRAUSD": -1200.0, "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2191,18 +1123,8 @@
       "BayBook",
       "Payroll",
       "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "IRAUSD",
-          "number": 1200.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "IRAUSD", "number": 1200.0 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2210,19 +1132,8 @@
       "BayBook",
       "Payroll",
       "Assets:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": 5
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VACHR": 5,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "VACHR", "number": 5 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VACHR": 5, "VBMPX": 43.684 }
     ],
     [
       "2014-01-30",
@@ -2230,18 +1141,8 @@
       "BayBook",
       "Payroll",
       "Income:US:BayBook:Vacation",
-      {
-        "cost": null,
-        "units": {
-          "currency": "VACHR",
-          "number": -5
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "VACHR", "number": -5 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-31",
@@ -2249,18 +1150,8 @@
       null,
       "Employer match for contribution",
       "Assets:US:Vanguard:Cash",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": 600.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -2999.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": 600.0 } },
+      { "RGAGX": 23.368, "USD": -2999.99, "VBMPX": 43.684 }
     ],
     [
       "2014-01-31",
@@ -2268,49 +1159,18 @@
       null,
       "Employer match for contribution",
       "Income:US:BayBook:Match401k",
-      {
-        "cost": null,
-        "units": {
-          "currency": "USD",
-          "number": -600.0
-        }
-      },
-      {
-        "RGAGX": 23.368,
-        "USD": -3599.99,
-        "VBMPX": 43.684
-      }
+      { "cost": null, "units": { "currency": "USD", "number": -600.0 } },
+      { "RGAGX": 23.368, "USD": -3599.99, "VBMPX": 43.684 }
     ]
   ],
   "t": "table",
   "types": [
-    {
-      "dtype": "date",
-      "name": "date"
-    },
-    {
-      "dtype": "str",
-      "name": "flag"
-    },
-    {
-      "dtype": "str",
-      "name": "MAXWIDTH(payee, 48)"
-    },
-    {
-      "dtype": "str",
-      "name": "MAXWIDTH(narration, 80)"
-    },
-    {
-      "dtype": "str",
-      "name": "account"
-    },
-    {
-      "dtype": "Position",
-      "name": "position"
-    },
-    {
-      "dtype": "Inventory",
-      "name": "balance"
-    }
+    { "dtype": "date", "name": "date" },
+    { "dtype": "str", "name": "flag" },
+    { "dtype": "str", "name": "MAXWIDTH(payee, 48)" },
+    { "dtype": "str", "name": "MAXWIDTH(narration, 80)" },
+    { "dtype": "str", "name": "account" },
+    { "dtype": "Position", "name": "position" },
+    { "dtype": "Inventory", "name": "balance" }
   ]
 }

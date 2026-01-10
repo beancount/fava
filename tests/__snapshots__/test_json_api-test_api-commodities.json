@@ -773,9 +773,5 @@
     ],
     "quote": "USD"
   },
-  {
-    "base": "XYZ",
-    "prices": [["2000-01-03", 125]],
-    "quote": "USD"
-  }
+  { "base": "XYZ", "prices": [["2000-01-03", 125]], "quote": "USD" }
 ]
