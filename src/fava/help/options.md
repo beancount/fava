@@ -243,7 +243,8 @@ ______________________________________________________________________
 
 Default: Not set
 
-Set the directories to be scanned by the Beancount import mechanism.
+Set a directory to be scanned by the Beancount import mechanism. This option can
+be specified multiple times to add multiple directories.
 
 ______________________________________________________________________
 
