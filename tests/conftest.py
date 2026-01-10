@@ -184,7 +184,7 @@ def snapshot(
         out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
         out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)
         # replace env-dependant info
-        out = out.replace('have_excel": false', 'have_excel": true')
+        out = re.sub(r'have_excel":\s*(false|False)', 'have_excel": true', out)
 
         for dir_path, replacement in [
             (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
