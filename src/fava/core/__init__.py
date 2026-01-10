@@ -125,6 +125,14 @@ class FilteredLedger:
         filter: str | None = None,  # noqa: A002
         time: str | None = None,
     ) -> None:
+        """Create a filtered view of a ledger.
+
+        Args:
+            ledger: The ledger to filter.
+            account: The account filter.
+            filter: The advanced filter.
+            time: The time filter.
+        """
         self.ledger = ledger
         self.date_range: DateRange | None = None
         self._pages: (
@@ -196,7 +204,11 @@ class FilteredLedger:
         return tree
 
     def interval_ranges(self, interval: Interval) -> Sequence[DateRange]:
-        """Yield date ranges corresponding to interval boundaries."""
+        """Yield date ranges corresponding to interval boundaries.
+
+        Args:
+            interval: The interval to yield ranges for.
+        """
         if not self._date_first or not self._date_last:
             return []
         complete = not self.date_range
@@ -205,7 +217,12 @@ class FilteredLedger:
         )
 
     def prices(self, base: str, quote: str) -> Sequence[tuple[date, Decimal]]:
-        """List all prices."""
+        """List all prices for a pair of commodities.
+
+        Args:
+            base: The price base.
+            quote: The price quote.
+        """
         all_prices = self.ledger.prices.get_all_prices((base, quote))
         if all_prices is None:
             return []
@@ -276,11 +293,7 @@ class FilteredLedger:
 
 
 class FavaLedger:
-    """Create an interface for a Beancount ledger.
-
-    Arguments:
-        path: Path to the main Beancount file.
-    """
+    """Interface for a Beancount ledger."""
 
     __slots__ = (
         "_is_encrypted",
@@ -364,6 +377,12 @@ class FavaLedger:
     query_shell: QueryShell
 
     def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
+        """Create an interface for a Beancount ledger.
+
+        Arguments:
+            path: Path to the main Beancount file.
+            poll_watcher: Whether to use the polling file watcher.
+        """
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
@@ -428,12 +447,15 @@ class FavaLedger:
         filter: str | None = None,  # noqa: A002
         time: str | None = None,
     ) -> FilteredLedger:
-        """Filter the ledger."""
+        """Filter the ledger.
+
+        Args:
+            account: The account filter.
+            filter: The advanced filter.
+            time: The time filter.
+        """
         return FilteredLedger(
-            ledger=self,
-            account=account,
-            filter=filter,
-            time=time,
+            ledger=self, account=account, filter=filter, time=time
         )
 
     @property
