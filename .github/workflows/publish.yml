@@ -17,6 +17,11 @@ permissions:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
@@ -37,7 +42,4 @@ jobs:
       - run: git diff --exit-code
       - name: Publish release
         if: github.event_name == 'push' && github.ref_type == 'tag'
-        env:
-          UV_PUBLISH_USERNAME: __token__
-          UV_PUBLISH_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: uv publish
