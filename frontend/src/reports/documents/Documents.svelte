@@ -6,7 +6,7 @@
   import AccountInput from "../../entry-forms/AccountInput.svelte";
   import { _ } from "../../i18n.ts";
   import { basename } from "../../lib/paths.ts";
-  import { stratify } from "../../lib/tree.ts";
+  import { stratifyAccounts } from "../../lib/tree.ts";
   import ModalBase from "../../modals/ModalBase.svelte";
   import { router } from "../../router.ts";
   import Accounts from "./Accounts.svelte";
@@ -24,7 +24,7 @@
 
   let grouped = $derived(group(documents, (d) => d.account));
   let node = $derived(
-    stratify(
+    stratifyAccounts(
       grouped.entries(),
       ([s]) => s,
       (name, d) => ({ name, count: d?.[1].length ?? 0 }),

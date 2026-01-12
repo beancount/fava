@@ -8,11 +8,12 @@
   import { modKey } from "../../keyboard-shortcuts.ts";
   import { router } from "../../router.ts";
   import { insert_entry } from "../../stores/fava_options.ts";
-  import { sources } from "../../stores/options.ts";
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
   import AppMenuSubItem from "./AppMenuSubItem.svelte";
   import Key from "./Key.svelte";
+  import Sources from "./Sources.svelte";
+  import { sources_tree } from "./stores.ts";
 
   interface Props {
     file_path: string;
@@ -39,16 +40,14 @@
 <div>
   <AppMenu>
     <AppMenuItem name={_("File")}>
-      {#each $sources as source (source)}
-        <AppMenuSubItem
-          action={() => {
-            goToFileAndLine(source);
-          }}
-          selected={source === file_path}
-        >
-          {source}
-        </AppMenuSubItem>
-      {/each}
+      <Sources
+        is_root
+        node={$sources_tree}
+        on_select={(source: string) => {
+          goToFileAndLine(source);
+        }}
+        selected={file_path}
+      ></Sources>
     </AppMenuItem>
     <AppMenuItem name={_("Edit")}>
       <AppMenuSubItem

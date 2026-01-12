@@ -1,7 +1,12 @@
-import { equal } from "node:assert/strict";
+import { deepEqual, equal } from "node:assert/strict";
 import { test } from "node:test";
 
-import { basename, documentHasAccount, ext } from "../src/lib/paths.ts";
+import {
+  basename,
+  dirnameBasename,
+  documentHasAccount,
+  ext,
+} from "../src/lib/paths.ts";
 
 test("get basename of file", () => {
   equal(basename("/home/Assets/Cash/document.pdf"), "document.pdf");
@@ -37,4 +42,33 @@ test("detect account of document", () => {
     false,
     documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
   );
+});
+
+test("get dirname and basename", () => {
+  deepEqual(dirnameBasename(""), ["", ""]);
+  deepEqual(dirnameBasename("/"), ["", "/"]);
+  deepEqual(dirnameBasename("/data"), ["/", "data"]);
+  deepEqual(dirnameBasename("/data/financials"), ["/data/", "financials"]);
+  deepEqual(dirnameBasename("/data/financials/main.bean"), [
+    "/data/financials/",
+    "main.bean",
+  ]);
+  deepEqual(dirnameBasename("C:\\"), ["", "C:\\"]);
+  deepEqual(dirnameBasename("C:\\data"), ["C:\\", "data"]);
+  deepEqual(dirnameBasename("C:\\data\\financials"), [
+    "C:\\data\\",
+    "financials",
+  ]);
+  deepEqual(dirnameBasename("C:\\data\\financials\\main.bean"), [
+    "C:\\data\\financials\\",
+    "main.bean",
+  ]);
+  deepEqual(dirnameBasename("C:\\data/financials"), [
+    "C:\\data/",
+    "financials",
+  ]);
+  deepEqual(dirnameBasename("C:/data\\financials"), [
+    "C:/data\\",
+    "financials",
+  ]);
 });
