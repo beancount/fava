@@ -1,27 +1,29 @@
 import { deepEqual } from "node:assert/strict";
 import { test } from "node:test";
 
-import { buildSourcesTree } from "../src/lib/sources.ts";
+import { build_compressed_sources_tree } from "../src/lib/sources.ts";
 
 test("sources: buildSourcesTree (unix path separator)", () => {
-  const empty = buildSourcesTree(new Set<string>());
+  const empty = build_compressed_sources_tree(new Set<string>());
   deepEqual(empty, { name: "", path: "", children: [] });
 
-  const root = buildSourcesTree(new Set<string>(["/main.bean"]));
+  const root = build_compressed_sources_tree(new Set<string>(["/main.bean"]));
   deepEqual(root, {
     name: "/",
     path: "/",
     children: [{ name: "main.bean", path: "/main.bean", children: [] }],
   });
 
-  const one = buildSourcesTree(new Set<string>(["/data/main.bean"]));
+  const one = build_compressed_sources_tree(
+    new Set<string>(["/data/main.bean"]),
+  );
   deepEqual(one, {
     name: "/data/",
     path: "/data/",
     children: [{ name: "main.bean", path: "/data/main.bean", children: [] }],
   });
 
-  const two = buildSourcesTree(
+  const two = build_compressed_sources_tree(
     new Set<string>(["/data/main.bean", "/data/other.bean"]),
   );
   deepEqual(two, {
@@ -33,7 +35,7 @@ test("sources: buildSourcesTree (unix path separator)", () => {
     ],
   });
 
-  const complex = buildSourcesTree(
+  const complex = build_compressed_sources_tree(
     new Set<string>([
       "/home/data/main.bean",
       "/home/data/deep_include.bean",
@@ -88,14 +90,18 @@ test("sources: buildSourcesTree (unix path separator)", () => {
 });
 
 test("sources: buildSourcesTree (windows path separator)", () => {
-  const root = buildSourcesTree(new Set<string>(["C:\\main.bean"]));
+  const root = build_compressed_sources_tree(
+    new Set<string>(["C:\\main.bean"]),
+  );
   deepEqual(root, {
     name: "C:\\",
     path: "C:\\",
     children: [{ name: "main.bean", path: "C:\\main.bean", children: [] }],
   });
 
-  const one = buildSourcesTree(new Set<string>(["C:\\data\\main.bean"]));
+  const one = build_compressed_sources_tree(
+    new Set<string>(["C:\\data\\main.bean"]),
+  );
   deepEqual(one, {
     name: "C:\\data\\",
     path: "C:\\data\\",
@@ -104,7 +110,7 @@ test("sources: buildSourcesTree (windows path separator)", () => {
     ],
   });
 
-  const two = buildSourcesTree(
+  const two = build_compressed_sources_tree(
     new Set<string>(["C:\\data\\main.bean", "C:\\data\\other.bean"]),
   );
   deepEqual(two, {
@@ -116,7 +122,7 @@ test("sources: buildSourcesTree (windows path separator)", () => {
     ],
   });
 
-  const complex = buildSourcesTree(
+  const complex = build_compressed_sources_tree(
     new Set<string>([
       "C:\\home\\data\\main.bean",
       "C:\\home\\data\\deep_include.bean",
@@ -175,14 +181,16 @@ test("sources: buildSourcesTree (windows path separator)", () => {
 });
 
 test("sources: buildSourcesTree (mixed path separator)", () => {
-  const one = buildSourcesTree(new Set<string>(["C:\\data/main.bean"]));
+  const one = build_compressed_sources_tree(
+    new Set<string>(["C:\\data/main.bean"]),
+  );
   deepEqual(one, {
     name: "C:\\data/",
     path: "C:\\data/",
     children: [{ name: "main.bean", path: "C:\\data/main.bean", children: [] }],
   });
 
-  const two = buildSourcesTree(
+  const two = build_compressed_sources_tree(
     new Set<string>(["C:\\data/main.bean", "C:\\data/other.bean"]),
   );
   deepEqual(two, {
@@ -194,7 +202,7 @@ test("sources: buildSourcesTree (mixed path separator)", () => {
     ],
   });
 
-  const complex = buildSourcesTree(
+  const complex = build_compressed_sources_tree(
     new Set<string>([
       "C:\\home\\data/main.bean",
       "C:\\home\\data/deep_include.bean",

@@ -1,19 +1,17 @@
 import { derived, get, writable } from "svelte/store";
 
-import { dirnameBasename } from "../../lib/paths.ts";
 import {
-  buildSourcesTree,
-  isDirectoryNode,
-  type SourceNode,
+  build_compressed_sources_tree,
+  is_directory,
+  parent,
 } from "../../lib/sources.ts";
+import { all_matching } from "../../lib/tree.ts";
 import { sources } from "../../stores/options.ts";
 
-export const sourcesTree = derived(sources, ($sources) => {
-  return buildSourcesTree($sources);
-});
+export const sources_tree = derived(sources, build_compressed_sources_tree);
 
 // The directories which have been explicitly expanded (true) or collapsed (false).
-export const expandedDirectories = writable<ReadonlyMap<string, boolean>>(
+export const expanded_directories = writable<ReadonlyMap<string, boolean>>(
   new Map(),
 );
 
@@ -23,56 +21,35 @@ export const expandedDirectories = writable<ReadonlyMap<string, boolean>>(
  * If Shift-Click, deeply expand/collapse all descendants.
  * If Ctrl- or Meta-Click, expand/collapse direct children.
  */
-export function toggleDirectory(
+export function toggle_directory(
   directory: string,
   expand: boolean,
   event: MouseEvent,
 ): void {
-  const $sourcesTree: SourceNode = get(sourcesTree);
+  const $sources_tree = get(sources_tree);
 
-  expandedDirectories.update(($expandedDirectories) => {
-    const newExpandedDirectories = new Map($expandedDirectories);
-    newExpandedDirectories.set(directory, expand);
+  expanded_directories.update(($expanded_directories) => {
+    const new_expanded_directories = new Map($expanded_directories);
+    new_expanded_directories.set(directory, expand);
     if (event.shiftKey) {
-      const descendants = allMatching(
-        $sourcesTree,
-        (node: SourceNode) =>
-          isDirectoryNode(node) && node.path.startsWith(directory),
+      const descendants = all_matching(
+        $sources_tree,
+        (node) => is_directory(node) && node.path.startsWith(directory),
       );
 
       for (const node of descendants) {
-        newExpandedDirectories.set(node.path, expand);
+        new_expanded_directories.set(node.path, expand);
       }
     } else if (event.ctrlKey || event.metaKey) {
-      const directChildren = allMatching(
-        $sourcesTree,
-        (node: SourceNode) =>
-          isDirectoryNode(node) && parent(node.path) === directory,
+      const direct_children = all_matching(
+        $sources_tree,
+        (node) => is_directory(node) && parent(node.path) === directory,
       );
 
-      for (const node of directChildren) {
-        newExpandedDirectories.set(node.path, expand);
+      for (const node of direct_children) {
+        new_expanded_directories.set(node.path, expand);
       }
     }
-    return newExpandedDirectories;
+    return new_expanded_directories;
   });
-}
-
-function parent(path: string): string {
-  const [dirname, _] = dirnameBasename(path);
-  return dirname;
-}
-
-function* allMatching(
-  root: SourceNode,
-  predicate: (node: SourceNode) => boolean,
-): Generator<SourceNode, void, void> {
-  if (predicate(root)) {
-    yield root;
-  }
-  for (const child of root.children) {
-    for (const match of allMatching(child, predicate)) {
-      yield match;
-    }
-  }
 }

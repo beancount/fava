@@ -71,3 +71,20 @@ export function stratify<T, S = null>(
   });
   return root;
 }
+
+/**
+ * Get all matching descendants.
+ */
+export function* all_matching<T>(
+  root: TreeNode<T>,
+  predicate: (node: TreeNode<T>) => boolean,
+): Generator<TreeNode<T>, void, void> {
+  if (predicate(root)) {
+    yield root;
+  }
+  for (const child of root.children) {
+    for (const match of all_matching(child, predicate)) {
+      yield match;
+    }
+  }
+}

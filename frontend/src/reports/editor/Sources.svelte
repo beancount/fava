@@ -1,89 +1,70 @@
 <script lang="ts">
   import type { SourceNode } from "../../lib/sources.ts";
   import Sources from "./Sources.svelte";
-  import {
-    expandedDirectories,
-    sourcesTree,
-    toggleDirectory,
-  } from "./stores.ts";
+  import { expanded_directories, toggle_directory } from "./stores.ts";
 
   interface Props {
-    isRoot?: boolean;
-    node?: SourceNode;
-    sourceSelectionAction: (source: string) => void;
-    selectedSourcePath: string;
+    is_root?: boolean;
+    node: SourceNode;
+    on_select: (source: string) => void;
+    selected: string;
   }
 
-  let {
-    isRoot = false,
-    node,
-    sourceSelectionAction,
-    selectedSourcePath,
-  }: Props = $props();
+  let { is_root = false, node, on_select, selected }: Props = $props();
 
-  // If $sourcesTree was the default argument for node,
-  // we would not get updates to the tree if files change.
-  // node is undefined only when we are adding the root from EditorMenu.
-  let derivedNode: SourceNode = $derived(
-    isRoot
-      ? $sourcesTree
-      : (node ?? { name: "error", path: "error", children: [] }),
-  );
-
-  let nodeName: string = $derived(derivedNode.name);
-  let nodePath: string = $derived(derivedNode.path);
-  let isExpanded: boolean = $derived.by(() => {
-    const result = $expandedDirectories.get(nodePath);
+  let is_expanded = $derived.by(() => {
+    const result = $expanded_directories.get(node.path);
     // Even though root is always expanded, treat is as being collapsed by default.
     // This allows for expanding everything with one Ctrl/Meta-Click. The subsequent click would then collapse everything.
-    return result ?? (!isRoot && selectedSourcePath.startsWith(nodePath));
+    return result ?? (!is_root && selected.startsWith(node.path));
   });
 
-  let isDirectory: boolean = $derived(derivedNode.children.length > 0);
-  let selected: boolean = $derived.by(() => {
-    // Show where the selected file would be, if directories are collapsed
-    if (isDirectory && !isExpanded && !isRoot) {
-      return selectedSourcePath.startsWith(nodePath);
-    }
-    return selectedSourcePath === nodePath;
-  });
+  let is_directory = $derived(node.children.length > 0);
+  // Show where the selected file would be, if directories are collapsed
+  let is_selected = $derived(
+    is_directory && !is_expanded && !is_root
+      ? selected.startsWith(node.path)
+      : selected === node.path,
+  );
 
   let action = (event: MouseEvent) => {
-    if (isDirectory) {
-      toggleDirectory(nodePath, !isExpanded, event);
+    if (is_directory) {
+      toggle_directory(node.path, !is_expanded, event);
     } else {
-      sourceSelectionAction(nodePath);
+      on_select(node.path);
     }
     event.stopPropagation();
   };
 </script>
 
-<li class:selected role="menuitem">
-  {#if isRoot}
+<li class:selected={is_selected} role="menuitem">
+  {#if is_root}
     <button
       type="button"
       title="Beancount data root directory
 Shift-Click to expand/collapse immediate directories
 Ctrl-/Cmd-/Meta-Click to expand/collapse all directories."
       class="unset root"
-      onclick={action}>{nodeName}</button
+      onclick={action}
     >
+      {node.name}
+    </button>
   {:else}
     <p>
-      {#if isDirectory}
-        <button type="button" class="unset toggle" onclick={action}
-          >{isExpanded ? "▾" : "▸"}</button
-        >
+      {#if is_directory}
+        <button type="button" class="unset toggle" onclick={action}>
+          {is_expanded ? "▾" : "▸"}
+        </button>
       {/if}
-      <button type="button" class="unset leaf" onclick={action}
-        >{nodeName}</button
-      >
+      <button type="button" class="unset leaf" onclick={action}>
+        {node.name}
+      </button>
     </p>
   {/if}
-  {#if isDirectory && (isExpanded || isRoot)}
+  {#if is_directory && (is_expanded || is_root)}
     <ul>
-      {#each derivedNode.children as child (child.path)}
-        <Sources node={child} {sourceSelectionAction} {selectedSourcePath} />
+      {#each node.children as child (child.path)}
+        <Sources node={child} {on_select} {selected} />
       {/each}
     </ul>
   {/if}
@@ -126,6 +107,5 @@ Ctrl-/Cmd-/Meta-Click to expand/collapse all directories."
 
   .root {
     margin: 0 0.25rem;
-    font-size: 90%;
   }
 </style>

@@ -13,6 +13,7 @@
   import AppMenuSubItem from "./AppMenuSubItem.svelte";
   import Key from "./Key.svelte";
   import Sources from "./Sources.svelte";
+  import { sources_tree } from "./stores.ts";
 
   interface Props {
     file_path: string;
@@ -40,11 +41,12 @@
   <AppMenu>
     <AppMenuItem name={_("File")}>
       <Sources
-        isRoot={true}
-        sourceSelectionAction={(source: string) => {
+        is_root
+        node={$sources_tree}
+        on_select={(source: string) => {
           goToFileAndLine(source);
         }}
-        selectedSourcePath={file_path}
+        selected={file_path}
       ></Sources>
     </AppMenuItem>
     <AppMenuItem name={_("Edit")}>
