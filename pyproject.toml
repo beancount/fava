@@ -47,6 +47,7 @@ dependencies = [
     "ply>=3.4",
     "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
+    "tatsu-lts<5.15",  # temporary pin to unbreak beanquery
     "typing-extensions>=4.5; python_version<\"3.12\"",
 ]
 
@@ -153,6 +154,10 @@ preview = true
 
 [tool.ty.environment]
 python-version = "3.12"
+
+[tool.ty.rules]
+# There's some mismatches betweeen mypy and ty still
+unused-ignore-comment = "ignore"
 
 [tool.ty.src]
 exclude = [
