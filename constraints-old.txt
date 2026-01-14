@@ -154,8 +154,6 @@ sniffio==1.1.0
     # via anyio
 tatsu==5.7.4
     # via beanquery
-tatsu-lts==5.12.2
-    # via fava (pyproject.toml)
 texttable==0.8.1
     # via pyexcel
 tomli==1.0.0

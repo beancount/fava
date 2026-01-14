@@ -47,7 +47,6 @@ dependencies = [
     "ply>=3.4",
     "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
-    "tatsu-lts<5.15",  # temporary pin to unbreak beanquery
     "typing-extensions>=4.5; python_version<\"3.12\"",
 ]
 
