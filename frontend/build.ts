@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 import chokidar from "chokidar";
 import { type BuildResult, context } from "esbuild";
 import svelte from "esbuild-svelte";
-import { sveltePreprocess } from "svelte-preprocess";
 
 /**
  * Create a debounced function.
@@ -64,9 +63,6 @@ async function run_build(dev: boolean, watch: boolean) {
     plugins: [
       svelte({
         compilerOptions: { dev, runes: true },
-        // Needed until sourcemaps in svelte are fixed, see e.g.
-        // https://github.com/sveltejs/svelte/issues/17003
-        preprocess: sveltePreprocess(),
       }),
     ],
     sourcemap: true,
