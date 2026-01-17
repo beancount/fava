@@ -70,6 +70,11 @@
     "name": "TEST_DATA_DIR/import_config.py"
   },
   {
+    "basename": "import_config_with_duplicate_names.py",
+    "importers": [],
+    "name": "TEST_DATA_DIR/import_config_with_duplicate_names.py"
+  },
+  {
     "basename": "invalid-unicode.beancount",
     "importers": [],
     "name": "TEST_DATA_DIR/invalid-unicode.beancount"

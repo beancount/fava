@@ -361,6 +361,9 @@ def load_import_config(
             )
             raise ImportConfigLoadError(msg)
         wrapped_importer = WrappedImporter(importer)
+        if wrapped_importer.name in importers:
+            msg = f"Duplicate importer name found: {wrapped_importer.name}"
+            raise ImportConfigLoadError(msg)
         importers[wrapped_importer.name] = wrapped_importer
     return importers, hooks
 

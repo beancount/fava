@@ -149,6 +149,14 @@ def test_load_import_config() -> None:
     with pytest.raises(ImportConfigLoadError, match=r"CONFIG is missing"):
         load_import_config(Path(__file__))
 
+    with pytest.raises(
+        ImportConfigLoadError, match=r"Duplicate importer name found"
+    ):
+        load_import_config(
+            Path(__file__).parent
+            / Path("data/import_config_with_duplicate_names.py")
+        )
+
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
     assert small_example_ledger.ingest.import_data() == []
