@@ -1,9 +1,9 @@
 ci:
   autoupdate_schedule: quarterly
-  skip: ["eslint"]
+  skip: ["eslint", "stylelint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.11
+    rev: v0.14.13
     hooks:
       - id: ruff-check
         args: ["--fix"]
@@ -29,25 +29,25 @@ repos:
         types_or: ["svelte", "yaml"]
         require_serial: true
         additional_dependencies:
-          - "prettier@3.7.4"
+          - "prettier@3.8.0"
           - "prettier-plugin-svelte@3.4.1"
-          - "svelte@5.46.3"
+          - "svelte@5.46.4"
       - id: stylelint
         name: stylelint
         language: node
-        entry: stylelint --fix
+        entry: stylelint --fix --config frontend/stylelint.config.js
         types_or: ["css", "svelte"]
         require_serial: true
         additional_dependencies:
-          - "stylelint@16.26.1"
+          - "stylelint@17.0.0"
           - "stylelint-config-recess-order@7.4.0"
-          - "stylelint-config-standard@39.0.1"
+          - "stylelint-config-standard@40.0.0"
           - "postcss-html@1.8.1"
       - id: eslint
         name: eslint
         language: node
         entry: ./frontend/node_modules/eslint/bin/eslint.js --config
-          frontend/eslint.config.mjs --fix --max-warnings 0
+          frontend/eslint.config.js --fix --max-warnings 0
         require_serial: true
         types_or: ["javascript", "svelte", "ts"]
         files: "^frontend/"

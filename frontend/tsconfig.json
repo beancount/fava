@@ -19,6 +19,6 @@
     "src/**/*.svelte",
     "test/**/*.ts",
     "*.cjs",
-    "*.mjs"
+    "*.js"
   ]
 }
