@@ -41,6 +41,8 @@ const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
  */
 type FavaQueryParameters =
   | "account"
+  | "chart"
+  | "chart_mode"
   | "charts"
   | "conversion"
   | "filter"
@@ -334,12 +336,14 @@ export class Router {
   /**
    * Set the URL parameter and push a history state for it if changed.
    *
-   * For `charts` and `query_string`, this will not load the target URL.
+   * For `charts`, `chart`, `chart_mode`, and `query_string`, this will not load the target URL.
    */
   set_search_param(key: "charts", value: "false" | ""): void;
   set_search_param(
     key:
       | "account"
+      | "chart"
+      | "chart_mode"
       | "conversion"
       | "filter"
       | "interval"
@@ -351,7 +355,12 @@ export class Router {
     const target = new URL(this.current);
     set_query_param(target, key, value);
     if (target.href !== this.current.href) {
-      const load = !(key === "charts" || key === "query_string");
+      const load = !(
+        key === "charts" ||
+        key === "chart" ||
+        key === "chart_mode" ||
+        key === "query_string"
+      );
       this.navigate(target, load);
     }
   }
