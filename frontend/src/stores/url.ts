@@ -58,3 +58,13 @@ export const syncedSearchParams = derived(searchParams, ($searchParams) => {
   }
   return params;
 });
+
+/** The currently selected chart name from URL. */
+export const url_chart = derived(searchParams, ($searchParams) =>
+  $searchParams.get("chart"),
+);
+
+/** The currently selected chart mode from URL. */
+export const url_chart_mode = derived(searchParams, ($searchParams) =>
+  $searchParams.get("chart_mode"),
+);
