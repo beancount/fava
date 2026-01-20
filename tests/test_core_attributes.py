@@ -6,13 +6,15 @@ from fava.core.attributes import get_active_years
 from fava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
     from .conftest import SnapshotFunc
 
 
-def test_get_active_years(load_doc_entries: list[Directive]) -> None:
+def test_get_active_years(load_doc_entries: Sequence[Directive]) -> None:
     """
     2010-11-12 * "test"
         Assets:T   4.00 USD

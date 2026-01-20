@@ -503,6 +503,7 @@ dev = [
     { name = "ruff" },
     { name = "setuptools" },
     { name = "ty" },
+    { name = "typeguard" },
     { name = "types-requests" },
     { name = "types-setuptools" },
     { name = "types-simplejson" },
@@ -515,13 +516,6 @@ docs = [
     { name = "sphinx-autodoc-typehints", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "sphinx-autodoc-typehints", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
     { name = "sphinx-autodoc-typehints", version = "3.6.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-mypy = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "types-requests" },
-    { name = "types-setuptools" },
-    { name = "types-simplejson" },
 ]
 old-deps = [
     { name = "setuptools" },
@@ -537,10 +531,13 @@ test = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "setuptools" },
+    { name = "typeguard" },
 ]
-ty = [
+types = [
+    { name = "mypy" },
     { name = "pytest" },
     { name = "ty" },
+    { name = "typeguard" },
     { name = "types-requests" },
     { name = "types-setuptools" },
     { name = "types-simplejson" },
@@ -579,6 +576,7 @@ dev = [
     { name = "ruff", specifier = ">=0.11" },
     { name = "setuptools", specifier = ">=67" },
     { name = "ty", specifier = ">=0.0.2" },
+    { name = "typeguard", specifier = ">=4" },
     { name = "types-requests", specifier = ">=2.32.0.20250515" },
     { name = "types-setuptools", specifier = ">=67" },
     { name = "types-simplejson", specifier = ">=3" },
@@ -588,13 +586,6 @@ docs = [
     { name = "sphinx", specifier = ">=7" },
     { name = "sphinx-autodoc-typehints", specifier = ">=2" },
 ]
-mypy = [
-    { name = "mypy", specifier = ">=1.14" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "types-requests", specifier = ">=2.32.0.20250515" },
-    { name = "types-setuptools", specifier = ">=67" },
-    { name = "types-simplejson", specifier = ">=3" },
-]
 old-deps = [{ name = "setuptools" }]
 pre-commit = [{ name = "pre-commit", specifier = ">=4" }]
 scripts = [{ name = "requests", specifier = ">=2" }]
@@ -603,10 +594,13 @@ test = [
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=6" },
     { name = "setuptools", specifier = ">=67" },
+    { name = "typeguard", specifier = ">=4" },
 ]
-ty = [
+types = [
+    { name = "mypy", specifier = ">=1.14" },
     { name = "pytest", specifier = ">=8" },
     { name = "ty", specifier = ">=0.0.2" },
+    { name = "typeguard", specifier = ">=4" },
     { name = "types-requests", specifier = ">=2.32.0.20250515" },
     { name = "types-setuptools", specifier = ">=67" },
     { name = "types-simplejson", specifier = ">=3" },
@@ -1647,11 +1641,11 @@ wheels = [
 
 [[package]]
 name = "soupsieve"
-version = "2.8.1"
+version = "2.8.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/89/23/adf3796d740536d63a6fbda113d07e60c734b6ed5d3058d1e47fc0495e47/soupsieve-2.8.1.tar.gz", hash = "sha256:4cf733bc50fa805f5df4b8ef4740fc0e0fa6218cf3006269afd3f9d6d80fd350", size = 117856, upload-time = "2025-12-18T13:50:34.655Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/ae/2d9c981590ed9999a0d91755b47fc74f74de286b0f5cee14c9269041e6c4/soupsieve-2.8.3.tar.gz", hash = "sha256:3267f1eeea4251fb42728b6dfb746edc9acaffc4a45b27e19450b676586e8349", size = 118627, upload-time = "2026-01-20T04:27:02.457Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/f3/b67d6ea49ca9154453b6d70b34ea22f3996b9fa55da105a79d8732227adc/soupsieve-2.8.1-py3-none-any.whl", hash = "sha256:a11fe2a6f3d76ab3cf2de04eb339c1be5b506a8a47f2ceb6d139803177f85434", size = 36710, upload-time = "2025-12-18T13:50:33.267Z" },
+    { url = "https://files.pythonhosted.org/packages/46/2c/1462b1d0a634697ae9e55b3cecdcb64788e8b7d63f54d923fcd0bb140aed/soupsieve-2.8.3-py3-none-any.whl", hash = "sha256:ed64f2ba4eebeab06cc4962affce381647455978ffc1e36bb79a545b91f45a95", size = 37016, upload-time = "2026-01-20T04:27:01.012Z" },
 ]
 
 [[package]]
@@ -1955,6 +1949,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/31/e9/2ecbe56826759845a7c21d80aa28187865ea62bc9757b056f6cbc06f78ed/ty-0.0.12-py3-none-win32.whl", hash = "sha256:a91c24fd75c0f1796d8ede9083e2c0ec96f106dbda73a09fe3135e075d31f742", size = 9140115, upload-time = "2026-01-14T22:30:38.903Z" },
     { url = "https://files.pythonhosted.org/packages/5d/6d/d9531eff35a5c0ec9dbc10231fac21f9dd6504814048e81d6ce1c84dc566/ty-0.0.12-py3-none-win_amd64.whl", hash = "sha256:df151894be55c22d47068b0f3b484aff9e638761e2267e115d515fcc9c5b4a4b", size = 9884532, upload-time = "2026-01-14T22:30:25.112Z" },
     { url = "https://files.pythonhosted.org/packages/e9/f3/20b49e75967023b123a221134548ad7000f9429f13fdcdda115b4c26305f/ty-0.0.12-py3-none-win_arm64.whl", hash = "sha256:cea99d334b05629de937ce52f43278acf155d3a316ad6a35356635f886be20ea", size = 9313974, upload-time = "2026-01-14T22:30:27.44Z" },
+]
+
+[[package]]
+name = "typeguard"
+version = "4.4.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/68/71c1a15b5f65f40e91b65da23b8224dad41349894535a97f63a52e462196/typeguard-4.4.4.tar.gz", hash = "sha256:3a7fd2dffb705d4d0efaed4306a704c89b9dee850b688f060a8b1615a79e5f74", size = 75203, upload-time = "2025-06-18T09:56:07.624Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1b/a9/e3aee762739c1d7528da1c3e06d518503f8b6c439c35549b53735ba52ead/typeguard-4.4.4-py3-none-any.whl", hash = "sha256:b5f562281b6bfa1f5492470464730ef001646128b180769880468bd84b68b09e", size = 34874, upload-time = "2025-06-18T09:56:05.999Z" },
 ]
 
 [[package]]

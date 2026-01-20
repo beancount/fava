@@ -27,6 +27,8 @@ from fava.core.inventory import SimpleCounterInventory
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
 
 
@@ -79,7 +81,7 @@ def _simple_inv(s: str) -> SimpleCounterInventory:
 )
 def test_conversion_from_string(
     conversion: str,
-    currencies: tuple[str],
+    currencies: tuple[str, ...],
 ) -> None:
     parsed = conversion_from_str(conversion)
     assert isinstance(parsed, Conversion)
@@ -126,7 +128,7 @@ def test_get_cost(position: str, expected: str) -> None:
     ],
 )
 def test_get_market_value(
-    load_doc_entries: list[Directive],
+    load_doc_entries: Sequence[Directive],
     position: str,
     conversion_date: date | None,
     expected: str,
@@ -160,7 +162,7 @@ def test_get_market_value(
     ],
 )
 def test_convert_position(
-    load_doc_entries: list[Directive],
+    load_doc_entries: Sequence[Directive],
     position: str,
     target_currency: str,
     conversion_date: date | None,
@@ -206,7 +208,8 @@ def test_convert_position(
     ],
 )
 def test_conversion(
-    load_doc_entries: list[Directive],
+    load_doc_entries: Sequence[Directive],
+    *,
     inventory: str,
     conversion: str,
     conversion_date: date | None,

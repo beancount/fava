@@ -30,6 +30,9 @@ jobs:
           - os: "ubuntu-latest"
             make_target: "test-py"
             py: "3.14"
+          - os: "ubuntu-latest"
+            make_target: "test-py-typeguard"
+            py: "3.14"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:

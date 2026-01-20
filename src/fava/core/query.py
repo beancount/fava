@@ -57,8 +57,7 @@ class QueryResultText:
     t: Literal["string"] = "string"
 
 
-if TYPE_CHECKING:  # pragma: no cover
-    QueryResult: TypeAlias = QueryResultTable | QueryResultText
+QueryResult: TypeAlias = QueryResultTable | QueryResultText
 
 
 @dataclass(frozen=True)

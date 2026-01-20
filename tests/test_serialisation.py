@@ -21,6 +21,7 @@ from fava.serialisation import InvalidAmountError
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
     from typing import Any
 
     from beancount.core.data import Meta
@@ -79,7 +80,7 @@ def test_serialise_txn() -> None:
 
 def test_serialise_entry_types(
     snapshot: SnapshotFunc,
-    load_doc_entries: list[Directive],
+    load_doc_entries: Sequence[Directive],
 ) -> None:
     """
     2017-12-11 open Assets:Cash USD "STRICT"
@@ -108,53 +109,48 @@ def test_serialise_entry_types(
 
 
 @pytest.mark.parametrize(
-    ("amount_cost_price", "amount_string", "meta"),
+    ("amount", "cost", "price", "amount_string", "meta"),
     [
-        (("100 USD", None, None), "100 USD", None),
-        (("100 USD", None, None), "100 USD", {"someKey": "someValue"}),
+        ("100 USD", None, None, "100 USD", None),
+        ("100 USD", None, None, "100 USD", {"someKey": "someValue"}),
         (
-            (
-                "100 USD",
-                CostSpec(Decimal(10), None, "EUR", None, None, merge=False),
-                None,
-            ),
+            "100 USD",
+            CostSpec(Decimal(10), None, "EUR", None, None, merge=False),
+            None,
             "100 USD {10 EUR}",
             None,
         ),
         (
-            (
-                "100 USD",
-                CostSpec(Decimal(10), None, "EUR", None, None, merge=False),
-                "11 EUR",
-            ),
+            "100 USD",
+            CostSpec(Decimal(10), None, "EUR", None, None, merge=False),
+            "11 EUR",
             "100 USD {10 EUR} @ 11 EUR",
             None,
         ),
-        (("100 USD", None, "11 EUR"), "100 USD @ 11 EUR", None),
+        ("100 USD", None, "11 EUR", "100 USD @ 11 EUR", None),
         (
-            (
-                "100 USD",
-                CostSpec(
-                    MISSING,  # type: ignore[arg-type]
-                    None,
-                    MISSING,  # type: ignore[arg-type]
-                    None,
-                    None,
-                    merge=False,
-                ),
+            "100 USD",
+            CostSpec(
+                MISSING,  # type: ignore[arg-type]
                 None,
+                MISSING,  # type: ignore[arg-type]
+                None,
+                None,
+                merge=False,
             ),
+            None,
             "100 USD {}",
             None,
         ),
     ],
 )
 def test_serialise_posting(
-    amount_cost_price: tuple[str, CostSpec | None, str],
+    amount: str,
+    cost: CostSpec | None,
+    price: str | None,
     amount_string: str,
     meta: Meta | None,
 ) -> None:
-    amount, cost, price = amount_cost_price
     pos = create.posting(
         "Assets",
         amount,

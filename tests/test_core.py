@@ -13,6 +13,8 @@ from fava.util.date import local_today
 from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
@@ -99,7 +101,7 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
 
 def test_group_entries(
     example_ledger: FavaLedger,
-    load_doc_entries: list[Directive],
+    load_doc_entries: Sequence[Directive],
 ) -> None:
     """
     2010-11-12 * "test"

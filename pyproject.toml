@@ -75,18 +75,12 @@ docs = [
     "sphinx>=7",
     "sphinx-autodoc-typehints>=2",
 ]
-# Type-checking with mypy.
-mypy = [
+# Type-checking with mypy or ty.
+types = [
     "mypy>=1.14",
     "pytest>=8",
-    "types-requests>=2.32.0.20250515",
-    "types-setuptools>=67",
-    "types-simplejson>=3",
-]
-# Type-checking with ty.
-ty = [
     "ty>=0.0.2",
-    "pytest>=8",
+    "typeguard>=4",
     "types-requests>=2.32.0.20250515",
     "types-setuptools>=67",
     "types-simplejson>=3",
@@ -110,13 +104,13 @@ test = [
     "pytest-cov>=6",
     "pytest>=8",
     "setuptools>=67",
+    "typeguard>=4",
 ]
 # Stuff for the dev environment.
 dev = [
-    { include-group = "mypy" },
     { include-group = "pre-commit" },
     { include-group = "test" },
-    { include-group = "ty" },
+    { include-group = "types" },
     "ruff>=0.11",
 ]
 

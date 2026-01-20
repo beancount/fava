@@ -19,6 +19,8 @@ from fava.beans.helpers import replace
 from fava.beans.prices import FavaPriceMap
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Sequence
+
     from fava.beans.abc import Directive
 
 
@@ -95,7 +97,7 @@ def test_replace() -> None:
         replace("", a="")  # type: ignore[type-var]
 
 
-def test_fava_price_map(load_doc_entries: list[Directive]) -> None:
+def test_fava_price_map(load_doc_entries: Sequence[Directive]) -> None:
     """
     option "operating_currency" "CHF"
     option "operating_currency" "USD"
