@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import errno
 import os
+import sys
 from pathlib import Path
 
 import click
@@ -50,6 +51,13 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
 
     all_names = tuple(env_names) + filenames
     return tuple(dict.fromkeys(all_names))
+
+
+# Fallback to polling watcher by default on BSD systems since the watchfiles
+# watcher does not seem to work there.
+FALLBACK_TO_BACK_TO_WATCHER = sys.platform.startswith(
+    ("freebsd", "openbsd", "netbsd")
+)
 
 
 @click.command(context_settings={"auto_envvar_prefix": "FAVA"})
@@ -99,7 +107,10 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
     help="Output directory for profiling data.",
 )
 @click.option(
-    "--poll-watcher", is_flag=True, help="Use old polling-based watcher."
+    "--poll-watcher/--no-poll-watcher",
+    is_flag=True,
+    default=FALLBACK_TO_BACK_TO_WATCHER,
+    help="Use old polling-based watcher.",
 )
 @click.version_option(version=__version__, prog_name="fava")
 def main(  # noqa: PLR0913
