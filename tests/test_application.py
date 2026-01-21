@@ -4,13 +4,12 @@ from __future__ import annotations
 
 import datetime
 from http import HTTPStatus
+from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount import __version__ as beancount_version
 
-from fava import __version__ as fava_version
 from fava.application import create_app
 from fava.application import static_url
 from fava.beans import create
@@ -50,6 +49,12 @@ def assert_success(response: TestResponse) -> str:
     """Asserts that the request was successful and return the data."""
     assert response.status_code == HTTPStatus.OK.value
     return response.get_data(as_text=True)
+
+
+def test_version() -> None:
+    from fava import __version__  # noqa: PLC0415
+
+    assert __version__ == version("fava")
 
 
 def test_client_side_reports(test_client: FlaskClient) -> None:
@@ -179,8 +184,8 @@ def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     response = test_client.get("/long-example/help/")
     help_page = assert_success(response)
-    assert f"Fava <code>{fava_version}</code>" in help_page
-    assert f"<code>{beancount_version}</code>" in help_page
+    assert f"Fava <code>{version('fava')}</code>" in help_page
+    assert f"<code>{version('beancount')}</code>" in help_page
     response = test_client.get("/long-example/help/filters")
     assert assert_success(response)
     response = test_client.get("/long-example/help/asdfasdf")

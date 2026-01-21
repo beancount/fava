@@ -7,14 +7,6 @@ import os
 from pathlib import Path
 
 import click
-from cheroot.wsgi import Server
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from werkzeug.middleware.profiler import ProfilerMiddleware
-
-from fava import __version__
-from fava.application import create_app
-from fava.util import setup_debug_logging
-from fava.util import simple_wsgi
 
 
 class AddressInUse(click.ClickException):  # noqa: D101
@@ -101,7 +93,7 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
 @click.option(
     "--poll-watcher", is_flag=True, help="Use old polling-based watcher."
 )
-@click.version_option(version=__version__, prog_name="fava")
+@click.version_option(package_name="fava")
 def main(  # noqa: PLR0913
     *,
     filenames: tuple[str, ...] = (),
@@ -130,6 +122,8 @@ def main(  # noqa: PLR0913
     if not all_filenames:
         raise NoFileSpecifiedError
 
+    from fava.application import create_app
+
     app = create_app(
         all_filenames,
         incognito=incognito,
@@ -138,6 +132,10 @@ def main(  # noqa: PLR0913
     )
 
     if prefix:
+        from werkzeug.middleware.dispatcher import DispatcherMiddleware
+
+        from fava.util import simple_wsgi
+
         app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]
             simple_wsgi,
             {prefix: app.wsgi_app},
@@ -150,6 +148,8 @@ def main(  # noqa: PLR0913
 
     click.secho(f"Starting Fava on http://{host}:{port}", fg="green")
     if not debug:
+        from cheroot.wsgi import Server
+
         server = Server((host, port), app)
         try:
             server.start()
@@ -161,6 +161,10 @@ def main(  # noqa: PLR0913
                 raise AddressInUse(port) from error
             raise click.Abort from error
     else:
+        from werkzeug.middleware.profiler import ProfilerMiddleware
+
+        from fava.util import setup_debug_logging
+
         setup_debug_logging()
         if profile:
             app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]

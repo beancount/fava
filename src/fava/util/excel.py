@@ -6,6 +6,7 @@ import csv
 import datetime
 import io
 from decimal import Decimal
+from importlib.util import find_spec
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -15,14 +16,9 @@ if TYPE_CHECKING:  # pragma: no cover
 
     ResultRow = tuple[Any, ...]
 
-try:
-    # since this is a conditional dependency, there will be different mypy
-    # errors depending on whether it's installed
-    import pyexcel  # type: ignore  # noqa: PGH003
 
-    HAVE_EXCEL = True
-except ImportError:  # pragma: no cover
-    HAVE_EXCEL = False
+# Just check whether it's installed here without importing.
+HAVE_EXCEL = find_spec("pyexcel") is not None
 
 
 class InvalidResultFormatError(ValueError):  # noqa: D101
@@ -50,6 +46,11 @@ def to_excel(
     if result_format not in {"xlsx", "ods"}:  # pragma: no cover
         raise InvalidResultFormatError(result_format)
     resp = io.BytesIO()
+    # Lazily import pyexcel
+    # since this is a conditional dependency, there will be different mypy
+    # errors depending on whether it's installed
+    import pyexcel  # type: ignore  # noqa: PGH003, PLC0415
+
     book = pyexcel.Book(
         {
             "Results": _result_array(types, rows),

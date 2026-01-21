@@ -27,8 +27,6 @@ from urllib.parse import urlencode
 from urllib.parse import urlparse
 from urllib.parse import urlunparse
 
-import markdown2
-from beancount import __version__ as beancount_version
 from flask import abort
 from flask import current_app
 from flask import Flask
@@ -43,7 +41,6 @@ from flask_babel import get_translations
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
 
-from fava import __version__ as fava_version
 from fava import LOCALES
 from fava import template_filters
 from fava._ctx_globals_class import Context
@@ -414,11 +411,15 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
         """Fava's included documentation."""
+        from importlib.metadata import version
+
+        from markdown2 import markdown
+
         if page_slug not in HELP_PAGES:
             return abort(404)
         help_path = Path(__file__).parent / "help" / (page_slug + ".md")
         contents = help_path.read_text(encoding="utf-8")
-        html = markdown2.markdown(
+        html = markdown(
             contents,
             extras=["fenced-code-blocks", "tables", "header-ids"],
         )
@@ -428,8 +429,8 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             help_html=Markup(  # noqa: S704
                 render_template_string(
                     html,
-                    beancount_version=beancount_version,
-                    fava_version=fava_version,
+                    beancount_version=version("beancount"),
+                    fava_version=version("fava"),
                 ),
             ),
             HELP_PAGES=HELP_PAGES,

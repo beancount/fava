@@ -244,6 +244,8 @@ max-args = 9
 "tests/data/import_config.py" = ["D", "INP", "S101"]
 "tests/data/import_config_with_duplicate_names.py" = ["INP"]
 "src/fava/core/filters.py" = ["D"]
+# Lazy imports in CLI and request handlers (for conditionally used deps)
+"src/fava/{__init__,application,cli}.py" = ["PLC0415"]
 
 # pylint is not run as part of linting for Fava anymore but we keep these disables
 # around for devs who might have pylint automatically run by their editors to avoid

@@ -2,13 +2,6 @@
 
 from __future__ import annotations
 
-from contextlib import suppress
-from importlib.metadata import PackageNotFoundError
-from importlib.metadata import version
-
-with suppress(PackageNotFoundError):
-    __version__ = version(__name__)
-
 LOCALES = [
     "bg",
     "ca",
@@ -27,3 +20,11 @@ LOCALES = [
     "zh",
     "zh_Hant_TW",
 ]
+
+
+def __getattr__(name: str) -> str:
+    if name == "__version__":
+        from importlib.metadata import version
+
+        return version("fava")
+    raise AttributeError(name)
