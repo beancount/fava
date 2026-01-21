@@ -270,6 +270,29 @@ export class Router {
   };
 
   /**
+   * Subscribe to all URL changes.
+   * This keeps the current URL synchronized, even if an external router (i.e. an extension module with its own router) updates the location.
+   * The router must maintain an up-to-date URL, otherwise changing global filters (time, account, filter) would redirect to a stale URL.
+   */
+  #subscribe_url_changes = (): void => {
+    const original_pushstate = window.history.pushState.bind(window.history);
+    window.history.pushState = (...args: Parameters<History["pushState"]>) => {
+      original_pushstate.apply(window.history, args);
+      this.current = new URL(window.location.href);
+    };
+
+    const original_replacestate = window.history.replaceState.bind(
+      window.history,
+    );
+    window.history.replaceState = (
+      ...args: Parameters<History["pushState"]>
+    ) => {
+      original_replacestate.apply(window.history, args);
+      this.current = new URL(window.location.href);
+    };
+  };
+
+  /**
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
@@ -280,6 +303,7 @@ export class Router {
     window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
+    this.#subscribe_url_changes();
 
     handleExtensionPageLoad();
   }
