@@ -11,16 +11,33 @@ if TYPE_CHECKING:
     from fava.beans.types import BeancountOptions
 
 
+class _RLCurrencyContext:
+    """Minimal CurrencyContext for a single currency."""
+
+    def __init__(self, precision: int) -> None:
+        self._precision = precision
+
+    def get_fractional(self, _precision_type: Any = None) -> int:
+        """Return the fractional precision (beancount-compatible API)."""
+        return self._precision
+
+
 class RLDisplayContext:
     """Minimal DisplayContext implementation for rustledger.
 
     This replaces beancount.core.display_context.DisplayContext.
+    Provides beancount-compatible `ccontexts` property.
     """
 
     def __init__(self, options: dict[str, Any]) -> None:
         """Initialize from rustledger options."""
         self._precision = options.get("display_precision", {})
         self._render_commas = options.get("render_commas", True)
+        # Beancount-compatible ccontexts mapping
+        self.ccontexts = {
+            currency: _RLCurrencyContext(prec)
+            for currency, prec in self._precision.items()
+        }
 
     def build(self) -> RLDisplayFormatter:
         """Build a formatter from this context."""

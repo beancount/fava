@@ -232,8 +232,6 @@ class QueryShell(FavaModule):
         rrows = res.fetchall()
         rtypes = res.description
         dcontext = self.ledger.options["dcontext"]
-        # DisplayContext can be beancount's or RLDisplayContext
-        assert hasattr(dcontext, "build")  # noqa: S101
         dformat = dcontext.build()
         types, rows = numberify_results(rtypes, rrows, dformat)
 
