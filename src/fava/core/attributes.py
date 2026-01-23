@@ -99,7 +99,9 @@ class AttributesModule(FavaModule):
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
-                currency_ranker.update(posting.units.currency, txn.date)
+                # Skip postings with missing units (can happen with parse errors)
+                if posting.units is not None:
+                    currency_ranker.update(posting.units.currency, txn.date)
                 if posting.cost and posting.cost.currency is not None:
                     currency_ranker.update(posting.cost.currency, txn.date)
 

@@ -7,7 +7,7 @@ import shlex
 import textwrap
 from typing import TYPE_CHECKING
 
-from beancount.core.display_context import DisplayContext
+from beancount.core import data
 from beanquery import CompilationError
 from beanquery import connect
 from beanquery import Cursor
@@ -16,6 +16,7 @@ from beanquery.numberify import numberify_results
 from beanquery.shell import BQLShell
 
 from fava.core.module_base import FavaModule
+from fava.rustledger.beanquery_compat import to_beancount_entries
 from fava.core.query import COLUMNS
 from fava.core.query import ObjectColumn
 from fava.core.query import QueryResultTable
@@ -88,9 +89,15 @@ class FavaBQLShell(BQLShell):
 
     def run(self, entries: Sequence[Directive], query: str) -> Cursor | str:
         """Run a query, capturing output as string or returning the result."""
+        # Convert rustledger entries to beancount entries for beanquery
+        bc_entries = (
+            entries
+            if entries and isinstance(entries[0], data.ALL_DIRECTIVES)
+            else to_beancount_entries(entries)
+        )
         self.context = connect(
             "beancount:",
-            entries=entries,
+            entries=bc_entries,
             errors=self.ledger.errors,
             options=self.ledger.options,
         )
@@ -225,7 +232,8 @@ class QueryShell(FavaModule):
         rrows = res.fetchall()
         rtypes = res.description
         dcontext = self.ledger.options["dcontext"]
-        assert isinstance(dcontext, DisplayContext)  # noqa: S101
+        # DisplayContext can be beancount's or RLDisplayContext
+        assert hasattr(dcontext, "build")  # noqa: S101
         dformat = dcontext.build()
         types, rows = numberify_results(rtypes, rrows, dformat)
 

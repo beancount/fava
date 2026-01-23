@@ -162,6 +162,10 @@ def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
 """
     )
 
+
+@pytest.mark.usefixtures("ledger_in_tmp_path")
+def test_insert_metadata_generated(ledger_in_tmp_path: FavaLedger) -> None:
+    """Test that auto_accounts-generated entries raise GeneratedEntryError."""
     auto_account = ledger_in_tmp_path.all_entries[0]
     auto_account_hash = hash_entry(auto_account)
     with pytest.raises(GeneratedEntryError):
@@ -188,6 +192,10 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
     assert filename.read_text("utf-8") == contents
 
+
+@pytest.mark.usefixtures("ledger_in_tmp_path")
+def test_save_entry_slice_generated(ledger_in_tmp_path: FavaLedger) -> None:
+    """Test that auto_accounts-generated entries raise GeneratedEntryError."""
     auto_account = ledger_in_tmp_path.all_entries[0]
     with pytest.raises(GeneratedEntryError):
         get_entry_slice(auto_account)

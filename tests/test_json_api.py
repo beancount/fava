@@ -444,9 +444,28 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     assert "Trying to read a non-source file" in err_msg
 
 
-def test_api_get_source_slice_unprocessable(test_client: FlaskClient) -> None:
+def test_api_get_source_slice_unprocessable(
+    app: Flask, test_client: FlaskClient
+) -> None:
+    """Test that generated entries (from plugins) return 422.
+
+    This test finds an auto_accounts-generated entry and verifies that
+    trying to get its source slice returns 422 (Unprocessable Entity).
+    """
+    # Get a generated entry (auto_accounts-generated Open directive)
+    ledger = app.config["LEDGERS"]["edit-example"]
+    generated_entry = None
+    for entry in ledger.all_entries:
+        # auto_accounts-generated entries have filename "<auto_accounts>"
+        if entry.meta.get("filename") == "<auto_accounts>":
+            generated_entry = entry
+            break
+
+    assert generated_entry is not None, "No auto_accounts-generated entry found"
+    entry_hash = hash_entry(generated_entry)
+
     response = test_client.get(
-        "/edit-example/api/source_slice?entry_hash=ba17fb171c2ef1789d8def32f58bf21f"
+        f"/edit-example/api/source_slice?entry_hash={entry_hash}"
     )
     assert_api_error(
         response,

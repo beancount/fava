@@ -38,9 +38,9 @@ def to_string(
     if isinstance(number, Decimal) and isinstance(currency, str):
         # The Amount and Cost protocols are ambigous, so handle this here
         # instead of having this be dispatched - relevant for older Pythons
-        if hasattr(obj, "date"):  # pragma: no cover
-            cost_to_string(obj)  # type: ignore[arg-type]
-        return f"{number} {currency}"  # pragma: no cover
+        if hasattr(obj, "date"):
+            return cost_to_string(obj)  # type: ignore[arg-type]
+        return f"{number} {currency}"
     msg = f"Unsupported object of type {type(obj)}"
     raise TypeError(msg)
 
@@ -54,8 +54,12 @@ def amount_to_string(obj: amount.Amount | protocols.Amount) -> str:
 @to_string.register(position.Cost)
 def cost_to_string(cost: protocols.Cost | position.Cost) -> str:
     """Convert a cost to a string."""
-    res = f"{cost.number} {cost.currency}, {cost.date.isoformat()}"
-    return f'{res}, "{cost.label}"' if cost.label else res
+    parts = [f"{cost.number} {cost.currency}"]
+    if cost.date is not None:
+        parts.append(cost.date.isoformat())
+    if cost.label:
+        parts.append(f'"{cost.label}"')
+    return ", ".join(parts)
 
 
 @to_string.register(CostSpec)

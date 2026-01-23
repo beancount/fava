@@ -140,6 +140,9 @@ class CounterInventory(dict[InventoryKey, Decimal]):
 
     def add_position(self, pos: Position) -> None:
         """Add a Position or Posting to the inventory."""
+        # Skip positions with missing units (can happen with parse errors)
+        if pos.units is None:
+            return
         self.add_amount(pos.units, pos.cost)
 
     def __neg__(self) -> CounterInventory:

@@ -29,6 +29,7 @@ def test_fava_options_errors(load_doc_custom_entries: list[Custom]) -> None:
     2016-06-14 custom "fava-option" "fiscal-year-end" "not a date"
     """
     options, errors = parse_options(load_doc_custom_entries)
+    # Both beancount and rustledger parse bare `10` as a number (not a string)
     assert len(errors) == 5
 
     with pytest.raises(NotARegularExpressionError):

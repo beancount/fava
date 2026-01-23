@@ -4,11 +4,19 @@ from __future__ import annotations
 
 import datetime
 from http import HTTPStatus
+from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
+
+# Check if fava package is installed
+try:
+    version("fava")
+    _FAVA_PACKAGE_INSTALLED = True
+except PackageNotFoundError:
+    _FAVA_PACKAGE_INSTALLED = False
 
 from fava.application import create_app
 from fava.application import static_url
@@ -51,6 +59,9 @@ def assert_success(response: TestResponse) -> str:
     return response.get_data(as_text=True)
 
 
+@pytest.mark.skipif(
+    not _FAVA_PACKAGE_INSTALLED, reason="fava package not installed"
+)
 def test_version() -> None:
     from fava import __version__  # noqa: PLC0415
 
@@ -180,6 +191,9 @@ def test_jump_handler(
     assert get_url == expect
 
 
+@pytest.mark.skipif(
+    not _FAVA_PACKAGE_INSTALLED, reason="fava package not installed"
+)
 def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     response = test_client.get("/long-example/help/")

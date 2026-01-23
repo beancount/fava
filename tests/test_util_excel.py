@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING
 
 import beanquery
 import pytest
-from beancount.core.display_context import DisplayContext
+from beancount.core import data
 from beanquery.numberify import numberify_results
 
+from fava.rustledger.beanquery_compat import to_beancount_entries
 from fava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -15,9 +16,16 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def _run_query(ledger: FavaLedger, query: str) -> Any:
+    # Convert rustledger entries to beancount entries for beanquery
+    entries = ledger.all_entries
+    bc_entries = (
+        entries
+        if entries and isinstance(entries[0], data.ALL_DIRECTIVES)
+        else to_beancount_entries(entries)
+    )
     conn = beanquery.connect(
         "beancount:",
-        entries=ledger.all_entries,
+        entries=bc_entries,
         options=ledger.options,
         errors=ledger.errors,
     )
@@ -25,7 +33,8 @@ def _run_query(ledger: FavaLedger, query: str) -> Any:
     rrows = curs.fetchall()
     rtypes = curs.description
     dcontext = ledger.options["dcontext"]
-    assert isinstance(dcontext, DisplayContext)
+    # Duck-type check: DisplayContext can be beancount's or RLDisplayContext
+    assert hasattr(dcontext, "build")
     dformat = dcontext.build()
     rtypes, rrows = numberify_results(rtypes, rrows, dformat)
     return rtypes, rrows

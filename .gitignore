@@ -27,3 +27,4 @@
 .env
 __pycache__
 npm-debug.log
+.venv

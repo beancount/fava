@@ -55,7 +55,12 @@ def group_entries_by_type(entries: Sequence[abc.Directive]) -> EntriesByType:
         [],
     )
     for entry in entries:
-        getattr(entries_by_type, entry.__class__.__name__).append(entry)
+        # Handle both beancount types (e.g., "Transaction") and
+        # rustledger types (e.g., "RLTransaction")
+        type_name = entry.__class__.__name__
+        if type_name.startswith("RL"):
+            type_name = type_name[2:]  # Strip "RL" prefix
+        getattr(entries_by_type, type_name).append(entry)
     return entries_by_type
 
 

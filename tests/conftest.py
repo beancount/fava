@@ -22,6 +22,15 @@ from typing import TypeAlias
 from typing import TypeGuard
 
 import pytest
+
+from fava.beans.load import _USE_BEANCOUNT
+
+# Skip marker for tests that require beancount plugin execution
+# rustledger doesn't run beancount Python plugins
+requires_beancount = pytest.mark.skipif(
+    not _USE_BEANCOUNT,
+    reason="Test requires beancount plugin execution (rustledger doesn't run plugins)",
+)
 from beancount.core import data
 from beancount.core.display_context import DisplayContext
 from flask.app import Flask
@@ -190,15 +199,31 @@ def snapshot(
         # replace today
         today = local_today()
         out = out.replace(str(today), "TODAY")
-        # replace entry hashes
+        # replace entry hashes (hex strings from beancount or integers from rustledger)
         out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
+        out = re.sub(r'_hash": ?"-?[0-9]+', '_hash":"ENTRY_HASH', out)
         out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
+        out = re.sub(r"context--?[0-9]+", "context-ENTRY_HASH", out)
         out = re.sub(r"data-entry='[0-9a-f]+", "data-entry='ENTRY_HASH", out)
+        out = re.sub(r"data-entry='-?[0-9]+", "data-entry='ENTRY_HASH", out)
         # replace mtimes
         out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
         out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)
         # replace env-dependant info
         out = re.sub(r'have_excel":\s*(false|False)', 'have_excel": true', out)
+        # replace object addresses
+        out = re.sub(r' object at 0x[0-9a-f]+>', ' object at ADDR>', out)
+        # normalize non-deterministic set/dict repr in beancount_options
+        out = re.sub(
+            r'"commodities":"[^"]+"',
+            '"commodities":"COMMODITIES_SET"',
+            out,
+        )
+        out = re.sub(
+            r'"display_precision":"[^"]+"',
+            '"display_precision":"PRECISION_DICT"',
+            out,
+        )
 
         for dir_path, replacement in [
             (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),

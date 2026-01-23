@@ -3,18 +3,70 @@
 from __future__ import annotations
 
 import copy
+from collections import defaultdict
 from collections.abc import Callable
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from babel.core import Locale
-from beancount.core.display_context import DisplayContext
-from beancount.core.display_context import Precision
 
 from fava.core.module_base import FavaModule
 
+# Try to import beancount's DisplayContext, but don't fail if unavailable
+try:
+    from beancount.core.display_context import DisplayContext
+    from beancount.core.display_context import Precision
+except ImportError:
+    DisplayContext = None  # type: ignore[misc,assignment]
+    Precision = None  # type: ignore[misc,assignment]
+
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
+
+
+def _get_decimal_places(number: Decimal) -> int:
+    """Get the number of decimal places in a Decimal."""
+    sign, digits, exponent = number.as_tuple()
+    if isinstance(exponent, int) and exponent < 0:
+        return -exponent
+    return 0
+
+
+def _infer_precisions_from_entries(ledger: FavaLedger) -> dict[str, int]:
+    """Infer currency precisions from transaction amounts.
+
+    This mimics beancount's DisplayContext behavior by finding the
+    most commonly used precision for each currency.
+    """
+    # Count occurrences of each precision for each currency
+    precision_counts: dict[str, dict[int, int]] = defaultdict(lambda: defaultdict(int))
+
+    for txn in ledger.all_entries_by_type.Transaction:
+        for posting in txn.postings:
+            if posting.units is not None:
+                currency = posting.units.currency
+                prec = _get_decimal_places(posting.units.number)
+                precision_counts[currency][prec] += 1
+            if posting.cost is not None and posting.cost.number is not None:
+                currency = posting.cost.currency
+                prec = _get_decimal_places(posting.cost.number)
+                precision_counts[currency][prec] += 1
+
+    # Also check Balance directives
+    for bal in ledger.all_entries_by_type.Balance:
+        currency = bal.amount.currency
+        prec = _get_decimal_places(bal.amount.number)
+        precision_counts[currency][prec] += 1
+
+    # Find most common precision for each currency
+    precisions: dict[str, int] = {}
+    for currency, counts in precision_counts.items():
+        if counts:
+            # Get the precision with the highest count
+            most_common_prec = max(counts.keys(), key=lambda p: counts[p])
+            precisions[currency] = most_common_prec
+
+    return precisions
 
 Formatter = Callable[[Decimal], str]
 
@@ -75,12 +127,18 @@ class DecimalFormatModule(FavaModule):
             locale = Locale.parse(locale_option)
 
         dcontext = self.ledger.options["dcontext"]
-        assert isinstance(dcontext, DisplayContext)  # noqa: S101
         precisions: dict[str, int] = {}
-        for currency, ccontext in dcontext.ccontexts.items():
-            prec = ccontext.get_fractional(Precision.MOST_COMMON)
-            if prec is not None:
-                precisions[currency] = prec
+
+        # Handle both beancount's DisplayContext and rustledger's RLDisplayContext
+        if DisplayContext is not None and isinstance(dcontext, DisplayContext):
+            for currency, ccontext in dcontext.ccontexts.items():
+                prec = ccontext.get_fractional(Precision.MOST_COMMON)
+                if prec is not None:
+                    precisions[currency] = prec
+        else:
+            # Infer precisions from transaction amounts (for rustledger)
+            precisions.update(_infer_precisions_from_entries(self.ledger))
+
         precisions.update(self.ledger.commodities.precisions)
 
         self._locale = locale

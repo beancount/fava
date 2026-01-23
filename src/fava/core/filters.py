@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
 from beancount.core import account
+from beancount.core import data
 from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
@@ -391,6 +392,45 @@ class EntryFilter(ABC):
         """Filter a list of directives."""
 
 
+def _is_rustledger_entry(entry: Directive) -> bool:
+    """Check if entry is a rustledger type (not a beancount namedtuple)."""
+    return not isinstance(entry, data.ALL_DIRECTIVES)
+
+
+def _simple_clamp(
+    entries: Sequence[Directive],
+    begin_date: Any,
+    end_date: Any,
+) -> Sequence[Directive]:
+    """Simple date-based clamping for rustledger entries.
+
+    This is a simplified version of beancount's clamp_opt that works with
+    duck-typed entries. It includes:
+    - All entries within the date range
+    - Open directives that started before the range (they're still "active")
+    - Price entries within the date range
+    """
+    result = []
+    for entry in entries:
+        entry_date = entry.date
+        entry_type = type(entry).__name__
+
+        # Include entries within the date range (excluding Commodity - beancount doesn't include them)
+        if begin_date <= entry_date < end_date:
+            if entry_type not in ("Commodity", "RLCommodity"):
+                result.append(entry)
+        # Include standing Open directives that started before the range
+        elif entry_type in ("Open", "RLOpen"):
+            if entry_date < end_date:
+                result.append(entry)
+        # Include Close directives that close within or after the range
+        elif entry_type in ("Close", "RLClose"):
+            if entry_date >= begin_date:
+                result.append(entry)
+
+    return result
+
+
 class TimeFilter(EntryFilter):
     """Filter by dates."""
 
@@ -409,6 +449,13 @@ class TimeFilter(EntryFilter):
         self.date_range = DateRange(begin, end)
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
+        # Check if we're dealing with rustledger entries
+        if entries and _is_rustledger_entry(entries[0]):
+            return _simple_clamp(
+                entries, self.date_range.begin, self.date_range.end
+            )
+
+        # Use beancount's clamp_opt for native beancount entries
         clamped_entries, _ = clamp_opt(
             entries,  # type: ignore[arg-type]
             self.date_range.begin,

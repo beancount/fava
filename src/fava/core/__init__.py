@@ -662,16 +662,16 @@ class FavaLedger:
             return entry, None, None
 
         entry_accounts = get_entry_accounts(entry)
-        balances = {account: Inventory() for account in entry_accounts}
+        balances = {account: CounterInventory() for account in entry_accounts}
         for entry_ in takewhile(lambda e: e is not entry, self.all_entries):
             if isinstance(entry_, Transaction):
                 for posting in entry_.postings:
                     balance = balances.get(posting.account, None)
                     if balance is not None:
-                        balance.add_position(posting)  # type: ignore[arg-type]
+                        balance.add_position(posting)
 
-        def visualise(inv: Inventory) -> Sequence[str]:
-            return [to_string(pos) for pos in sorted(iter(inv))]
+        def visualise(inv: CounterInventory) -> Sequence[str]:
+            return inv.to_strings()
 
         before = {acc: visualise(inv) for acc, inv in balances.items()}
 

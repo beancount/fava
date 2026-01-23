@@ -4,6 +4,7 @@ from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
+import pytest
 from beancount.loader import load_file
 
 from fava.beans.abc import Document
