@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.rustledger.query import connect
-from fava.util import excel
+from rustfava.rustledger.query import connect
+from rustfava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
-def _run_query(ledger: FavaLedger, query: str) -> Any:
+def _run_query(ledger: RustfavaLedger, query: str) -> Any:
     """Run a query using rustledger and return types/rows for excel export."""
     conn = connect(
         "rustledger:",
@@ -31,7 +31,7 @@ def _run_query(ledger: FavaLedger, query: str) -> Any:
     return rtypes, rrows
 
 
-def test_to_csv(example_ledger: FavaLedger) -> None:
+def test_to_csv(example_ledger: RustfavaLedger) -> None:
     types, rows = _run_query(example_ledger, "balances")
     assert types
     assert rows
@@ -43,7 +43,7 @@ def test_to_csv(example_ledger: FavaLedger) -> None:
 
 
 @pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
-def test_to_excel(example_ledger: FavaLedger) -> None:
+def test_to_excel(example_ledger: RustfavaLedger) -> None:
     types, rows = _run_query(example_ledger, "balances")
     assert types
     assert rows

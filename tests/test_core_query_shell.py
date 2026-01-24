@@ -5,26 +5,26 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core.query import QueryResultTable
-from fava.core.query import QueryResultText
-from fava.core.query_shell import NonExportableQueryError
-from fava.core.query_shell import QueryCompilationError
-from fava.core.query_shell import QueryNotFoundError
-from fava.core.query_shell import QueryParseError
-from fava.core.query_shell import TooManyRunArgsError
-from fava.util import excel
+from rustfava.core.query import QueryResultTable
+from rustfava.core.query import QueryResultText
+from rustfava.core.query_shell import NonExportableQueryError
+from rustfava.core.query_shell import QueryCompilationError
+from rustfava.core.query_shell import QueryNotFoundError
+from rustfava.core.query_shell import QueryParseError
+from rustfava.core.query_shell import TooManyRunArgsError
+from rustfava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
 
-    from fava.core.query import QueryResult
+    from rustfava.core.query import QueryResult
 
-    from .conftest import GetFavaLedger
+    from .conftest import GetRustfavaLedger
     from .conftest import SnapshotFunc
 
 
 @pytest.fixture
-def run_query(get_ledger: GetFavaLedger) -> Callable[[str], QueryResult]:
+def run_query(get_ledger: GetRustfavaLedger) -> Callable[[str], QueryResult]:
     query_ledger = get_ledger("query-example")
 
     def _run_query(query_string: str) -> QueryResult:
@@ -54,7 +54,7 @@ def test_text_queries(
 ) -> None:
     assert run_text_query(".help")
 
-    noop_doc = "Doesn't do anything in Fava's query shell."
+    noop_doc = "Doesn't do anything in Rustfava's query shell."
     assert run_text_query(".exit") == noop_doc
     assert run_text_query(".help exit") == noop_doc
     snapshot(run_text_query(".explain select date, balance")[:100])
@@ -97,7 +97,7 @@ def test_query_errors(run_query: Callable[[str], QueryResult]) -> None:
 
 def test_query_to_file(
     snapshot: SnapshotFunc,
-    get_ledger: GetFavaLedger,
+    get_ledger: GetRustfavaLedger,
 ) -> None:
     query_ledger = get_ledger("query-example")
     entries = query_ledger.all_entries
@@ -122,7 +122,7 @@ def test_query_to_file(
 
 
 @pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
-def test_query_to_excel_file(get_ledger: GetFavaLedger) -> None:
+def test_query_to_excel_file(get_ledger: GetRustfavaLedger) -> None:
     query_ledger = get_ledger("query-example")
     entries = query_ledger.all_entries
     query_shell = query_ledger.query_shell

@@ -5,33 +5,33 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans.funcs import hash_entry
-from fava.core import EntryNotFoundForHashError
-from fava.core import FilteredLedger
-from fava.helpers import FavaAPIError
-from fava.util.date import local_today
-from fava.util.date import Month
+from rustfava.beans.funcs import hash_entry
+from rustfava.core import EntryNotFoundForHashError
+from rustfava.core import FilteredLedger
+from rustfava.helpers import RustfavaAPIError
+from rustfava.util.date import local_today
+from rustfava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
-    from fava.beans.abc import Directive
-    from fava.core import FavaLedger
+    from rustfava.beans.abc import Directive
+    from rustfava.core import RustfavaLedger
 
 
 def test_apiexception() -> None:
-    with pytest.raises(FavaAPIError) as exception:
-        raise FavaAPIError("error")  # noqa: EM101
+    with pytest.raises(RustfavaAPIError) as exception:
+        raise RustfavaAPIError("error")  # noqa: EM101
     assert str(exception.value) == "error"
 
 
-def test_attributes(example_ledger: FavaLedger) -> None:
+def test_attributes(example_ledger: RustfavaLedger) -> None:
     assert len(example_ledger.attributes.accounts) == 61
     assert "Assets" not in example_ledger.attributes.accounts
 
 
 def test_filtered_ledger(
-    small_example_ledger: FavaLedger,
+    small_example_ledger: RustfavaLedger,
 ) -> None:
     filtered = FilteredLedger(small_example_ledger, account="NONE")
     assert not filtered.entries
@@ -56,7 +56,7 @@ def test_filtered_ledger(
 
 
 def test_ledger_get_entry(
-    small_example_ledger: FavaLedger,
+    small_example_ledger: RustfavaLedger,
 ) -> None:
     first = small_example_ledger.all_entries[0]
     assert small_example_ledger.get_entry(hash_entry(first)) == first
@@ -66,7 +66,7 @@ def test_ledger_get_entry(
 
 
 def test_paths_to_watch(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     assert example_ledger.paths_to_watch() == (
@@ -90,7 +90,7 @@ def test_paths_to_watch(
     )
 
 
-def test_account_metadata(example_ledger: FavaLedger) -> None:
+def test_account_metadata(example_ledger: RustfavaLedger) -> None:
     data = example_ledger.accounts["Assets:US:BofA"].meta
     assert data["address"] == "123 America Street, LargeTown, USA"
     assert data["institution"] == "Bank of America"
@@ -100,7 +100,7 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
 
 
 def test_group_entries(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     load_doc_entries: Sequence[Directive],
 ) -> None:
     """
@@ -119,14 +119,14 @@ def test_group_entries(
     assert data.Transaction == load_doc_entries[0:2]
 
 
-def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
+def test_account_uptodate_status(example_ledger: RustfavaLedger) -> None:
     accounts = example_ledger.accounts
     assert accounts["Assets:US:BofA"].uptodate_status is None
     assert accounts["Assets:US:BofA:Checking"].uptodate_status == "yellow"
     assert accounts["Liabilities:US:Chase:Slate"].uptodate_status == "green"
 
 
-def test_account_balance_directive(example_ledger: FavaLedger) -> None:
+def test_account_balance_directive(example_ledger: RustfavaLedger) -> None:
     today = local_today()
     bal = f"{today} balance Assets:US:BofA:Checking              1632.79 USD\n"
 
@@ -137,13 +137,13 @@ def test_account_balance_directive(example_ledger: FavaLedger) -> None:
     assert example_ledger.accounts.all_balance_directives() == bal
 
 
-def test_commodity_names(example_ledger: FavaLedger) -> None:
+def test_commodity_names(example_ledger: RustfavaLedger) -> None:
     assert example_ledger.commodities.name("USD") == "US Dollar"
     assert example_ledger.commodities.name("NOCOMMODITY") == "NOCOMMODITY"
     assert example_ledger.commodities.name("VMMXX") == "VMMXX"
 
 
-def test_paginate_journal(small_example_ledger: FavaLedger) -> None:
+def test_paginate_journal(small_example_ledger: RustfavaLedger) -> None:
     empty = FilteredLedger(small_example_ledger, filter="never")
     first_page = empty.paginate_journal(1)
     assert first_page

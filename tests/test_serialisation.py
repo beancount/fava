@@ -7,25 +7,25 @@ from typing import TYPE_CHECKING
 import pytest
 from beancount.core.position import CostSpec
 
-from fava.beans import create
-from fava.beans.funcs import hash_entry
-from fava.beans.helpers import replace
-from fava.beans.str import to_string
-from fava.core.charts import dumps
-from fava.core.charts import loads
-from fava.helpers import FavaAPIError
-from fava.serialisation import deserialise
-from fava.serialisation import deserialise_posting
-from fava.serialisation import InvalidAmountError
-from fava.serialisation import serialise
+from rustfava.beans import create
+from rustfava.beans.funcs import hash_entry
+from rustfava.beans.helpers import replace
+from rustfava.beans.str import to_string
+from rustfava.core.charts import dumps
+from rustfava.core.charts import loads
+from rustfava.helpers import RustfavaAPIError
+from rustfava.serialisation import deserialise
+from rustfava.serialisation import deserialise_posting
+from rustfava.serialisation import InvalidAmountError
+from rustfava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from typing import Any
 
-    from fava.beans.abc import Directive
-    from fava.beans.abc import Meta
-    from fava.beans.abc import Posting
+    from rustfava.beans.abc import Directive
+    from rustfava.beans.abc import Meta
+    from rustfava.beans.abc import Posting
 
     from .conftest import SnapshotFunc
 
@@ -275,10 +275,10 @@ def test_deserialise() -> None:
     )
     assert deserialise(json_txn) == txn
 
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         deserialise({})
 
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         deserialise({"t": "NoEntry"})
 
 
@@ -322,5 +322,5 @@ def test_deserialise_unknown() -> None:
         "date": "2017-12-12",
         "meta": {},
     }
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         deserialise(json_custom)

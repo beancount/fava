@@ -1,15 +1,15 @@
-"""Tests for Fava's main Flask app."""
+"""Tests for Rustfava's main Flask app."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from fava.internal_api import BalancesChart
-from fava.internal_api import BarChart
-from fava.internal_api import ChartApi
-from fava.internal_api import get_ledger_data
-from fava.internal_api import HierarchyChart
-from fava.util.date import Month
+from rustfava.internal_api import BalancesChart
+from rustfava.internal_api import BarChart
+from rustfava.internal_api import ChartApi
+from rustfava.internal_api import get_ledger_data
+from rustfava.internal_api import HierarchyChart
+from rustfava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask

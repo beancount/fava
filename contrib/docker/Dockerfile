@@ -1,11 +1,11 @@
 FROM python:slim as builder
 
-RUN pip install --root-user-action ignore --prefix="/install" fava
+RUN pip install --root-user-action ignore --prefix="/install" rustfava
 
 FROM python:slim
 
 COPY --from=builder /install /usr/local
 
-ENV FAVA_HOST "0.0.0.0"
+ENV RUSTFAVA_HOST "0.0.0.0"
 EXPOSE 5000
-CMD fava
+CMD rustfava

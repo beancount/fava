@@ -9,13 +9,13 @@ from werkzeug.exceptions import NotFound
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
-from fava.util import get_translations
-from fava.util import listify
-from fava.util import next_key
-from fava.util import send_file_inline
-from fava.util import simple_wsgi
-from fava.util import slugify
-from fava.util.unreachable import assert_never
+from rustfava.util import get_translations
+from rustfava.util import listify
+from rustfava.util import next_key
+from rustfava.util import send_file_inline
+from rustfava.util import simple_wsgi
+from rustfava.util import slugify
+from rustfava.util.unreachable import assert_never
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable

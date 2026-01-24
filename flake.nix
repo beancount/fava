@@ -1,5 +1,5 @@
 {
-  description = "Fava with rustledger backend";
+  description = "Rustfava - web interface for rustledger";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -11,9 +11,9 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        # Python with Fava dependencies
+        # Python with Rustfava dependencies
         pythonEnv = pkgs.python311.withPackages (ps: with ps; [
-          # Fava core dependencies
+          # Rustfava core dependencies
           flask
           flask-babel
           jinja2
@@ -24,7 +24,7 @@
           werkzeug
           click
           markupsafe
-          cheroot  # WSGI server for fava CLI
+          cheroot  # WSGI server for rustfava CLI
 
           # Beancount (for testing/comparison - will be replaced by rustledger)
           beancount
@@ -62,12 +62,12 @@
           ];
 
           shellHook = ''
-            echo "🌿 Fava + rustledger development environment"
+            echo "🦀 Rustfava development environment"
             echo ""
             echo "Python: $(python --version)"
             echo "wasmtime: $(wasmtime --version)"
             echo ""
-            echo "WASM file: src/fava/rustledger/rustledger-wasi.wasm"
+            echo "WASM file: src/rustfava/rustledger/rustledger-wasi.wasm"
             echo ""
 
             # Create/activate venv for additional packages not in nixpkgs
@@ -81,7 +81,7 @@
             if [ ! -f ".venv/.uv-installed" ]; then
               echo "Installing additional Python packages via uv..."
               uv pip install pyexcel pyexcel-ods3 pyexcel-xlsx
-              # Install fava in editable mode for package metadata (version, etc.)
+              # Install rustfava in editable mode for package metadata (version, etc.)
               uv pip install -e . --no-deps
               touch .venv/.uv-installed
             fi
@@ -89,13 +89,13 @@
             # Add src to PYTHONPATH for development
             export PYTHONPATH="$PWD/src:$PYTHONPATH"
 
-            # Create a wrapper script for the fava CLI so tests can find it
+            # Create a wrapper script for the rustfava CLI so tests can find it
             mkdir -p "$PWD/.dev-bin"
-            cat > "$PWD/.dev-bin/fava" << 'WRAPPER'
+            cat > "$PWD/.dev-bin/rustfava" << 'WRAPPER'
 #!/usr/bin/env bash
-exec python -m fava.cli "$@"
+exec python -m rustfava.cli "$@"
 WRAPPER
-            chmod +x "$PWD/.dev-bin/fava"
+            chmod +x "$PWD/.dev-bin/rustfava"
             export PATH="$PWD/.dev-bin:$PATH"
           '';
         };

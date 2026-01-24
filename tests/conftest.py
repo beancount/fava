@@ -25,21 +25,21 @@ import pytest
 from flask.app import Flask
 from flask.testing import FlaskClient
 
-from fava.application import create_app
-from fava.beans.abc import Custom
-from fava.beans.abc import Directive
-from fava.beans.load import load_string
-from fava.beans.types import LoaderResult
-from fava.core import FavaLedger
-from fava.core.budgets import BudgetDict
-from fava.core.budgets import parse_budgets
-from fava.core.charts import dumps
-from fava.core.charts import loads
-from fava.core.query import QueryResult
-from fava.rustledger import types as rl_types
-from fava.rustledger.options import RLDisplayContext
-from fava.util.date import Interval
-from fava.util.date import local_today
+from rustfava.application import create_app
+from rustfava.beans.abc import Custom
+from rustfava.beans.abc import Directive
+from rustfava.beans.load import load_string
+from rustfava.beans.types import LoaderResult
+from rustfava.core import RustfavaLedger
+from rustfava.core.budgets import BudgetDict
+from rustfava.core.budgets import parse_budgets
+from rustfava.core.charts import dumps
+from rustfava.core.charts import loads
+from rustfava.core.query import QueryResult
+from rustfava.rustledger import types as rl_types
+from rustfava.rustledger.options import RLDisplayContext
+from rustfava.util.date import Interval
+from rustfava.util.date import local_today
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -236,7 +236,7 @@ def snapshot(
 
 @pytest.fixture(scope="session")
 def app(test_data_dir: Path) -> Flask:
-    """Get the Fava Flask app."""
+    """Get the Rustfava Flask app."""
     fava_app = create_app(
         [
             test_data_dir / filename
@@ -260,7 +260,7 @@ def app(test_data_dir: Path) -> Flask:
 
 @pytest.fixture
 def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
-    """Get a Fava Flask app in a tmp_dir."""
+    """Get a Rustfava Flask app in a tmp_dir."""
     ledger_path = tmp_path / "edit-example.beancount"
     shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
     ledger_path.chmod(tmp_path.stat().st_mode)
@@ -271,7 +271,7 @@ def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
 
 @pytest.fixture
 def test_client(app: Flask) -> FlaskClient:
-    """Get the test client for the Fava Flask app."""
+    """Get the test client for the Rustfava Flask app."""
     return app.test_client()
 
 
@@ -321,29 +321,29 @@ LedgerSlug: TypeAlias = Literal[
     "off-by-one",
     "invalid-unicode",
 ]
-GetFavaLedger: TypeAlias = Callable[[LedgerSlug], FavaLedger]
+GetRustfavaLedger: TypeAlias = Callable[[LedgerSlug], RustfavaLedger]
 
 
 @pytest.fixture(scope="session")
-def get_ledger(app: Flask) -> GetFavaLedger:
+def get_ledger(app: Flask) -> GetRustfavaLedger:
     """Getter for one of the loaded ledgers."""
 
-    def _get_ledger(name: LedgerSlug) -> FavaLedger:
+    def _get_ledger(name: LedgerSlug) -> RustfavaLedger:
         ledger = app.config["LEDGERS"][name]
-        assert isinstance(ledger, FavaLedger)
+        assert isinstance(ledger, RustfavaLedger)
         return ledger
 
     return _get_ledger
 
 
 @pytest.fixture
-def small_example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
+def small_example_ledger(get_ledger: GetRustfavaLedger) -> RustfavaLedger:
     """Get the small example ledger."""
     return get_ledger("example")
 
 
 @pytest.fixture
-def example_ledger(get_ledger: GetFavaLedger) -> FavaLedger:
+def example_ledger(get_ledger: GetRustfavaLedger) -> RustfavaLedger:
     """Get the long example ledger."""
     return get_ledger("long-example")
 
@@ -367,10 +367,10 @@ def pytest_runtest_makereport(item: pytest.Function) -> None:
         "Decimal": Decimal,
         "Directive": Directive,
         "DisplayContext": RLDisplayContext,
-        "FavaLedger": FavaLedger,
+        "RustfavaLedger": RustfavaLedger,
         "Flask": Flask,
         "FlaskClient": FlaskClient,
-        "GetFavaLedger": GetFavaLedger,
+        "GetRustfavaLedger": GetRustfavaLedger,
         "Interval": Interval,
         "LoaderResult": LoaderResult,
         "Meta": Mapping[str, Any],

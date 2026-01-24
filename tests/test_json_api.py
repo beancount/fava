@@ -10,20 +10,20 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans.funcs import hash_entry
-from fava.context import g
-from fava.core.file import _sha256_str
-from fava.core.file import get_entry_slice
-from fava.core.misc import align
-from fava.json_api import validate_func_arguments
-from fava.json_api import ValidationError
+from rustfava.beans.funcs import hash_entry
+from rustfava.context import g
+from rustfava.core.file import _sha256_str
+from rustfava.core.file import get_entry_slice
+from rustfava.core.misc import align
+from rustfava.json_api import validate_func_arguments
+from rustfava.json_api import ValidationError
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
     from flask.testing import FlaskClient
     from werkzeug.test import TestResponse
 
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
     from .conftest import SnapshotFunc
 
@@ -263,7 +263,7 @@ def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
 def test_api_context(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
 ) -> None:
     response = test_client.get("/long-example/api/context")
     assert_api_error(
@@ -609,7 +609,7 @@ def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
 
 def test_api_format_source(
     test_client: FlaskClient,
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
 ) -> None:
     path = Path(example_ledger.beancount_file_path)
     url = "/long-example/api/format_source"

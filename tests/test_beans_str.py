@@ -7,8 +7,8 @@ from textwrap import dedent
 import pytest
 from beancount.core.position import CostSpec
 
-from fava.beans import create
-from fava.beans.str import to_string
+from rustfava.beans import create
+from rustfava.beans.str import to_string
 
 
 def test_to_string_invalid() -> None:

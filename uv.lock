@@ -458,152 +458,11 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8a/0e/97c33bf5009bdbac74fd2beace167cab3f978feb69cc36f1ef79360d6c4e/exceptiongroup-1.3.1-py3-none-any.whl", hash = "sha256:a7a39a3bd276781e98394987d3a5701d0c4edffb633bb7a5144577f82c773598", size = 16740, upload-time = "2025-11-21T23:01:53.443Z" },
-]
-
-[[package]]
-name = "fava"
-source = { editable = "." }
-dependencies = [
-    { name = "babel" },
-    { name = "beancount" },
-    { name = "beangulp" },
-    { name = "beanquery" },
-    { name = "cheroot" },
-    { name = "click" },
-    { name = "flask" },
-    { name = "flask-babel" },
-    { name = "jinja2" },
-    { name = "markdown2" },
-    { name = "ply" },
-    { name = "simplejson" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
-    { name = "watchfiles" },
-    { name = "werkzeug" },
-]
-
-[package.optional-dependencies]
-excel = [
-    { name = "pyexcel" },
-    { name = "pyexcel-ods3" },
-    { name = "pyexcel-xlsx" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "fava", extra = ["excel"] },
-    { name = "mypy" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-    { name = "setuptools" },
-    { name = "ty" },
-    { name = "typeguard" },
-    { name = "types-requests" },
-    { name = "types-setuptools" },
-    { name = "types-simplejson" },
-]
-docs = [
-    { name = "furo" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "sphinx-autodoc-typehints", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "sphinx-autodoc-typehints", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "sphinx-autodoc-typehints", version = "3.6.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-old-deps = [
-    { name = "setuptools" },
-]
-pre-commit = [
-    { name = "pre-commit" },
-]
-scripts = [
-    { name = "requests" },
-]
-test = [
-    { name = "fava", extra = ["excel"] },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "setuptools" },
-    { name = "typeguard" },
-]
-types = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "ty" },
-    { name = "typeguard" },
-    { name = "types-requests" },
-    { name = "types-setuptools" },
-    { name = "types-simplejson" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "babel", specifier = ">=2.11,<3" },
-    { name = "beancount", specifier = ">=2,<4" },
-    { name = "beangulp", specifier = ">=0.1" },
-    { name = "beanquery", specifier = ">=0.1,<0.3" },
-    { name = "cheroot", specifier = ">=8,<12" },
-    { name = "click", specifier = ">=7,<9" },
-    { name = "flask", specifier = ">=2.2,<4" },
-    { name = "flask-babel", specifier = ">=3,<5" },
-    { name = "jinja2", specifier = ">=3,<4" },
-    { name = "markdown2", specifier = ">=2.3.0,<3" },
-    { name = "ply", specifier = ">=3.4" },
-    { name = "pyexcel", marker = "extra == 'excel'", specifier = ">=0.5" },
-    { name = "pyexcel-ods3", marker = "extra == 'excel'", specifier = ">=0.5" },
-    { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.5" },
-    { name = "simplejson", specifier = ">=3.16.0,<4" },
-    { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.5" },
-    { name = "watchfiles", specifier = ">=0.20.0" },
-    { name = "werkzeug", specifier = ">=2.2,<4" },
-]
-provides-extras = ["excel"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "fava", extras = ["excel"] },
-    { name = "mypy", specifier = ">=1.14" },
-    { name = "pre-commit", specifier = ">=4" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-cov", specifier = ">=6" },
-    { name = "ruff", specifier = ">=0.11" },
-    { name = "setuptools", specifier = ">=67" },
-    { name = "ty", specifier = ">=0.0.2" },
-    { name = "typeguard", specifier = ">=4" },
-    { name = "types-requests", specifier = ">=2.32.0.20250515" },
-    { name = "types-setuptools", specifier = ">=67" },
-    { name = "types-simplejson", specifier = ">=3" },
-]
-docs = [
-    { name = "furo", specifier = ">=2024" },
-    { name = "sphinx", specifier = ">=7" },
-    { name = "sphinx-autodoc-typehints", specifier = ">=2" },
-]
-old-deps = [{ name = "setuptools" }]
-pre-commit = [{ name = "pre-commit", specifier = ">=4" }]
-scripts = [{ name = "requests", specifier = ">=2" }]
-test = [
-    { name = "fava", extras = ["excel"] },
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-cov", specifier = ">=6" },
-    { name = "setuptools", specifier = ">=67" },
-    { name = "typeguard", specifier = ">=4" },
-]
-types = [
-    { name = "mypy", specifier = ">=1.14" },
-    { name = "pytest", specifier = ">=8" },
-    { name = "ty", specifier = ">=0.0.2" },
-    { name = "typeguard", specifier = ">=4" },
-    { name = "types-requests", specifier = ">=2.32.0.20250515" },
-    { name = "types-setuptools", specifier = ">=67" },
-    { name = "types-simplejson", specifier = ">=3" },
 ]
 
 [[package]]
@@ -1549,6 +1408,153 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/6a/c5/abd840d4132fd51a12f594934af5eba1d5d27298a6f5b5d6c3be45301caf/ruff-0.14.13-py3-none-win32.whl", hash = "sha256:ef720f529aec113968b45dfdb838ac8934e519711da53a0456038a0efecbd680", size = 12919024, upload-time = "2026-01-15T20:14:43.647Z" },
     { url = "https://files.pythonhosted.org/packages/c2/55/6384b0b8ce731b6e2ade2b5449bf07c0e4c31e8a2e68ea65b3bafadcecc5/ruff-0.14.13-py3-none-win_amd64.whl", hash = "sha256:6070bd026e409734b9257e03e3ef18c6e1a216f0435c6751d7a8ec69cb59abef", size = 14097887, upload-time = "2026-01-15T20:15:01.48Z" },
     { url = "https://files.pythonhosted.org/packages/4d/e1/7348090988095e4e39560cfc2f7555b1b2a7357deba19167b600fdf5215d/ruff-0.14.13-py3-none-win_arm64.whl", hash = "sha256:7ab819e14f1ad9fe39f246cfcc435880ef7a9390d81a2b6ac7e01039083dd247", size = 13080224, upload-time = "2026-01-15T20:14:45.853Z" },
+]
+
+[[package]]
+name = "rustfava"
+source = { editable = "." }
+dependencies = [
+    { name = "babel" },
+    { name = "beangulp" },
+    { name = "cheroot" },
+    { name = "click" },
+    { name = "flask" },
+    { name = "flask-babel" },
+    { name = "jinja2" },
+    { name = "markdown2" },
+    { name = "ply" },
+    { name = "simplejson" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "watchfiles" },
+    { name = "werkzeug" },
+]
+
+[package.optional-dependencies]
+beancount-compat = [
+    { name = "beancount" },
+]
+excel = [
+    { name = "pyexcel" },
+    { name = "pyexcel-ods3" },
+    { name = "pyexcel-xlsx" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+    { name = "rustfava", extra = ["beancount-compat", "excel"] },
+    { name = "setuptools" },
+    { name = "ty" },
+    { name = "typeguard" },
+    { name = "types-requests" },
+    { name = "types-setuptools" },
+    { name = "types-simplejson" },
+]
+docs = [
+    { name = "furo" },
+    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "sphinx", version = "9.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "sphinx-autodoc-typehints", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "sphinx-autodoc-typehints", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "sphinx-autodoc-typehints", version = "3.6.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+old-deps = [
+    { name = "setuptools" },
+]
+pre-commit = [
+    { name = "pre-commit" },
+]
+scripts = [
+    { name = "beanquery" },
+    { name = "requests" },
+]
+test = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "rustfava", extra = ["beancount-compat", "excel"] },
+    { name = "setuptools" },
+    { name = "typeguard" },
+]
+types = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "ty" },
+    { name = "typeguard" },
+    { name = "types-requests" },
+    { name = "types-setuptools" },
+    { name = "types-simplejson" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "babel", specifier = ">=2.11,<3" },
+    { name = "beancount", marker = "extra == 'beancount-compat'", specifier = ">=2,<4" },
+    { name = "beangulp", specifier = ">=0.1" },
+    { name = "cheroot", specifier = ">=8,<12" },
+    { name = "click", specifier = ">=7,<9" },
+    { name = "flask", specifier = ">=2.2,<4" },
+    { name = "flask-babel", specifier = ">=3,<5" },
+    { name = "jinja2", specifier = ">=3,<4" },
+    { name = "markdown2", specifier = ">=2.3.0,<3" },
+    { name = "ply", specifier = ">=3.4" },
+    { name = "pyexcel", marker = "extra == 'excel'", specifier = ">=0.5" },
+    { name = "pyexcel-ods3", marker = "extra == 'excel'", specifier = ">=0.5" },
+    { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.5" },
+    { name = "simplejson", specifier = ">=3.16.0,<4" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.5" },
+    { name = "watchfiles", specifier = ">=0.20.0" },
+    { name = "werkzeug", specifier = ">=2.2,<4" },
+]
+provides-extras = ["excel", "beancount-compat"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.14" },
+    { name = "pre-commit", specifier = ">=4" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "pytest-cov", specifier = ">=6" },
+    { name = "ruff", specifier = ">=0.11" },
+    { name = "rustfava", extras = ["beancount-compat"] },
+    { name = "rustfava", extras = ["excel"] },
+    { name = "setuptools", specifier = ">=67" },
+    { name = "ty", specifier = ">=0.0.2" },
+    { name = "typeguard", specifier = ">=4" },
+    { name = "types-requests", specifier = ">=2.32.0.20250515" },
+    { name = "types-setuptools", specifier = ">=67" },
+    { name = "types-simplejson", specifier = ">=3" },
+]
+docs = [
+    { name = "furo", specifier = ">=2024" },
+    { name = "sphinx", specifier = ">=7" },
+    { name = "sphinx-autodoc-typehints", specifier = ">=2" },
+]
+old-deps = [{ name = "setuptools" }]
+pre-commit = [{ name = "pre-commit", specifier = ">=4" }]
+scripts = [
+    { name = "beanquery", specifier = ">=0.1,<0.3" },
+    { name = "requests", specifier = ">=2" },
+]
+test = [
+    { name = "pytest", specifier = ">=8" },
+    { name = "pytest-cov", specifier = ">=6" },
+    { name = "rustfava", extras = ["beancount-compat"] },
+    { name = "rustfava", extras = ["excel"] },
+    { name = "setuptools", specifier = ">=67" },
+    { name = "typeguard", specifier = ">=4" },
+]
+types = [
+    { name = "mypy", specifier = ">=1.14" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "ty", specifier = ">=0.0.2" },
+    { name = "typeguard", specifier = ">=4" },
+    { name = "types-requests", specifier = ">=2.32.0.20250515" },
+    { name = "types-setuptools", specifier = ">=67" },
+    { name = "types-simplejson", specifier = ">=3" },
 ]
 
 [[package]]

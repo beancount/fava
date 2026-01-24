@@ -4,11 +4,11 @@ Development
 Setting up a development environment
 ------------------------------------
 
-If you want to hack on Fava or run the latest development version, make sure
+If you want to hack on Rustrustfava or run the latest development version, make sure
 you have recent enough versions of the following installed (ideally with your
 system package manager):
 
-- `Python 3`_ - as Fava is written in Python,
+- `Python 3`_ - as Rustrustfava is written in Python,
 - `Node.js`_ - with `npm`, to build the frontend,
 - Make - to run various build / lint/ test targets,
 - `uv`_ - to install the development environment and run scripts.
@@ -21,14 +21,14 @@ Then this will get you up and running:
 
 .. code:: bash
 
-    git clone https://github.com/beancount/fava.git
-    cd fava
-    # setup a virtual environment (at .venv) and install Fava and development
+    git clone https://github.com/beancount/rustfava.git
+    cd rustfava
+    # setup a virtual environment (at .venv) and install Rustrustfava and development
     # dependencies into it:
     make dev
 
-You can start Fava in the virtual environment as usual by running ``fava``.
-Running in debug mode with ``fava --debug`` is useful for development.
+You can start Rustrustfava in the virtual environment as usual by running ``rustfava``.
+Running in debug mode with ``rustfava --debug`` is useful for development.
 
 You can run the tests with ``make test`` and the linters by running ``make
 lint``. There are further make targets defined, see the `Makefile` for details.
@@ -47,8 +47,8 @@ install from source like so (more details `here
 
 Contributions are very welcome, just open a PR on `GitHub`_.
 
-Fava is released under the `MIT License`_.
+Rustrustfava is released under the `MIT License`_.
 
-.. _GitHub: https://github.com/beancount/fava/pulls
-.. _MIT License: https://github.com/beancount/fava/blob/main/LICENSE
+.. _GitHub: https://github.com/beancount/rustfava/pulls
+.. _MIT License: https://github.com/beancount/rustfava/blob/main/LICENSE
 

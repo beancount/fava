@@ -1,9 +1,9 @@
 FRONTEND_SOURCES := $(shell find frontend/src frontend/css -type f)
 
-all: src/fava/static/app.js
+all: src/rustfava/static/app.js
 
 # Compile the frontend.
-src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
+src/rustfava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
 	cd frontend; npm run build
 
 # Install the frontend node_modules dependencies.
@@ -22,10 +22,10 @@ dev: .venv
 # Remove the generated frontend and translations in addition to mostlyclean (see below).
 .PHONY: clean
 clean: mostlyclean
-	find src/fava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
-	find src/fava/translations -name '*.mo' -delete
-	rm -rf src/fava.egg-info
-	rm -rf src/fava/translations/messages.pot
+	find src/rustfava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
+	find src/rustfava/translations -name '*.mo' -delete
+	rm -rf src/rustfava.egg-info
+	rm -rf src/rustfava/translations/messages.pot
 
 # Remove node_modules, caches, .tox, etc.
 .PHONY: mostlyclean
@@ -65,7 +65,7 @@ test: test-js test-py
 test-js: frontend/node_modules
 	cd frontend; npm run test
 test-py:
-	uv run --no-dev --group test pytest --cov=fava --cov-report=term-missing:skip-covered --cov-report=html --cov-fail-under=100
+	uv run --no-dev --group test pytest --cov=rustfava --cov-report=term-missing:skip-covered --cov-report=html --cov-fail-under=100
 test-py-old-deps:
 	uv run --no-project --isolated --with-editable=. --with-requirements=constraints-old.txt pytest --snapshot-ignore
 test-py-typeguard:
@@ -117,11 +117,11 @@ docs:
 	uv run --no-dev --group docs docs/generate.py
 	uv run --no-dev --group docs sphinx-build -b html docs build/docs
 
-# Run fava for the example files.
+# Run rustfava for the example files.
 .PHONY: run-example
 run-example:
 	@xdg-open http://localhost:3333
-	BEANCOUNT_FILE= fava -p 3333 --debug tests/data/*.beancount
+	BEANCOUNT_FILE= rustfava -p 3333 --debug tests/data/*.beancount
 
 # Generate the bql-grammar json file used by the frontend.
 .PHONY: bql-grammar
@@ -142,7 +142,7 @@ before-release: bql-grammar translations-push translations-fetch
 # Extract translation strings.
 .PHONY: translations-extract
 translations-extract: .venv
-	uv run pybabel extract -F src/fava/translations/babel.conf -o src/fava/translations/messages.pot .
+	uv run pybabel extract -F src/rustfava/translations/babel.conf -o src/rustfava/translations/messages.pot .
 
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token
@@ -157,6 +157,6 @@ translations-fetch: .venv
 	uv run --group scripts contrib/scripts.py download-translations
 
 # Create a binary using pyinstaller
-dist/fava: src/fava/static/app.js
+dist/rustfava: src/rustfava/static/app.js
 	uv run --no-project --isolated --with=. --with=pyinstaller pyinstaller --clean --noconfirm contrib/pyinstaller_spec.spec
-	dist/fava --version
+	dist/rustfava --version

@@ -3,16 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
-def test_commodity_names(example_ledger: FavaLedger) -> None:
+def test_commodity_names(example_ledger: RustfavaLedger) -> None:
     assert example_ledger.commodities.name("USD") == "US Dollar"
     assert example_ledger.commodities.name("NOCOMMODITY") == "NOCOMMODITY"
     assert example_ledger.commodities.name("VMMXX") == "VMMXX"
 
 
-def test_commodity_precision(example_ledger: FavaLedger) -> None:
+def test_commodity_precision(example_ledger: RustfavaLedger) -> None:
     assert example_ledger.commodities.precisions == {
         "USD": 2,
         "VMMXX": 4,

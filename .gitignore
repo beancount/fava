@@ -11,14 +11,14 @@
 /frontend/coverage/
 /frontend/node_modules/
 /htmlcov/
-/src/fava.egg-info/
-/src/fava/static/*.css
-/src/fava/static/*.js
-/src/fava/static/*.map
-/src/fava/static/*.wasm
-/src/fava/static/*.woff2
-/src/fava/translations/messages.pot
-/src/fava/translations/**/messages.mo
+/src/rustfava.egg-info/
+/src/rustfava/static/*.css
+/src/rustfava/static/*.js
+/src/rustfava/static/*.map
+/src/rustfava/static/*.wasm
+/src/rustfava/static/*.woff2
+/src/rustfava/translations/messages.pot
+/src/rustfava/translations/**/messages.mo
 /venv/
 
 *.pyc

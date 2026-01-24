@@ -1,4 +1,4 @@
-"""Tests for Fava's main Flask app."""
+"""Tests for Rustfava's main Flask app."""
 
 from __future__ import annotations
 
@@ -13,19 +13,19 @@ import pytest
 
 # Check if fava package is installed
 try:
-    version("fava")
-    _FAVA_PACKAGE_INSTALLED = True
+    version("rustfava")
+    _RUSTFAVA_PACKAGE_INSTALLED = True
 except PackageNotFoundError:
-    _FAVA_PACKAGE_INSTALLED = False
+    _RUSTFAVA_PACKAGE_INSTALLED = False
 
-from fava.application import create_app
-from fava.application import static_url
-from fava.beans import create
-from fava.beans.funcs import hash_entry
-from fava.context import g
-from fava.core import StatementMetadataInvalidError
-from fava.core import StatementNotFoundError
-from fava.core.group_entries import group_entries_by_type
+from rustfava.application import create_app
+from rustfava.application import static_url
+from rustfava.beans import create
+from rustfava.beans.funcs import hash_entry
+from rustfava.context import g
+from rustfava.core import StatementMetadataInvalidError
+from rustfava.core import StatementNotFoundError
+from rustfava.core.group_entries import group_entries_by_type
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
@@ -60,12 +60,12 @@ def assert_success(response: TestResponse) -> str:
 
 
 @pytest.mark.skipif(
-    not _FAVA_PACKAGE_INSTALLED, reason="fava package not installed"
+    not _RUSTFAVA_PACKAGE_INSTALLED, reason="rustfava package not installed"
 )
 def test_version() -> None:
-    from fava import __version__  # noqa: PLC0415
+    from rustfava import __version__  # noqa: PLC0415
 
-    assert __version__ == version("fava")
+    assert __version__ == version("rustfava")
 
 
 def test_client_side_reports(test_client: FlaskClient) -> None:
@@ -192,13 +192,13 @@ def test_jump_handler(
 
 
 @pytest.mark.skipif(
-    not _FAVA_PACKAGE_INSTALLED, reason="fava package not installed"
+    not _RUSTFAVA_PACKAGE_INSTALLED, reason="rustfava package not installed"
 )
 def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     response = test_client.get("/long-example/help/")
     help_page = assert_success(response)
-    assert f"Fava <code>{version('fava')}</code>" in help_page
+    assert f"Rustfava <code>{version('rustfava')}</code>" in help_page
     assert f"<code>{version('beancount')}</code>" in help_page
     response = test_client.get("/long-example/help/filters")
     assert assert_success(response)
@@ -334,10 +334,10 @@ def test_static_url(app: Flask) -> None:
 def test_load_extension_reports(test_client: FlaskClient) -> None:
     """Extension can register reports."""
 
-    url = "/extension-report/extension/FavaExtTest/"
+    url = "/extension-report/extension/RustfavaExtTest/"
     response = test_client.get(url)
     assert_success(response)
-    url = "/extension-report/extension_js_module/FavaExtTest.js"
+    url = "/extension-report/extension_js_module/RustfavaExtTest.js"
     response = test_client.get(url)
     assert_success(response)
 
@@ -348,7 +348,7 @@ def test_load_extension_reports(test_client: FlaskClient) -> None:
         ("/extension-report/extension/MissingExtension/"),
         ("/extension-report/extension/MissingExtension/example_data"),
         ("/extension-report/extension_js_module/Missing.js"),
-        ("/extension-report/extension/FavaExtTest/missing_endpoint"),
+        ("/extension-report/extension/RustfavaExtTest/missing_endpoint"),
     ],
 )
 def test_load_extension_not_found(test_client: FlaskClient, url: str) -> None:
@@ -357,7 +357,7 @@ def test_load_extension_not_found(test_client: FlaskClient, url: str) -> None:
 
 
 def test_load_extension_endpoint(test_client: FlaskClient) -> None:
-    url = "/extension-report/extension/FavaExtTest/example_data"
+    url = "/extension-report/extension/RustfavaExtTest/example_data"
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]

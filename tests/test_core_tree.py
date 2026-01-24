@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from fava.core.tree import Tree
+from rustfava.core.tree import Tree
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
     from .conftest import SnapshotFunc
 
@@ -41,7 +41,7 @@ def test_tree() -> None:
 
 
 def test_tree_from_entries(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     tree = Tree(example_ledger.all_entries)
@@ -50,7 +50,7 @@ def test_tree_from_entries(
     snapshot(tree["Assets"].balance_children.to_strings())
 
 
-def test_tree_cap(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
+def test_tree_cap(example_ledger: RustfavaLedger, snapshot: SnapshotFunc) -> None:
     tree = Tree(example_ledger.all_entries)
     tree.cap(example_ledger.options, "Unrealized")
 

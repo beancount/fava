@@ -1,1 +1,1 @@
-"""Fava tests."""
+"""Rustfava tests."""

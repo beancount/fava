@@ -7,21 +7,21 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans import create
-from fava.beans.abc import Note
-from fava.beans.abc import Price
-from fava.beans.account import account_tester
-from fava.beans.account import parent
-from fava.beans.account import root
-from fava.beans.funcs import get_position
-from fava.beans.funcs import hash_entry
-from fava.beans.helpers import replace
-from fava.beans.prices import FavaPriceMap
+from rustfava.beans import create
+from rustfava.beans.abc import Note
+from rustfava.beans.abc import Price
+from rustfava.beans.account import account_tester
+from rustfava.beans.account import parent
+from rustfava.beans.account import root
+from rustfava.beans.funcs import get_position
+from rustfava.beans.funcs import hash_entry
+from rustfava.beans.helpers import replace
+from rustfava.beans.prices import RustfavaPriceMap
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
-    from fava.beans.abc import Directive
+    from rustfava.beans.abc import Directive
 
 
 def test_account_parent() -> None:
@@ -126,7 +126,7 @@ def test_fava_price_map(load_doc_entries: Sequence[Directive]) -> None:
     price_entries = [e for e in load_doc_entries if isinstance(e, Price)]
     assert len(price_entries) == 4
 
-    prices = FavaPriceMap(price_entries)
+    prices = RustfavaPriceMap(price_entries)
     assert prices.commodity_pairs([]) == [("USD", "CHF"), ("USD", "ZEROUSD")]
     assert prices.commodity_pairs(["USD", "CHF"]) == [
         ("CHF", "USD"),

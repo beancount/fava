@@ -9,27 +9,27 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans.abc import Price
-from fava.beans.prices import FavaPriceMap
-from fava.core.conversion import _CurrencyConversion
-from fava.core.conversion import Conversion
-from fava.core.conversion import conversion_from_str
-from fava.core.conversion import convert_position
-from fava.core.conversion import cost_or_value
-from fava.core.conversion import get_cost
-from fava.core.conversion import get_market_value
-from fava.core.conversion import UNITS
-from fava.core.inventory import _Amount
-from fava.core.inventory import _Cost
-from fava.core.inventory import _Position
-from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
-from fava.util.date import local_today
+from rustfava.beans.abc import Price
+from rustfava.beans.prices import RustfavaPriceMap
+from rustfava.core.conversion import _CurrencyConversion
+from rustfava.core.conversion import Conversion
+from rustfava.core.conversion import conversion_from_str
+from rustfava.core.conversion import convert_position
+from rustfava.core.conversion import cost_or_value
+from rustfava.core.conversion import get_cost
+from rustfava.core.conversion import get_market_value
+from rustfava.core.conversion import UNITS
+from rustfava.core.inventory import _Amount
+from rustfava.core.inventory import _Cost
+from rustfava.core.inventory import _Position
+from rustfava.core.inventory import CounterInventory
+from rustfava.core.inventory import SimpleCounterInventory
+from rustfava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
-    from fava.beans.abc import Directive
+    from rustfava.beans.abc import Directive
 
 
 def _amt(s: str) -> _Amount:
@@ -137,7 +137,7 @@ def test_get_market_value(
     2022-02-02 price STOCK 10 USD
     2022-02-04 price STOCK 20 USD
     """
-    prices = FavaPriceMap(
+    prices = RustfavaPriceMap(
         (e for e in load_doc_entries if isinstance(e, Price)),
     )
     pos = _pos(position)
@@ -175,7 +175,7 @@ def test_convert_position(
     2022-02-04 price GBP 12 EUR
     """
 
-    prices = FavaPriceMap(
+    prices = RustfavaPriceMap(
         (e for e in load_doc_entries if isinstance(e, Price)),
     )
     pos = _pos(position)
@@ -222,7 +222,7 @@ def test_conversion(
     2022-02-04 price GBP 12 EUR
     """
 
-    prices = FavaPriceMap(
+    prices = RustfavaPriceMap(
         (e for e in load_doc_entries if isinstance(e, Price)),
     )
     inv = _inv(inventory)

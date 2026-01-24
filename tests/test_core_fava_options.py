@@ -7,17 +7,17 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core.charts import dumps
-from fava.core.fava_options import FavaOptions
-from fava.core.fava_options import InsertEntryOption
-from fava.core.fava_options import NotARegularExpressionError
-from fava.core.fava_options import parse_options
-from fava.core.fava_options import UnknownLocaleOptionError
-from fava.core.fava_options import UnsupportedLanguageOptionError
-from fava.util.date import FiscalYearEnd
+from rustfava.core.charts import dumps
+from rustfava.core.fava_options import RustfavaOptions
+from rustfava.core.fava_options import InsertEntryOption
+from rustfava.core.fava_options import NotARegularExpressionError
+from rustfava.core.fava_options import parse_options
+from rustfava.core.fava_options import UnknownLocaleOptionError
+from rustfava.core.fava_options import UnsupportedLanguageOptionError
+from rustfava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Custom
+    from rustfava.beans.abc import Custom
 
 
 def test_fava_options_errors(load_doc_custom_entries: list[Custom]) -> None:
@@ -80,7 +80,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
 
 
 def test_fava_options_language() -> None:
-    options = FavaOptions()
+    options = RustfavaOptions()
     options.set_locale("en")
     assert options.locale == "en"
     with pytest.raises(UnknownLocaleOptionError):
@@ -108,7 +108,7 @@ def test_fava_options_import_dirs(
 
 
 def test_fava_options_set_import_dirs() -> None:
-    options = FavaOptions()
+    options = RustfavaOptions()
     options.set_import_dirs("/path/with spaces")
     options.set_import_dirs("/simple/path")
     assert list(options.import_dirs) == ["/path/with spaces", "/simple/path"]

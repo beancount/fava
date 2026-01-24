@@ -42,7 +42,7 @@ const local_storage_synced_stores = new Set();
 
 /**
  * Create a store that syncs its value to localStorage.
- * @param key - The key to save this with in localStorage (will be prefixed with `fava-`).
+ * @param key - The key to save this with in localStorage (will be prefixed with `rustfava-`).
  * @param validator - A Validator to check the loaded value.
  * @param init - A default to initialise the store with if localStorage is empty.
  * @param values - An optional enumerator of all possible values and descriptions.
@@ -53,10 +53,10 @@ export function localStorageSyncedStore<T>(
   init: () => T,
   values: () => [T, string][] = () => [],
 ): LocalStoreSyncedStore<T> {
-  if (key.startsWith("fava")) {
-    throw new Error("INTERNAL: should be called without 'fava-' prefix.");
+  if (key.startsWith("rustfava")) {
+    throw new Error("INTERNAL: should be called without 'rustfava-' prefix.");
   }
-  const full_key = `fava-${key}`;
+  const full_key = `rustfava-${key}`;
   if (local_storage_synced_stores.has(full_key)) {
     throw new Error(`INTERNAL: duplicate store with key '${key}'.`);
   }

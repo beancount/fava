@@ -1,5 +1,5 @@
 # vim: set ft=python:
-"""Pyinstaller spec file for building a binary from fava's cli.py"""
+"""Pyinstaller spec file for building a binary from rustfava's cli.py"""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.utils.hooks import copy_metadata
 
-# Data files and version info for Fava:
-datas = collect_data_files("fava") + copy_metadata("fava")
+# Data files and version info for Rustfava:
+datas = collect_data_files("rustfava") + copy_metadata("rustfava")
 
 # Add all Beancount code (for plugins) and the version file:
 hiddenimports = collect_submodules("beancount")
 datas += collect_data_files("beancount")
 
 a = Analysis(
-    ["../src/fava/cli.py"],
+    ["../src/rustfava/cli.py"],
     pathex=["."],
     datas=datas,
     hiddenimports=hiddenimports,
@@ -33,6 +33,6 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="fava",
+    name="rustfava",
     upx=True,
 )

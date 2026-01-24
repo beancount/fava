@@ -7,13 +7,13 @@ from typing import TYPE_CHECKING
 import pytest
 from beancount.loader import load_file
 
-from fava.beans.abc import Document
-from fava.beans.abc import Transaction
-from fava.beans.load import load_string
-from fava.plugins.link_documents import DocumentError
+from rustfava.beans.abc import Document
+from rustfava.beans.abc import Transaction
+from rustfava.beans.load import load_string
+from rustfava.plugins.link_documents import DocumentError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.types import LoaderResult
+    from rustfava.beans.types import LoaderResult
 
 
 def test_plugins(tmp_path: Path) -> None:
@@ -39,7 +39,7 @@ def test_plugins(tmp_path: Path) -> None:
         option "operating_currency" "EUR"
         option "documents" "{tmp_path / "documents"}"
 
-        plugin "fava.plugins.link_documents"
+        plugin "rustfava.plugins.link_documents"
 
         2016-10-30 open Expenses:Foo
         2016-10-31 open Assets:Cash
@@ -87,7 +87,7 @@ def test_plugins(tmp_path: Path) -> None:
 
 def test_link_documents_error(load_doc: LoaderResult) -> None:
     """
-    plugin "fava.plugins.link_documents"
+    plugin "rustfava.plugins.link_documents"
 
     2016-10-31 open Expenses:Foo
     2016-10-31 open Assets:Cash
@@ -107,7 +107,7 @@ def test_link_documents_missing(tmp_path: Path) -> None:
     bfile = dedent(
         f"""
         option "documents" "{tmp_path}"
-        plugin "fava.plugins.link_documents"
+        plugin "rustfava.plugins.link_documents"
 
         2016-10-31 open Expenses:Foo
         2016-10-31 open Assets:Cash

@@ -7,20 +7,20 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans import BEANCOUNT_V3
-from fava.beans.abc import Note
-from fava.beans.abc import Transaction
-from fava.beans.ingest import BeanImporterProtocol
-from fava.core.ingest import FileImportInfo
-from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.ingest import ImportConfigLoadError
-from fava.core.ingest import ImporterExtractError
-from fava.core.ingest import ImporterInvalidTypeError
-from fava.core.ingest import load_import_config
-from fava.core.ingest import WrappedImporter
-from fava.helpers import FavaAPIError
-from fava.serialisation import serialise
-from fava.util.date import local_today
+from rustfava.beans import BEANCOUNT_V3
+from rustfava.beans.abc import Note
+from rustfava.beans.abc import Transaction
+from rustfava.beans.ingest import BeanImporterProtocol
+from rustfava.core.ingest import FileImportInfo
+from rustfava.core.ingest import filepath_in_primary_imports_folder
+from rustfava.core.ingest import ImportConfigLoadError
+from rustfava.core.ingest import ImporterExtractError
+from rustfava.core.ingest import ImporterInvalidTypeError
+from rustfava.core.ingest import load_import_config
+from rustfava.core.ingest import WrappedImporter
+from rustfava.helpers import RustfavaAPIError
+from rustfava.serialisation import serialise
+from rustfava.util.date import local_today
 
 try:
     from typing import override
@@ -28,15 +28,15 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.ingest import FileMemo
-    from fava.core import FavaLedger
+    from rustfava.beans.ingest import FileMemo
+    from rustfava.core import RustfavaLedger
 
-    from .conftest import GetFavaLedger
+    from .conftest import GetRustfavaLedger
     from .conftest import SnapshotFunc
 
 
 def test_ingest_file_import_info(
-    test_data_dir: Path, get_ledger: GetFavaLedger
+    test_data_dir: Path, get_ledger: GetRustfavaLedger
 ) -> None:
     ingest_ledger = get_ledger("import")
     importer = next(iter(ingest_ledger.ingest.importers.values()))
@@ -90,7 +90,7 @@ def test_ingest_file_import_info_account_method_errors(
     csv_path = test_data_dir / "import.csv"
 
     importer = WrappedImporter(AccountNameErrors())
-    with pytest.raises(FavaAPIError) as err:
+    with pytest.raises(RustfavaAPIError) as err:
         importer.file_import_info(csv_path)
     assert "Some error reason..." in err.value.message
 
@@ -106,7 +106,7 @@ def test_ingest_identify_errors(test_data_dir: Path) -> None:
     csv_path = test_data_dir / "import.csv"
 
     importer = WrappedImporter(IdentifyErrors())
-    with pytest.raises(FavaAPIError) as err:
+    with pytest.raises(RustfavaAPIError) as err:
         importer.identify(csv_path)
     assert "IDENTIFY_ERRORS" in err.value.message
 
@@ -120,7 +120,7 @@ class ImporterNameErrors(MinimalImporter):
 
 def test_ingest_get_name_errors() -> None:
     importer = WrappedImporter(ImporterNameErrors())
-    with pytest.raises(FavaAPIError) as err:
+    with pytest.raises(RustfavaAPIError) as err:
         assert importer.name
     assert "GET_NAME_WILL_ERROR" in err.value.message
 
@@ -158,15 +158,15 @@ def test_load_import_config() -> None:
         )
 
 
-def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
+def test_ingest_no_config(small_example_ledger: RustfavaLedger) -> None:
     assert small_example_ledger.ingest.import_data() == []
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         small_example_ledger.ingest.extract("import.csv", "import_name")
 
 
 def test_ingest_examplefile(
     test_data_dir: Path,
-    get_ledger: GetFavaLedger,
+    get_ledger: GetRustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     ingest_ledger = get_ledger("import")
@@ -220,7 +220,7 @@ def test_ingest_examplefile(
 
 
 def test_ingest_errors_file_does_not_exist(
-    get_ledger: GetFavaLedger,
+    get_ledger: GetRustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     ingest_ledger = get_ledger("import")
@@ -236,7 +236,7 @@ def test_ingest_errors_file_does_not_exist(
 
 
 def test_filepath_in_primary_imports_folder(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test"])
@@ -258,5 +258,5 @@ def test_filepath_in_primary_imports_folder(
     ) == _join("/test", " .. file name")
 
     monkeypatch.setattr(example_ledger.fava_options, "import_dirs", [])
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         filepath_in_primary_imports_folder("filename", example_ledger)

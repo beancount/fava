@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from fava.core.attributes import get_active_years
-from fava.util.date import FiscalYearEnd
+from rustfava.core.attributes import get_active_years
+from rustfava.util.date import FiscalYearEnd
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
-    from fava.beans.abc import Directive
-    from fava.core import FavaLedger
+    from rustfava.beans.abc import Directive
+    from rustfava.core import RustfavaLedger
 
     from .conftest import SnapshotFunc
 
@@ -51,7 +51,7 @@ def test_get_active_years(load_doc_entries: Sequence[Directive]) -> None:
     ]
 
 
-def test_payee_accounts(example_ledger: FavaLedger) -> None:
+def test_payee_accounts(example_ledger: RustfavaLedger) -> None:
     attr = example_ledger.attributes
     assert attr.payee_accounts("NOTAPAYEE") == attr.accounts
 
@@ -60,7 +60,7 @@ def test_payee_accounts(example_ledger: FavaLedger) -> None:
     assert len(verizon) == len(attr.accounts)
 
 
-def test_payee_transaction(example_ledger: FavaLedger) -> None:
+def test_payee_transaction(example_ledger: RustfavaLedger) -> None:
     attr = example_ledger.attributes
     assert attr.payee_transaction("NOTAPAYEE") is None
 
@@ -69,7 +69,7 @@ def test_payee_transaction(example_ledger: FavaLedger) -> None:
     assert str(txn.date) == "2016-05-05"
 
 
-def test_narration_transaction(example_ledger: FavaLedger) -> None:
+def test_narration_transaction(example_ledger: RustfavaLedger) -> None:
     attr = example_ledger.attributes
     assert attr.narration_transaction("NOTANARRATION") is None
 
@@ -79,7 +79,7 @@ def test_narration_transaction(example_ledger: FavaLedger) -> None:
 
 
 def test_narrations(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     narrations = example_ledger.attributes.narrations

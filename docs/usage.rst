@@ -17,11 +17,11 @@ page for an index of the available documentation.
 Installation
 ------------
 
-Fava is known to run on macOS, Linux, and Windows.  You will need `Python 3
+Rustrustfava is known to run on macOS, Linux, and Windows.  You will need `Python 3
 <https://www.python.org/downloads/>`_.  Then you can use ``pip`` to install
-Fava or update your existing Installation by running::
+Rustrustfava or update your existing Installation by running::
 
-    pip install --upgrade fava
+    pip install --upgrade rustfava
 
 which will also pull in all required dependencies including Beancount. If you
 do not have Beancount installed already, you might want to have a look at its
@@ -31,21 +31,21 @@ do not have Beancount installed already, you might want to have a look at its
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
 
-   pip install --upgrade fava[excel]
+   pip install --upgrade rustfava[excel]
 
 
-Starting Fava
+Starting Rustrustfava
 -------------
 
-After installing Fava, you can start it by running::
+After installing Rustrustfava, you can start it by running::
 
-    fava ledger.beancount
+    rustfava ledger.beancount
 
 pointing it to your Beancount file -- and visit the web interface at
 `http://localhost:5000 <http://localhost:5000>`_.
 
-There are some command-line options available, run ``fava --help`` for an overview.
+There are some command-line options available, run ``rustfava --help`` for an overview.
 
-For more information on Fava's features, refer to the help pages that are
-available through Fava's web-interface.  Fava comes with Gmail-style keyboard
+For more information on Rustrustfava's features, refer to the help pages that are
+available through Rustrustfava's web-interface.  Rustrustfava comes with Gmail-style keyboard
 shortcuts; press ``?`` to show an overview.

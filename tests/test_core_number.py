@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING
 
 from babel.core import Locale
 
-from fava.core.number import get_locale_format
+from rustfava.core.number import get_locale_format
 
 if TYPE_CHECKING:  # pragma: no cover
     import pytest
 
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
 def test_get_locale_format() -> None:
@@ -22,7 +22,7 @@ def test_get_locale_format() -> None:
     assert fmt(dec) == "1,00000000000000"
 
 
-def test_precisions(example_ledger: FavaLedger) -> None:
+def test_precisions(example_ledger: RustfavaLedger) -> None:
     fmt = example_ledger.format_decimal
     assert fmt.precisions == {
         "ABC": 0,
@@ -40,7 +40,7 @@ def test_precisions(example_ledger: FavaLedger) -> None:
     }
 
 
-def test_format_decimal(example_ledger: FavaLedger) -> None:
+def test_format_decimal(example_ledger: RustfavaLedger) -> None:
     fmt = example_ledger.format_decimal
     assert fmt(Decimal("12.333"), "USD") == "12.33"
     assert fmt(Decimal("12.33"), "USD") == "12.33"
@@ -49,7 +49,7 @@ def test_format_decimal(example_ledger: FavaLedger) -> None:
 
 
 def test_format_decimal_locale(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fmt = example_ledger.format_decimal

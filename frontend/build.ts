@@ -24,7 +24,7 @@ function debounce(func: () => void, wait: number): () => void {
 }
 
 const filename = fileURLToPath(import.meta.url);
-const outdir = join(dirname(filename), "..", "src", "fava", "static");
+const outdir = join(dirname(filename), "..", "src", "rustfava", "static");
 const entryPoints = [join(dirname(filename), "src", "app.ts")];
 
 async function cleanup_outdir(result: BuildResult<{ metafile: true }>) {

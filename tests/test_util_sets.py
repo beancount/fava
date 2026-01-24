@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fava.util.sets import add_to_set
+from rustfava.util.sets import add_to_set
 
 
 def test_add_to_set_basic() -> None:

@@ -12,35 +12,35 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans import create
-from fava.beans.funcs import get_position
-from fava.beans.funcs import hash_entry
-from fava.beans.helpers import replace
-from fava.core import FavaLedger
-from fava.core.fava_options import InsertEntryOption
-from fava.core.file import _file_newline_character
-from fava.core.file import _incomplete_sortkey
-from fava.core.file import ExternallyChangedError
-from fava.core.file import find_entry_lines
-from fava.core.file import GeneratedEntryError
-from fava.core.file import get_entry_slice
-from fava.core.file import insert_entry
-from fava.core.file import insert_metadata_in_file
-from fava.core.file import InvalidUnicodeError
-from fava.core.file import NonSourceFileError
-from fava.core.file import save_entry_slice
+from rustfava.beans import create
+from rustfava.beans.funcs import get_position
+from rustfava.beans.funcs import hash_entry
+from rustfava.beans.helpers import replace
+from rustfava.core import RustfavaLedger
+from rustfava.core.fava_options import InsertEntryOption
+from rustfava.core.file import _file_newline_character
+from rustfava.core.file import _incomplete_sortkey
+from rustfava.core.file import ExternallyChangedError
+from rustfava.core.file import find_entry_lines
+from rustfava.core.file import GeneratedEntryError
+from rustfava.core.file import get_entry_slice
+from rustfava.core.file import insert_entry
+from rustfava.core.file import insert_metadata_in_file
+from rustfava.core.file import InvalidUnicodeError
+from rustfava.core.file import NonSourceFileError
+from rustfava.core.file import save_entry_slice
 
 if TYPE_CHECKING:  # pragma: no cover
     from .conftest import SnapshotFunc
 
 
 @pytest.fixture
-def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
-    """Create a FavaLedger 'edit-example.beancount' in a tmp_path."""
+def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> RustfavaLedger:
+    """Create a RustfavaLedger 'edit-example.beancount' in a tmp_path."""
     ledger_path = tmp_path / "edit-example.beancount"
     shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
     ledger_path.chmod(tmp_path.stat().st_mode)
-    return FavaLedger(str(ledger_path))
+    return RustfavaLedger(str(ledger_path))
 
 
 def test_sort_incomplete_sortkey() -> None:
@@ -74,7 +74,7 @@ def test_sort_incomplete_sortkey() -> None:
     ]
 
 
-def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+def test_get_and_save_entry_slice(ledger_in_tmp_path: RustfavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
     entry_hash = hash_entry(entry)
     path = Path(ledger_in_tmp_path.beancount_file_path)
@@ -100,7 +100,7 @@ def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     assert new_slice in path.read_text("utf-8")
 
 
-def test_windows_newlines(ledger_in_tmp_path: FavaLedger) -> None:
+def test_windows_newlines(ledger_in_tmp_path: RustfavaLedger) -> None:
     path = Path(ledger_in_tmp_path.beancount_file_path)
     contents = path.read_text("utf-8")
     assert "\r\n" not in contents
@@ -127,7 +127,7 @@ def test_windows_newlines(ledger_in_tmp_path: FavaLedger) -> None:
     assert source == contents
 
 
-def test_get_and_set_source(ledger_in_tmp_path: FavaLedger) -> None:
+def test_get_and_set_source(ledger_in_tmp_path: RustfavaLedger) -> None:
     with pytest.raises(NonSourceFileError):
         ledger_in_tmp_path.file.get_source(Path("asdf"))
 
@@ -147,7 +147,7 @@ def test_get_and_set_source(ledger_in_tmp_path: FavaLedger) -> None:
         ledger_in_tmp_path.file.get_source(path)
 
 
-def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
+def test_insert_metadata(ledger_in_tmp_path: RustfavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
     entry_hash = hash_entry(entry)
     path = Path(ledger_in_tmp_path.beancount_file_path)
@@ -164,7 +164,7 @@ def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
 
 
 @pytest.mark.usefixtures("ledger_in_tmp_path")
-def test_insert_metadata_generated(ledger_in_tmp_path: FavaLedger) -> None:
+def test_insert_metadata_generated(ledger_in_tmp_path: RustfavaLedger) -> None:
     """Test that auto_accounts-generated entries raise GeneratedEntryError."""
     auto_account = ledger_in_tmp_path.all_entries[0]
     auto_account_hash = hash_entry(auto_account)
@@ -174,7 +174,7 @@ def test_insert_metadata_generated(ledger_in_tmp_path: FavaLedger) -> None:
         )
 
 
-def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+def test_save_entry_slice(ledger_in_tmp_path: RustfavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
 
     entry_source, sha256sum = get_entry_slice(entry)
@@ -194,14 +194,14 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
 
 
 @pytest.mark.usefixtures("ledger_in_tmp_path")
-def test_save_entry_slice_generated(ledger_in_tmp_path: FavaLedger) -> None:
+def test_save_entry_slice_generated(ledger_in_tmp_path: RustfavaLedger) -> None:
     """Test that auto_accounts-generated entries raise GeneratedEntryError."""
     auto_account = ledger_in_tmp_path.all_entries[0]
     with pytest.raises(GeneratedEntryError):
         get_entry_slice(auto_account)
 
 
-def test_delete_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
+def test_delete_entry_slice(ledger_in_tmp_path: RustfavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
     entry_hash = hash_entry(entry)
 
@@ -500,7 +500,7 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
 
 
 def test_render_entries(
-    small_example_ledger: FavaLedger,
+    small_example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     all_transactions = small_example_ledger.all_entries_by_type.Transaction

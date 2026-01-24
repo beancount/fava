@@ -6,5 +6,5 @@ API Documentation
 .. toctree::
     :glob:
 
-    api/fava*
+    api/rustfava*
 

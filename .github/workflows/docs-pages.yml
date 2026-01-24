@@ -24,15 +24,15 @@ jobs:
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
-      - run: touch src/fava/static/app.js
+      - run: touch src/rustfava/static/app.js
       - run: make docs
-      - if: github.repository == 'beancount/fava'
+      - if: github.repository == 'jmptable/rustfava'
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:
           path: "build/docs"
   deploy:
-    if: github.repository == 'beancount/fava' && github.event_name == 'push'
+    if: github.repository == 'jmptable/rustfava' && github.event_name == 'push'
     needs: "build"
     permissions:
       pages: write

@@ -6,18 +6,18 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans import create
-from fava.core.documents import filepath_in_document_folder
-from fava.core.documents import is_document_or_import_file
-from fava.core.group_entries import group_entries_by_type
-from fava.helpers import FavaAPIError
+from rustfava.beans import create
+from rustfava.core.documents import filepath_in_document_folder
+from rustfava.core.documents import is_document_or_import_file
+from rustfava.core.group_entries import group_entries_by_type
+from rustfava.helpers import RustfavaAPIError
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
 def test_is_document_or_import_file(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     path = str(Path(__file__))
@@ -37,7 +37,7 @@ def test_is_document_or_import_file(
 
 
 def test_filepath_in_documents_folder(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setitem(example_ledger.options, "documents", ["/test"])  # ty:ignore[invalid-argument-type]
@@ -63,14 +63,14 @@ def test_filepath_in_documents_folder(
         "/../file/name",
         example_ledger,
     ) == _join("/test", "Assets", "US", "BofA", "Checking", " .. file name")
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         filepath_in_document_folder(
             "/test",
             "notanaccount",
             "filename",
             example_ledger,
         )
-    with pytest.raises(FavaAPIError):
+    with pytest.raises(RustfavaAPIError):
         filepath_in_document_folder(
             "/notadocumentsfolder",
             "Assets:US:BofA:Checking",

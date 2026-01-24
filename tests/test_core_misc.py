@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from fava.beans.load import load_string
-from fava.core.misc import sidebar_links
-from fava.core.misc import upcoming_events
-from fava.util.date import local_today
+from rustfava.beans.load import load_string
+from rustfava.core.misc import sidebar_links
+from rustfava.core.misc import upcoming_events
+from rustfava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Custom
+    from rustfava.beans.abc import Custom
 
 
 def test_sidebar_links(load_doc_custom_entries: list[Custom]) -> None:

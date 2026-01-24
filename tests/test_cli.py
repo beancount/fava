@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.cli import _add_env_filenames
-from fava.cli import NonAbsolutePathError
+from rustfava.cli import _add_env_filenames
+from rustfava.cli import NonAbsolutePathError
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import IO
@@ -75,7 +75,7 @@ def test_cli(
 ) -> None:
     port = str(open_port)
     monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
-    args = ("fava", str(test_data_dir / "example.beancount"), "-p", port)
+    args = ("rustfava", str(test_data_dir / "example.beancount"), "-p", port)
     env = os.environ.copy()
     env["PYTHONUNBUFFERED"] = "1"
     with Popen(
@@ -86,7 +86,7 @@ def test_cli(
         env=env,
     ) as process:
         assert process.stdout
-        assert output_contains(process.stdout, "Starting Fava on")
+        assert output_contains(process.stdout, "Starting Rustfava on")
         with Popen(
             args,
             stdout=PIPE,

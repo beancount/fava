@@ -4,9 +4,9 @@ from decimal import Decimal
 
 import pytest
 
-from fava.beans import create
-from fava.core.inventory import CounterInventory
-from fava.core.inventory import SimpleCounterInventory
+from rustfava.beans import create
+from rustfava.core.inventory import CounterInventory
+from rustfava.core.inventory import SimpleCounterInventory
 
 
 def test_no_iter_possible() -> None:

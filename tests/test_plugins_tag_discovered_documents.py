@@ -5,7 +5,7 @@ from textwrap import dedent
 
 from beancount.loader import load_file
 
-from fava.beans.abc import Document
+from rustfava.beans.abc import Document
 
 
 def test_tag_discovered_plugin(tmp_path: Path) -> None:
@@ -27,7 +27,7 @@ def test_tag_discovered_plugin(tmp_path: Path) -> None:
         option "operating_currency" "EUR"
         option "documents" "{tmp_path / "documents"}"
 
-        plugin "fava.plugins.tag_discovered_documents"
+        plugin "rustfava.plugins.tag_discovered_documents"
 
         2016-10-31 open Assets:Cash
 

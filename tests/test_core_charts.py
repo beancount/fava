@@ -3,19 +3,19 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from fava.core.conversion import AT_COST
-from fava.util.date import Day
-from fava.util.date import Month
+from rustfava.core.conversion import AT_COST
+from rustfava.util.date import Day
+from rustfava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
-    from .conftest import GetFavaLedger
+    from .conftest import GetRustfavaLedger
     from .conftest import SnapshotFunc
 
 
 def test_interval_totals(
-    small_example_ledger: FavaLedger,
+    small_example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     filtered = small_example_ledger.get_filtered()
@@ -30,7 +30,7 @@ def test_interval_totals(
 
 
 def test_interval_totals_inverted(
-    small_example_ledger: FavaLedger,
+    small_example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     filtered = small_example_ledger.get_filtered()
@@ -46,7 +46,7 @@ def test_interval_totals_inverted(
 
 
 def test_linechart_data(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     snapshot: SnapshotFunc,
 ) -> None:
     filtered = example_ledger.get_filtered()
@@ -65,7 +65,7 @@ def test_linechart_data(
     )
 
 
-def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
+def test_net_worth(example_ledger: RustfavaLedger, snapshot: SnapshotFunc) -> None:
     filtered = example_ledger.get_filtered()
     data = example_ledger.charts.net_worth(filtered, Month, "USD")
     snapshot(data, json=True)
@@ -73,7 +73,7 @@ def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
 
 def test_net_worth_off_by_one(
     snapshot: SnapshotFunc,
-    get_ledger: GetFavaLedger,
+    get_ledger: GetRustfavaLedger,
 ) -> None:
     off_by_one = get_ledger("off-by-one")
     off_by_one_filtered = off_by_one.get_filtered()
@@ -90,7 +90,7 @@ def test_net_worth_off_by_one(
         snapshot(data, json=True)
 
 
-def test_hierarchy(example_ledger: FavaLedger) -> None:
+def test_hierarchy(example_ledger: RustfavaLedger) -> None:
     filtered = example_ledger.get_filtered()
 
     data = example_ledger.charts.hierarchy(filtered, "Assets", AT_COST)

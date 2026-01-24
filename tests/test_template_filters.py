@@ -3,10 +3,10 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from fava.template_filters import basename
-from fava.template_filters import format_currency
-from fava.template_filters import passthrough_numbers
-from fava.template_filters import replace_numbers
+from rustfava.template_filters import basename
+from rustfava.template_filters import format_currency
+from rustfava.template_filters import passthrough_numbers
+from rustfava.template_filters import replace_numbers
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask

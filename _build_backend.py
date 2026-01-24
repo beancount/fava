@@ -53,7 +53,7 @@ def _frontend_sources() -> Iterable[Path]:
 def _compile_frontend() -> None:
     """Compile the frontend (if changed or missing)."""
     source_mtime = max(p.stat().st_mtime_ns for p in _frontend_sources())
-    app_js = Path("src/fava/static/app.js")
+    app_js = Path("src/rustfava/static/app.js")
     if app_js.exists() and source_mtime < app_js.stat().st_mtime_ns:
         return
 
@@ -69,7 +69,7 @@ def _compile_frontend() -> None:
 
 def _compile_translations() -> None:
     """Compile the translations from .po to .mo (if changed or missing)."""
-    for source in Path().glob("src/fava/translations/**/messages.po"):
+    for source in Path().glob("src/rustfava/translations/**/messages.po"):
         target = source.parent / "messages.mo"
         if (
             not target.exists()
@@ -80,8 +80,8 @@ def _compile_translations() -> None:
             write_mo(target.open("wb"), catalog)
 
 
-def _build_fava() -> None:
-    """Run the build steps for Fava."""
+def _build_rustfava() -> None:
+    """Run the build steps for Rustfava."""
     _compile_frontend()
     _compile_translations()
 
@@ -91,7 +91,7 @@ def build_wheel(
     config_settings: dict[str, str | list[str] | None] | None = None,
     metadata_directory: str | None = None,
 ) -> str:
-    _build_fava()
+    _build_rustfava()
     return build_meta.build_wheel(
         wheel_directory,
         config_settings=config_settings,
@@ -104,7 +104,7 @@ def build_editable(
     config_settings: dict[str, str | list[str] | None] | None = None,
     metadata_directory: str | None = None,
 ) -> str:
-    _build_fava()
+    _build_rustfava()
     return build_meta.build_editable(
         wheel_directory,
         config_settings=config_settings,
@@ -116,7 +116,7 @@ def build_sdist(
     sdist_directory: str,
     config_settings: dict[str, str | list[str] | None] | None = None,
 ) -> str:
-    _build_fava()
+    _build_rustfava()
     return build_meta.build_sdist(
         sdist_directory,
         config_settings=config_settings,

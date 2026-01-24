@@ -4,15 +4,15 @@ from typing import TYPE_CHECKING
 
 from flask import get_template_attribute
 
-from fava.beans import create
+from rustfava.beans import create
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
 
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
-def test_render_amount(app: Flask, example_ledger: FavaLedger) -> None:
+def test_render_amount(app: Flask, example_ledger: RustfavaLedger) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(
@@ -27,7 +27,7 @@ def test_render_amount(app: Flask, example_ledger: FavaLedger) -> None:
         assert macro(example_ledger, create.amount("10 TEST")) == res
 
 
-def test_account_name(app: Flask, example_ledger: FavaLedger) -> None:
+def test_account_name(app: Flask, example_ledger: RustfavaLedger) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(

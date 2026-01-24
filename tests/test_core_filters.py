@@ -6,18 +6,18 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.beans import create
-from fava.beans.account import get_entry_accounts
-from fava.core.filters import AccountFilter
-from fava.core.filters import AdvancedFilter
-from fava.core.filters import FilterError
-from fava.core.filters import FilterSyntaxLexer
-from fava.core.filters import Match
-from fava.core.filters import MatchAmount
-from fava.core.filters import TimeFilter
+from rustfava.beans import create
+from rustfava.beans.account import get_entry_accounts
+from rustfava.core.filters import AccountFilter
+from rustfava.core.filters import AdvancedFilter
+from rustfava.core.filters import FilterError
+from rustfava.core.filters import FilterSyntaxLexer
+from rustfava.core.filters import Match
+from rustfava.core.filters import MatchAmount
+from rustfava.core.filters import TimeFilter
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from rustfava.core import RustfavaLedger
 
 
 def _has_component(account_name: str, component: str) -> bool:
@@ -167,7 +167,7 @@ def test_filterexception() -> None:
     ],
 )
 def test_advanced_filter(
-    example_ledger: FavaLedger,
+    example_ledger: RustfavaLedger,
     string: str,
     number: int,
 ) -> None:
@@ -193,7 +193,7 @@ def test_null_meta_posting() -> None:
     assert len(filter_.apply([txn])) == 0
 
 
-def test_account_filter(example_ledger: FavaLedger) -> None:
+def test_account_filter(example_ledger: RustfavaLedger) -> None:
     account_filter = AccountFilter("")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert filtered_entries is example_ledger.all_entries
@@ -211,7 +211,7 @@ def test_account_filter(example_ledger: FavaLedger) -> None:
     assert len(filtered_entries) == 67
 
 
-def test_time_filter(example_ledger: FavaLedger) -> None:
+def test_time_filter(example_ledger: RustfavaLedger) -> None:
     time_filter = TimeFilter(
         example_ledger.options,
         example_ledger.fava_options,

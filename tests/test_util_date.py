@@ -6,25 +6,25 @@ from unittest import mock
 
 import pytest
 
-from fava.util.date import DateRange
-from fava.util.date import dateranges
-from fava.util.date import Day
-from fava.util.date import FiscalYearEnd
-from fava.util.date import get_fiscal_period
-from fava.util.date import interval_ends
-from fava.util.date import INTERVALS
-from fava.util.date import InvalidDateRangeError
-from fava.util.date import Month
-from fava.util.date import month_offset
-from fava.util.date import parse_date
-from fava.util.date import parse_fye_string
-from fava.util.date import Quarter
-from fava.util.date import substitute
-from fava.util.date import Week
-from fava.util.date import Year
+from rustfava.util.date import DateRange
+from rustfava.util.date import dateranges
+from rustfava.util.date import Day
+from rustfava.util.date import FiscalYearEnd
+from rustfava.util.date import get_fiscal_period
+from rustfava.util.date import interval_ends
+from rustfava.util.date import INTERVALS
+from rustfava.util.date import InvalidDateRangeError
+from rustfava.util.date import Month
+from rustfava.util.date import month_offset
+from rustfava.util.date import parse_date
+from rustfava.util.date import parse_fye_string
+from rustfava.util.date import Quarter
+from rustfava.util.date import substitute
+from rustfava.util.date import Week
+from rustfava.util.date import Year
 
 if TYPE_CHECKING:
-    from fava.util.date import Interval
+    from rustfava.util.date import Interval
 
 
 fromisoformat = date.fromisoformat
@@ -232,7 +232,7 @@ def test_dateranges_single_date() -> None:
     ],
 )
 def test_substitute(string: str, output: str) -> None:
-    with mock.patch("fava.util.date.local_today") as mock_local_today:
+    with mock.patch("rustfava.util.date.local_today") as mock_local_today:
         mock_local_today.return_value = fromisoformat("2016-06-24")
         assert substitute(string) == output
 
@@ -273,7 +273,7 @@ def test_fiscal_substitute(
     output: str | None,
 ) -> None:
     fye = parse_fye_string(fye_str)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
+    with mock.patch("rustfava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = fromisoformat(test_date)
         mock_date.side_effect = date
         if output is None:
@@ -333,7 +333,7 @@ def test_parse_date_relative(
     text: str,
 ) -> None:
     start, end = fromisoformat(expect_start), fromisoformat(expect_end)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
+    with mock.patch("rustfava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = fromisoformat("2016-06-24")
         mock_date.side_effect = date
         assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)

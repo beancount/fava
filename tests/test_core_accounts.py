@@ -1,14 +1,14 @@
-"""Fava's budget syntax."""
+"""Rustfava's budget syntax."""
 
 from __future__ import annotations
 
 import datetime
 
-from fava.beans import create
-from fava.beans.helpers import replace
-from fava.core.accounts import get_last_entry
-from fava.core.accounts import uptodate_status
-from fava.core.group_entries import TransactionPosting
+from rustfava.beans import create
+from rustfava.beans.helpers import replace
+from rustfava.core.accounts import get_last_entry
+from rustfava.core.accounts import uptodate_status
+from rustfava.core.group_entries import TransactionPosting
 
 
 def test_get_last_entry() -> None:

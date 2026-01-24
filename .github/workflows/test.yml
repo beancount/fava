@@ -43,7 +43,7 @@ jobs:
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
-      - run: touch src/fava/static/app.js
+      - run: touch src/rustfava/static/app.js
       - run: make ${{ matrix.make_target }}
   test-js:
     runs-on: ${{ matrix.os }}
@@ -110,7 +110,7 @@ jobs:
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
-      - run: touch src/fava/static/app.js
+      - run: touch src/rustfava/static/app.js
       - run: make mypy
   lint-python-ty:
     runs-on: "ubuntu-latest"
@@ -124,5 +124,5 @@ jobs:
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
-      - run: touch src/fava/static/app.js
+      - run: touch src/rustfava/static/app.js
       - run: make ty

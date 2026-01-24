@@ -31,7 +31,7 @@ test("derived store", () => {
 
 test("localStorage-synced stores", () => {
   const a = localStorageSyncedStore("test-store", string, () => "default");
-  equal(a.key, "fava-test-store");
+  equal(a.key, "rustfava-test-store");
   deepEqual(a.values(), []);
 
   // Getting the value will temporarily attach a subscriber (and unsubscribe as well).
@@ -65,7 +65,7 @@ test("localStorage-synced stores", () => {
   );
   window.dispatchEvent(
     new StorageEvent("storage", {
-      key: "fava-wrong-key",
+      key: "rustfava-wrong-key",
       newValue: JSON.stringify("event-value-wrong-key"),
       storageArea: localStorage,
     }),
@@ -82,7 +82,7 @@ test("localStorage-synced stores", () => {
 
   throws(() => {
     // The prefix is added automatically.
-    localStorageSyncedStore("fava-test-store", string, () => "value");
+    localStorageSyncedStore("rustfava-test-store", string, () => "value");
   });
   throws(() => {
     // No duplicate stores

@@ -1,4 +1,4 @@
-"""Test importer for Fava."""
+"""Test importer for Rustfava."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING
 
 from beangulp import Importer
 
-from fava.beans import create
-from fava.beans.ingest import BeanImporterProtocol
+from rustfava.beans import create
+from rustfava.beans.ingest import BeanImporterProtocol
 
 try:
     from typing import override
@@ -23,8 +23,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from typing import Any
 
-    from fava.beans.abc import Directive
-    from fava.beans.ingest import FileMemo
+    from rustfava.beans.abc import Directive
+    from rustfava.beans.ingest import FileMemo
 
 DATE = datetime.date(2022, 12, 12)
 
@@ -111,7 +111,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
 
 
 class TestImporter(BeanImporterProtocol):
-    """Test importer for Fava."""
+    """Test importer for Rustfava."""
 
     account = "Assets:Checking"
     currency = "EUR"

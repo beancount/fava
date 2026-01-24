@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from fava.core.watcher import Watcher
-from fava.core.watcher import WatchfilesWatcher
+from rustfava.core.watcher import Watcher
+from rustfava.core.watcher import WatchfilesWatcher
 
 if TYPE_CHECKING:  # pragma: no cover
     from pathlib import Path

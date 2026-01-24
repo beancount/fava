@@ -1,4 +1,4 @@
-"""Fava's budget syntax."""
+"""Rustfava's budget syntax."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ from datetime import date
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from fava.core.budgets import calculate_budget
-from fava.core.budgets import calculate_budget_children
-from fava.core.budgets import parse_budgets
+from rustfava.core.budgets import calculate_budget
+from rustfava.core.budgets import calculate_budget_children
+from rustfava.core.budgets import parse_budgets
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Custom
-    from fava.core.budgets import BudgetDict
+    from rustfava.beans.abc import Custom
+    from rustfava.core.budgets import BudgetDict
 
 
 def test_budgets(load_doc_custom_entries: list[Custom]) -> None:

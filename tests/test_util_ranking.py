@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from fava.util.ranking import ExponentialDecayRanker
+from rustfava.util.ranking import ExponentialDecayRanker
 
 
 def test_ranker() -> None:

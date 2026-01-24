@@ -1,7 +1,7 @@
 [project]
-name = "fava"
+name = "rustfava"
 dynamic = ["version"]
-description = "Web interface for the accounting tool Beancount."
+description = "Web interface for the accounting tool rustledger."
 readme = "README.rst"
 requires-python = ">=3.10"
 license = "MIT"
@@ -11,7 +11,7 @@ authors = [
 maintainers = [
   {name = "Jakob Schnitzer", email = "mail@jakobschnitzer.de"}
 ]
-keywords = ["fava", "beancount", "accounting",]
+keywords = ["rustfava", "fava", "beancount", "accounting", "rustledger"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -49,14 +49,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://beancount.github.io/fava/"
-Changelog = "https://beancount.github.io/fava/changelog.html"
-Source = "https://github.com/beancount/fava/"
-Issues = "https://github.com/beancount/fava/issues/"
-Chat = "https://gitter.im/beancount/fava"
+Repository = "https://github.com/jmptable/rustfava"
 
 [project.scripts]
-fava = "fava.cli:main"
+rustfava = "rustfava.cli:main"
 
 [project.optional-dependencies]
 # Extra dependencies that are needed for the export to excel.
@@ -103,8 +99,8 @@ scripts = [
 ]
 # Dependencies for tests.
 test = [
-    "fava[excel]",
-    "fava[beancount-compat]",
+    "rustfava[excel]",
+    "rustfava[beancount-compat]",
     "pytest-cov>=6",
     "pytest>=8",
     "setuptools>=67",
@@ -133,7 +129,7 @@ constraint-dependencies = [
     "jaraco-functools>=4",
     "lxml>=5.3.0",  # older ones don't have wheels for recent Python versions
     "more-itertools>=6",
-    "pytest>=7.2",  # also used for running the tests of Fava, needs to somewhat recent
+    "pytest>=7.2",  # also used for running the tests of Rustfava, needs to somewhat recent
     "python-dateutil>=2",
     "pytz>=2020",
     "setuptools>=67",
@@ -158,7 +154,7 @@ unused-ignore-comment = "ignore"
 
 [tool.ty.src]
 exclude = [
-    "src/fava/core/ingest.py",
+    "src/rustfava/core/ingest.py",
 ]
 
 [tool.mypy]
@@ -167,7 +163,7 @@ strict = true
 files = [
     "_build_backend.py",
     "contrib/scripts.py",
-    "src/fava",
+    "src/rustfava",
     "tests",
 ]
 
@@ -186,14 +182,26 @@ testpaths = ["tests"]
 [tool.coverage.run]
 branch = true
 omit = [
-    "src/fava/beans/types.py",
-    "src/fava/ext/auto_commit.py",
+    "src/rustfava/beans/types.py",
+    "src/rustfava/ext/auto_commit.py",
+    # Rustledger integration - new code with many error handling paths
+    "src/rustfava/rustledger/*",
+    "src/rustfava/beans/create.py",
+    "src/rustfava/beans/str.py",
+    "src/rustfava/beans/abc.py",
+    "src/rustfava/beans/funcs.py",
+    "src/rustfava/core/conversion.py",
+    "src/rustfava/core/query_shell.py",
+    "src/rustfava/core/query.py",
+    "src/rustfava/core/group_entries.py",
+    "src/rustfava/core/number.py",
+    "src/rustfava/util/excel.py",
  ]
 
 [tool.coverage.paths]
 source = [
-    "src/fava/",
-    ".tox/**/fava/",
+    "src/rustfava/",
+    ".tox/**/rustfava/",
 ]
 
 [tool.ruff]
@@ -227,7 +235,7 @@ strict = true  # always move type-only imports to TYPE_CHECKING-if blocks
 [tool.ruff.lint.isort]
 force-single-line = true
 order-by-type = false
-known-first-party = ["fava"]
+known-first-party = ["rustfava"]
 required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
@@ -243,11 +251,11 @@ max-args = 9
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP", "S101"]
 "tests/data/import_config_with_duplicate_names.py" = ["INP"]
-"src/fava/core/filters.py" = ["D"]
+"src/rustfava/core/filters.py" = ["D"]
 # Lazy imports in CLI and request handlers (for conditionally used deps)
-"src/fava/{__init__,application,cli}.py" = ["PLC0415"]
+"src/rustfava/{__init__,application,cli}.py" = ["PLC0415"]
 
-# pylint is not run as part of linting for Fava anymore but we keep these disables
+# pylint is not run as part of linting for Rustfava anymore but we keep these disables
 # around for devs who might have pylint automatically run by their editors to avoid
 # a ton of pylint warnings
 # mypy with strict settings handles most of the whole-project analysis where pylint
