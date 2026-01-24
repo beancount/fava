@@ -6,7 +6,7 @@ repo_name: rustledger/rustfava
 
 theme:
   name: material
-  logo: logo.png
+  logo: logo.svg
   palette:
     - scheme: default
       primary: teal
