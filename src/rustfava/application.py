@@ -1,6 +1,6 @@
-"""Rustfava's main WSGI application.
+"""rustfava's main WSGI application.
 
-you can use `create_app` to create a Rustfava WSGI app for a given list of files.
+you can use `create_app` to create a rustfava WSGI app for a given list of files.
 To start a simple server::
 
     from rustfava.application import create_app
@@ -307,7 +307,7 @@ def _setup_filters(
             and "application/json" in response.content_type
             and response.content_length
             and response.content_length > 500
-            and "gzip" in request.accept_encodings
+            and any(enc == "gzip" for enc, _ in request.accept_encodings)
         ):
             response.data = gzip.compress(response.data)
             response.headers["Content-Encoding"] = "gzip"
@@ -427,14 +427,20 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
-        """Rustfava's included documentation."""
+        """rustfava's included documentation."""
         from importlib.metadata import version
 
         from markdown2 import markdown
 
-        if page_slug not in HELP_PAGES:
+        # Validate against whitelist (defense-in-depth: also check for path traversal)
+        if page_slug not in HELP_PAGES or "/" in page_slug or "\\" in page_slug:
             return abort(404)
-        help_path = Path(__file__).parent / "help" / (page_slug + ".md")
+        help_dir = (Path(__file__).parent / "help").resolve()
+        help_path = (help_dir / (page_slug + ".md")).resolve()
+        # Ensure resolved path is within help directory
+        # Note: With whitelist check above, this is unreachable (defense-in-depth)
+        if not help_path.is_relative_to(help_dir):  # pragma: no cover
+            return abort(404)
         contents = help_path.read_text(encoding="utf-8")
         html = markdown(
             contents,
@@ -496,7 +502,7 @@ def create_app(
     read_only: bool = False,
     poll_watcher: bool = False,
 ) -> Flask:
-    """Create a Rustfava Flask application.
+    """Create a rustfava Flask application.
 
     Arguments:
         files: The list of Beancount files (paths).

@@ -54,7 +54,7 @@ def test_text_queries(
 ) -> None:
     assert run_text_query(".help")
 
-    noop_doc = "Doesn't do anything in Rustfava's query shell."
+    noop_doc = "Doesn't do anything in rustfava's query shell."
     assert run_text_query(".exit") == noop_doc
     assert run_text_query(".help exit") == noop_doc
     snapshot(run_text_query(".explain select date, balance")[:100])

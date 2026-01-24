@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rustfava</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #0f172a;
+      color: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      height: 40px;
+      padding: 0 8px;
+      gap: 4px;
+      -webkit-app-region: drag;
+    }
+
+    .tab-bar-buttons {
+      display: flex;
+      gap: 4px;
+      -webkit-app-region: no-drag;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #334155;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      font-size: 13px;
+      color: #94a3b8;
+      max-width: 200px;
+      transition: all 0.15s ease;
+      -webkit-app-region: no-drag;
+    }
+
+    .tab:hover {
+      background: #475569;
+      color: #e2e8f0;
+    }
+
+    .tab.active {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .tab-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .tab-close {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #64748b;
+      transition: all 0.15s ease;
+    }
+
+    .tab-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .new-tab-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      -webkit-app-region: no-drag;
+    }
+
+    .new-tab-btn:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Welcome screen */
+    .welcome {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      background: #0a0f1a;
+    }
+
+    .welcome.hidden {
+      display: none;
+    }
+
+    /* Left sidebar - Recent files */
+    .sidebar {
+      width: 280px;
+      background: #0f1420;
+      border-right: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    .sidebar.empty {
+      display: none;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .sidebar-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .recent-list {
+      list-style: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .recent-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+    }
+
+    .recent-item:hover {
+      background: rgba(249, 115, 22, 0.08);
+      border-color: rgba(249, 115, 22, 0.2);
+    }
+
+    .recent-item:active {
+      background: rgba(249, 115, 22, 0.12);
+    }
+
+    .recent-item .file-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+      border: 1px solid #334155;
+    }
+
+    .recent-item .name {
+      font-weight: 500;
+      font-size: 13px;
+      color: #e2e8f0;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-item .path {
+      font-size: 11px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-item .time {
+      font-size: 10px;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    /* Main content area */
+    .welcome-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
+      position: relative;
+    }
+
+    .welcome-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(249, 115, 22, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.02) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .welcome-content {
+      text-align: center;
+      padding: 60px 40px;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-icon {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 8px 24px rgba(249, 115, 22, 0.2));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .logo {
+      font-size: 56px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+
+    .logo .rust {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo .fava {
+      color: #f8fafc;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .tagline {
+      color: #94a3b8;
+      margin-bottom: 48px;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    .open-btn {
+      padding: 18px 48px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:
+        0 4px 14px rgba(249, 115, 22, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .open-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s;
+    }
+
+    .open-btn:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 8px 25px rgba(249, 115, 22, 0.45),
+        0 3px 6px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .open-btn:hover::before {
+      left: 100%;
+    }
+
+    .open-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .hint {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .hint kbd {
+      background: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    /* Quick actions below button */
+    .quick-actions {
+      margin-top: 32px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .quick-action {
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-action:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+
+    .quick-action .icon {
+      font-size: 16px;
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(249, 115, 22, 0.2);
+      border-top-color: #f97316;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Terminal Panel */
+    .terminal-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: #0c1222;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .terminal-panel.visible {
+      transform: translateY(0);
+    }
+
+    .terminal-resize-handle {
+      height: 6px;
+      background: #1e293b;
+      cursor: ns-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+
+    .terminal-resize-handle:hover {
+      background: #334155;
+    }
+
+    .terminal-resize-handle::after {
+      content: '';
+      width: 40px;
+      height: 3px;
+      background: #475569;
+      border-radius: 2px;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      height: 36px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .terminal-tabs {
+      display: flex;
+      gap: 2px;
+    }
+
+    .terminal-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .terminal-tab:hover {
+      background: #1e293b;
+      color: #e2e8f0;
+    }
+
+    .terminal-tab.active {
+      background: #1e293b;
+      color: #f97316;
+    }
+
+    .terminal-tab .icon {
+      font-size: 14px;
+    }
+
+    .terminal-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .terminal-action {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .terminal-action:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    .terminal-action.close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .terminal-body {
+      flex: 1;
+      overflow: hidden;
+      padding: 8px 12px;
+    }
+
+    .terminal-body .xterm {
+      height: 100%;
+    }
+
+    .terminal-body .xterm-viewport {
+      overflow-y: auto !important;
+    }
+
+    /* Terminal toggle button (in tab content area) */
+    .terminal-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      color: #94a3b8;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 40;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .terminal-toggle:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #334155 0%, #475569 100%);
+      color: #f97316;
+      border-color: #f97316;
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.2);
+    }
+
+    .terminal-toggle.hidden {
+      display: none;
+    }
+
+    /* Adjust content area when terminal is open */
+    .content.terminal-open .tab-content {
+      bottom: 300px;
+    }
+
+    .content.terminal-open .terminal-toggle {
+      bottom: 316px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-bar-buttons" id="tabs"></div>
+    <button class="new-tab-btn" id="newTabBtn" title="Open file (Ctrl+O)">+</button>
+  </div>
+
+  <!-- Content area -->
+  <div class="content">
+    <!-- Welcome screen (shown when no tabs) -->
+    <div class="welcome" id="welcome">
+      <!-- Sidebar with recent files -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">Recent Files</div>
+        </div>
+        <ul class="recent-list" id="recentList"></ul>
+      </div>
+
+      <!-- Main content -->
+      <div class="welcome-main">
+        <div class="welcome-content">
+          <img src="logo.svg" alt="rustfava logo" class="logo-icon">
+          <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
+          <div class="tagline">Accounting in plain text, under your control, forever.</div>
+
+          <button class="open-btn" id="openBtn">Open Beancount File</button>
+
+          <div class="hint">or press <kbd>Ctrl</kbd>+<kbd>O</kbd></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content (iframes) -->
+    <div id="tabContents"></div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Terminal toggle button -->
+    <button class="terminal-toggle hidden" id="terminalToggle" title="Toggle Terminal (Ctrl+`)">
+      ⌘
+    </button>
+
+    <!-- Terminal panel -->
+    <div class="terminal-panel" id="terminalPanel">
+      <div class="terminal-resize-handle" id="terminalResizeHandle"></div>
+      <div class="terminal-header">
+        <div class="terminal-tabs">
+          <div class="terminal-tab active">
+            <span class="icon">▸</span>
+            <span>Terminal</span>
+          </div>
+        </div>
+        <div class="terminal-actions">
+          <button class="terminal-action" id="terminalClear" title="Clear">⌫</button>
+          <button class="terminal-action close" id="terminalClose" title="Close (Ctrl+`)">✕</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'rustfava_recent_files';
+    const MAX_RECENT = 5;
+
+    // State
+    let tabs = [];  // { tab_id, url, path, name }
+    let activeTabId = null;
+
+    // Elements
+    const tabsEl = document.getElementById('tabs');
+    const tabContentsEl = document.getElementById('tabContents');
+    const welcomeEl = document.getElementById('welcome');
+    const loadingEl = document.getElementById('loadingOverlay');
+    const openBtn = document.getElementById('openBtn');
+    const newTabBtn = document.getElementById('newTabBtn');
+
+    // Recent files
+    function getRecentFiles() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function addRecentFile(path) {
+      let recent = getRecentFiles().filter(p => p !== path);
+      recent.unshift(path);
+      recent = recent.slice(0, MAX_RECENT);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recent));
+      renderRecentFiles();
+    }
+
+    function renderRecentFiles() {
+      const recent = getRecentFiles();
+      const sidebar = document.getElementById('sidebar');
+      const list = document.getElementById('recentList');
+
+      if (recent.length === 0) {
+        sidebar.classList.add('empty');
+        return;
+      }
+
+      sidebar.classList.remove('empty');
+      list.innerHTML = recent.map(path => {
+        const name = path.split('/').pop();
+        const dir = path.split('/').slice(0, -1).join('/');
+        // Shorten the directory path for display
+        const shortDir = dir.length > 40 ? '...' + dir.slice(-37) : dir;
+        return `
+          <li class="recent-item" data-path="${path}">
+            <div class="file-icon">📄</div>
+            <div class="name" title="${name}">${name}</div>
+            <div class="path" title="${dir}">${shortDir}</div>
+          </li>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.recent-item').forEach(item => {
+        item.addEventListener('click', () => openPath(item.dataset.path));
+      });
+    }
+
+    // Tab management
+    function renderTabs() {
+      tabsEl.innerHTML = tabs.map(tab => `
+        <div class="tab ${tab.tab_id === activeTabId ? 'active' : ''}" data-id="${tab.tab_id}">
+          <span class="tab-name" title="${tab.path}">${tab.name}</span>
+          <span class="tab-close" data-id="${tab.tab_id}">&times;</span>
+        </div>
+      `).join('');
+
+      // Tab click handlers
+      tabsEl.querySelectorAll('.tab').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('tab-close')) {
+            switchTab(el.dataset.id);
+          }
+        });
+      });
+
+      // Close button handlers
+      tabsEl.querySelectorAll('.tab-close').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeTab(el.dataset.id);
+        });
+      });
+
+      // Show/hide welcome screen
+      if (tabs.length === 0) {
+        welcomeEl.classList.remove('hidden');
+      } else {
+        welcomeEl.classList.add('hidden');
+      }
+    }
+
+    function renderTabContents() {
+      // Create/update iframes for each tab
+      const existingIds = new Set(
+        [...tabContentsEl.querySelectorAll('.tab-content')].map(el => el.dataset.id)
+      );
+
+      tabs.forEach(tab => {
+        if (!existingIds.has(tab.tab_id)) {
+          const div = document.createElement('div');
+          div.className = 'tab-content';
+          div.dataset.id = tab.tab_id;
+          div.innerHTML = `<iframe src="${tab.url}"></iframe>`;
+          tabContentsEl.appendChild(div);
+        }
+      });
+
+      // Remove iframes for closed tabs
+      tabContentsEl.querySelectorAll('.tab-content').forEach(el => {
+        if (!tabs.find(t => t.tab_id === el.dataset.id)) {
+          el.remove();
+        }
+      });
+
+      // Show active tab
+      tabContentsEl.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.toggle('active', el.dataset.id === activeTabId);
+      });
+    }
+
+    function switchTab(tabId) {
+      activeTabId = tabId;
+      renderTabs();
+      renderTabContents();
+    }
+
+    async function closeTab(tabId) {
+      try {
+        const { invoke } = window.__TAURI__.core;
+        await invoke('close_tab', { tabId });
+
+        const idx = tabs.findIndex(t => t.tab_id === tabId);
+        tabs = tabs.filter(t => t.tab_id !== tabId);
+
+        // Switch to another tab if closing active
+        if (activeTabId === tabId) {
+          if (tabs.length > 0) {
+            activeTabId = tabs[Math.max(0, idx - 1)].tab_id;
+          } else {
+            activeTabId = null;
+          }
+        }
+
+        renderTabs();
+        renderTabContents();
+      } catch (err) {
+        console.error('Failed to close tab:', err);
+      }
+    }
+
+    // Open file
+    async function openPath(path) {
+      loadingEl.classList.remove('hidden');
+
+      try {
+        const { invoke } = window.__TAURI__.core;
+        const result = await invoke('open_file', { path });
+
+        addRecentFile(path);
+
+        if (result.already_open) {
+          // Switch to existing tab
+          switchTab(result.tab_id);
+          loadingEl.classList.add('hidden');
+          return;
+        }
+
+        // Wait for server to be ready
+        await waitForServer(result.url);
+
+        // Add new tab
+        tabs.push({
+          tab_id: result.tab_id,
+          url: result.url,
+          path: result.path,
+          name: result.path.split('/').pop()
+        });
+        activeTabId = result.tab_id;
+
+        renderTabs();
+        renderTabContents();
+      } catch (err) {
+        console.error('Failed to open file:', err);
+        alert('Failed to open file: ' + err);
+      } finally {
+        loadingEl.classList.add('hidden');
+      }
+    }
+
+    async function waitForServer(url, maxAttempts = 30) {
+      for (let i = 0; i < maxAttempts; i++) {
+        try {
+          await fetch(url, { mode: 'no-cors' });
+          return;
+        } catch {
+          await new Promise(r => setTimeout(r, 200));
+        }
+      }
+      throw new Error('Server failed to start');
+    }
+
+    async function openFilePicker() {
+      try {
+        if (!window.__TAURI__) return;
+
+        const { open } = window.__TAURI__.dialog;
+        const path = await open({
+          multiple: false,
+          filters: [{
+            name: 'Beancount',
+            extensions: ['beancount', 'bean']
+          }]
+        });
+
+        if (path) {
+          await openPath(path);
+        }
+      } catch (err) {
+        console.error('File picker error:', err);
+      }
+    }
+
+    // Event listeners
+    openBtn.addEventListener('click', openFilePicker);
+    newTabBtn.addEventListener('click', openFilePicker);
+
+    // Menu events from Rust
+    if (window.__TAURI__) {
+      const { listen } = window.__TAURI__.event;
+
+      listen('menu-open-file', () => openFilePicker());
+
+      listen('menu-close-tab', () => {
+        if (activeTabId) closeTab(activeTabId);
+      });
+
+      listen('menu-reload', () => {
+        const iframe = tabContentsEl.querySelector(`.tab-content[data-id="${activeTabId}"] iframe`);
+        if (iframe) iframe.src = iframe.src;
+      });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+        e.preventDefault();
+        openFilePicker();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'w') {
+        e.preventDefault();
+        if (activeTabId) closeTab(activeTabId);
+      }
+    });
+
+    // Initialize
+    renderRecentFiles();
+    renderTabs();
+  </script>
+
+  <!-- xterm.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-links@0.11.0/lib/addon-web-links.min.js"></script>
+
+  <script>
+    // Terminal management
+    const terminalPanel = document.getElementById('terminalPanel');
+    const terminalBody = document.getElementById('terminalBody');
+    const terminalToggle = document.getElementById('terminalToggle');
+    const terminalClose = document.getElementById('terminalClose');
+    const terminalClear = document.getElementById('terminalClear');
+    const terminalResizeHandle = document.getElementById('terminalResizeHandle');
+    const contentEl = document.querySelector('.content');
+
+    let terminal = null;
+    let fitAddon = null;
+    let currentTerminalId = null;
+    let terminalVisible = false;
+    let terminalHeight = 300;
+
+    // Custom theme matching rustfava colors
+    const terminalTheme = {
+      background: '#0c1222',
+      foreground: '#e2e8f0',
+      cursor: '#f97316',
+      cursorAccent: '#0c1222',
+      selectionBackground: 'rgba(249, 115, 22, 0.3)',
+      selectionForeground: '#ffffff',
+      black: '#1e293b',
+      red: '#ef4444',
+      green: '#22c55e',
+      yellow: '#f59e0b',
+      blue: '#3b82f6',
+      magenta: '#a855f7',
+      cyan: '#06b6d4',
+      white: '#f1f5f9',
+      brightBlack: '#475569',
+      brightRed: '#f87171',
+      brightGreen: '#4ade80',
+      brightYellow: '#fbbf24',
+      brightBlue: '#60a5fa',
+      brightMagenta: '#c084fc',
+      brightCyan: '#22d3ee',
+      brightWhite: '#ffffff'
+    };
+
+    let commandBuffer = '';
+
+    function initTerminal() {
+      if (terminal) return;
+
+      terminal = new Terminal({
+        theme: terminalTheme,
+        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, Monaco, 'Courier New', monospace",
+        fontSize: 13,
+        lineHeight: 1.4,
+        cursorBlink: true,
+        cursorStyle: 'bar',
+        scrollback: 5000,
+        allowProposedApi: true
+      });
+
+      fitAddon = new FitAddon.FitAddon();
+      const webLinksAddon = new WebLinksAddon.WebLinksAddon();
+
+      terminal.loadAddon(fitAddon);
+      terminal.loadAddon(webLinksAddon);
+
+      terminal.open(terminalBody);
+      fitAddon.fit();
+
+      // Handle terminal input - command-based approach
+      terminal.onData(data => {
+        if (!currentTerminalId || !window.__TAURI__) return;
+
+        // Handle special keys
+        if (data === '\r') {
+          // Enter pressed - execute command
+          if (commandBuffer.trim()) {
+            window.__TAURI__.core.invoke('run_command', {
+              terminalId: currentTerminalId,
+              command: commandBuffer.trim()
+            }).catch(err => {
+              terminal.write(`\r\n\x1b[31mError: ${err}\x1b[0m\r\n\x1b[38;5;208m❯\x1b[0m `);
+            });
+          } else {
+            // Empty command - just show new prompt
+            terminal.write('\r\n\x1b[38;5;208m❯\x1b[0m ');
+          }
+          commandBuffer = '';
+        } else if (data === '\x7f' || data === '\b') {
+          // Backspace
+          if (commandBuffer.length > 0) {
+            commandBuffer = commandBuffer.slice(0, -1);
+            terminal.write('\b \b');
+          }
+        } else if (data === '\x03') {
+          // Ctrl+C - cancel current input
+          commandBuffer = '';
+          terminal.write('^C\r\n\x1b[38;5;208m❯\x1b[0m ');
+        } else if (data === '\x0c') {
+          // Ctrl+L - clear screen
+          terminal.clear();
+          terminal.write('\x1b[38;5;208m❯\x1b[0m ' + commandBuffer);
+        } else if (data >= ' ' || data === '\t') {
+          // Regular printable characters
+          commandBuffer += data;
+          terminal.write(data);
+        }
+      });
+    }
+
+    async function spawnTerminal(cwd) {
+      if (!window.__TAURI__) return;
+
+      try {
+        const { invoke } = window.__TAURI__.core;
+        const { listen } = window.__TAURI__.event;
+
+        // Create terminal session
+        currentTerminalId = await invoke('spawn_terminal', { cwd });
+        commandBuffer = '';
+
+        // Listen for terminal output
+        listen(`terminal-output-${currentTerminalId}`, (event) => {
+          if (terminal) {
+            terminal.write(event.payload);
+          }
+        });
+
+      } catch (err) {
+        console.error('Failed to create terminal:', err);
+        if (terminal) {
+          terminal.write(`\x1b[31mFailed to create terminal: ${err}\x1b[0m\r\n`);
+        }
+      }
+    }
+
+    function showTerminal() {
+      if (!terminal) {
+        initTerminal();
+      }
+
+      terminalPanel.classList.add('visible');
+      contentEl.classList.add('terminal-open');
+      terminalVisible = true;
+
+      // Fit terminal to container
+      setTimeout(() => {
+        if (fitAddon) fitAddon.fit();
+        if (terminal) terminal.focus();
+      }, 300);
+
+      // Spawn terminal if not already running and we have an active tab
+      if (!currentTerminalId && activeTabId) {
+        const tab = tabs.find(t => t.tab_id === activeTabId);
+        if (tab) {
+          spawnTerminal(tab.path);
+        }
+      }
+    }
+
+    function hideTerminal() {
+      terminalPanel.classList.remove('visible');
+      contentEl.classList.remove('terminal-open');
+      terminalVisible = false;
+    }
+
+    function toggleTerminal() {
+      if (terminalVisible) {
+        hideTerminal();
+      } else {
+        showTerminal();
+      }
+    }
+
+    // Terminal resize handling
+    let isResizing = false;
+    let startY = 0;
+    let startHeight = 0;
+
+    terminalResizeHandle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = terminalHeight;
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+
+      const delta = startY - e.clientY;
+      terminalHeight = Math.max(150, Math.min(window.innerHeight - 100, startHeight + delta));
+      terminalPanel.style.height = terminalHeight + 'px';
+
+      // Update tab content bottom offset
+      document.documentElement.style.setProperty('--terminal-height', terminalHeight + 'px');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(el => {
+        if (terminalVisible) {
+          el.style.bottom = terminalHeight + 'px';
+        }
+      });
+
+      if (fitAddon) fitAddon.fit();
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+
+    // Terminal event handlers
+    terminalToggle.addEventListener('click', toggleTerminal);
+    terminalClose.addEventListener('click', hideTerminal);
+    terminalClear.addEventListener('click', () => {
+      if (terminal) terminal.clear();
+    });
+
+    // Show toggle button when tabs are open
+    const originalRenderTabs = renderTabs;
+    renderTabs = function() {
+      originalRenderTabs();
+      if (tabs.length > 0) {
+        terminalToggle.classList.remove('hidden');
+      } else {
+        terminalToggle.classList.add('hidden');
+        hideTerminal();
+      }
+    };
+
+    // Keyboard shortcut for terminal toggle
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === '`') {
+        e.preventDefault();
+        if (tabs.length > 0) {
+          toggleTerminal();
+        }
+      }
+    });
+
+    // Listen for menu toggle event
+    if (window.__TAURI__) {
+      const { listen } = window.__TAURI__.event;
+      listen('menu-toggle-terminal', () => {
+        if (tabs.length > 0) {
+          toggleTerminal();
+        }
+      });
+    }
+
+    // Resize terminal on window resize
+    window.addEventListener('resize', () => {
+      if (fitAddon && terminalVisible) {
+        fitAddon.fit();
+      }
+    });
+
+    // Kill terminal when closing tab
+    const originalCloseTab = closeTab;
+    closeTab = async function(tabId) {
+      // If closing the tab that owns the terminal, kill it
+      if (currentTerminalId && tabs.length === 1) {
+        try {
+          await window.__TAURI__.core.invoke('kill_terminal', { terminalId: currentTerminalId });
+        } catch (err) {
+          console.error('Failed to kill terminal:', err);
+        }
+        currentTerminalId = null;
+      }
+      return originalCloseTab(tabId);
+    };
+  </script>
+</body>
+</html>

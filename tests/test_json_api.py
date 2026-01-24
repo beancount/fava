@@ -882,3 +882,32 @@ def test_api(
     data = assert_api_success(response)
     assert data
     snapshot(data, name=name, json=True)
+
+
+def test_api_etag_304(test_client: FlaskClient) -> None:
+    """Test ETag caching returns 304 Not Modified."""
+    # First request to get the ETag
+    response = test_client.get("/long-example/api/changed")
+    assert response.status_code == HTTPStatus.OK.value
+    etag = response.headers.get("ETag")
+    assert etag is not None
+
+    # Second request with If-None-Match should return 304
+    response = test_client.get(
+        "/long-example/api/changed",
+        headers={"If-None-Match": etag},
+    )
+    assert response.status_code == HTTPStatus.NOT_MODIFIED.value
+    assert response.data == b""
+
+
+def test_api_pydantic_validation_error(test_client: FlaskClient) -> None:
+    """Test Pydantic validation error handler."""
+    # Send invalid JSON to an endpoint expecting a specific structure
+    response = test_client.put(
+        "/long-example/api/source",
+        json={"source": 123, "file_path": None},  # source should be str
+    )
+    assert response.status_code == HTTPStatus.BAD_REQUEST.value
+    assert response.json
+    assert "Validation error" in response.json["error"]

@@ -1,4 +1,4 @@
-"""Rustfava's budget syntax."""
+"""rustfava's budget syntax."""
 
 from __future__ import annotations
 

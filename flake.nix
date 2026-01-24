@@ -4,12 +4,22 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ rust-overlay.overlays.default ];
+        };
+
+        # Rust toolchain with WASM target
+        rustToolchain = pkgs.rust-bin.stable.latest.default.override {
+          targets = [ "wasm32-wasip1" ];
+        };
 
         # Python with Rustfava dependencies
         pythonEnv = pkgs.python313.withPackages (ps: with ps; [
@@ -59,6 +69,20 @@
 
             # Node.js 23+ for frontend tests (required for registerHooks API)
             pkgs.nodejs_latest
+
+            # Rust toolchain with WASM target for Tauri desktop app
+            rustToolchain
+
+            # Tauri system dependencies
+            pkgs.pkg-config
+            pkgs.openssl
+            pkgs.webkitgtk_4_1
+            pkgs.libsoup_3
+            pkgs.glib-networking
+            pkgs.librsvg
+            pkgs.gsettings-desktop-schemas
+            pkgs.gtk3
+
           ];
 
           shellHook = ''
@@ -70,6 +94,10 @@
             echo ""
             echo "WASM file: src/rustfava/rustledger/rustledger-wasi.wasm"
             echo ""
+
+            # GTK/GSettings environment for Tauri
+            export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
+            export GIO_MODULE_DIR="${pkgs.glib-networking}/lib/gio/modules"
 
             # Create/activate venv for additional packages not in nixpkgs
             if [ ! -d ".venv" ]; then

@@ -26,7 +26,7 @@ def replace(entry: T, **kwargs: Any) -> T:
         return entry._replace(**kwargs)  # type: ignore[no-any-return]
     # Rustledger dataclass
     if hasattr(entry, "__dataclass_fields__"):
-        return dataclass_replace(entry, **kwargs)  # type: ignore[no-any-return]
+        return dataclass_replace(entry, **kwargs)  # type: ignore[type-var]
     msg = f"Could not replace attribute in type {type(entry)}"
     raise TypeError(msg)
 

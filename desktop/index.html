@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rustfava</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-bar-buttons" id="tabs"></div>
+    <button class="new-tab-btn" id="newTabBtn" title="Open file (Ctrl+O)">+</button>
+  </div>
+
+  <!-- Content area -->
+  <div class="content" id="content">
+    <!-- Welcome screen (shown when no tabs) -->
+    <div class="welcome" id="welcome">
+      <!-- Sidebar with recent files -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">Recent Files</div>
+        </div>
+        <ul class="recent-list" id="recentList"></ul>
+      </div>
+
+      <!-- Main content -->
+      <div class="welcome-main">
+        <div class="welcome-content">
+          <img src="/src/logo.svg" alt="rustfava logo" class="logo-icon">
+          <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
+          <div class="tagline">Accounting in plain text, under your control, forever.</div>
+
+          <button class="open-btn" id="openExampleBtn">Open Example Beancount File</button>
+
+          <div class="hint">or <button class="link-btn" id="openBtn">open your own file</button> (<kbd>Ctrl</kbd>+<kbd>O</kbd>)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content (iframes) -->
+    <div id="tabContents"></div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Terminal panel -->
+    <div class="terminal-panel" id="terminalPanel">
+      <div class="terminal-resize-handle" id="terminalResizeHandle"></div>
+      <div class="terminal-header">
+        <div class="terminal-header-left">
+          <span class="terminal-header-title">TERMINAL</span>
+        </div>
+        <div class="terminal-header-right">
+          <button class="terminal-action" id="terminalNew" title="New Terminal">+</button>
+          <button class="terminal-action" id="terminalClear" title="Clear">&#9003;</button>
+          <button class="terminal-action close" id="terminalClose" title="Close Panel (Ctrl+`)">&#10005;</button>
+        </div>
+      </div>
+      <div class="terminal-main">
+        <div class="terminal-body" id="terminalBody"></div>
+        <div class="terminal-sidebar" id="terminalSidebar">
+          <div class="terminal-list" id="terminalList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer bar -->
+  <div class="footer-bar" id="footerBar">
+    <div class="footer-left">
+      <div class="terminal-toggle-bar" id="terminalToggle" title="Toggle Terminal (Ctrl+`)">
+        <span class="icon">&#9654;</span>
+        <span>Terminal</span>
+      </div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-item" id="footerPath"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-"""Test importer for Rustfava."""
+"""Test importer for rustfava."""
 
 from __future__ import annotations
 
@@ -111,7 +111,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
 
 
 class TestImporter(BeanImporterProtocol):
-    """Test importer for Rustfava."""
+    """Test importer for rustfava."""
 
     account = "Assets:Checking"
     currency = "EUR"

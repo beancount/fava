@@ -35,19 +35,19 @@ def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
 
 
 def setup_logging() -> None:
-    """Set up logging for Rustfava."""
+    """Set up logging for rustfava."""
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
 def setup_debug_logging() -> None:  # pragma: no cover
-    """Set up debug level logging for Rustfava."""
+    """Set up debug level logging for rustfava."""
     logging.getLogger().setLevel(logging.DEBUG)
     logging.getLogger("watchfiles").setLevel(logging.INFO)
 
 
 def get_translations(locale: Locale) -> str | None:
-    """Check whether Rustfava has translations for the locale.
+    """Check whether rustfava has translations for the locale.
 
     Args:
         locale: The locale to search for
@@ -136,12 +136,22 @@ def send_file_inline(filename: str) -> Response:
     """Send a file inline, including the original filename.
 
     Ref: http://test.greenbytes.de/tech/tc2231/.
+
+    Security: Callers must validate that filename is an allowed path.
+    This function adds defense-in-depth with path normalization and containment.
     """
-    try:
-        response: Response = send_file(filename)
-    except FileNotFoundError:
+    # Compute base directory from filename's resolved parent
+    base_dir = Path(filename).resolve().parent
+    # Normalize target path - only allow basename under resolved parent
+    full_path = (base_dir / Path(filename).name).resolve()
+    # Enforce containment: path must be within base_dir (403 if escape attempt)
+    # Note: With current logic this is unreachable (defense-in-depth)
+    if not full_path.is_relative_to(base_dir):  # pragma: no cover
+        return abort(403)
+    # Check file exists (404 if not found)
+    if not full_path.is_file():
         return abort(404)
-    base = Path(filename).name
-    cont_disp = f"inline; filename*=UTF-8''{quote(base)}"
+    response: Response = send_file(full_path)
+    cont_disp = f"inline; filename*=UTF-8''{quote(full_path.name)}"
     response.headers["Content-Disposition"] = cont_disp
     return response

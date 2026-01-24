@@ -149,8 +149,13 @@ class Balance(Directive):
 
     @property
     @abstractmethod
+    def amount(self) -> protocols.Amount:
+        """Balance amount."""
+
+    @property
+    @abstractmethod
     def diff_amount(self) -> protocols.Amount | None:
-        """Account of the directive."""
+        """Difference amount if balance failed."""
 
 
 class Commodity(Directive):

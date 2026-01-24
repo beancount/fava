@@ -11,6 +11,7 @@ from dataclasses import asdict
 from dataclasses import dataclass
 from dataclasses import fields
 from decimal import Decimal
+from typing import Any
 from typing import TYPE_CHECKING
 
 from rustfava.beans import abc
@@ -18,7 +19,6 @@ from rustfava.beans import abc
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from collections.abc import Sequence
-    from typing import Any
 
 
 class AsDictMixin:
@@ -29,7 +29,7 @@ class AsDictMixin:
         return {f.name: getattr(self, f.name) for f in fields(self)}  # type: ignore[arg-type]
 
 
-class FrozenDict(dict):
+class FrozenDict(dict[str, Any]):
     """A hashable dict for use in frozen dataclasses.
 
     This allows our directive types to be hashable while still
@@ -155,12 +155,15 @@ class RLPosition:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> RLPosition:
         """Create from JSON dict."""
-        units = RLAmount.from_json(data["units"])  # type: ignore[arg-type]
+        units = RLAmount.from_json(data["units"])
+        if units is None:
+            msg = "RLPosition requires units"
+            raise ValueError(msg)
         return cls(
             units=units,
             cost=RLCost.from_json(
                 data.get("cost"),
-                units_number=units.number if units else None,
+                units_number=units.number,
             ),
         )
 
@@ -562,7 +565,9 @@ class RLCustomValue:
             if val_type == "account":
                 return cls(val, dtype=str)
             if val_type == "date":
-                return cls(datetime.date.fromisoformat(val), dtype=datetime.date)
+                if val is None:
+                    return cls(None, dtype=datetime.date)
+                return cls(datetime.date.fromisoformat(str(val)), dtype=datetime.date)
             # Unknown type, return as-is
             return cls(val)
 
@@ -651,7 +656,10 @@ def directive_from_json(data: dict[str, Any]) -> abc.Directive:
     if cls is None:
         msg = f"Unknown directive type: {directive_type}"
         raise ValueError(msg)
-    return cls.from_json(data)
+    # All types in DIRECTIVE_TYPES have from_json class method
+    from_json = getattr(cls, "from_json")
+    result: abc.Directive = from_json(data)
+    return result
 
 
 def directives_from_json(data: list[dict[str, Any]]) -> list[abc.Directive]:
@@ -670,7 +678,7 @@ def _amount_to_json(amt: RLAmount | None) -> dict[str, Any] | None:
     return {"number": str(amt.number), "currency": amt.currency}
 
 
-def _cost_to_json(cost: RLCostSpec | None) -> dict[str, Any] | None:
+def _cost_to_json(cost: RLCost | None) -> dict[str, Any] | None:
     """Convert RLCostSpec to JSON dict."""
     if cost is None:
         return None
@@ -731,67 +739,70 @@ def directive_to_json(directive: abc.Directive) -> dict[str, Any]:
     if hasattr(directive, "meta") and directive.meta:
         result["meta"] = dict(directive.meta)
 
-    # Type-specific fields
+    # Type-specific fields - use getattr since directive type varies
     if type_name == "transaction":
-        result["flag"] = directive.flag
-        result["payee"] = directive.payee
-        result["narration"] = directive.narration
-        result["tags"] = list(directive.tags)
-        result["links"] = list(directive.links)
-        result["postings"] = [_posting_to_json(p) for p in directive.postings]
+        result["flag"] = getattr(directive, "flag", "*")
+        result["payee"] = getattr(directive, "payee", None)
+        result["narration"] = getattr(directive, "narration", "")
+        result["tags"] = list(getattr(directive, "tags", []))
+        result["links"] = list(getattr(directive, "links", []))
+        result["postings"] = [_posting_to_json(p) for p in getattr(directive, "postings", [])]
 
     elif type_name == "balance":
-        result["account"] = directive.account
-        result["amount"] = _amount_to_json(directive.amount)
-        if directive.tolerance is not None:
-            result["tolerance"] = str(directive.tolerance)
-        if directive.diff_amount is not None:
-            result["diff_amount"] = _amount_to_json(directive.diff_amount)
+        result["account"] = getattr(directive, "account", "")
+        result["amount"] = _amount_to_json(getattr(directive, "amount", None))
+        tolerance = getattr(directive, "tolerance", None)
+        if tolerance is not None:
+            result["tolerance"] = str(tolerance)
+        diff_amount = getattr(directive, "diff_amount", None)
+        if diff_amount is not None:
+            result["diff_amount"] = _amount_to_json(diff_amount)
 
     elif type_name == "open":
-        result["account"] = directive.account
-        result["currencies"] = list(directive.currencies) if directive.currencies else []
-        result["booking"] = directive.booking
+        result["account"] = getattr(directive, "account", "")
+        currencies = getattr(directive, "currencies", None)
+        result["currencies"] = list(currencies) if currencies else []
+        result["booking"] = getattr(directive, "booking", None)
 
     elif type_name == "close":
-        result["account"] = directive.account
+        result["account"] = getattr(directive, "account", "")
 
     elif type_name == "price":
-        result["currency"] = directive.currency
-        result["amount"] = _amount_to_json(directive.amount)
+        result["currency"] = getattr(directive, "currency", "")
+        result["amount"] = _amount_to_json(getattr(directive, "amount", None))
 
     elif type_name == "event":
-        result["event_type"] = directive.type
-        result["description"] = directive.description
+        result["event_type"] = getattr(directive, "type", "")
+        result["description"] = getattr(directive, "description", "")
 
     elif type_name == "note":
-        result["account"] = directive.account
-        result["comment"] = directive.comment
-        result["tags"] = list(directive.tags) if hasattr(directive, "tags") else []
-        result["links"] = list(directive.links) if hasattr(directive, "links") else []
+        result["account"] = getattr(directive, "account", "")
+        result["comment"] = getattr(directive, "comment", "")
+        result["tags"] = list(getattr(directive, "tags", []))
+        result["links"] = list(getattr(directive, "links", []))
 
     elif type_name == "document":
-        result["account"] = directive.account
-        result["filename"] = directive.filename
-        result["tags"] = list(directive.tags) if hasattr(directive, "tags") else []
-        result["links"] = list(directive.links) if hasattr(directive, "links") else []
+        result["account"] = getattr(directive, "account", "")
+        result["filename"] = getattr(directive, "filename", "")
+        result["tags"] = list(getattr(directive, "tags", []))
+        result["links"] = list(getattr(directive, "links", []))
 
     elif type_name == "pad":
-        result["account"] = directive.account
-        result["source_account"] = directive.source_account
+        result["account"] = getattr(directive, "account", "")
+        result["source_account"] = getattr(directive, "source_account", "")
 
     elif type_name == "commodity":
-        result["currency"] = directive.currency
+        result["currency"] = getattr(directive, "currency", "")
 
     elif type_name == "query":
-        result["name"] = directive.name
-        result["query_string"] = directive.query_string
+        result["name"] = getattr(directive, "name", "")
+        result["query_string"] = getattr(directive, "query_string", "")
 
     elif type_name == "custom":
-        result["custom_type"] = directive.type
+        result["custom_type"] = getattr(directive, "type", "")
         # Custom values need special handling
         values = []
-        for v in directive.values:
+        for v in getattr(directive, "values", []):
             if isinstance(v, RLCustomValue):
                 # Convert RLCustomValue to rustledger's typed format
                 if v.dtype == str:

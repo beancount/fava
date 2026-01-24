@@ -9,15 +9,27 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import requests
-from beancount.parser.options import OPTIONS_DEFAULTS
-from beanquery import connect
-from beanquery import query_compile
-from beanquery.parser.parser import KEYWORDS
 from click import echo
 from click import group
 from click import UsageError
 
 from rustfava import LOCALES
+
+# Optional imports for BQL grammar generation
+# These are only needed for the generate_bql_grammar_json command
+_HAS_BEANQUERY = False
+OPTIONS_DEFAULTS = None
+KEYWORDS: set[str] = set()
+connect = None
+query_compile = None
+try:
+    from beancount.parser.options import OPTIONS_DEFAULTS  # type: ignore[assignment]
+    from beanquery import connect  # type: ignore[import-not-found,no-redef]
+    from beanquery import query_compile  # type: ignore[no-redef]
+    from beanquery.parser.parser import KEYWORDS  # type: ignore[import-not-found,no-redef]
+    _HAS_BEANQUERY = True
+except ImportError:
+    pass
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
@@ -45,11 +57,20 @@ def generate_bql_grammar_json() -> None:
     The online code editor needs to have the list of available columns,
     functions, and keywords for syntax highlighting and completion.
 
-    Should be run whenever the BQL changes."""
+    Should be run whenever the BQL changes.
 
+    Requires beanquery to be installed.
+    """
+    if not _HAS_BEANQUERY:
+        raise UsageError(
+            "beanquery is required for this command. Install with: pip install beanquery"
+        )
+
+    assert connect is not None
+    assert query_compile is not None
     tables = connect(
         "beancount:", entries=[], options=OPTIONS_DEFAULTS, errors=[]
-    ).tables  # type: ignore[attr-defined]
+    ).tables
     columns = {column for table in tables.values() for column in table.columns}
     data = {
         "columns": sorted(columns),

@@ -15,6 +15,7 @@ from rustfava.helpers import RustfavaAPIError
 from rustfava.rustledger.query import CompilationError
 from rustfava.rustledger.query import connect
 from rustfava.rustledger.query import ParseError
+from rustfava.rustledger.query import RLConnection
 from rustfava.rustledger.query import RLCursor
 from rustfava.util.excel import HAVE_EXCEL
 from rustfava.util.excel import to_csv
@@ -97,7 +98,7 @@ class FavaQueryRunner:
         query_lower = query.lower()
 
         # Handle noop commands (return fixed text)
-        noop_doc = "Doesn't do anything in Rustfava's query shell."
+        noop_doc = "Doesn't do anything in rustfava's query shell."
         if query_lower in (".exit", ".quit", "exit", "quit"):
             return noop_doc
 
@@ -126,7 +127,7 @@ class FavaQueryRunner:
         except CompilationError as exc:
             raise QueryCompilationError(exc) from exc
 
-    def _handle_run(self, query: str, conn: connect) -> RLCursor | str:
+    def _handle_run(self, query: str, conn: RLConnection) -> RLCursor | str:
         """Handle .run command to execute stored queries."""
         queries = self.ledger.all_entries_by_type.Query
 
@@ -251,16 +252,16 @@ class QueryShell(FavaModule):
 
 
 def _numberify_rows(
-    rows: list[tuple],
-    columns: tuple,
-) -> list[tuple]:
+    rows: list[tuple[object, ...]],
+    columns: tuple[object, ...],
+) -> list[tuple[object, ...]]:
     """Convert row values to exportable format.
 
     This replaces beanquery.numberify.numberify_results for our use case.
     """
-    result = []
+    result: list[tuple[object, ...]] = []
     for row in rows:
-        new_row = []
+        new_row: list[object] = []
         for i, value in enumerate(row):
             col = columns[i]
             # Convert complex types to strings for export

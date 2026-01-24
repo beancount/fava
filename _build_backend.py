@@ -81,7 +81,7 @@ def _compile_translations() -> None:
 
 
 def _build_rustfava() -> None:
-    """Run the build steps for Rustfava."""
+    """Run the build steps for rustfava."""
     _compile_frontend()
     _compile_translations()
 

@@ -1,0 +1,26 @@
+[package]
+name = "rustfava-desktop"
+version = "0.1.0"
+description = "Desktop app for rustfava - double-entry bookkeeping"
+authors = ["rustfava"]
+license = "MIT"
+repository = "https://github.com/rustledger/rustfava"
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-pty = "0.2"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"

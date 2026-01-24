@@ -163,10 +163,10 @@ def options_from_json(data: dict[str, Any]) -> BeancountOptions:
             "account_unrealized_gains", "Income:Unrealized"
         ),
         # Booking and commodities
-        "booking_method": RLBooking(data.get("booking_method", "STRICT")),  # type: ignore[typeddict-item]
+        "booking_method": RLBooking(data.get("booking_method", "STRICT")),
         "commodities": set(data.get("commodities", [])),
         "conversion_currency": data.get("conversion_currency", ""),
-        "dcontext": dcontext,  # type: ignore[typeddict-item]
+        "dcontext": dcontext,
         "display_precision": display_precision,
         # File handling
         "documents": list(data.get("documents", [])),

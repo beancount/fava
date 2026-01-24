@@ -1,4 +1,4 @@
-"""The command-line interface for Rustfava."""
+"""The command-line interface for rustfava."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import click
 class AddressInUse(click.ClickException):  # noqa: D101
     def __init__(self, port: int) -> None:  # pragma: no cover
         super().__init__(
-            f"Cannot start Rustfava because port {port} is already in use."
+            f"Cannot start rustfava because port {port} is already in use."
             "\nPlease choose a different port with the '-p' option.",
         )
 
@@ -77,7 +77,7 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
 @click.option(
     "--read-only",
     is_flag=True,
-    help="Run in read-only mode, disable any change through Rustfava.",
+    help="Run in read-only mode, disable any change through rustfava.",
 )
 @click.option("-d", "--debug", is_flag=True, help="Turn on debugging.")
 @click.option(

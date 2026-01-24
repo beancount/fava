@@ -6,7 +6,7 @@ your own report pages.
 If you use this extension system and need it to do more or need other hooks,
 please open an issue on [GitHub](https://github.com/rustledger/rustfava/issues).
 
-A Rustfava extension is simply a Python module which contains a class that inherits
+A rustfava extension is simply a Python module which contains a class that inherits
 from `RustfavaExtensionBase` from `rustfava.ext`. Invoking an extension is done via the
 `fava-extension` option in the beancount file. Check out `rustfava.ext.auto_commit`
 for an example.
@@ -24,8 +24,8 @@ module can define functions to be called when different events happen. Take a
 look at `rustfava/ext/portfolio_list/PortfolioList.js` for an example. Currently,
 the following events/functions can be specified:
 
-- `init`: is called when a Rustfava report is first opened
-- `onPageLoad`: Is called when any page in Rustfava is loaded (so on first open and
+- `init`: is called when a rustfava report is first opened
+- `onPageLoad`: Is called when any page in rustfava is loaded (so on first open and
   on any further navigation).
 - `onExtensionPageLoad`: Is called when the extension report is loaded.
 
@@ -43,7 +43,7 @@ in addition to anything on the Python path. Single python files will also be
 searched - so for example a `my_extension.py` could be used by giving
 `my_extension`. Note that Python has a global namespace for currently loaded
 modules, so try avoiding simple names that might coincide with some Python
-library (as well as running Rustfava on two files that have different extensions of
+library (as well as running rustfava on two files that have different extensions of
 the same name).
 
 Extensions allow for an optional configuration options string, whose structure

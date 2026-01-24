@@ -10,7 +10,7 @@ Beancount file:
 2015-05-01 custom "budget" Expenses:Electricity  "quarterly"    85.00 EUR
 2016-06-01 custom "budget" Expenses:Holiday      "yearly"     2500.00 EUR</textarea></pre>
 
-If budgets are specified, Rustfava's reports and charts will display remaining
+If budgets are specified, rustfava's reports and charts will display remaining
 budgets and related information.
 
 The budget directives can be specified `daily`, `weekly`, `monthly`, `quarterly`
@@ -26,6 +26,6 @@ of the global budget in the `Net Profit` and `Expenses` charts for the Income
 Statement report.
 
 The Income Statement report is a good starting point for getting access to the
-full budget information in Rustfava. The `Changes` charts visualize the data. The
+full budget information in rustfava. The `Changes` charts visualize the data. The
 `Changes (monthly)` and `Balances (monthly)` reports show, respectively, the
 monthly and cumulative (over the selected period) budgets.

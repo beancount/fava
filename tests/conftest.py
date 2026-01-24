@@ -236,7 +236,7 @@ def snapshot(
 
 @pytest.fixture(scope="session")
 def app(test_data_dir: Path) -> Flask:
-    """Get the Rustfava Flask app."""
+    """Get the rustfava Flask app."""
     fava_app = create_app(
         [
             test_data_dir / filename
@@ -260,7 +260,7 @@ def app(test_data_dir: Path) -> Flask:
 
 @pytest.fixture
 def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
-    """Get a Rustfava Flask app in a tmp_dir."""
+    """Get a rustfava Flask app in a tmp_dir."""
     ledger_path = tmp_path / "edit-example.beancount"
     shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
     ledger_path.chmod(tmp_path.stat().st_mode)
@@ -271,7 +271,7 @@ def app_in_tmp_dir(test_data_dir: Path, tmp_path: Path) -> Flask:
 
 @pytest.fixture
 def test_client(app: Flask) -> FlaskClient:
-    """Get the test client for the Rustfava Flask app."""
+    """Get the test client for the rustfava Flask app."""
     return app.test_client()
 
 

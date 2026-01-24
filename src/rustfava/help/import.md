@@ -12,7 +12,7 @@ variable `HOOKS` with a list of hooks to apply to the list of
 `(filename: str, entries: list[Directive])` tuples. If you want to use
 beangulp-style hooks that take lists of
 `(filename: str, entries: list[Directive], account: str, importer: Importer)`-tuples,
-you can annotate them with the appropriate Python types which Rustfava will detect
+you can annotate them with the appropriate Python types which rustfava will detect
 and call with these 4-tuples.
 
 Set the `import-config` option to point to your import config and set

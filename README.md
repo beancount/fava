@@ -10,7 +10,7 @@ parsing and processing.
 
 ## Getting Started
 
-Install Rustfava:
+Install rustfava:
 
 ```bash
 uv pip install rustfava

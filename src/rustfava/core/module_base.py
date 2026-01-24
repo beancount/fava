@@ -1,4 +1,4 @@
-"""Base class for the "modules" of RustfavaLedger."""
+"""Base class for the "modules" of rustfavaLedger."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class FavaModule:
-    """Base class for the "modules" of RustfavaLedger."""
+    """Base class for the "modules" of rustfavaLedger."""
 
     def __init__(self, ledger: RustfavaLedger) -> None:
         self.ledger = ledger

@@ -1,6 +1,6 @@
 # Conversion
 
-In most reports in Rustfava, a conversion can be selected with the select dropdown
+In most reports in rustfava, a conversion can be selected with the select dropdown
 at the top of the chart. These conversions will use the prices defined in the
 Beancount file, so these should defined manually or by some plugin (using
 `beancount.plugins.implicit_prices` is recommend to get prices for all costs in

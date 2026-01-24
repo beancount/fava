@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "rustfava",
+  "version": "0.1.0",
+  "identifier": "io.rustledger.rustfava",
+  "build": {
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "rustfava",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "externalBin": [
+      "binaries/rustfava-server",
+      "binaries/bean-check",
+      "binaries/bean-doctor",
+      "binaries/bean-extract",
+      "binaries/bean-format",
+      "binaries/bean-price",
+      "binaries/bean-query",
+      "binaries/bean-report",
+      "binaries/rledger-check",
+      "binaries/rledger-doctor",
+      "binaries/rledger-extract",
+      "binaries/rledger-format",
+      "binaries/rledger-price",
+      "binaries/rledger-query",
+      "binaries/rledger-report"
+    ],
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
+  }
+}

@@ -30,7 +30,7 @@ With this release, query results are now rendered in the frontend. The
 templates for HTML rendering are still available but extension authors are
 encouraged to switch, see the statistics report for an example how this can be
 done. This release adds CSS styles for dark-mode. Numerical comparisons on the
-units, price or cost are now possible in Rustfava filters. As the watchfiles based
+units, price or cost are now possible in rustfava filters. As the watchfiles based
 watcher might not work correctly in some setups with network file systems, you
 can switch to the (slower) polling based watcher as well. The `default-file`
 option, if set, is now considered instead of the "main" file when inserting an
@@ -54,17 +54,17 @@ been re-added.
 
 This release brings various improvements to the charts, like allowing the
 toggling of currencies by clicking on their names in the chart legend. The
-account balance trees in Rustfava are now rendered in the frontend, fixing some
-minor bugs in the process and easing maintenance. Rustfava extensions can now also
+account balance trees in rustfava are now rendered in the frontend, fixing some
+minor bugs in the process and easing maintenance. rustfava extensions can now also
 provide their own endpoints.
 
 ## v1.25 (2023-07-17)
 
 With this release, extensions can now ship Javascript code to run in the
-frontend. The editor in Rustfava now uses a tree-sitter grammar to obtain a full
+frontend. The editor in rustfava now uses a tree-sitter grammar to obtain a full
 parsed syntax tree, which makes editor functionality more maintainable and
 should improve the autocompletion. The Flask WSGI app is now created using the
-application factory pattern - users who use the Rustfava WSGI app directly should
+application factory pattern - users who use the rustfava WSGI app directly should
 switch from `rustfava.application.app` to the `create_app` function in
 `rustfava.application`. This release also drops support for Python 3.7 and contains
 a couple of minor fixes and changes, in particular various styling fixes.
@@ -99,7 +99,7 @@ and use `g.filtered` instead of `ledger` for some attributes.
 
 ## v1.21 (2022-02-06)
 
-This release of Rustfava drops support for Python 3.6. It mainly consists of
+This release of rustfava drops support for Python 3.6. It mainly consists of
 various small improvements and fixes.
 
 ## v1.20.1 (2021-09-22)
@@ -135,7 +135,7 @@ for Python 3.9. It also fixes a couple of bugs.
 ## v1.16 (2020-10-18)
 
 This release brings area charts as an alternative option to view the various
-line charts in Rustfava and a Catalan translation for Rustfava. There is also now an
+line charts in rustfava and a Catalan translation for rustfava. There is also now an
 option to set the indentation of inserted Beancount entries. As usual this
 release also includes various minor fixes and improvements.
 
@@ -164,7 +164,7 @@ syntax of Beancount should supported.
 
 ## v1.11 (2019-08-20)
 
-The import page of Rustfava has been reworked - it now supports moving files to the
+The import page of rustfava has been reworked - it now supports moving files to the
 documents folder and the import process should be a bit more interactive. This
 release also contains various fixes and a new `collapse-pattern` option to
 collapse accounts in account trees based on regular expressions (and replaces
@@ -189,7 +189,7 @@ always, bugs have been fixed.
 ## v1.8 (2018-07-25)
 
 The journal design has been updated and should now have a clearer structure.
-Starting with this version, there will not be any more GUI releases of Rustfava.
+Starting with this version, there will not be any more GUI releases of rustfava.
 The GUI broke frequently and does not seem to worth the maintenance burden.
 
 Other changes:
@@ -248,7 +248,7 @@ import transactions from your bank for example.
 Rustfava can now show your balances at market value or convert them to a single
 currency if your file contains the necessary price information.
 
-We now also provide a compiled GUI version of Rustfava for Linux and macOS. This
+We now also provide a compiled GUI version of rustfava for Linux and macOS. This
 version might still be a bit buggy so any feedback/help on it is very welcome.
 
 Other changes:
@@ -261,7 +261,7 @@ Other changes:
 
 ## v1.3 (2017-03-15)
 
-The translations of Rustfava are on [POEditor.com](https://poeditor.com/projects/view?id=90283),
+The translations of rustfava are on [POEditor.com](https://poeditor.com/projects/view?id=90283),
 which has helped us get translations in five more languages: Chinese
 (simplified), Dutch, French, Portuguese, and Spanish. A big thank you to the
 new translators!
@@ -287,7 +287,7 @@ Other changes:
 
 ## v1.2 (2016-12-25)
 
-You can now add transactions from within Rustfava. The form supports autocompletion
+You can now add transactions from within rustfava. The form supports autocompletion
 for most fields.
 
 Rustfava will now show a little bubble in the sidebar for the number of events in
@@ -304,7 +304,7 @@ Other changes:
 ## v1.1 (2016-11-19)
 
 You can now upload documents by dropping them onto transactions, which will
-also add the file path as `statement` metadata to the transaction. Rustfava also
+also add the file path as `statement` metadata to the transaction. rustfava also
 ships with a plugin to link these transactions with the generated documents.
 See the help pages for details.
 
@@ -326,15 +326,15 @@ list. Some highlights:
 
 - The layout has been tweaked and we use some nicer fonts.
 - Rustfava looks and works much better on smaller screens.
-- Rustfava loads most pages asynchronously, so navigating Rustfava is much faster and
+- Rustfava loads most pages asynchronously, so navigating rustfava is much faster and
   responsive.
 
-Rustfava's configuration is not read from a configuration file anymore but can
+rustfava's configuration is not read from a configuration file anymore but can
 rather be specified using custom entries in the Beancount file. Some options
-have also been removed or renamed, so check Rustfava's help page on the available
+have also been removed or renamed, so check rustfava's help page on the available
 options when upgrading from v0.3.0.
 
-There have been many changes under the hood to improve Rustfava's codebase and a
+There have been many changes under the hood to improve rustfava's codebase and a
 lot of bugs have been squashed.
 
 ## v0.3.0 (2016-03-24)
