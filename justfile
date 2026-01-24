@@ -1,6 +1,8 @@
 # Rustfava Justfile
 # Run `just --list` to see all available recipes
 
+# Use bash on Unix, default shell on Windows
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 set shell := ["bash", "-euc"]
 set dotenv-load
 

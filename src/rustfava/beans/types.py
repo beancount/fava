@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import Any
 from typing import TYPE_CHECKING
 from typing import TypedDict
 
@@ -12,7 +13,6 @@ from rustfava.helpers import BeancountError
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
-    from beancount.core.data import Booking
     from beancount.core.display_context import DisplayContext
 
 
@@ -36,7 +36,7 @@ class BeancountOptions(TypedDict):
     account_rounding: str | None
     account_unrealized_gains: str
 
-    booking_method: Booking
+    booking_method: Any  # beancount.core.data.Booking enum
     commodities: set[str]
     conversion_currency: str
     dcontext: DisplayContext
