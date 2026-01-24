@@ -30,7 +30,6 @@
     "@types/d3-shape": "^3.0.2",
     "@types/d3-time": "^3.0.0",
     "@types/d3-time-format": "^4.0.0",
-    "@types/dom-navigation": "^1.0.6",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^22.1.0",
     "chokidar": "^5.0.0",
