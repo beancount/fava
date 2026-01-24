@@ -77,7 +77,7 @@ class DecimalFormatModule(FavaModule):
 
         # Both beancount's DisplayContext and RLDisplayContext have ccontexts
         for currency, ccontext in dcontext.ccontexts.items():
-            prec = ccontext.get_fractional(None)  # type: ignore[arg-type]
+            prec = ccontext.get_fractional(None)
             if prec is not None:
                 precisions[currency] = prec
 
