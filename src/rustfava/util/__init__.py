@@ -136,9 +136,16 @@ def send_file_inline(filename: str) -> Response:
     """Send a file inline, including the original filename.
 
     Ref: http://test.greenbytes.de/tech/tc2231/.
+
+    Security: Callers must validate that filename is an allowed path.
+    This function adds defense-in-depth by resolving the path.
     """
+    # Resolve to absolute path and verify no path traversal
+    resolved = Path(filename).resolve()
+    if ".." in Path(filename).parts:
+        return abort(403)
     try:
-        response: Response = send_file(filename)
+        response: Response = send_file(resolved)
     except FileNotFoundError:
         return abort(404)
     base = Path(filename).name

@@ -18,13 +18,13 @@ def hash_entry(entry: Directive) -> str:
     # Rustledger dataclass (for plugin-generated entries without hash)
     if hasattr(entry, "__dataclass_fields__"):
         content = f"{type(entry).__name__}|{entry.date}|{getattr(entry, 'account', '')}"
-        return hashlib.md5(content.encode()).hexdigest()
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
     # Beancount namedtuple (for entries created by create module)
     if hasattr(entry, "_fields"):
         content = f"{type(entry).__name__}|{entry.date}|{getattr(entry, 'narration', '')}"
-        return hashlib.md5(content.encode()).hexdigest()
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
     # Fallback for other types
-    return hashlib.md5(str(entry).encode()).hexdigest()
+    return hashlib.sha256(str(entry).encode()).hexdigest()[:16]
 
 
 def get_position(entry: Directive) -> tuple[str, int]:

@@ -432,9 +432,14 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
 
         from markdown2 import markdown
 
-        if page_slug not in HELP_PAGES:
+        # Validate against whitelist (defense-in-depth: also check for path traversal)
+        if page_slug not in HELP_PAGES or "/" in page_slug or "\\" in page_slug:
             return abort(404)
-        help_path = Path(__file__).parent / "help" / (page_slug + ".md")
+        help_dir = (Path(__file__).parent / "help").resolve()
+        help_path = (help_dir / (page_slug + ".md")).resolve()
+        # Ensure resolved path is within help directory
+        if not help_path.is_relative_to(help_dir):
+            return abort(404)
         contents = help_path.read_text(encoding="utf-8")
         html = markdown(
             contents,

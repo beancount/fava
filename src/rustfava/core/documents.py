@@ -30,6 +30,8 @@ class NotAValidAccountError(RustfavaAPIError):
 def is_document_or_import_file(filename: str, ledger: RustfavaLedger) -> bool:
     """Check whether the filename is a document or in an import directory.
 
+    This is a security validation function that prevents path traversal.
+
     Args:
         filename: The filename to check.
         ledger: The RustfavaLedger.
@@ -37,15 +39,21 @@ def is_document_or_import_file(filename: str, ledger: RustfavaLedger) -> bool:
     Returns:
         Whether this is one of the documents or a path in an import dir.
     """
+    # Check if it's an exact match for a known document
     if any(
         filename == d.filename for d in ledger.all_entries_by_type.Document
     ):
         return True
+    # Check if resolved path is within an import directory (prevents path traversal)
     file_path = Path(filename).resolve()
-    return any(
-        str(file_path).startswith(str(ledger.join_path(d)))
-        for d in ledger.fava_options.import_dirs
-    )
+    for import_dir in ledger.fava_options.import_dirs:
+        resolved_dir = ledger.join_path(import_dir).resolve()
+        try:
+            if file_path.is_relative_to(resolved_dir):
+                return True
+        except ValueError:
+            continue
+    return False
 
 
 def filepath_in_document_folder(
