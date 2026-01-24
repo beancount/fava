@@ -66,3 +66,33 @@ The app uses a "sidecar" pattern:
 - `src-tauri/tauri.conf.json` - Tauri configuration
 - `src-tauri/binaries/` - Sidecar binaries (platform-specific)
 - `build-sidecar.sh` - Script to build PyInstaller sidecar
+
+## Cross-Platform Releases
+
+Releases are built automatically via GitHub Actions when you push a version tag:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Or trigger manually from the Actions tab → "Desktop Release" → "Run workflow".
+
+The workflow builds for:
+- **Linux**: `.deb`, `.rpm`, `.AppImage` (x86_64)
+- **macOS**: `.dmg` (x86_64 Intel + ARM64 Apple Silicon)
+- **Windows**: `.msi`, `.exe` installer (x86_64)
+
+### How it works
+
+1. **Build sidecars**: PyInstaller creates platform-specific rustfava binaries
+2. **Build Tauri**: Each platform builds the Tauri app with its sidecar
+3. **Release**: Artifacts are uploaded to a draft GitHub Release
+
+### Local cross-compilation
+
+You cannot easily cross-compile (e.g., build Windows from Linux). Each platform must be built natively. For local testing:
+
+- **Linux**: `nix develop && cd desktop && bun tauri build`
+- **macOS**: Install Xcode, Rust, Bun, then `cd desktop && bun tauri build`
+- **Windows**: Install Visual Studio Build Tools, Rust, Bun, then `cd desktop && bun tauri build`
