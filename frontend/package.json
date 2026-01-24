@@ -29,7 +29,7 @@
     "@types/d3-time": "^3.0.0",
     "@types/d3-time-format": "^4.0.0",
     "@types/jsdom": "^27.0.0",
-    "@types/node": "^22.1.0",
+    "@types/node": "^25.0.10",
     "chokidar": "^5.0.0",
     "esbuild": "^0.27.0",
     "esbuild-svelte": "^0.9.0",
