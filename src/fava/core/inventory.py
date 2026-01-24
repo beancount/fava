@@ -68,13 +68,13 @@ class SimpleCounterInventory(dict[str, Decimal]):
         self,
         reducer: Callable[Concatenate[Position, P], Amount],
         *args: P.args,
-        **_kwargs: P.kwargs,
+        **kwargs: P.kwargs,
     ) -> SimpleCounterInventory:
         """Reduce inventory."""
         counter = SimpleCounterInventory()
         for currency, number in self.items():
             pos = _Position(_Amount(number, currency), None)
-            amount = reducer(pos, *args)  # type: ignore[call-arg]
+            amount = reducer(pos, *args, **kwargs)
             counter.add(amount.currency, amount.number)
         return counter
 
@@ -119,7 +119,7 @@ class CounterInventory(dict[InventoryKey, Decimal]):
         self,
         reducer: Callable[Concatenate[Position, P], Amount],
         *args: P.args,
-        **_kwargs: P.kwargs,
+        **kwargs: P.kwargs,
     ) -> SimpleCounterInventory:
         """Reduce inventory.
 
@@ -129,7 +129,7 @@ class CounterInventory(dict[InventoryKey, Decimal]):
         counter = SimpleCounterInventory()
         for (currency, cost), number in self.items():
             pos = _Position(_Amount(number, currency), cost)
-            amount = reducer(pos, *args)  # type: ignore[call-arg]
+            amount = reducer(pos, *args, **kwargs)
             counter.add(amount.currency, amount.number)
         return counter
 
