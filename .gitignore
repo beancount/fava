@@ -8,6 +8,7 @@
 /build/
 /dist/
 /docs/api/
+/frontend/.dev-bin/
 /frontend/coverage/
 /frontend/node_modules/
 /htmlcov/
