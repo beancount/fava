@@ -138,17 +138,19 @@ def send_file_inline(filename: str) -> Response:
     Ref: http://test.greenbytes.de/tech/tc2231/.
 
     Security: Callers must validate that filename is an allowed path.
-    This function adds defense-in-depth by resolving the path.
+    This function adds defense-in-depth with path normalization and containment.
     """
-    # Resolve to absolute path and verify no path traversal
-    resolved = Path(filename).resolve()
-    if ".." in Path(filename).parts:
+    # Compute base directory from filename's resolved parent
+    base_dir = Path(filename).resolve().parent
+    # Normalize target path - only allow basename under resolved parent
+    full_path = (base_dir / Path(filename).name).resolve()
+    # Enforce containment: file must exist and be within base_dir
+    if not full_path.is_file() or not full_path.is_relative_to(base_dir):
         return abort(403)
     try:
-        response: Response = send_file(resolved)
+        response: Response = send_file(full_path)
     except FileNotFoundError:
         return abort(404)
-    base = Path(filename).name
-    cont_disp = f"inline; filename*=UTF-8''{quote(base)}"
+    cont_disp = f"inline; filename*=UTF-8''{quote(full_path.name)}"
     response.headers["Content-Disposition"] = cont_disp
     return response
