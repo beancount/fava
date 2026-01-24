@@ -144,13 +144,14 @@ def send_file_inline(filename: str) -> Response:
     base_dir = Path(filename).resolve().parent
     # Normalize target path - only allow basename under resolved parent
     full_path = (base_dir / Path(filename).name).resolve()
-    # Enforce containment: file must exist and be within base_dir
-    if not full_path.is_file() or not full_path.is_relative_to(base_dir):
+    # Enforce containment: path must be within base_dir (403 if escape attempt)
+    # Note: With current logic this is unreachable (defense-in-depth)
+    if not full_path.is_relative_to(base_dir):  # pragma: no cover
         return abort(403)
-    try:
-        response: Response = send_file(full_path)
-    except FileNotFoundError:
+    # Check file exists (404 if not found)
+    if not full_path.is_file():
         return abort(404)
+    response: Response = send_file(full_path)
     cont_disp = f"inline; filename*=UTF-8''{quote(full_path.name)}"
     response.headers["Content-Disposition"] = cont_disp
     return response
