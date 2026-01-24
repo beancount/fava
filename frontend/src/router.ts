@@ -267,6 +267,16 @@ export class Router {
   };
 
   /**
+   * Synchronize the current URL, even if an external router (i.e. an extension module with its own router) updates the location.
+   * The router must maintain an up-to-date URL, otherwise changing global filters (time, account, filter) would redirect to a stale URL.
+   */
+  #on_navigate = (event: NavigateEvent): void => {
+    if (event.destination.sameDocument) {
+      this.current = new URL(event.destination.url);
+    }
+  };
+
+  /**
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
@@ -277,6 +287,9 @@ export class Router {
     window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
+    if ("navigation" in window) {
+      window.navigation.addEventListener("navigate", this.#on_navigate);
+    }
 
     handleExtensionPageLoad();
   }
