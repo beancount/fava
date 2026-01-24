@@ -36,6 +36,9 @@ const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
   (link instanceof HTMLAnchorElement &&
     (link.host !== window.location.host || !link.protocol.startsWith("http")));
 
+/** The navigation API is still rather new so only optionally depend on it for now. */
+const navigation_api = "navigation" in window ? window.navigation : null;
+
 /**
  * The various query parameters used in Fava.
  */
@@ -363,6 +366,14 @@ export class Router {
     if (this.current.hash) {
       const target = new URL(this.current);
       target.hash = "";
+      if (navigation_api?.currentEntry != null && navigation_api.canGoBack) {
+        const entries = navigation_api.entries();
+        const previous_entry = entries[navigation_api.currentEntry.index - 1];
+        if (previous_entry?.url === target.href) {
+          navigation_api.back();
+          return;
+        }
+      }
       this.navigate(target, false);
     }
   };
