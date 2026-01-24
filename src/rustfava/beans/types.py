@@ -12,7 +12,7 @@ from rustfava.helpers import BeancountError
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
-    from beancount.core import data
+    from beancount.core.data import Booking
     from beancount.core.display_context import DisplayContext
 
 
@@ -36,7 +36,7 @@ class BeancountOptions(TypedDict):
     account_rounding: str | None
     account_unrealized_gains: str
 
-    booking_method: data.Booking
+    booking_method: Booking
     commodities: set[str]
     conversion_currency: str
     dcontext: DisplayContext

@@ -26,10 +26,11 @@ jobs:
         os: ["ubuntu-latest"]
         py: ["3.14", "3.13"]
         include:
+          # Use Python 3.13 for macOS/Windows as beancount lacks 3.14 wheels
           - os: "macos-latest"
-            py: "3.14"
+            py: "3.13"
           - os: "windows-latest"
-            py: "3.14"
+            py: "3.13"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
