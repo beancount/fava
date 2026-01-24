@@ -1,11 +1,9 @@
-Changelog
-=========
+# Changelog
 
-Rustfava (2025)
----------------
+## Rustfava (2025)
 
 This is a fork of Fava that replaces the Python Beancount parser and beanquery
-with `rustledger <https://github.com/rustledger/rustledger>`_, a Rust-based
+with [rustledger](https://github.com/rustledger/rustledger), a Rust-based
 implementation of the Beancount format compiled to WebAssembly.
 
 Key changes from Fava:
@@ -16,10 +14,9 @@ Key changes from Fava:
 - **Query support**: BQL queries are now handled by rustledger's built-in query
   engine instead of beanquery. The query syntax remains largely compatible.
 - **Optional beancount compatibility**: If you need to use Beancount plugins or
-  the import system, install with ``uv pip install rustfava[beancount-compat]``.
+  the import system, install with `uv pip install rustfava[beancount-compat]`.
 
-v1.30 (2024-12-29)
-------------------
+## v1.30 (2024-12-29)
 
 *Note: This entry describes the original Fava release. Rustfava is based on
 this version with the rustledger integration.*
@@ -27,8 +24,7 @@ this version with the rustledger integration.*
 Under the hood, this also upgrades Svelte (the framework used for the frontend
 parts) to version 5.
 
-v1.29 (2024-10-09)
-------------------
+## v1.29 (2024-10-09)
 
 With this release, query results are now rendered in the frontend. The
 templates for HTML rendering are still available but extension authors are
@@ -40,15 +36,13 @@ can switch to the (slower) polling based watcher as well. The `default-file`
 option, if set, is now considered instead of the "main" file when inserting an
 entry.
 
-v1.28 (2024-07-07)
-------------------
+## v1.28 (2024-07-07)
 
 This release accumulates a couple of minor fixes and improvements. Under the
 hood, the file change detection is now powered by watchfiles instead of
 polling, which is more performant.
 
-v1.27 (2024-01-06)
-------------------
+## v1.27 (2024-01-06)
 
 It is now possible to convert to a sequence of currencies. Posting metadata is
 now supported in the entry forms. The editor should now be a bit more
@@ -56,8 +50,7 @@ performant as the previous parses will be reused better. For compatibility with
 extensions using them, the Javascript and CSS for the "old" account trees has
 been re-added.
 
-v1.26 (2023-09-04)
-------------------
+## v1.26 (2023-09-04)
 
 This release brings various improvements to the charts, like allowing the
 toggling of currencies by clicking on their names in the chart legend. The
@@ -65,8 +58,7 @@ account balance trees in Rustfava are now rendered in the frontend, fixing some
 minor bugs in the process and easing maintenance. Rustfava extensions can now also
 provide their own endpoints.
 
-v1.25 (2023-07-17)
-------------------
+## v1.25 (2023-07-17)
 
 With this release, extensions can now ship Javascript code to run in the
 frontend. The editor in Rustfava now uses a tree-sitter grammar to obtain a full
@@ -77,21 +69,18 @@ switch from `rustfava.application.app` to the `create_app` function in
 `rustfava.application`. This release also drops support for Python 3.7 and contains
 a couple of minor fixes and changes, in particular various styling fixes.
 
-v1.24 (2023-02-21)
-------------------
+## v1.24 (2023-02-21)
 
 With this release, the rendering of some report like the documents report has
 been moved completely to the frontend, which should be slightly more perfomant
 and easier to maintain. This release also contains a couple of minor fixes and
 changes.
 
-v1.23 (2022-10-15)
-------------------
+## v1.23 (2022-10-15)
 
 This release accumulates a couple of minor fixes and changes.
 
-v1.22 (2022-07-03)
-------------------
+## v1.22 (2022-07-03)
 
 This release brings stacked bar charts, which are a great way to visualise
 income broken down per account per month for example. The inferred display
@@ -108,27 +97,23 @@ per-file Ledger class is not filtered anymore in-place but rather the filtered
 data is generated per request - some extensions might have to adjust for this
 and use `g.filtered` instead of `ledger` for some attributes.
 
-v1.21 (2022-02-06)
-------------------
+## v1.21 (2022-02-06)
 
 This release of Rustfava drops support for Python 3.6. It mainly consists of
 various small improvements and fixes.
 
-v1.20.1 (2021-09-22)
---------------------
+## v1.20.1 (2021-09-22)
 
 Bugfix release to fix loading of translations for the browser-rendered frontend
 parts.
 
-v1.20 (2021-09-19)
-------------------
+## v1.20 (2021-09-19)
 
 In this release, the document page now shows counts in the account tree and
 allows collapsing of accounts in the tree. Parts of the charts in the future
 are now desaturated. This release contains a couple of bug fixes as usual.
 
-v1.19 (2021-05-18)
-------------------
+## v1.19 (2021-05-18)
 
 The `conversion` and `interval` options have been removed. Their functionality
 can be achieved with the new `default-page` option. The editor components have
@@ -138,54 +123,46 @@ has been added to invert the numbers of those accounts on the income statement
 and the balance sheet. This release also adds a Bulgarian translation and
 features various smaller improvements and fixes as usual.
 
-v1.18 (2021-01-16)
-------------------
+## v1.18 (2021-01-16)
 
 This release contains couple of small improvements and various bug fixes.
 
-v1.17 (2020-11-15)
-------------------
+## v1.17 (2020-11-15)
 
 This release adds a document preview to the import page, as well as support
 for Python 3.9. It also fixes a couple of bugs.
 
-v1.16 (2020-10-18)
-------------------
+## v1.16 (2020-10-18)
 
 This release brings area charts as an alternative option to view the various
 line charts in Rustfava and a Catalan translation for Rustfava. There is also now an
 option to set the indentation of inserted Beancount entries. As usual this
 release also includes various minor fixes and improvements.
 
-v1.15 (2020-05-30)
-------------------
+## v1.15 (2020-05-30)
 
 This release accumulates various minor fixes and improvements, for example the
 setting of filters from payees and metadata in the Journal report.
 
-v1.14 (2020-02-16)
-------------------
+## v1.14 (2020-02-16)
 
 This is mainly a bugfix release to fix compatibility with one of the main
 dependencies (werkzeug). Also, a `default-conversion` option was added, which
 allows setting a default conversion.
 
-v1.13 (2020-02-01)
-------------------
+## v1.13 (2020-02-01)
 
 Rustfava can now display charts for BQL queries - if they have exactly two columns
 with the first being a date or string and the second an inventory, then a line
 chart or treemap chart is shown on the query page.
 
-v1.12 (2019-12-03)
-------------------
+## v1.12 (2019-12-03)
 
 Apart from plenty of bug fixes, this release mainly contains improvements to
 the forms to add transactions: postings can now be dragged and the full cost
 syntax of Beancount should supported.
 
-v1.11 (2019-08-20)
-------------------
+## v1.11 (2019-08-20)
 
 The import page of Rustfava has been reworked - it now supports moving files to the
 documents folder and the import process should be a bit more interactive. This
@@ -198,21 +175,18 @@ Other changes:
 - Command line flags can be specified by setting environment variables.
 - A Taiwanese translation has been added.
 
-v1.10 (2019-01-31)
-------------------
+## v1.10 (2019-01-31)
 
 This release contains mostly smaller changes and fixes. In particular, the net
 worth chart will now follow the selected conversion.
 
-v1.9 (2018-10-08)
------------------
+## v1.9 (2018-10-08)
 
 In this release, the click behaviour has been updated to allow filtering for
-payees. The entry input forms now allow inputting prices and costs.  As
+payees. The entry input forms now allow inputting prices and costs. As
 always, bugs have been fixed.
 
-v1.8 (2018-07-25)
------------------
+## v1.8 (2018-07-25)
 
 The journal design has been updated and should now have a clearer structure.
 Starting with this version, there will not be any more GUI releases of Rustfava.
@@ -225,12 +199,11 @@ Other changes:
   filtering entries by properties of their postings.
 - As always, bugs have been fixed.
 
-v1.7 (2018-03-09)
------------------
+## v1.7 (2018-03-09)
 
 The entry filters have been reworked in this release and should now support for
 more flexible filtering of the entries. See the help page on how the new syntax
-works.  Also, when completing the payee in the transaction form, the postings
+works. Also, when completing the payee in the transaction form, the postings
 of the last transaction for this payee will be auto-filled.
 
 Other changes:
@@ -239,8 +212,7 @@ Other changes:
   the page URL.
 - As always, bugs have been fixed.
 
-v1.6 (2017-10-06)
------------------
+## v1.6 (2017-10-06)
 
 This is a release with various small changes and mainly some speed
 improvements to the Balance Sheet and the net worth calculation. Also, if 'At
@@ -250,10 +222,9 @@ Balance Sheet.
 Other changes:
 
 - The currently filtered entries can now be exported from the Journal page.
-- The CLI now has a ``--version`` flag.
+- The CLI now has a `--version` flag.
 
-v1.5 (2017-07-23)
------------------
+## v1.5 (2017-07-23)
 
 Rustfava now has an interface to edit single entries. Clicking on the entry date in
 the Journal will open an overlay that shows the entry context and allows
@@ -263,14 +234,13 @@ Other changes:
 
 - The source editor now has a menu that gives access to editor commands like
   "fold all".
-- Entries with matching tags or links can now be excluded with ``-#tag``.
+- Entries with matching tags or links can now be excluded with `-#tag`.
 - The keyboard shortcuts are now displayed in-place.
-- The ``incognito`` option has been removed and replaced with a ``--incognito``
+- The `incognito` option has been removed and replaced with a `--incognito`
   command line switch.
 - As always, several bugs have been fixed.
 
-v1.4 (2017-05-14)
------------------
+## v1.4 (2017-05-14)
 
 Rustfava now provides an interface for Beancount's import system that allows you to
 import transactions from your bank for example.
@@ -283,51 +253,45 @@ version might still be a bit buggy so any feedback/help on it is very welcome.
 
 Other changes:
 
-- The ``insert-entry`` option can be used to control where transactions are
+- The `insert-entry` option can be used to control where transactions are
   inserted.
 - The transaction form now accepts tags and links in the narration field.
 - Budgets are now accumulated over all children where appropriate.
 - As always, several bugs have been fixed.
 
-Thanks to :user:`TZdyrski` and :user:`Akuukis` for their contributions.
+## v1.3 (2017-03-15)
 
-v1.3 (2017-03-15)
------------------
-
-The translations of Rustfava are now on `POEditor.com
-<https://poeditor.com/projects/view?id=90283>`__, which has helped us get
-translations in five more languages: Chinese (simplified), Dutch, French,
-Portuguese, and Spanish. A big thank you to the new translators!
+The translations of Rustfava are on [POEditor.com](https://poeditor.com/projects/view?id=90283),
+which has helped us get translations in five more languages: Chinese
+(simplified), Dutch, French, Portuguese, and Spanish. A big thank you to the
+new translators!
 
 The transaction form has been improved, it now supports adding metadata and the
 suggestions will be ranked by how often and recently they occur (using
 exponential decay).
 
-The Query page supports all commands of the ``bean-query`` shell and shares its
+The Query page supports all commands of the `bean-query` shell and shares its
 history of recently used queries.
 
 Rustfava has gained a basic extension mechanism. Extensions allow you to run hooks
 at various points, e.g., after adding a transaction. They are specified using
-the ``extensions`` option and for an example, see the ``rustfava.ext.auto_commit``
+the `extensions` option and for an example, see the `rustfava.ext.auto_commit`
 extension.
 
 Other changes:
 
 - The default sort order in journals has been reversed so that the most recent
   entries come first.
-- The new ``incognito`` option can be used to obscure all numbers.
+- The new `incognito` option can be used to obscure all numbers.
 - As always, several bugs have been fixed.
 
-Thanks to :user:`johannesharms` and :user:`xentac` for their contributions.
-
-v1.2 (2016-12-25)
------------------
+## v1.2 (2016-12-25)
 
 You can now add transactions from within Rustfava. The form supports autocompletion
 for most fields.
 
 Rustfava will now show a little bubble in the sidebar for the number of events in
-the next week. This can be configured with the ``upcoming-events`` option.
+the next week. This can be configured with the `upcoming-events` option.
 
 Other changes:
 
@@ -337,10 +301,7 @@ Other changes:
 - The Journal shows little indicators for metadata.
 - As always, several bugs have been fixed.
 
-Thanks to :user:`fokusov` for their contributions.
-
-v1.1 (2016-11-19)
------------------
+## v1.1 (2016-11-19)
 
 You can now upload documents by dropping them onto transactions, which will
 also add the file path as `statement` metadata to the transaction. Rustfava also
@@ -355,13 +316,10 @@ Other changes:
 
 - The bar charts on account pages now also show budgets.
 - The Journal can now be sorted by date, flag and narration.
-- Rustfava now has a Russian translation, thanks to :user:`fokusov`.
+- Rustfava now has a Russian translation.
 - As always, several bugs have been fixed.
 
-Thanks to :user:`adamgibbins` and :user:`xentac` for their contributions.
-
-v1.0 (2016-10-19)
------------------
+## v1.0 (2016-10-19)
 
 This is a major new release that includes too many improvements and changes to
 list. Some highlights:
@@ -379,152 +337,134 @@ options when upgrading from v0.3.0.
 There have been many changes under the hood to improve Rustfava's codebase and a
 lot of bugs have been squashed.
 
-Thanks to :user:`adamgibbins`, :user:`davidastephens`, :user:`xentac`, and
-:user:`yegle` for their contributions.
+## v0.3.0 (2016-03-24)
 
-v0.3.0 (2016-03-24)
--------------------
+### Additions
 
-Additions
-
-- Support for switching between multiple beancount files. :bug:`213`
-- New sunburst charts. :bug:`198`
-- Add "Clear filter" button when filters are active. :bug:`290`
+- Support for switching between multiple beancount files.
+- New sunburst charts.
+- Add "Clear filter" button when filters are active.
 - Simple budgeting functionality in the Account view. See help pages on how to
-  use budgets. :bug:`294`
-- German translation. :bug:`284`
+  use budgets.
+- German translation.
 - The Beancount is now being reloaded when it is saved in the Source Editor.
-- New Journal filter controls. Thanks to :user:`yagebu`.
-- Tree-tables are now displayed in a hierarchical way. Thanks to :user:`yagebu`.
+- New Journal filter controls.
+- Tree-tables are now displayed in a hierarchical way.
 
-Changes
+### Changes
 
-- All charts are now rendered with d3.js. Thanks to :user:`yagebu`.
+- All charts are now rendered with d3.js.
 - The title of a page is now shown in the header to save screen space.
-- Changed shortcut for Journal from ``g g`` to ``g j`` as the Journal was
+- Changed shortcut for Journal from `g g` to `g j` as the Journal was
   renamed from "General Journal" to "Journal".
 
-New configuration options
+### New configuration options
 
-- ``language``: The language to use. Valid languages are ``"en"`` and
-  ``"de"`` (default: ``"en"``). :bug:`284`
-- ``treemaps-show-negative-numbers`` was removed.
+- `language`: The language to use. Valid languages are `"en"` and `"de"`
+  (default: `"en"`).
+- `treemaps-show-negative-numbers` was removed.
 
-Fixes
+### Fixes
 
-- Commodity prices are now filtered when a Time filter is enabled. :bug:`273`
+- Commodity prices are now filtered when a Time filter is enabled.
 - Some improvements to the help pages.
-- Many small bug fixes. Thanks to :user:`yagebu`.
+- Many small bug fixes.
 
-v0.2.6 (2016-03-20)
--------------------
+## v0.2.6 (2016-03-20)
 
-Additions
+### Additions
 
 - There are now more interval options available for charts and the account
   balances report. The interval can be selected from a dropdown next to the
-  charts. :bug:`175`
-- Show metadata for postings in the Journal. Thanks to :user:`corani`.
-  :bug:`185`
-- The editor now supports org-mode style folding. Thanks to :user:`corani`.
-  :bug:`209`
+  charts.
+- Show metadata for postings in the Journal.
+- The editor now supports org-mode style folding.
 - Show colored dots for all the postings of a transaction in the Journal
-  report. This way flagged postings can be quickly spotted. :bug:`195`
-- Add keyboard shortcuts for save to source editor. :bug:`199`
+  report. This way flagged postings can be quickly spotted.
+- Add keyboard shortcuts for save to source editor.
 
-Changes
+### Changes
 
 - Use beancount's DisplayContext to determine the correct precision at which to
-  render numbers. :bug:`188`
-- Improve the way that query results are serialized to XLS etc. Thanks to
-  :user:`corani`. :bug:`168`
+  render numbers.
+- Improve the way that query results are serialized to XLS etc.
 - Show inverse rates for pairs of operating currencies on the commodities
-  report. :bug:`139`
+  report.
 - Use Click for the CLI and check if beancount file exists on startup.
-  :bug:`216`
 - Hide closed accounts in tree tables. Also see new configuration option below.
 
-New configuration options
+### New configuration options
 
-- ``editor-strip-trailing-whitespace`` to enable trimming of trailing
-  whitespace in the Source editor (default: "false").  Thanks to
-  :user:`corani`. :bug:`163`
-- ``show-closed-accounts`` to show closed accounts in tree tables, for example
-  on the balance sheet (default: "false"). :bug:`91`
-- ``show-accounts-with-zero-balance`` to show accounts with a balance of zero
-  in tree tables (default: "true"). :bug:`91`
-- ``show-accounts-with-zero-transactions`` to show accounts with no
-  transactions in tree tables (default: "true"). :bug:`91`
+- `editor-strip-trailing-whitespace` to enable trimming of trailing
+  whitespace in the Source editor (default: "false").
+- `show-closed-accounts` to show closed accounts in tree tables, for example
+  on the balance sheet (default: "false").
+- `show-accounts-with-zero-balance` to show accounts with a balance of zero
+  in tree tables (default: "true").
+- `show-accounts-with-zero-transactions` to show accounts with no
+  transactions in tree tables (default: "true").
 
-Fixes
+### Fixes
 
 - Fixed a bug where the months would be off by one for the interval reports.
-  :bug:`182`
-- Fix the net worth report for more than one currency. :bug:`207`
+- Fix the net worth report for more than one currency.
 - Some improvements to the help pages.
 - Many small bug fixes.
 
-v0.2.5 (2016-02-28)
--------------------
+## v0.2.5 (2016-02-28)
 
 Bump release to remove unused draft code.
 
-v0.2.4 (2016-02-18)
--------------------
+## v0.2.4 (2016-02-18)
 
-Additions
+### Additions
 
-- Added missing Holdings views compared to ``bean-web``. Thanks to
-  :user:`yagebu`. :bug:`140`
-- Custom queries are now shown in sidebar. Thanks to :user:`corani`. :bug:`135`
-- The user settings file is now editable in the Source editor. :bug:`136`
-- Added second theme. Thanks to Rubén Gómez for the stylesheet. :bug:`59`
+- Added missing Holdings views compared to `bean-web`.
+- Custom queries are now shown in sidebar.
+- The user settings file is now editable in the Source editor.
+- Added second theme.
 - Added Help pages.
-- Query results can now be downloaded as CSV, XLS, XLSX and ODS. :bug:`143`
+- Query results can now be downloaded as CSV, XLS, XLSX and ODS.
 - Documents can now be uploaded by dragging and dropping files over an Account
-  name on the Account page and all tree-tables. :bug:`157`
-- Journal can now be filtered by transaction type. Thanks to :user:`yagebu`.
+  name on the Account page and all tree-tables.
+- Journal can now be filtered by transaction type.
 
-Changes
+### Changes
 
 - The uptodate-indicator is now shown everywhere by default, but only enabled
-  for accounts that have the metadata ``rustfava-uptodate-indication: "True"`` set
-  on their ``open``-directives. :bug:`35`
-- Speedier Journal rendering. Thanks to :user:`yagebu`. :bug:`164`
-- Only basenames will be shown for documents in the Journal. Thanks to
-  :user:`corani`.
+  for accounts that have the metadata `rustfava-uptodate-indication: "True"` set
+  on their `open`-directives.
+- Speedier Journal rendering.
+- Only basenames will be shown for documents in the Journal.
 - Slightly reordered the sidebar menu.
 - Minor UI tweaks.
 
-New configuration options
+### New configuration options
 
-- ``sidebar-show-queries``: The maximum number of custom queries to show in the
+- `sidebar-show-queries`: The maximum number of custom queries to show in the
   sidebar (default: 5).
-- ``theme``: The theme to use. Valid themes are ``"default"`` and
-  ``"alternative"`` (default: ``"default"``).
-- ``editor-print-margin-column``: Set the column for the print margin in the
-  Source editor (default: 60). :bug:`161`
-- ``uptodate-indicator-show-everywhere`` (default: "true"). See Changes above.
+- `theme`: The theme to use. Valid themes are `"default"` and `"alternative"`
+  (default: `"default"`).
+- `editor-print-margin-column`: Set the column for the print margin in the
+  Source editor (default: 60).
+- `uptodate-indicator-show-everywhere` (default: "true"). See Changes above.
 
-Removed configuration options
+### Removed configuration options
 
-- ``uptodate-indicator-exclude-accounts``, see Changes above.
+- `uptodate-indicator-exclude-accounts`, see Changes above.
 
-Fixes
+### Fixes
 
-- Fixed Net worth calculation. Thanks to :user:`yagebu`.
+- Fixed Net worth calculation.
 - Many small bug fixes.
 
-v0.2.3 (2016-02-15)
--------------------
+## v0.2.3 (2016-02-15)
 
-Bumped version to communicate that installing via ``pip install`` now works,
-all requirements included.  Thanks to :user:`blais` and :user:`yagebu`.
+Bumped version to communicate that installing via `pip install` now works,
+all requirements included.
 
+## Earlier Versions
 
-Earlier Versions
-----------------
-
-It was not possible to install any of the earlier versions only using ``pip``
+It was not possible to install any of the earlier versions only using `pip`
 and you may consult the git log for earlier changes. The first commit in the
 git repository was on December 4th, 2015.

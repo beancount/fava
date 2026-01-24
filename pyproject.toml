@@ -2,7 +2,7 @@
 name = "rustfava"
 dynamic = ["version"]
 description = "Web interface for the accounting tool rustledger."
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 authors = [
@@ -61,11 +61,11 @@ beancount-compat = [
 ]
 
 [dependency-groups]
-# Building the documentation website with sphinx.
+# Building the documentation website with MkDocs.
 docs = [
-    "furo>=2024",
-    "sphinx>=7",
-    "sphinx-autodoc-typehints>=2",
+    "mkdocs>=1.6",
+    "mkdocs-material>=9",
+    "mkdocstrings[python]>=0.27",
 ]
 # Type-checking with mypy or ty.
 types = [

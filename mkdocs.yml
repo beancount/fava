@@ -1,0 +1,54 @@
+site_name: Rustfava
+site_description: Web interface for rustledger, a Rust-based Beancount parser
+site_url: https://rustledger.github.io/rustfava/
+repo_url: https://github.com/rustledger/rustfava
+repo_name: rustledger/rustfava
+
+theme:
+  name: material
+  logo: logo.png
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Getting Started: usage.md
+  - Changelog: changelog.md
+  - Development: development.md
+  - Deployment: deployment.md
+  - API Reference: api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_root_heading: true
+            members_order: source
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
