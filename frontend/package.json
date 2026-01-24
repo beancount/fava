@@ -4,14 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node build.ts",
-    "dev": "node build.ts --dev --watch",
-    "sync-pre-commit": "node sync-pre-commit.ts",
-    "test": "node --conditions browser --import ./setup.js test.ts",
-    "test:watch": "node --conditions browser --import ./setup.js test.ts --watch"
-  },
-  "engines": {
-    "node": ">=22.18"
+    "build": "bun run build.ts",
+    "dev": "bun run build.ts --dev --watch",
+    "sync-pre-commit": "bun run sync-pre-commit.ts",
+    "tsc": "tsc",
+    "svelte-check": "svelte-check"
   },
   "overrides": {
     "parse5": "^7.3.0"

@@ -10,9 +10,15 @@ from PyInstaller.utils.hooks import copy_metadata
 # Data files and version info for Rustfava:
 datas = collect_data_files("rustfava") + copy_metadata("rustfava")
 
-# Add all Beancount code (for plugins) and the version file:
-hiddenimports = collect_submodules("beancount")
-datas += collect_data_files("beancount")
+# Hidden imports for rustledger
+hiddenimports = []
+
+# Optionally add beancount for legacy plugin support
+try:
+    hiddenimports += collect_submodules("beancount")
+    datas += collect_data_files("beancount")
+except Exception:
+    pass
 
 a = Analysis(
     ["../src/rustfava/cli.py"],

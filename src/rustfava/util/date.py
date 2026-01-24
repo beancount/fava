@@ -23,7 +23,7 @@ from rustfava.util import listify
 try:
     from typing import override
 except ImportError:  # pragma: no cover
-    from typing_extensions import override
+    from typing import override
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable

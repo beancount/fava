@@ -4,11 +4,11 @@ all: src/rustfava/static/app.js
 
 # Compile the frontend.
 src/rustfava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
-	cd frontend; npm run build
+	cd frontend; bun run build
 
 # Install the frontend node_modules dependencies.
-frontend/node_modules: frontend/package-lock.json
-	cd frontend; npm install --no-progress
+frontend/node_modules: frontend/bun.lock
+	cd frontend; bun install
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
@@ -46,8 +46,8 @@ mostlyclean:
 .PHONY: lint
 lint: frontend/node_modules ty
 	uv run pre-commit run -v -a
-	cd frontend; npm exec tsc
-	cd frontend; npm exec svelte-check
+	cd frontend; bun run tsc
+	cd frontend; bun run svelte-check
 
 # Run mypy for Python type-checking.
 .PHONY: mypy
@@ -60,14 +60,12 @@ ty:
 	uv run --no-dev --group types ty check
 
 # Run tests.
-.PHONY: test test-js test-py test-py-old-deps
+.PHONY: test test-js test-py
 test: test-js test-py
 test-js: frontend/node_modules
-	cd frontend; npm run test
+	cd frontend; bun test
 test-py:
 	uv run --no-dev --group test pytest --cov=rustfava --cov-report=term-missing:skip-covered --cov-report=html --cov-fail-under=100
-test-py-old-deps:
-	uv run --no-project --isolated --with-editable=. --with-requirements=constraints-old.txt pytest --snapshot-ignore
 test-py-typeguard:
 	uv run --no-dev --group test pytest --typeguard-fixtures
 
@@ -77,18 +75,16 @@ update-snapshots:
 	uv run pytest --snapshot-update --snapshot-clean
 	uv run pre-commit run -a biome-check
 
-# Update the constraints file for Python dependencies
-.PHONY: update-constraints
-update-constraints:
+# Update Python dependencies
+.PHONY: update-deps
+update-deps:
 	uv lock --upgrade
-	uv pip compile --quiet --extra excel --group old-deps --resolution=lowest --python-version 3.10 --upgrade --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
 update-frontend-deps:
-	-cd frontend; npm outdated
-	cd frontend; npm update
-	cd frontend; npm run sync-pre-commit
+	cd frontend; bun update
+	cd frontend; bun run sync-pre-commit
 	touch -m frontend/node_modules
 
 # Update the tree-sitter-beancount wasm build.
@@ -109,7 +105,7 @@ update-github-actions:
 
 # Update frontend deps, Python deps and pre-commit
 .PHONY: update
-update: update-constraints update-frontend-deps update-precommit update-github-actions
+update: update-deps update-frontend-deps update-precommit update-github-actions
 
 # Build the website
 .PHONY: docs

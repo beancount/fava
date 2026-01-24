@@ -15,7 +15,7 @@ from rustfava.core.inventory import SimpleCounterInventory
 try:
     from typing import override
 except ImportError:  # pragma: no cover
-    from typing_extensions import override
+    from typing import override
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime

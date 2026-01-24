@@ -3,7 +3,7 @@ name = "rustfava"
 dynamic = ["version"]
 description = "Web interface for the accounting tool rustledger."
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 license = "MIT"
 authors = [
   {name = "Dominik Aumayr", email = "dominik@aumayr.name"}
@@ -23,9 +23,6 @@ classifiers = [
     "Natural Language :: English",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
@@ -45,7 +42,6 @@ dependencies = [
     "ply>=3.4",
     "simplejson>=3.16.0,<4",
     "watchfiles>=0.20.0",
-    "typing-extensions>=4.5; python_version<\"3.12\"",
 ]
 
 [project.urls]
@@ -83,11 +79,6 @@ types = [
     "types-setuptools>=67",
     "types-simplejson>=3",
 ]
-# Add setuptools for the old_deps constraints
-# (otherwise it is not added to the constraints as it's only a build dependency).
-old-deps = [
-    "setuptools",
-]
 # Running pre-commit hooks.
 pre-commit = [
     "pre-commit>=4",
@@ -121,20 +112,6 @@ backend-path = ["."]
 
 [tool.uv]
 python-preference = "system"
-# Pin some lower bounds for transitive dependencies in the old_deps tests
-# This a basically determined by increasing them until getting a combination that runs.
-constraint-dependencies = [
-    "bottle>=0.12.20",  # older ones didn't build
-    "importlib_metadata>=3.6",
-    "jaraco-functools>=4",
-    "lxml>=5.3.0",  # older ones don't have wheels for recent Python versions
-    "more-itertools>=6",
-    "pytest>=7.2",  # also used for running the tests of Rustfava, needs to somewhat recent
-    "python-dateutil>=2",
-    "pytz>=2020",
-    "setuptools>=67",
-    "six>=1.16",
-]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -146,7 +123,7 @@ line-length = 79
 preview = true
 
 [tool.ty.environment]
-python-version = "3.12"
+python-version = "3.13"
 
 [tool.ty.rules]
 # There's some mismatches betweeen mypy and ty still

@@ -12,7 +12,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Python with Rustfava dependencies
-        pythonEnv = pkgs.python311.withPackages (ps: with ps; [
+        pythonEnv = pkgs.python313.withPackages (ps: with ps; [
           # Rustfava core dependencies
           flask
           flask-babel
@@ -26,9 +26,8 @@
           markupsafe
           cheroot  # WSGI server for rustfava CLI
 
-          # Beancount (for testing/comparison - will be replaced by rustledger)
+          # Beancount (optional - for legacy plugin support)
           beancount
-          beanquery
           beangulp
 
           # Dev/test dependencies
@@ -56,15 +55,15 @@
             pkgs.ripgrep
             pkgs.uv  # Fast Python package manager
 
-            # Node.js for frontend build (requires >=22)
-            pkgs.nodejs_22
-            pkgs.nodePackages.npm
+            # Bun for frontend build
+            pkgs.bun
           ];
 
           shellHook = ''
             echo "🦀 Rustfava development environment"
             echo ""
             echo "Python: $(python --version)"
+            echo "Bun: $(bun --version)"
             echo "wasmtime: $(wasmtime --version)"
             echo ""
             echo "WASM file: src/rustfava/rustledger/rustledger-wasi.wasm"

@@ -18,20 +18,11 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-        py: ["3.13", "3.10"]
-        make_target: ["test-py", "test-py-old-deps"]
+        py: ["3.14", "3.13"]
         include:
           - os: "macos-latest"
-            make_target: "test-py"
-            py: "3.13"
-          - os: "windows-latest"
-            make_target: "test-py"
-            py: "3.13"
-          - os: "ubuntu-latest"
-            make_target: "test-py"
             py: "3.14"
-          - os: "ubuntu-latest"
-            make_target: "test-py-typeguard"
+          - os: "windows-latest"
             py: "3.14"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -44,39 +35,39 @@ jobs:
         with:
           enable-cache: false
       - run: touch src/rustfava/static/app.js
-      - run: make ${{ matrix.make_target }}
-  test-js:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        node: ["lts/*"]
-        include:
-          - os: "ubuntu-latest"
-            node: "current"
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
-        with:
-          node-version: ${{ matrix.node }}
-          package-manager-cache: false
-      - run: cd frontend && npm ci
-      - run: cd frontend && npm run build
-      - run: cd frontend && npm test
-  deno-js:
+      - run: make test-py
+
+  test-py-typeguard:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          deno-version: "v2.6.x"
-      - run: cd frontend && deno install
-      - run: cd frontend && deno lint
-      - run: cd frontend && deno run build
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+        with:
+          enable-cache: false
+      - run: touch src/rustfava/static/app.js
+      - run: make test-py-typeguard
+
+  test-js:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
+        with:
+          bun-version: latest
+      - run: cd frontend && bun install
+      - run: cd frontend && bun run build
+      - run: cd frontend && bun test
+
   lint-js:
     runs-on: "ubuntu-latest"
     steps:
@@ -85,19 +76,19 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.13"
-      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+          python-version: "3.14"
+      - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
         with:
-          node-version: "lts/*"
-          package-manager-cache: false
+          bun-version: latest
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
-      - run: cd frontend && npm ci
+      - run: cd frontend && bun install
       - run: uv run --no-dev --group pre-commit pre-commit run -a eslint
       - run: uv run --no-dev --group pre-commit pre-commit run -a stylelint
-      - run: cd frontend; npx tsc
-      - run: cd frontend; npx svelte-check
+      - run: cd frontend && bun run tsc
+      - run: cd frontend && bun run svelte-check
+
   lint-python-mypy:
     runs-on: "ubuntu-latest"
     steps:
@@ -106,12 +97,13 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false
       - run: touch src/rustfava/static/app.js
       - run: make mypy
+
   lint-python-ty:
     runs-on: "ubuntu-latest"
     steps:
@@ -120,7 +112,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           enable-cache: false

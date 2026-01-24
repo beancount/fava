@@ -11,6 +11,7 @@
 /frontend/.dev-bin/
 /frontend/coverage/
 /frontend/node_modules/
+/frontend/package-lock.json
 /htmlcov/
 /src/rustfava.egg-info/
 /src/rustfava/static/*.css

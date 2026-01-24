@@ -17,7 +17,7 @@ from rustfava.beans.ingest import BeanImporterProtocol
 try:
     from typing import override
 except ImportError:
-    from typing_extensions import override
+    from typing import override
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence

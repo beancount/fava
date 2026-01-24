@@ -25,7 +25,7 @@ from rustfava.util.date import local_today
 try:
     from typing import override
 except ImportError:  # pragma: no cover
-    from typing_extensions import override
+    from typing import override
 
 if TYPE_CHECKING:  # pragma: no cover
     from rustfava.beans.ingest import FileMemo
