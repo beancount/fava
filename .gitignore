@@ -28,3 +28,7 @@
 __pycache__
 npm-debug.log
 .venv
+
+# MCP / Claude Code
+.mcp.json
+.playwright-mcp/
