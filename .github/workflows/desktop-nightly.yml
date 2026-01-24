@@ -53,7 +53,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Rust
         uses: dtolnay/rust-action@stable
@@ -77,7 +77,7 @@ jobs:
           copy target\wasm32-wasip1\release\rustledger-ffi-wasi.wasm ${{ github.workspace }}\src\rustfava\rustledger\rustledger-wasi.wasm
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -102,7 +102,7 @@ jobs:
           move dist\rustfava.exe dist\${{ matrix.sidecar_name }}
 
       - name: Upload sidecar artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sidecar-${{ matrix.target }}
           path: dist/${{ matrix.sidecar_name }}
@@ -130,7 +130,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout rustledger
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ env.RUSTLEDGER_REPO }}
           ref: main
@@ -171,7 +171,7 @@ jobs:
           }
 
       - name: Upload rustledger binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: rustledger-${{ matrix.target }}
           path: binaries/*
@@ -197,16 +197,16 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download sidecar artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: sidecar-${{ matrix.target }}
           path: desktop/src-tauri/binaries/
 
       - name: Download rustledger binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: rustledger-${{ matrix.target }}
           path: desktop/src-tauri/binaries/
@@ -232,7 +232,7 @@ jobs:
         uses: dtolnay/rust-action@stable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
 
@@ -252,7 +252,7 @@ jobs:
           tauriScript: bun tauri
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: rustfava-${{ matrix.target }}
           path: |
@@ -271,7 +271,7 @@ jobs:
       contents: write
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: artifacts
           pattern: rustfava-*
