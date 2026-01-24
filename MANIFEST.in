@@ -8,6 +8,6 @@ exclude .pre-commit-config.yaml
 exclude .prettierignore
 prune .github
 
-graft src/fava/static
-exclude src/fava/translations/babel.conf
-recursive-include src/fava/translations *.mo
+graft src/rustfava/static
+exclude src/rustfava/translations/babel.conf
+recursive-include src/rustfava/translations *.mo

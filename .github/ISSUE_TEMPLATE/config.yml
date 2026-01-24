@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://rustledger.github.io/rustfava/
+    about: Check the documentation for usage help
+  - name: Security Vulnerabilities
+    url: https://github.com/rustledger/rustfava/security/advisories/new
+    about: Report security issues privately
