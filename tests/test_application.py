@@ -361,3 +361,21 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]
+
+
+def test_gzip_compression(test_client: FlaskClient) -> None:
+    """Test gzip compression for large JSON responses."""
+    import gzip
+
+    # Request a large JSON response with gzip accepted
+    response = test_client.get(
+        "/long-example/api/journal",
+        headers={"Accept-Encoding": "gzip"},
+    )
+    assert response.status_code == HTTPStatus.OK.value
+    # Large JSON responses should be gzip compressed
+    if response.content_length and response.content_length > 500:
+        assert response.headers.get("Content-Encoding") == "gzip"
+        # Verify we can decompress it
+        decompressed = gzip.decompress(response.data)
+        assert len(decompressed) > len(response.data)
