@@ -16,9 +16,8 @@ from decimal import Decimal
 from functools import singledispatch
 from typing import Any
 
-from beancount.parser.parser import parse_string
-
 from fava.beans import create
+from fava.beans.load import load_string
 from fava.beans.abc import Balance
 from fava.beans.abc import Custom
 from fava.beans.abc import Directive
@@ -39,6 +38,36 @@ class InvalidAmountError(FavaAPIError):
         super().__init__(f"Invalid amount: {amount}")
 
 
+# Internal meta fields that should not be serialised to JSON
+_INTERNAL_META_KEYS = {"filename", "lineno", "hash", "__tolerances__"}
+
+# Map rustledger type names to standard beancount type names
+_TYPE_NAME_MAP = {
+    "RLDocument": "Document",
+    "RLNote": "Note",
+    "RLEvent": "Event",
+    "RLQuery": "Query",
+    "RLCommodity": "Commodity",
+    "RLOpen": "Open",
+    "RLClose": "Close",
+    "RLPad": "Pad",
+}
+
+
+def _get_entry_type_name(entry: Directive) -> str:
+    """Get the canonical entry type name for serialisation."""
+    name = entry.__class__.__name__
+    return _TYPE_NAME_MAP.get(name, name)
+
+
+def _clean_meta(meta: dict) -> dict:
+    """Remove internal meta fields from a copy of the metadata."""
+    result = copy(meta)
+    for key in _INTERNAL_META_KEYS:
+        result.pop(key, None)
+    return result
+
+
 @singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
@@ -46,16 +75,16 @@ def serialise(entry: Directive | Posting) -> Any:
         msg = f"Unsupported object {entry}"
         raise TypeError(msg)
     ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["meta"] = _clean_meta(ret.get("meta", {}))
     ret["entry_hash"] = hash_entry(entry)
-    ret["t"] = entry.__class__.__name__
+    ret["t"] = _get_entry_type_name(entry)
     return ret
 
 
 @serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
     ret = entry._asdict()  # type: ignore[attr-defined]
-    ret["meta"] = copy(entry.meta)
-    ret["meta"].pop("__tolerances__", None)
+    ret["meta"] = _clean_meta(entry.meta)
     ret["t"] = "Transaction"
     ret["entry_hash"] = hash_entry(entry)
     ret["payee"] = entry.payee or ""
@@ -66,6 +95,7 @@ def _(entry: Transaction) -> Any:
 @serialise.register(Custom)
 def _(entry: Custom) -> Any:
     ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["meta"] = _clean_meta(ret.get("meta", {}))
     ret["t"] = "Custom"
     ret["entry_hash"] = hash_entry(entry)
     ret["values"] = [v.value for v in entry.values]
@@ -75,6 +105,7 @@ def _(entry: Custom) -> Any:
 @serialise.register(Balance)
 def _(entry: Balance) -> Any:
     ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["meta"] = _clean_meta(ret.get("meta", {}))
     ret["t"] = "Balance"
     ret["entry_hash"] = hash_entry(entry)
     amt = ret["amount"]
@@ -85,6 +116,7 @@ def _(entry: Balance) -> Any:
 @serialise.register(Price)
 def _(entry: Balance) -> Any:
     ret = entry._asdict()  # type: ignore[attr-defined]
+    ret["meta"] = _clean_meta(ret.get("meta", {}))
     ret["t"] = "Price"
     ret["entry_hash"] = hash_entry(entry)
     amt = ret["amount"]
@@ -105,23 +137,35 @@ def _(posting: Posting) -> Any:
     return ret
 
 
+_DUMMY_DATE = datetime.date(2000, 1, 1)
+
+
 def deserialise_posting(posting: Any) -> Posting:
     """Parse JSON to a Beancount Posting."""
     amount = posting.get("amount", "")
-    entries, errors, _ = parse_string(
-        f'2000-01-01 * "" ""\n Assets:Account {amount}',
+    entries, errors, _ = load_string(
+        f'2000-01-01 * "" ""\n  Assets:Account {amount}',
     )
-    if errors:
+    # Raise error if:
+    # - No entries were parsed at all
+    # - Amount was provided but there's a parse error (not inference warning)
+    has_parse_error = any("parse error" in str(e.message).lower() for e in errors)
+    if not entries or (amount and has_parse_error):
         raise InvalidAmountError(amount)
     txn = entries[0]
     if not isinstance(txn, Transaction):  # pragma: no cover
         msg = "Expected transaction"
         raise TypeError(msg)
     pos = txn.postings[0]
+    # Strip dummy date from cost if present (booking assigns transaction date)
+    cost = pos.cost
+    if cost is not None and getattr(cost, "date", None) == _DUMMY_DATE:
+        cost = replace(cost, date=None)
     return replace(
         pos,
         account=posting["account"],
         meta=posting.get("meta", {}) or None,
+        cost=cost,
     )
 
 

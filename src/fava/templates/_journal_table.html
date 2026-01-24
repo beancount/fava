@@ -8,6 +8,15 @@
    'open': 'Open',
 } %}
 
+{# Normalize rustledger type names (e.g., 'rltransaction' -> 'transaction') #}
+{% macro _normalize_type(raw_type) %}
+{%- if raw_type.startswith('rl') -%}
+{{ raw_type[2:] }}
+{%- else -%}
+{{ raw_type }}
+{%- endif -%}
+{% endmacro %}
+
 {% macro _account_link(name) %}<a href='{{ url_for('account', name=name) }}'>{{ name }}</a>{% endmacro %}
 
 {% macro _render_metadata_indicators(metadata) -%}
@@ -47,7 +56,8 @@
     {% else %}
         {% set index, entry = entry %}
     {% endif %}
-    {% set type = entry.__class__.__name__.lower() %}
+    {% set raw_type = entry.__class__.__name__.lower() %}
+    {% set type = _normalize_type(raw_type)|trim %}
     {% set metadata_items = entry.meta|meta_items %}
     {% set entry_hash = entry|hash_entry -%}
     <li class='{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}'>
