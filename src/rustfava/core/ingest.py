@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import datetime
 import os
-import sys
 import traceback
 from dataclasses import dataclass
 from functools import wraps
@@ -330,7 +329,7 @@ def load_import_config(
     try:
         mod = run_path(str(module_path))
     except Exception as error:  # pragma: no cover
-        message = "".join(traceback.format_exception(*sys.exc_info()))
+        message = traceback.format_exc()
         raise ImportConfigLoadError(message) from error
 
     if "CONFIG" not in mod:

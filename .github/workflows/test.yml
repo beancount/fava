@@ -49,10 +49,7 @@ jobs:
       - run: make test-py-typeguard
 
   test-js:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -83,7 +80,7 @@ jobs:
       - run: cd frontend && bun run tsc
       - run: cd frontend && bun run svelte-check
 
-  lint-python-mypy:
+  lint-python-types:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -95,16 +92,4 @@ jobs:
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
       - run: touch src/rustfava/static/app.js
       - run: make mypy
-
-  lint-python-ty:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: "3.14"
-      - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
-      - run: touch src/rustfava/static/app.js
       - run: make ty

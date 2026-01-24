@@ -1,6 +1,6 @@
-"""Fava's options.
+"""Rustfava's options.
 
-Options for Fava can be specified through Custom entries in the Beancount file.
+Options for Rustfava can be specified through Custom entries in the Beancount file.
 This module contains a list of possible options, the defaults and the code for
 parsing the options.
 
@@ -34,7 +34,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class OptionError(BeancountError):
-    """An error for one the Fava options."""
+    """An error for one of the Rustfava options."""
 
 
 @dataclass(frozen=True)
@@ -78,7 +78,7 @@ class UnknownLocaleOptionError(ValueError):  # noqa: D101
 
 class UnsupportedLanguageOptionError(ValueError):  # noqa: D101
     def __init__(self, value: str) -> None:
-        super().__init__(f"Fava has no translations for: '{value}'.")
+        super().__init__(f"Rustfava has no translations for: '{value}'.")
 
 
 class InvalidFiscalYearEndOptionError(ValueError):  # noqa: D101
@@ -88,7 +88,7 @@ class InvalidFiscalYearEndOptionError(ValueError):  # noqa: D101
 
 @dataclass
 class RustfavaOptions:
-    """Options for Fava that can be set in the Beancount file."""
+    """Options for Rustfava that can be set in the Beancount file."""
 
     account_journal_include_children: bool = True
     auto_reload: bool = False
@@ -227,7 +227,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
 def parse_options(
     custom_entries: Sequence[Custom],
 ) -> tuple[RustfavaOptions, list[OptionError]]:
-    """Parse custom entries for Fava options.
+    """Parse custom entries for Rustfava options.
 
     The format for option entries is the following::
 

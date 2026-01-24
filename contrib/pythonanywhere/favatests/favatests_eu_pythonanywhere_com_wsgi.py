@@ -1,8 +1,8 @@
-"""Fava WSGI application for `favatests.eu.pythonanywhere.com`."""
+"""Rustfava WSGI application for `favatests.eu.pythonanywhere.com`."""
 
 from __future__ import annotations
 
-from fava.application import create_app
+from rustfava.application import create_app
 
 application = create_app(
     [

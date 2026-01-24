@@ -1,4 +1,4 @@
-"""Auto-commit hook for Fava.
+"""Auto-commit hook for Rustfava.
 
 This mainly serves as an example how Rustfava's extension systems, which only
 really does hooks at the moment, works.
@@ -6,28 +6,23 @@ really does hooks at the moment, works.
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
-from subprocess import call
-from subprocess import DEVNULL
 from typing import TYPE_CHECKING
+from typing import override
 
 from rustfava.ext import RustfavaExtensionBase
-
-try:
-    from typing import override
-except ImportError:  # pragma: no cover
-    from typing import override
 
 if TYPE_CHECKING:  # pragma: no cover
     from rustfava.beans.abc import Directive
 
 
 class AutoCommit(RustfavaExtensionBase):  # pragma: no cover
-    """Auto-commit hook for Fava."""
+    """Auto-commit hook for Rustfava."""
 
     def _run(self, args: list[str]) -> None:
         cwd = Path(self.ledger.beancount_file_path).parent
-        call(args, cwd=cwd, stdout=DEVNULL)
+        subprocess.run(args, cwd=cwd, stdout=subprocess.DEVNULL, check=False)
 
     @override
     def after_write_source(self, path: str, source: str) -> None:

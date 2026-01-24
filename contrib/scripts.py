@@ -17,13 +17,13 @@ from click import echo
 from click import group
 from click import UsageError
 
-from fava import LOCALES
+from rustfava import LOCALES
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
 
 BASE_PATH = Path(__file__).parent.parent
-FAVA_PATH = BASE_PATH / "src" / "fava"
+RUSTFAVA_PATH = BASE_PATH / "src" / "rustfava"
 
 
 @group()
@@ -83,7 +83,7 @@ def upload_translations() -> None:
     token = environ.get("POEDITOR_TOKEN")
     if not token:
         raise MissingPoeditorTokenError
-    path = FAVA_PATH / "translations" / "messages.pot"
+    path = RUSTFAVA_PATH / "translations" / "messages.pot"
     echo(f"Uploading message catalog: {path}")
     data = {
         "api_token": token,
@@ -127,7 +127,7 @@ def download_from_poeditor(language: str, token: str) -> None:
     )
     url = request.json()["result"]["url"]
     content = requests.get(url, timeout=10).content
-    folder = FAVA_PATH / "translations" / language / "LC_MESSAGES"
+    folder = RUSTFAVA_PATH / "translations" / language / "LC_MESSAGES"
     if not folder.exists():
         folder.mkdir(parents=True)
     path = folder / "messages.po"
