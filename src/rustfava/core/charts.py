@@ -12,9 +12,9 @@ from re import Pattern
 from typing import Any
 from typing import TYPE_CHECKING
 
+import json
+
 from flask.json.provider import JSONProvider
-from simplejson import dumps as simplejson_dumps
-from simplejson import loads as simplejson_loads
 
 from rustfava.beans.abc import Position
 from rustfava.rustledger.constants import Booking
@@ -44,6 +44,8 @@ ZERO = Decimal()
 
 def _json_default(o: Any) -> Any:
     """Specific serialisation for some data types."""
+    if isinstance(o, Decimal):
+        return str(o)
     if isinstance(o, (date, Booking, Position)):
         return str(o)
     if isinstance(o, (set, frozenset)):
@@ -59,26 +61,26 @@ def _json_default(o: Any) -> Any:
 
 def dumps(obj: Any, **_kwargs: Any) -> str:
     """Dump as a JSON string."""
-    return simplejson_dumps(
+    return json.dumps(
         obj, sort_keys=True, separators=(",", ":"), default=_json_default
     )
 
 
 def loads(s: str | bytes) -> Any:
     """Load a JSON string."""
-    return simplejson_loads(s)
+    return json.loads(s)
 
 
 class RustfavaJSONProvider(JSONProvider):
     """Use custom JSON encoder and decoder."""
 
     def dumps(self, obj: Any, **_kwargs: Any) -> str:  # noqa: D102
-        return simplejson_dumps(
+        return json.dumps(
             obj, sort_keys=True, separators=(",", ":"), default=_json_default
         )
 
     def loads(self, s: str | bytes, **_kwargs: Any) -> Any:  # noqa: D102
-        return simplejson_loads(s)
+        return json.loads(s)
 
 
 @dataclass(frozen=True)

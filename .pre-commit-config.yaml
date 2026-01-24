@@ -1,6 +1,7 @@
 ci:
   autoupdate_schedule: quarterly
-  skip: ["eslint", "stylelint"]
+  skip: ["eslint", "stylelint", "prettier"]
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.13
@@ -8,6 +9,7 @@ repos:
       - id: ruff-check
         args: ["--fix"]
       - id: ruff-format
+
   - repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
     hooks:
@@ -15,39 +17,33 @@ repos:
         args: ["--wrap", "80"]
         additional_dependencies:
           - mdformat-gfm
+
   - repo: https://github.com/biomejs/pre-commit
     rev: v2.3.10
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
+
   - repo: local
     hooks:
       - id: prettier
         name: prettier
-        language: node
-        entry: prettier --write --list-different
+        language: system
+        entry: bunx prettier --write --list-different
         types_or: ["svelte", "yaml"]
-        require_serial: true
-        additional_dependencies:
-          - "prettier@3.8.0"
-          - "prettier-plugin-svelte@3.4.1"
-          - "svelte@5.46.4"
+        pass_filenames: true
+
       - id: stylelint
         name: stylelint
-        language: node
-        entry: stylelint --fix --config frontend/stylelint.config.js
+        language: system
+        entry: bunx stylelint --fix --config frontend/stylelint.config.js
         types_or: ["css", "svelte"]
-        require_serial: true
-        additional_dependencies:
-          - "stylelint@17.0.0"
-          - "stylelint-config-recess-order@7.4.0"
-          - "stylelint-config-standard@40.0.0"
-          - "postcss-html@1.8.1"
+        pass_filenames: true
+
       - id: eslint
         name: eslint
-        language: node
-        entry: ./frontend/node_modules/eslint/bin/eslint.js --config
-          frontend/eslint.config.js --fix --max-warnings 0
-        require_serial: true
+        language: system
+        entry: bunx eslint --config frontend/eslint.config.js --fix --max-warnings 0
         types_or: ["javascript", "svelte", "ts"]
         files: "^frontend/"
+        pass_filenames: true

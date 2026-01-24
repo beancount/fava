@@ -3,8 +3,9 @@ from abc import ABC
 from abc import abstractmethod
 from collections.abc import Sequence
 
-from fava.beans.abc import Account
-from fava.beans.abc import Directive
+from rustfava.beans.abc import Directive
+
+type Account = str
 
 class Importer(ABC):
     @property
