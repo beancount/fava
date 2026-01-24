@@ -4,24 +4,24 @@ Rustfava supports extensions. Extensions allow you to register hooks and generat
 your own report pages.
 
 If you use this extension system and need it to do more or need other hooks,
-please open an issue on [GitHub](https://github.com/beancount/fava/issues).
+please open an issue on [GitHub](https://github.com/rustledger/rustfava/issues).
 
 A Rustfava extension is simply a Python module which contains a class that inherits
-from `RustfavaExtensionBase` from `fava.ext`. Invoking an extension is done via the
-`fava-extension` option in the beancount file. Check out `fava.ext.auto_commit`
+from `RustfavaExtensionBase` from `rustfava.ext`. Invoking an extension is done via the
+`fava-extension` option in the beancount file. Check out `rustfava.ext.auto_commit`
 for an example.
 
 Extensions may also contain a report - this is detected when the extension's
 class has a `report_title` attribute. The template for the report should be in a
 `templates` subdirectory with a report matching the class's name. For example,
-check out `fava.ext.portfolio_list` which has its template located at
-`fava/ext/portfolio_list/templates/PortfolioList.html`.
+check out `rustfava.ext.portfolio_list` which has its template located at
+`rustfava/ext/portfolio_list/templates/PortfolioList.html`.
 
 Finally, extensions may contain a Javascript module to be loaded in the
 frontend. The module should be in a Javascript file matching the class's name
-and the extension should have its `has_js_module` attribte set to `True`. The
+and the extension should have its `has_js_module` attribute set to `True`. The
 module can define functions to be called when different events happen. Take a
-look at `fava/ext/portfolio_list/PortfolioList.js` for an example. Currently,
+look at `rustfava/ext/portfolio_list/PortfolioList.js` for an example. Currently,
 the following events/functions can be specified:
 
 - `init`: is called when a Rustfava report is first opened

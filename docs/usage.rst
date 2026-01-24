@@ -1,32 +1,31 @@
 Getting Started
 ===============
 
-If you're new to Beancount or double-entry accounting in general, we
+If you're new to Beancount-format files or double-entry accounting in general, we
 recommend `Command-line Accounting in Context
 <https://docs.google.com/document/d/1e4Vz3wZB_8-ZcAwIFde8X5CjzKshE4-OXtVVHm4RQ8s/>`_,
-a motivational document written by Martin Blais, the author of Beancount.
+a motivational document written by Martin Blais, the creator of the Beancount format.
 
-To learn how to create your beancount file, refer to `Getting Started with
+To learn how to create your ledger file, refer to `Getting Started with
 Beancount
 <https://docs.google.com/document/d/1P5At-z1sP8rgwYLHso5sEy3u4rMnIUDDgob9Y_BYuWE/>`_
-guide. Martin Blais has written a great deal of very detailed documentation for
-Beancount, see the `Beancount Documentation
+guide. There is extensive documentation for the Beancount file format at the
+`Beancount Documentation
 <https://docs.google.com/document/d/1RaondTJCS_IUPBHFNdT8oqFKJjVJDsfsn6JEjBG04eA>`_
-page for an index of the available documentation.
+page.
 
 Installation
 ------------
 
-Rustrustfava is known to run on macOS, Linux, and Windows.  You will need `Python 3
+Rustfava runs on macOS, Linux, and Windows.  You will need `Python 3
 <https://www.python.org/downloads/>`_.  Then you can use ``pip`` to install
-Rustrustfava or update your existing Installation by running::
+Rustfava or update your existing installation by running::
 
     pip install --upgrade rustfava
 
-which will also pull in all required dependencies including Beancount. If you
-do not have Beancount installed already, you might want to have a look at its
-`installation instructions
-<https://docs.google.com/document/d/1FqyrTPwiHVLyncWTf3v5TcooCu9z5JRX8Nm41lVZi0U>`_.
+Rustfava uses `rustledger <https://github.com/rustledger/rustledger>`_, a
+Rust-based parser compiled to WebAssembly, to parse your Beancount files. No
+separate Beancount installation is required.
 
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
@@ -34,10 +33,10 @@ the following command to install the optional dependencies for this feature::
    pip install --upgrade rustfava[excel]
 
 
-Starting Rustrustfava
--------------
+Starting Rustfava
+-----------------
 
-After installing Rustrustfava, you can start it by running::
+After installing Rustfava, you can start it by running::
 
     rustfava ledger.beancount
 
@@ -46,6 +45,6 @@ pointing it to your Beancount file -- and visit the web interface at
 
 There are some command-line options available, run ``rustfava --help`` for an overview.
 
-For more information on Rustrustfava's features, refer to the help pages that are
-available through Rustrustfava's web-interface.  Rustrustfava comes with Gmail-style keyboard
+For more information on Rustfava's features, refer to the help pages that are
+available through Rustfava's web-interface.  Rustfava comes with Gmail-style keyboard
 shortcuts; press ``?`` to show an overview.

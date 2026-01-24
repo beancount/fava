@@ -18,9 +18,10 @@ and then Tab directly after it.
 
 ## Queries
 
-On the [Query](../query/) report you can execute queries like with the
-`bean-query` command-line tool. For an explanation of how these queries work see
-the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
+On the [Query](../query/) report you can execute queries using the Beancount
+Query Language (BQL). Rustfava uses rustledger's built-in query engine. For an
+explanation of how BQL queries work, see the
+[Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
 Rustfava displays charts for BQL queries - if they have exactly two columns like the
 following example with the first being a date or string and the second an
@@ -40,7 +41,7 @@ By default, only exporting to `csv` is supported. For support of `xlsx` and
 `ods`, install Rustfava with the `excel` feature:
 
 ```
-pip3 install fava[excel]
+pip3 install rustfava[excel]
 ```
 
 ## Adding Transactions
@@ -150,7 +151,7 @@ When enabling the `tag_discovered_documents`-plugin, these Document entries will
 be tagged with `#discovered` and can be filtered in the Journal:
 
 ```
-plugin "fava.plugins.tag_discovered_documents"
+plugin "rustfava.plugins.tag_discovered_documents"
 ```
 
 ### Uploading statements
@@ -169,7 +170,7 @@ Beancount (see above) will be tagged with `#linked`, linked to the corresponding
 transaction and can be filtered in the Journal:
 
 ```
-plugin "fava.plugins.link_documents"
+plugin "rustfava.plugins.link_documents"
 ```
 
 ### Exporting

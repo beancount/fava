@@ -1,19 +1,28 @@
 Changelog
 =========
 
+Rustfava (2025)
+---------------
+
+This is a fork of Fava that replaces the Python Beancount parser and beanquery
+with `rustledger <https://github.com/rustledger/rustledger>`_, a Rust-based
+implementation of the Beancount format compiled to WebAssembly.
+
+Key changes from Fava:
+
+- **No Beancount dependency**: Rustfava uses rustledger for parsing, so you
+  don't need to install Python's beancount package. Your existing Beancount
+  files are fully compatible.
+- **Query support**: BQL queries are now handled by rustledger's built-in query
+  engine instead of beanquery. The query syntax remains largely compatible.
+- **Optional beancount compatibility**: If you need to use Beancount plugins or
+  the import system, install with ``pip install rustfava[beancount-compat]``.
+
 v1.30 (2024-12-29)
 ------------------
 
-Support for Beancount version 3 was added. Using Beancount 2 is still
-supported. Beancount query support is now provided by the beanquery package,
-which has some minor differences in syntax, the provided columns and functions
-to the bean-query functionality in Beancount version 2. For extensions using
-Rustrustfava's query_shell directly, this will lead to breakage due to differences in
-methods and the types that are returned.
-
-For importers, this sticks to beancount.ingest on v2 and used beangulp for v3.
-Due to changes related to duplicate detection, duplicate detection is not
-automatically done by Rustrustfava here but can still be manually specified as hooks.
+*Note: This entry describes the original Fava release. Rustfava is based on
+this version with the rustledger integration.*
 
 Under the hood, this also upgrades Svelte (the framework used for the frontend
 parts) to version 5.
@@ -25,7 +34,7 @@ With this release, query results are now rendered in the frontend. The
 templates for HTML rendering are still available but extension authors are
 encouraged to switch, see the statistics report for an example how this can be
 done. This release adds CSS styles for dark-mode. Numerical comparisons on the
-units, price or cost are now possible in Rustrustfava filters. As the watchfiles based
+units, price or cost are now possible in Rustfava filters. As the watchfiles based
 watcher might not work correctly in some setups with network file systems, you
 can switch to the (slower) polling based watcher as well. The `default-file`
 option, if set, is now considered instead of the "main" file when inserting an
@@ -52,18 +61,18 @@ v1.26 (2023-09-04)
 
 This release brings various improvements to the charts, like allowing the
 toggling of currencies by clicking on their names in the chart legend. The
-account balance trees in Rustrustfava are now rendered in the frontend, fixing some
-minor bugs in the process and easing maintenance. Rustrustfava extensions can now also
+account balance trees in Rustfava are now rendered in the frontend, fixing some
+minor bugs in the process and easing maintenance. Rustfava extensions can now also
 provide their own endpoints.
 
 v1.25 (2023-07-17)
 ------------------
 
 With this release, extensions can now ship Javascript code to run in the
-frontend. The editor in Rustrustfava now uses a tree-sitter grammar to obtain a full
+frontend. The editor in Rustfava now uses a tree-sitter grammar to obtain a full
 parsed syntax tree, which makes editor functionality more maintainable and
 should improve the autocompletion. The Flask WSGI app is now created using the
-application factory pattern - users who use the Rustrustfava WSGI app directly should
+application factory pattern - users who use the Rustfava WSGI app directly should
 switch from `rustfava.application.app` to the `create_app` function in
 `rustfava.application`. This release also drops support for Python 3.7 and contains
 a couple of minor fixes and changes, in particular various styling fixes.
@@ -102,7 +111,7 @@ and use `g.filtered` instead of `ledger` for some attributes.
 v1.21 (2022-02-06)
 ------------------
 
-This release of Rustrustfava drops support for Python 3.6. It mainly consists of
+This release of Rustfava drops support for Python 3.6. It mainly consists of
 various small improvements and fixes.
 
 v1.20.1 (2021-09-22)
@@ -144,7 +153,7 @@ v1.16 (2020-10-18)
 ------------------
 
 This release brings area charts as an alternative option to view the various
-line charts in Rustrustfava and a Catalan translation for Rustrustfava. There is also now an
+line charts in Rustfava and a Catalan translation for Rustfava. There is also now an
 option to set the indentation of inserted Beancount entries. As usual this
 release also includes various minor fixes and improvements.
 
@@ -164,7 +173,7 @@ allows setting a default conversion.
 v1.13 (2020-02-01)
 ------------------
 
-Rustrustfava can now display charts for BQL queries - if they have exactly two columns
+Rustfava can now display charts for BQL queries - if they have exactly two columns
 with the first being a date or string and the second an inventory, then a line
 chart or treemap chart is shown on the query page.
 
@@ -178,7 +187,7 @@ syntax of Beancount should supported.
 v1.11 (2019-08-20)
 ------------------
 
-The import page of Rustrustfava has been reworked - it now supports moving files to the
+The import page of Rustfava has been reworked - it now supports moving files to the
 documents folder and the import process should be a bit more interactive. This
 release also contains various fixes and a new `collapse-pattern` option to
 collapse accounts in account trees based on regular expressions (and replaces
@@ -206,7 +215,7 @@ v1.8 (2018-07-25)
 -----------------
 
 The journal design has been updated and should now have a clearer structure.
-Starting with this version, there will not be any more GUI releases of Rustrustfava.
+Starting with this version, there will not be any more GUI releases of Rustfava.
 The GUI broke frequently and does not seem to worth the maintenance burden.
 
 Other changes:
@@ -246,7 +255,7 @@ Other changes:
 v1.5 (2017-07-23)
 -----------------
 
-Rustrustfava now has an interface to edit single entries. Clicking on the entry date in
+Rustfava now has an interface to edit single entries. Clicking on the entry date in
 the Journal will open an overlay that shows the entry context and allows
 editing just the lines of that entry.
 
@@ -263,13 +272,13 @@ Other changes:
 v1.4 (2017-05-14)
 -----------------
 
-Rustrustfava now provides an interface for Beancount's import system that allows you to
+Rustfava now provides an interface for Beancount's import system that allows you to
 import transactions from your bank for example.
 
-Rustrustfava can now show your balances at market value or convert them to a single
+Rustfava can now show your balances at market value or convert them to a single
 currency if your file contains the necessary price information.
 
-We now also provide a compiled GUI version of Rustrustfava for Linux and macOS. This
+We now also provide a compiled GUI version of Rustfava for Linux and macOS. This
 version might still be a bit buggy so any feedback/help on it is very welcome.
 
 Other changes:
@@ -285,7 +294,7 @@ Thanks to :user:`TZdyrski` and :user:`Akuukis` for their contributions.
 v1.3 (2017-03-15)
 -----------------
 
-The translations of Rustrustfava are now on `POEditor.com
+The translations of Rustfava are now on `POEditor.com
 <https://poeditor.com/projects/view?id=90283>`__, which has helped us get
 translations in five more languages: Chinese (simplified), Dutch, French,
 Portuguese, and Spanish. A big thank you to the new translators!
@@ -297,7 +306,7 @@ exponential decay).
 The Query page supports all commands of the ``bean-query`` shell and shares its
 history of recently used queries.
 
-Rustrustfava has gained a basic extension mechanism. Extensions allow you to run hooks
+Rustfava has gained a basic extension mechanism. Extensions allow you to run hooks
 at various points, e.g., after adding a transaction. They are specified using
 the ``extensions`` option and for an example, see the ``rustfava.ext.auto_commit``
 extension.
@@ -314,10 +323,10 @@ Thanks to :user:`johannesharms` and :user:`xentac` for their contributions.
 v1.2 (2016-12-25)
 -----------------
 
-You can now add transactions from within Rustrustfava. The form supports autocompletion
+You can now add transactions from within Rustfava. The form supports autocompletion
 for most fields.
 
-Rustrustfava will now show a little bubble in the sidebar for the number of events in
+Rustfava will now show a little bubble in the sidebar for the number of events in
 the next week. This can be configured with the ``upcoming-events`` option.
 
 Other changes:
@@ -334,7 +343,7 @@ v1.1 (2016-11-19)
 -----------------
 
 You can now upload documents by dropping them onto transactions, which will
-also add the file path as `statement` metadata to the transaction. Rustrustfava also
+also add the file path as `statement` metadata to the transaction. Rustfava also
 ships with a plugin to link these transactions with the generated documents.
 See the help pages for details.
 
@@ -346,7 +355,7 @@ Other changes:
 
 - The bar charts on account pages now also show budgets.
 - The Journal can now be sorted by date, flag and narration.
-- Rustrustfava now has a Russian translation, thanks to :user:`fokusov`.
+- Rustfava now has a Russian translation, thanks to :user:`fokusov`.
 - As always, several bugs have been fixed.
 
 Thanks to :user:`adamgibbins` and :user:`xentac` for their contributions.
@@ -358,16 +367,16 @@ This is a major new release that includes too many improvements and changes to
 list. Some highlights:
 
 - The layout has been tweaked and we use some nicer fonts.
-- Rustrustfava looks and works much better on smaller screens.
-- Rustrustfava loads most pages asynchronously, so navigating Rustrustfava is much faster and
+- Rustfava looks and works much better on smaller screens.
+- Rustfava loads most pages asynchronously, so navigating Rustfava is much faster and
   responsive.
 
-Rustrustfava's configuration is not read from a configuration file anymore but can
+Rustfava's configuration is not read from a configuration file anymore but can
 rather be specified using custom entries in the Beancount file. Some options
-have also been removed or renamed, so check Rustrustfava's help page on the available
+have also been removed or renamed, so check Rustfava's help page on the available
 options when upgrading from v0.3.0.
 
-There have been many changes under the hood to improve Rustrustfava's codebase and a
+There have been many changes under the hood to improve Rustfava's codebase and a
 lot of bugs have been squashed.
 
 Thanks to :user:`adamgibbins`, :user:`davidastephens`, :user:`xentac`, and

@@ -1,16 +1,16 @@
 # Import
 
 Rustfava can use Beancount's import system to semi-automatically import entries into
-your Beancount ledger. See
-[Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
+your ledger. See [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
 for more information on how to write importers.
 
+**Note**: Import functionality requires the beancount compatibility package.
+Install it with: `pip install rustfava[beancount-compat]`
+
 You can override the hooks that should be run for your importers by specifying a
-variable `HOOKS` with the a list of hooks to apply to the list of
-`(filename: str, entries: list[Directive])` tuples. On Beancount version 2 the
-duplicates detector hook will be run by default and no hooks will run by default
-on Beancount version 3. If you want to use beangulp-style hooks that take list
-of
+variable `HOOKS` with a list of hooks to apply to the list of
+`(filename: str, entries: list[Directive])` tuples. If you want to use
+beangulp-style hooks that take lists of
 `(filename: str, entries: list[Directive], account: str, importer: Importer)`-tuples,
 you can annotate them with the appropriate Python types which Rustfava will detect
 and call with these 4-tuples.

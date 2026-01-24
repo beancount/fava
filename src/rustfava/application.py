@@ -429,7 +429,6 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             help_html=Markup(  # noqa: S704
                 render_template_string(
                     html,
-                    beancount_version=version("beancount"),
                     rustfava_version=version("rustfava"),
                 ),
             ),

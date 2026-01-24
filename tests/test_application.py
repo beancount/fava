@@ -198,8 +198,8 @@ def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     response = test_client.get("/long-example/help/")
     help_page = assert_success(response)
-    assert f"Rustfava <code>{version('rustfava')}</code>" in help_page
-    assert f"<code>{version('beancount')}</code>" in help_page
+    assert f"Rustfava\n<code>{version('rustfava')}</code>" in help_page
+    assert "powered by rustledger" in help_page
     response = test_client.get("/long-example/help/filters")
     assert assert_success(response)
     response = test_client.get("/long-example/help/asdfasdf")

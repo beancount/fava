@@ -1,5 +1,5 @@
-Welcome to Rustrustfava!
-================
+Welcome to Rustfava!
+====================
 
 .. toctree::
     :hidden:
@@ -9,19 +9,21 @@ Welcome to Rustrustfava!
     development
     api
 
-Rustrustfava is a web interface for the double-entry bookkeeping software `Beancount`_
-with a focus on features and usability.
+Rustfava is a web interface for double-entry bookkeeping, powered by
+`rustledger`_, a Rust-based parser for the Beancount file format compiled to
+WebAssembly for fast in-browser processing.
 
-.. _Beancount: https://beancount.github.io/
+.. _rustledger: https://github.com/rustledger/rustledger
 
-You can try out an online `demo <https://rustfava.pythonanywhere.com>`_.
+Rustfava is a fork of `Fava <https://beancount.github.io/fava/>`_ that replaces
+the Python Beancount parser with rustledger for improved performance. Your
+existing Beancount files are fully compatible.
 
 .. image:: https://i.imgbox.com/rfb9I7Zw.png
 
-If you are new to Rustrustfava and Beancount, begin with the :doc:`usage` guide.
+If you are new to Rustfava or Beancount-format files, begin with the :doc:`usage` guide.
 
-If you are already familiar with Beancount, this is enough to get you up and
-running::
+This is enough to get you up and running::
 
     pip3 install rustfava
     rustfava ledger.beancount

@@ -1,6 +1,6 @@
-Welcome to the help pages for Rustfava! You are running Beancount version
-`{{ beancount_version }}` and Rustfava `{{ rustfava_version }}`. There are help
-pages for the following topics:
+Welcome to the help pages for Rustfava! You are running Rustfava
+`{{ rustfava_version }}` powered by rustledger. There are help pages for the
+following topics:
 
 - [Beancount Syntax](./beancount_syntax) - short overview of the syntax.
 - [Budgets](./budgets) - how to use Rustfava's budgeting feature.
@@ -23,8 +23,7 @@ If you discover a bug in Rustfava, or have some ideas for improvement, please op
 ### Related websites
 
 - Rustfava on [GitHub](https://github.com/rustledger/rustfava),
-- Beancount's [documentation](http://furius.ca/beancount/doc/index),
-  [mailing list](https://groups.google.com/forum/#!forum/beancount), and
-  [bug tracker](https://bitbucket.org/blais/beancount/issues),
+- rustledger on [GitHub](https://github.com/rustledger/rustledger),
+- Beancount file format [documentation](http://furius.ca/beancount/doc/index),
 - An overview of other implementations of command-line accounting:
   [Plain Text Accounting](http://plaintextaccounting.org).
