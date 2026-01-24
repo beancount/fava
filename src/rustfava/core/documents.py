@@ -48,11 +48,8 @@ def is_document_or_import_file(filename: str, ledger: RustfavaLedger) -> bool:
     file_path = Path(filename).resolve()
     for import_dir in ledger.fava_options.import_dirs:
         resolved_dir = ledger.join_path(import_dir).resolve()
-        try:
-            if file_path.is_relative_to(resolved_dir):
-                return True
-        except ValueError:
-            continue
+        if file_path.is_relative_to(resolved_dir):
+            return True
     return False
 
 
