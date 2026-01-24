@@ -39,7 +39,7 @@ def _frontend_sources() -> Iterable[Path]:
     Yields:
         The files relevant for the frontend build.
     """
-    yield Path("frontend/package-lock.json")
+    yield Path("frontend/bun.lock")
     yield Path("frontend/build.ts")
     for directory, _dirnames, files in chain(
         walk(Path("frontend/css")),
@@ -57,14 +57,14 @@ def _compile_frontend() -> None:
     if app_js.exists() and source_mtime < app_js.stat().st_mtime_ns:
         return
 
-    npm = shutil.which("npm")
-    if npm is None:
-        msg = "npm is missing"
+    bun = shutil.which("bun")
+    if bun is None:
+        msg = "bun is missing"
         raise RuntimeError(msg)
 
-    subprocess.run((npm, "install", "--no-save"), cwd="frontend", check=True)
+    subprocess.run((bun, "install"), cwd="frontend", check=True)
     Path("frontend/node_modules").touch()
-    subprocess.run((npm, "run", "build"), cwd="frontend", check=True)
+    subprocess.run((bun, "run", "build"), cwd="frontend", check=True)
 
 
 def _compile_translations() -> None:

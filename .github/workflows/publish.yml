@@ -30,8 +30,6 @@ jobs:
           bun-version: latest
       - run: cd frontend && bun install
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
-        with:
-          enable-cache: false
       - run: uv build
       - run: git diff --exit-code
       - name: Publish release

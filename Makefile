@@ -110,8 +110,7 @@ update: update-deps update-frontend-deps update-precommit update-github-actions
 # Build the website
 .PHONY: docs
 docs:
-	uv run --no-dev --group docs docs/generate.py
-	uv run --no-dev --group docs sphinx-build -b html docs build/docs
+	uv run --no-dev --group docs mkdocs build -d build/docs
 
 # Run rustfava for the example files.
 .PHONY: run-example

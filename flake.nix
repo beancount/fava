@@ -18,8 +18,7 @@
           flask-babel
           jinja2
           markdown2
-          ply
-          simplejson
+          ply  # Used for filter syntax parsing
           watchfiles
           werkzeug
           click
