@@ -7,21 +7,153 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e8e8e8;
+    html, body {
+      height: 100%;
       overflow: hidden;
     }
 
-    /* Subtle animated background */
-    body::before {
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #0f172a;
+      color: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      height: 40px;
+      padding: 0 8px;
+      gap: 4px;
+      -webkit-app-region: drag;
+    }
+
+    .tab-bar-buttons {
+      display: flex;
+      gap: 4px;
+      -webkit-app-region: no-drag;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #334155;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      font-size: 13px;
+      color: #94a3b8;
+      max-width: 200px;
+      transition: all 0.15s ease;
+      -webkit-app-region: no-drag;
+    }
+
+    .tab:hover {
+      background: #475569;
+      color: #e2e8f0;
+    }
+
+    .tab.active {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .tab-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .tab-close {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #64748b;
+      transition: all 0.15s ease;
+    }
+
+    .tab-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .new-tab-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      -webkit-app-region: no-drag;
+    }
+
+    .new-tab-btn:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Welcome screen */
+    .welcome {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
+    }
+
+    .welcome.hidden {
+      display: none;
+    }
+
+    .welcome::before {
       content: '';
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;
@@ -32,12 +164,18 @@
       pointer-events: none;
     }
 
-    .container {
+    .welcome-content {
       text-align: center;
       padding: 60px 40px;
       max-width: 520px;
       position: relative;
       z-index: 1;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .logo-icon {
@@ -65,7 +203,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 2px 4px rgba(249, 115, 22, 0.3));
     }
 
     .logo .fava {
@@ -124,46 +261,23 @@
 
     .open-btn:active {
       transform: translateY(-1px);
-      box-shadow:
-        0 4px 12px rgba(249, 115, 22, 0.4),
-        0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
-    .open-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.2);
-    }
-
-    .status {
+    .hint {
       margin-top: 24px;
-      font-size: 14px;
-      color: #f97316;
-      min-height: 24px;
-      font-weight: 500;
+      font-size: 13px;
+      color: #64748b;
     }
 
-    .status.error {
-      color: #f87171;
+    .hint kbd {
+      background: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 12px;
     }
 
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(249, 115, 22, 0.3);
-      border-top-color: #f97316;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
+    /* Recent files */
     .recent {
       margin-top: 56px;
       text-align: left;
@@ -171,7 +285,10 @@
       border-radius: 16px;
       padding: 20px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
+    }
+
+    .recent.hidden {
+      display: none;
     }
 
     .recent h3 {
@@ -188,15 +305,15 @@
     }
 
     .recent-item {
-      padding: 14px 16px;
+      padding: 12px 14px;
       background: rgba(255, 255, 255, 0.03);
-      border-radius: 10px;
-      margin-bottom: 8px;
+      border-radius: 8px;
+      margin-bottom: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       border: 1px solid transparent;
     }
 
@@ -211,62 +328,87 @@
     }
 
     .recent-item .icon {
-      font-size: 20px;
+      font-size: 18px;
       opacity: 0.6;
     }
 
     .recent-item .name {
       font-weight: 500;
-      font-size: 14px;
+      font-size: 13px;
       color: #e2e8f0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .recent-item .path {
-      font-size: 12px;
+      font-size: 11px;
       color: #64748b;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       margin-top: 2px;
     }
 
-    .hidden { display: none; }
-
-    /* Fade in animation */
-    .container {
-      animation: fadeIn 0.6s ease-out;
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(249, 115, 22, 0.2);
+      border-top-color: #f97316;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.svg" alt="rustfava logo" class="logo-icon">
-    <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
-    <div class="tagline">Accounting in plain text, under your control, forever.</div>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-bar-buttons" id="tabs"></div>
+    <button class="new-tab-btn" id="newTabBtn" title="Open file (Ctrl+O)">+</button>
+  </div>
 
-    <button class="open-btn" id="openBtn">
-      Open Beancount File
-    </button>
+  <!-- Content area -->
+  <div class="content">
+    <!-- Welcome screen (shown when no tabs) -->
+    <div class="welcome" id="welcome">
+      <div class="welcome-content">
+        <img src="logo.svg" alt="rustfava logo" class="logo-icon">
+        <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
+        <div class="tagline">Accounting in plain text, under your control, forever.</div>
 
-    <div class="status" id="status"></div>
+        <button class="open-btn" id="openBtn">Open Beancount File</button>
 
-    <div class="recent hidden" id="recentSection">
-      <h3>Recent Files</h3>
-      <ul class="recent-list" id="recentList"></ul>
+        <div class="hint">or press <kbd>Ctrl</kbd>+<kbd>O</kbd></div>
+
+        <div class="recent hidden" id="recentSection">
+          <h3>Recent Files</h3>
+          <ul class="recent-list" id="recentList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab content (iframes) -->
+    <div id="tabContents"></div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+      <div class="spinner"></div>
     </div>
   </div>
 
@@ -274,19 +416,19 @@
     const STORAGE_KEY = 'rustfava_recent_files';
     const MAX_RECENT = 5;
 
-    const statusEl = document.getElementById('status');
+    // State
+    let tabs = [];  // { tab_id, url, path, name }
+    let activeTabId = null;
+
+    // Elements
+    const tabsEl = document.getElementById('tabs');
+    const tabContentsEl = document.getElementById('tabContents');
+    const welcomeEl = document.getElementById('welcome');
+    const loadingEl = document.getElementById('loadingOverlay');
     const openBtn = document.getElementById('openBtn');
+    const newTabBtn = document.getElementById('newTabBtn');
 
-    function setStatus(msg, isError = false) {
-      statusEl.textContent = msg;
-      statusEl.className = isError ? 'status error' : 'status';
-    }
-
-    function setLoading(msg) {
-      statusEl.innerHTML = '<span class="spinner"></span>' + msg;
-      statusEl.className = 'status';
-    }
-
+    // Recent files
     function getRecentFiles() {
       try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -333,51 +475,155 @@
       });
     }
 
-    async function openPath(path) {
-      openBtn.disabled = true;
-      setLoading('Starting server...');
+    // Tab management
+    function renderTabs() {
+      tabsEl.innerHTML = tabs.map(tab => `
+        <div class="tab ${tab.tab_id === activeTabId ? 'active' : ''}" data-id="${tab.tab_id}">
+          <span class="tab-name" title="${tab.path}">${tab.name}</span>
+          <span class="tab-close" data-id="${tab.tab_id}">&times;</span>
+        </div>
+      `).join('');
 
-      try {
-        const { invoke } = window.__TAURI__.core;
-        const url = await invoke('open_file', { path });
-        addRecentFile(path);
-        setLoading('Loading...');
-
-        // Poll until server is ready
-        let attempts = 0;
-        const checkServer = async () => {
-          try {
-            await fetch(url, { mode: 'no-cors' });
-            window.location.href = url;
-          } catch {
-            if (++attempts < 30) {
-              setTimeout(checkServer, 200);
-            } else {
-              setStatus('Server failed to start', true);
-              openBtn.disabled = false;
-            }
+      // Tab click handlers
+      tabsEl.querySelectorAll('.tab').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('tab-close')) {
+            switchTab(el.dataset.id);
           }
-        };
-        setTimeout(checkServer, 500);
-      } catch (err) {
-        setStatus('Error: ' + err, true);
-        openBtn.disabled = false;
+        });
+      });
+
+      // Close button handlers
+      tabsEl.querySelectorAll('.tab-close').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeTab(el.dataset.id);
+        });
+      });
+
+      // Show/hide welcome screen
+      if (tabs.length === 0) {
+        welcomeEl.classList.remove('hidden');
+      } else {
+        welcomeEl.classList.add('hidden');
       }
     }
 
-    async function openFile() {
+    function renderTabContents() {
+      // Create/update iframes for each tab
+      const existingIds = new Set(
+        [...tabContentsEl.querySelectorAll('.tab-content')].map(el => el.dataset.id)
+      );
+
+      tabs.forEach(tab => {
+        if (!existingIds.has(tab.tab_id)) {
+          const div = document.createElement('div');
+          div.className = 'tab-content';
+          div.dataset.id = tab.tab_id;
+          div.innerHTML = `<iframe src="${tab.url}"></iframe>`;
+          tabContentsEl.appendChild(div);
+        }
+      });
+
+      // Remove iframes for closed tabs
+      tabContentsEl.querySelectorAll('.tab-content').forEach(el => {
+        if (!tabs.find(t => t.tab_id === el.dataset.id)) {
+          el.remove();
+        }
+      });
+
+      // Show active tab
+      tabContentsEl.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.toggle('active', el.dataset.id === activeTabId);
+      });
+    }
+
+    function switchTab(tabId) {
+      activeTabId = tabId;
+      renderTabs();
+      renderTabContents();
+    }
+
+    async function closeTab(tabId) {
       try {
-        if (!window.__TAURI__) {
-          setStatus('Tauri not loaded yet, please wait...', true);
+        const { invoke } = window.__TAURI__.core;
+        await invoke('close_tab', { tabId });
+
+        const idx = tabs.findIndex(t => t.tab_id === tabId);
+        tabs = tabs.filter(t => t.tab_id !== tabId);
+
+        // Switch to another tab if closing active
+        if (activeTabId === tabId) {
+          if (tabs.length > 0) {
+            activeTabId = tabs[Math.max(0, idx - 1)].tab_id;
+          } else {
+            activeTabId = null;
+          }
+        }
+
+        renderTabs();
+        renderTabContents();
+      } catch (err) {
+        console.error('Failed to close tab:', err);
+      }
+    }
+
+    // Open file
+    async function openPath(path) {
+      loadingEl.classList.remove('hidden');
+
+      try {
+        const { invoke } = window.__TAURI__.core;
+        const result = await invoke('open_file', { path });
+
+        addRecentFile(path);
+
+        if (result.already_open) {
+          // Switch to existing tab
+          switchTab(result.tab_id);
+          loadingEl.classList.add('hidden');
           return;
         }
+
+        // Wait for server to be ready
+        await waitForServer(result.url);
+
+        // Add new tab
+        tabs.push({
+          tab_id: result.tab_id,
+          url: result.url,
+          path: result.path,
+          name: result.path.split('/').pop()
+        });
+        activeTabId = result.tab_id;
+
+        renderTabs();
+        renderTabContents();
+      } catch (err) {
+        console.error('Failed to open file:', err);
+        alert('Failed to open file: ' + err);
+      } finally {
+        loadingEl.classList.add('hidden');
+      }
+    }
+
+    async function waitForServer(url, maxAttempts = 30) {
+      for (let i = 0; i < maxAttempts; i++) {
+        try {
+          await fetch(url, { mode: 'no-cors' });
+          return;
+        } catch {
+          await new Promise(r => setTimeout(r, 200));
+        }
+      }
+      throw new Error('Server failed to start');
+    }
+
+    async function openFilePicker() {
+      try {
+        if (!window.__TAURI__) return;
 
         const { open } = window.__TAURI__.dialog;
-        if (!open) {
-          setStatus('Dialog plugin not available', true);
-          return;
-        }
-
         const path = await open({
           multiple: false,
           filters: [{
@@ -390,26 +636,45 @@
           await openPath(path);
         }
       } catch (err) {
-        setStatus('Error: ' + err, true);
-        console.error('Open file error:', err);
+        console.error('File picker error:', err);
       }
     }
 
-    // Initialize
-    openBtn.addEventListener('click', openFile);
-    renderRecentFiles();
+    // Event listeners
+    openBtn.addEventListener('click', openFilePicker);
+    newTabBtn.addEventListener('click', openFilePicker);
 
-    // Debug: log Tauri availability
-    setTimeout(() => {
-      if (window.__TAURI__) {
-        console.log('Tauri loaded:', Object.keys(window.__TAURI__));
-        if (window.__TAURI__.dialog) {
-          console.log('Dialog plugin loaded:', Object.keys(window.__TAURI__.dialog));
-        }
-      } else {
-        setStatus('Tauri API not available', true);
+    // Menu events from Rust
+    if (window.__TAURI__) {
+      const { listen } = window.__TAURI__.event;
+
+      listen('menu-open-file', () => openFilePicker());
+
+      listen('menu-close-tab', () => {
+        if (activeTabId) closeTab(activeTabId);
+      });
+
+      listen('menu-reload', () => {
+        const iframe = tabContentsEl.querySelector(`.tab-content[data-id="${activeTabId}"] iframe`);
+        if (iframe) iframe.src = iframe.src;
+      });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+        e.preventDefault();
+        openFilePicker();
       }
-    }, 500);
+      if ((e.ctrlKey || e.metaKey) && e.key === 'w') {
+        e.preventDefault();
+        if (activeTabId) closeTab(activeTabId);
+      }
+    });
+
+    // Initialize
+    renderRecentFiles();
+    renderTabs();
   </script>
 </body>
 </html>
