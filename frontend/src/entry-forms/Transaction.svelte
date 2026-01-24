@@ -6,8 +6,8 @@
     get_payee_transaction,
   } from "../api/index.ts";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { EntryMetadata } from "../entries/index.ts";
-  import { Posting, Transaction } from "../entries/index.ts";
+  import type { EntryMetadata , Transaction } from "../entries/index.ts";
+  import { Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import { move } from "../lib/array.ts";
   import { notify_err } from "../notifications.ts";

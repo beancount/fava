@@ -39,15 +39,16 @@
       return { number: "", currency: DEFAULT_CURRENCY };
     }
     // Match patterns like "123.45 USD", "-50 EUR", "100USD", etc.
-    const match = trimmed.match(/^(-?[\d.,]+)\s*([A-Za-z]*)$/);
+    const match = /^(-?[\d.,]+)\s*([A-Za-z]*)$/.exec(trimmed);
     if (match) {
+      const currency = match[2];
       return {
         number: match[1] ?? "",
-        currency: match[2] || DEFAULT_CURRENCY,
+        currency: currency !== undefined && currency !== "" ? currency : DEFAULT_CURRENCY,
       };
     }
     // Fallback: try to extract just the number
-    const numberMatch = trimmed.match(/(-?[\d.,]+)/);
+    const numberMatch = /(-?[\d.,]+)/.exec(trimmed);
     return {
       number: numberMatch?.[1] ?? "",
       currency: DEFAULT_CURRENCY,
@@ -141,14 +142,14 @@
       placeholder={_("Amount")}
       step="any"
       value={parsed.number}
-      oninput={(e) => updateNumber(e.currentTarget.value)}
+      oninput={(e) => { updateNumber(e.currentTarget.value); }}
     />
     <select
       class="amount-currency"
       value={parsed.currency}
-      onchange={(e) => updateCurrency(e.currentTarget.value)}
+      onchange={(e) => { updateCurrency(e.currentTarget.value); }}
     >
-      {#each $currencies as currency}
+      {#each $currencies as currency (currency)}
         <option value={currency}>{currency}</option>
       {/each}
       {#if !$currencies.includes(parsed.currency)}
