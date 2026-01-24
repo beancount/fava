@@ -6,8 +6,8 @@
     get_payee_transaction,
   } from "../api/index.ts";
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import type { EntryMetadata, Transaction } from "../entries/index.ts";
-  import { Posting } from "../entries/index.ts";
+  import type { EntryMetadata } from "../entries/index.ts";
+  import { Posting, Transaction } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import { move } from "../lib/array.ts";
   import { notify_err } from "../notifications.ts";
@@ -58,6 +58,16 @@
       });
   });
 
+  /** Clear the amount from the first posting of a transaction. */
+  function clearFirstPostingAmount(txn: Transaction): Transaction {
+    const postings = txn.postings;
+    if (postings.length > 0 && postings[0]) {
+      const updatedFirstPosting = postings[0].set("amount", "");
+      return txn.set("postings", postings.with(0, updatedFirstPosting));
+    }
+    return txn;
+  }
+
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
     if (entry.narration || entry.postings.some((p) => !p.is_empty())) {
@@ -66,15 +76,14 @@
     const payee_transaction = await get_payee_transaction({
       payee: entry.payee,
     });
-    entry = payee_transaction.set("date", entry.date);
+    entry = clearFirstPostingAmount(payee_transaction.set("date", entry.date));
   }
   async function autocompleteSelectNarration() {
     if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
     const data = await get_narration_transaction({ narration });
-    data.set("date", entry.date);
-    entry = data;
+    entry = clearFirstPostingAmount(data.set("date", entry.date));
     narration = entry.get_narration_tags_links();
   }
 

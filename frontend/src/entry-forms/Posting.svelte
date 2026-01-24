@@ -1,11 +1,12 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
   import type { EntryMetadata, Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import { currencies } from "../stores/index.ts";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
+
+  const DEFAULT_CURRENCY = "SGD";
 
   interface Props {
     /** The posting to show and edit. */
@@ -31,10 +32,47 @@
     remove,
   }: Props = $props();
 
-  let amount_number = $derived(posting.amount.replace(/[^\-?0-9.]/g, ""));
-  let amountSuggestions = $derived(
-    $currencies.map((c) => `${amount_number} ${c}`),
-  );
+  /** Parse the amount string into number and currency parts. */
+  function parseAmount(amount: string): { number: string; currency: string } {
+    const trimmed = amount.trim();
+    if (!trimmed) {
+      return { number: "", currency: DEFAULT_CURRENCY };
+    }
+    // Match patterns like "123.45 USD", "-50 EUR", "100USD", etc.
+    const match = trimmed.match(/^(-?[\d.,]+)\s*([A-Za-z]*)$/);
+    if (match) {
+      return {
+        number: match[1] ?? "",
+        currency: match[2] || DEFAULT_CURRENCY,
+      };
+    }
+    // Fallback: try to extract just the number
+    const numberMatch = trimmed.match(/(-?[\d.,]+)/);
+    return {
+      number: numberMatch?.[1] ?? "",
+      currency: DEFAULT_CURRENCY,
+    };
+  }
+
+  /** Combine number and currency into an amount string. */
+  function formatAmount(number: string, currency: string): string {
+    if (!number) {
+      return "";
+    }
+    return `${number} ${currency}`;
+  }
+
+  let parsed = $derived(parseAmount(posting.amount));
+
+  function updateNumber(newNumber: string) {
+    const newAmount = formatAmount(newNumber, parsed.currency);
+    posting = posting.set("amount", newAmount);
+  }
+
+  function updateCurrency(newCurrency: string) {
+    const newAmount = formatAmount(parsed.number, newCurrency);
+    posting = posting.set("amount", newAmount);
+  }
 
   let drag = $state.raw(false);
   let draggable = $state.raw(true);
@@ -96,17 +134,28 @@
     {date}
     --autocomplete-wrapper-flex="2"
   />
-  <AutocompleteInput
-    placeholder={_("Amount")}
-    suggestions={amountSuggestions}
-    bind:value={
-      () => posting.amount,
-      (amount: string) => {
-        posting = posting.set("amount", amount);
-      }
-    }
-    --autocomplete-wrapper-flex="1"
-  />
+  <span class="amount-wrapper">
+    <input
+      type="number"
+      class="amount-number"
+      placeholder={_("Amount")}
+      step="any"
+      value={parsed.number}
+      oninput={(e) => updateNumber(e.currentTarget.value)}
+    />
+    <select
+      class="amount-currency"
+      value={parsed.currency}
+      onchange={(e) => updateCurrency(e.currentTarget.value)}
+    >
+      {#each $currencies as currency}
+        <option value={currency}>{currency}</option>
+      {/each}
+      {#if !$currencies.includes(parsed.currency)}
+        <option value={parsed.currency}>{parsed.currency}</option>
+      {/if}
+    </select>
+  </span>
   <AddMetadataButton
     bind:meta={
       () => posting.meta,
@@ -143,9 +192,29 @@
     visibility: hidden;
   }
 
+  .amount-wrapper {
+    display: flex;
+    flex: 1;
+    gap: var(--flex-gap);
+  }
+
+  .amount-number {
+    flex: 2;
+    min-width: 80px;
+  }
+
+  .amount-currency {
+    flex: 1;
+    min-width: 70px;
+  }
+
   @media (width <= 767px) {
     div {
       padding-left: 0;
+    }
+
+    .amount-wrapper {
+      flex-basis: 100%;
     }
   }
 </style>
