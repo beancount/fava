@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
-    from beanquery import Column
+    from fava.rustledger.query import ColumnDescription as Column
 
     ResultRow = tuple[Any, ...]
 
@@ -103,6 +103,13 @@ def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str]:
             result.append(" ".join(value))
         elif type_ is datetime.date:
             result.append(str(value))
+        elif type_ is dict or isinstance(value, dict):
+            # Handle inventory dicts from rustledger
+            if isinstance(value, dict):
+                parts = [f"{v} {k}" for k, v in value.items()]
+                result.append(", ".join(parts))
+            else:
+                result.append(str(value))
         else:
             if not isinstance(value, str):  # pragma: no cover
                 msg = f"unexpected type {type(value)}"

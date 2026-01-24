@@ -7,10 +7,8 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import Amount
-from beancount.core.inventory import Inventory
-from beancount.core.position import Position
-
+from fava.rustledger.types import RLAmount
+from fava.rustledger.types import RLPosition
 from fava.core.conversion import UNITS
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -34,7 +32,7 @@ if TYPE_CHECKING:  # pragma: no cover
         | str
         | datetime.date
         | Decimal
-        | Position
+        | RLPosition
         | SimpleCounterInventory
         | None
     )
@@ -145,26 +143,38 @@ class ObjectColumn(BaseColumn):
 
 @dataclass(frozen=True)
 class InventoryColumn(BaseColumn):
-    """A str query column."""
+    """An inventory query column."""
 
     dtype: str = "Inventory"
 
     @staticmethod
     def serialise(
-        val: Inventory | None,
+        val: dict | None,
     ) -> SimpleCounterInventory | None:
-        """Serialise an inventory."""
+        """Serialise an inventory.
+
+        Rustledger returns inventory as a dict of currency -> Decimal.
+        """
+        if val is None:
+            return None
+        # Rustledger already converts to {currency: Decimal} format
+        if isinstance(val, dict):
+            from fava.core.inventory import SimpleCounterInventory
+            return SimpleCounterInventory(val)
+        # Fallback for beancount Inventory type (for backwards compat)
         return UNITS.apply_inventory(val) if val is not None else None
 
 
 COLUMNS = {
-    Amount: AmountColumn,
+    RLAmount: AmountColumn,
     Decimal: DecimalColumn,
-    Inventory: InventoryColumn,
-    Position: PositionColumn,
+    dict: InventoryColumn,  # Rustledger returns inventory as dict
+    RLPosition: PositionColumn,
+    object: ObjectColumn,  # Fallback for Position from rustledger
     bool: BoolColumn,
     datetime.date: DateColumn,
     int: IntColumn,
     set: SetColumn,
+    frozenset: SetColumn,  # Rustledger returns frozenset for sets
     str: StrColumn,
 }

@@ -7,8 +7,16 @@ from abc import abstractmethod
 from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.core import data
-from beancount.core import position
+# Try to import beancount types for backwards compatibility
+# These are only needed to register beancount types with the ABCs
+_HAS_BEANCOUNT = False
+try:
+    from beancount.core import data as _bc_data
+    from beancount.core import position as _bc_position
+    _HAS_BEANCOUNT = True
+except ImportError:
+    _bc_data = None  # type: ignore[assignment]
+    _bc_position = None  # type: ignore[assignment]
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -41,7 +49,8 @@ class Position(ABC):
         """Units of the position."""
 
 
-Position.register(position.Position)
+if _HAS_BEANCOUNT:
+    Position.register(_bc_position.Position)
 
 
 class Posting(Position):
@@ -78,7 +87,8 @@ class Posting(Position):
         """Flag of the posting."""
 
 
-Posting.register(data.Posting)
+if _HAS_BEANCOUNT:
+    Posting.register(_bc_data.Posting)
 
 
 class Directive(ABC):
@@ -237,7 +247,7 @@ class Open(Directive):
 
     @property
     @abstractmethod
-    def booking(self) -> data.Booking | None:
+    def booking(self) -> str | None:
         """Booking method for the account."""
 
 
@@ -297,15 +307,16 @@ class TxnPosting(ABC):
         """Posting."""
 
 
-Balance.register(data.Balance)
-Commodity.register(data.Commodity)
-Close.register(data.Close)
-Custom.register(data.Custom)
-Document.register(data.Document)
-Event.register(data.Event)
-Note.register(data.Note)
-Open.register(data.Open)
-Pad.register(data.Pad)
-Price.register(data.Price)
-Transaction.register(data.Transaction)
-Query.register(data.Query)
+if _HAS_BEANCOUNT:
+    Balance.register(_bc_data.Balance)
+    Commodity.register(_bc_data.Commodity)
+    Close.register(_bc_data.Close)
+    Custom.register(_bc_data.Custom)
+    Document.register(_bc_data.Document)
+    Event.register(_bc_data.Event)
+    Note.register(_bc_data.Note)
+    Open.register(_bc_data.Open)
+    Pad.register(_bc_data.Pad)
+    Price.register(_bc_data.Price)
+    Transaction.register(_bc_data.Transaction)
+    Query.register(_bc_data.Query)

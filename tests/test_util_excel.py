@@ -3,12 +3,9 @@ from __future__ import annotations
 from typing import Any
 from typing import TYPE_CHECKING
 
-import beanquery
 import pytest
-from beancount.core import data
-from beanquery.numberify import numberify_results
 
-from fava.rustledger.beanquery_compat import to_beancount_entries
+from fava.rustledger.query import connect
 from fava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -16,27 +13,21 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def _run_query(ledger: FavaLedger, query: str) -> Any:
-    # Convert rustledger entries to beancount entries for beanquery
-    entries = ledger.all_entries
-    bc_entries = (
-        entries
-        if entries and isinstance(entries[0], data.ALL_DIRECTIVES)
-        else to_beancount_entries(entries)
-    )
-    conn = beanquery.connect(
-        "beancount:",
-        entries=bc_entries,
+    """Run a query using rustledger and return types/rows for excel export."""
+    conn = connect(
+        "rustledger:",
+        entries=ledger.all_entries,
         options=ledger.options,
         errors=ledger.errors,
     )
+    # Set source for queries
+    source = getattr(ledger, "_source", None)
+    if source:
+        conn.set_source(source)
+
     curs = conn.execute(query)
     rrows = curs.fetchall()
-    rtypes = curs.description
-    dcontext = ledger.options["dcontext"]
-    # Duck-type check: DisplayContext can be beancount's or RLDisplayContext
-    assert hasattr(dcontext, "build")
-    dformat = dcontext.build()
-    rtypes, rrows = numberify_results(rtypes, rrows, dformat)
+    rtypes = list(curs.description)
     return rtypes, rrows
 
 

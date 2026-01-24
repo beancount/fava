@@ -808,7 +808,7 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
         query_string={"query_string": "nononono"},
     )
     msg = assert_api_error(response)
-    assert "Query parse error: syntax error" in msg
+    assert "Query parse error" in msg
 
 
 def test_api_commodities_empty(

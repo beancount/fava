@@ -1,27 +1,31 @@
-(b'account,SUM((position)) (USD),SUM((position)) (VACHR),SUM((position)) (IRAUS'
- b'D),SUM((position)) (VHT),SUM((position)) (VEA),SUM((position)) (VBMPX),SUM(('
- b'position)) (RGAGX),SUM((position)) (ITOT),SUM((position)) (GLD)\r\nAssets:'
- b'US:BofA:Checking,502.25,,,,,,,,\r\nAssets:US:ETrade:Cash,8689.74,,,,,,,,\r\n'
- b'Assets:US:ETrade:GLD,,,,,,,,,10.0\r\nAssets:US:ETrade:ITOT,,,,,,,,60.0,\r\nA'
- b'ssets:US:ETrade:VEA,,,,,4.0,,,,\r\nAssets:US:ETrade:VHT,,,,23.0,,,,,\r\nAsse'
- b'ts:US:Federal:PreTax401k,,,,,,,,,\r\nAssets:US:Hoogle:Vacation,,130.0,,,,,'
- b',,\r\nAssets:US:Vanguard:Cash,0.04,,,,,,,,\r\nAssets:US:Vanguard:RGAGX,,,,,,'
- b',103.322,,\r\nAssets:US:Vanguard:VBMPX,,,,,,63.276,,,\r\nLiabilities:US:Chas'
- b'e:Slate,-1144.44,,,,,,,,\r\nEquity:Opening-Balances,-4363.28,,,,,,,,\r\nInco'
- b'me:US:ETrade:Dividends,-70.55,,,,,,,,\r\nIncome:US:ETrade:Gains,-76.05,,,,'
- b',,,,\r\nIncome:US:Federal:PreTax401k,,,-16500.0,,,,,,\r\nIncome:US:Hoogle:Gr'
- b'oupTermLife,-632.32,,,,,,,,\r\nIncome:US:Hoogle:Match401k,-8250.0,,,,,,,,\r'
- b'\nIncome:US:Hoogle:Salary,-119999.88,,,,,,,,\r\nIncome:US:Hoogle:Vacation,,'
- b'-130.0,,,,,,,\r\nExpenses:Financial:Commissions,179.0,,,,,,,,\r\nExpenses:Fi'
- b'nancial:Fees,48.0,,,,,,,,\r\nExpenses:Food:Groceries,2196.8,,,,,,,,\r\nExpen'
- b'ses:Food:Restaurant,3795.18,,,,,,,,\r\nExpenses:Health:Dental:Insurance,75'
- b'.4,,,,,,,,\r\nExpenses:Health:Life:GroupTermLife,632.32,,,,,,,,\r\nExpenses:'
- b'Health:Medical:Insurance,711.88,,,,,,,,\r\nExpenses:Health:Vision:Insuranc'
- b'e,1099.8,,,,,,,,\r\nExpenses:Home:Electricity,715.0,,,,,,,,\r\nExpenses:Home'
- b':Internet,879.86,,,,,,,,\r\nExpenses:Home:Phone,666.23,,,,,,,,\r\nExpenses:H'
- b'ome:Rent,26400.0,,,,,,,,\r\nExpenses:Taxes:Y2010:US:CityNYC,4547.92,,,,,,,'
- b',\r\nExpenses:Taxes:Y2010:US:Federal,27635.92,,,,,,,,\r\nExpenses:Taxes:Y201'
- b'0:US:Federal:PreTax401k,,,16500.0,,,,,,\r\nExpenses:Taxes:Y2010:US:Medicar'
- b'e,2772.12,,,,,,,,\r\nExpenses:Taxes:Y2010:US:SDI,29.12,,,,,,,,\r\nExpenses:T'
- b'axes:Y2010:US:SocSec,7000.04,,,,,,,,\r\nExpenses:Taxes:Y2010:US:State,9492'
- b'.08,,,,,,,,\r\nExpenses:Transport:Tram,1440.0,,,,,,,,\r\n')
+(b"account,balance\r\nAssets:US:BofA:Checking,{'USD': Decimal('502.25')}\r\nAss"
+ b"ets:US:ETrade:Cash,{'USD': Decimal('8689.74')}\r\nAssets:US:ETrade:GLD,{'G"
+ b"LD': Decimal('10')}\r\nAssets:US:ETrade:ITOT,{'ITOT': Decimal('60')}\r\nAsse"
+ b"ts:US:ETrade:VEA,{'VEA': Decimal('4')}\r\nAssets:US:ETrade:VHT,{'VHT': Dec"
+ b"imal('23')}\r\nAssets:US:Federal:PreTax401k,{'IRAUSD': Decimal('0.00')}\r\nA"
+ b"ssets:US:Hoogle:Vacation,{'VACHR': Decimal('130')}\r\nAssets:US:Vanguard:C"
+ b"ash,{'USD': Decimal('0.04')}\r\nAssets:US:Vanguard:RGAGX,{'RGAGX': Decimal"
+ b"('103.322')}\r\nAssets:US:Vanguard:VBMPX,{'VBMPX': Decimal('63.276')}\r\nEqu"
+ b"ity:Opening-Balances,{'USD': Decimal('-4363.28')}\r\nExpenses:Financial:Co"
+ b"mmissions,{'USD': Decimal('179.00')}\r\nExpenses:Financial:Fees,{'USD': De"
+ b"cimal('48.00')}\r\nExpenses:Food:Groceries,{'USD': Decimal('2196.80')}\r\nEx"
+ b"penses:Food:Restaurant,{'USD': Decimal('3795.18')}\r\nExpenses:Health:Dent"
+ b"al:Insurance,{'USD': Decimal('75.40')}\r\nExpenses:Health:Life:GroupTermLi"
+ b"fe,{'USD': Decimal('632.32')}\r\nExpenses:Health:Medical:Insurance,{'USD':"
+ b" Decimal('711.88')}\r\nExpenses:Health:Vision:Insurance,{'USD': Decimal('1"
+ b"099.80')}\r\nExpenses:Home:Electricity,{'USD': Decimal('715.00')}\r\nExpense"
+ b"s:Home:Internet,{'USD': Decimal('879.86')}\r\nExpenses:Home:Phone,{'USD': "
+ b"Decimal('666.23')}\r\nExpenses:Home:Rent,{'USD': Decimal('26400.00')}\r\nExp"
+ b"enses:Taxes:Y2010:US:CityNYC,{'USD': Decimal('4547.92')}\r\nExpenses:Taxes"
+ b":Y2010:US:Federal,{'USD': Decimal('27635.92')}\r\nExpenses:Taxes:Y2010:US:"
+ b"Federal:PreTax401k,{'IRAUSD': Decimal('16500.00')}\r\nExpenses:Taxes:Y2010"
+ b":US:Medicare,{'USD': Decimal('2772.12')}\r\nExpenses:Taxes:Y2010:US:SDI,{'"
+ b"USD': Decimal('29.12')}\r\nExpenses:Taxes:Y2010:US:SocSec,{'USD': Decimal("
+ b"'7000.04')}\r\nExpenses:Taxes:Y2010:US:State,{'USD': Decimal('9492.08')}\r\n"
+ b"Expenses:Transport:Tram,{'USD': Decimal('1440.00')}\r\nIncome:US:ETrade:Di"
+ b"vidends,{'USD': Decimal('-70.55')}\r\nIncome:US:ETrade:Gains,{'USD': Decim"
+ b"al('-76.05')}\r\nIncome:US:Federal:PreTax401k,{'IRAUSD': Decimal('-16500')"
+ b"}\r\nIncome:US:Hoogle:GroupTermLife,{'USD': Decimal('-632.32')}\r\nIncome:US"
+ b":Hoogle:Match401k,{'USD': Decimal('-8250.00')}\r\nIncome:US:Hoogle:Salary,"
+ b"{'USD': Decimal('-119999.88')}\r\nIncome:US:Hoogle:Vacation,{'VACHR': Deci"
+ b"mal('-130')}\r\nLiabilities:US:Chase:Slate,{'USD': Decimal('-1144.44')}\r\n")

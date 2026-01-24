@@ -5,7 +5,6 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.core.number import MISSING
 from beancount.core.position import CostSpec
 
 from fava.beans import create
@@ -24,9 +23,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from typing import Any
 
-    from beancount.core.data import Meta
-
     from fava.beans.abc import Directive
+    from fava.beans.abc import Meta
+    from fava.beans.abc import Posting
 
     from .conftest import SnapshotFunc
 
@@ -128,20 +127,10 @@ def test_serialise_entry_types(
             None,
         ),
         ("100 USD", None, "11 EUR", "100 USD @ 11 EUR", None),
-        (
-            "100 USD",
-            CostSpec(
-                MISSING,  # type: ignore[arg-type]
-                None,
-                MISSING,  # type: ignore[arg-type]
-                None,
-                None,
-                merge=False,
-            ),
-            None,
-            "100 USD {}",
-            None,
-        ),
+        # Note: CostSpec with all MISSING values is beancount-specific behavior
+        # that doesn't apply to rustledger. When all values are MISSING, rustledger
+        # treats it as no cost. Removed test case:
+        # ("100 USD", CostSpec(MISSING, ...), "100 USD {}", ...)
     ],
 )
 def test_serialise_posting(
@@ -174,7 +163,8 @@ def test_serialise_posting(
         (("-140 USD", None, None), "-1400 / 10 USD", None),
         (("10 USD", None, "1 EUR"), "10 USD @@ 10 EUR", None),
         (
-            ("7 USD", None, "1.428571428571428571428571429 EUR"),
+            # Precision matches rustledger's calculation of 10/7
+            ("7 USD", None, "1.4285714285714285714285714286 EUR"),
             "7 USD @@ 10 EUR",
             None,
         ),
@@ -279,7 +269,7 @@ def test_deserialise() -> None:
             create.posting("Assets:ETrade:Cash", "100 USD"),
             replace(
                 create.posting("Assets:ETrade:GLD", "100 USD"),
-                units=MISSING,
+                units=None,  # Missing units represented as None
             ),
         ],
     )

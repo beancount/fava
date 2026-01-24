@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from bisect import bisect_left
+from dataclasses import replace as dataclass_replace
 from operator import attrgetter
 from typing import Any
 from typing import TYPE_CHECKING
@@ -20,8 +21,12 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def replace(entry: T, **kwargs: Any) -> T:
     """Create a copy of the given directive, replacing some arguments."""
+    # Beancount namedtuple
     if hasattr(entry, "_replace"):
         return entry._replace(**kwargs)  # type: ignore[no-any-return]
+    # Rustledger dataclass
+    if hasattr(entry, "__dataclass_fields__"):
+        return dataclass_replace(entry, **kwargs)  # type: ignore[no-any-return]
     msg = f"Could not replace attribute in type {type(entry)}"
     raise TypeError(msg)
 

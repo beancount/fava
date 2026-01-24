@@ -12,14 +12,13 @@ from re import Pattern
 from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import Amount
-from beancount.core.data import Booking
-from beancount.core.number import MISSING
 from flask.json.provider import JSONProvider
 from simplejson import dumps as simplejson_dumps
 from simplejson import loads as simplejson_loads
 
 from fava.beans.abc import Position
+from fava.rustledger.constants import Booking
+from fava.rustledger.constants import MISSING
 from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
 from fava.beans.flags import FLAG_UNREALIZED
@@ -45,7 +44,7 @@ ZERO = Decimal()
 
 def _json_default(o: Any) -> Any:
     """Specific serialisation for some data types."""
-    if isinstance(o, (date, Amount, Booking, Position)):
+    if isinstance(o, (date, Booking, Position)):
         return str(o)
     if isinstance(o, (set, frozenset)):
         return list(o)

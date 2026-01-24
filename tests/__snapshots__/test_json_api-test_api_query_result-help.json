@@ -1,4 +1,1 @@
-{
-  "contents": "Shell utility commands (type help <topic>):\n===========================================\nEOF    describe  exit     format  history  parse  reload  set   \nclear  errors    explain  help    output   quit   run     tables\n\nBeancount query commands:\n=========================\nbalances  from  journal  print  select  targets  where",
-  "t": "string"
-}
+{"contents":"Fava Query Shell\n\nCommands:\n  SELECT ...     Run a BQL SELECT query\n  run <name>     Run a stored query by name\n  run            List all stored queries\n  help           Show this help message\n\nExample queries:\n  SELECT account, sum(position) GROUP BY account\n  SELECT date, narration, position WHERE account ~ \"Expenses\"\n","t":"string"}

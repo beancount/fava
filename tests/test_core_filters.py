@@ -5,11 +5,9 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import pytest
-from beancount.core.account import has_component
 
 from fava.beans import create
 from fava.beans.account import get_entry_accounts
-from fava.beans.load import _USE_BEANCOUNT
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterError
@@ -20,6 +18,11 @@ from fava.core.filters import TimeFilter
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
+
+
+def _has_component(account_name: str, component: str) -> bool:
+    """Check if account name contains a specific component."""
+    return component in account_name.split(":")
 
 
 def test_match() -> None:
@@ -200,7 +203,7 @@ def test_account_filter(example_ledger: FavaLedger) -> None:
     assert len(filtered_entries) == 541
     for entry in filtered_entries:
         assert any(
-            has_component(a, "Assets") for a in get_entry_accounts(entry)
+            _has_component(a, "Assets") for a in get_entry_accounts(entry)
         )
 
     account_filter = AccountFilter(".*US:State")
@@ -220,11 +223,8 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
     assert date_range.begin == datetime.date(2017, 1, 1)
     assert date_range.end == datetime.date(2018, 1, 1)
     filtered_entries = time_filter.apply(example_ledger.all_entries)
-    # beancount's clamp_opt includes Open directives for accounts used in the period
-    # rustledger's simple_clamp includes all Open directives that started before end_date
-    # This results in different counts when filtering for a year with no transactions
-    expected_count = 83 if _USE_BEANCOUNT else 61
-    assert len(filtered_entries) == expected_count
+    # Matches beancount: 61 Opens + 7 Prices + 15 summarization transactions
+    assert len(filtered_entries) == 83
 
     time_filter = TimeFilter(
         example_ledger.options,

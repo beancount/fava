@@ -10,9 +10,6 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
-from beancount.core import account
-from beancount.core import data
-from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
@@ -392,49 +389,15 @@ class EntryFilter(ABC):
         """Filter a list of directives."""
 
 
-def _is_rustledger_entry(entry: Directive) -> bool:
-    """Check if entry is a rustledger type (not a beancount namedtuple)."""
-    return not isinstance(entry, data.ALL_DIRECTIVES)
-
-
-def _simple_clamp(
-    entries: Sequence[Directive],
-    begin_date: Any,
-    end_date: Any,
-) -> Sequence[Directive]:
-    """Simple date-based clamping for rustledger entries.
-
-    This is a simplified version of beancount's clamp_opt that works with
-    duck-typed entries. It includes:
-    - All entries within the date range
-    - Open directives that started before the range (they're still "active")
-    - Price entries within the date range
-    """
-    result = []
-    for entry in entries:
-        entry_date = entry.date
-        entry_type = type(entry).__name__
-
-        # Include entries within the date range (excluding Commodity - beancount doesn't include them)
-        if begin_date <= entry_date < end_date:
-            if entry_type not in ("Commodity", "RLCommodity"):
-                result.append(entry)
-        # Include standing Open directives that started before the range
-        elif entry_type in ("Open", "RLOpen"):
-            if entry_date < end_date:
-                result.append(entry)
-        # Include Close directives that close within or after the range
-        elif entry_type in ("Close", "RLClose"):
-            if entry_date >= begin_date:
-                result.append(entry)
-
-    return result
+def _has_component(account_name: str, component: str) -> bool:
+    """Check if account name contains a specific component."""
+    return component in account_name.split(":")
 
 
 class TimeFilter(EntryFilter):
     """Filter by dates."""
 
-    __slots__ = ("_options", "date_range")
+    __slots__ = ("date_range",)
 
     def __init__(
         self,
@@ -442,27 +405,26 @@ class TimeFilter(EntryFilter):
         fava_options: FavaOptions,
         value: str,
     ) -> None:
-        self._options = options
+        del options  # unused
         begin, end = parse_date(value, fava_options.fiscal_year_end)
         if not begin or not end:
             raise TimeFilterParseError(value)
         self.date_range = DateRange(begin, end)
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
-        # Check if we're dealing with rustledger entries
-        if entries and _is_rustledger_entry(entries[0]):
-            return _simple_clamp(
-                entries, self.date_range.begin, self.date_range.end
-            )
+        from fava.rustledger.engine import RustledgerEngine
+        from fava.rustledger.types import directives_from_json
+        from fava.rustledger.types import directives_to_json
 
-        # Use beancount's clamp_opt for native beancount entries
-        clamped_entries, _ = clamp_opt(
-            entries,  # type: ignore[arg-type]
-            self.date_range.begin,
-            self.date_range.end,
-            self._options,
+        # Use native rustledger clamp_entries
+        engine = RustledgerEngine.get_instance()
+        entries_json = directives_to_json(list(entries))
+        result = engine.clamp_entries(
+            entries_json,
+            str(self.date_range.begin),
+            str(self.date_range.end),
         )
-        return clamped_entries  # type: ignore[return-value]
+        return directives_from_json(result.get("entries", []))
 
 
 LEXER = FilterSyntaxLexer()
@@ -516,7 +478,7 @@ class AccountFilter(EntryFilter):
             entry
             for entry in entries
             if any(
-                account.has_component(name, value) or match(name)
+                _has_component(name, value) or match(name)
                 for name in get_entry_accounts(entry)
             )
         ]

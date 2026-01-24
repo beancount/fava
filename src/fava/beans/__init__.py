@@ -2,6 +2,5 @@
 
 from __future__ import annotations
 
-from beancount import __version__
-
-BEANCOUNT_V3 = not __version__.startswith("2")
+# Rustledger is compatible with beancount v3 API
+BEANCOUNT_V3 = True

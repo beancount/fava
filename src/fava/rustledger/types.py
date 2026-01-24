@@ -98,12 +98,14 @@ class RLCost:
     currency: str
     date: datetime.date | None
     label: str | None
+    number_total: Decimal | None = None
 
     @classmethod
     def from_json(
         cls,
         data: dict[str, Any] | None,
         default_date: datetime.date | None = None,
+        units_number: Decimal | None = None,
     ) -> RLCost | None:
         """Create from JSON dict.
 
@@ -112,6 +114,7 @@ class RLCost:
             default_date: Date to use if cost has no date (e.g., transaction date).
                          This matches beancount's behavior of filling in missing
                          cost dates with the transaction date.
+            units_number: Number of units (for computing per-unit cost from total)
         """
         if data is None or not data:
             return None
@@ -125,11 +128,20 @@ class RLCost:
             if data.get("date")
             else default_date
         )
+        # Handle both per-unit (number) and total cost (number_total)
+        number = Decimal(data["number"]) if data.get("number") else None
+        number_total = (
+            Decimal(data["number_total"]) if data.get("number_total") else None
+        )
+        # If we have total cost but not per-unit, compute per-unit
+        if number is None and number_total is not None and units_number:
+            number = number_total / abs(units_number)
         return cls(
-            number=Decimal(data["number"]) if data.get("number") else None,
+            number=number,
             currency=currency,
             date=cost_date,
             label=data.get("label"),
+            number_total=number_total,
         )
 
 
@@ -143,9 +155,13 @@ class RLPosition:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> RLPosition:
         """Create from JSON dict."""
+        units = RLAmount.from_json(data["units"])  # type: ignore[arg-type]
         return cls(
-            units=RLAmount.from_json(data["units"]),  # type: ignore[arg-type]
-            cost=RLCost.from_json(data.get("cost")),
+            units=units,
+            cost=RLCost.from_json(
+                data.get("cost"),
+                units_number=units.number if units else None,
+            ),
         )
 
 
@@ -177,10 +193,15 @@ class RLPosting:
                             missing cost dates (beancount behavior).
         """
         meta = data.get("meta")
+        units = RLAmount.from_json(data.get("units"))
         return cls(
             account=data["account"],
-            units=RLAmount.from_json(data.get("units")),
-            cost=RLCost.from_json(data.get("cost"), default_date=transaction_date),
+            units=units,
+            cost=RLCost.from_json(
+                data.get("cost"),
+                default_date=transaction_date,
+                units_number=units.number if units else None,
+            ),
             price=RLAmount.from_json(data.get("price")),
             flag=data.get("flag"),
             meta=FrozenDict(meta) if meta else None,
@@ -198,11 +219,14 @@ def _parse_date(date_str: str) -> datetime.date:
 def _parse_meta(data: dict[str, Any]) -> FrozenDict:
     """Parse metadata dict, converting date strings."""
     meta = dict(data.get("meta", {}))
-    # Ensure filename and lineno are present
+    # Ensure filename and lineno are present with correct types
     if "filename" not in meta:
         meta["filename"] = "<unknown>"
     if "lineno" not in meta:
         meta["lineno"] = 0
+    else:
+        # Ensure lineno is int (FFI may return it as string)
+        meta["lineno"] = int(meta["lineno"])
     return FrozenDict(meta)
 
 
@@ -633,3 +657,163 @@ def directive_from_json(data: dict[str, Any]) -> abc.Directive:
 def directives_from_json(data: list[dict[str, Any]]) -> list[abc.Directive]:
     """Convert a list of JSON directives to Fava-compatible objects."""
     return [directive_from_json(d) for d in data]
+
+
+# Reverse mapping from class to type name
+_TYPE_NAMES: dict[type, str] = {v: k for k, v in DIRECTIVE_TYPES.items()}
+
+
+def _amount_to_json(amt: RLAmount | None) -> dict[str, Any] | None:
+    """Convert RLAmount to JSON dict."""
+    if amt is None:
+        return None
+    return {"number": str(amt.number), "currency": amt.currency}
+
+
+def _cost_to_json(cost: RLCostSpec | None) -> dict[str, Any] | None:
+    """Convert RLCostSpec to JSON dict."""
+    if cost is None:
+        return None
+    result: dict[str, Any] = {}
+    if cost.number is not None:
+        result["number"] = str(cost.number)
+    if cost.currency is not None:
+        result["currency"] = cost.currency
+    if cost.date is not None:
+        result["date"] = str(cost.date)
+    if cost.label is not None:
+        result["label"] = cost.label
+    return result if result else None
+
+
+def _posting_to_json(posting: RLPosting) -> dict[str, Any]:
+    """Convert RLPosting to JSON dict."""
+    result: dict[str, Any] = {"account": posting.account}
+    if posting.units is not None:
+        result["units"] = _amount_to_json(posting.units)
+    if posting.cost is not None:
+        result["cost"] = _cost_to_json(posting.cost)
+    if posting.price is not None:
+        result["price"] = _amount_to_json(posting.price)
+    if posting.flag:
+        result["flag"] = posting.flag
+    if posting.meta:
+        result["meta"] = dict(posting.meta)
+    return result
+
+
+def directive_to_json(directive: abc.Directive) -> dict[str, Any]:
+    """Convert a directive to JSON dict for rustledger.
+
+    Args:
+        directive: A Fava directive object
+
+    Returns:
+        JSON dict with 'type' field indicating directive type
+    """
+    cls = type(directive)
+    type_name = _TYPE_NAMES.get(cls)
+
+    if type_name is None:
+        # Handle beancount types by checking class name
+        cls_name = cls.__name__
+        type_name = cls_name.lower().replace("rl", "")
+        if type_name not in DIRECTIVE_TYPES:
+            msg = f"Unknown directive type: {cls}"
+            raise ValueError(msg)
+
+    result: dict[str, Any] = {
+        "type": type_name,
+        "date": str(directive.date),
+    }
+
+    # Add meta if present
+    if hasattr(directive, "meta") and directive.meta:
+        result["meta"] = dict(directive.meta)
+
+    # Type-specific fields
+    if type_name == "transaction":
+        result["flag"] = directive.flag
+        result["payee"] = directive.payee
+        result["narration"] = directive.narration
+        result["tags"] = list(directive.tags)
+        result["links"] = list(directive.links)
+        result["postings"] = [_posting_to_json(p) for p in directive.postings]
+
+    elif type_name == "balance":
+        result["account"] = directive.account
+        result["amount"] = _amount_to_json(directive.amount)
+        if directive.tolerance is not None:
+            result["tolerance"] = str(directive.tolerance)
+        if directive.diff_amount is not None:
+            result["diff_amount"] = _amount_to_json(directive.diff_amount)
+
+    elif type_name == "open":
+        result["account"] = directive.account
+        result["currencies"] = list(directive.currencies) if directive.currencies else []
+        result["booking"] = directive.booking
+
+    elif type_name == "close":
+        result["account"] = directive.account
+
+    elif type_name == "price":
+        result["currency"] = directive.currency
+        result["amount"] = _amount_to_json(directive.amount)
+
+    elif type_name == "event":
+        result["event_type"] = directive.type
+        result["description"] = directive.description
+
+    elif type_name == "note":
+        result["account"] = directive.account
+        result["comment"] = directive.comment
+        result["tags"] = list(directive.tags) if hasattr(directive, "tags") else []
+        result["links"] = list(directive.links) if hasattr(directive, "links") else []
+
+    elif type_name == "document":
+        result["account"] = directive.account
+        result["filename"] = directive.filename
+        result["tags"] = list(directive.tags) if hasattr(directive, "tags") else []
+        result["links"] = list(directive.links) if hasattr(directive, "links") else []
+
+    elif type_name == "pad":
+        result["account"] = directive.account
+        result["source_account"] = directive.source_account
+
+    elif type_name == "commodity":
+        result["currency"] = directive.currency
+
+    elif type_name == "query":
+        result["name"] = directive.name
+        result["query_string"] = directive.query_string
+
+    elif type_name == "custom":
+        result["custom_type"] = directive.type
+        # Custom values need special handling
+        values = []
+        for v in directive.values:
+            if isinstance(v, RLCustomValue):
+                # Convert RLCustomValue to rustledger's typed format
+                if v.dtype == str:
+                    values.append({"type": "string", "value": str(v.value)})
+                elif hasattr(v.value, "number") and hasattr(v.value, "currency"):
+                    # Amount type
+                    values.append({
+                        "type": "amount",
+                        "number": str(v.value.number),
+                        "currency": v.value.currency,
+                    })
+                else:
+                    values.append({"type": "string", "value": str(v.value)})
+            elif hasattr(v, "_asdict"):
+                values.append(v._asdict())
+            else:
+                values.append(v)
+        result["values"] = values
+
+    return result
+
+
+def directives_to_json(directives: list[abc.Directive]) -> list[dict[str, Any]]:
+    """Convert a list of directives to JSON dicts for rustledger."""
+    return [directive_to_json(d) for d in directives]

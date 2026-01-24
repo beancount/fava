@@ -2,7 +2,8 @@
              'beancount file.',
   'source': None,
   'type': 'FavaError'},
- {'message': 'cannot infer currency for posting to account Assets:Cash',
+ {'message': 'interpolation failed: cannot infer currency for posting to '
+             'account Assets:Cash',
   'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
              'lineno': 11},
   'type': 'BeancountError'}]

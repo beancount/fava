@@ -1,5 +1,1 @@
-{
-  "rows": [[43558]],
-  "t": "table",
-  "types": [{ "dtype": "int", "name": "sum(day)" }]
-}
+{"rows":[[{"number":"43558"}]],"t":"table","types":[{"dtype":"Decimal","name":"sum"}]}

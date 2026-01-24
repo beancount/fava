@@ -308,7 +308,10 @@ def _directive_to_source(directive: Directive) -> str:
         return f'{date} query "{name}" "{query_string}"'
 
     if dtype == "custom":
+        # Skip fava-specific custom directives that rustledger can't parse
         custom_type = getattr(directive, "type", "")
+        if custom_type.startswith("fava"):
+            return ""
         values = getattr(directive, "values", [])
         values_str = " ".join(f'"{v}"' for v in values)
         return f'{date} custom "{custom_type}" {values_str}'

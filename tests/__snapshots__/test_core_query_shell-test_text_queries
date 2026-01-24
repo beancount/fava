@@ -1,6 +1,1 @@
-parsed statement
-----------------
-  (select
-    targets: (
-      (target
-        expression: (column
+EXPLAIN: .explain select date, balance

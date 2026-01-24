@@ -38,8 +38,6 @@ dependencies = [
     "Flask>=2.2,<4",
     "Jinja2>=3,<4",
     "Werkzeug>=2.2,<4",
-    "beancount>=2,<4",
-    "beanquery>=0.1,<0.3",
     "beangulp>=0.1",
     "cheroot>=8,<12",
     "click>=7,<9",
@@ -66,6 +64,10 @@ excel =[
     "pyexcel>=0.5",
     "pyexcel-ods3>=0.5",
     "pyexcel-xlsx>=0.5",
+]
+# Beancount compatibility - for legacy beancount plugin support and ingest hooks
+beancount-compat = [
+    "beancount>=2,<4",
 ]
 
 [dependency-groups]
@@ -94,13 +96,15 @@ old-deps = [
 pre-commit = [
     "pre-commit>=4",
 ]
-# Dependencies for the scripts/*.py.
+# Dependencies for the contrib/scripts.py.
 scripts = [
+    "beanquery>=0.1,<0.3",
     "requests>=2",
 ]
 # Dependencies for tests.
 test = [
     "fava[excel]",
+    "fava[beancount-compat]",
     "pytest-cov>=6",
     "pytest>=8",
     "setuptools>=67",
@@ -166,10 +170,6 @@ files = [
     "src/fava",
     "tests",
 ]
-
-[[tool.mypy.overrides]]
-module = ["beanquery.*"]
-follow_untyped_imports = true
 
 [[tool.mypy.overrides]]
 module = ["flask_babel.*"]

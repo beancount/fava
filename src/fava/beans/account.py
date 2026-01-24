@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from beancount.core.account import TYPE as ACCOUNT_TYPE
+from fava.rustledger.constants import ACCOUNT_TYPE
 
 from fava.beans.abc import Custom
 from fava.beans.abc import Pad

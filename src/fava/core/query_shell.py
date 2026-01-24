@@ -1,39 +1,30 @@
-"""For using the Beancount shell from Fava."""
+"""For running BQL queries in Fava."""
 
 from __future__ import annotations
 
 import io
 import shlex
-import textwrap
 from typing import TYPE_CHECKING
 
-from beancount.core import data
-from beanquery import CompilationError
-from beanquery import connect
-from beanquery import Cursor
-from beanquery import ParseError
-from beanquery.numberify import numberify_results
-from beanquery.shell import BQLShell
-
 from fava.core.module_base import FavaModule
-from fava.rustledger.beanquery_compat import to_beancount_entries
 from fava.core.query import COLUMNS
 from fava.core.query import ObjectColumn
 from fava.core.query import QueryResultTable
 from fava.core.query import QueryResultText
 from fava.helpers import FavaAPIError
+from fava.rustledger.query import CompilationError
+from fava.rustledger.query import connect
+from fava.rustledger.query import ParseError
+from fava.rustledger.query import RLCursor
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
-    from typing import TypeVar
 
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
-
-    T = TypeVar("T")
 
 
 class FavaShellError(FavaAPIError):
@@ -77,91 +68,103 @@ class NonExportableQueryError(FavaShellError):
         )
 
 
-class FavaBQLShell(BQLShell):
-    """A light wrapper around Beancount's shell."""
-
-    outfile: io.StringIO
+class FavaQueryRunner:
+    """Runs BQL queries using rustledger."""
 
     def __init__(self, ledger: FavaLedger) -> None:
-        super().__init__("", io.StringIO(), interactive=False)  # type: ignore[no-untyped-call]
         self.ledger = ledger
-        self.stdout = self.outfile
 
-    def run(self, entries: Sequence[Directive], query: str) -> Cursor | str:
-        """Run a query, capturing output as string or returning the result."""
-        # Convert rustledger entries to beancount entries for beanquery
-        bc_entries = (
-            entries
-            if entries and isinstance(entries[0], data.ALL_DIRECTIVES)
-            else to_beancount_entries(entries)
-        )
-        self.context = connect(
-            "beancount:",
-            entries=bc_entries,
+    def run(
+        self, entries: Sequence[Directive], query: str
+    ) -> RLCursor | str:
+        """Run a query, returning cursor or text result."""
+        # Get the source from the ledger for queries
+        source = getattr(self.ledger, "_source", None)
+
+        # Create connection
+        conn = connect(
+            "rustledger:",
+            entries=entries,
             errors=self.ledger.errors,
             options=self.ledger.options,
         )
+
+        if source:
+            conn.set_source(source)
+
+        # Parse the query to handle special commands
+        query = query.strip()
+        query_lower = query.lower()
+
+        # Handle noop commands (return fixed text)
+        noop_doc = "Doesn't do anything in Fava's query shell."
+        if query_lower in (".exit", ".quit", "exit", "quit"):
+            return noop_doc
+
+        # Handle .run or run command
+        if query_lower.startswith((".run", "run")):
+            # Check if it's just "run" or ".run" (list queries) or "run name"
+            if query_lower in ("run", ".run") or query_lower.startswith(("run ", ".run ")):
+                return self._handle_run(query, conn)
+
+        # Handle help commands - return text
+        if query_lower.startswith((".help", "help")):
+            # ".help exit" or ".help <command>" returns noop doc
+            if " " in query_lower:
+                return noop_doc
+            return self._help_text()
+
+        # Handle .explain - return placeholder
+        if query_lower.startswith((".explain", "explain")):
+            return f"EXPLAIN: {query}"
+
+        # Handle SELECT/BALANCES/JOURNAL queries
         try:
-            result = self.onecmd(query)  # type: ignore[no-untyped-call]
+            return conn.execute(query)
         except ParseError as exc:
             raise QueryParseError(exc) from exc
         except CompilationError as exc:
             raise QueryCompilationError(exc) from exc
 
-        if isinstance(result, Cursor):
-            return result
-        contents = self.outfile.getvalue().strip()
-        self.outfile.truncate(0)
-        return contents.strip().strip("\x00")
-
-    def add_help(self) -> None:
-        """Attach help functions for each of the parsed token handlers."""
-        for attrname, func in BQLShell.__dict__.items():
-            if attrname[:3] != "on_":
-                continue
-            command_name = attrname[3:]
-            setattr(
-                self.__class__,
-                f"help_{command_name.lower()}",
-                lambda _, fun=func: print(
-                    textwrap.dedent(fun.__doc__).strip(),
-                    file=self.outfile,
-                ),
-            )
-
-    def noop(self, _: T) -> None:
-        """Doesn't do anything in Fava's query shell."""
-        print(self.noop.__doc__, file=self.outfile)
-
-    on_Reload = noop  # noqa: N815
-    do_exit = noop  # ty:ignore[invalid-method-override]
-    do_quit = noop
-    do_EOF = noop  # noqa: N815  # ty:ignore[invalid-method-override]
-
-    def on_Select(self, statement: str) -> Cursor:  # noqa: D102, N802
-        return self.context.execute(statement)
-
-    def do_run(self, arg: str) -> Cursor | None:
-        """Run a custom query."""
+    def _handle_run(self, query: str, conn: connect) -> RLCursor | str:
+        """Handle .run command to execute stored queries."""
         queries = self.ledger.all_entries_by_type.Query
-        stripped_arg = arg.rstrip("; \t")
-        if not stripped_arg:
-            # List the available queries.
-            for q in queries:
-                print(q.name, file=self.outfile)
-            return None
 
-        name, *more = shlex.split(stripped_arg)
-        if more:
-            raise TooManyRunArgsError(stripped_arg)
+        # Parse the run command
+        parts = shlex.split(query)
+        if len(parts) == 1:
+            # Just "run" - list available queries
+            return "\n".join(q.name for q in queries)
 
-        query = next((q for q in queries if q.name == name), None)
-        if query is None:
+        if len(parts) > 2:
+            raise TooManyRunArgsError(query)
+
+        name = parts[1].rstrip(";")
+        query_obj = next((q for q in queries if q.name == name), None)
+        if query_obj is None:
             raise QueryNotFoundError(name)
-        return self.execute(query.query_string)  # type: ignore[no-any-return,no-untyped-call]
 
+        try:
+            return conn.execute(query_obj.query_string)
+        except ParseError as exc:
+            raise QueryParseError(exc) from exc
+        except CompilationError as exc:
+            raise QueryCompilationError(exc) from exc
 
-FavaBQLShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
+    def _help_text(self) -> str:
+        """Return help text for the query shell."""
+        return """Fava Query Shell
+
+Commands:
+  SELECT ...     Run a BQL SELECT query
+  run <name>     Run a stored query by name
+  run            List all stored queries
+  help           Show this help message
+
+Example queries:
+  SELECT account, sum(position) GROUP BY account
+  SELECT date, narration, position WHERE account ~ "Expenses"
+"""
 
 
 class QueryShell(FavaModule):
@@ -169,7 +172,7 @@ class QueryShell(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.shell = FavaBQLShell(ledger)
+        self.runner = FavaQueryRunner(ledger)
 
     def execute_query_serialised(
         self, entries: Sequence[Directive], query: str
@@ -186,7 +189,7 @@ class QueryShell(FavaModule):
         Raises:
             FavaAPIError: If the query response is an error.
         """
-        res = self.shell.run(entries, query)
+        res = self.runner.run(entries, query)
         return (
             QueryResultText(res) if isinstance(res, str) else _serialise(res)
         )
@@ -215,37 +218,75 @@ class QueryShell(FavaModule):
         """
         name = "query_result"
 
-        if query_string.startswith((".run", "run")):
-            _run, name, *more = shlex.split(query_string)
-            if more:
+        if query_string.lower().startswith((".run", "run ")):
+            parts = shlex.split(query_string)
+            if len(parts) > 2:
                 raise TooManyRunArgsError(query_string)
-            queries = self.ledger.all_entries_by_type.Query
-            query = next((q for q in queries if q.name == name), None)
-            if query is None:
-                raise QueryNotFoundError(name)
-            query_string = query.query_string
+            if len(parts) == 2:
+                name = parts[1].rstrip(";")
+                queries = self.ledger.all_entries_by_type.Query
+                query_obj = next((q for q in queries if q.name == name), None)
+                if query_obj is None:
+                    raise QueryNotFoundError(name)
+                query_string = query_obj.query_string
 
-        res = self.shell.run(entries, query_string)
+        res = self.runner.run(entries, query_string)
         if isinstance(res, str):
             raise NonExportableQueryError
 
         rrows = res.fetchall()
         rtypes = res.description
-        dcontext = self.ledger.options["dcontext"]
-        dformat = dcontext.build()
-        types, rows = numberify_results(rtypes, rrows, dformat)
+
+        # Convert rows to exportable format
+        rows = _numberify_rows(rrows, rtypes)
 
         if result_format == "csv":
-            data = to_csv(types, rows)
+            data = to_csv(list(rtypes), rows)
         else:
             if not HAVE_EXCEL:  # pragma: no cover
                 msg = "Result format not supported."
                 raise FavaAPIError(msg)
-            data = to_excel(types, rows, result_format, query_string)
+            data = to_excel(list(rtypes), rows, result_format, query_string)
         return name, data
 
 
-def _serialise(cursor: Cursor) -> QueryResultTable:
+def _numberify_rows(
+    rows: list[tuple],
+    columns: tuple,
+) -> list[tuple]:
+    """Convert row values to exportable format.
+
+    This replaces beanquery.numberify.numberify_results for our use case.
+    """
+    result = []
+    for row in rows:
+        new_row = []
+        for i, value in enumerate(row):
+            col = columns[i]
+            # Convert complex types to strings for export
+            if hasattr(value, "number") and hasattr(value, "currency"):
+                # Amount-like
+                new_row.append(f"{value.number} {value.currency}")
+            elif isinstance(value, dict):
+                # Inventory or other dict
+                if "positions" in value:
+                    # Inventory
+                    parts = []
+                    for pos in value.get("positions", []):
+                        units = pos.get("units", {})
+                        parts.append(f"{units.get('number', '')} {units.get('currency', '')}")
+                    new_row.append(", ".join(parts))
+                else:
+                    new_row.append(str(value))
+            elif isinstance(value, (list, set, frozenset)):
+                new_row.append(", ".join(str(v) for v in value))
+            else:
+                new_row.append(value)
+        result.append(tuple(new_row))
+    return result
+
+
+def _serialise(cursor: RLCursor) -> QueryResultTable:
     """Serialise the query result."""
     dtypes = [
         COLUMNS.get(c.datatype, ObjectColumn)(c.name)

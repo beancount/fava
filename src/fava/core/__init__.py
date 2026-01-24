@@ -13,9 +13,6 @@ from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from beancount.core.inventory import Inventory
-from beancount.utils.encryption import is_encrypted_file
-
 from fava.beans.abc import Balance
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
@@ -28,6 +25,7 @@ from fava.beans.load import load_uncached
 from fava.beans.prices import FavaPriceMap
 from fava.beans.str import to_string
 from fava.core.accounts import AccountDict
+from fava.rustledger import is_encrypted_file
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule

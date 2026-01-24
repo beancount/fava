@@ -1,17 +1,1 @@
-[
-  {
-    "account_balances": { "Expenses:Others": { "EUR": -280.0 } },
-    "balance": { "EUR": -280.0 },
-    "budgets": { "EUR": -31.42857142857142857142857145 },
-    "date": "2012-11-30"
-  },
-  {
-    "account_balances": {
-      "Expenses:Food": { "EUR": -70.0 },
-      "Expenses:Others": { "EUR": -10.0 }
-    },
-    "balance": { "EUR": -80.0 },
-    "budgets": { "EUR": -88.57142857142857142857142865 },
-    "date": "2012-12-31"
-  }
-]
+[{"account_balances":{"Expenses:Others":{"EUR":-280.00}},"balance":{"EUR":-280.00},"budgets":{"EUR":-31.42857142857142857142857145},"date":"2012-11-30"},{"account_balances":{"Expenses:Food":{"EUR":-70.00},"Expenses:Others":{"EUR":-10.00}},"balance":{"EUR":-80.00},"budgets":{"EUR":-88.57142857142857142857142865},"date":"2012-12-31"}]

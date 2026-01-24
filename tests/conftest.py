@@ -22,17 +22,6 @@ from typing import TypeAlias
 from typing import TypeGuard
 
 import pytest
-
-from fava.beans.load import _USE_BEANCOUNT
-
-# Skip marker for tests that require beancount plugin execution
-# rustledger doesn't run beancount Python plugins
-requires_beancount = pytest.mark.skipif(
-    not _USE_BEANCOUNT,
-    reason="Test requires beancount plugin execution (rustledger doesn't run plugins)",
-)
-from beancount.core import data
-from beancount.core.display_context import DisplayContext
 from flask.app import Flask
 from flask.testing import FlaskClient
 
@@ -47,6 +36,8 @@ from fava.core.budgets import parse_budgets
 from fava.core.charts import dumps
 from fava.core.charts import loads
 from fava.core.query import QueryResult
+from fava.rustledger import types as rl_types
+from fava.rustledger.options import RLDisplayContext
 from fava.util.date import Interval
 from fava.util.date import local_today
 
@@ -375,7 +366,7 @@ def pytest_runtest_makereport(item: pytest.Function) -> None:
         "Custom": Custom,
         "Decimal": Decimal,
         "Directive": Directive,
-        "DisplayContext": DisplayContext,
+        "DisplayContext": RLDisplayContext,
         "FavaLedger": FavaLedger,
         "Flask": Flask,
         "FlaskClient": FlaskClient,
@@ -387,7 +378,7 @@ def pytest_runtest_makereport(item: pytest.Function) -> None:
         "QueryResult": QueryResult,
         "Sequence": Sequence,
         "SnapshotFunc": SnapshotFunc,
-        "data": data,
+        "rl_types": rl_types,
         "pytest": pytest,
     }
     annotations = get_type_hints(
