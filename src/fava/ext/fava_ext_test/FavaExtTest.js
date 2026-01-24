@@ -1,9 +1,9 @@
 // @ts-check
 
-/** @type import("../../../../frontend/src/extensions").ExtensionModule */
+/** @type import("../../../../frontend/src/extension-api").ExtensionModule */
 export default {
   init() {
-    console.log("initialising extension");
+    console.log("Initialising extension FavaExtTest");
   },
   onPageLoad() {
     console.log("a Fava report page has loaded", window.location.pathname);

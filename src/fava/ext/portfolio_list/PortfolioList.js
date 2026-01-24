@@ -1,16 +1,16 @@
 // @ts-check
 
-/** @type import("../../../../frontend/src/extensions").ExtensionModule */
+/** @type import("../../../../frontend/src/extension-api").ExtensionModule */
 export default {
   init() {
-    console.log("initialising extension");
+    console.log("initialising Javascript extension PortfolioList");
   },
   onPageLoad() {
-    console.log("a Fava report page has loaded", window.location.pathname);
+    console.log("A Fava report page has loaded", window.location.pathname);
   },
   onExtensionPageLoad() {
     console.log(
-      "the page for the PortfolioList extension has loaded",
+      "The page for the PortfolioList extension has loaded",
       window.location.pathname,
     );
 

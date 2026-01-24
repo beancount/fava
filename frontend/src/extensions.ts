@@ -5,19 +5,24 @@
 
 import { get as store_get } from "svelte/store";
 
+import type {
+  ExtensionApi,
+  ExtensionContext,
+  ExtensionModule,
+} from "./extension-api.d.ts";
 import { getUrlPath, urlForRaw } from "./helpers.ts";
 import { log_error } from "./log.ts";
 import { extensions } from "./stores/index.ts";
 
 /** Helpers to make requests. */
-export class ExtensionApi {
-  private readonly name: string;
+class ExtensionApiImpl implements ExtensionApi {
+  /** The extension name. */
+  #name: string;
 
   constructor(name: string) {
-    this.name = name;
+    this.#name = name;
   }
 
-  /** Send a request to an extension endpoint. */
   async request(
     endpoint: string,
     method: "GET" | "PUT" | "POST" | "DELETE",
@@ -26,7 +31,7 @@ export class ExtensionApi {
     output: "json" | "string" | "raw" = "json",
   ): Promise<unknown> {
     const $urlForRaw = store_get(urlForRaw);
-    const url = $urlForRaw(`extension/${this.name}/${endpoint}`, params);
+    const url = $urlForRaw(`extension/${this.#name}/${endpoint}`, params);
     let opts = {};
     if (body != null) {
       opts =
@@ -46,81 +51,51 @@ export class ExtensionApi {
     }
     return response;
   }
-
-  /** GET an endpoint with parameters and return JSON. */
   async get(
     endpoint: string,
     params: Record<string, string>,
   ): Promise<unknown> {
     return this.request(endpoint, "GET", params, undefined);
   }
-
-  /** GET an endpoint with a body and return JSON. */
   async put(endpoint: string, body?: unknown): Promise<unknown> {
     return this.request(endpoint, "PUT", undefined, body);
   }
-
-  /** POST to an endpoint with a body and return JSON. */
   async post(endpoint: string, body?: unknown): Promise<unknown> {
     return this.request(endpoint, "POST", undefined, body);
   }
-
-  /** DELETE an endpoint and return JSON. */
   async delete(endpoint: string): Promise<unknown> {
     return this.request(endpoint, "DELETE");
   }
 }
 
-/** The context that an extensions handlers are called with. */
-export interface ExtensionContext {
-  /** Helpers to make requests. */
-  api: ExtensionApi;
-}
-
-/**
- * The Javascript code of a Fava extension should export an object of this type.
- *
- * The extension will be initialised when Fava loads by a call to init(). It can also
- * provider handlers that are run on each subsequent page load (either all or just
- * pages of the extension itself).
- */
-export interface ExtensionModule {
-  /** Initialise this Javascript module / run some code on the initial load. */
-  init?: (c: ExtensionContext) => void | Promise<void>;
-  /** Run some code after any Fava page has loaded. */
-  onPageLoad?: (c: ExtensionContext) => void;
-  /** Run some code after a page for this extension has loaded. */
-  onExtensionPageLoad?: (c: ExtensionContext) => void;
-}
-
 class ExtensionData {
-  private readonly extension: ExtensionModule;
-  private readonly context: ExtensionContext;
+  readonly #extension: ExtensionModule;
+  readonly #context: ExtensionContext;
 
   constructor(extension: ExtensionModule, context: ExtensionContext) {
-    this.extension = extension;
-    this.context = context;
+    this.#extension = extension;
+    this.#context = context;
   }
 
   async init(): Promise<void> {
-    await this.extension.init?.(this.context);
+    await this.#extension.init?.(this.#context);
   }
 
   onPageLoad(): void {
-    this.extension.onPageLoad?.(this.context);
+    this.#extension.onPageLoad?.(this.#context);
   }
 
   onExtensionPageLoad(): void {
-    this.extension.onExtensionPageLoad?.(this.context);
+    this.#extension.onExtensionPageLoad?.(this.#context);
   }
 }
 
-async function loadExtensionModule(name: string): Promise<ExtensionData> {
+async function load_extension_module(name: string): Promise<ExtensionData> {
   const $urlForRaw = store_get(urlForRaw);
   const url = $urlForRaw(`extension_js_module/${name}.js`);
   const mod = await (import(url) as Promise<{ default?: ExtensionModule }>);
   if (typeof mod.default === "object") {
-    return new ExtensionData(mod.default, { api: new ExtensionApi(name) });
+    return new ExtensionData(mod.default, { api: new ExtensionApiImpl(name) });
   }
   throw new Error(
     `Error importing module for extension ${name}: module must export "default" object`,
@@ -131,12 +106,12 @@ async function loadExtensionModule(name: string): Promise<ExtensionData> {
 const loaded_extensions = new Map<string, Promise<ExtensionData>>();
 
 /** Get the extensions module - if it has not been imported yet, initialise it. */
-async function getOrInitExtension(name: string): Promise<ExtensionData> {
+async function get_or_init_extension(name: string): Promise<ExtensionData> {
   const loaded_ext = loaded_extensions.get(name);
   if (loaded_ext) {
     return loaded_ext;
   }
-  const ext_promise = loadExtensionModule(name);
+  const ext_promise = load_extension_module(name);
   loaded_extensions.set(name, ext_promise);
   await (await ext_promise).init();
   return ext_promise;
@@ -149,7 +124,7 @@ export function handleExtensionPageLoad(): void {
   const exts = store_get(extensions).filter((e) => e.has_js_module);
   for (const { name } of exts) {
     // Run the onPageLoad handler for all pages.
-    getOrInitExtension(name)
+    get_or_init_extension(name)
       .then((m) => {
         m.onPageLoad();
       })
@@ -159,7 +134,7 @@ export function handleExtensionPageLoad(): void {
   if (path.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {
-        getOrInitExtension(name)
+        get_or_init_extension(name)
           .then((m) => {
             m.onExtensionPageLoad();
           })

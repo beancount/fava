@@ -29,6 +29,10 @@ the following events/functions can be specified:
   on any further navigation).
 - `onExtensionPageLoad`: Is called when the extension report is loaded.
 
+The type signature of the extension module is defined in
+[extension-api.d.ts](https://github.com/beancount/fava/blob/main/frontend/src/extension-api.d.ts),
+which you can vendor into your extension to get Typescript checking for it.
+
 The whole extension system should be considered unstable and it might change
 drastically.
 
