@@ -6,7 +6,7 @@ set dotenv-load
 
 # Configuration (used by rustledger-status)
 rustledger_cache := ".cache/rustledger"
-target_triple := `rustc -vV 2>/dev/null | grep host | cut -d' ' -f2 || echo "unknown"`
+target_triple := env("RUSTFAVA_TARGET_TRIPLE", "unknown")
 
 # Default recipe - build frontend
 default: frontend
@@ -100,11 +100,12 @@ rustledger-status:
         echo "WASM: not built"
     fi
 
-    marker="desktop/src-tauri/binaries/.cli-version-{{target_triple}}"
+    triple="${RUSTFAVA_TARGET_TRIPLE:-$(rustc -vV 2>/dev/null | grep host | cut -d' ' -f2 || echo "unknown")}"
+    marker="desktop/src-tauri/binaries/.cli-version-${triple}"
     if [ -f "$marker" ]; then
-        echo "CLI ({{target_triple}}) built from: $(cat "$marker" | head -c 8)"
+        echo "CLI (${triple}) built from: $(cat "$marker" | head -c 8)"
     else
-        echo "CLI ({{target_triple}}): not built"
+        echo "CLI (${triple}): not built"
     fi
 
 # ============================================================================
