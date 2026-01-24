@@ -13,7 +13,6 @@ from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from beancount.core.inventory import Inventory
 from beancount.utils.encryption import is_encrypted_file
 
 from fava.beans.abc import Balance
@@ -26,7 +25,7 @@ from fava.beans.funcs import hash_entry
 from fava.beans.helpers import slice_entry_dates
 from fava.beans.load import load_uncached
 from fava.beans.prices import FavaPriceMap
-from fava.beans.str import to_string
+from fava.beans.str import position_to_string
 from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
@@ -662,16 +661,16 @@ class FavaLedger:
             return entry, None, None
 
         entry_accounts = get_entry_accounts(entry)
-        balances = {account: Inventory() for account in entry_accounts}
+        balances = {account: CounterInventory() for account in entry_accounts}
         for entry_ in takewhile(lambda e: e is not entry, self.all_entries):
             if isinstance(entry_, Transaction):
                 for posting in entry_.postings:
                     balance = balances.get(posting.account, None)
                     if balance is not None:
-                        balance.add_position(posting)  # type: ignore[arg-type]
+                        balance.add_position(posting)
 
-        def visualise(inv: Inventory) -> Sequence[str]:
-            return [to_string(pos) for pos in sorted(iter(inv))]
+        def visualise(inv: CounterInventory) -> Sequence[str]:
+            return [position_to_string(pos) for pos in inv.positions()]
 
         before = {acc: visualise(inv) for acc, inv in balances.items()}
 
@@ -679,7 +678,7 @@ class FavaLedger:
             return entry, before, None
 
         for posting in entry.postings:
-            balances[posting.account].add_position(posting)  # type: ignore[arg-type]
+            balances[posting.account].add_position(posting)
         after = {acc: visualise(inv) for acc, inv in balances.items()}
         return entry, before, after
 

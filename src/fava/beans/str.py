@@ -83,7 +83,8 @@ def _(cost: CostSpec) -> str:
 
 
 @to_string.register(Position)
-def _(obj: Position) -> str:
+def position_to_string(obj: Position | protocols.Position) -> str:
+    """Render a position as a string."""
     units_str = amount_to_string(obj.units)
     if obj.cost is None:
         return units_str
