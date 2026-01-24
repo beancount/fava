@@ -11,6 +11,7 @@ This is not intended to work well enough for full roundtrips yet.
 from __future__ import annotations
 
 import datetime
+from collections.abc import Mapping
 from copy import copy
 from decimal import Decimal
 from functools import singledispatch
@@ -60,9 +61,9 @@ def _get_entry_type_name(entry: Directive) -> str:
     return _TYPE_NAME_MAP.get(name, name)
 
 
-def _clean_meta(meta: dict) -> dict:
+def _clean_meta(meta: dict[str, object] | Mapping[str, object]) -> dict[str, object]:
     """Remove internal meta fields from a copy of the metadata."""
-    result = copy(meta)
+    result = dict(meta)
     for key in _INTERNAL_META_KEYS:
         result.pop(key, None)
     return result
@@ -160,7 +161,7 @@ def deserialise_posting(posting: Any) -> Posting:
     # Strip dummy date from cost if present (booking assigns transaction date)
     cost = pos.cost
     if cost is not None and getattr(cost, "date", None) == _DUMMY_DATE:
-        cost = replace(cost, date=None)
+        cost = replace(cost, date=None)  # type: ignore[type-var]
     return replace(
         pos,
         account=posting["account"],

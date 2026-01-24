@@ -14,7 +14,7 @@ def hash_entry(entry: Directive) -> str:
     # Rustledger provides pre-computed hash in meta
     meta = getattr(entry, "meta", None)
     if meta and isinstance(meta, dict) and "hash" in meta:
-        return meta["hash"]
+        return str(meta["hash"])
     # Rustledger dataclass (for plugin-generated entries without hash)
     if hasattr(entry, "__dataclass_fields__"):
         content = f"{type(entry).__name__}|{entry.date}|{getattr(entry, 'account', '')}"

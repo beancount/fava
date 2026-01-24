@@ -42,6 +42,34 @@ class Cost(Protocol):
         """Label of the cost."""
 
 
+class CostSpec(Protocol):
+    """A cost specification (uses number_per/number_total instead of number)."""
+
+    @property
+    def number_per(self) -> Decimal | None:
+        """Per-unit cost."""
+
+    @property
+    def number_total(self) -> Decimal | None:
+        """Total cost."""
+
+    @property
+    def currency(self) -> str | None:
+        """Currency of the cost."""
+
+    @property
+    def date(self) -> datetime.date | None:
+        """Date of the cost."""
+
+    @property
+    def label(self) -> str | None:
+        """Label of the cost."""
+
+    @property
+    def merge(self) -> bool | None:
+        """Whether to merge lots."""
+
+
 class Position(Protocol):
     """A Beancount position - just cost and units."""
 

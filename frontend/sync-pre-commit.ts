@@ -1,30 +1,33 @@
 /**
  * A script to sync the exact linter dependencies
- * from `./package-lock.json` to `../.pre-commit-config.yaml`
+ * from `./bun.lock` to `../.pre-commit-config.yaml`
  */
 
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import package_lock from "./package-lock.json" with { type: "json" };
+interface BunLock {
+  packages: Record<string, [string, ...unknown[]]>;
+}
 
-const { packages } = package_lock;
+const script_dir = join(fileURLToPath(import.meta.url), "..");
+const lock_path = join(script_dir, "bun.lock");
 
-const config_path = join(
-  fileURLToPath(import.meta.url),
-  "..",
-  "..",
-  ".pre-commit-config.yaml",
-);
+const config_path = join(script_dir, "..", ".pre-commit-config.yaml");
 
 async function main() {
+  const lock_content = await readFile(lock_path, "utf-8");
+  const bun_lock = JSON.parse(lock_content) as BunLock;
+  const packages = bun_lock.packages;
+
   const current_config = await readFile(config_path, "utf-8");
   let new_config = current_config;
 
-  for (const [pack, { version }] of Object.entries(packages)) {
-    const name = pack.substring("node_modules/".length);
-    if (name) {
+  for (const [name, info] of Object.entries(packages)) {
+    // info[0] is "package@version"
+    const version = info[0].split("@").pop();
+    if (name && version) {
       new_config = new_config.replaceAll(
         new RegExp(`"${name}@[\\d\\.]+"`, "g"),
         `"${name}@${version}"`,

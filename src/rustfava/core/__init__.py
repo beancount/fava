@@ -676,7 +676,7 @@ class RustfavaLedger:
             return entry, before, None
 
         for posting in entry.postings:
-            balances[posting.account].add_position(posting)  # type: ignore[arg-type]
+            balances[posting.account].add_position(posting)
         after = {acc: visualise(inv) for acc, inv in balances.items()}
         return entry, before, after
 

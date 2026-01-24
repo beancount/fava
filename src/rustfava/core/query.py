@@ -149,7 +149,7 @@ class InventoryColumn(BaseColumn):
 
     @staticmethod
     def serialise(
-        val: dict | None,
+        val: dict[str, Decimal] | None,
     ) -> SimpleCounterInventory | None:
         """Serialise an inventory.
 

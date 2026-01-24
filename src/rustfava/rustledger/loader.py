@@ -71,7 +71,7 @@ def _compute_display_precision(entries_json: list[dict[str, Any]]) -> dict[str, 
 
 
 def _errors_from_json(
-    errors_json: list[dict],
+    errors_json: list[dict[str, Any]],
     filename: str = "<unknown>",
 ) -> list[BeancountError]:
     """Convert rustledger errors to Fava BeancountError format."""
@@ -103,7 +103,7 @@ def _errors_from_json(
 
 def _run_plugins(
     entries: list[Directive],
-    plugins: list[dict],
+    plugins: list[dict[str, Any]],
     options: BeancountOptions,
 ) -> tuple[list[Directive], list[BeancountError]]:
     """Run Python plugins on entries.

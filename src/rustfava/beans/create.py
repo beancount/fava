@@ -67,12 +67,12 @@ def amount(amt: Decimal, currency: str) -> Amount: ...  # pragma: no cover
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     """Amount from a string or tuple."""
     if isinstance(amt, str):
-        return _parse_amount_string(amt)  # type: ignore[return-value]
+        return _parse_amount_string(amt)
     if hasattr(amt, "number") and hasattr(amt, "currency"):
         return amt  # Already an Amount-like object
     if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
-    return RLAmount(amt, currency)  # type: ignore[return-value]
+    return RLAmount(amt, currency)
 
 
 _amount = amount

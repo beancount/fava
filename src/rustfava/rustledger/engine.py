@@ -94,7 +94,9 @@ class RustledgerEngine:
             1 = User error (stderr has error message, not JSON)
             2 = Internal error (serialization failures)
         """
-        cmd = [
+        # Assert wasmtime is set (checked in __init__)
+        assert self._wasmtime is not None
+        cmd: list[str] = [
             self._wasmtime,
             "run",
         ]
@@ -135,7 +137,7 @@ class RustledgerEngine:
             error_msg = result.stderr.strip() or f"Exit code {result.returncode}"
             raise RustledgerError(error_msg)
 
-        return result.stdout
+        return str(result.stdout)
 
     def _parse_response(self, json_str: str) -> dict[str, Any]:
         """Parse JSON response and check API version.
@@ -162,7 +164,7 @@ class RustledgerEngine:
                 f"Expected {SUPPORTED_API_VERSION}x"
             )
             raise RustledgerAPIVersionError(msg)
-        return data
+        return dict(data)
 
     def load(self, source: str, filename: str = "<stdin>") -> dict[str, Any]:
         """Load/parse beancount source and return entries, errors, options.
@@ -211,7 +213,7 @@ class RustledgerEngine:
         """Get rustledger version string."""
         result_json = self._run(["version"])
         data = self._parse_response(result_json)
-        return data.get("version", "unknown")
+        return str(data.get("version", "unknown"))
 
     def format_entries(self, source: str) -> str:
         """Format beancount source to canonical form.
@@ -224,7 +226,7 @@ class RustledgerEngine:
         """
         result_json = self._run(["format"], stdin_data=source)
         data = self._parse_response(result_json)
-        return data.get("formatted", "")
+        return str(data.get("formatted", ""))
 
     def is_encrypted(self, filepath: str) -> bool:
         """Check if a file is GPG encrypted.
@@ -243,7 +245,7 @@ class RustledgerEngine:
             allow_dir=allow_dir,
         )
         data = self._parse_response(result_json)
-        return data.get("encrypted", False)
+        return bool(data.get("encrypted", False))
 
     def get_account_type(self, account: str) -> str:
         """Get the type of an account (Assets, Liabilities, etc).
@@ -256,7 +258,7 @@ class RustledgerEngine:
         """
         result_json = self._run(["get-account-type", account])
         data = self._parse_response(result_json)
-        return data.get("account_type", "")
+        return str(data.get("account_type", ""))
 
     def clamp(
         self,
@@ -333,7 +335,7 @@ class RustledgerEngine:
             stdin_data=json.dumps(entry_json),
         )
         data = self._parse_response(result_json)
-        return data.get("formatted", "")
+        return str(data.get("formatted", ""))
 
     def format_entries_json(self, entries_json: list[dict[str, Any]]) -> str:
         """Format multiple entries to beancount string.
@@ -349,7 +351,7 @@ class RustledgerEngine:
             stdin_data=json.dumps(entries_json),
         )
         data = self._parse_response(result_json)
-        return data.get("formatted", "")
+        return str(data.get("formatted", ""))
 
     def create_entry(self, entry_json: dict[str, Any]) -> dict[str, Any]:
         """Create an entry with hash from JSON.
@@ -365,7 +367,7 @@ class RustledgerEngine:
             stdin_data=json.dumps(entry_json),
         )
         data = self._parse_response(result_json)
-        return data.get("entry", {})
+        return dict(data.get("entry", {}))
 
     def create_entries(
         self, entries_json: list[dict[str, Any]]
@@ -383,7 +385,7 @@ class RustledgerEngine:
             stdin_data=json.dumps(entries_json),
         )
         data = self._parse_response(result_json)
-        return data.get("entries", [])
+        return list(data.get("entries", []))
 
     def load_full(
         self,

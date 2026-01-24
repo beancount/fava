@@ -307,7 +307,7 @@ def _setup_filters(
             and "application/json" in response.content_type
             and response.content_length
             and response.content_length > 500
-            and "gzip" in request.accept_encodings
+            and any(enc == "gzip" for enc, _ in request.accept_encodings)
         ):
             response.data = gzip.compress(response.data)
             response.headers["Content-Encoding"] = "gzip"

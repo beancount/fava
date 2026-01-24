@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import re
+from collections.abc import Mapping
 from decimal import Decimal
 from functools import singledispatch
 from typing import TYPE_CHECKING
@@ -56,6 +57,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def to_string(
     obj: protocols.Amount
     | protocols.Cost
+    | protocols.CostSpec
     | Directive
     | Position
     | Posting,
@@ -203,7 +205,7 @@ def _format_posting(posting: Posting, indent: int = 2) -> str:
     return "".join(parts)
 
 
-def _format_meta(meta: dict, indent: int = 2) -> list[str]:
+def _format_meta(meta: Mapping[str, object], indent: int = 2) -> list[str]:
     """Format metadata lines (excluding internal keys)."""
     lines = []
     prefix = " " * indent

@@ -250,14 +250,19 @@ def _directive_to_source(directive: Directive) -> str:
 
     if dtype == "open":
         currencies = " ".join(getattr(directive, "currencies", []))
-        return f'{date} open {directive.account} {currencies}'.strip()
+        account = getattr(directive, "account", "")
+        return f'{date} open {account} {currencies}'.strip()
 
     if dtype == "close":
-        return f'{date} close {directive.account}'
+        account = getattr(directive, "account", "")
+        return f'{date} close {account}'
 
     if dtype == "balance":
-        amt = directive.amount
-        return f'{date} balance {directive.account} {amt.number} {amt.currency}'
+        amt = getattr(directive, "amount", None)
+        account = getattr(directive, "account", "")
+        if amt:
+            return f'{date} balance {account} {amt.number} {amt.currency}'
+        return f'{date} balance {account}'
 
     if dtype == "transaction":
         flag = getattr(directive, "flag", "*")
@@ -270,7 +275,7 @@ def _directive_to_source(directive: Directive) -> str:
             header = f'{date} {flag} "{narration}"'
 
         posting_lines = []
-        for p in directive.postings:
+        for p in getattr(directive, "postings", []):
             if p.units:
                 posting_lines.append(f'  {p.account}  {p.units.number} {p.units.currency}')
             else:
@@ -279,11 +284,15 @@ def _directive_to_source(directive: Directive) -> str:
         return header + "\n" + "\n".join(posting_lines)
 
     if dtype == "price":
-        amt = directive.amount
-        return f'{date} price {directive.currency} {amt.number} {amt.currency}'
+        amt = getattr(directive, "amount", None)
+        currency = getattr(directive, "currency", "")
+        if amt:
+            return f'{date} price {currency} {amt.number} {amt.currency}'
+        return f'{date} price {currency}'
 
     if dtype == "commodity":
-        return f'{date} commodity {directive.currency}'
+        currency = getattr(directive, "currency", "")
+        return f'{date} commodity {currency}'
 
     if dtype == "event":
         event_type = getattr(directive, "type", "")
@@ -292,15 +301,18 @@ def _directive_to_source(directive: Directive) -> str:
 
     if dtype == "note":
         comment = getattr(directive, "comment", "")
-        return f'{date} note {directive.account} "{comment}"'
+        account = getattr(directive, "account", "")
+        return f'{date} note {account} "{comment}"'
 
     if dtype == "document":
         filename = getattr(directive, "filename", "")
-        return f'{date} document {directive.account} "{filename}"'
+        account = getattr(directive, "account", "")
+        return f'{date} document {account} "{filename}"'
 
     if dtype == "pad":
         source_account = getattr(directive, "source_account", "")
-        return f'{date} pad {directive.account} {source_account}'
+        account = getattr(directive, "account", "")
+        return f'{date} pad {account} {source_account}'
 
     if dtype == "query":
         name = getattr(directive, "name", "")
