@@ -39,11 +39,16 @@ dependencies = [
     "cheroot>=8,<12",
     "click>=7,<9",
     "markdown2>=2.3.0,<3",
+    "ply>=3.11",
+    "pydantic>=2.0",
     "watchfiles>=0.20.0",
 ]
 
 [project.urls]
 Repository = "https://github.com/rustledger/rustfava"
+Documentation = "https://rustledger.github.io/rustfava"
+Issues = "https://github.com/rustledger/rustfava/issues"
+Changelog = "https://github.com/rustledger/rustfava/releases"
 
 [project.scripts]
 rustfava = "rustfava.cli:main"
@@ -67,11 +72,10 @@ docs = [
     "mkdocs-material>=9",
     "mkdocstrings[python]>=0.27",
 ]
-# Type-checking with mypy or ty.
+# Type-checking with mypy.
 types = [
     "mypy>=1.14",
     "pytest>=8",
-    "ty>=0.0.2",
     "typeguard>=4",
     "types-requests>=2.32.0.20250515",
     "types-setuptools>=67",
@@ -90,6 +94,7 @@ test = [
     "rustfava[excel]",
     "rustfava[beancount-compat]",
     "pytest-cov>=6",
+    "pytest-xdist>=3",
     "pytest>=8",
     "setuptools>=67",
     "typeguard>=4",
@@ -118,18 +123,7 @@ where = ["src"]
 [tool.black]
 line-length = 79
 preview = true
-
-[tool.ty.environment]
-python-version = "3.13"
-
-[tool.ty.rules]
-# There's some mismatches betweeen mypy and ty still
-unused-ignore-comment = "ignore"
-
-[tool.ty.src]
-exclude = [
-    "src/rustfava/core/ingest.py",
-]
+target-version = ["py313"]
 
 [tool.mypy]
 mypy_path = "stubs"

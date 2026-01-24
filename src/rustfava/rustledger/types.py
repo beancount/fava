@@ -717,7 +717,7 @@ def directive_to_json(directive: abc.Directive) -> dict[str, Any]:
     if type_name is None:
         # Handle beancount types by checking class name
         cls_name = cls.__name__
-        type_name = cls_name.lower().replace("rl", "")
+        type_name = cls_name.lower().removeprefix("rl")
         if type_name not in DIRECTIVE_TYPES:
             msg = f"Unknown directive type: {cls}"
             raise ValueError(msg)

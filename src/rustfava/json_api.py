@@ -6,6 +6,7 @@ interface for asynchronous functionality.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import shutil
 from abc import abstractmethod
@@ -25,7 +26,12 @@ from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 from flask_babel import gettext
+from pydantic import BaseModel
+from pydantic import ValidationError as PydanticValidationError
 
+from rustfava.api_models import FormatSourceRequest
+from rustfava.api_models import SaveEntrySliceRequest
+from rustfava.api_models import SaveSourceRequest
 from rustfava.beans.abc import Document
 from rustfava.beans.abc import Event
 from rustfava.context import g
@@ -104,10 +110,29 @@ def json_err(msg: str, status: HTTPStatus) -> Response:
 
 
 def json_success(data: Any) -> Response:
-    """Jsonify the response."""
-    return jsonify(
+    """Jsonify the response with caching headers."""
+    response = jsonify(
         {"data": data, "mtime": str(g.ledger.mtime)},
     )
+
+    # Add Cache-Control for GET requests (private cache, short TTL)
+    if request.method == "GET":
+        response.headers["Cache-Control"] = "private, max-age=5"
+
+        # Compute ETag from mtime for cache validation
+        etag = hashlib.md5(  # noqa: S324
+            f"{g.ledger.mtime}".encode(),
+            usedforsecurity=False,
+        ).hexdigest()
+        response.headers["ETag"] = f'"{etag}"'
+
+        # Check If-None-Match for conditional requests
+        if_none_match = request.headers.get("If-None-Match")
+        if if_none_match and if_none_match.strip('"') == etag:
+            response.status_code = 304
+            response.data = b""
+
+    return response
 
 
 class FavaJSONAPIError(RustfavaAPIError):
@@ -209,6 +234,15 @@ def _(error: ValidationError) -> Response:
     return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
 
 
+@json_api.errorhandler(PydanticValidationError)
+def _(error: PydanticValidationError) -> Response:
+    errors = "; ".join(
+        f"{'.'.join(str(loc) for loc in e['loc'])}: {e['msg']}"
+        for e in error.errors()
+    )
+    return json_err(f"Validation error: {errors}", HTTPStatus.BAD_REQUEST)
+
+
 @json_api.errorhandler(EntryNotFoundForHashError)
 def _(error: EntryNotFoundForHashError) -> Response:
     return json_err(error.message, HTTPStatus.NOT_FOUND)
@@ -294,6 +328,35 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
         return json_success(res)
 
     return _wrapper
+
+
+def pydantic_api_endpoint(
+    model: type[BaseModel],
+    method: str = "put",
+) -> Callable[[Callable[..., Any]], Callable[[], Response]]:
+    """Register an API endpoint with Pydantic validation.
+
+    Args:
+        model: Pydantic model class for request validation.
+        method: HTTP method (put, delete).
+    """
+
+    def decorator(func: Callable[..., Any]) -> Callable[[], Response]:
+        name = func.__name__.partition("_")[2]
+
+        @json_api.route(f"/{name}", methods=[method])
+        @wraps(func)
+        def _wrapper() -> Response:
+            request_json = request.get_json(silent=True)
+            if request_json is None:
+                raise InvalidJsonRequestError
+            validated = model.model_validate(request_json)
+            res = func(validated)
+            return json_success(res)
+
+        return _wrapper
+
+    return decorator
 
 
 @api_endpoint
@@ -425,16 +488,16 @@ def get_source() -> SourceFile:
     return SourceFile(file_path=file_path, sha256sum=sha256sum, source=source)
 
 
-@api_endpoint
-def put_source(file_path: str, source: str, sha256sum: str) -> str:
+@pydantic_api_endpoint(SaveSourceRequest)
+def put_source(req: SaveSourceRequest) -> str:
     """Write one of the source files and return the updated sha256sum."""
-    return g.ledger.file.set_source(Path(file_path), source, sha256sum)
+    return g.ledger.file.set_source(Path(req.file_path), req.source, req.sha256sum)
 
 
-@api_endpoint
-def put_source_slice(entry_hash: str, source: str, sha256sum: str) -> str:
+@pydantic_api_endpoint(SaveEntrySliceRequest)
+def put_source_slice(req: SaveEntrySliceRequest) -> str:
     """Write an entry source slice and return the updated sha256sum."""
-    return g.ledger.file.save_entry_slice(entry_hash, source, sha256sum)
+    return g.ledger.file.save_entry_slice(req.entry_hash, req.source, req.sha256sum)
 
 
 @api_endpoint
@@ -444,10 +507,10 @@ def delete_source_slice(entry_hash: str, sha256sum: str) -> str:
     return f"Deleted entry {entry_hash}."
 
 
-@api_endpoint
-def put_format_source(source: str) -> str:
+@pydantic_api_endpoint(FormatSourceRequest)
+def put_format_source(req: FormatSourceRequest) -> str:
     """Format beancount file."""
-    return align(source, g.ledger.fava_options.currency_column)
+    return align(req.source, g.ledger.fava_options.currency_column)
 
 
 class FileDoesNotExistError(RustfavaAPIError):

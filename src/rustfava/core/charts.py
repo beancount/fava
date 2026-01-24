@@ -45,7 +45,7 @@ ZERO = Decimal()
 def _json_default(o: Any) -> Any:
     """Specific serialisation for some data types."""
     if isinstance(o, Decimal):
-        return str(o)
+        return float(o)
     if isinstance(o, (date, Booking, Position)):
         return str(o)
     if isinstance(o, (set, frozenset)):

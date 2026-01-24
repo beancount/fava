@@ -56,6 +56,9 @@
 
             # Bun for frontend build
             pkgs.bun
+
+            # Node.js 23+ for frontend tests (required for registerHooks API)
+            pkgs.nodejs_latest
           ];
 
           shellHook = ''

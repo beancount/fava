@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -10,8 +10,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from rustfava.beans.abc import Meta
 
 
-class BeancountError(NamedTuple):
-    """NamedTuple base for a Beancount-style error."""
+@dataclass(frozen=True, slots=True)
+class BeancountError:
+    """Dataclass for a Beancount-style error."""
 
     source: Meta | None
     message: str

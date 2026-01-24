@@ -12,6 +12,7 @@ To start a simple server::
 
 from __future__ import annotations
 
+import gzip
 import logging
 import mimetypes
 from datetime import date
@@ -296,6 +297,22 @@ def _setup_filters(
         return render_template(
             "_layout.html", page_title="Error", content=error.message
         ), 500
+
+    @fava_app.after_request
+    def _compress_response(response: Response) -> Response:
+        """Compress JSON responses with gzip if client supports it."""
+        # Only compress JSON responses over 500 bytes
+        if (
+            response.content_type
+            and "application/json" in response.content_type
+            and response.content_length
+            and response.content_length > 500
+            and "gzip" in request.accept_encodings
+        ):
+            response.data = gzip.compress(response.data)
+            response.headers["Content-Encoding"] = "gzip"
+            response.headers["Content-Length"] = len(response.data)
+        return response
 
 
 def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915

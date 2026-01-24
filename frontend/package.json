@@ -7,6 +7,7 @@
     "build": "bun run build.ts",
     "dev": "bun run build.ts --dev --watch",
     "sync-pre-commit": "bun run sync-pre-commit.ts",
+    "test": "node --conditions browser --import ./setup.js test.ts",
     "tsc": "tsc",
     "svelte-check": "svelte-check"
   },

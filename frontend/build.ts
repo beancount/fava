@@ -27,16 +27,16 @@ const filename = fileURLToPath(import.meta.url);
 const outdir = join(dirname(filename), "..", "src", "rustfava", "static");
 const entryPoints = [join(dirname(filename), "src", "app.ts")];
 
-async function cleanup_outdir(result: BuildResult<{ metafile: true }>) {
+async function cleanupOutdir(result: BuildResult<{ metafile: true }>) {
   // Clean all files in outdir except the ones from this build and favicon.ico
-  const to_keep = new Set(
+  const toKeep = new Set(
     Object.keys(result.metafile.outputs).map((p) => basename(p)),
   );
-  to_keep.add("favicon.ico");
-  const outdir_files = await readdir(outdir);
-  for (const to_delete of outdir_files.filter((f) => !to_keep.has(f))) {
-    console.log(`Cleaning up '${to_delete}'`);
-    await unlink(join(outdir, to_delete));
+  toKeep.add("favicon.ico");
+  const outdirFiles = await readdir(outdir);
+  for (const toDelete of outdirFiles.filter((f) => !toKeep.has(f))) {
+    console.log(`Cleaning up '${toDelete}'`);
+    await unlink(join(outdir, toDelete));
   }
 }
 
@@ -44,7 +44,7 @@ async function cleanup_outdir(result: BuildResult<{ metafile: true }>) {
  * Build the frontend using esbuild.
  * @param dev - Whether to generate sourcemaps and watch for changes.
  */
-async function run_build(dev: boolean, watch: boolean) {
+async function runBuild(dev: boolean, watch: boolean) {
   const ctx = await context({
     entryPoints,
     outdir,
@@ -72,7 +72,7 @@ async function run_build(dev: boolean, watch: boolean) {
     `starting build, dev=${dev.toString()}, watch=${watch.toString()}`,
   );
   const result = await ctx.rebuild();
-  await cleanup_outdir(result);
+  await cleanupOutdir(result);
   console.log("finished build");
 
   if (!watch) {
@@ -83,7 +83,7 @@ async function run_build(dev: boolean, watch: boolean) {
       console.log("starting rebuild");
       ctx
         .rebuild()
-        .then(async (result) => cleanup_outdir(result))
+        .then(async (result) => cleanupOutdir(result))
         .then(() => {
           console.log("finished rebuild");
         })
@@ -103,13 +103,13 @@ async function run_build(dev: boolean, watch: boolean) {
   }
 }
 
-const is_main = resolve(process.argv[1] ?? "") === filename;
+const isMain = resolve(process.argv[1] ?? "") === filename;
 
-if (is_main) {
+if (isMain) {
   const watch = process.argv.includes("--watch");
   const dev = process.argv.includes("--dev");
 
-  run_build(dev, watch).catch((e: unknown) => {
+  runBuild(dev, watch).catch((e: unknown) => {
     console.error(e);
   });
 }

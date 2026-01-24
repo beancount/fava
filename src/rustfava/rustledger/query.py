@@ -246,7 +246,7 @@ def _entries_to_source(entries: Sequence[Directive]) -> str:
 def _directive_to_source(directive: Directive) -> str:
     """Convert a directive to beancount source line."""
     date = directive.date.isoformat()
-    dtype = type(directive).__name__.lower().replace("rl", "")
+    dtype = type(directive).__name__.lower().removeprefix("rl")
 
     if dtype == "open":
         currencies = " ".join(getattr(directive, "currencies", []))

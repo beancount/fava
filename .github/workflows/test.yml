@@ -32,6 +32,9 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - run: touch src/rustfava/static/app.js
       - run: make test-py
 
@@ -45,6 +48,9 @@ jobs:
         with:
           python-version: "3.14"
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - run: touch src/rustfava/static/app.js
       - run: make test-py-typeguard
 
@@ -59,7 +65,7 @@ jobs:
           bun-version: latest
       - run: cd frontend && bun install
       - run: cd frontend && bun run build
-      - run: cd frontend && bun test
+      - run: cd frontend && bun run test
 
   lint-js:
     runs-on: "ubuntu-latest"
@@ -74,6 +80,9 @@ jobs:
         with:
           bun-version: latest
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - run: cd frontend && bun install
       - run: uv run --no-dev --group pre-commit pre-commit run -a eslint
       - run: uv run --no-dev --group pre-commit pre-commit run -a stylelint
@@ -90,6 +99,17 @@ jobs:
         with:
           python-version: "3.14"
       - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - run: touch src/rustfava/static/app.js
       - run: make mypy
-      - run: make ty
+
+  check-lockfile:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
+      - run: uv lock --check

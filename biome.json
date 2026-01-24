@@ -29,10 +29,10 @@
         "useImportExtensions": "on"
       },
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "warn"
       },
       "style": {
-        "noNonNullAssertion": "off",
+        "noNonNullAssertion": "warn",
         "useConsistentObjectDefinitions": "on"
       }
     }
