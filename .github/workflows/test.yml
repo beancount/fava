@@ -41,8 +41,9 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
+      - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
       - run: touch src/rustfava/static/app.js
-      - run: make test-py
+      - run: just test-py
 
   test-py-typeguard:
     runs-on: "ubuntu-latest"
@@ -58,8 +59,9 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
+      - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
       - run: touch src/rustfava/static/app.js
-      - run: make test-py-typeguard
+      - run: just test-py-typeguard
 
   test-js:
     runs-on: ubuntu-latest
@@ -115,8 +117,9 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
+      - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
       - run: touch src/rustfava/static/app.js
-      - run: make mypy
+      - run: just mypy
 
   check-lockfile:
     runs-on: "ubuntu-latest"

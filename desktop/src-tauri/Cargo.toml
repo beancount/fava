@@ -17,6 +17,7 @@ serde_json = "1"
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-shell = "2"
+tauri-plugin-pty = "0.2"
 
 [profile.release]
 strip = true

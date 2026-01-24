@@ -14,7 +14,7 @@ large change or you want some help to get started with coding, open an issue
 beforehand to discuss it.
 
 Please contribute tests as well. See the `tests/` subdirectory for existing
-tests, which can be run with `make test`.
+tests, which can be run with `just test`.
 
 ### Contributing translations
 

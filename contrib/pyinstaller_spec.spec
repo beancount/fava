@@ -3,12 +3,22 @@
 
 from __future__ import annotations
 
+import os
+
 from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.utils.hooks import copy_metadata
 
 # Data files and version info for rustfava:
 datas = collect_data_files("rustfava") + copy_metadata("rustfava")
+
+# Explicitly include the rustledger WASM file
+# This ensures it's bundled even if collect_data_files misses it
+import rustfava
+rustfava_dir = os.path.dirname(rustfava.__file__)
+wasm_file = os.path.join(rustfava_dir, "rustledger", "rustledger-wasi.wasm")
+if os.path.exists(wasm_file):
+    datas.append((wasm_file, "rustfava/rustledger"))
 
 # Hidden imports for rustledger
 hiddenimports = []

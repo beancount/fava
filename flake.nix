@@ -4,12 +4,22 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ rust-overlay.overlays.default ];
+        };
+
+        # Rust toolchain with WASM target
+        rustToolchain = pkgs.rust-bin.stable.latest.default.override {
+          targets = [ "wasm32-wasip1" ];
+        };
 
         # Python with Rustfava dependencies
         pythonEnv = pkgs.python313.withPackages (ps: with ps; [
@@ -60,9 +70,8 @@
             # Node.js 23+ for frontend tests (required for registerHooks API)
             pkgs.nodejs_latest
 
-            # Rust toolchain for Tauri desktop app
-            pkgs.rustc
-            pkgs.cargo
+            # Rust toolchain with WASM target for Tauri desktop app
+            rustToolchain
 
             # Tauri system dependencies
             pkgs.pkg-config

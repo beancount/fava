@@ -2421,6 +2421,96 @@
           "markdownDescription": "Denies the save command without any pre-configured scope."
         },
         {
+          "description": "Allows the spawn command\n#### This default permission set includes:\n\n- `allow-spawn`\n- `allow-read`\n- `allow-write`\n- `allow-resize`\n- `allow-kill`\n- `allow-exitstatus`",
+          "type": "string",
+          "const": "pty:default",
+          "markdownDescription": "Allows the spawn command\n#### This default permission set includes:\n\n- `allow-spawn`\n- `allow-read`\n- `allow-write`\n- `allow-resize`\n- `allow-kill`\n- `allow-exitstatus`"
+        },
+        {
+          "description": "Enables the exitstatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-exitstatus",
+          "markdownDescription": "Enables the exitstatus command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the kill command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-kill",
+          "markdownDescription": "Enables the kill command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the read command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-read",
+          "markdownDescription": "Enables the read command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the resize command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-resize",
+          "markdownDescription": "Enables the resize command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the spawn command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-spawn",
+          "markdownDescription": "Enables the spawn command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the spawn, write, read, resize, kill, exitstatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-spawn, write, read, resize, kill, exitstatus",
+          "markdownDescription": "Enables the spawn, write, read, resize, kill, exitstatus command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the write command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:allow-write",
+          "markdownDescription": "Enables the write command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the exitstatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-exitstatus",
+          "markdownDescription": "Denies the exitstatus command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the kill command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-kill",
+          "markdownDescription": "Denies the kill command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the read command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-read",
+          "markdownDescription": "Denies the read command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the resize command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-resize",
+          "markdownDescription": "Denies the resize command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the spawn command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-spawn",
+          "markdownDescription": "Denies the spawn command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the spawn, write, read, resize, kill, exitstatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-spawn, write, read, resize, kill, exitstatus",
+          "markdownDescription": "Denies the spawn, write, read, resize, kill, exitstatus command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the write command without any pre-configured scope.",
+          "type": "string",
+          "const": "pty:deny-write",
+          "markdownDescription": "Denies the write command without any pre-configured scope."
+        },
+        {
           "description": "This permission set configures which\nshell functionality is exposed by default.\n\n#### Granted Permissions\n\nIt allows to use the `open` functionality with a reasonable\nscope pre-configured. It will allow opening `http(s)://`,\n`tel:` and `mailto:` links.\n\n#### This default permission set includes:\n\n- `allow-open`",
           "type": "string",
           "const": "shell:default",

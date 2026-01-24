@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>rustfava</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -142,16 +143,118 @@
       right: 0;
       bottom: 0;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
+      background: #0a0f1a;
     }
 
     .welcome.hidden {
       display: none;
     }
 
-    .welcome::before {
+    /* Left sidebar - Recent files */
+    .sidebar {
+      width: 280px;
+      background: #0f1420;
+      border-right: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    .sidebar.empty {
+      display: none;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .sidebar-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .recent-list {
+      list-style: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .recent-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+    }
+
+    .recent-item:hover {
+      background: rgba(249, 115, 22, 0.08);
+      border-color: rgba(249, 115, 22, 0.2);
+    }
+
+    .recent-item:active {
+      background: rgba(249, 115, 22, 0.12);
+    }
+
+    .recent-item .file-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+      border: 1px solid #334155;
+    }
+
+    .recent-item .name {
+      font-weight: 500;
+      font-size: 13px;
+      color: #e2e8f0;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-item .path {
+      font-size: 11px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-item .time {
+      font-size: 10px;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    /* Main content area */
+    .welcome-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
+      position: relative;
+    }
+
+    .welcome-main::before {
       content: '';
       position: absolute;
       top: 0;
@@ -167,7 +270,7 @@
     .welcome-content {
       text-align: center;
       padding: 60px 40px;
-      max-width: 520px;
+      max-width: 480px;
       position: relative;
       z-index: 1;
       animation: fadeIn 0.6s ease-out;
@@ -277,71 +380,36 @@
       font-size: 12px;
     }
 
-    /* Recent files */
-    .recent {
-      margin-top: 56px;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Quick actions below button */
+    .quick-actions {
+      margin-top: 32px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
     }
 
-    .recent.hidden {
-      display: none;
-    }
-
-    .recent h3 {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #64748b;
-      margin-bottom: 14px;
-      font-weight: 600;
-    }
-
-    .recent-list {
-      list-style: none;
-    }
-
-    .recent-item {
-      padding: 12px 14px;
+    .quick-action {
+      padding: 10px 16px;
       background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #334155;
       border-radius: 8px;
-      margin-bottom: 6px;
+      color: #94a3b8;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 12px;
-      border: 1px solid transparent;
+      gap: 8px;
     }
 
-    .recent-item:hover {
-      background: rgba(249, 115, 22, 0.08);
-      border-color: rgba(249, 115, 22, 0.15);
-      transform: translateX(4px);
-    }
-
-    .recent-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .recent-item .icon {
-      font-size: 18px;
-      opacity: 0.6;
-    }
-
-    .recent-item .name {
-      font-weight: 500;
-      font-size: 13px;
+    .quick-action:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #475569;
       color: #e2e8f0;
     }
 
-    .recent-item .path {
-      font-size: 11px;
-      color: #64748b;
-      margin-top: 2px;
+    .quick-action .icon {
+      font-size: 16px;
     }
 
     /* Loading overlay */
@@ -374,6 +442,175 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* Terminal Panel */
+    .terminal-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: #0c1222;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .terminal-panel.visible {
+      transform: translateY(0);
+    }
+
+    .terminal-resize-handle {
+      height: 6px;
+      background: #1e293b;
+      cursor: ns-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+
+    .terminal-resize-handle:hover {
+      background: #334155;
+    }
+
+    .terminal-resize-handle::after {
+      content: '';
+      width: 40px;
+      height: 3px;
+      background: #475569;
+      border-radius: 2px;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      height: 36px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .terminal-tabs {
+      display: flex;
+      gap: 2px;
+    }
+
+    .terminal-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #94a3b8;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .terminal-tab:hover {
+      background: #1e293b;
+      color: #e2e8f0;
+    }
+
+    .terminal-tab.active {
+      background: #1e293b;
+      color: #f97316;
+    }
+
+    .terminal-tab .icon {
+      font-size: 14px;
+    }
+
+    .terminal-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .terminal-action {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .terminal-action:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    .terminal-action.close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .terminal-body {
+      flex: 1;
+      overflow: hidden;
+      padding: 8px 12px;
+    }
+
+    .terminal-body .xterm {
+      height: 100%;
+    }
+
+    .terminal-body .xterm-viewport {
+      overflow-y: auto !important;
+    }
+
+    /* Terminal toggle button (in tab content area) */
+    .terminal-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      color: #94a3b8;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 40;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .terminal-toggle:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #334155 0%, #475569 100%);
+      color: #f97316;
+      border-color: #f97316;
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.2);
+    }
+
+    .terminal-toggle.hidden {
+      display: none;
+    }
+
+    /* Adjust content area when terminal is open */
+    .content.terminal-open .tab-content {
+      bottom: 300px;
+    }
+
+    .content.terminal-open .terminal-toggle {
+      bottom: 316px;
+    }
   </style>
 </head>
 <body>
@@ -387,18 +624,24 @@
   <div class="content">
     <!-- Welcome screen (shown when no tabs) -->
     <div class="welcome" id="welcome">
-      <div class="welcome-content">
-        <img src="logo.svg" alt="rustfava logo" class="logo-icon">
-        <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
-        <div class="tagline">Accounting in plain text, under your control, forever.</div>
+      <!-- Sidebar with recent files -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">Recent Files</div>
+        </div>
+        <ul class="recent-list" id="recentList"></ul>
+      </div>
 
-        <button class="open-btn" id="openBtn">Open Beancount File</button>
+      <!-- Main content -->
+      <div class="welcome-main">
+        <div class="welcome-content">
+          <img src="logo.svg" alt="rustfava logo" class="logo-icon">
+          <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
+          <div class="tagline">Accounting in plain text, under your control, forever.</div>
 
-        <div class="hint">or press <kbd>Ctrl</kbd>+<kbd>O</kbd></div>
+          <button class="open-btn" id="openBtn">Open Beancount File</button>
 
-        <div class="recent hidden" id="recentSection">
-          <h3>Recent Files</h3>
-          <ul class="recent-list" id="recentList"></ul>
+          <div class="hint">or press <kbd>Ctrl</kbd>+<kbd>O</kbd></div>
         </div>
       </div>
     </div>
@@ -409,6 +652,29 @@
     <!-- Loading overlay -->
     <div class="loading-overlay hidden" id="loadingOverlay">
       <div class="spinner"></div>
+    </div>
+
+    <!-- Terminal toggle button -->
+    <button class="terminal-toggle hidden" id="terminalToggle" title="Toggle Terminal (Ctrl+`)">
+      ⌘
+    </button>
+
+    <!-- Terminal panel -->
+    <div class="terminal-panel" id="terminalPanel">
+      <div class="terminal-resize-handle" id="terminalResizeHandle"></div>
+      <div class="terminal-header">
+        <div class="terminal-tabs">
+          <div class="terminal-tab active">
+            <span class="icon">▸</span>
+            <span>Terminal</span>
+          </div>
+        </div>
+        <div class="terminal-actions">
+          <button class="terminal-action" id="terminalClear" title="Clear">⌫</button>
+          <button class="terminal-action close" id="terminalClose" title="Close (Ctrl+`)">✕</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
     </div>
   </div>
 
@@ -447,25 +713,25 @@
 
     function renderRecentFiles() {
       const recent = getRecentFiles();
-      const section = document.getElementById('recentSection');
+      const sidebar = document.getElementById('sidebar');
       const list = document.getElementById('recentList');
 
       if (recent.length === 0) {
-        section.classList.add('hidden');
+        sidebar.classList.add('empty');
         return;
       }
 
-      section.classList.remove('hidden');
+      sidebar.classList.remove('empty');
       list.innerHTML = recent.map(path => {
         const name = path.split('/').pop();
         const dir = path.split('/').slice(0, -1).join('/');
+        // Shorten the directory path for display
+        const shortDir = dir.length > 40 ? '...' + dir.slice(-37) : dir;
         return `
           <li class="recent-item" data-path="${path}">
-            <span class="icon">📄</span>
-            <div>
-              <div class="name">${name}</div>
-              <div class="path">${dir}</div>
-            </div>
+            <div class="file-icon">📄</div>
+            <div class="name" title="${name}">${name}</div>
+            <div class="path" title="${dir}">${shortDir}</div>
           </li>
         `;
       }).join('');
@@ -675,6 +941,285 @@
     // Initialize
     renderRecentFiles();
     renderTabs();
+  </script>
+
+  <!-- xterm.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-links@0.11.0/lib/addon-web-links.min.js"></script>
+
+  <script>
+    // Terminal management
+    const terminalPanel = document.getElementById('terminalPanel');
+    const terminalBody = document.getElementById('terminalBody');
+    const terminalToggle = document.getElementById('terminalToggle');
+    const terminalClose = document.getElementById('terminalClose');
+    const terminalClear = document.getElementById('terminalClear');
+    const terminalResizeHandle = document.getElementById('terminalResizeHandle');
+    const contentEl = document.querySelector('.content');
+
+    let terminal = null;
+    let fitAddon = null;
+    let currentTerminalId = null;
+    let terminalVisible = false;
+    let terminalHeight = 300;
+
+    // Custom theme matching rustfava colors
+    const terminalTheme = {
+      background: '#0c1222',
+      foreground: '#e2e8f0',
+      cursor: '#f97316',
+      cursorAccent: '#0c1222',
+      selectionBackground: 'rgba(249, 115, 22, 0.3)',
+      selectionForeground: '#ffffff',
+      black: '#1e293b',
+      red: '#ef4444',
+      green: '#22c55e',
+      yellow: '#f59e0b',
+      blue: '#3b82f6',
+      magenta: '#a855f7',
+      cyan: '#06b6d4',
+      white: '#f1f5f9',
+      brightBlack: '#475569',
+      brightRed: '#f87171',
+      brightGreen: '#4ade80',
+      brightYellow: '#fbbf24',
+      brightBlue: '#60a5fa',
+      brightMagenta: '#c084fc',
+      brightCyan: '#22d3ee',
+      brightWhite: '#ffffff'
+    };
+
+    let commandBuffer = '';
+
+    function initTerminal() {
+      if (terminal) return;
+
+      terminal = new Terminal({
+        theme: terminalTheme,
+        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, Monaco, 'Courier New', monospace",
+        fontSize: 13,
+        lineHeight: 1.4,
+        cursorBlink: true,
+        cursorStyle: 'bar',
+        scrollback: 5000,
+        allowProposedApi: true
+      });
+
+      fitAddon = new FitAddon.FitAddon();
+      const webLinksAddon = new WebLinksAddon.WebLinksAddon();
+
+      terminal.loadAddon(fitAddon);
+      terminal.loadAddon(webLinksAddon);
+
+      terminal.open(terminalBody);
+      fitAddon.fit();
+
+      // Handle terminal input - command-based approach
+      terminal.onData(data => {
+        if (!currentTerminalId || !window.__TAURI__) return;
+
+        // Handle special keys
+        if (data === '\r') {
+          // Enter pressed - execute command
+          if (commandBuffer.trim()) {
+            window.__TAURI__.core.invoke('run_command', {
+              terminalId: currentTerminalId,
+              command: commandBuffer.trim()
+            }).catch(err => {
+              terminal.write(`\r\n\x1b[31mError: ${err}\x1b[0m\r\n\x1b[38;5;208m❯\x1b[0m `);
+            });
+          } else {
+            // Empty command - just show new prompt
+            terminal.write('\r\n\x1b[38;5;208m❯\x1b[0m ');
+          }
+          commandBuffer = '';
+        } else if (data === '\x7f' || data === '\b') {
+          // Backspace
+          if (commandBuffer.length > 0) {
+            commandBuffer = commandBuffer.slice(0, -1);
+            terminal.write('\b \b');
+          }
+        } else if (data === '\x03') {
+          // Ctrl+C - cancel current input
+          commandBuffer = '';
+          terminal.write('^C\r\n\x1b[38;5;208m❯\x1b[0m ');
+        } else if (data === '\x0c') {
+          // Ctrl+L - clear screen
+          terminal.clear();
+          terminal.write('\x1b[38;5;208m❯\x1b[0m ' + commandBuffer);
+        } else if (data >= ' ' || data === '\t') {
+          // Regular printable characters
+          commandBuffer += data;
+          terminal.write(data);
+        }
+      });
+    }
+
+    async function spawnTerminal(cwd) {
+      if (!window.__TAURI__) return;
+
+      try {
+        const { invoke } = window.__TAURI__.core;
+        const { listen } = window.__TAURI__.event;
+
+        // Create terminal session
+        currentTerminalId = await invoke('spawn_terminal', { cwd });
+        commandBuffer = '';
+
+        // Listen for terminal output
+        listen(`terminal-output-${currentTerminalId}`, (event) => {
+          if (terminal) {
+            terminal.write(event.payload);
+          }
+        });
+
+      } catch (err) {
+        console.error('Failed to create terminal:', err);
+        if (terminal) {
+          terminal.write(`\x1b[31mFailed to create terminal: ${err}\x1b[0m\r\n`);
+        }
+      }
+    }
+
+    function showTerminal() {
+      if (!terminal) {
+        initTerminal();
+      }
+
+      terminalPanel.classList.add('visible');
+      contentEl.classList.add('terminal-open');
+      terminalVisible = true;
+
+      // Fit terminal to container
+      setTimeout(() => {
+        if (fitAddon) fitAddon.fit();
+        if (terminal) terminal.focus();
+      }, 300);
+
+      // Spawn terminal if not already running and we have an active tab
+      if (!currentTerminalId && activeTabId) {
+        const tab = tabs.find(t => t.tab_id === activeTabId);
+        if (tab) {
+          spawnTerminal(tab.path);
+        }
+      }
+    }
+
+    function hideTerminal() {
+      terminalPanel.classList.remove('visible');
+      contentEl.classList.remove('terminal-open');
+      terminalVisible = false;
+    }
+
+    function toggleTerminal() {
+      if (terminalVisible) {
+        hideTerminal();
+      } else {
+        showTerminal();
+      }
+    }
+
+    // Terminal resize handling
+    let isResizing = false;
+    let startY = 0;
+    let startHeight = 0;
+
+    terminalResizeHandle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = terminalHeight;
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+
+      const delta = startY - e.clientY;
+      terminalHeight = Math.max(150, Math.min(window.innerHeight - 100, startHeight + delta));
+      terminalPanel.style.height = terminalHeight + 'px';
+
+      // Update tab content bottom offset
+      document.documentElement.style.setProperty('--terminal-height', terminalHeight + 'px');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(el => {
+        if (terminalVisible) {
+          el.style.bottom = terminalHeight + 'px';
+        }
+      });
+
+      if (fitAddon) fitAddon.fit();
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+
+    // Terminal event handlers
+    terminalToggle.addEventListener('click', toggleTerminal);
+    terminalClose.addEventListener('click', hideTerminal);
+    terminalClear.addEventListener('click', () => {
+      if (terminal) terminal.clear();
+    });
+
+    // Show toggle button when tabs are open
+    const originalRenderTabs = renderTabs;
+    renderTabs = function() {
+      originalRenderTabs();
+      if (tabs.length > 0) {
+        terminalToggle.classList.remove('hidden');
+      } else {
+        terminalToggle.classList.add('hidden');
+        hideTerminal();
+      }
+    };
+
+    // Keyboard shortcut for terminal toggle
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === '`') {
+        e.preventDefault();
+        if (tabs.length > 0) {
+          toggleTerminal();
+        }
+      }
+    });
+
+    // Listen for menu toggle event
+    if (window.__TAURI__) {
+      const { listen } = window.__TAURI__.event;
+      listen('menu-toggle-terminal', () => {
+        if (tabs.length > 0) {
+          toggleTerminal();
+        }
+      });
+    }
+
+    // Resize terminal on window resize
+    window.addEventListener('resize', () => {
+      if (fitAddon && terminalVisible) {
+        fitAddon.fit();
+      }
+    });
+
+    // Kill terminal when closing tab
+    const originalCloseTab = closeTab;
+    closeTab = async function(tabId) {
+      // If closing the tab that owns the terminal, kill it
+      if (currentTerminalId && tabs.length === 1) {
+        try {
+          await window.__TAURI__.core.invoke('kill_terminal', { terminalId: currentTerminalId });
+        } catch (err) {
+          console.error('Failed to kill terminal:', err);
+        }
+        currentTerminalId = null;
+      }
+      return originalCloseTab(tabId);
+    };
   </script>
 </body>
 </html>

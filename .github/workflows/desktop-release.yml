@@ -10,9 +10,13 @@ on:
   push:
     tags:
       - 'v*'
+  # Triggered by rustledger releases
+  repository_dispatch:
+    types: [rustledger-release]
 
 env:
   CARGO_TERM_COLOR: always
+  RUSTLEDGER_REPO: rustledger/rustledger
 
 jobs:
   build-sidecar:
@@ -36,6 +40,34 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: wasm32-wasip1
+
+      - name: Get latest rustledger tag
+        id: rustledger-tag
+        run: |
+          TAG=$(git ls-remote --tags --sort=-v:refname https://github.com/${{ env.RUSTLEDGER_REPO }}.git "v*" | head -1 | sed 's/.*refs\/tags\///' | sed 's/\^{}//')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Using rustledger $TAG"
+
+      - name: Clone and build rustledger WASM (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          git clone --depth 1 --branch ${{ steps.rustledger-tag.outputs.tag }} https://github.com/${{ env.RUSTLEDGER_REPO }}.git /tmp/rustledger
+          cd /tmp/rustledger
+          cargo build --target wasm32-wasip1 --release -p rustledger-ffi-wasi
+          cp target/wasm32-wasip1/release/rustledger-ffi-wasi.wasm ${{ github.workspace }}/src/rustfava/rustledger/rustledger-wasi.wasm
+
+      - name: Clone and build rustledger WASM (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          git clone --depth 1 --branch ${{ steps.rustledger-tag.outputs.tag }} https://github.com/${{ env.RUSTLEDGER_REPO }}.git ${{ runner.temp }}\rustledger
+          cd ${{ runner.temp }}\rustledger
+          cargo build --target wasm32-wasip1 --release -p rustledger-ffi-wasi
+          copy target\wasm32-wasip1\release\rustledger-ffi-wasi.wasm ${{ github.workspace }}\src\rustfava\rustledger\rustledger-wasi.wasm
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -68,8 +100,83 @@ jobs:
           name: sidecar-${{ matrix.target }}
           path: dist/${{ matrix.sidecar_name }}
 
+  build-rustledger:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            ext: ''
+          - os: macos-13
+            target: x86_64-apple-darwin
+            ext: ''
+          - os: macos-14
+            target: aarch64-apple-darwin
+            ext: ''
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            ext: '.exe'
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Get latest rustledger tag
+        id: rustledger-tag
+        shell: bash
+        run: |
+          TAG=$(git ls-remote --tags --sort=-v:refname https://github.com/${{ env.RUSTLEDGER_REPO }}.git "v*" | head -1 | sed 's/.*refs\/tags\///' | sed 's/\^{}//')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Using rustledger $TAG"
+
+      - name: Checkout rustledger
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.RUSTLEDGER_REPO }}
+          ref: ${{ steps.rustledger-tag.outputs.tag }}
+
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build rustledger CLI binaries
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Prepare binaries (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p binaries
+          for bin in bean-check bean-doctor bean-extract bean-format bean-price bean-query bean-report \
+                     rledger-check rledger-doctor rledger-extract rledger-format rledger-price rledger-query rledger-report; do
+            if [ -f "target/${{ matrix.target }}/release/${bin}" ]; then
+              cp "target/${{ matrix.target }}/release/${bin}" "binaries/${bin}-${{ matrix.target }}"
+            fi
+          done
+
+      - name: Prepare binaries (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path binaries
+          $binaries = @(
+            "bean-check", "bean-doctor", "bean-extract", "bean-format", "bean-price", "bean-query", "bean-report",
+            "rledger-check", "rledger-doctor", "rledger-extract", "rledger-format", "rledger-price", "rledger-query", "rledger-report"
+          )
+          foreach ($bin in $binaries) {
+            $src = "target/${{ matrix.target }}/release/${bin}.exe"
+            if (Test-Path $src) {
+              Copy-Item $src "binaries/${bin}-${{ matrix.target }}.exe"
+            }
+          }
+
+      - name: Upload rustledger binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustledger-${{ matrix.target }}
+          path: binaries/*
+
   build-tauri:
-    needs: build-sidecar
+    needs: [build-sidecar, build-rustledger]
     strategy:
       fail-fast: false
       matrix:
@@ -97,9 +204,15 @@ jobs:
           name: sidecar-${{ matrix.target }}
           path: desktop/src-tauri/binaries/
 
-      - name: Make sidecar executable (Unix)
+      - name: Download rustledger binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: rustledger-${{ matrix.target }}
+          path: desktop/src-tauri/binaries/
+
+      - name: Make binaries executable (Unix)
         if: runner.os != 'Windows'
-        run: chmod +x desktop/src-tauri/binaries/${{ matrix.sidecar_name }}
+        run: chmod +x desktop/src-tauri/binaries/*
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'

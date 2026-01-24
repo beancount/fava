@@ -4,10 +4,13 @@
   "version": "0.1.0",
   "identifier": "io.rustledger.rustfava",
   "build": {
-    "frontendDist": "../src"
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
   },
   "app": {
-    "withGlobalTauri": true,
+    "withGlobalTauri": false,
     "windows": [
       {
         "title": "rustfava",
@@ -34,7 +37,21 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-      "binaries/rustfava-server"
+      "binaries/rustfava-server",
+      "binaries/bean-check",
+      "binaries/bean-doctor",
+      "binaries/bean-extract",
+      "binaries/bean-format",
+      "binaries/bean-price",
+      "binaries/bean-query",
+      "binaries/bean-report",
+      "binaries/rledger-check",
+      "binaries/rledger-doctor",
+      "binaries/rledger-extract",
+      "binaries/rledger-format",
+      "binaries/rledger-price",
+      "binaries/rledger-query",
+      "binaries/rledger-report"
     ],
     "linux": {
       "appimage": {

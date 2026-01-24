@@ -16,6 +16,7 @@
         }
       ]
     },
-    "shell:allow-kill"
+    "shell:allow-kill",
+    "pty:default"
   ]
 }

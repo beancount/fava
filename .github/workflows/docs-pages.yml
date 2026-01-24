@@ -31,8 +31,9 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
+      - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
       - run: touch src/rustfava/static/app.js
-      - run: make docs
+      - run: just docs
       - if: github.repository == 'rustledger/rustfava'
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0

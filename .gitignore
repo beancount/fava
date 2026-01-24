@@ -37,5 +37,9 @@ npm-debug.log
 # Desktop app (Tauri)
 /desktop/node_modules/
 /desktop/src-tauri/target/
-/desktop/src-tauri/binaries/rustfava-server-*
+/desktop/src-tauri/binaries/
+/desktop/dist/
 /desktop/bun.lockb
+
+# Rustledger build markers
+/src/rustfava/rustledger/.wasm-version
