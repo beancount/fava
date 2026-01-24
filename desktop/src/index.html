@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rustfava</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: radial-gradient(ellipse at top, #1e2a4a 0%, #0f172a 50%, #020617 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e8e8e8;
+      overflow: hidden;
+    }
+
+    /* Subtle animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(249, 115, 22, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.02) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .container {
+      text-align: center;
+      padding: 60px 40px;
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-icon {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 8px 24px rgba(249, 115, 22, 0.2));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .logo {
+      font-size: 56px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+
+    .logo .rust {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(249, 115, 22, 0.3));
+    }
+
+    .logo .fava {
+      color: #f8fafc;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .tagline {
+      color: #94a3b8;
+      margin-bottom: 48px;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    .open-btn {
+      padding: 18px 48px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:
+        0 4px 14px rgba(249, 115, 22, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .open-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s;
+    }
+
+    .open-btn:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 8px 25px rgba(249, 115, 22, 0.45),
+        0 3px 6px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .open-btn:hover::before {
+      left: 100%;
+    }
+
+    .open-btn:active {
+      transform: translateY(-1px);
+      box-shadow:
+        0 4px 12px rgba(249, 115, 22, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .open-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.2);
+    }
+
+    .status {
+      margin-top: 24px;
+      font-size: 14px;
+      color: #f97316;
+      min-height: 24px;
+      font-weight: 500;
+    }
+
+    .status.error {
+      color: #f87171;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(249, 115, 22, 0.3);
+      border-top-color: #f97316;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .recent {
+      margin-top: 56px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .recent h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .recent-list {
+      list-style: none;
+    }
+
+    .recent-item {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid transparent;
+    }
+
+    .recent-item:hover {
+      background: rgba(249, 115, 22, 0.08);
+      border-color: rgba(249, 115, 22, 0.15);
+      transform: translateX(4px);
+    }
+
+    .recent-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .recent-item .icon {
+      font-size: 20px;
+      opacity: 0.6;
+    }
+
+    .recent-item .name {
+      font-weight: 500;
+      font-size: 14px;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-item .path {
+      font-size: 12px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .hidden { display: none; }
+
+    /* Fade in animation */
+    .container {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.svg" alt="rustfava logo" class="logo-icon">
+    <div class="logo"><span class="rust">rust</span><span class="fava">fava</span></div>
+    <div class="tagline">Accounting in plain text, under your control, forever.</div>
+
+    <button class="open-btn" id="openBtn">
+      Open Beancount File
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="recent hidden" id="recentSection">
+      <h3>Recent Files</h3>
+      <ul class="recent-list" id="recentList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'rustfava_recent_files';
+    const MAX_RECENT = 5;
+
+    const statusEl = document.getElementById('status');
+    const openBtn = document.getElementById('openBtn');
+
+    function setStatus(msg, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.className = isError ? 'status error' : 'status';
+    }
+
+    function setLoading(msg) {
+      statusEl.innerHTML = '<span class="spinner"></span>' + msg;
+      statusEl.className = 'status';
+    }
+
+    function getRecentFiles() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function addRecentFile(path) {
+      let recent = getRecentFiles().filter(p => p !== path);
+      recent.unshift(path);
+      recent = recent.slice(0, MAX_RECENT);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recent));
+      renderRecentFiles();
+    }
+
+    function renderRecentFiles() {
+      const recent = getRecentFiles();
+      const section = document.getElementById('recentSection');
+      const list = document.getElementById('recentList');
+
+      if (recent.length === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      list.innerHTML = recent.map(path => {
+        const name = path.split('/').pop();
+        const dir = path.split('/').slice(0, -1).join('/');
+        return `
+          <li class="recent-item" data-path="${path}">
+            <span class="icon">📄</span>
+            <div>
+              <div class="name">${name}</div>
+              <div class="path">${dir}</div>
+            </div>
+          </li>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.recent-item').forEach(item => {
+        item.addEventListener('click', () => openPath(item.dataset.path));
+      });
+    }
+
+    async function openPath(path) {
+      openBtn.disabled = true;
+      setLoading('Starting server...');
+
+      try {
+        const { invoke } = window.__TAURI__.core;
+        const url = await invoke('open_file', { path });
+        addRecentFile(path);
+        setLoading('Loading...');
+
+        // Poll until server is ready
+        let attempts = 0;
+        const checkServer = async () => {
+          try {
+            await fetch(url, { mode: 'no-cors' });
+            window.location.href = url;
+          } catch {
+            if (++attempts < 30) {
+              setTimeout(checkServer, 200);
+            } else {
+              setStatus('Server failed to start', true);
+              openBtn.disabled = false;
+            }
+          }
+        };
+        setTimeout(checkServer, 500);
+      } catch (err) {
+        setStatus('Error: ' + err, true);
+        openBtn.disabled = false;
+      }
+    }
+
+    async function openFile() {
+      try {
+        if (!window.__TAURI__) {
+          setStatus('Tauri not loaded yet, please wait...', true);
+          return;
+        }
+
+        const { open } = window.__TAURI__.dialog;
+        if (!open) {
+          setStatus('Dialog plugin not available', true);
+          return;
+        }
+
+        const path = await open({
+          multiple: false,
+          filters: [{
+            name: 'Beancount',
+            extensions: ['beancount', 'bean']
+          }]
+        });
+
+        if (path) {
+          await openPath(path);
+        }
+      } catch (err) {
+        setStatus('Error: ' + err, true);
+        console.error('Open file error:', err);
+      }
+    }
+
+    // Initialize
+    openBtn.addEventListener('click', openFile);
+    renderRecentFiles();
+
+    // Debug: log Tauri availability
+    setTimeout(() => {
+      if (window.__TAURI__) {
+        console.log('Tauri loaded:', Object.keys(window.__TAURI__));
+        if (window.__TAURI__.dialog) {
+          console.log('Dialog plugin loaded:', Object.keys(window.__TAURI__.dialog));
+        }
+      } else {
+        setStatus('Tauri API not available', true);
+      }
+    }, 500);
+  </script>
+</body>
+</html>

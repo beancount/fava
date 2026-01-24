@@ -59,6 +59,21 @@
 
             # Node.js 23+ for frontend tests (required for registerHooks API)
             pkgs.nodejs_latest
+
+            # Rust toolchain for Tauri desktop app
+            pkgs.rustc
+            pkgs.cargo
+
+            # Tauri system dependencies
+            pkgs.pkg-config
+            pkgs.openssl
+            pkgs.webkitgtk_4_1
+            pkgs.libsoup_3
+            pkgs.glib-networking
+            pkgs.librsvg
+            pkgs.gsettings-desktop-schemas
+            pkgs.gtk3
+
           ];
 
           shellHook = ''
@@ -70,6 +85,10 @@
             echo ""
             echo "WASM file: src/rustfava/rustledger/rustledger-wasi.wasm"
             echo ""
+
+            # GTK/GSettings environment for Tauri
+            export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
+            export GIO_MODULE_DIR="${pkgs.glib-networking}/lib/gio/modules"
 
             # Create/activate venv for additional packages not in nixpkgs
             if [ ! -d ".venv" ]; then
