@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in Rustfava
+description: Report a bug in rustfava
 labels: ["bug"]
 body:
   - type: markdown

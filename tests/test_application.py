@@ -1,4 +1,4 @@
-"""Tests for Rustfava's main Flask app."""
+"""Tests for rustfava's main Flask app."""
 
 from __future__ import annotations
 
@@ -198,7 +198,7 @@ def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages."""
     response = test_client.get("/long-example/help/")
     help_page = assert_success(response)
-    assert f"Rustfava\n<code>{version('rustfava')}</code>" in help_page
+    assert f"rustfava\n<code>{version('rustfava')}</code>" in help_page
     assert "powered by rustledger" in help_page
     response = test_client.get("/long-example/help/filters")
     assert assert_success(response)

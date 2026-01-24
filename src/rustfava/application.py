@@ -1,6 +1,6 @@
-"""Rustfava's main WSGI application.
+"""rustfava's main WSGI application.
 
-you can use `create_app` to create a Rustfava WSGI app for a given list of files.
+you can use `create_app` to create a rustfava WSGI app for a given list of files.
 To start a simple server::
 
     from rustfava.application import create_app
@@ -427,7 +427,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
-        """Rustfava's included documentation."""
+        """rustfava's included documentation."""
         from importlib.metadata import version
 
         from markdown2 import markdown
@@ -496,7 +496,7 @@ def create_app(
     read_only: bool = False,
     poll_watcher: bool = False,
 ) -> Flask:
-    """Create a Rustfava Flask application.
+    """Create a rustfava Flask application.
 
     Arguments:
         files: The list of Beancount files (paths).

@@ -1,6 +1,6 @@
 # Deployment
 
-There are a number of deployment options for persistently running Rustfava on
+There are a number of deployment options for persistently running rustfava on
 the Web, depending on your Web server and WSGI deployment choices. Below you
 can find some examples.
 
@@ -12,8 +12,8 @@ Apache configuration:
 ProxyPass "/rustfava" "http://localhost:5000/rustfava"
 ```
 
-The above will make Rustfava accessible at the `/rustfava` URL and proxy requests
-arriving there to a locally running Rustfava. To make Rustfava work properly in
+The above will make rustfava accessible at the `/rustfava` URL and proxy requests
+arriving there to a locally running rustfava. To make rustfava work properly in
 that context, you should run it using the `--prefix` command line option, like
 this:
 
@@ -21,7 +21,7 @@ this:
 rustfava --prefix /rustfava /path/to/your/main.beancount
 ```
 
-To have Rustfava run automatically at boot and manageable as a system service
+To have rustfava run automatically at boot and manageable as a system service
 you might want to define a systemd unit file for it, for example:
 
 ```ini

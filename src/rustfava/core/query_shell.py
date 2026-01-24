@@ -98,7 +98,7 @@ class FavaQueryRunner:
         query_lower = query.lower()
 
         # Handle noop commands (return fixed text)
-        noop_doc = "Doesn't do anything in Rustfava's query shell."
+        noop_doc = "Doesn't do anything in rustfava's query shell."
         if query_lower in (".exit", ".quit", "exit", "quit"):
             return noop_doc
 

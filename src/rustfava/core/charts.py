@@ -1,4 +1,4 @@
-"""Provide data suitable for Rustfava's charts."""
+"""Provide data suitable for rustfava's charts."""
 
 from __future__ import annotations
 
@@ -102,7 +102,7 @@ class DateAndBalanceWithBudget:
 
 
 class ChartModule(FavaModule):
-    """Return data for the various charts in Rustfava."""
+    """Return data for the various charts in rustfava."""
 
     def hierarchy(
         self,

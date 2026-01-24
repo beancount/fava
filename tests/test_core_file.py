@@ -36,7 +36,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 @pytest.fixture
 def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> RustfavaLedger:
-    """Create a RustfavaLedger 'edit-example.beancount' in a tmp_path."""
+    """Create a rustfavaLedger 'edit-example.beancount' in a tmp_path."""
     ledger_path = tmp_path / "edit-example.beancount"
     shutil.copy(test_data_dir / "edit-example.beancount", ledger_path)
     ledger_path.chmod(tmp_path.stat().st_mode)

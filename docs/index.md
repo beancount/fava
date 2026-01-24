@@ -1,4 +1,4 @@
-# Welcome to Rustfava!
+# Welcome to rustfava!
 
 Rustfava is a web interface for double-entry bookkeeping, powered by
 [rustledger](https://github.com/rustledger/rustledger), a Rust-based parser for
@@ -11,7 +11,7 @@ existing Beancount files are fully compatible.
 
 ![Rustfava Screenshot](https://i.imgbox.com/rfb9I7Zw.png)
 
-If you are new to Rustfava or Beancount-format files, begin with the
+If you are new to rustfava or Beancount-format files, begin with the
 [Getting Started](usage.md) guide.
 
 This is enough to get you up and running:

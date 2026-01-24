@@ -1,6 +1,6 @@
-"""Auto-commit hook for Rustfava.
+"""Auto-commit hook for rustfava.
 
-This mainly serves as an example how Rustfava's extension systems, which only
+This mainly serves as an example how rustfava's extension systems, which only
 really does hooks at the moment, works.
 """
 
@@ -18,7 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class AutoCommit(RustfavaExtensionBase):  # pragma: no cover
-    """Auto-commit hook for Rustfava."""
+    """Auto-commit hook for rustfava."""
 
     def _run(self, args: list[str]) -> None:
         cwd = Path(self.ledger.beancount_file_path).parent

@@ -65,9 +65,9 @@ To open or close an account use the `open` and `close` directives:
 
 Declaring commodities is optional. Use this if you want to attach metadata by
 currency. If you specify a `name` for a currency like below, this name will be
-displayed as a tooltip on hovering over currency names in Rustfava. Likewise, with
+displayed as a tooltip on hovering over currency names in rustfava. Likewise, with
 the `precision` metadata, you can specify the number of decimal digits to show
-in Rustfava, overriding the precision that is otherwise automatically inferred from
+in rustfava, overriding the precision that is otherwise automatically inferred from
 the input data.
 
 <pre><textarea is="beancount-textarea">

@@ -17,7 +17,7 @@ Rustfava runs on macOS, Linux, and Windows. You will need
 [Python 3](https://www.python.org/downloads/) and
 [uv](https://docs.astral.sh/uv/).
 
-Then you can install Rustfava or update your existing installation by running:
+Then you can install rustfava or update your existing installation by running:
 
 ```bash
 uv pip install --upgrade rustfava
@@ -36,7 +36,7 @@ uv pip install --upgrade rustfava[excel]
 
 ## Starting Rustfava
 
-After installing Rustfava, you can start it by running:
+After installing rustfava, you can start it by running:
 
 ```bash
 rustfava ledger.beancount
@@ -48,6 +48,6 @@ pointing it to your Beancount file -- and visit the web interface at
 There are some command-line options available, run `rustfava --help` for an
 overview.
 
-For more information on Rustfava's features, refer to the help pages that are
-available through Rustfava's web-interface. Rustfava comes with Gmail-style
+For more information on rustfava's features, refer to the help pages that are
+available through rustfava's web-interface. Rustfava comes with Gmail-style
 keyboard shortcuts; press `?` to show an overview.

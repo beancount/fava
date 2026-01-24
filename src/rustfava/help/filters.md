@@ -1,7 +1,7 @@
 # Filters
 
 With the text inputs at the top right of the page, you can filter the entries
-that are displayed in Rustfava's reports. If you use multiple filters, the entries
+that are displayed in rustfava's reports. If you use multiple filters, the entries
 matching all of them will be selected.
 
 ## Time
@@ -22,7 +22,7 @@ the 10th of this month, whereas `month-10` would be 10 months ago.
 
 ### Summarisation of previous balances and conversions
 
-When setting a time filter, Rustfava does not just filter to the transactions in the
+When setting a time filter, rustfava does not just filter to the transactions in the
 interval but also summarises transactions in the following ways (using
 Beancount's "clamp" summarisation):
 
@@ -74,7 +74,7 @@ This final filter allows you to filter entries by various attributes.
 - Filter by any entry attribute, such as payee `payee:"restaurant"` or narration
   `narration:'Dinner with Joe'`. The argument is a regular expression which
   needs to be quoted (with `'` or `"`) if it contains spaces or special
-  characters. If the argument is not a valid regular expression, Rustfava will look
+  characters. If the argument is not a valid regular expression, rustfava will look
   for an exact match instead.
 - Search in payee and narration if no specific entry attribute is given, e.g.
   `"Cash withdrawal"`. For Note directives, the comment will be searched.
@@ -99,5 +99,5 @@ comma like an "or". As usual, the logical "and" has a higher grouping power than
 
 When given regular expressions, Rustfava checks for a match anywhere in the
 corresponding attribute. Matching is always case-insensitive. To find out more
-about the specific syntax Rustfava uses, refer to
+about the specific syntax rustfava uses, refer to
 [Python's Regular Expression Syntax](https://docs.python.org/3/library/re.html?highlight=match#regular-expression-syntax).

@@ -1,4 +1,4 @@
-"""Rustfava's extension system."""
+"""rustfava's extension system."""
 
 from __future__ import annotations
 

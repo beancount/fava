@@ -91,7 +91,7 @@ class _FilesWatchfilesThread(_WatchfilesThread):
 
 
 class WatcherBase(abc.ABC):
-    """ABC for Rustfava ledger file watchers."""
+    """ABC for rustfava ledger file watchers."""
 
     last_checked: int
     """Timestamp of the latest change noticed by the file watcher."""

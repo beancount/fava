@@ -35,19 +35,19 @@ def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
 
 
 def setup_logging() -> None:
-    """Set up logging for Rustfava."""
+    """Set up logging for rustfava."""
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
 def setup_debug_logging() -> None:  # pragma: no cover
-    """Set up debug level logging for Rustfava."""
+    """Set up debug level logging for rustfava."""
     logging.getLogger().setLevel(logging.DEBUG)
     logging.getLogger("watchfiles").setLevel(logging.INFO)
 
 
 def get_translations(locale: Locale) -> str | None:
-    """Check whether Rustfava has translations for the locale.
+    """Check whether rustfava has translations for the locale.
 
     Args:
         locale: The locale to search for

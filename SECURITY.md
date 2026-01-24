@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Rustfava, please report it through
+If you discover a security vulnerability in rustfava, please report it through
 GitHub's private vulnerability reporting:
 
 1. Go to the [Security Advisories](https://github.com/rustledger/rustfava/security/advisories) page
@@ -17,7 +17,7 @@ Please do not open public issues for security vulnerabilities.
 
 ### Production Deployment
 
-When deploying Rustfava in production, consider the following security headers:
+When deploying rustfava in production, consider the following security headers:
 
 ```python
 # Example Flask middleware for security headers

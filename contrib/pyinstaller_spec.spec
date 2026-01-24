@@ -7,7 +7,7 @@ from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import collect_submodules
 from PyInstaller.utils.hooks import copy_metadata
 
-# Data files and version info for Rustfava:
+# Data files and version info for rustfava:
 datas = collect_data_files("rustfava") + copy_metadata("rustfava")
 
 # Hidden imports for rustledger

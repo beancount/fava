@@ -1,6 +1,6 @@
 # Options
 
-To customize some of Rustfava's behaviour, you can add custom entries like the
+To customize some of rustfava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
 <pre><textarea is="beancount-textarea">
@@ -8,7 +8,7 @@ following to your Beancount file.
 2016-04-14 custom "fava-option" "auto-reload" "true"
 2016-04-14 custom "fava-option" "currency-column" "100"</textarea></pre>
 
-Below is a list of all possible options for Rustfava.
+Below is a list of all possible options for rustfava.
 
 ______________________________________________________________________
 
@@ -16,7 +16,7 @@ ______________________________________________________________________
 
 Default: Not set
 
-If this setting is not specified, Rustfava will try to guess the language from your
+If this setting is not specified, rustfava will try to guess the language from your
 browser settings. Rustfava currently ships translations into the following
 languages:
 
@@ -60,7 +60,7 @@ ______________________________________________________________________
 
 Default: `income_statement/`
 
-Use this option to specify the page to be redirected to when visiting Rustfava. If
+Use this option to specify the page to be redirected to when visiting rustfava. If
 this option is not specified, you are taken to the income statement. You may
 also use this option to set filters. For example, a `default-page` of
 `balance_sheet/?time=year-2+-+year` would result in you being redirected to a
@@ -123,10 +123,10 @@ ______________________________________________________________________
 
 Default: `false`
 
-Set this to `true` to make Rustfava automatically reload the page whenever a file
+Set this to `true` to make rustfava automatically reload the page whenever a file
 changes is detected. By default only a notification is shown which you can click
 to reload the page. If the file change is due to user interaction, e.g.,
-uploading a document or adding a transaction, Rustfava will always reload the page
+uploading a document or adding a transaction, rustfava will always reload the page
 automatically.
 
 ______________________________________________________________________
@@ -145,8 +145,8 @@ ______________________________________________________________________
 Default: `61`
 
 This option can be used to configure how posting lines are aligned when saved to
-file or when using 'Align Amounts' in the editor. Rustfava tries to align so that
-the currencies all occur in the given column. Also, Rustfava will show a vertical
+file or when using 'Align Amounts' in the editor. rustfava tries to align so that
+the currencies all occur in the given column. Also, rustfava will show a vertical
 line before this column in the editor.
 
 ______________________________________________________________________
@@ -252,7 +252,7 @@ ______________________________________________________________________
 
 Default: `false`
 
-By default, Rustfava uses green for unrealized gains (positive values) and red for
+By default, rustfava uses green for unrealized gains (positive values) and red for
 unrealized losses (negative values) in the Balance Sheet and Trial Balance when
 displaying at market value.
 
@@ -271,7 +271,7 @@ In Beancount the Income, Liabilities and Equity accounts tend to have a negative
 balance (see
 [Types of Accounts](https://beancount.github.io/docs/the_double_entry_counting_method.html#types-of-accounts)).
 
-This Rustfava option flips the sign of these three accounts in the income statement
+This rustfava option flips the sign of these three accounts in the income statement
 and the balance sheet. This way, the net profit chart will show positive numbers
 if the income is greater than the expenses for a given timespan.
 
@@ -285,5 +285,5 @@ ______________________________________________________________________
 Default: Not set
 
 When set, the currency conversion select dropdown in all charts will show the
-list of currencies specified in this option. By default, Rustfava lists all
+list of currencies specified in this option. By default, rustfava lists all
 operating currencies and those currencies that match ISO 4217 currency codes.

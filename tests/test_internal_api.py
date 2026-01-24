@@ -1,4 +1,4 @@
-"""Tests for Rustfava's main Flask app."""
+"""Tests for rustfava's main Flask app."""
 
 from __future__ import annotations
 

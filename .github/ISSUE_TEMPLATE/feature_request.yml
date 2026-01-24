@@ -1,5 +1,5 @@
 name: Feature Request
-description: Suggest a new feature for Rustfava
+description: Suggest a new feature for rustfava
 labels: ["enhancement"]
 body:
   - type: markdown

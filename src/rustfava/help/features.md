@@ -1,6 +1,6 @@
-# Rustfava's features
+# rustfava's features
 
-This is an overview of some of the more advanced features that Rustfava has to
+This is an overview of some of the more advanced features that rustfava has to
 offer.
 
 ## Editor
@@ -38,7 +38,7 @@ GROUP BY payee, account
 
 Rustfava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xlsx` and
-`ods`, install Rustfava with the `excel` feature:
+`ods`, install rustfava with the `excel` feature:
 
 ```
 uv pip install rustfava[excel]
@@ -50,7 +50,7 @@ By clicking the `+` button or using the `n` keyboard shortcut you can open a
 form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
 [`insert-entry`](./options#insert-entry) option. If you want to set a bookmark
-to this form, adding `#add-transaction` to any URL in Rustfava will open it on load.
+to this form, adding `#add-transaction` to any URL in rustfava will open it on load.
 Tags and links can be added in the form by adding them (separated by spaces) to
 the narration field, e.g., `narration #tag ^somelink`.
 
@@ -88,12 +88,12 @@ pre-configured URL handlers for macOS and Cygwin.
 
 ## Multiple Beancount files
 
-When you start Rustfava specifying multiple Beancount files, you can click the
+When you start rustfava specifying multiple Beancount files, you can click the
 Beancount file name on the top left to switch between the files.
 
 ## Custom links in the sidebar
 
-If you regularly use certain views in Rustfava with different filters, you can put
+If you regularly use certain views in rustfava with different filters, you can put
 links to them in the sidebar. Custom links can be put in the Beancount file,
 utilizing the `custom` directive:
 
@@ -119,7 +119,7 @@ current page but change the time filter to the current month.
 ## Language
 
 You can change the language of the interface by specifying the
-[`language`](./options#language) option. If no option is specified, Rustfava tries
+[`language`](./options#language) option. If no option is specified, rustfava tries
 to guess the language from your browser settings.
 
 ## Documents upload
@@ -175,5 +175,5 @@ plugin "rustfava.plugins.link_documents"
 
 ### Exporting
 
-The entries that are currently shown in Rustfava, with filters applied, can be
+The entries that are currently shown in rustfava, with filters applied, can be
 downloaded in Beancount format by clicking the ⬇ (Export) button in the sidebar.

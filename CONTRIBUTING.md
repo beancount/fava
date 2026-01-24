@@ -3,7 +3,7 @@
 Please first search the existing issues, including closed ones, for a report
 that matches your issue.
 
-When reporting a bug, provide details of the Rustfava version and browser used.
+When reporting a bug, provide details of the rustfava version and browser used.
 
 If you want to report a security issue, please open an issue on GitHub.
 

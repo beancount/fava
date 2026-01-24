@@ -1,6 +1,6 @@
-"""Portfolio list extension for Rustfava.
+"""Portfolio list extension for rustfava.
 
-This is a simple example of Rustfava's extension reports system.
+This is a simple example of rustfava's extension reports system.
 """
 
 from __future__ import annotations

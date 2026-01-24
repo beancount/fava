@@ -50,7 +50,7 @@ def get_market_value(
 
     Args:
         pos: A Position.
-        prices: A RustfavaPriceMap
+        prices: A rustfavaPriceMap
         date: A datetime.date instance to evaluate the value at, or None.
 
     Returns:
@@ -84,7 +84,7 @@ def convert_position(
     Args:
         pos: A Position.
         target_currency: The target currency to convert to.
-        prices: A RustfavaPriceMap
+        prices: A rustfavaPriceMap
         date: A datetime.date instance to evaluate the value at, or None.
 
     Returns:
