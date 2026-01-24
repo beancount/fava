@@ -217,7 +217,7 @@ dist:
 
 # Build PyInstaller binary
 [group('dist')]
-pyinstaller: frontend rustledger-wasm
+pyinstaller: frontend rustledger
     uv run --no-project --isolated --with=. --with=pyinstaller pyinstaller --clean --noconfirm contrib/pyinstaller_spec.spec
     dist/rustfava --version
 

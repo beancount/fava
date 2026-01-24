@@ -27,7 +27,7 @@ async function main() {
   for (const [name, info] of Object.entries(packages)) {
     // info[0] is "package@version"
     const version = info[0].split("@").pop();
-    if (name && version) {
+    if (name !== "" && version !== undefined && version !== "") {
       new_config = new_config.replaceAll(
         new RegExp(`"${name}@[\\d\\.]+"`, "g"),
         `"${name}@${version}"`,
