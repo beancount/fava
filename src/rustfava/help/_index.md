@@ -18,11 +18,11 @@ If you started Rustfava from the command line, you can run `rustfava --help` to 
 the available command line options.
 
 If you discover a bug in Rustfava, or have some ideas for improvement, please open a
-[bug report](https://github.com/jmptable/rustfava/issues).
+[bug report](https://github.com/rustledger/rustfava/issues).
 
 ### Related websites
 
-- Rustfava on [GitHub](https://github.com/jmptable/rustfava),
+- Rustfava on [GitHub](https://github.com/rustledger/rustfava),
 - Beancount's [documentation](http://furius.ca/beancount/doc/index),
   [mailing list](https://groups.google.com/forum/#!forum/beancount), and
   [bug tracker](https://bitbucket.org/blais/beancount/issues),

@@ -49,7 +49,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/jmptable/rustfava"
+Repository = "https://github.com/rustledger/rustfava"
 
 [project.scripts]
 rustfava = "rustfava.cli:main"

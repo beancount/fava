@@ -20,7 +20,7 @@ copyright = "2016, Dominik Aumayr"  # noqa: A001
 author = "Dominik Aumayr"
 
 extlinks = {
-    "bug": ("https://github.com/jmptable/rustfava/issues/%s", "#%s"),
+    "bug": ("https://github.com/rustledger/rustfava/issues/%s", "#%s"),
     "user": ("https://github.com/%s", "@%s"),
 }
 
@@ -41,7 +41,7 @@ def setup(app: Any) -> None:
     app.connect("autodoc-skip-member", skip_namedtuples)
 
 
-desc = 'Web interface for <a href="https://github.com/jmptable/rustledger">rustledger</a>'
+desc = 'Web interface for <a href="https://github.com/rustledger/rustledger">rustledger</a>'
 
 # Set templates path to add extra links to navigation
 # (in templates/sidebar/navigation.html)
@@ -53,7 +53,7 @@ html_title = "Rustfava"
 html_static_path = ["static"]
 html_logo = "static/logo.png"
 html_theme_options = {
-    "source_repository": "https://github.com/jmptable/rustfava/",
+    "source_repository": "https://github.com/rustledger/rustfava/",
     "source_branch": "main",
     "source_directory": "docs/",
 }
