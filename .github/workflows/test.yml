@@ -42,6 +42,8 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
       - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+      - name: Install wasmtime
+        uses: bytecodealliance/actions/wasmtime/setup@v1
       - run: touch src/rustfava/static/app.js
       - run: just test-py
 
@@ -60,6 +62,8 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
       - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+      - name: Install wasmtime
+        uses: bytecodealliance/actions/wasmtime/setup@v1
       - run: touch src/rustfava/static/app.js
       - run: just test-py-typeguard
 
@@ -98,8 +102,8 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
       - run: cd frontend && bun install --frozen-lockfile
-      - run: uv run --no-dev --group pre-commit pre-commit run -a eslint
-      - run: uv run --no-dev --group pre-commit pre-commit run -a stylelint
+      - run: cd frontend && bun run eslint --max-warnings 0 .
+      - run: cd frontend && bun run stylelint "**/*.{css,svelte}"
       - run: cd frontend && bun run tsc
       - run: cd frontend && bun run svelte-check
 
