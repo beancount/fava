@@ -18,10 +18,10 @@ Installation
 ------------
 
 Rustfava runs on macOS, Linux, and Windows.  You will need `Python 3
-<https://www.python.org/downloads/>`_.  Then you can use ``pip`` to install
-Rustfava or update your existing installation by running::
+<https://www.python.org/downloads/>`_ and `uv <https://docs.astral.sh/uv/>`_.
+Then you can install Rustfava or update your existing installation by running::
 
-    pip install --upgrade rustfava
+    uv pip install --upgrade rustfava
 
 Rustfava uses `rustledger <https://github.com/rustledger/rustledger>`_, a
 Rust-based parser compiled to WebAssembly, to parse your Beancount files. No
@@ -30,7 +30,7 @@ separate Beancount installation is required.
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
 
-   pip install --upgrade rustfava[excel]
+   uv pip install --upgrade rustfava[excel]
 
 
 Starting Rustfava

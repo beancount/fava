@@ -41,7 +41,7 @@ By default, only exporting to `csv` is supported. For support of `xlsx` and
 `ods`, install Rustfava with the `excel` feature:
 
 ```
-pip3 install rustfava[excel]
+uv pip install rustfava[excel]
 ```
 
 ## Adding Transactions

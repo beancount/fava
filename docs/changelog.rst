@@ -16,7 +16,7 @@ Key changes from Fava:
 - **Query support**: BQL queries are now handled by rustledger's built-in query
   engine instead of beanquery. The query syntax remains largely compatible.
 - **Optional beancount compatibility**: If you need to use Beancount plugins or
-  the import system, install with ``pip install rustfava[beancount-compat]``.
+  the import system, install with ``uv pip install rustfava[beancount-compat]``.
 
 v1.30 (2024-12-29)
 ------------------

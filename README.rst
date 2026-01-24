@@ -12,7 +12,7 @@ Getting Started
 
 Install Rustfava::
 
-    pip3 install rustfava
+    uv pip install rustfava
     rustfava ledger.beancount
 
 and visit the web interface at `http://localhost:5000

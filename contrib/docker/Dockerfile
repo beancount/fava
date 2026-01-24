@@ -1,6 +1,7 @@
 FROM python:slim as builder
 
-RUN pip install --root-user-action ignore --prefix="/install" rustfava
+RUN pip install --root-user-action ignore uv && \
+    uv pip install --system --prefix="/install" rustfava
 
 FROM python:slim
 

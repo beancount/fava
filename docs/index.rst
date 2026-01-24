@@ -25,7 +25,7 @@ If you are new to Rustfava or Beancount-format files, begin with the :doc:`usage
 
 This is enough to get you up and running::
 
-    pip3 install rustfava
+    uv pip install rustfava
     rustfava ledger.beancount
 
 and visit the web interface at `http://localhost:5000

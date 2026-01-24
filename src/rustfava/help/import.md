@@ -5,7 +5,7 @@ your ledger. See [Importing External Data in Beancount](http://furius.ca/beancou
 for more information on how to write importers.
 
 **Note**: Import functionality requires the beancount compatibility package.
-Install it with: `pip install rustfava[beancount-compat]`
+Install it with: `uv pip install rustfava[beancount-compat]`
 
 You can override the hooks that should be run for your importers by specifying a
 variable `HOOKS` with a list of hooks to apply to the list of

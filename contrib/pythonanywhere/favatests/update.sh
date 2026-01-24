@@ -15,8 +15,8 @@ rm -rf ~/.npm
 rm -rf ~/.cache
 rm -rf ~/nvm/.cache
 
-# Install fava
-pip install --upgrade --upgrade-strategy eager ~/fava
+# Install rustfava
+uv pip install --upgrade ~/fava
 
 # Copy example files
 rm -f ~/example.beancount ~/budgets-example.beancount ~/huge-example.beancount
