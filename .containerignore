@@ -1,0 +1,44 @@
+# Git
+.git/
+.github/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.tox/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Frontend build artifacts (rebuilt in container)
+frontend/node_modules/
+frontend/coverage/
+src/fava/static/*.js
+src/fava/static/*.css
+src/fava/static/*.map
+src/fava/static/*.wasm
+src/fava/static/*.woff2
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Docs
+docs/api/
+
+# Tests (not needed in runtime image)
+tests/
+
+# Other
+*.log
+.env
+*cache/
