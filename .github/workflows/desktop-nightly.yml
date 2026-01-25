@@ -147,8 +147,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           mkdir -p binaries
-          for bin in bean-check bean-doctor bean-extract bean-format bean-price bean-query bean-report \
-                     rledger-check rledger-doctor rledger-extract rledger-format rledger-price rledger-query rledger-report; do
+          for bin in bean-check bean-doctor bean-extract bean-format bean-price bean-query bean-report rledger; do
             if [ -f "target/${{ matrix.target }}/release/${bin}" ]; then
               cp "target/${{ matrix.target }}/release/${bin}" "binaries/${bin}-${{ matrix.target }}"
             fi
@@ -160,8 +159,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path binaries
           $binaries = @(
-            "bean-check", "bean-doctor", "bean-extract", "bean-format", "bean-price", "bean-query", "bean-report",
-            "rledger-check", "rledger-doctor", "rledger-extract", "rledger-format", "rledger-price", "rledger-query", "rledger-report"
+            "bean-check", "bean-doctor", "bean-extract", "bean-format", "bean-price", "bean-query", "bean-report", "rledger"
           )
           foreach ($bin in $binaries) {
             $src = "target/${{ matrix.target }}/release/${bin}.exe"

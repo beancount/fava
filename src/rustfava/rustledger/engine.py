@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+import urllib.request
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -18,6 +19,13 @@ if TYPE_CHECKING:
 
 # Supported API version prefix
 SUPPORTED_API_VERSION = "1."
+
+# Rustledger release to download
+RUSTLEDGER_VERSION = "v0.7.0"
+RUSTLEDGER_WASM_URL = (
+    f"https://github.com/rustledger/rustledger/releases/download/"
+    f"{RUSTLEDGER_VERSION}/rustledger-ffi-wasi.wasm"
+)
 
 
 class RustledgerError(Exception):
@@ -45,14 +53,13 @@ class RustledgerEngine:
         """Initialize the rustledger engine.
 
         Args:
-            wasm_path: Path to rustledger-wasi.wasm. If None, uses bundled WASM.
+            wasm_path: Path to rustledger-wasi.wasm. If None, uses default path.
         """
         if wasm_path is None:
             wasm_path = Path(__file__).parent / "rustledger-wasi.wasm"
 
         if not wasm_path.exists():
-            msg = f"Rustledger WASM not found at {wasm_path}"
-            raise FileNotFoundError(msg)
+            self._download_wasm(wasm_path)
 
         self._wasm_path = wasm_path
 
@@ -61,6 +68,23 @@ class RustledgerEngine:
         if self._wasmtime is None:
             msg = "wasmtime not found in PATH. Install with: cargo install wasmtime-cli"
             raise RuntimeError(msg)
+
+    @staticmethod
+    def _download_wasm(wasm_path: Path) -> None:
+        """Download the rustledger WASM module."""
+        import sys
+
+        print(  # noqa: T201
+            f"Downloading rustledger WASM ({RUSTLEDGER_VERSION})...",
+            file=sys.stderr,
+        )
+        try:
+            wasm_path.parent.mkdir(parents=True, exist_ok=True)
+            urllib.request.urlretrieve(RUSTLEDGER_WASM_URL, wasm_path)  # noqa: S310
+            print("Done.", file=sys.stderr)  # noqa: T201
+        except Exception as e:
+            msg = f"Failed to download rustledger WASM: {e}"
+            raise RuntimeError(msg) from e
 
     @classmethod
     def get_instance(cls, wasm_path: Path | None = None) -> RustledgerEngine:

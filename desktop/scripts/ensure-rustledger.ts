@@ -22,8 +22,7 @@ const RUSTLEDGER_REPO = "https://github.com/rustledger/rustledger.git";
 const CLI_BINARIES = [
   "bean-check", "bean-doctor", "bean-extract", "bean-format",
   "bean-price", "bean-query", "bean-report",
-  "rledger-check", "rledger-doctor", "rledger-extract", "rledger-format",
-  "rledger-price", "rledger-query", "rledger-report"
+  "rledger"
 ];
 
 function getTargetTriple(): string {

@@ -10,14 +10,36 @@ parsing and processing.
 
 ## Getting Started
 
-Install rustfava:
+### Option 1: Desktop App (Recommended)
+
+Download the desktop app from [GitHub Releases](https://github.com/rustledger/rustfava/releases):
+
+- **macOS**: `rustfava_x.x.x_universal.dmg`
+- **Windows**: `rustfava_x.x.x_x64-setup.exe`
+- **Linux**: `rustfava_x.x.x_amd64.AppImage`
+
+Double-click to launch, then open your `.beancount` file.
+
+### Option 2: Docker
+
+Run the server in a container:
 
 ```bash
-uv pip install rustfava
+docker run -p 5000:5000 -v /path/to/ledger:/data ghcr.io/rustledger/rustfava /data/main.beancount
+```
+
+Then visit [http://localhost:5000](http://localhost:5000).
+
+### Option 3: uv install
+
+For developers or advanced users. Requires Python 3.13+ and [wasmtime](https://wasmtime.dev/):
+
+```bash
+uv tool install rustfava
 rustfava ledger.beancount
 ```
 
-and visit the web interface at [http://localhost:5000](http://localhost:5000).
+Then visit [http://localhost:5000](http://localhost:5000).
 
 ## Development
 

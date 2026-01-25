@@ -415,22 +415,22 @@ async function spawnPtyForTerminal(instance: TerminalInstance, cwd: string) {
     instance.terminal.write("  \x1b[1m\x1b[38;5;208mrustfava terminal\x1b[0m\r\n");
     instance.terminal.write("  \x1b[38;5;245m─────────────────\x1b[0m\r\n");
     instance.terminal.write("\r\n");
-    instance.terminal.write("  \x1b[36mrledger-check\x1b[0m   \x1b[38;5;245m(bean-check)\x1b[0m   - Validate beancount files\r\n");
-    instance.terminal.write("  \x1b[36mrledger-query\x1b[0m   \x1b[38;5;245m(bean-query)\x1b[0m   - Query ledger with BQL\r\n");
-    instance.terminal.write("  \x1b[36mrledger-format\x1b[0m  \x1b[38;5;245m(bean-format)\x1b[0m  - Format beancount files\r\n");
-    instance.terminal.write("  \x1b[36mrledger-doctor\x1b[0m  \x1b[38;5;245m(bean-doctor)\x1b[0m  - Diagnose issues in ledger\r\n");
-    instance.terminal.write("  \x1b[36mrledger-report\x1b[0m  \x1b[38;5;245m(bean-report)\x1b[0m  - Generate reports\r\n");
-    instance.terminal.write("  \x1b[36mrledger-price\x1b[0m   \x1b[38;5;245m(bean-price)\x1b[0m   - Fetch price quotes\r\n");
-    instance.terminal.write("  \x1b[36mrledger-extract\x1b[0m \x1b[38;5;245m(bean-extract)\x1b[0m - Extract transactions\r\n");
+    instance.terminal.write("  \x1b[36mrledger check\x1b[0m   - Validate beancount files\r\n");
+    instance.terminal.write("  \x1b[36mrledger query\x1b[0m   - Query ledger with BQL\r\n");
+    instance.terminal.write("  \x1b[36mrledger format\x1b[0m  - Format beancount files\r\n");
+    instance.terminal.write("  \x1b[36mrledger doctor\x1b[0m  - Diagnose issues in ledger\r\n");
+    instance.terminal.write("  \x1b[36mrledger report\x1b[0m  - Generate reports\r\n");
+    instance.terminal.write("  \x1b[36mrledger price\x1b[0m   - Fetch price quotes\r\n");
+    instance.terminal.write("  \x1b[36mrledger extract\x1b[0m - Extract transactions\r\n");
     instance.terminal.write("\r\n");
     instance.terminal.write("  \x1b[38;5;245mRun any command with --help for usage info\x1b[0m\r\n");
     instance.terminal.write("\r\n");
 
-    // Run rledger-check on the current file after a short delay
+    // Run rledger check on the current file after a short delay
     setTimeout(() => {
       if (instance.pty) {
         const filePath = cwd; // cwd is the file path passed to spawnPtyForTerminal
-        instance.pty.write(`rledger-check "${filePath}"\n`);
+        instance.pty.write(`rledger check "${filePath}"\n`);
       }
     }, 500);
 

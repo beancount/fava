@@ -45,13 +45,7 @@
       "binaries/bean-price",
       "binaries/bean-query",
       "binaries/bean-report",
-      "binaries/rledger-check",
-      "binaries/rledger-doctor",
-      "binaries/rledger-extract",
-      "binaries/rledger-format",
-      "binaries/rledger-price",
-      "binaries/rledger-query",
-      "binaries/rledger-report"
+      "binaries/rledger"
     ],
     "linux": {
       "appimage": {

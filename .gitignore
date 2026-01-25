@@ -44,5 +44,6 @@ npm-debug.log
 /desktop/bun.lockb
 /desktop/.vite/
 
-# Rustledger build markers
+# Rustledger build artifacts
 /src/rustfava/rustledger/.wasm-version
+/src/rustfava/rustledger/*.wasm

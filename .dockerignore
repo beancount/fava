@@ -1,0 +1,47 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*.egg-info
+.eggs
+dist
+build
+.tox
+.pytest_cache
+.coverage
+htmlcov
+
+# Node/Frontend dev
+node_modules
+frontend/node_modules
+desktop/
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Docs
+docs/
+mkdocs.yml
+
+# Tests
+tests/
+stubs/
+
+# CI/CD
+.github/
+.pre-commit-config.yaml
+
+# Cache
+.cache/
+.mypy_cache/
+.ruff_cache/
+
+# Misc
+*.md
+!README.md
+contrib/
