@@ -1,6 +1,6 @@
 site_name: Rustfava
 site_description: Web interface for rustledger, a Rust-based Beancount parser
-site_url: https://rustledger.github.io/rustfava/
+site_url: https://rustledger.github.io/rustfava/docs/
 repo_url: https://github.com/rustledger/rustfava
 repo_name: rustledger/rustfava
 
