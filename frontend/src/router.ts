@@ -270,11 +270,16 @@ export class Router {
   };
 
   /**
-   * Synchronize the current URL, even if an external router (i.e. an extension module with its own router) updates the location.
+   * Synchronize the current URL if an external router (e.g. an extension module with its own router) pushes or replaces a history entry.
+   * Navigating in the history (going back or forward) is handled by the popstate event.
+   *
    * The router must maintain an up-to-date URL, otherwise changing global filters (time, account, filter) would redirect to a stale URL.
    */
   #on_navigate = (event: NavigateEvent): void => {
-    if (event.destination.sameDocument) {
+    if (
+      event.destination.sameDocument &&
+      (event.navigationType === "push" || event.navigationType === "replace")
+    ) {
       this.current = new URL(event.destination.url);
     }
   };
@@ -290,9 +295,7 @@ export class Router {
     window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
-    if ("navigation" in window) {
-      window.navigation.addEventListener("navigate", this.#on_navigate);
-    }
+    navigation_api?.addEventListener("navigate", this.#on_navigate);
 
     handleExtensionPageLoad();
   }
