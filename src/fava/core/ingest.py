@@ -9,27 +9,14 @@ import traceback
 from dataclasses import dataclass
 from functools import wraps
 from inspect import get_annotations
-from inspect import signature
 from os import altsep
 from os import sep
 from pathlib import Path
 from runpy import run_path
 from typing import TYPE_CHECKING
 
-from beangulp import Importer
+from beangulp.importer import Importer
 
-try:  # pragma: no cover
-    from beancount.ingest import cache  # type: ignore[import-not-found]
-    from beancount.ingest import extract
-
-    DEFAULT_HOOKS = [extract.find_duplicate_entries]
-except ImportError:
-    from beangulp import cache
-
-    DEFAULT_HOOKS = []
-
-from fava.beans.ingest import BeanImporterProtocol
-from fava.core.file import _incomplete_sortkey
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
@@ -45,11 +32,10 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import TypeVar
 
     from fava.beans.abc import Directive
-    from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
 
     HookOutput = (
-        list[tuple[str, list[Directive], str, BeanImporterProtocol | Importer]]
+        list[tuple[str, list[Directive], str, Importer]]
         | list[tuple[str, list[Directive]]]
     )
     Hooks = Sequence[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
@@ -134,29 +120,6 @@ def walk_dir(directory: Path) -> Iterable[Path]:
             yield root_path / filename
 
 
-# Keep our own cache to also keep track of file mtimes
-_CACHE: dict[Path, tuple[int, FileMemo]] = {}
-
-
-def get_cached_file(path: Path) -> FileMemo:
-    """Get a cached FileMemo.
-
-    This checks the file's mtime before getting it from the Cache.
-    In addition to using the beangulp cache.
-    """
-    mtime = path.stat().st_mtime_ns
-    filename = str(path)
-    cached = _CACHE.get(path)
-    if cached:
-        mtime_cached, memo_cached = cached
-        if mtime <= mtime_cached:  # pragma: no cover
-            return memo_cached
-    memo: FileMemo = cache._FileMemo(filename)  # noqa: SLF001
-    cache._CACHE[filename] = memo  # noqa: SLF001
-    _CACHE[path] = (mtime, memo)
-    return memo
-
-
 @dataclass(frozen=True)
 class FileImportInfo:
     """Info about one file/importer combination."""
@@ -198,51 +161,35 @@ def _assert_type(attr: str, value: T, type_: type[T]) -> T:
     return value
 
 
+@dataclass(frozen=True)
 class WrappedImporter:
     """A wrapper to safely call importer methods."""
 
-    importer: BeanImporterProtocol | Importer
-
-    def __init__(self, importer: BeanImporterProtocol | Importer) -> None:
-        self.importer = importer
+    importer: Importer
 
     @property
     @_catch_any
     def name(self) -> str:
         """Get the name of the importer."""
         importer = self.importer
-        name = (
-            importer.name
-            if isinstance(importer, Importer)
-            else importer.name()
-        )
+        name = importer.name
         return _assert_type("name", name, str)
 
     @_catch_any
     def identify(self: WrappedImporter, path: Path) -> bool:
         """Whether the importer is matching the file."""
         importer = self.importer
-        matches = (
-            importer.identify(str(path))
-            if isinstance(importer, Importer)
-            else importer.identify(get_cached_file(path))
-        )
+        matches = importer.identify(str(path))
         return _assert_type("identify", matches, bool)
 
     @_catch_any
     def file_import_info(self, path: Path) -> FileImportInfo:
         """Generate info about a file with an importer."""
         importer = self.importer
-        if isinstance(importer, Importer):
-            str_path = str(path)
-            account = importer.account(str_path)
-            date = importer.date(str_path)
-            filename = importer.filename(str_path)
-        else:
-            file = get_cached_file(path)
-            account = importer.file_account(file)
-            date = importer.file_date(file)
-            filename = importer.file_name(file)
+        str_path = str(path)
+        account = importer.account(str_path)
+        date = importer.date(str_path)
+        filename = importer.filename(str_path)
 
         return FileImportInfo(
             self.name,
@@ -297,23 +244,10 @@ def extract_from_file(
     """
     filename = str(path)
     importer = wrapped_importer.importer
-    if isinstance(importer, Importer):
-        entries = importer.extract(filename, existing=existing_entries)
-    else:
-        file = get_cached_file(path)
-        entries = (
-            importer.extract(file, existing_entries=existing_entries)
-            if "existing_entries" in signature(importer.extract).parameters
-            else importer.extract(file)
-        ) or []
-
-    if hasattr(importer, "sort"):
-        importer.sort(entries)
-    else:
-        entries.sort(key=_incomplete_sortkey)
-    if isinstance(importer, Importer):
-        importer.deduplicate(entries, existing=existing_entries)
-    return entries
+    entries = importer.extract(filename, existing=existing_entries)  # type: ignore[arg-type]
+    importer.sort(entries)
+    importer.deduplicate(entries, existing=existing_entries)  # type: ignore[arg-type]
+    return entries  # type: ignore[return-value]
 
 
 def load_import_config(
@@ -341,7 +275,7 @@ def load_import_config(
         raise ImportConfigLoadError(msg)
 
     config = mod["CONFIG"]
-    hooks = DEFAULT_HOOKS
+    hooks = []
     if "HOOKS" in mod:  # pragma: no cover
         hooks = mod["HOOKS"]
         if not isinstance(hooks, list) or not all(
@@ -351,9 +285,7 @@ def load_import_config(
             raise ImportConfigLoadError(msg)
     importers = {}
     for importer in config:
-        if not isinstance(
-            importer, (BeanImporterProtocol, Importer)
-        ):  # pragma: no cover
+        if not isinstance(importer, Importer):  # pragma: no cover
             name = importer.__class__.__name__
             msg = (
                 f"Importer class '{name}' in '{module_path}' does "
