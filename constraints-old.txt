@@ -2,63 +2,44 @@
 #    uv pip compile --extra excel --group old-deps --resolution=lowest --python-version 3.10 --output-file constraints-old.txt pyproject.toml
 anyio==3.0.0
     # via watchfiles
-attrs==19.2.0
-    # via pytest
 babel==2.11.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
-beancount==2.3.5
+beancount==3.0.0
     # via
     #   fava (pyproject.toml)
     #   beangulp
     #   beanquery
+    #   uromyces
 beangulp==0.1.0
     # via fava (pyproject.toml)
 beanquery==0.1.0
     # via fava (pyproject.toml)
 beautifulsoup4==4.0.1
-    # via
-    #   beancount
-    #   beangulp
-bottle==0.12.20
-    # via
-    #   -c (workspace)
-    #   beancount
+    # via beangulp
 chardet==1.0
-    # via
-    #   beancount
-    #   beangulp
+    # via beangulp
 cheroot==8.0.0
     # via fava (pyproject.toml)
 click==8.0.1
     # via
     #   fava (pyproject.toml)
+    #   beancount
     #   beangulp
     #   beanquery
     #   flask
+    #   uromyces
 et-xmlfile==1.0.0
     # via openpyxl
-exceptiongroup==1.0.0
-    # via pytest
 flask==2.2.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
 flask-babel==3.0.0
     # via fava (pyproject.toml)
-google-api-python-client==1.0
-    # via beancount
-httplib2==0.7.6
-    # via google-api-python-client
 idna==2.8
     # via anyio
-importlib-metadata==3.6.0
-    # via
-    #   -c (workspace)
-    #   pluggy
-iniconfig==0.1
-    # via pytest
 itsdangerous==2.0.0
     # via flask
 jaraco-functools==4.0.0
@@ -79,7 +60,6 @@ lml==0.0.1
 lxml==5.3.0
     # via
     #   -c (workspace)
-    #   beancount
     #   beangulp
     #   pyexcel-ezodf
     #   pyexcel-ods3
@@ -96,14 +76,8 @@ more-itertools==6.0.0
     #   jaraco-functools
 openpyxl==2.4.4
     # via pyexcel-xlsx
-packaging==14.0
-    # via pytest
-pluggy==0.12.0
-    # via pytest
 ply==3.4
-    # via
-    #   fava (pyproject.toml)
-    #   beancount
+    # via fava (pyproject.toml)
 pyexcel==0.5.0
     # via fava (pyproject.toml)
 pyexcel-ezodf==0.3.3
@@ -117,27 +91,19 @@ pyexcel-ods3==0.5.0
     # via fava (pyproject.toml)
 pyexcel-xlsx==0.5.0
     # via fava (pyproject.toml)
-pytest==7.2.0
-    # via
-    #   -c (workspace)
-    #   beancount
 python-dateutil==2.6.0
     # via
     #   -c (workspace)
     #   beancount
     #   beanquery
-python-gflags==1.3
-    # via google-api-python-client
 python-magic==0.4.12
-    # via
-    #   beancount
-    #   beangulp
+    # via beangulp
 pytz==2022.7
     # via
     #   -c (workspace)
     #   babel
     #   flask-babel
-requests==0.2.0
+regex==2022.9.13
     # via beancount
 setuptools==67.0.0
     # via
@@ -154,11 +120,13 @@ sniffio==1.1.0
     # via anyio
 tatsu==5.7.4
     # via beanquery
+tatsu-lts==5.12.2
+    # via uromyces
 texttable==0.8.1
     # via pyexcel
-tomli==1.0.0
-    # via pytest
 typing-extensions==4.5.0
+    # via fava (pyproject.toml)
+uromyces==0.0.2
     # via fava (pyproject.toml)
 watchfiles==0.20.0
     # via fava (pyproject.toml)
@@ -166,5 +134,3 @@ werkzeug==2.2.0
     # via
     #   fava (pyproject.toml)
     #   flask
-zipp==0.5.0
-    # via importlib-metadata

@@ -114,9 +114,11 @@ class _LedgerSlugLoader:
         *,
         load: bool = False,
         poll_watcher: bool = False,
+        use_uromyces: bool = True,
     ) -> None:
         self.fava_app = fava_app
         self.poll_watcher = poll_watcher
+        self.use_uromyces = use_uromyces
 
         self._lock = Lock()
 
@@ -134,7 +136,11 @@ class _LedgerSlugLoader:
 
     def _load(self) -> list[FavaLedger]:
         return [
-            FavaLedger(path, poll_watcher=self.poll_watcher)
+            FavaLedger(
+                path,
+                poll_watcher=self.poll_watcher,
+                use_uromyces=self.use_uromyces,
+            )
             for path in self.fava_app.config["BEANCOUNT_FILES"]
         ]
 
@@ -479,6 +485,7 @@ def create_app(
     incognito: bool = False,
     read_only: bool = False,
     poll_watcher: bool = False,
+    use_uromyces: bool = True,
 ) -> Flask:
     """Create a Fava Flask application.
 
@@ -487,7 +494,8 @@ def create_app(
         load: Whether to load the Beancount files directly.
         incognito: Whether to run in incognito mode.
         read_only: Whether to run in read-only mode.
-        poll_watcher: Whether to use old poll watcher
+        poll_watcher: Whether to use old poll watcher.
+        use_uromyces: Whether to load the ledger with uromyces.
     """
     fava_app = Flask("fava")
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
@@ -498,11 +506,15 @@ def create_app(
     _setup_filters(fava_app, read_only=read_only)
     _setup_routes(fava_app)
 
+    fava_app.config["USE_UROMYCES"] = use_uromyces
     fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL
     fava_app.config["BEANCOUNT_FILES"] = [str(f) for f in files]
     fava_app.config["INCOGNITO"] = incognito
     fava_app.config["LEDGERS"] = _LedgerSlugLoader(
-        fava_app, load=load, poll_watcher=poll_watcher
+        fava_app,
+        load=load,
+        poll_watcher=poll_watcher,
+        use_uromyces=use_uromyces,
     )
 
     return fava_app

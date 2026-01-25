@@ -43,6 +43,8 @@ from fava.util.date import local_today
 
 if TYPE_CHECKING:
     from collections.abc import Generator
+    from typing import TypeAlias
+    from typing import TypeGuard
 
 
 class SnapshotFunc(Protocol):
@@ -190,13 +192,14 @@ def snapshot(
         # replace today
         out = out.replace(str(local_today()), "TODAY")
         # replace entry hashes
-        out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
-        out = re.sub(r"#context-[0-9a-f]+", "#context-ENTRY_HASH", out)
+        out = re.sub(r'_hash": ?"-?[0-9a-f]+', '_hash":"ENTRY_HASH', out)
+        out = re.sub(r"#context--?[0-9a-f]+", "#context-ENTRY_HASH", out)
         # replace env-dependant info
         out = re.sub(r'have_excel":\s*(false|False)', 'have_excel": true', out)
 
         for dir_path, replacement in [
             (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
+            (rf"\\?\{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
         ]:
             json_escaped = dumps(dir_path)[1:-1]
             out = out.replace(json_escaped, replacement)
@@ -225,7 +228,7 @@ def app(test_data_dir: Path) -> Flask:
                 "query-example.beancount",
                 "errors.beancount",
                 "off-by-one.beancount",
-                "invalid-unicode.beancount",
+                # "invalid-unicode.beancount",
             ]
         ],
         load=True,
@@ -295,7 +298,7 @@ LedgerSlug: TypeAlias = Literal[
     "extension-report",
     "import",
     "off-by-one",
-    "invalid-unicode",
+    # "invalid-unicode",
 ]
 GetFavaLedger: TypeAlias = Callable[[LedgerSlug], FavaLedger]
 

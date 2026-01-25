@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
@@ -31,7 +32,6 @@ from fava.util import listify
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
-    from collections.abc import Mapping
 
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
@@ -43,7 +43,7 @@ if TYPE_CHECKING:  # pragma: no cover
 ZERO = Decimal()
 
 
-def _json_default(o: Any) -> Any:
+def _json_default(o: Any) -> Any:  # noqa: PLR0911
     """Specific serialisation for some data types."""
     if isinstance(o, (date, Amount, Booking, Position)):
         return str(o)
@@ -53,6 +53,10 @@ def _json_default(o: Any) -> Any:
         return o.pattern
     if is_dataclass(o):
         return {field.name: getattr(o, field.name) for field in fields(o)}
+    if hasattr(o, "to_json"):
+        return simplejson_loads(o.to_json())
+    if isinstance(o, Mapping):
+        return dict(o)
     if o is MISSING:  # pragma: no cover
         return None
     raise TypeError  # pragma: no cover
