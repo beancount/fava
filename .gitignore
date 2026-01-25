@@ -1,4 +1,5 @@
 /*cache/
+*.cache
 /.coverage
 /.eggs/
 /.idea/
@@ -38,8 +39,10 @@ npm-debug.log
 /desktop/node_modules/
 /desktop/src-tauri/target/
 /desktop/src-tauri/binaries/
+/desktop/src-tauri/.dev-bin/
 /desktop/dist/
 /desktop/bun.lockb
+/desktop/.vite/
 
 # Rustledger build markers
 /src/rustfava/rustledger/.wasm-version
