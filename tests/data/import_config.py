@@ -4,15 +4,13 @@ from __future__ import annotations
 
 import csv
 import datetime
-from contextlib import suppress
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from beangulp import Importer
+from beangulp.importer import Importer
 
 from fava.beans import create
-from fava.beans.ingest import BeanImporterProtocol
 
 try:
     from typing import override
@@ -21,10 +19,10 @@ except ImportError:
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
-    from typing import Any
+
+    from beancount.core import data
 
     from fava.beans.abc import Directive
-    from fava.beans.ingest import FileMemo
 
 DATE = datetime.date(2022, 12, 12)
 
@@ -49,7 +47,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
     """Importer with the beangulp interface."""
 
     @override
-    def extract(self, filepath: str, existing: Any) -> list[Directive]:  # ty:ignore[invalid-method-override]
+    def extract(self, filepath: str, existing: data.Entries) -> data.Entries:
         entries: list[Directive] = []
         path = Path(filepath)
         account = self.account(filepath)
@@ -107,48 +105,48 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
                 create.amount("10 USD"),
             )
             entries.append(bal)
-        return entries
+        return entries  # type: ignore[return-value]
 
 
-class TestImporter(BeanImporterProtocol):
+class TestImporter(Importer):
     """Test importer for Fava."""
 
-    account = "Assets:Checking"
+    _account = "Assets:Checking"
     currency = "EUR"
 
     @override
-    def identify(self, file: FileMemo) -> bool:
-        return Path(file.name).name == "import.csv"
+    def identify(self, filepath: str) -> bool:
+        return Path(filepath).name == "import.csv"
 
     @override
-    def file_name(self, file: FileMemo) -> str:
-        return f"examplebank.{Path(file.name).name}"
+    def filename(self, filepath: str) -> str:
+        return f"examplebank.{Path(filepath).name}"
 
     @override
-    def file_account(self, file: FileMemo) -> str:
-        return self.account
+    def account(self, filepath: str) -> str:
+        return self._account
 
     @override
-    def file_date(self, file: FileMemo) -> datetime.date:
+    def date(self, filepath: str) -> datetime.date:
         return DATE
 
     @override
     def extract(
         self,
-        file: FileMemo,
-        **_kwargs: Any,
-    ) -> list[Directive]:
+        filepath: str,
+        existing: data.Entries,
+    ) -> data.Entries:
         importer = TestBeangulpImporter()
-        return importer.extract(file.name, existing=[])
+        return importer.extract(filepath, existing=[])
 
 
 class TestImporterThatErrorsOnExtract(TestImporter):
     @override
     def extract(
         self,
-        file: FileMemo,
-        **_kwargs: Any,
-    ) -> list[Directive]:
+        filepath: str,
+        existing: data.Entries,
+    ) -> data.Entries:
         raise TypeError
 
 
@@ -163,10 +161,10 @@ def _example_noop_importer_legacy_hook(
 
 def _example_noop_importer_hook(
     files_entries_accounts_importers: list[
-        tuple[str, list[Directive], str, BeanImporterProtocol | Importer]
+        tuple[str, list[Directive], str, Importer]
     ],
     _existing: Sequence[Directive],
-) -> list[tuple[str, list[Directive], str, BeanImporterProtocol | Importer]]:
+) -> list[tuple[str, list[Directive], str, Importer]]:
     for e in files_entries_accounts_importers:
         assert len(e) == 4
     return files_entries_accounts_importers
@@ -175,13 +173,7 @@ def _example_noop_importer_hook(
 HOOKS = [_example_noop_importer_legacy_hook, _example_noop_importer_hook]
 
 
-with suppress(ImportError):  # pragma: no cover
-    from beancount.ingest import extract  # type: ignore[import-not-found]
-
-    HOOKS.append(extract.find_duplicate_entries)
-
-
-CONFIG: list[BeanImporterProtocol | Importer] = [
+CONFIG: list[Importer] = [
     TestImporter(),
     TestImporterThatErrorsOnExtract(),
     TestBeangulpImporter(),
