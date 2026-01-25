@@ -6,7 +6,7 @@ authors = ["rustfava"]
 license = "MIT"
 repository = "https://github.com/rustledger/rustfava"
 edition = "2021"
-rust-version = "1.70"
+rust-version = "1.92"
 
 [build-dependencies]
 tauri-build = { version = "2.1", features = [] }
