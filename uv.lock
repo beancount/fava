@@ -532,6 +532,7 @@ docs = [
     { name = "sphinx-autodoc-typehints", version = "3.6.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 old-deps = [
+    { name = "pytest" },
     { name = "setuptools" },
 ]
 pre-commit = [
@@ -560,8 +561,8 @@ types = [
 [package.metadata]
 requires-dist = [
     { name = "babel", specifier = ">=2.11,<3" },
-    { name = "beancount", specifier = ">=2,<4" },
-    { name = "beangulp", specifier = ">=0.1" },
+    { name = "beancount", specifier = ">=3.2.0,<4" },
+    { name = "beangulp", specifier = ">=0.2" },
     { name = "beanquery", specifier = ">=0.1,<0.3" },
     { name = "cheroot", specifier = ">=8,<12" },
     { name = "click", specifier = ">=7,<9" },
@@ -600,7 +601,10 @@ docs = [
     { name = "sphinx", specifier = ">=7" },
     { name = "sphinx-autodoc-typehints", specifier = ">=2" },
 ]
-old-deps = [{ name = "setuptools" }]
+old-deps = [
+    { name = "pytest" },
+    { name = "setuptools" },
+]
 pre-commit = [{ name = "pre-commit", specifier = ">=4" }]
 scripts = [{ name = "requests", specifier = ">=2" }]
 test = [

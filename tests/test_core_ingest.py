@@ -6,11 +6,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
+from beangulp.importer import Importer
 
-from fava.beans import BEANCOUNT_V3
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
-from fava.beans.ingest import BeanImporterProtocol
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.ingest import ImportConfigLoadError
@@ -28,7 +27,6 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.ingest import FileMemo
     from fava.core import FavaLedger
 
     from .conftest import GetFavaLedger
@@ -47,20 +45,21 @@ def test_ingest_file_import_info(
     assert info.account == "Assets:Checking"
 
 
-class MinimalImporter(BeanImporterProtocol):
+class MinimalImporter(Importer):
     def __init__(self, acc: str = "Assets:Checking") -> None:
         self.acc = acc
 
     @override
+    @property
     def name(self) -> str:
         return f"MinimalImporter({self.acc})"
 
     @override
-    def identify(self, file: FileMemo) -> bool:
-        return self.acc in file.name
+    def identify(self, filepath: str) -> bool:
+        return self.acc in filepath
 
     @override
-    def file_account(self, file: FileMemo) -> str:
+    def account(self, filepath: str) -> str:
         return self.acc
 
 
@@ -79,7 +78,7 @@ def test_ingest_file_import_info_minimal_importer(test_data_dir: Path) -> None:
 
 class AccountNameErrors(MinimalImporter):
     @override
-    def file_account(self, file: FileMemo) -> str:
+    def account(self, filepath: str) -> str:
         msg = "Some error reason..."
         raise ValueError(msg)
 
@@ -97,7 +96,7 @@ def test_ingest_file_import_info_account_method_errors(
 
 class IdentifyErrors(MinimalImporter):
     @override
-    def identify(self, file: FileMemo) -> bool:
+    def identify(self, filepath: str) -> bool:
         msg = "IDENTIFY_ERRORS"
         raise ValueError(msg)
 
@@ -113,6 +112,7 @@ def test_ingest_identify_errors(test_data_dir: Path) -> None:
 
 class ImporterNameErrors(MinimalImporter):
     @override
+    @property
     def name(self) -> str:
         msg = "GET_NAME_WILL_ERROR"
         raise ValueError(msg)
@@ -127,6 +127,7 @@ def test_ingest_get_name_errors() -> None:
 
 class ImporterNameInvalidType(MinimalImporter):
     @override
+    @property
     def name(self) -> str:
         return False  # type: ignore[return-value]
 
@@ -208,9 +209,6 @@ def test_ingest_examplefile(
     assert entries[1].postings[1].units is not None
     assert entries[1].postings[1].units.number == -50.00
     assert entries[1].postings[1].units.currency == "EUR"
-    if not BEANCOUNT_V3:
-        assert "__duplicate__" not in entries[1].meta
-        assert "__duplicate__" in entries[2].meta
 
     ingest_ledger.ingest.extract(
         str(test_data_dir / "import.csv"),

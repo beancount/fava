@@ -38,9 +38,9 @@ dependencies = [
     "Flask>=2.2,<4",
     "Jinja2>=3,<4",
     "Werkzeug>=2.2,<4",
-    "beancount>=2,<4",
+    "beancount>=3.2.0,<4",
     "beanquery>=0.1,<0.3",
-    "beangulp>=0.1",
+    "beangulp>=0.2",
     "cheroot>=8,<12",
     "click>=7,<9",
     "markdown2>=2.3.0,<3",
@@ -88,6 +88,7 @@ types = [
 # Add setuptools for the old_deps constraints
 # (otherwise it is not added to the constraints as it's only a build dependency).
 old-deps = [
+    "pytest",
     "setuptools",
 ]
 # Running pre-commit hooks.
@@ -166,6 +167,10 @@ files = [
     "src/fava",
     "tests",
 ]
+
+[[tool.mypy.overrides]]
+module = ["beangulp.*"]
+follow_untyped_imports = true
 
 [[tool.mypy.overrides]]
 module = ["beanquery.*"]
