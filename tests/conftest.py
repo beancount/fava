@@ -188,30 +188,22 @@ def snapshot(
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         # replace today
-        today = local_today()
-        out = out.replace(str(today), "TODAY")
+        out = out.replace(str(local_today()), "TODAY")
         # replace entry hashes
         out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
-        out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
-        out = re.sub(r"data-entry='[0-9a-f]+", "data-entry='ENTRY_HASH", out)
-        # replace mtimes
-        out = re.sub(r"mtime=\d+", "mtime=MTIME", out)
-        out = re.sub(r'id="ledger-mtime">\d+', 'id="ledger-mtime">MTIME', out)
+        out = re.sub(r"#context-[0-9a-f]+", "#context-ENTRY_HASH", out)
         # replace env-dependant info
         out = re.sub(r'have_excel":\s*(false|False)', 'have_excel": true', out)
 
         for dir_path, replacement in [
             (f"{test_data_dir}{os.sep}", "TEST_DATA_DIR/"),
         ]:
+            json_escaped = dumps(dir_path)[1:-1]
+            out = out.replace(json_escaped, replacement)
             if sys.platform == "win32":
-                out = out.replace(
-                    dir_path.replace(os.sep, os.sep * 2), replacement
-                )
                 out = out.replace(
                     dir_path.replace(os.sep, os.sep * 4), replacement
                 )
-            else:
-                out = out.replace(dir_path, replacement)
 
         compare_snapshot(filename, out, json=json)
 

@@ -257,7 +257,7 @@ def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
     def get_message(err: Any) -> str:
         return str(err["message"])
 
-    snapshot(sorted(data, key=get_message))
+    snapshot(sorted(data, key=get_message), json=True)
 
 
 def test_api_context(
