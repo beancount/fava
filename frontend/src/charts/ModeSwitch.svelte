@@ -4,15 +4,40 @@
   interface Props {
     /** The store to show a switch for. */
     store: LocalStoreSyncedStore<T>;
+    /** URL value that overrides the store value when set. */
+    url_value?: T | null;
+    /** Callback when the value changes. */
+    onchange?: (value: T) => void;
   }
 
-  let { store }: Props = $props();
+  let { store, url_value, onchange }: Props = $props();
+
+  // URL value takes precedence over store value if it's a valid option
+  let effective_value = $derived.by(() => {
+    const valid_options = store.values().map(([opt]) => opt);
+    if (url_value != null && valid_options.includes(url_value)) {
+      return url_value;
+    }
+    return $store;
+  });
+
+  function handle_change(option: T) {
+    store.set(option);
+    onchange?.(option);
+  }
 </script>
 
 <span>
   {#each store.values() as [option, name] (option)}
-    <label class="button" class:muted={$store !== option}>
-      <input type="radio" bind:group={$store} value={option} />
+    <label class="button" class:muted={effective_value !== option}>
+      <input
+        type="radio"
+        checked={effective_value === option}
+        value={option}
+        onchange={() => {
+          handle_change(option);
+        }}
+      />
       {name}
     </label>
   {/each}
