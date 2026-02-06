@@ -150,7 +150,7 @@ python-version = "3.12"
 
 [tool.ty.rules]
 # There's some mismatches betweeen mypy and ty still
-unused-ignore-comment = "ignore"
+unused-type-ignore-comment = "ignore"
 
 [tool.ty.src]
 exclude = [

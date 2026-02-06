@@ -277,7 +277,7 @@ def load_doc_custom_entries(
 ) -> Sequence[Custom]:
     """Load the docstring as Beancount custom entries."""
     assert _is_custom_entries_list(load_doc_entries)
-    return load_doc_entries  # ty:ignore[invalid-return-type]
+    return load_doc_entries
 
 
 @pytest.fixture

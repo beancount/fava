@@ -665,7 +665,7 @@ class FavaLedger:
         for entry_ in takewhile(lambda e: e is not entry, self.all_entries):
             if isinstance(entry_, Transaction):
                 for posting in entry_.postings:
-                    balance = balances.get(posting.account, None)
+                    balance = balances.get(posting.account)
                     if balance is not None:
                         balance.add_position(posting)
 
