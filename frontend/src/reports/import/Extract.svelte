@@ -17,7 +17,7 @@
   let shown = $derived(count > 0);
 
   let entry = $derived(entries[currentIndex]);
-  let duplicate = $derived(entry?.is_duplicate());
+  let duplicate = $derived(entry?.is_duplicate() ?? false);
   let count_duplicates = $derived(
     entries.filter((e) => e.is_duplicate()).length,
   );
@@ -76,16 +76,15 @@
           {_("ignore duplicate")}
         </label>
       </div>
-      <div class:duplicate>
-        <Entry
-          bind:entry={
-            () => entry,
-            (entry: EntryType) => {
-              entries[currentIndex] = entry;
-            }
+      <Entry
+        bind:entry={
+          () => entry,
+          (entry: EntryType) => {
+            entries[currentIndex] = entry;
           }
-        />
-      </div>
+        }
+        {duplicate}
+      />
       <div class="flex-row">
         {#if currentIndex > 0}
           <button
@@ -132,10 +131,5 @@
     margin: 0;
     font-size: 0.9em;
     white-space: pre-wrap;
-  }
-
-  .duplicate {
-    display: contents;
-    opacity: 0.5;
   }
 </style>

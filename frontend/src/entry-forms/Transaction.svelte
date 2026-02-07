@@ -86,105 +86,103 @@
   });
 </script>
 
-<div class="flex-column">
-  <div class="flex-row">
-    <input
-      type="date"
-      bind:value={
-        () => entry.date,
-        (date: string) => {
-          entry = entry.set("date", date);
-        }
-      }
-      required
-    />
-    <input
-      type="text"
-      name="flag"
-      bind:value={
-        () => entry.flag,
-        (flag: string) => {
-          entry = entry.set("flag", flag);
-        }
-      }
-      required
-    />
-    <label>
-      <span class="hide-on-desktop">{_("Payee")}:</span>
-      <AutocompleteInput
-        placeholder={_("Payee")}
-        bind:value={
-          () => entry.payee,
-          (payee: string) => {
-            entry = entry.set("payee", payee);
-          }
-        }
-        suggestions={$payees}
-        onSelect={autocompleteSelectPayee}
-        --autocomplete-wrapper-flex="1"
-      />
-    </label>
-    <label class="narration">
-      <span class="hide-on-desktop">{_("Narration")}:</span>
-      <AutocompleteInput
-        placeholder={_("Narration")}
-        bind:value={narration}
-        suggestions={narration_suggestions}
-        onSelect={autocompleteSelectNarration}
-        onEnter={() => {
-          entry = entry.set_narration_tags_links(narration);
-        }}
-        onBlur={() => {
-          entry = entry.set_narration_tags_links(narration);
-        }}
-        --autocomplete-wrapper-flex="2"
-      />
-      <AddMetadataButton
-        bind:meta={
-          () => entry.meta,
-          (meta: EntryMetadata) => {
-            entry = entry.set("meta", meta);
-          }
-        }
-      />
-    </label>
-  </div>
-  <EntryMetadataSvelte
-    bind:meta={
-      () => entry.meta,
-      (meta: EntryMetadata) => {
-        entry = entry.set("meta", meta);
+<div class="flex-row">
+  <input
+    type="date"
+    bind:value={
+      () => entry.date,
+      (date: string) => {
+        entry = entry.set("date", date);
       }
     }
+    required
   />
-  <div class="flex-row hide-on-desktop">
-    <span class="label">{_("Postings")}:</span>
-  </div>
-  {#each entry.postings, index (index)}
-    <!-- Using the indexed access (instead of `as posting` in the each) seems to track
-         the reactivity differently and avoids cursor jumping on the posting inputs. -->
-    {@const posting = entry.postings[index]}
-    {#if posting}
-      <PostingSvelte
-        bind:posting={
-          () => posting,
-          (posting: Posting) => {
-            entry = entry.set("postings", entry.postings.with(index, posting));
-          }
+  <input
+    type="text"
+    name="flag"
+    bind:value={
+      () => entry.flag,
+      (flag: string) => {
+        entry = entry.set("flag", flag);
+      }
+    }
+    required
+  />
+  <label>
+    <span class="hide-on-desktop">{_("Payee")}:</span>
+    <AutocompleteInput
+      placeholder={_("Payee")}
+      bind:value={
+        () => entry.payee,
+        (payee: string) => {
+          entry = entry.set("payee", payee);
         }
-        {index}
-        {suggestions}
-        date={entry.date}
-        move={({ from, to }: { from: number; to: number }) => {
-          entry = entry.set("postings", move(entry.postings, from, to));
-        }}
-        remove={() => {
-          entry = entry.set("postings", entry.postings.toSpliced(index, 1));
-        }}
-      />
-    {/if}
-  {/each}
+      }
+      suggestions={$payees}
+      onSelect={autocompleteSelectPayee}
+      --autocomplete-wrapper-flex="1"
+    />
+  </label>
+  <label class="narration">
+    <span class="hide-on-desktop">{_("Narration")}:</span>
+    <AutocompleteInput
+      placeholder={_("Narration")}
+      bind:value={narration}
+      suggestions={narration_suggestions}
+      onSelect={autocompleteSelectNarration}
+      onEnter={() => {
+        entry = entry.set_narration_tags_links(narration);
+      }}
+      onBlur={() => {
+        entry = entry.set_narration_tags_links(narration);
+      }}
+      --autocomplete-wrapper-flex="2"
+    />
+    <AddMetadataButton
+      bind:meta={
+        () => entry.meta,
+        (meta: EntryMetadata) => {
+          entry = entry.set("meta", meta);
+        }
+      }
+    />
+  </label>
 </div>
+<EntryMetadataSvelte
+  bind:meta={
+    () => entry.meta,
+    (meta: EntryMetadata) => {
+      entry = entry.set("meta", meta);
+    }
+  }
+/>
+<div class="flex-row hide-on-desktop">
+  <span class="label">{_("Postings")}:</span>
+</div>
+{#each entry.postings, index (index)}
+  <!-- Using the indexed access (instead of `as posting` in the each) seems to track
+         the reactivity differently and avoids cursor jumping on the posting inputs. -->
+  {@const posting = entry.postings[index]}
+  {#if posting}
+    <PostingSvelte
+      bind:posting={
+        () => posting,
+        (posting: Posting) => {
+          entry = entry.set("postings", entry.postings.with(index, posting));
+        }
+      }
+      {index}
+      {suggestions}
+      date={entry.date}
+      move={({ from, to }: { from: number; to: number }) => {
+        entry = entry.set("postings", move(entry.postings, from, to));
+      }}
+      remove={() => {
+        entry = entry.set("postings", entry.postings.toSpliced(index, 1));
+      }}
+    />
+  {/if}
+{/each}
 
 <style>
   input[name="flag"] {

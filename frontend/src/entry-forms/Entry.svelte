@@ -7,17 +7,26 @@
 
   interface Props {
     entry: Entry;
+    duplicate?: boolean;
   }
 
-  let { entry = $bindable() }: Props = $props();
+  let { entry = $bindable(), duplicate = false }: Props = $props();
 </script>
 
-{#if entry instanceof Balance}
-  <BalanceSvelte bind:entry />
-{:else if entry instanceof Note}
-  <NoteSvelte bind:entry />
-{:else if entry instanceof Transaction}
-  <TransactionSvelte bind:entry />
-{:else}
-  Entry type unsupported for editing.
-{/if}
+<div class="flex-column" class:duplicate>
+  {#if entry instanceof Balance}
+    <BalanceSvelte bind:entry />
+  {:else if entry instanceof Note}
+    <NoteSvelte bind:entry />
+  {:else if entry instanceof Transaction}
+    <TransactionSvelte bind:entry />
+  {:else}
+    Entry type unsupported for editing.
+  {/if}
+</div>
+
+<style>
+  .duplicate {
+    opacity: 0.5;
+  }
+</style>
