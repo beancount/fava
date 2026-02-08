@@ -77,4 +77,8 @@
   svg {
     shape-rendering: crispedges;
   }
+
+  text {
+    fill: var(--text-color-chart);
+  }
 </style>
