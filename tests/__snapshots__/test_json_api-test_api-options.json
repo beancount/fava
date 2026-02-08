@@ -55,7 +55,7 @@
     "locale": "None",
     "show-accounts-with-zero-balance": "False",
     "show-accounts-with-zero-transactions": "True",
-    "show-metadata-indicators":"True",
+    "show-metadata-indicators": "True",
     "show-closed-accounts": "False",
     "sidebar-show-queries": "5",
     "unrealized": "'Unrealized'",
