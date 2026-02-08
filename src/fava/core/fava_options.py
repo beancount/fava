@@ -109,6 +109,7 @@ class FavaOptions:
     show_accounts_with_zero_balance: bool = True
     show_accounts_with_zero_transactions: bool = True
     show_closed_accounts: bool = False
+    show_metadata_indicators: bool = True
     sidebar_show_queries: int = 5
     unrealized: str = "Unrealized"
     upcoming_events: int = 7
