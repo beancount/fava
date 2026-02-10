@@ -59,11 +59,13 @@
    * it seems to work around a Safari bug, see #809 and #1528.
    */
   function submit() {
-    const url = new URL(router.current);
+    // Do not use router.current here, as this value might be stale
+    // if a Fava extension uses a custom router.
+    const url = new URL(window.location.href);
     set_query_param(url, "account", account_filter_value);
     set_query_param(url, "filter", fql_filter_value);
     set_query_param(url, "time", time_filter_value);
-    if (url.href !== router.current.href) {
+    if (url.href !== window.location.href) {
       target = url;
       setTimeout(() => {
         if (target) {
