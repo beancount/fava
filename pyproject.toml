@@ -187,6 +187,11 @@ omit = [
 [tool.ruff]
 line-length = 79
 
+[tool.ruff.format]
+exclude = [
+    "src/fava/help/import.md",
+]
+
 [tool.ruff.lint]
 extend-select = ["ALL"]
 extend-ignore = [
