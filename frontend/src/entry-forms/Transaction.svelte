@@ -73,8 +73,7 @@
       return;
     }
     const data = await get_narration_transaction({ narration });
-    data.set("date", entry.date);
-    entry = data;
+    entry = data.set("date", entry.date); // Copy to "entry" and preserve the date set in the dialog
     narration = entry.get_narration_tags_links();
   }
 
