@@ -52,10 +52,13 @@ Your import configuration must be a Python file that defines:
 - `HOOKS`: A list of functions to apply to all directives (e.g., transactions)
   after generation by any Importer.
 
-See the help document
-[Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
-for more information on how to write importers. Hook functions are explained in
-more detail further down on this page.
+For more information on how to write importers, see
+
+- [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)
+  in the beancount manual.
+- The <a href="{{ github_url }}">Example input configuration file</a>
+
+Hook functions are explained in more detail further down on this page.
 
 Fava currently only supports entries of type `Transaction`, `Balance`, and
 `Note`. Set the special metadata key `__source__` to display the corresponding
