@@ -71,15 +71,28 @@ async function run_build(dev: boolean, watch: boolean) {
   console.log(
     `starting build, dev=${dev.toString()}, watch=${watch.toString()}`,
   );
-  const result = await ctx.rebuild();
-  await cleanup_outdir(result);
-  console.log("finished build");
+  try {
+    const result = await ctx.rebuild();
+    await cleanup_outdir(result);
+    console.log("finished build");
+  } catch (err: unknown) {
+    console.error("build failed", err);
+  } finally {
+    if (!watch) {
+      await ctx.dispose();
+    }
+  }
 
-  if (!watch) {
-    await ctx.dispose();
-  } else {
+  if (watch) {
     console.log("watching for file changes");
+    let rebuildInFlight = false;
+    let pendingRebuild = false;
     const rebuild = debounce(() => {
+      if (rebuildInFlight) {
+        pendingRebuild = true;
+        return;
+      }
+      rebuildInFlight = true;
       console.log("starting rebuild");
       ctx
         .rebuild()
@@ -88,7 +101,14 @@ async function run_build(dev: boolean, watch: boolean) {
           console.log("finished rebuild");
         })
         .catch((err: unknown) => {
-          console.error(err);
+          console.error("rebuild failed", err);
+        })
+        .finally(() => {
+          rebuildInFlight = false;
+          if (pendingRebuild) {
+            pendingRebuild = false;
+            rebuild();
+          }
         });
     }, 200);
     chokidar
