@@ -57,7 +57,7 @@ mypy:
 # Run ty for Python type-checking.
 .PHONY: ty
 ty:
-	uv run --no-dev --group types ty check
+	uv run --no-dev --group types ty check --error-on-warning
 
 # Run tests.
 .PHONY: test test-js test-py test-py-old-deps
