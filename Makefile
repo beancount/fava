@@ -19,6 +19,11 @@ dev: .venv
 	uv run pre-commit install
 	touch -m .venv
 
+# Build the frontend in watch mode.
+.PHONY: watch
+watch: .venv frontend/node_modules
+	uv run watchfiles make frontend
+
 # Remove the generated frontend and translations in addition to mostlyclean (see below).
 .PHONY: clean
 clean: mostlyclean
