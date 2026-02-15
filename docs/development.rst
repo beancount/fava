@@ -35,8 +35,7 @@ lint``. There are further make targets defined, see the `Makefile` for details.
 After any changes to the Javascript code, you will need to re-build the
 frontend, which you can do by running ``make``. If you are working on the
 frontend code, you can e.g. use `entr` to rerun the build on file changes:
-``fd | entr -s make``, or on Debian based distros (Ubuntu, Mint, etc.)
-``fdfind | entr -s make``.
+``fd | entr -s make``.
 
 If you need a newer version of Beancount than the latest released one, you can
 install from source like so (more details `here
