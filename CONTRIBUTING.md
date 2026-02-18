@@ -16,7 +16,7 @@ beforehand to discuss it or just ask about it in the
 [chat](https://gitter.im/beancount/fava).
 
 Please contribute tests as well. See the `tests/` subdirectory for existing
-tests, which can be run with `make test` (requires `tox`).
+tests, which can be run with `make test`.
 
 ### Contributing translations
 
