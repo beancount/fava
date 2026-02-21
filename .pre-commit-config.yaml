@@ -3,7 +3,7 @@ ci:
   skip: ["eslint", "stylelint"]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.1
+    rev: v0.15.2
     hooks:
       - id: ruff-check
         args: ["--fix"]
@@ -16,7 +16,7 @@ repos:
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.4.2
+    rev: v2.4.4
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
@@ -30,8 +30,8 @@ repos:
         require_serial: true
         additional_dependencies:
           - "prettier@3.8.1"
-          - "prettier-plugin-svelte@3.4.1"
-          - "svelte@5.51.3"
+          - "prettier-plugin-svelte@3.5.0"
+          - "svelte@5.53.1"
       - id: stylelint
         name: stylelint
         language: node
