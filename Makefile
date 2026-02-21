@@ -147,7 +147,7 @@ before-release: bql-grammar translations-push translations-fetch
 # Extract translation strings.
 .PHONY: translations-extract
 translations-extract: .venv
-	uv run pybabel extract -F src/fava/translations/babel.conf -o src/fava/translations/messages.pot .
+	uv run pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=src/fava/translations/messages.pot .
 
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token

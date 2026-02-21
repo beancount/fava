@@ -123,6 +123,23 @@ where = ["src"]
 
 [tool.setuptools_scm]
 
+[tool.babel]
+[[tool.babel.mappings]]
+method = "python"
+pattern = "src/fava/**.py"
+[[tool.babel.mappings]]
+method = "jinja2"
+pattern = "src/fava/**/templates/**.html"
+extensions = "jinja2.ext.do,jinja2.ext.loopcontrols"
+[[tool.babel.mappings]]
+method = "javascript"
+pattern = "frontend/src/**.ts"
+keywords = "_"
+[[tool.babel.mappings]]
+method = "javascript"
+pattern = "frontend/src/**.svelte"
+keywords = "_"
+
 [tool.black]
 line-length = 79
 preview = true
