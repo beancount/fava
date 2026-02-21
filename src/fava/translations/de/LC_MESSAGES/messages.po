@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: Fava\n"
+"PO-Revision-Date: 2026-02-22 10:46+0000\n"
+"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/fava/fava/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
-"Project-Id-Version: Fava\n"
-"Language: de\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
@@ -561,7 +565,7 @@ msgstr "Einfaches Säulendiagramm"
 
 #: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
-msgstr "Leeres Diagramm"
+msgstr "Leeres Diagramm."
 
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Toggle metadata"
@@ -615,4 +619,3 @@ msgstr ""
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
 msgstr ""
-
