@@ -8,7 +8,7 @@ src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modu
 
 # Install the frontend node_modules dependencies.
 frontend/node_modules: frontend/package-lock.json
-	cd frontend; npm install --no-progress
+	cd frontend; npm install --no-save --no-progress
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
