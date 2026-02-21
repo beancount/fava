@@ -21,8 +21,9 @@ tests, which can be run with `make test`.
 ### Contributing translations
 
 You can contribute to Fava's translations at the
-[Fava project on POEditor.com](https://poeditor.com/join/project/TlraSxOCxt).
-All new contributors have to be approved by the maintainers, who do not
-automatically get notified, so please send an e-mail/chat on gitter/open an
-issue. Translations will be fetched manually by the maintainers from POEditor
-for updates.
+[Fava project on Weblate](https://hosted.weblate.org/projects/fava/fava/).
+Translations will be fetched manually by the maintainers from Weblate for
+updates.
+
+The translations were previously done on POEditor, if you contributed there,
+you'll now have to switch to Weblate.
