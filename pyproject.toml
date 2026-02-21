@@ -128,15 +128,12 @@ pattern = "src/fava/**.py"
 [[tool.babel.mappings]]
 method = "jinja2"
 pattern = "src/fava/**/templates/**.html"
-extensions = "jinja2.ext.do,jinja2.ext.loopcontrols"
 [[tool.babel.mappings]]
 method = "javascript"
 pattern = "frontend/src/**.ts"
-keywords = "_"
 [[tool.babel.mappings]]
-method = "javascript"
+method = "fava._babel:extract_svelte"
 pattern = "frontend/src/**.svelte"
-keywords = "_"
 
 [tool.black]
 line-length = 79
@@ -179,7 +176,11 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-omit = ["src/fava/beans/types.py", "src/fava/ext/auto_commit.py"]
+omit = [
+  "src/fava/_babel.py",
+  "src/fava/beans/types.py",
+  "src/fava/ext/auto_commit.py",
+]
 
 [tool.ruff]
 line-length = 79
