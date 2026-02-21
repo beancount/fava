@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: Fava\n"
+"PO-Revision-Date: 2026-02-22 10:46+0000\n"
+"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/fava/fava/sv/>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
-"Project-Id-Version: Fava\n"
-"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
@@ -494,7 +498,7 @@ msgstr "Transaktion"
 
 #: frontend/src/modals/AddEntry.svelte:43
 msgid "Add"
-msgstr "Lägg till:"
+msgstr "Lägg till"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
@@ -615,4 +619,3 @@ msgstr ""
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
 msgstr ""
-
