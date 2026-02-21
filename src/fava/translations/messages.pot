@@ -35,7 +35,7 @@ msgid "Chart is empty."
 msgstr ""
 
 #: frontend/src/editor/DeleteButton.svelte:11
-msgid "Deleting..."
+msgid "Deleting…"
 msgstr ""
 
 #: frontend/src/editor/DeleteButton.svelte:11
@@ -45,7 +45,7 @@ msgid "Delete"
 msgstr ""
 
 #: frontend/src/editor/SaveButton.svelte:14
-msgid "Saving..."
+msgid "Saving…"
 msgstr ""
 
 #: frontend/src/editor/SaveButton.svelte:14
@@ -471,7 +471,7 @@ msgid "Options"
 msgstr ""
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
-msgid "...enter a BQL query. 'help' to list available commands."
+msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
@@ -556,7 +556,7 @@ msgid "Time"
 msgstr ""
 
 #: frontend/src/sidebar/FilterForm.svelte:109
-msgid "Filter by tag, payee, ..."
+msgid "Filter by tag, payee, …"
 msgstr ""
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
