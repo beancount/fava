@@ -4,8 +4,8 @@ Fava is maintained by Dominik Aumayr and Jakob Schnitzer.
 See the Issue Tracker and the Git log for other contributors, e.g., with:
     git log --format='%aN' | sort -u
 
-Translations: The translations are maintained on POEditor. See the project
-there (https://poeditor.com/join/project/TlraSxOCxt) for details.
+Translations: The translations are maintained on Weblate. See the project
+there (https://hosted.weblate.org/projects/fava/fava/) for details.
 
 A big thank you goes to Martin Blais for creating Beancount and all the
 invaluable documentation for it.
