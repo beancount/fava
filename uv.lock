@@ -538,9 +538,6 @@ old-deps = [
 pre-commit = [
     { name = "pre-commit" },
 ]
-scripts = [
-    { name = "requests" },
-]
 test = [
     { name = "fava", extra = ["excel"] },
     { name = "pytest" },
@@ -606,7 +603,6 @@ old-deps = [
     { name = "setuptools" },
 ]
 pre-commit = [{ name = "pre-commit", specifier = ">=4" }]
-scripts = [{ name = "requests", specifier = ">=2" }]
 test = [
     { name = "fava", extras = ["excel"] },
     { name = "pytest", specifier = ">=8" },
