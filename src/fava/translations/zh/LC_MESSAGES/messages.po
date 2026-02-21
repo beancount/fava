@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
 "PO-Revision-Date: 2026-02-22 10:46+0000\n"
-"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/fava/fava/zh_Hans/>\n"
 "Language: zh\n"
@@ -411,8 +411,9 @@ msgstr "提交"
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
-msgstr "按住 Shift 键展开所有子集\n"
-"按住 Ctrl 或 Cmd 键并点击展开单层子集"
+msgstr ""
+"按住 Shift 键并点击以展开所有层级。\n"
+"按住 Ctrl 或 Cmd 键并点击以展开单层级。"
 
 #: frontend/src/modals/Export.svelte:13
 msgid "Export"
@@ -566,7 +567,7 @@ msgstr "条形图"
 
 #: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
-msgstr "图表为空."
+msgstr "图表为空。"
 
 #: frontend/src/journal/JournalFilters.svelte:43
 msgid "Toggle metadata"
@@ -603,20 +604,20 @@ msgstr "添加日记账条目"
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:83
 msgid "Move"
-msgstr ""
+msgstr "移动"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "忽略重复项"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
-msgstr ""
+msgstr "上传要导入的文件"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "配色方案"
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "冰柱图"
