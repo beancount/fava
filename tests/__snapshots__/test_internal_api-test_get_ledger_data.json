@@ -733,6 +733,7 @@
     "show_accounts_with_zero_balance": false,
     "show_accounts_with_zero_transactions": true,
     "show_closed_accounts": false,
+    "show_metadata_indicators": true,
     "sidebar_show_queries": 5,
     "unrealized": "Unrealized",
     "upcoming_events": 7,
