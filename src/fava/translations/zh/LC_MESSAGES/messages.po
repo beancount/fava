@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-22 10:46+0000\n"
+"PO-Revision-Date: 2026-02-23 11:09+0000\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/fava/fava/zh_Hans/>\n"
@@ -49,10 +49,8 @@ msgid "Chart is empty."
 msgstr "图表为空。"
 
 #: frontend/src/editor/DeleteButton.svelte:11
-#, fuzzy
-#| msgid "Deleting..."
 msgid "Deleting…"
-msgstr "正在删除..."
+msgstr "正在删除…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -61,8 +59,6 @@ msgid "Delete"
 msgstr "删除"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#, fuzzy
-#| msgid "Saving..."
 msgid "Saving…"
 msgstr "正在保存…"
 
@@ -191,16 +187,12 @@ msgid "Upload file(s)"
 msgstr "上传文件"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
 msgstr "文件"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents folder"
-msgstr "凭证文档"
+msgstr "凭证文档文件夹"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
@@ -235,7 +227,7 @@ msgstr "错误"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "该账户及其子账户所有条目的日记账"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
@@ -354,10 +346,8 @@ msgid "Event: %(type)s"
 msgstr "事件：%(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
-#, fuzzy
-#| msgid "Events"
 msgid "No events."
-msgstr "事件"
+msgstr "暂无事件。"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -423,11 +413,11 @@ msgstr "没有发现可供导入的文件。"
 
 #: frontend/src/reports/import/Import.svelte:148
 msgid "Importable Files"
-msgstr ""
+msgstr "可导入的文件"
 
 #: frontend/src/reports/import/Import.svelte:162
 msgid "Non-importable Files"
-msgstr ""
+msgstr "不可导入的文件"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
@@ -514,8 +504,6 @@ msgid "Options"
 msgstr "选项"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
-#, fuzzy
-#| msgid "...enter a BQL query. 'help' to list available commands."
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命令。"
 
@@ -602,8 +590,6 @@ msgid "Time"
 msgstr "时间"
 
 #: frontend/src/sidebar/FilterForm.svelte:109
-#, fuzzy
-#| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
 msgstr "筛选（标签，收款人等等）"
 
@@ -658,7 +644,7 @@ msgstr "展开所有"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
