@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
+"PO-Revision-Date: 2026-02-23 11:09+0000\n"
+"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/fava/fava/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -44,10 +48,8 @@ msgid "Chart is empty."
 msgstr "Le graphique est vide."
 
 #: frontend/src/editor/DeleteButton.svelte:11
-#, fuzzy
-#| msgid "Deleting..."
 msgid "Deleting…"
-msgstr "Suppression..."
+msgstr "Suppression…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -349,10 +351,8 @@ msgid "Event: %(type)s"
 msgstr "Événement :%(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
-#, fuzzy
-#| msgid "Events"
 msgid "No events."
-msgstr "Événements"
+msgstr "Pas d'événements."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
