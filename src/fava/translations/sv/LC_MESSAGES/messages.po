@@ -11,66 +11,333 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.16.1-dev\n"
 
+#: frontend/src/app.ts:84
+msgid "File change detected. Click to reload."
+msgstr "Filändring upptäckt. Klicka för att ladda om."
+
+#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/reports/import/Extract.svelte:100
+msgid "Previous"
+msgstr "Föregående"
+
+#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/reports/import/Extract.svelte:105
+msgid "Next"
+msgstr "Nästa"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:17
+msgid "At Cost"
+msgstr "Kostnad"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:19
+msgid "At Market Value"
+msgstr "Marknadsvärde"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:21
+#: frontend/src/reports/journal/JournalHeaders.svelte:53
+msgid "Units"
+msgstr "Enheter"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:23
+#, python-format
+msgid "Converted to %(currency)s"
+msgstr ""
+
+#: frontend/src/charts/HierarchyContainer.svelte:33
+msgid "Chart is empty."
+msgstr ""
+
+#: frontend/src/editor/DeleteButton.svelte:11
+msgid "Deleting…"
+msgstr ""
+
+#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:14
+#: frontend/src/reports/import/FileList.svelte:47
+msgid "Delete"
+msgstr "Radera"
+
+#: frontend/src/editor/SaveButton.svelte:14
+#, fuzzy
+#| msgid "Saving..."
+msgid "Saving…"
+msgstr "Sparar…"
+
+#: frontend/src/editor/SaveButton.svelte:14
+#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/reports/import/Extract.svelte:115
+msgid "Save"
+msgstr "Spara"
+
+#: frontend/src/editor/SliceEditor.svelte:102
+msgid "reload"
+msgstr ""
+
+#: frontend/src/entry-forms/AccountInput.svelte:24
+msgid "Should be one of the declared accounts"
+msgstr "Bör vara ett av de deklarerade kontona"
+
+#: frontend/src/entry-forms/AccountInput.svelte:39
+#: frontend/src/modals/DocumentUpload.svelte:192
+#: frontend/src/modals/EntryContextBalances.svelte:31
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:29
+#: frontend/src/reports/statistics/UpdateActivity.svelte:32
+#: frontend/src/sidebar/FilterForm.svelte:98
+msgid "Account"
+msgstr "Konto"
+
+#: frontend/src/entry-forms/AddMetadataButton.svelte:19
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
+#: frontend/src/entry-forms/EntryMetadata.svelte:54
+msgid "Add metadata"
+msgstr "Lägg till metadata"
+
+#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/statistics/UpdateActivity.svelte:39
+msgid "Balance"
+msgstr "Saldo"
+
+#: frontend/src/entry-forms/Balance.svelte:43
+msgid "Number"
+msgstr "Antal"
+
+#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:39
+msgid "Currency"
+msgstr "Valuta"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:29
+#: frontend/src/reports/options/OptionsTable.svelte:14
+msgid "Key"
+msgstr "Nyckel"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:40
+#: frontend/src/reports/options/OptionsTable.svelte:15
+msgid "Value"
+msgstr "Värde"
+
+#: frontend/src/entry-forms/Note.svelte:27
+#: frontend/src/modals/AddEntry.svelte:16
+msgid "Note"
+msgstr "Anteckning"
+
+#: frontend/src/entry-forms/Posting.svelte:100
+msgid "Amount"
+msgstr "Belopp"
+
+#: frontend/src/entry-forms/Transaction.svelte:111
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/reports/journal/JournalHeaders.svelte:51
+msgid "Payee"
+msgstr "Mottagare"
+
+#: frontend/src/entry-forms/Transaction.svelte:126
+#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/reports/journal/JournalHeaders.svelte:51
+msgid "Narration"
+msgstr "Beskrivning"
+
+#: frontend/src/entry-forms/Transaction.svelte:159
+#: frontend/src/reports/journal/JournalFilters.svelte:44
+msgid "Postings"
+msgstr "Poster"
+
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+msgid "Yearly"
+msgstr "Årligt"
+
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+msgid "Quarterly"
+msgstr "Kvartalsvis"
+
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+msgid "Monthly"
+msgstr "Månatligt"
+
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+msgid "Weekly"
+msgstr "Veckovis"
+
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+msgid "Daily"
+msgstr "Dagligt"
+
+#: frontend/src/modals/AddEntry.svelte:14
+msgid "Transaction"
+msgstr "Transaktion"
+
+#: frontend/src/modals/AddEntry.svelte:43
+msgid "Add"
+msgstr "Lägg till"
+
+#: frontend/src/modals/AddEntry.svelte:64
+msgid "continue"
+msgstr ""
+
+#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/EntryContextBalances.svelte:25
+msgid "Context"
+msgstr "Kontext"
+
+#: frontend/src/modals/DocumentUpload.svelte:167
+msgid "Upload file(s)"
+msgstr "Ladda upp fil(er)"
+
+#: frontend/src/modals/DocumentUpload.svelte:169
+#, fuzzy
+#| msgid "File"
+msgid "Files"
+msgstr "Fil"
+
+#: frontend/src/modals/DocumentUpload.svelte:184
+#, fuzzy
+#| msgid "Documents"
+msgid "Documents folder"
+msgstr "Dokument"
+
+#: frontend/src/modals/DocumentUpload.svelte:195
+#: frontend/src/reports/import/ImportFileUpload.svelte:35
+msgid "Upload"
+msgstr "Ladda upp"
+
+#: frontend/src/modals/EntryContextBalances.svelte:32
+msgid "Balances before entry"
+msgstr "Saldon innan inlägg"
+
+#: frontend/src/modals/EntryContextBalances.svelte:34
+msgid "Balances after entry"
+msgstr "Saldon efter inlägg"
+
+#: frontend/src/modals/EntryContextLocation.svelte:14
+msgid "Location"
+msgstr "Plats"
+
+#: frontend/src/modals/Export.svelte:13
+#: frontend/src/sidebar/AsideContents.svelte:73
+msgid "Export"
+msgstr "Exportera"
+
+#: frontend/src/modals/Export.svelte:15
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "Ladda ner filtrerade inlägg som en Beancount-fil"
+
+#: frontend/src/reports/errors/Errors.svelte:24
+#: frontend/src/reports/route.ts:102
+msgid "Error"
+msgstr "Fel"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr ""
+
+#: frontend/src/reports/accounts/AccountReport.svelte:57
+#: frontend/src/reports/accounts/AccountReport.svelte:60
+msgid "Account Journal"
+msgstr "Kontojournal"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: frontend/src/reports/accounts/AccountReport.svelte:69
+#: src/fava/json_api.py:785
+msgid "Changes"
+msgstr "Ändringar"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:75
+#: frontend/src/reports/accounts/AccountReport.svelte:78
+msgid "Balances"
+msgstr "Saldon"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:18
+#: frontend/src/reports/documents/Table.svelte:26
+#: frontend/src/reports/events/EventTable.svelte:14
+#: frontend/src/reports/journal/JournalHeaders.svelte:29
+msgid "Date"
+msgstr "Datum"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:19
+#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/journal/JournalHeaders.svelte:59
+msgid "Price"
+msgstr "Pris"
+
+#: frontend/src/reports/commodities/index.ts:32
+#: frontend/src/sidebar/AsideContents.svelte:46
+msgid "Commodities"
+msgstr "Handelsvaror"
+
+#: frontend/src/reports/documents/Documents.svelte:75
+msgid "Move or rename document"
+msgstr "Flytta eller byta dokument"
+
+#: frontend/src/reports/documents/Documents.svelte:80
+#: frontend/src/reports/import/FileList.svelte:84
+msgid "Move"
+msgstr ""
+
+#: frontend/src/reports/documents/Table.svelte:27
+msgid "Name"
+msgstr "Namn"
+
+#: frontend/src/reports/documents/index.ts:19
+#: frontend/src/sidebar/AsideContents.svelte:47
+msgid "Documents"
+msgstr "Dokument"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:42
+#: frontend/src/reports/errors/Errors.svelte:22
+msgid "File"
+msgstr "Fil"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:52
+msgid "Edit"
+msgstr "Redigera"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:56
+msgid "Align Amounts"
+msgstr "Justera belopp"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:62
+msgid "Toggle Comment (selection)"
+msgstr "Toggla kommentar (för markering)"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:68
+msgid "Open all folds"
+msgstr "Öppna alla sektioner"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:74
+msgid "Close all folds"
+msgstr "Stäng alla sektioner"
+
+#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/sidebar/AsideContents.svelte:57
+msgid "Editor"
+msgstr "Redigerare"
+
+#: frontend/src/reports/errors/Errors.svelte:23
+#: frontend/src/reports/import/Extract.svelte:121
+msgid "Line"
+msgstr "Linje"
+
+#: frontend/src/reports/errors/Errors.svelte:48
+#, python-format
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "Visa källa: %(file)s:%(lineno)s"
+
+#: frontend/src/reports/errors/Errors.svelte:75
+msgid "No errors."
+msgstr "Inga fel."
+
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
 msgstr "Fel"
 
-#: frontend/src/sidebar/FilterForm.svelte:82
-msgid "Time"
-msgstr "Tid"
-
-#: frontend/src/entry-forms/AccountInput.svelte:47
-#: frontend/src/modals/DocumentUpload.svelte:66
-#: frontend/src/reports/holdings/Holdings.svelte:25
-#: frontend/src/reports/holdings/Holdings.svelte:29
-#: frontend/src/sidebar/FilterForm.svelte:93
-#: src/fava/templates/statistics.html:26
-msgid "Account"
-msgstr "Konto"
-
-#: frontend/src/entry-forms/Transaction.svelte:110
-#: frontend/src/entry-forms/Transaction.svelte:113
-#: src/fava/templates/_journal_table.html:50
-msgid "Payee"
-msgstr "Mottagare"
-
-#: frontend/src/reports/tree_reports/index.ts:20
-msgid "Income Statement"
-msgstr "Resultaträkning"
-
-#: frontend/src/reports/tree_reports/index.ts:27
-#: frontend/src/sidebar/AsideContents.svelte:28
-msgid "Balance Sheet"
-msgstr "Balansräkning"
-
-#: frontend/src/reports/tree_reports/index.ts:34
-#: frontend/src/sidebar/AsideContents.svelte:29
-msgid "Trial Balance"
-msgstr "Råbalans"
-
-#: frontend/src/sidebar/AsideContents.svelte:30
-#: src/fava/templates/journal.html:5
-msgid "Journal"
-msgstr "Huvudbok"
-
-#: frontend/src/reports/holdings/Holdings.svelte:56
-#: frontend/src/reports/query/index.ts:5
-#: frontend/src/sidebar/AsideContents.svelte:31
-msgid "Query"
-msgstr "Uppslag"
-
-#: frontend/src/reports/holdings/Holdings.svelte:18
-#: frontend/src/reports/holdings/Holdings.svelte:20
-#: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
-msgid "Holdings"
-msgstr "Innehav"
-
-#: frontend/src/reports/commodities/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:46
-msgid "Commodities"
-msgstr "Handelsvaror"
+#: frontend/src/reports/events/EventTable.svelte:15
+msgid "Description"
+msgstr "Beskrivning"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
@@ -78,138 +345,23 @@ msgstr "Handelsvaror"
 msgid "Events"
 msgstr "Händelser"
 
-#: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
-msgid "Editor"
-msgstr "Redigerare"
-
-#: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
-msgid "Options"
-msgstr "Inställningar"
-
-#: frontend/src/sidebar/AsideContents.svelte:54
-#: src/fava/templates/statistics.html:6
-msgid "Statistics"
-msgstr "Statistik"
-
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Hjälp"
-
-#: frontend/src/reports/commodities/CommodityTable.svelte:18
-#: frontend/src/reports/documents/Table.svelte:26
-#: frontend/src/reports/events/EventTable.svelte:14
-#: src/fava/templates/_journal_table.html:48
-msgid "Date"
-msgstr "Datum"
-
-#: src/fava/templates/_journal_table.html:49
-msgid "F"
-msgstr "M"
-
-#: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: src/fava/templates/_journal_table.html:53
-msgid "Price"
-msgstr "Pris"
-
-#: src/fava/templates/_journal_table.html:52
-msgid "Cost"
-msgstr "Kostnad"
-
-#: src/fava/templates/_journal_table.html:52
-msgid "Change"
-msgstr "Ändra"
-
-#: frontend/src/entry-forms/Balance.svelte:29
-#: frontend/src/modals/AddEntry.svelte:15
-#: src/fava/templates/_journal_table.html:53
-#: src/fava/templates/statistics.html:30
-msgid "Balance"
-msgstr "Saldo"
-
-#: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
-#: frontend/src/reports/import/Extract.svelte:116
-msgid "Save"
-msgstr "Spara"
-
-#: frontend/src/editor/SaveButton.svelte:14
-msgid "Saving..."
-msgstr "Sparar…"
-
-#: frontend/src/main.ts:82
-msgid "File change detected. Click to reload."
-msgstr "Filändring upptäckt. Klicka för att ladda om."
-
-#: frontend/src/tree-table/AccountCellHeader.svelte:34
-msgid "Expand all accounts"
-msgstr "Expandera alla konton"
-
-#: frontend/src/tree-table/AccountCellHeader.svelte:39
-msgid "Expand all"
-msgstr "Expandera alla"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:46
-msgid "Account Journal"
-msgstr "Kontojournal"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:52
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: src/fava/json_api.py:722
-msgid "Changes"
-msgstr "Ändringar"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:61
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-msgid "Balances"
-msgstr "Saldon"
-
-#: frontend/src/reports/errors/Errors.svelte:48
-msgid "Show source %(file)s:%(lineno)s"
-msgstr "Visa källa: %(file)s:%(lineno)s"
-
-#: frontend/src/reports/editor/EditorMenu.svelte:43
-#: frontend/src/reports/errors/Errors.svelte:22
-msgid "File"
-msgstr "Fil"
-
-#: frontend/src/reports/errors/Errors.svelte:23
-#: frontend/src/reports/import/Extract.svelte:122
-msgid "Line"
-msgstr "Linje"
-
-#: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:93
-msgid "Error"
-msgstr "Fel"
-
-#: frontend/src/reports/errors/Errors.svelte:75
-msgid "No errors."
-msgstr "Inga fel."
-
 #: frontend/src/reports/events/Events.svelte:31
+#, python-format
 msgid "Event: %(type)s"
 msgstr "Händelse: %(type)s"
 
-#: frontend/src/reports/events/EventTable.svelte:15
-msgid "Description"
-msgstr "Beskrivning"
+#: frontend/src/reports/events/Events.svelte:37
+#, fuzzy
+#| msgid "Events"
+msgid "No events."
+msgstr "Händelser"
 
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Hjälpsidor"
-
-#: frontend/src/entry-forms/Balance.svelte:56
-#: frontend/src/reports/holdings/Holdings.svelte:35
-#: frontend/src/reports/holdings/Holdings.svelte:39
-msgid "Currency"
-msgstr "Valuta"
-
-#: frontend/src/reports/holdings/Holdings.svelte:45
-#: frontend/src/reports/holdings/Holdings.svelte:49
-msgid "Cost currency"
-msgstr "Valutakostnad"
+#: frontend/src/reports/holdings/Holdings.svelte:18
+#: frontend/src/reports/holdings/Holdings.svelte:20
+#: frontend/src/reports/holdings/index.ts:92
+#: frontend/src/sidebar/AsideContents.svelte:45
+msgid "Holdings"
+msgstr "Innehav"
 
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:28
@@ -220,176 +372,126 @@ msgstr "Valutakostnad"
 msgid "Holdings by"
 msgstr "Innehav av"
 
-#: frontend/src/stores/accounts.ts:109 src/fava/json_api.py:604
-#: src/fava/json_api.py:624
-msgid "Net Profit"
-msgstr "Nettoresultat"
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:49
+msgid "Cost currency"
+msgstr "Valutakostnad"
 
-#: src/fava/json_api.py:610
-msgid "Income"
-msgstr "Intäkter"
-
-#: src/fava/json_api.py:616
-msgid "Expenses"
-msgstr "Utgifter"
-
-#: frontend/src/entry-forms/EntryMetadata.svelte:29
-#: frontend/src/reports/options/OptionsTable.svelte:14
-msgid "Key"
-msgstr "Nyckel"
-
-#: frontend/src/entry-forms/EntryMetadata.svelte:39
-#: frontend/src/reports/options/OptionsTable.svelte:15
-msgid "Value"
-msgstr "Värde"
-
-#: frontend/src/reports/query/QueryLinks.svelte:21
-msgid "Download as"
-msgstr "Ladda ner som"
-
-#: src/fava/templates/statistics.html:12
-msgid "Postings per Account"
-msgstr "Poster per konto"
-
-#: src/fava/templates/statistics.html:80
-msgid "Total"
-msgstr "Total"
-
-#: src/fava/templates/statistics.html:20
-msgid "Update Activity"
-msgstr "Uppdatera aktivitet"
-
-#: src/fava/templates/statistics.html:21
-msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
-msgstr "Klicka för att kopiera balansdirektkiven för konotn (förutom de gröna) till urklipp."
-
-#: src/fava/templates/statistics.html:22
-msgid "Copy balance directives"
-msgstr "Kopiera balansdirektkiv"
-
-#: src/fava/templates/statistics.html:29
-msgid "Last Entry"
-msgstr "Senaste inlägg"
-
-#: src/fava/templates/statistics.html:62
-msgid "Entries per Type"
-msgstr "Inlägg per typ"
-
-#: src/fava/templates/statistics.html:66
-msgid "Type"
-msgstr "Typ"
-
-#: src/fava/templates/statistics.html:67
-msgid "# Entries"
-msgstr "Antal poster"
-
-#: frontend/src/entry-forms/Transaction.svelte:125
-#: frontend/src/entry-forms/Transaction.svelte:128
-#: src/fava/templates/_journal_table.html:50
-msgid "Narration"
-msgstr "Beskrivning"
-
-#: frontend/src/entry-forms/Balance.svelte:44
-msgid "Number"
-msgstr "Antal"
+#: frontend/src/reports/holdings/Holdings.svelte:56
+#: frontend/src/reports/query/index.ts:16
+#: frontend/src/reports/statistics/Statistics.svelte:24
+#: frontend/src/sidebar/AsideContents.svelte:31
+msgid "Query"
+msgstr "Uppslag"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:59
+#: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr "Importera"
 
-#: frontend/src/journal/JournalFilters.svelte:42
-msgid "Budget entries"
-msgstr "Budget-inlägg"
+#: frontend/src/reports/import/Extract.svelte:76
+msgid "ignore duplicate"
+msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:121
+#: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
 msgstr "Källkod"
 
-#: frontend/src/reports/import/FileList.svelte:94
+#: frontend/src/reports/import/FileList.svelte:95
+msgid "Continue"
+msgstr "Fortsätt"
+
+#: frontend/src/reports/import/FileList.svelte:95
 msgid "Extract"
 msgstr "Extrahera"
 
-#: frontend/src/reports/query/QueryEditor.svelte:19
-msgid "...enter a BQL query. 'help' to list available commands."
-msgstr "… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
+#: frontend/src/reports/import/FileList.svelte:104
+msgid "Clear"
+msgstr "Rensa"
 
-#: frontend/src/journal/JournalFilters.svelte:43
-msgid "Metadata"
-msgstr "Metadata"
+#: frontend/src/reports/import/Import.svelte:78
+msgid "Delete this file?"
+msgstr "Radera denna fil?"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:19
-#: frontend/src/entry-forms/EntryMetadata.svelte:52
-msgid "Add metadata"
-msgstr "Lägg till metadata"
+#: frontend/src/reports/import/Import.svelte:145
+msgid "No files were found for import."
+msgstr "Inga filer för import kunde hittas."
 
-#: frontend/src/entry-forms/Note.svelte:28
-#: frontend/src/modals/AddEntry.svelte:16
-msgid "Note"
-msgstr "Anteckning"
+#: frontend/src/reports/import/Import.svelte:148
+msgid "Importable Files"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:17
-msgid "Location"
-msgstr "Plats"
+#: frontend/src/reports/import/Import.svelte:162
+msgid "Non-importable Files"
+msgstr ""
 
-#: frontend/src/modals/Context.svelte:39
-#: frontend/src/modals/EntryContext.svelte:28
-msgid "Context"
-msgstr "Kontext"
+#: frontend/src/reports/import/ImportFileUpload.svelte:33
+msgid "Upload files for import"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:34
-msgid "Balances before entry"
-msgstr "Saldon innan inlägg"
+#: frontend/src/reports/journal/JournalFilters.svelte:8
+#, python-format
+msgid "Toggle %(type)s entries"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:54
-msgid "Balances after entry"
-msgstr "Saldon efter inlägg"
-
-#: frontend/src/journal/JournalFilters.svelte:25
+#: frontend/src/reports/journal/JournalFilters.svelte:25
 msgid "Cleared transactions"
 msgstr "Färdiga transaktioner"
 
-#: frontend/src/journal/JournalFilters.svelte:26
+#: frontend/src/reports/journal/JournalFilters.svelte:26
 msgid "Pending transactions"
 msgstr "Väntande transaktioner"
 
-#: frontend/src/journal/JournalFilters.svelte:27
+#: frontend/src/reports/journal/JournalFilters.svelte:27
 msgid "Other transactions"
 msgstr "Andra transaktioner"
 
-#: frontend/src/journal/JournalFilters.svelte:34
+#: frontend/src/reports/journal/JournalFilters.svelte:34
 msgid "Documents with a #discovered tag"
 msgstr "Dokument med etiketten #discovered"
 
-#: frontend/src/entry-forms/Transaction.svelte:155
-#: frontend/src/journal/JournalFilters.svelte:44
-msgid "Postings"
-msgstr "Poster"
+#: frontend/src/reports/journal/JournalFilters.svelte:38
+msgid "Documents with a #linked tag"
+msgstr "Dokument med etiketten #linked"
 
-#: frontend/src/modals/DocumentUpload.svelte:48
-msgid "Upload file(s)"
-msgstr "Ladda upp fil(er)"
+#: frontend/src/reports/journal/JournalFilters.svelte:42
+msgid "Budget entries"
+msgstr "Budget-inlägg"
 
-#: frontend/src/modals/DocumentUpload.svelte:70
-#: frontend/src/reports/import/ImportFileUpload.svelte:35
-msgid "Upload"
-msgstr "Ladda upp"
+#: frontend/src/reports/journal/JournalFilters.svelte:43
+msgid "Metadata"
+msgstr "Metadata"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:57
-msgid "Align Amounts"
-msgstr "Justera belopp"
+#: frontend/src/reports/journal/JournalFilters.svelte:43
+msgid "Toggle metadata"
+msgstr ""
 
-#: frontend/src/reports/editor/EditorMenu.svelte:63
-msgid "Toggle Comment (selection)"
-msgstr "Toggla kommentar (för markering)"
+#: frontend/src/reports/journal/JournalFilters.svelte:44
+msgid "Toggle postings"
+msgstr ""
 
-#: frontend/src/reports/editor/EditorMenu.svelte:69
-msgid "Open all folds"
-msgstr "Öppna alla sektioner"
+#: frontend/src/reports/journal/JournalHeaders.svelte:40
+msgid "F"
+msgstr "M"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:75
-msgid "Close all folds"
-msgstr "Stäng alla sektioner"
+#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:58
+msgid "Cost"
+msgstr "Kostnad"
+
+#: frontend/src/reports/journal/JournalHeaders.svelte:55
+msgid "Change"
+msgstr "Ändra"
+
+#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/sidebar/AsideContents.svelte:30
+msgid "Journal"
+msgstr "Huvudbok"
+
+#: frontend/src/reports/options/Options.svelte:13
+msgid "Color scheme"
+msgstr ""
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -403,72 +505,112 @@ msgstr "hjälp"
 msgid "Beancount options"
 msgstr "Beancount-inställningar"
 
-#: frontend/src/reports/query/QueryEditor.svelte:38
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
+msgid "Options"
+msgstr "Inställningar"
+
+#: frontend/src/reports/query/QueryEditor.svelte:21
+#, fuzzy
+#| msgid "...enter a BQL query. 'help' to list available commands."
+msgid "…enter a BQL query. 'help' to list available commands."
+msgstr ""
+"… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
+
+#: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
 msgstr "Skicka"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:23
-msgid "Hold Shift while clicking to expand all children.\n"
-"Hold Ctrl or Cmd while clicking to expand one level."
-msgstr "Håll inne Shift medan du klickar för att expandera alla undernivåer. \n"
-" Håll inne Ctrl eller Cmd medan du klickar för att expandera en nivå."
+#: frontend/src/reports/query/QueryLinks.svelte:21
+msgid "Download as"
+msgstr "Ladda ner som"
 
-#: frontend/src/modals/Export.svelte:13
-msgid "Export"
-msgstr "Exportera"
+#: frontend/src/reports/statistics/EntriesByType.svelte:14
+msgid "Type"
+msgstr "Typ"
 
-#: frontend/src/sidebar/FilterForm.svelte:104
-msgid "Filter by tag, payee, ..."
+#: frontend/src/reports/statistics/EntriesByType.svelte:15
+msgid "# Entries"
+msgstr "Antal poster"
+
+#: frontend/src/reports/statistics/EntriesByType.svelte:41
+msgid "Total"
+msgstr "Total"
+
+#: frontend/src/reports/statistics/Statistics.svelte:22
+msgid "Postings per Account"
+msgstr "Poster per konto"
+
+#: frontend/src/reports/statistics/Statistics.svelte:32
+msgid "Update Activity"
+msgstr "Uppdatera aktivitet"
+
+#: frontend/src/reports/statistics/Statistics.svelte:35
+msgid ""
+"Click to copy balance directives for accounts (except green ones) to the "
+"clipboard."
+msgstr ""
+"Klicka för att kopiera balansdirektkiven för konotn (förutom de gröna) till "
+"urklipp."
+
+#: frontend/src/reports/statistics/Statistics.svelte:40
+msgid "Copy balance directives"
+msgstr "Kopiera balansdirektkiv"
+
+#: frontend/src/reports/statistics/Statistics.svelte:47
+msgid "Entries per Type"
+msgstr "Inlägg per typ"
+
+#: frontend/src/reports/statistics/UpdateActivity.svelte:36
+msgid "Last Entry"
+msgstr "Senaste inlägg"
+
+#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/sidebar/AsideContents.svelte:54
+msgid "Statistics"
+msgstr "Statistik"
+
+#: frontend/src/reports/tree_reports/index.ts:38
+#: frontend/src/sidebar/AsideContents.svelte:27
+msgid "Income Statement"
+msgstr "Resultaträkning"
+
+#: frontend/src/reports/tree_reports/index.ts:49
+#: frontend/src/sidebar/AsideContents.svelte:28
+msgid "Balance Sheet"
+msgstr "Balansräkning"
+
+#: frontend/src/reports/tree_reports/index.ts:63
+#: frontend/src/sidebar/AsideContents.svelte:29
+msgid "Trial Balance"
+msgstr "Råbalans"
+
+#: frontend/src/sidebar/AccountSelector.svelte:22
+msgid "Go to account"
+msgstr "Gå till konto"
+
+#: frontend/src/sidebar/AsideContents.svelte:61
+msgid "Add Journal Entry"
+msgstr ""
+
+#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
+msgid "Help"
+msgstr "Hjälp"
+
+#: frontend/src/sidebar/FilterForm.svelte:87
+msgid "Time"
+msgstr "Tid"
+
+#: frontend/src/sidebar/FilterForm.svelte:109
+#, fuzzy
+#| msgid "Filter by tag, payee, ..."
+msgid "Filter by tag, payee, …"
 msgstr "Filtrera efter etikett, mottagare, …"
 
-#: frontend/src/modals/Export.svelte:15
-msgid "Download currently filtered entries as a Beancount file"
-msgstr "Ladda ner filtrerade inlägg som en Beancount-fil"
-
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:123
-msgid "Yearly"
-msgstr "Årligt"
-
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:143
-msgid "Quarterly"
-msgstr "Kvartalsvis"
-
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
-msgid "Monthly"
-msgstr "Månatligt"
-
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
-msgid "Weekly"
-msgstr "Veckovis"
-
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:215
-msgid "Daily"
-msgstr "Dagligt"
-
-#: frontend/src/reports/editor/EditorMenu.svelte:55
-msgid "Edit"
-msgstr "Redigera"
-
-#: frontend/src/entry-forms/Posting.svelte:101
-msgid "Amount"
-msgstr "Belopp"
-
-#: frontend/src/journal/JournalFilters.svelte:38
-msgid "Documents with a #linked tag"
-msgstr "Dokument med etiketten #linked"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:12
-msgid "At Cost"
-msgstr "Kostnad"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:14
-msgid "At Market Value"
-msgstr "Marknadsvärde"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:16
-#: src/fava/templates/_journal_table.html:51
-msgid "Units"
-msgstr "Enheter"
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
+#: src/fava/json_api.py:700
+msgid "Net Profit"
+msgstr "Nettoresultat"
 
 #: frontend/src/stores/chart.ts:28
 msgid "Treemap"
@@ -478,46 +620,9 @@ msgstr "Trädkarta"
 msgid "Sunburst"
 msgstr "Sunburst"
 
-#: frontend/src/entry-forms/AccountInput.svelte:32
-msgid "Should be one of the declared accounts"
-msgstr "Bör vara ett av de deklarerade kontona"
-
-#: frontend/src/charts/ChartSwitcher.svelte:25
-#: frontend/src/reports/import/Extract.svelte:101
-msgid "Previous"
-msgstr "Föregående"
-
-#: frontend/src/charts/ChartSwitcher.svelte:32
-#: frontend/src/reports/import/Extract.svelte:106
-msgid "Next"
-msgstr "Nästa"
-
-#: frontend/src/modals/AddEntry.svelte:14
-msgid "Transaction"
-msgstr "Transaktion"
-
-#: frontend/src/modals/AddEntry.svelte:43
-msgid "Add"
-msgstr "Lägg till"
-
-#: frontend/src/reports/documents/Documents.svelte:75
-msgid "Move or rename document"
-msgstr "Flytta eller byta dokument"
-
-#: frontend/src/reports/documents/Table.svelte:27
-msgid "Name"
-msgstr "Namn"
-
-#: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
-msgid "Documents"
-msgstr "Dokument"
-
-#: frontend/src/editor/DeleteButton.svelte:11
-#: frontend/src/editor/DeleteButton.svelte:14
-#: frontend/src/reports/import/FileList.svelte:47
-msgid "Delete"
-msgstr "Radera"
+#: frontend/src/stores/chart.ts:30
+msgid "Icicle"
+msgstr ""
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
@@ -527,34 +632,6 @@ msgstr "Linjediagram"
 msgid "Area chart"
 msgstr "Områdesdiagram"
 
-#: frontend/src/reports/import/FileList.svelte:94
-msgid "Continue"
-msgstr "Fortsätt"
-
-#: frontend/src/reports/import/FileList.svelte:103
-msgid "Clear"
-msgstr "Rensa"
-
-#: frontend/src/sidebar/AccountSelector.svelte:22
-msgid "Go to account"
-msgstr "Gå till konto"
-
-#: frontend/src/reports/import/Import.svelte:69
-msgid "Delete this file?"
-msgstr "Radera denna fil?"
-
-#: frontend/src/reports/import/Import.svelte:134
-msgid "No files were found for import."
-msgstr "Inga filer för import kunde hittas."
-
-#: frontend/src/journal/JournalFilters.svelte:8
-msgid "Toggle %(type)s entries"
-msgstr ""
-
-#: frontend/src/charts/ConversionAndInterval.svelte:18
-msgid "Converted to %(currency)s"
-msgstr ""
-
 #: frontend/src/stores/chart.ts:57
 msgid "Stacked Bars"
 msgstr ""
@@ -563,59 +640,42 @@ msgstr ""
 msgid "Single Bars"
 msgstr ""
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
-msgid "Chart is empty."
+#: frontend/src/tree-table/AccountCellHeader.svelte:23
+msgid ""
+"Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr ""
+"Håll inne Shift medan du klickar för att expandera alla undernivåer. \n"
+" Håll inne Ctrl eller Cmd medan du klickar för att expandera en nivå."
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:34
+msgid "Expand all accounts"
+msgstr "Expandera alla konton"
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:39
+msgid "Expand all"
+msgstr "Expandera alla"
+
+#: frontend/src/tree-table/TreeTable.svelte:41
+msgid "Other"
 msgstr ""
 
-#: frontend/src/journal/JournalFilters.svelte:43
-msgid "Toggle metadata"
-msgstr ""
-
-#: frontend/src/journal/JournalFilters.svelte:44
-msgid "Toggle postings"
-msgstr ""
-
-#: src/fava/internal_api.py:223
-msgid "Net Worth"
-msgstr ""
-
-#: src/fava/internal_api.py:172
+#: src/fava/internal_api.py:171
 msgid "Account Balance"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:96
-msgid "reload"
+#: src/fava/internal_api.py:219
+msgid "Net Worth"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "continue"
-msgstr ""
+#: src/fava/json_api.py:688
+msgid "Income"
+msgstr "Intäkter"
 
-#: frontend/src/editor/DeleteButton.svelte:11
-msgid "Deleting..."
-msgstr ""
+#: src/fava/json_api.py:694
+msgid "Expenses"
+msgstr "Utgifter"
 
-#: frontend/src/sidebar/AsideContents.svelte:61
-msgid "Add Journal Entry"
-msgstr ""
-
-#: frontend/src/reports/documents/Documents.svelte:80
-#: frontend/src/reports/import/FileList.svelte:83
-msgid "Move"
-msgstr ""
-
-#: frontend/src/reports/import/Extract.svelte:76
-msgid "ignore duplicate"
-msgstr ""
-
-#: frontend/src/reports/import/ImportFileUpload.svelte:33
-msgid "Upload files for import"
-msgstr ""
-
-#: frontend/src/reports/options/Options.svelte:13
-msgid "Color scheme"
-msgstr ""
-
-#: frontend/src/stores/chart.ts:30
-msgid "Icicle"
-msgstr ""
+#: src/fava/templates/help.html:8
+msgid "Help pages"
+msgstr "Hjälpsidor"
