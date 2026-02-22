@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-22 10:46+0000\n"
+"PO-Revision-Date: 2026-02-23 11:09+0000\n"
 "Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/fava/fava/de/>\n"
 "Language: de\n"
@@ -48,10 +48,8 @@ msgid "Chart is empty."
 msgstr "Leeres Diagramm."
 
 #: frontend/src/editor/DeleteButton.svelte:11
-#, fuzzy
-#| msgid "Deleting..."
 msgid "Deleting…"
-msgstr "Wird gelöscht..."
+msgstr "Wird gelöscht…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -60,8 +58,6 @@ msgid "Delete"
 msgstr "Entfernen"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#, fuzzy
-#| msgid "Saving..."
 msgid "Saving…"
 msgstr "Wird gespeichert …"
 
@@ -190,16 +186,12 @@ msgid "Upload file(s)"
 msgstr "Datei(en) hochladen"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "Datei"
+msgstr "Dateien"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents folder"
-msgstr "Dokumente"
+msgstr "Dokumentenordner"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
@@ -234,7 +226,7 @@ msgstr "Fehler"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "Journal aller Einträge für dieses Konto und Unterkonten"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
@@ -353,10 +345,8 @@ msgid "Event: %(type)s"
 msgstr "Ereignis: %(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
-#, fuzzy
-#| msgid "Events"
 msgid "No events."
-msgstr "Ereignisse"
+msgstr "Keine Ereignisse."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -422,11 +412,11 @@ msgstr "Keine Dateien zum Importieren gefunden."
 
 #: frontend/src/reports/import/Import.svelte:148
 msgid "Importable Files"
-msgstr ""
+msgstr "Importierbare Dateien"
 
 #: frontend/src/reports/import/Import.svelte:162
 msgid "Non-importable Files"
-msgstr ""
+msgstr "Nicht importierbare Dateien"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
@@ -493,7 +483,7 @@ msgstr "Journal"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "Farbschema"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -513,11 +503,8 @@ msgid "Options"
 msgstr "Optionen"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
-#, fuzzy
-#| msgid "...enter a BQL query. 'help' to list available commands."
 msgid "…enter a BQL query. 'help' to list available commands."
-msgstr ""
-"… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
+msgstr "… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
@@ -604,8 +591,6 @@ msgid "Time"
 msgstr "Zeitraum"
 
 #: frontend/src/sidebar/FilterForm.svelte:109
-#, fuzzy
-#| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
 msgstr "Filtern nach Markierung, Empfänger, …"
 
@@ -624,7 +609,7 @@ msgstr "Sunburst"
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "Icicle"
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
@@ -662,7 +647,7 @@ msgstr "Alle erweitern"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
