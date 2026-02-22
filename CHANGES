@@ -1,6 +1,16 @@
 Changelog
 =========
 
+v1.31 (unreleased)
+------------------
+
+This version drops support for Beancount version 2. See also the previous
+release - this mainly means you will have to switch importers to use beangulp.
+
+The translations for Fava are now maintained on Weblate
+(https://hosted.weblate.org/projects/fava/fava/) a hopefully more reliable
+and libre alternative to the previously used POEditor.
+
 v1.30 (2024-12-29)
 ------------------
 

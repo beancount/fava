@@ -146,7 +146,7 @@ class _LedgerSlugLoader:
                 # avoid loading it already loaded while waiting for the lock
                 if self._ledgers is None:  # pragma: no cover
                     self._ledgers = self._load()
-        return self._ledgers  # ty:ignore[invalid-return-type]
+        return self._ledgers
 
     @property
     def ledgers_by_slug(self) -> dict[str, FavaLedger]:

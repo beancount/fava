@@ -114,7 +114,7 @@ def test_group_entries(
     """
 
     assert len(load_doc_entries) == 3
-    data = example_ledger.group_entries_by_type(load_doc_entries)  # ty:ignore[missing-argument]
+    data = example_ledger.group_entries_by_type(load_doc_entries)
     assert data.Note == [load_doc_entries[2]]
     assert data.Transaction == load_doc_entries[0:2]
 

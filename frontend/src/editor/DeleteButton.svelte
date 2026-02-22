@@ -8,7 +8,7 @@
 
   let { deleting, onDelete }: Props = $props();
 
-  let buttonContent = $derived(deleting ? _("Deleting...") : _("Delete"));
+  let buttonContent = $derived(deleting ? _("Deleting…") : _("Delete"));
 </script>
 
 <button type="button" class="muted" onclick={onDelete} title={_("Delete")}>

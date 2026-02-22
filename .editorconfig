@@ -16,6 +16,6 @@ indent_size = 4
 [Makefile]
 indent_style = tab
 
-[*.{css,html,json,svelte,ts,yaml,js,mjs,cjs}]
+[*.{css,html,json,svelte,ts,yaml,js,mjs,cjs,toml}]
 indent_style = space
 indent_size = 2

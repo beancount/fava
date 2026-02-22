@@ -11,7 +11,7 @@
 
   let { changed, saving }: Props = $props();
 
-  let buttonContent = $derived(saving ? _("Saving...") : _("Save"));
+  let buttonContent = $derived(saving ? _("Saving…") : _("Save"));
 </script>
 
 <button

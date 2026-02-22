@@ -8,7 +8,7 @@ src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modu
 
 # Install the frontend node_modules dependencies.
 frontend/node_modules: frontend/package-lock.json
-	cd frontend; npm install --no-progress
+	cd frontend; npm install --no-save --no-progress
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
@@ -18,6 +18,11 @@ dev: .venv
 	uv sync
 	uv run pre-commit install
 	touch -m .venv
+
+# Build the frontend in watch mode.
+.PHONY: watch
+watch: .venv frontend/node_modules
+	uv run watchfiles make frontend
 
 # Remove the generated frontend and translations in addition to mostlyclean (see below).
 .PHONY: clean
@@ -57,7 +62,7 @@ mypy:
 # Run ty for Python type-checking.
 .PHONY: ty
 ty:
-	uv run --no-dev --group types ty check
+	uv run --no-dev --group types ty check --error-on-warning
 
 # Run tests.
 .PHONY: test test-js test-py test-py-old-deps
@@ -126,7 +131,7 @@ run-example:
 # Generate the bql-grammar json file used by the frontend.
 .PHONY: bql-grammar
 bql-grammar: .venv contrib/scripts.py
-	uv run --group scripts contrib/scripts.py generate-bql-grammar-json
+	uv run contrib/scripts.py generate-bql-grammar-json
 	-uv run pre-commit run --files frontend/src/codemirror/bql-grammar.ts
 
 # Build the distribution (sdist and wheel).
@@ -135,26 +140,14 @@ dist:
 	rm -f dist/*{.tar.gz,.whl}
 	uv build
 
-# Build the bql-grammar and update translations with POEditor.com
+# Build the bql-grammar and extract translation strings
 .PHONY: before-release
-before-release: bql-grammar translations-push translations-fetch
+before-release: bql-grammar translations-extract
 
 # Extract translation strings.
 .PHONY: translations-extract
 translations-extract: .venv
-	uv run pybabel extract -F src/fava/translations/babel.conf -o src/fava/translations/messages.pot .
-
-# Extract translation strings and upload them to POEditor.com.
-# Requires the environment variable POEDITOR_TOKEN to be set to an API token
-# for POEditor.
-.PHONY: translations-push
-translations-push: .venv translations-extract
-	uv run --group scripts contrib/scripts.py upload-translations
-
-# Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
-.PHONY: translations-fetch
-translations-fetch: .venv
-	uv run --group scripts contrib/scripts.py download-translations
+	uv run pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=src/fava/translations/messages.pot .
 
 # Create a binary using pyinstaller
 dist/fava: src/fava/static/app.js
