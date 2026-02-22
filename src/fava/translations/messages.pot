@@ -163,6 +163,11 @@ msgstr ""
 msgid "continue"
 msgstr ""
 
+#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/EntryContextBalances.svelte:25
+msgid "Context"
+msgstr ""
+
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
 msgstr ""
@@ -171,13 +176,13 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
+#: frontend/src/modals/DocumentUpload.svelte:184
+msgid "Documents folder"
+msgstr ""
+
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
-msgstr ""
-
-#: frontend/src/modals/EntryContextBalances.svelte:25
-msgid "Context"
 msgstr ""
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
@@ -193,6 +198,7 @@ msgid "Location"
 msgstr ""
 
 #: frontend/src/modals/Export.svelte:13
+#: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Export"
 msgstr ""
 
@@ -325,6 +331,10 @@ msgstr ""
 msgid "Event: %(type)s"
 msgstr ""
 
+#: frontend/src/reports/events/Events.svelte:37
+msgid "No events."
+msgstr ""
+
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
@@ -355,6 +365,7 @@ msgstr ""
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:59
+#: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr ""
 
@@ -384,6 +395,14 @@ msgstr ""
 
 #: frontend/src/reports/import/Import.svelte:145
 msgid "No files were found for import."
+msgstr ""
+
+#: frontend/src/reports/import/Import.svelte:148
+msgid "Importable Files"
+msgstr ""
+
+#: frontend/src/reports/import/Import.svelte:162
+msgid "Non-importable Files"
 msgstr ""
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
@@ -526,6 +545,7 @@ msgid "Statistics"
 msgstr ""
 
 #: frontend/src/reports/tree_reports/index.ts:38
+#: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Income Statement"
 msgstr ""
 
@@ -604,6 +624,10 @@ msgstr ""
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:39
 msgid "Expand all"
+msgstr ""
+
+#: frontend/src/tree-table/TreeTable.svelte:41
+msgid "Other"
 msgstr ""
 
 #: src/fava/internal_api.py:171

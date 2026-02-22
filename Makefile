@@ -1,9 +1,11 @@
 FRONTEND_SOURCES := $(shell find frontend/src frontend/css -type f)
+PY_SOURCES := $(shell find src/fava -name "*.py")
 
-all: src/fava/static/app.js
+all: src/fava/static/app.js src/fava/translations/messages.pot
 
 # Compile the frontend.
 src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
+src/fava/static/app.js: frontend/src/codemirror/bql-grammar.ts
 	cd frontend; npm run build
 
 # Install the frontend node_modules dependencies.
@@ -129,25 +131,19 @@ run-example:
 	BEANCOUNT_FILE= fava -p 3333 --debug tests/data/*.beancount
 
 # Generate the bql-grammar json file used by the frontend.
-.PHONY: bql-grammar
-bql-grammar: .venv contrib/scripts.py
+frontend/src/codemirror/bql-grammar.ts: .venv contrib/scripts.py
 	uv run contrib/scripts.py generate-bql-grammar-json
-	-uv run pre-commit run --files frontend/src/codemirror/bql-grammar.ts
+	-uv run pre-commit run biome-check --files $@
+
+# Extract translation strings.
+src/fava/translations/messages.pot: .venv $(PY_SOURCES) $(FRONTEND_SOURCES)
+	uv run pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=$@ .
 
 # Build the distribution (sdist and wheel).
 .PHONY: dist
 dist:
 	rm -f dist/*{.tar.gz,.whl}
 	uv build
-
-# Build the bql-grammar and extract translation strings
-.PHONY: before-release
-before-release: bql-grammar translations-extract
-
-# Extract translation strings.
-.PHONY: translations-extract
-translations-extract: .venv
-	uv run pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=src/fava/translations/messages.pot .
 
 # Create a binary using pyinstaller
 dist/fava: src/fava/static/app.js
