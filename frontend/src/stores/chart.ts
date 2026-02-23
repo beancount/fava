@@ -2,14 +2,119 @@ import { derived, writable } from "svelte/store";
 
 import { _ } from "../i18n.ts";
 import iso4217currencies from "../lib/iso4217.ts";
+import { parseJSON } from "../lib/json.ts";
 import { localStorageSyncedStore } from "../lib/store.ts";
 import type { ValidationT } from "../lib/validation.ts";
-import { array, constants, string } from "../lib/validation.ts";
+import { array, constants, record, string } from "../lib/validation.ts";
 import { conversion_currencies } from "./fava_options.ts";
 import { currencies_sorted } from "./index.ts";
 import { operating_currency } from "./options.ts";
 
-/** This store is used to switch to the same chart (as identified by name) on navigation. */
+/**
+ * Store that tracks the last active chart name per report.
+ * Maps report paths (e.g., "balance_sheet", "income_statement") to chart names.
+ * Uses a simple in-memory cache with localStorage persistence.
+ */
+function createLastActiveChartStore() {
+  const STORAGE_KEY = "fava-last-active-charts";
+  const validator = record(string);
+
+  // In-memory cache, lazily loaded from localStorage
+  let cache: Record<string, string> | null = null;
+
+  function loadCache(): Record<string, string> {
+    if (cache != null) {
+      return cache;
+    }
+    // Guard for test environment where localStorage may not exist
+    if (typeof localStorage === "undefined") {
+      cache = {};
+      return cache;
+    }
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored != null) {
+      const res = parseJSON(stored).and_then(validator);
+      if (res.is_ok) {
+        cache = res.value;
+        return cache;
+      }
+    }
+    cache = {};
+    return cache;
+  }
+
+  return {
+    /** Get the last active chart name for a report. */
+    get(report: string): string | undefined {
+      return loadCache()[report];
+    },
+    /** Set the last active chart name for a report. */
+    set(report: string, chartName: string): void {
+      const data = loadCache();
+      data[report] = chartName;
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+    },
+  };
+}
+
+/** Store that tracks the last active chart name per report. */
+export const lastActiveChartPerReport = createLastActiveChartStore();
+
+/**
+ * Store that tracks the last active chart mode per report.
+ * Maps report paths (e.g., "balance_sheet", "income_statement") to chart modes.
+ * Uses a simple in-memory cache with localStorage persistence.
+ */
+function createLastActiveChartModeStore() {
+  const STORAGE_KEY = "fava-last-active-chart-modes";
+  const validator = record(string);
+
+  // In-memory cache, lazily loaded from localStorage
+  let cache: Record<string, string> | null = null;
+
+  function loadCache(): Record<string, string> {
+    if (cache != null) {
+      return cache;
+    }
+    // Guard for test environment where localStorage may not exist
+    if (typeof localStorage === "undefined") {
+      cache = {};
+      return cache;
+    }
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored != null) {
+      const res = parseJSON(stored).and_then(validator);
+      if (res.is_ok) {
+        cache = res.value;
+        return cache;
+      }
+    }
+    cache = {};
+    return cache;
+  }
+
+  return {
+    /** Get the last active chart mode for a report. */
+    get(report: string): string | undefined {
+      return loadCache()[report];
+    },
+    /** Set the last active chart mode for a report. */
+    set(report: string, chartMode: string): void {
+      const data = loadCache();
+      data[report] = chartMode;
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+    },
+  };
+}
+
+/** Store that tracks the last active chart mode per report. */
+export const lastActiveChartModePerReport = createLastActiveChartModeStore();
+
+/** @deprecated Use lastActiveChartPerReport instead. Kept for backwards compatibility. */
 export const lastActiveChartName = writable<string | null>(null);
 
 const hierarchy_chart_mode_validator = constants(

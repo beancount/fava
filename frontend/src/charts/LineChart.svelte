@@ -7,6 +7,7 @@
 
   import { chartToggledCurrencies, lineChartMode } from "../stores/chart.ts";
   import { ctx, short } from "../stores/format.ts";
+  import { url_chart_mode } from "../stores/url.ts";
   import Axis from "./Axis.svelte";
   import { currenciesScale, includeZero, padExtent } from "./helpers.ts";
   import type { LineChart, LineChartDatum } from "./line.ts";
@@ -28,6 +29,17 @@
 
   let data = $derived(chart.filter($chartToggledCurrencies));
 
+  // URL chart_mode takes precedence over store value if it's a valid line mode
+  const valid_line_modes = ["line", "area"] as const;
+  let mode = $derived(
+    $url_chart_mode != null &&
+      valid_line_modes.includes(
+        $url_chart_mode as (typeof valid_line_modes)[number],
+      )
+      ? ($url_chart_mode as (typeof valid_line_modes)[number])
+      : $lineChartMode,
+  );
+
   // Scales and quadtree
   let allValues = $derived(data.flatMap((d) => d.values));
 
@@ -39,7 +51,7 @@
   let valueExtent = $derived(extent(allValues, (v) => v.value));
   // Include zero in area charts so the entire area is shown, not a cropped part of it
   let yExtent = $derived(
-    $lineChartMode === "area" ? includeZero(valueExtent) : valueExtent,
+    mode === "area" ? includeZero(valueExtent) : valueExtent,
   );
   // Span y-axis as max minus min value plus 5 percent margin
   let y = $derived(scaleLinear([innerHeight, 0]).domain(padExtent(yExtent)));
@@ -95,7 +107,7 @@
   >
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} />
-    {#if $lineChartMode === "area"}
+    {#if mode === "area"}
       <g class="area" filter={futureFilter}>
         {#each data as d (d.name)}
           <path d={areaShape(d.values)} fill={$currenciesScale(d.name)} />
@@ -107,7 +119,7 @@
         <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
       {/each}
     </g>
-    {#if $lineChartMode === "line"}
+    {#if mode === "line"}
       <g>
         {#each data as d (d.name)}
           <g fill={$currenciesScale(d.name)}>

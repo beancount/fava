@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { getUrlPath } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
-  import { lastActiveChartName } from "../stores/chart.ts";
-  import { show_charts } from "../stores/url.ts";
+  import { router } from "../router.ts";
+  import { lastActiveChartPerReport } from "../stores/chart.ts";
+  import { current_url, show_charts, url_chart } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
   import { chartContext } from "./context.ts";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
@@ -15,9 +17,36 @@
 
   let { charts }: Props = $props();
 
-  let active_chart = $derived(
-    charts.find((c) => c.label === $lastActiveChartName) ?? charts[0],
+  // Extract the report name from the current URL (e.g., "balance_sheet" from "/ledger/balance_sheet/")
+  let report_name = $derived.by(() => {
+    const path = getUrlPath($current_url);
+    if (path.is_ok) {
+      // Path is like "balance_sheet/" - extract the report name
+      const match = /^([^/]+)/.exec(path.value);
+      return match ? match[1] : null;
+    }
+    return null;
+  });
+
+  // Get the stored chart name for this report
+  let stored_chart_name = $derived(
+    report_name != null ? lastActiveChartPerReport.get(report_name) : undefined,
   );
+
+  // Prefer URL chart parameter if set, otherwise fall back to stored chart for this report
+  let active_chart = $derived(
+    charts.find((c) => c.label === $url_chart) ??
+      charts.find((c) => c.label === stored_chart_name) ??
+      charts[0],
+  );
+
+  // Sync active chart to URL when it doesn't match (e.g., on page load)
+  $effect(() => {
+    const label = active_chart?.label;
+    if (label != null && label !== $url_chart) {
+      router.set_search_param("chart", label);
+    }
+  });
 
   // Get the shortcut key for jumping to the previous chart.
   let shortcutPrevious = $derived((index: number): KeySpec | undefined => {
@@ -46,7 +75,15 @@
         class="unset"
         class:selected={chart === active_chart}
         onclick={() => {
-          $lastActiveChartName = chart.label;
+          const label = chart.label;
+          if (label == null) {
+            return;
+          }
+          const currentReport = report_name;
+          if (currentReport != null) {
+            lastActiveChartPerReport.set(currentReport, label);
+          }
+          router.set_search_param("chart", label);
         }}
         {@attach keyboardShortcut(shortcutPrevious(index))}
         {@attach keyboardShortcut(shortcutNext(index))}
