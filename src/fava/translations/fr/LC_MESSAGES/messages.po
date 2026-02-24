@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-23 11:09+0000\n"
-"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"PO-Revision-Date: 2026-02-25 22:09+0000\n"
+"Last-Translator: Théophile Roos <slashformotion@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/fava/fava/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -58,10 +58,8 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#, fuzzy
-#| msgid "Saving..."
 msgid "Saving…"
-msgstr "Sauvegarde…"
+msgstr "Enregistrement…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/modals/AddEntry.svelte:66
@@ -176,7 +174,7 @@ msgstr "Ajouter"
 
 #: frontend/src/modals/AddEntry.svelte:64
 msgid "continue"
-msgstr "Continuer"
+msgstr "continuer"
 
 #: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
 #: frontend/src/modals/EntryContextBalances.svelte:25
@@ -188,16 +186,12 @@ msgid "Upload file(s)"
 msgstr "Téléverser des fichiers"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "Fichier"
+msgstr "Fichiers"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents folder"
-msgstr "Documents"
+msgstr "Dossier des documents"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
@@ -232,7 +226,7 @@ msgstr "Erreur"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "Journal de toutes les entrées pour ce compte et sous-comptes"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
@@ -248,7 +242,7 @@ msgstr "Opérations"
 #: frontend/src/reports/accounts/AccountReport.svelte:75
 #: frontend/src/reports/accounts/AccountReport.svelte:78
 msgid "Balances"
-msgstr "Balances"
+msgstr "Soldes"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: frontend/src/reports/documents/Table.svelte:26
@@ -275,7 +269,7 @@ msgstr "Déplacer ou renommer le document"
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:84
 msgid "Move"
-msgstr ""
+msgstr "Déplacer"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
@@ -390,7 +384,7 @@ msgstr "Importer"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "Ignorer les doublons"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
@@ -418,15 +412,15 @@ msgstr "Aucun fichier à importer n'a été trouvé."
 
 #: frontend/src/reports/import/Import.svelte:148
 msgid "Importable Files"
-msgstr ""
+msgstr "Fichiers Importables"
 
 #: frontend/src/reports/import/Import.svelte:162
 msgid "Non-importable Files"
-msgstr ""
+msgstr "Fichiers non-importables"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
-msgstr ""
+msgstr "Importer des fichiers"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
@@ -489,7 +483,7 @@ msgstr "Journal"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "Thème"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -509,8 +503,6 @@ msgid "Options"
 msgstr "Options"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
-#, fuzzy
-#| msgid "...enter a BQL query. 'help' to list available commands."
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
 "… entrez une requête BQL. Utilisez ‘help’ pour voir les commandes "
@@ -590,7 +582,7 @@ msgstr "Aller au compte"
 
 #: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
-msgstr ""
+msgstr "Ajouter une entrée au journal"
 
 #: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
 msgid "Help"
@@ -601,8 +593,6 @@ msgid "Time"
 msgstr "Période"
 
 #: frontend/src/sidebar/FilterForm.svelte:109
-#, fuzzy
-#| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
 msgstr "Filtrer par étiquette, bénéficiaire, …"
 
@@ -621,7 +611,7 @@ msgstr "Anneaux"
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "Partition hiérarchique"
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
@@ -657,7 +647,7 @@ msgstr "Développer tout"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "Autre"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
