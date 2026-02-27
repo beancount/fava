@@ -1,7 +1,8 @@
 # Beancount Syntax
 
 Below is a short reference of the Beancount language syntax. Also see the full
-[Syntax Documentation](https://beancount.github.io/docs/beancount_language_syntax.html) and the
+[Syntax Documentation](https://beancount.github.io/docs/beancount_language_syntax.html)
+and the
 [Syntax Cheat Sheet](https://beancount.github.io/docs/beancount_cheat_sheet.html).
 
 Beancount defines a language in which financial transactions are entered into a
@@ -136,7 +137,8 @@ Automatic insertion of transaction to fulfill the following assertion:
 
 ### Options
 
-See the [Beancount Options Reference](https://beancount.github.io/docs/beancount_options_reference.html)
+See the
+[Beancount Options Reference](https://beancount.github.io/docs/beancount_options_reference.html)
 for the full list of supported options.
 
 <pre><textarea is="beancount-textarea">
