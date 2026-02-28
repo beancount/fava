@@ -1,6 +1,6 @@
 svg text {
   font-family: var(--font-family);
-  fill: var(--text-color-lightest);
+  fill: var(--text-color-chart);
 }
 
 .tooltip {
