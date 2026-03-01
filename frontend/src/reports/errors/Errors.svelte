@@ -42,10 +42,9 @@
       {#each sorted_errors as { message, source } (source ? `${source.filename}-${source.lineno.toString()}-${message}` : message)}
         <tr>
           {#if source}
-            {@const line = source.lineno}
             {@const title = format(_("Show source %(file)s:%(lineno)s"), {
               file: source.filename,
-              lineno: line.toString(),
+              lineno: source.lineno.toString(),
             })}
             <td>{source.filename}</td>
             <td class="num">

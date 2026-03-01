@@ -57,18 +57,8 @@ class MissingOptionError(ValueError):  # noqa: D101
         super().__init__("Custom entry is missing option name.")
 
 
-REMOVED_OPTIONS_REPLACEMENTS = {}
-
-
 class UnknownOptionError(ValueError):  # noqa: D101
     def __init__(self, key: str) -> None:
-        replacement = REMOVED_OPTIONS_REPLACEMENTS.get(key)
-        if replacement:
-            super().__init__(
-                f"Option `{key.replace('_', '-')}` was removed. "
-                f"Use `{replacement}` instead.",
-            )
-            return
         super().__init__(f"Unknown option `{key}`")
 
 
@@ -108,7 +98,6 @@ class FavaOptions:
     currency_column: int = 61
     default_file: str | None = None
     default_page: str = "income_statement/"
-    use_external_editor: bool = False
     fiscal_year_end: FiscalYearEnd = END_OF_YEAR
     import_config: str | None = None
     import_dirs: Sequence[str] = field(default_factory=list)
@@ -125,6 +114,7 @@ class FavaOptions:
     unrealized: str = "Unrealized"
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
+    use_external_editor: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""
