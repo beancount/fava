@@ -51,7 +51,7 @@
               <SourceLink
                 class_name="source"
                 file_path={source.filename}
-                {line}
+                line={source.lineno.toString()}
                 {title}
                 label={source.lineno.toString()}
               />

@@ -129,7 +129,7 @@ tatsu==5.7.4
     # via beanquery
 texttable==0.8.1
     # via pyexcel
-tomli==1.0.0
+tomli==2.0.0
     # via
     #   fava (pyproject.toml)
     #   pytest
