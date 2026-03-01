@@ -736,8 +736,8 @@
     "sidebar_show_queries": 5,
     "unrealized": "Unrealized",
     "upcoming_events": 7,
-    "use_external_editor": false,
-    "uptodate_indicator_grey_lookback_days": 60
+    "uptodate_indicator_grey_lookback_days": 60,
+    "use_external_editor": false
   },
   "have_excel": true,
   "incognito": false,
