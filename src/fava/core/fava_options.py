@@ -30,6 +30,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from re import Pattern
 
     from fava.beans.abc import Custom
+    from fava.config import FavaProjectConfig
     from fava.util.date import FiscalYearEnd
 
 
@@ -56,8 +57,18 @@ class MissingOptionError(ValueError):  # noqa: D101
         super().__init__("Custom entry is missing option name.")
 
 
+REMOVED_OPTIONS_REPLACEMENTS = {}
+
+
 class UnknownOptionError(ValueError):  # noqa: D101
     def __init__(self, key: str) -> None:
+        replacement = REMOVED_OPTIONS_REPLACEMENTS.get(key)
+        if replacement:
+            super().__init__(
+                f"Option `{key.replace('_', '-')}` was removed. "
+                f"Use `{replacement}` instead.",
+            )
+            return
         super().__init__(f"Unknown option `{key}`")
 
 
@@ -97,6 +108,7 @@ class FavaOptions:
     currency_column: int = 61
     default_file: str | None = None
     default_page: str = "income_statement/"
+    external_editor_command: list[str] | None = None
     fiscal_year_end: FiscalYearEnd = END_OF_YEAR
     import_config: str | None = None
     import_dirs: Sequence[str] = field(default_factory=list)
@@ -113,7 +125,6 @@ class FavaOptions:
     unrealized: str = "Unrealized"
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
-    use_external_editor: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""
@@ -180,6 +191,7 @@ class FavaOptions:
 
 _fields = fields(FavaOptions)
 All_OPTS = {f.name for f in _fields}
+BEANCOUNT_OPTS = All_OPTS - {"external_editor_command"}
 BOOL_OPTS = {f.name for f in _fields if str(f.type) == "bool"}
 INT_OPTS = {f.name for f in _fields if str(f.type) == "int"}
 TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
@@ -192,7 +204,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
 ) -> None:
     """Parse a single custom fava-option entry and set option accordingly."""
     key = str(entry.values[0].value).replace("-", "_")
-    if key not in All_OPTS:
+    if key not in BEANCOUNT_OPTS:
         raise UnknownOptionError(key)
 
     value = entry.values[1].value if len(entry.values) > 1 else ""
@@ -226,6 +238,8 @@ def parse_option_custom_entry(  # noqa: PLR0912
 
 def parse_options(
     custom_entries: Sequence[Custom],
+    *,
+    project_config: FavaProjectConfig | None = None,
 ) -> tuple[FavaOptions, list[OptionError]]:
     """Parse custom entries for Fava options.
 
@@ -235,6 +249,8 @@ def parse_options(
 
     Args:
         custom_entries: A list of Custom entries.
+        project_config: Parsed project config that can override supported
+            options.
 
     Returns:
         A tuple (options, errors) where options is a dictionary of all options
@@ -251,5 +267,10 @@ def parse_options(
         except (IndexError, TypeError, ValueError) as err:
             msg = f"Failed to parse fava-option entry: {err!s}"
             errors.append(OptionError(entry.meta, msg, entry))
+
+    if project_config is not None:
+        options.external_editor_command = (
+            project_config.external_editor_command
+        )
 
     return options, errors

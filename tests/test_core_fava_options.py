@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.config import FavaProjectConfig
 from fava.core.charts import dumps
 from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import InsertEntryOption
@@ -106,8 +107,46 @@ def test_fava_options_import_dirs(
     ]
 
 
+def test_fava_options_use_external_editor_unknown(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "use-external-editor" "true"
+    """
+    options, errors = parse_options(load_doc_custom_entries)
+
+    assert len(errors) == 1
+    assert options.external_editor_command is None
+    assert "Unknown option `use_external_editor`" in errors[0].message
+
+
+def test_fava_options_external_editor_command_unknown(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "external-editor-command"
+      "echo ${file}:${line}"
+    """
+    options, errors = parse_options(load_doc_custom_entries)
+
+    assert len(errors) == 1
+    assert options.external_editor_command is None
+    assert "Unknown option `external_editor_command`" in errors[0].message
+
+
 def test_fava_options_set_import_dirs() -> None:
     options = FavaOptions()
     options.set_import_dirs("/path/with spaces")
     options.set_import_dirs("/simple/path")
     assert list(options.import_dirs) == ["/path/with spaces", "/simple/path"]
+
+
+def test_fava_options_project_config() -> None:
+    options, errors = parse_options(
+        [],
+        project_config=FavaProjectConfig(
+            external_editor_command=["code", "-g", "${file}:${line}"]
+        ),
+    )
+    assert len(errors) == 0
+    assert options.external_editor_command == ["code", "-g", "${file}:${line}"]

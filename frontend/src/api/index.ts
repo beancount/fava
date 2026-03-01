@@ -72,6 +72,7 @@ type PutEndpoint =
   | "attach_document"
   | "format_source"
   | "move"
+  | "open_in_editor"
   | "source"
   | "source_slice"
   | "upload_import_file";
@@ -335,6 +336,8 @@ export const put_attach_document: Put<{
 }> = define_put_json("attach_document");
 export const put_format_source: Put<{ source: string }> =
   define_put_json("format_source");
+export const put_open_in_editor: Put<{ file_path: string; line: string }> =
+  define_put_json("open_in_editor");
 const put_move: Put<{
   filename: string;
   account: string;

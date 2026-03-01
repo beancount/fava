@@ -14,6 +14,7 @@ from fava.application import create_app
 from fava.application import static_url
 from fava.beans import create
 from fava.beans.funcs import hash_entry
+from fava.config import ProjectConfigError
 from fava.context import g
 from fava.core import StatementMetadataInvalidError
 from fava.core import StatementNotFoundError
@@ -290,6 +291,53 @@ def test_read_only_mode(test_data_dir: Path) -> None:
     ]:
         response = method("/any/path/")
         assert response.status_code == HTTPStatus.UNAUTHORIZED.value
+
+
+def test_start_with_valid_config_file(
+    test_data_dir: Path, tmp_path: Path
+) -> None:
+    """A valid config file is loaded at startup."""
+    config = tmp_path / "pyproject.toml"
+    config.write_text(
+        """
+[tool.fava]
+external-editor-command = ["echo", "${file}:${line}"]
+""".strip(),
+        encoding="utf-8",
+    )
+
+    app = create_app(
+        [test_data_dir / "example.beancount"],
+        config_file=str(config),
+        load=True,
+    )
+    assert app.config["LEDGERS"].ledgers[
+        0
+    ].fava_options.external_editor_command == [
+        "echo",
+        "${file}:${line}",
+    ]
+
+
+def test_start_with_invalid_config_file_fails(
+    test_data_dir: Path,
+    tmp_path: Path,
+) -> None:
+    """An invalid config file fails startup."""
+    config = tmp_path / "pyproject.toml"
+    config.write_text(
+        """
+[tool.fava]
+external-editor-command = "echo ${file}:${line}"
+""".strip(),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ProjectConfigError):
+        create_app(
+            [test_data_dir / "example.beancount"],
+            config_file=str(config),
+        )
 
 
 def test_download_journal(

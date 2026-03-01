@@ -81,14 +81,35 @@ export const urlForRaw = derived(
       urlForInternal($base_url, null, report, params),
 );
 
-/** URL for the editor to the source location of an entry. */
-export const urlForSource = derived(
+export interface SourceLink {
+  href: string;
+  mode: "command" | "internal";
+}
+
+/** Link target for the source location of an entry. */
+export const sourceLink = derived<
+  [typeof urlFor, typeof use_external_editor],
+  (file_path: string, line: string) => SourceLink
+>(
   [urlFor, use_external_editor],
   ([$urlFor, $use_external_editor]) =>
+    (file_path: string, line: string): SourceLink => {
+      if ($use_external_editor) {
+        return { href: "#", mode: "command" };
+      }
+      return {
+        href: $urlFor("editor/", { file_path, line }),
+        mode: "internal",
+      };
+    },
+);
+
+/** URL for the editor to the source location of an entry. */
+export const urlForSource = derived(
+  sourceLink,
+  ($sourceLink): ((file_path: string, line: string) => string) =>
     (file_path: string, line: string): string =>
-      $use_external_editor
-        ? `beancount://${file_path}?lineno=${line}`
-        : $urlFor("editor/", { file_path, line }),
+      $sourceLink(file_path, line).href,
 );
 
 /** URL for the account report (derived store to keep track of filter changes.). */

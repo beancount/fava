@@ -721,6 +721,7 @@
     "currency_column": 61,
     "default_file": null,
     "default_page": "income_statement/",
+    "external_editor_command": null,
     "fiscal_year_end": { "day": 31, "month": 12 },
     "import_config": null,
     "import_dirs": [],
@@ -736,8 +737,7 @@
     "sidebar_show_queries": 5,
     "unrealized": "Unrealized",
     "upcoming_events": 7,
-    "uptodate_indicator_grey_lookback_days": 60,
-    "use_external_editor": false
+    "uptodate_indicator_grey_lookback_days": 60
   },
   "have_excel": true,
   "incognito": false,

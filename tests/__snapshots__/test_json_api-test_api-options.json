@@ -59,7 +59,6 @@
     "sidebar-show-queries": "5",
     "unrealized": "'Unrealized'",
     "upcoming-events": "7",
-    "uptodate-indicator-grey-lookback-days": "60",
-    "use-external-editor": "False"
+    "uptodate-indicator-grey-lookback-days": "60"
   }
 }
