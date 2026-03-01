@@ -28,6 +28,7 @@
           {:then [{ slice, sha256sum }, codemirror_beancount]}
             <SliceEditor
               {entry_hash}
+              {entry}
               {slice}
               {sha256sum}
               {codemirror_beancount}
