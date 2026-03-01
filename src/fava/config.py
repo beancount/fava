@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from typing import List  # noqa: UP035
+from typing import Optional
 
 import tomli
 from dacite import Config
@@ -20,7 +22,7 @@ class ProjectConfigError(ValueError):
 class FavaProjectConfig:
     """Configuration loaded from ``[tool.fava]`` in ``pyproject.toml``."""
 
-    external_editor_command: list[str] | None = None
+    external_editor_command: Optional[List[str]] = None  # noqa: UP045,UP006
 
     @property
     def use_external_editor(self) -> bool:
@@ -80,5 +82,5 @@ def load_project_config(config_file: str | None) -> FavaProjectConfig:
             data=_normalize_keys(fava_data),
             config=Config(strict=True),
         )
-    except DaciteError as err:
+    except (DaciteError, AttributeError, TypeError) as err:
         raise ProjectConfigError(str(err)) from err
