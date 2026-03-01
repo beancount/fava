@@ -14,6 +14,8 @@ from fava.application import create_app
 from fava.application import static_url
 from fava.beans import create
 from fava.beans.funcs import hash_entry
+from fava.config import FavaProjectConfig
+from fava.config import load_project_config
 from fava.config import ProjectConfigError
 from fava.context import g
 from fava.core import StatementMetadataInvalidError
@@ -333,6 +335,57 @@ external-editor-command = "echo ${file}:${line}"
             [test_data_dir / "example.beancount"],
             config_file=str(config),
         )
+
+
+def test_load_project_config_without_tool_returns_default(
+    tmp_path: Path,
+) -> None:
+    config = tmp_path / "pyproject.toml"
+    config.write_text("[project]\nname = 'example'\n", encoding="utf-8")
+
+    loaded = load_project_config(str(config))
+
+    assert loaded == FavaProjectConfig()
+    assert not loaded.use_external_editor
+
+
+def test_load_project_config_without_tool_fava_returns_default(
+    tmp_path: Path,
+) -> None:
+    config = tmp_path / "pyproject.toml"
+    config.write_text("[tool]\n", encoding="utf-8")
+
+    loaded = load_project_config(str(config))
+
+    assert loaded == FavaProjectConfig()
+    assert not loaded.use_external_editor
+
+
+def test_load_project_config_invalid_tool_table(tmp_path: Path) -> None:
+    config = tmp_path / "pyproject.toml"
+    config.write_text("tool = 'invalid'\n", encoding="utf-8")
+
+    with pytest.raises(ProjectConfigError, match="`tool` must be a table"):
+        load_project_config(str(config))
+
+
+def test_load_project_config_invalid_tool_fava_table(tmp_path: Path) -> None:
+    config = tmp_path / "pyproject.toml"
+    config.write_text("[tool]\nfava = 'invalid'\n", encoding="utf-8")
+
+    with pytest.raises(
+        ProjectConfigError,
+        match=r"`tool\.fava` must be a table",
+    ):
+        load_project_config(str(config))
+
+
+def test_load_project_config_invalid_toml(tmp_path: Path) -> None:
+    config = tmp_path / "pyproject.toml"
+    config.write_text("[tool.fava\n", encoding="utf-8")
+
+    with pytest.raises(ProjectConfigError):
+        load_project_config(str(config))
 
 
 def test_download_journal(

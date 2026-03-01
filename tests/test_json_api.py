@@ -464,6 +464,26 @@ def test_api_open_in_editor_requires_command(
     )
 
 
+def test_api_open_in_editor_requires_project_config(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(ledger, "project_config", None)
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "No external editor command configured.",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
 def test_api_open_in_editor_executes_command(
     app: Flask,
     test_client: FlaskClient,
@@ -539,6 +559,30 @@ def test_api_open_in_editor_empty_command(
         ledger.project_config,
         "external_editor_command",
         [],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "Invalid external editor command: command is empty",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_open_in_editor_empty_command_executable(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["", "${file}:${line}"],
     )
 
     response = test_client.put(
