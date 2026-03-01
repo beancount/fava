@@ -104,14 +104,6 @@ export const sourceLink = derived<
     },
 );
 
-/** URL for the editor to the source location of an entry. */
-export const urlForSource = derived(
-  sourceLink,
-  ($sourceLink): ((file_path: string, line: string) => string) =>
-    (file_path: string, line: string): string =>
-      $sourceLink(file_path, line).href,
-);
-
 /** URL for the account report (derived store to keep track of filter changes.). */
 export const urlForAccount = derived(
   urlFor,
