@@ -473,7 +473,9 @@ def get_source() -> SourceFile:
 @api_endpoint
 def put_open_in_editor(file_path: str, line: str) -> str:
     """Execute the configured external editor command."""
-    command_template = g.ledger.fava_options.external_editor_command
+    command_template = None
+    if g.ledger.project_config is not None:
+        command_template = g.ledger.project_config.external_editor_command
     if command_template is None:
         raise ExternalEditorCommandMissingError
 

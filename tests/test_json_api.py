@@ -472,7 +472,7 @@ def test_api_open_in_editor_executes_command(
     ledger = app.config["LEDGERS"]["example"]
     file_path = ledger.options["include"][0]
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         ["echo", "${file}:${line}"],
     )
@@ -512,7 +512,7 @@ def test_api_open_in_editor_invalid_line(
     ledger = app.config["LEDGERS"]["example"]
     file_path = ledger.options["include"][0]
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         ["echo", "${file}:${line}"],
     )
@@ -536,7 +536,7 @@ def test_api_open_in_editor_empty_command(
     ledger = app.config["LEDGERS"]["example"]
     file_path = ledger.options["include"][0]
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         [],
     )
@@ -560,7 +560,7 @@ def test_api_open_in_editor_missing_variable(
     ledger = app.config["LEDGERS"]["example"]
     file_path = ledger.options["include"][0]
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         ["echo", "${missing}"],
     )
@@ -585,7 +585,7 @@ def test_api_open_in_editor_requires_file(
     ledger = app.config["LEDGERS"]["example"]
     monkeypatch.setitem(ledger.options, "include", [str(tmp_path)])
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         ["echo", "${file}:${line}"],
     )
@@ -609,7 +609,7 @@ def test_api_open_in_editor_command_failure(
     ledger = app.config["LEDGERS"]["example"]
     file_path = ledger.options["include"][0]
     monkeypatch.setattr(
-        ledger.fava_options,
+        ledger.project_config,
         "external_editor_command",
         ["echo", "${file}:${line}"],
     )

@@ -116,7 +116,7 @@ def test_fava_options_use_external_editor_unknown(
     options, errors = parse_options(load_doc_custom_entries)
 
     assert len(errors) == 1
-    assert options.external_editor_command is None
+    assert not options.use_external_editor
     assert "Unknown option `use_external_editor`" in errors[0].message
 
 
@@ -127,10 +127,9 @@ def test_fava_options_external_editor_command_unknown(
     2016-04-14 custom "fava-option" "external-editor-command"
       "echo ${file}:${line}"
     """
-    options, errors = parse_options(load_doc_custom_entries)
+    _options, errors = parse_options(load_doc_custom_entries)
 
     assert len(errors) == 1
-    assert options.external_editor_command is None
     assert "Unknown option `external_editor_command`" in errors[0].message
 
 
@@ -149,4 +148,4 @@ def test_fava_options_project_config() -> None:
         ),
     )
     assert len(errors) == 0
-    assert options.external_editor_command == ["code", "-g", "${file}:${line}"]
+    assert options.use_external_editor

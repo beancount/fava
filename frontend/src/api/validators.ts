@@ -62,7 +62,7 @@ const fava_options = object({
   insert_entry: array(
     object({ date: string, filename: string, lineno: number, re: string }),
   ),
-  external_editor_command: optional(array(string)),
+  use_external_editor: boolean,
 });
 
 /** Validator for the Beancount options that are used in the frontend. */

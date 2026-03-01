@@ -53,9 +53,7 @@ export const indent = derived(
 );
 export const use_external_editor = derived(
   fava_options,
-  ($fava_options) =>
-    $fava_options.external_editor_command != null &&
-    $fava_options.external_editor_command.length > 0,
+  ($fava_options) => $fava_options.use_external_editor,
 );
 export const auto_reload = derived(
   fava_options,

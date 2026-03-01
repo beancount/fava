@@ -108,7 +108,7 @@ class FavaOptions:
     currency_column: int = 61
     default_file: str | None = None
     default_page: str = "income_statement/"
-    external_editor_command: list[str] | None = None
+    use_external_editor: bool = False
     fiscal_year_end: FiscalYearEnd = END_OF_YEAR
     import_config: str | None = None
     import_dirs: Sequence[str] = field(default_factory=list)
@@ -191,7 +191,7 @@ class FavaOptions:
 
 _fields = fields(FavaOptions)
 All_OPTS = {f.name for f in _fields}
-BEANCOUNT_OPTS = All_OPTS - {"external_editor_command"}
+BEANCOUNT_OPTS = All_OPTS - {"use_external_editor"}
 BOOL_OPTS = {f.name for f in _fields if str(f.type) == "bool"}
 INT_OPTS = {f.name for f in _fields if str(f.type) == "int"}
 TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
@@ -269,8 +269,6 @@ def parse_options(
             errors.append(OptionError(entry.meta, msg, entry))
 
     if project_config is not None:
-        options.external_editor_command = (
-            project_config.external_editor_command
-        )
+        options.use_external_editor = project_config.use_external_editor
 
     return options, errors

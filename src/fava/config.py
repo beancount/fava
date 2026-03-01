@@ -22,6 +22,14 @@ class FavaProjectConfig:
 
     external_editor_command: list[str] | None = None
 
+    @property
+    def use_external_editor(self) -> bool:
+        """Whether external editor mode is enabled."""
+        return (
+            self.external_editor_command is not None
+            and len(self.external_editor_command) > 0
+        )
+
 
 def _kebab_to_snake(key: str) -> str:
     return key.replace("-", "_")
