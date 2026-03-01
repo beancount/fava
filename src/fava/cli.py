@@ -130,14 +130,19 @@ def main(  # noqa: PLR0913
         raise NoFileSpecifiedError
 
     from fava.application import create_app
+    from fava.config import ProjectConfigError
 
-    app = create_app(
-        all_filenames,
-        config_file=config_file,
-        incognito=incognito,
-        read_only=read_only,
-        poll_watcher=poll_watcher,
-    )
+    try:
+        app = create_app(
+            all_filenames,
+            config_file=config_file,
+            incognito=incognito,
+            read_only=read_only,
+            poll_watcher=poll_watcher,
+        )
+    except ProjectConfigError as error:
+        msg = f"Failed to load config file: {error!s}"
+        raise click.UsageError(msg) from error
 
     if prefix:
         from werkzeug.middleware.dispatcher import DispatcherMiddleware
