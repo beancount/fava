@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-22 10:46+0000\n"
+"PO-Revision-Date: 2026-03-01 08:08+0000\n"
 "Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/fava/fava/sv/>\n"
 "Language: sv\n"
@@ -514,8 +514,7 @@ msgstr "Inställningar"
 #, fuzzy
 #| msgid "...enter a BQL query. 'help' to list available commands."
 msgid "…enter a BQL query. 'help' to list available commands."
-msgstr ""
-"… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
+msgstr "… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
