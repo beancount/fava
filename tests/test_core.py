@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
+from uromyces._convert import beancount_entries
 
 from fava.beans.funcs import hash_entry
 from fava.core import EntryNotFoundForHashError
@@ -35,9 +36,8 @@ def test_filtered_ledger(
 ) -> None:
     filtered = FilteredLedger(small_example_ledger, account="NONE")
     assert not filtered.entries
-    assert (
-        filtered.entries_with_all_prices
-        == small_example_ledger.all_entries_by_type.Price
+    assert (filtered.entries_with_all_prices) == beancount_entries(
+        small_example_ledger.all_entries_by_type.Price  # type: ignore[arg-type]
     )
     assert filtered.prices("EUR", "USD")
     assert filtered.prices("UNKNOWN1", "UNKNOWN2") == []

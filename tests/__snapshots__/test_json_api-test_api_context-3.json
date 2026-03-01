@@ -4,13 +4,15 @@
   "entry": {
     "account": "Expenses:Food:Alcohol",
     "booking": null,
-    "currencies": null,
+    "currencies": [],
     "date": "1980-05-12",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 5057
     },
-    "t": "Open"
+    "t": "Open",
+    "tags": []
   }
 }

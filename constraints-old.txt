@@ -13,6 +13,7 @@ beancount==3.2.0
     #   fava (pyproject.toml)
     #   beangulp
     #   beanquery
+    #   uromyces
 beangulp==0.2.0
     # via fava (pyproject.toml)
 beanquery==0.1.0
@@ -30,6 +31,7 @@ click==8.0.1
     #   beangulp
     #   beanquery
     #   flask
+    #   uromyces
 et-xmlfile==1.0.0
     # via openpyxl
 exceptiongroup==1.0.0
@@ -136,11 +138,15 @@ sniffio==1.1.0
     # via anyio
 tatsu==5.7.4
     # via beanquery
+tatsu-lts==5.12.2
+    # via uromyces
 texttable==0.8.1
     # via pyexcel
 tomli==1.0.0
     # via pytest
 typing-extensions==4.5.0
+    # via fava (pyproject.toml)
+uromyces==0.0.2
     # via fava (pyproject.toml)
 watchfiles==0.20.0
     # via fava (pyproject.toml)

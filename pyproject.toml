@@ -42,6 +42,7 @@ dependencies = [
   "ply>=3.4",
   "simplejson>=3.16.0,<4",
   "typing-extensions>=4.5; python_version<\"3.12\"",
+  "uromyces",
   "watchfiles>=0.20.0",
 ]
 dynamic = ["version"]
@@ -115,6 +116,11 @@ constraint-dependencies = [
   "setuptools>=67",
   "six>=1.16",
 ]
+
+[tool.uv.sources]
+# Uncomment these lines to install development versions of uromyces
+# uromyces = { path = "../uromyces", editable = true }
+# uromyces = { git = "ssh://git@github.com/yagebu/uromyces" }
 
 [tool.setuptools.packages.find]
 where = ["src"]

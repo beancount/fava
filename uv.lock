@@ -496,6 +496,7 @@ dependencies = [
     { name = "ply" },
     { name = "simplejson" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
+    { name = "uromyces" },
     { name = "watchfiles" },
     { name = "werkzeug" },
 ]
@@ -573,6 +574,7 @@ requires-dist = [
     { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.5" },
     { name = "simplejson", specifier = ">=3.16.0,<4" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.5" },
+    { name = "uromyces" },
     { name = "watchfiles", specifier = ">=0.20.0" },
     { name = "werkzeug", specifier = ">=2.2,<4" },
 ]
@@ -2046,6 +2048,24 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
+]
+
+[[package]]
+name = "uromyces"
+version = "0.0.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beancount" },
+    { name = "click" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7f/67/431424a36b88b598a1f6ca48f5e313bafe3e3a00cb5141d7d8b37b5d4fae/uromyces-0.0.4.tar.gz", hash = "sha256:78610c7d427081de623af127e663034b65a6c3748def1b118e29a4425339621e", size = 274301, upload-time = "2026-02-21T10:12:04.503Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9d/71/60c1ec85143733644fee15d292fff7dee4cefa3c79d48674edfc04788796/uromyces-0.0.4-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:d08ffffcba59ca9878e81a85f9476ebe532175d93648d0970273cc79caf66c9c", size = 1518004, upload-time = "2026-02-21T10:12:01.537Z" },
+    { url = "https://files.pythonhosted.org/packages/74/b5/35db7ae6b56f86d2bb22a91facbf6866349ab5bc409757b3025d03f0f2c8/uromyces-0.0.4-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:4a617673d69145687a53237bc6f1425b5a6250c88149cf90aeff4f06547a6001", size = 1450524, upload-time = "2026-02-21T10:12:09.378Z" },
+    { url = "https://files.pythonhosted.org/packages/91/e1/8d6d617fb7198e0bd35b60b61be631abe9d87cfea11e87cfd75448d25a38/uromyces-0.0.4-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:87b48c2aada6ac42c0c9d5ff18f7ee42501453544b7186e2df8560ab701c9146", size = 1608735, upload-time = "2026-02-21T10:12:06.504Z" },
+    { url = "https://files.pythonhosted.org/packages/23/16/3b40db3489d183787cc38118453bab4047c46bf3b61d19e3d7e79a458713/uromyces-0.0.4-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:0ecc4e07b8a7cec2ab328022a30e47ddf3b82bcc9879decbeed84e3bfd931230", size = 1626443, upload-time = "2026-02-21T10:12:03.036Z" },
+    { url = "https://files.pythonhosted.org/packages/27/43/6420a71aab5473c1175f0c9dad47a869959c866315d135bfa938d127a60f/uromyces-0.0.4-cp310-abi3-win_amd64.whl", hash = "sha256:626b78fdd8200bb3ab7fb51a6bbdf656f973ee7fed4d6e4dfc0dc505cb0d85c3", size = 1308651, upload-time = "2026-02-21T10:12:07.532Z" },
+    { url = "https://files.pythonhosted.org/packages/64/f3/c0f8b143b2f1e3462e65e822a8b359966a9061a16b6b18cdfc267cdcbf6d/uromyces-0.0.4-cp310-abi3-win_arm64.whl", hash = "sha256:e35ad620f6af985e8a3b69ee7e33702793a9377343b7b397977d260964f13892", size = 1244752, upload-time = "2026-02-21T10:12:05.545Z" },
 ]
 
 [[package]]
