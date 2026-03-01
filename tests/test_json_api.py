@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import datetime
+import subprocess
 from difflib import Differ
 from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
+from shutil import which
 from typing import Any
+from typing import cast
 from typing import TYPE_CHECKING
 
 import pytest
@@ -442,6 +445,191 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     )
     err_msg = assert_api_error(response)
     assert "Trying to read a non-source file" in err_msg
+
+
+def test_api_open_in_editor_requires_command(
+    app: Flask, test_client: FlaskClient
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "No external editor command configured.",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_open_in_editor_executes_command(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "${file}:${line}"],
+    )
+
+    calls: list[list[str]] = []
+
+    def fake_check_call(args: list[str], *_: Any, **__: Any) -> None:
+        calls.append(args)
+
+    monkeypatch.setattr(subprocess, "check_call", fake_check_call)
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "42"},
+    )
+    assert_api_success(response)
+    assert calls == [[which("echo"), f"{file_path}:42"]]
+
+    other_path = Path(file_path).parent / "not_included.beancount"
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": str(other_path), "line": "1"},
+    )
+    assert_api_error(
+        response,
+        f"Not a Beancount source file: '{other_path}'.",
+        HTTPStatus.BAD_REQUEST,
+    )
+    assert len(calls) == 1
+
+
+def test_api_open_in_editor_invalid_line(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "${file}:${line}"],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "not-a-number"},
+    )
+    assert_api_error(
+        response,
+        "Invalid external editor command: line must be an integer",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_open_in_editor_empty_command(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        [],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "Invalid external editor command: command is empty",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_open_in_editor_missing_variable(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "${missing}"],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "Invalid external editor command: missing variable 'missing'",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_open_in_editor_requires_file(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    monkeypatch.setitem(ledger.options, "include", [str(tmp_path)])
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "${file}:${line}"],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": str(tmp_path), "line": "10"},
+    )
+    assert_api_error(
+        response,
+        f"Not a file: '{tmp_path}'",
+        HTTPStatus.UNPROCESSABLE_ENTITY,
+    )
+
+
+def test_api_open_in_editor_command_failure(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "${file}:${line}"],
+    )
+
+    def fake_check_call(*_: Any, **__: Any) -> None:
+        raise subprocess.CalledProcessError(
+            1, [cast("str", which("echo"))], stderr="boom"
+        )
+
+    monkeypatch.setattr(subprocess, "check_call", fake_check_call)
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "Failed to run external editor command: boom.",
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+    )
 
 
 def test_api_get_source_slice_unprocessable(test_client: FlaskClient) -> None:

@@ -201,14 +201,25 @@ that are three levels deep).
 
 ______________________________________________________________________
 
-## `use-external-editor`
+## `external-editor-command`
 
-Default: `false`
+Default: Not set
 
-If `true`, instead of using the internal editor, the `beancount://` URL scheme
-is used. See the
-[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-details.
+Configure this in `pyproject.toml` under `[tool.fava]` and start Fava with
+`--config-file`.
+
+If set, Fava executes this command on the server when clicking source links. The
+value must be a list of command arguments. Use `${file}` and `${line}`
+placeholders to point your editor to the right location.
+
+Example:
+
+```toml
+[tool.fava]
+external-editor-command = ["code", "-r", "-g", "${file}:${line}"]
+```
+
+Paths are validated against the currently loaded Beancount files.
 
 ______________________________________________________________________
 
