@@ -3,79 +3,79 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-03-02 20:01+0000\n"
+"Last-Translator: kdm1jkm <me@kdm1jkm.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Translate Toolkit 3.19.2\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
-msgstr ""
+msgstr "파일 변경이 감지되었습니다. 클릭하여 새로고침하세요."
 
 #: frontend/src/charts/ChartSwitcher.svelte:26
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
-msgstr ""
+msgstr "이전"
 
 #: frontend/src/charts/ChartSwitcher.svelte:33
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
-msgstr ""
+msgstr "다음"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "At Cost"
-msgstr ""
+msgstr "취득 원가"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Market Value"
-msgstr ""
+msgstr "시장 가치"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:21
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
-msgstr ""
+msgstr "수량"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:23
 #, python-format
 msgid "Converted to %(currency)s"
-msgstr ""
+msgstr "%(currency)s(으)로 환산"
 
 #: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
-msgstr ""
+msgstr "차트가 비어 있습니다."
 
 #: frontend/src/editor/DeleteButton.svelte:11
 msgid "Deleting…"
-msgstr ""
+msgstr "삭제 중…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
 #: frontend/src/reports/import/FileList.svelte:47
 msgid "Delete"
-msgstr ""
+msgstr "삭제"
 
 #: frontend/src/editor/SaveButton.svelte:14
 msgid "Saving…"
-msgstr ""
+msgstr "저장 중…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/modals/AddEntry.svelte:66
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
-msgstr ""
+msgstr "저장"
 
 #: frontend/src/editor/SliceEditor.svelte:102
 msgid "reload"
-msgstr ""
+msgstr "새로고침"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
-msgstr ""
+msgstr "선언된 계정 중 하나여야 합니다"
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
 #: frontend/src/modals/DocumentUpload.svelte:192
@@ -85,120 +85,121 @@ msgstr ""
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
 #: frontend/src/sidebar/FilterForm.svelte:98
 msgid "Account"
-msgstr ""
+msgstr "계정"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
 #: frontend/src/entry-forms/EntryMetadata.svelte:53
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
-msgstr ""
+msgstr "메타데이터 추가"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:15
 #: frontend/src/reports/journal/JournalHeaders.svelte:56
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
-msgstr ""
+msgstr "잔액"
 
 #: frontend/src/entry-forms/Balance.svelte:43
 msgid "Number"
-msgstr ""
+msgstr "금액"
 
 #: frontend/src/entry-forms/Balance.svelte:54
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
-msgstr ""
+msgstr "통화"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:29
 #: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
-msgstr ""
+msgstr "키"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:40
 #: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 #: frontend/src/entry-forms/Note.svelte:27
 #: frontend/src/modals/AddEntry.svelte:16
 msgid "Note"
-msgstr ""
+msgstr "비고"
 
 #: frontend/src/entry-forms/Posting.svelte:100
 msgid "Amount"
-msgstr ""
+msgstr "금액"
 
 #: frontend/src/entry-forms/Transaction.svelte:111
 #: frontend/src/entry-forms/Transaction.svelte:113
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
-msgstr ""
+msgstr "거래처"
 
 #: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/entry-forms/Transaction.svelte:128
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
-msgstr ""
+msgstr "적요"
 
 #: frontend/src/entry-forms/Transaction.svelte:159
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
-msgstr ""
+msgstr "분개"
 
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
 msgid "Yearly"
-msgstr ""
+msgstr "연도별"
 
 #: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
 msgid "Quarterly"
-msgstr ""
+msgstr "연도별"
 
 #: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
 msgid "Monthly"
-msgstr ""
+msgstr "월별"
 
 #: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
 msgid "Weekly"
-msgstr ""
+msgstr "주별"
 
 #: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
 msgid "Daily"
-msgstr ""
+msgstr "일별"
 
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Transaction"
-msgstr ""
+msgstr "거래"
 
 #: frontend/src/modals/AddEntry.svelte:43
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 #: frontend/src/modals/AddEntry.svelte:64
 msgid "continue"
-msgstr ""
+msgstr "계속 추가"
 
 #: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
 #: frontend/src/modals/EntryContextBalances.svelte:25
+#, fuzzy
 msgid "Context"
-msgstr ""
+msgstr "관련 내역"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
-msgstr ""
+msgstr "파일(들) 업로드"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
 msgid "Files"
-msgstr ""
+msgstr "파일"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
 msgid "Documents folder"
-msgstr ""
+msgstr "문서 폴더"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
-msgstr ""
+msgstr "업로드"
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
 msgid "Balances before entry"
@@ -206,134 +207,134 @@ msgstr ""
 
 #: frontend/src/modals/EntryContextBalances.svelte:34
 msgid "Balances after entry"
-msgstr ""
+msgstr "거래 반영 후 잔액"
 
 #: frontend/src/modals/EntryContextLocation.svelte:14
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 #: frontend/src/modals/Export.svelte:13
 #: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Export"
-msgstr ""
+msgstr "내보내기"
 
 #: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
-msgstr ""
+msgstr "현재 필터가 적용된 항목을 Beancount 파일로 다운로드"
 
 #: frontend/src/reports/errors/Errors.svelte:24
 #: frontend/src/reports/route.ts:102
 msgid "Error"
-msgstr ""
+msgstr "오류"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "거래"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr ""
+msgstr "계정 거래 내역"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
 #: src/fava/json_api.py:785
 msgid "Changes"
-msgstr ""
+msgstr "변동"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:75
 #: frontend/src/reports/accounts/AccountReport.svelte:78
 msgid "Balances"
-msgstr ""
+msgstr "잔액"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: frontend/src/reports/documents/Table.svelte:26
 #: frontend/src/reports/events/EventTable.svelte:14
 #: frontend/src/reports/journal/JournalHeaders.svelte:29
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
 #: frontend/src/reports/journal/JournalHeaders.svelte:56
 #: frontend/src/reports/journal/JournalHeaders.svelte:59
 msgid "Price"
-msgstr ""
+msgstr "가격"
 
 #: frontend/src/reports/commodities/index.ts:32
 #: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
-msgstr ""
+msgstr "통화/자산"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
-msgstr ""
+msgstr "문서 이동/이름 변경"
 
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:84
 msgid "Move"
-msgstr ""
+msgstr "이동"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: frontend/src/reports/documents/index.ts:19
 #: frontend/src/sidebar/AsideContents.svelte:47
 msgid "Documents"
-msgstr ""
+msgstr "문서"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:42
 #: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
-msgstr ""
+msgstr "파일"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:52
 msgid "Edit"
-msgstr ""
+msgstr "수정"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:56
 msgid "Align Amounts"
-msgstr ""
+msgstr "금액 정렬"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Toggle Comment (selection)"
-msgstr ""
+msgstr "선택 항목의 코멘트 표시 전환"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Open all folds"
-msgstr ""
+msgstr "모두 펼치기"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Close all folds"
-msgstr ""
+msgstr "모두 접기"
 
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
-msgstr ""
+msgstr "편집기"
 
 #: frontend/src/reports/errors/Errors.svelte:23
 #: frontend/src/reports/import/Extract.svelte:121
 msgid "Line"
-msgstr ""
+msgstr "행"
 
 #: frontend/src/reports/errors/Errors.svelte:48
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
-msgstr ""
+msgstr "소스 보기 %(file)s:%(lineno)s"
 
 #: frontend/src/reports/errors/Errors.svelte:75
 msgid "No errors."
-msgstr ""
+msgstr "오류 없음."
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
-msgstr ""
+msgstr "오류"
 
 #: frontend/src/reports/events/EventTable.svelte:15
 msgid "Description"
-msgstr ""
+msgstr "설명"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
