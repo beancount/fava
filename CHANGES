@@ -11,6 +11,9 @@ The translations for Fava are now maintained on Weblate
 (https://hosted.weblate.org/projects/fava/fava/) a hopefully more reliable
 and libre alternative to the previously used POEditor.
 
+The `unrealized` fava-option was removed, use the corresponding Beancount
+option `account_unrealized_gains` instead.
+
 v1.30 (2024-12-29)
 ------------------
 

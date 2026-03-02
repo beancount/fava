@@ -224,13 +224,11 @@ class Tree(dict[str, TreeNode]):
 
         return net_profit.get(account_name)
 
-    def cap(self, options: BeancountOptions, unrealized_account: str) -> None:
+    def cap(self, options: BeancountOptions) -> None:
         """Transfer Income and Expenses, add conversions and unrealized gains.
 
         Args:
             options: The Beancount options.
-            unrealized_account: The name of the account to post unrealized
-                gains to (as a subaccount of Equity).
         """
         equity = options["name_equity"]
         conversions = CounterInventory(
@@ -248,10 +246,11 @@ class Tree(dict[str, TreeNode]):
             conversions,
         )
 
+        unrealized_gains = -self.get("").balance_children
         # Insert unrealized gains.
         self.insert(
-            equity + ":" + unrealized_account,
-            -self.get("").balance_children,
+            equity + ":" + options["account_unrealized_gains"],
+            unrealized_gains,
         )
 
         # Transfer Income and Expenses
