@@ -1,72 +1,340 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: Fava\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: Fava\n"
-"Language: fa\n"
+
+#: frontend/src/app.ts:84
+msgid "File change detected. Click to reload."
+msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
+
+#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/reports/import/Extract.svelte:100
+msgid "Previous"
+msgstr "قبلی"
+
+#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/reports/import/Extract.svelte:105
+msgid "Next"
+msgstr "بعدی"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:17
+msgid "At Cost"
+msgstr "با قیمت"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:19
+msgid "At Market Value"
+msgstr "در ارزش بازار"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:21
+#: frontend/src/reports/journal/JournalHeaders.svelte:53
+msgid "Units"
+msgstr "واحدها"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:23
+#, python-format
+msgid "Converted to %(currency)s"
+msgstr ""
+
+#: frontend/src/charts/HierarchyContainer.svelte:33
+msgid "Chart is empty."
+msgstr ""
+
+#: frontend/src/editor/DeleteButton.svelte:11
+msgid "Deleting…"
+msgstr ""
+
+#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:14
+#: frontend/src/reports/import/FileList.svelte:47
+msgid "Delete"
+msgstr "حذف"
+
+#: frontend/src/editor/SaveButton.svelte:14
+#, fuzzy
+#| msgid "Saving..."
+msgid "Saving…"
+msgstr "پس انداز..."
+
+#: frontend/src/editor/SaveButton.svelte:14
+#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/reports/import/Extract.svelte:115
+msgid "Save"
+msgstr "ذخیره"
+
+#: frontend/src/editor/SliceEditor.svelte:102
+msgid "reload"
+msgstr ""
+
+#: frontend/src/entry-forms/AccountInput.svelte:24
+msgid "Should be one of the declared accounts"
+msgstr "باید یکی از حساب های اعلام شده باشد"
+
+#: frontend/src/entry-forms/AccountInput.svelte:39
+#: frontend/src/modals/DocumentUpload.svelte:192
+#: frontend/src/modals/EntryContextBalances.svelte:31
+#: frontend/src/reports/holdings/Holdings.svelte:25
+#: frontend/src/reports/holdings/Holdings.svelte:29
+#: frontend/src/reports/statistics/UpdateActivity.svelte:32
+#: frontend/src/sidebar/FilterForm.svelte:98
+msgid "Account"
+msgstr "حساب‌ کاربری"
+
+#: frontend/src/entry-forms/AddMetadataButton.svelte:19
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
+#: frontend/src/entry-forms/EntryMetadata.svelte:54
+msgid "Add metadata"
+msgstr "افزودن‌متاداده"
+
+#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/statistics/UpdateActivity.svelte:39
+msgid "Balance"
+msgstr "تراز"
+
+#: frontend/src/entry-forms/Balance.svelte:43
+msgid "Number"
+msgstr "شماره"
+
+#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/reports/holdings/Holdings.svelte:35
+#: frontend/src/reports/holdings/Holdings.svelte:39
+msgid "Currency"
+msgstr "واحد‌ارز"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:29
+#: frontend/src/reports/options/OptionsTable.svelte:14
+msgid "Key"
+msgstr "کلید"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:40
+#: frontend/src/reports/options/OptionsTable.svelte:15
+msgid "Value"
+msgstr "مقدار"
+
+#: frontend/src/entry-forms/Note.svelte:27
+#: frontend/src/modals/AddEntry.svelte:16
+msgid "Note"
+msgstr "یادداشت"
+
+#: frontend/src/entry-forms/Posting.svelte:100
+msgid "Amount"
+msgstr "میزان"
+
+#: frontend/src/entry-forms/Transaction.svelte:111
+#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/reports/journal/JournalHeaders.svelte:51
+msgid "Payee"
+msgstr "دریافت کننده"
+
+#: frontend/src/entry-forms/Transaction.svelte:126
+#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/reports/journal/JournalHeaders.svelte:51
+msgid "Narration"
+msgstr "توصیف"
+
+#: frontend/src/entry-forms/Transaction.svelte:159
+#: frontend/src/reports/journal/JournalFilters.svelte:44
+msgid "Postings"
+msgstr "پست‌ها"
+
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+msgid "Yearly"
+msgstr "سالانه"
+
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+msgid "Quarterly"
+msgstr "سه‌ماهه"
+
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+msgid "Monthly"
+msgstr "ماهانه"
+
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+msgid "Weekly"
+msgstr "هفتگی"
+
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+msgid "Daily"
+msgstr "روزانه"
+
+#: frontend/src/modals/AddEntry.svelte:14
+msgid "Transaction"
+msgstr "تراکنش"
+
+#: frontend/src/modals/AddEntry.svelte:43
+msgid "Add"
+msgstr "افزودن"
+
+#: frontend/src/modals/AddEntry.svelte:64
+msgid "continue"
+msgstr ""
+
+#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/EntryContextBalances.svelte:25
+msgid "Context"
+msgstr "متن‌"
+
+#: frontend/src/modals/DocumentUpload.svelte:167
+msgid "Upload file(s)"
+msgstr "آپلودفایل‌(ها)"
+
+#: frontend/src/modals/DocumentUpload.svelte:169
+#, fuzzy
+#| msgid "File"
+msgid "Files"
+msgstr "فایل"
+
+#: frontend/src/modals/DocumentUpload.svelte:184
+#, fuzzy
+#| msgid "Documents"
+msgid "Documents folder"
+msgstr "اسناد"
+
+#: frontend/src/modals/DocumentUpload.svelte:195
+#: frontend/src/reports/import/ImportFileUpload.svelte:35
+msgid "Upload"
+msgstr "آپلود"
+
+#: frontend/src/modals/EntryContextBalances.svelte:32
+msgid "Balances before entry"
+msgstr "ترازقبل‌ازورود"
+
+#: frontend/src/modals/EntryContextBalances.svelte:34
+msgid "Balances after entry"
+msgstr "ترازبعدازورود"
+
+#: frontend/src/modals/EntryContextLocation.svelte:14
+msgid "Location"
+msgstr "محل"
+
+#: frontend/src/modals/Export.svelte:13
+#: frontend/src/sidebar/AsideContents.svelte:73
+msgid "Export"
+msgstr "صادر‌کردن"
+
+#: frontend/src/modals/Export.svelte:15
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
+
+#: frontend/src/reports/errors/Errors.svelte:24
+#: frontend/src/reports/route.ts:102
+msgid "Error"
+msgstr "خطا"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr ""
+
+#: frontend/src/reports/accounts/AccountReport.svelte:57
+#: frontend/src/reports/accounts/AccountReport.svelte:60
+msgid "Account Journal"
+msgstr "مجله‌حساب"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: frontend/src/reports/accounts/AccountReport.svelte:69
+#: src/fava/json_api.py:785
+msgid "Changes"
+msgstr "تغییرات"
+
+#: frontend/src/reports/accounts/AccountReport.svelte:75
+#: frontend/src/reports/accounts/AccountReport.svelte:78
+msgid "Balances"
+msgstr "ترازها"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:18
+#: frontend/src/reports/documents/Table.svelte:26
+#: frontend/src/reports/events/EventTable.svelte:14
+#: frontend/src/reports/journal/JournalHeaders.svelte:29
+msgid "Date"
+msgstr "تاریخ"
+
+#: frontend/src/reports/commodities/CommodityTable.svelte:19
+#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/journal/JournalHeaders.svelte:59
+msgid "Price"
+msgstr "قیمت"
+
+#: frontend/src/reports/commodities/index.ts:32
+#: frontend/src/sidebar/AsideContents.svelte:46
+msgid "Commodities"
+msgstr "کالا ها"
+
+#: frontend/src/reports/documents/Documents.svelte:75
+msgid "Move or rename document"
+msgstr "انتقال یا تغییر نام سند"
+
+#: frontend/src/reports/documents/Documents.svelte:80
+#: frontend/src/reports/import/FileList.svelte:84
+msgid "Move"
+msgstr ""
+
+#: frontend/src/reports/documents/Table.svelte:27
+msgid "Name"
+msgstr "نام"
+
+#: frontend/src/reports/documents/index.ts:19
+#: frontend/src/sidebar/AsideContents.svelte:47
+msgid "Documents"
+msgstr "اسناد"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:42
+#: frontend/src/reports/errors/Errors.svelte:22
+msgid "File"
+msgstr "فایل"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:52
+msgid "Edit"
+msgstr "ویرایش"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:56
+msgid "Align Amounts"
+msgstr "هماهنگ‌کردن‌تعداد"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:62
+msgid "Toggle Comment (selection)"
+msgstr "تغییر‌نظر(انتخاب)"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:68
+msgid "Open all folds"
+msgstr "بازکردن‌همه‌چینه‌ها"
+
+#: frontend/src/reports/editor/EditorMenu.svelte:74
+msgid "Close all folds"
+msgstr "بستن‌همه‌چینه‌ها"
+
+#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/sidebar/AsideContents.svelte:57
+msgid "Editor"
+msgstr "ویرایشگر"
+
+#: frontend/src/reports/errors/Errors.svelte:23
+#: frontend/src/reports/import/Extract.svelte:121
+msgid "Line"
+msgstr "خط"
+
+#: frontend/src/reports/errors/Errors.svelte:48
+#, fuzzy, python-format
+#| msgid "Show source %(file)s:%(lineno)s"
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
+
+#: frontend/src/reports/errors/Errors.svelte:75
+msgid "No errors."
+msgstr "بدون خطا."
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
 msgstr "خطا‌ها"
 
-#: frontend/src/sidebar/FilterForm.svelte:82
-msgid "Time"
-msgstr "زمان"
-
-#: frontend/src/entry-forms/AccountInput.svelte:47
-#: frontend/src/modals/DocumentUpload.svelte:66
-#: frontend/src/reports/holdings/Holdings.svelte:25
-#: frontend/src/reports/holdings/Holdings.svelte:29
-#: frontend/src/sidebar/FilterForm.svelte:93
-#: src/fava/templates/statistics.html:26
-msgid "Account"
-msgstr "حساب‌ کاربری"
-
-#: frontend/src/entry-forms/Transaction.svelte:110
-#: frontend/src/entry-forms/Transaction.svelte:113
-#: src/fava/templates/_journal_table.html:50
-msgid "Payee"
-msgstr "دریافت کننده"
-
-#: frontend/src/reports/tree_reports/index.ts:20
-msgid "Income Statement"
-msgstr "صورت حساب درآمد"
-
-#: frontend/src/reports/tree_reports/index.ts:27
-#: frontend/src/sidebar/AsideContents.svelte:28
-msgid "Balance Sheet"
-msgstr "ترازنامه"
-
-#: frontend/src/reports/tree_reports/index.ts:34
-#: frontend/src/sidebar/AsideContents.svelte:29
-msgid "Trial Balance"
-msgstr "تراز‌نامه ‌آزمایشی"
-
-#: frontend/src/sidebar/AsideContents.svelte:30
-#: src/fava/templates/journal.html:5
-msgid "Journal"
-msgstr "مجله"
-
-#: frontend/src/reports/holdings/Holdings.svelte:56
-#: frontend/src/reports/query/index.ts:5
-#: frontend/src/sidebar/AsideContents.svelte:31
-msgid "Query"
-msgstr "پرس ‌و ‌جو"
-
-#: frontend/src/reports/holdings/Holdings.svelte:18
-#: frontend/src/reports/holdings/Holdings.svelte:20
-#: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
-msgid "Holdings"
-msgstr "دارایی‌ ها"
-
-#: frontend/src/reports/commodities/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:46
-msgid "Commodities"
-msgstr "کالا ها"
+#: frontend/src/reports/events/EventTable.svelte:15
+msgid "Description"
+msgstr "توضیحات"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
@@ -74,138 +342,23 @@ msgstr "کالا ها"
 msgid "Events"
 msgstr "رویداد ها"
 
-#: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
-msgid "Editor"
-msgstr "ویرایشگر"
-
-#: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
-msgid "Options"
-msgstr "گزینه‌ ها"
-
-#: frontend/src/sidebar/AsideContents.svelte:54
-#: src/fava/templates/statistics.html:6
-msgid "Statistics"
-msgstr "آمار"
-
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "راهنما"
-
-#: frontend/src/reports/commodities/CommodityTable.svelte:18
-#: frontend/src/reports/documents/Table.svelte:26
-#: frontend/src/reports/events/EventTable.svelte:14
-#: src/fava/templates/_journal_table.html:48
-msgid "Date"
-msgstr "تاریخ"
-
-#: src/fava/templates/_journal_table.html:49
-msgid "F"
-msgstr "F"
-
-#: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: src/fava/templates/_journal_table.html:53
-msgid "Price"
-msgstr "قیمت"
-
-#: src/fava/templates/_journal_table.html:52
-msgid "Cost"
-msgstr "قیمت"
-
-#: src/fava/templates/_journal_table.html:52
-msgid "Change"
-msgstr "تغییر"
-
-#: frontend/src/entry-forms/Balance.svelte:29
-#: frontend/src/modals/AddEntry.svelte:15
-#: src/fava/templates/_journal_table.html:53
-#: src/fava/templates/statistics.html:30
-msgid "Balance"
-msgstr "تراز"
-
-#: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
-#: frontend/src/reports/import/Extract.svelte:116
-msgid "Save"
-msgstr "ذخیره"
-
-#: frontend/src/editor/SaveButton.svelte:14
-msgid "Saving..."
-msgstr "پس انداز..."
-
-#: frontend/src/main.ts:82
-msgid "File change detected. Click to reload."
-msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
-
-#: frontend/src/tree-table/AccountCellHeader.svelte:34
-msgid "Expand all accounts"
-msgstr "توسعه‌حساب‌ها"
-
-#: frontend/src/tree-table/AccountCellHeader.svelte:39
-msgid "Expand all"
-msgstr "توسعه‌همه"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:46
-msgid "Account Journal"
-msgstr "مجله‌حساب"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:52
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: src/fava/json_api.py:722
-msgid "Changes"
-msgstr "تغییرات"
-
-#: frontend/src/reports/accounts/AccountReport.svelte:61
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-msgid "Balances"
-msgstr "ترازها"
-
-#: frontend/src/reports/errors/Errors.svelte:48
-msgid "Show source %(file)s:%(lineno)s"
-msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
-
-#: frontend/src/reports/editor/EditorMenu.svelte:43
-#: frontend/src/reports/errors/Errors.svelte:22
-msgid "File"
-msgstr "فایل"
-
-#: frontend/src/reports/errors/Errors.svelte:23
-#: frontend/src/reports/import/Extract.svelte:122
-msgid "Line"
-msgstr "خط"
-
-#: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:93
-msgid "Error"
-msgstr "خطا"
-
-#: frontend/src/reports/errors/Errors.svelte:75
-msgid "No errors."
-msgstr "بدون خطا."
-
 #: frontend/src/reports/events/Events.svelte:31
+#, python-format
 msgid "Event: %(type)s"
 msgstr "رویداد: %(type)s"
 
-#: frontend/src/reports/events/EventTable.svelte:15
-msgid "Description"
-msgstr "توضیحات"
+#: frontend/src/reports/events/Events.svelte:37
+#, fuzzy
+#| msgid "Events"
+msgid "No events."
+msgstr "رویداد ها"
 
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "صفحات‌راهنما"
-
-#: frontend/src/entry-forms/Balance.svelte:56
-#: frontend/src/reports/holdings/Holdings.svelte:35
-#: frontend/src/reports/holdings/Holdings.svelte:39
-msgid "Currency"
-msgstr "واحد‌ارز"
-
-#: frontend/src/reports/holdings/Holdings.svelte:45
-#: frontend/src/reports/holdings/Holdings.svelte:49
-msgid "Cost currency"
-msgstr "قیمت ارز"
+#: frontend/src/reports/holdings/Holdings.svelte:18
+#: frontend/src/reports/holdings/Holdings.svelte:20
+#: frontend/src/reports/holdings/index.ts:92
+#: frontend/src/sidebar/AsideContents.svelte:45
+msgid "Holdings"
+msgstr "دارایی‌ ها"
 
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:28
@@ -216,176 +369,126 @@ msgstr "قیمت ارز"
 msgid "Holdings by"
 msgstr "منابع‌توسط"
 
-#: frontend/src/stores/accounts.ts:109 src/fava/json_api.py:604
-#: src/fava/json_api.py:624
-msgid "Net Profit"
-msgstr "سود‌خالص"
+#: frontend/src/reports/holdings/Holdings.svelte:45
+#: frontend/src/reports/holdings/Holdings.svelte:49
+msgid "Cost currency"
+msgstr "قیمت ارز"
 
-#: src/fava/json_api.py:610
-msgid "Income"
-msgstr "درآمد"
-
-#: src/fava/json_api.py:616
-msgid "Expenses"
-msgstr "هزینه‌ها"
-
-#: frontend/src/entry-forms/EntryMetadata.svelte:29
-#: frontend/src/reports/options/OptionsTable.svelte:14
-msgid "Key"
-msgstr "کلید"
-
-#: frontend/src/entry-forms/EntryMetadata.svelte:39
-#: frontend/src/reports/options/OptionsTable.svelte:15
-msgid "Value"
-msgstr "مقدار"
-
-#: frontend/src/reports/query/QueryLinks.svelte:21
-msgid "Download as"
-msgstr "دانلود‌به‌عنوان"
-
-#: src/fava/templates/statistics.html:12
-msgid "Postings per Account"
-msgstr "پست‌برای‌هر‌حساب"
-
-#: src/fava/templates/statistics.html:80
-msgid "Total"
-msgstr "کل"
-
-#: src/fava/templates/statistics.html:20
-msgid "Update Activity"
-msgstr "بروزرسانی‌فعالیت"
-
-#: src/fava/templates/statistics.html:21
-msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
-msgstr "برای‌کپی‌کردن‌دستورات تراز‌ها‌‌برای‌حساب‌ها‌(به‌جزموارد‌سبز)درکلیپ‌بور‌کلیک‌کنید."
-
-#: src/fava/templates/statistics.html:22
-msgid "Copy balance directives"
-msgstr "کپی‌دستورات‌ترازها"
-
-#: src/fava/templates/statistics.html:29
-msgid "Last Entry"
-msgstr "آخرین‌ورودی"
-
-#: src/fava/templates/statistics.html:62
-msgid "Entries per Type"
-msgstr "ورودی‌ها‌درهرنوع"
-
-#: src/fava/templates/statistics.html:66
-msgid "Type"
-msgstr "نوع"
-
-#: src/fava/templates/statistics.html:67
-msgid "# Entries"
-msgstr "# ورودی‌ها"
-
-#: frontend/src/entry-forms/Transaction.svelte:125
-#: frontend/src/entry-forms/Transaction.svelte:128
-#: src/fava/templates/_journal_table.html:50
-msgid "Narration"
-msgstr "توصیف"
-
-#: frontend/src/entry-forms/Balance.svelte:44
-msgid "Number"
-msgstr "شماره"
+#: frontend/src/reports/holdings/Holdings.svelte:56
+#: frontend/src/reports/query/index.ts:16
+#: frontend/src/reports/statistics/Statistics.svelte:24
+#: frontend/src/sidebar/AsideContents.svelte:31
+msgid "Query"
+msgstr "پرس ‌و ‌جو"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:59
+#: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr "واردکردن"
 
-#: frontend/src/journal/JournalFilters.svelte:42
-msgid "Budget entries"
-msgstr "ورودی‌های‌بودجه"
+#: frontend/src/reports/import/Extract.svelte:76
+msgid "ignore duplicate"
+msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:121
+#: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
 msgstr "منبع"
 
-#: frontend/src/reports/import/FileList.svelte:94
+#: frontend/src/reports/import/FileList.svelte:95
+msgid "Continue"
+msgstr "ادامه"
+
+#: frontend/src/reports/import/FileList.svelte:95
 msgid "Extract"
 msgstr "استخراج"
 
-#: frontend/src/reports/query/QueryEditor.svelte:19
-msgid "...enter a BQL query. 'help' to list available commands."
-msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌فهرست‌دستورات‌موجود."
+#: frontend/src/reports/import/FileList.svelte:104
+msgid "Clear"
+msgstr "پاک کردن"
 
-#: frontend/src/journal/JournalFilters.svelte:43
-msgid "Metadata"
-msgstr "متاداده"
+#: frontend/src/reports/import/Import.svelte:78
+msgid "Delete this file?"
+msgstr ""
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:19
-#: frontend/src/entry-forms/EntryMetadata.svelte:52
-msgid "Add metadata"
-msgstr "افزودن‌متاداده"
+#: frontend/src/reports/import/Import.svelte:145
+msgid "No files were found for import."
+msgstr ""
 
-#: frontend/src/entry-forms/Note.svelte:28
-#: frontend/src/modals/AddEntry.svelte:16
-msgid "Note"
-msgstr "یادداشت"
+#: frontend/src/reports/import/Import.svelte:148
+msgid "Importable Files"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:17
-msgid "Location"
-msgstr "محل"
+#: frontend/src/reports/import/Import.svelte:162
+msgid "Non-importable Files"
+msgstr ""
 
-#: frontend/src/modals/Context.svelte:39
-#: frontend/src/modals/EntryContext.svelte:28
-msgid "Context"
-msgstr "متن‌"
+#: frontend/src/reports/import/ImportFileUpload.svelte:33
+msgid "Upload files for import"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:34
-msgid "Balances before entry"
-msgstr "ترازقبل‌ازورود"
+#: frontend/src/reports/journal/JournalFilters.svelte:8
+#, python-format
+msgid "Toggle %(type)s entries"
+msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:54
-msgid "Balances after entry"
-msgstr "ترازبعدازورود"
-
-#: frontend/src/journal/JournalFilters.svelte:25
+#: frontend/src/reports/journal/JournalFilters.svelte:25
 msgid "Cleared transactions"
 msgstr "تراکنش‌های‌پاک‌شده"
 
-#: frontend/src/journal/JournalFilters.svelte:26
+#: frontend/src/reports/journal/JournalFilters.svelte:26
 msgid "Pending transactions"
 msgstr "تراکنش‌های‌درحال‌انتظار"
 
-#: frontend/src/journal/JournalFilters.svelte:27
+#: frontend/src/reports/journal/JournalFilters.svelte:27
 msgid "Other transactions"
 msgstr "سایر‌تراکنش‌ها"
 
-#: frontend/src/journal/JournalFilters.svelte:34
+#: frontend/src/reports/journal/JournalFilters.svelte:34
 msgid "Documents with a #discovered tag"
 msgstr "اسناد‌با‌برچسب#کشف‌شده"
 
-#: frontend/src/entry-forms/Transaction.svelte:155
-#: frontend/src/journal/JournalFilters.svelte:44
-msgid "Postings"
-msgstr "پست‌ها"
+#: frontend/src/reports/journal/JournalFilters.svelte:38
+msgid "Documents with a #linked tag"
+msgstr "اسناد با برچسب # مرتبط شده"
 
-#: frontend/src/modals/DocumentUpload.svelte:48
-msgid "Upload file(s)"
-msgstr "آپلودفایل‌(ها)"
+#: frontend/src/reports/journal/JournalFilters.svelte:42
+msgid "Budget entries"
+msgstr "ورودی‌های‌بودجه"
 
-#: frontend/src/modals/DocumentUpload.svelte:70
-#: frontend/src/reports/import/ImportFileUpload.svelte:35
-msgid "Upload"
-msgstr "آپلود"
+#: frontend/src/reports/journal/JournalFilters.svelte:43
+msgid "Metadata"
+msgstr "متاداده"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:57
-msgid "Align Amounts"
-msgstr "هماهنگ‌کردن‌تعداد"
+#: frontend/src/reports/journal/JournalFilters.svelte:43
+msgid "Toggle metadata"
+msgstr ""
 
-#: frontend/src/reports/editor/EditorMenu.svelte:63
-msgid "Toggle Comment (selection)"
-msgstr "تغییر‌نظر(انتخاب)"
+#: frontend/src/reports/journal/JournalFilters.svelte:44
+msgid "Toggle postings"
+msgstr ""
 
-#: frontend/src/reports/editor/EditorMenu.svelte:69
-msgid "Open all folds"
-msgstr "بازکردن‌همه‌چینه‌ها"
+#: frontend/src/reports/journal/JournalHeaders.svelte:40
+msgid "F"
+msgstr "F"
 
-#: frontend/src/reports/editor/EditorMenu.svelte:75
-msgid "Close all folds"
-msgstr "بستن‌همه‌چینه‌ها"
+#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:58
+msgid "Cost"
+msgstr "قیمت"
+
+#: frontend/src/reports/journal/JournalHeaders.svelte:55
+msgid "Change"
+msgstr "تغییر"
+
+#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/sidebar/AsideContents.svelte:30
+msgid "Journal"
+msgstr "مجله"
+
+#: frontend/src/reports/options/Options.svelte:13
+msgid "Color scheme"
+msgstr ""
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -399,72 +502,109 @@ msgstr "راهنما"
 msgid "Beancount options"
 msgstr "گزینه‌های‌شمارش‌جزئی"
 
-#: frontend/src/reports/query/QueryEditor.svelte:38
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
+msgid "Options"
+msgstr "گزینه‌ ها"
+
+#: frontend/src/reports/query/QueryEditor.svelte:21
+#, fuzzy
+#| msgid "...enter a BQL query. 'help' to list available commands."
+msgid "…enter a BQL query. 'help' to list available commands."
+msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌فهرست‌دستورات‌موجود."
+
+#: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
 msgstr "ارسال"
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:23
-msgid "Hold Shift while clicking to expand all children.\n"
-"Hold Ctrl or Cmd while clicking to expand one level."
-msgstr "نگه‌داشتن Shiftوکلیک‌کردن‌برای‌گسترش‌تمام‌سطح‌ها.\n"
-"نگه‌داشتن Ctrlیا Cmdوکلیک‌کردن‌برای‌گسترش‌یک‌سطح."
+#: frontend/src/reports/query/QueryLinks.svelte:21
+msgid "Download as"
+msgstr "دانلود‌به‌عنوان"
 
-#: frontend/src/modals/Export.svelte:13
-msgid "Export"
-msgstr "صادر‌کردن"
+#: frontend/src/reports/statistics/EntriesByType.svelte:14
+msgid "Type"
+msgstr "نوع"
 
-#: frontend/src/sidebar/FilterForm.svelte:104
-msgid "Filter by tag, payee, ..."
+#: frontend/src/reports/statistics/EntriesByType.svelte:15
+msgid "# Entries"
+msgstr "# ورودی‌ها"
+
+#: frontend/src/reports/statistics/EntriesByType.svelte:41
+msgid "Total"
+msgstr "کل"
+
+#: frontend/src/reports/statistics/Statistics.svelte:22
+msgid "Postings per Account"
+msgstr "پست‌برای‌هر‌حساب"
+
+#: frontend/src/reports/statistics/Statistics.svelte:32
+msgid "Update Activity"
+msgstr "بروزرسانی‌فعالیت"
+
+#: frontend/src/reports/statistics/Statistics.svelte:35
+msgid ""
+"Click to copy balance directives for accounts (except green ones) to the "
+"clipboard."
+msgstr "برای‌کپی‌کردن‌دستورات تراز‌ها‌‌برای‌حساب‌ها‌(به‌جزموارد‌سبز)درکلیپ‌بور‌کلیک‌کنید."
+
+#: frontend/src/reports/statistics/Statistics.svelte:40
+msgid "Copy balance directives"
+msgstr "کپی‌دستورات‌ترازها"
+
+#: frontend/src/reports/statistics/Statistics.svelte:47
+msgid "Entries per Type"
+msgstr "ورودی‌ها‌درهرنوع"
+
+#: frontend/src/reports/statistics/UpdateActivity.svelte:36
+msgid "Last Entry"
+msgstr "آخرین‌ورودی"
+
+#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/sidebar/AsideContents.svelte:54
+msgid "Statistics"
+msgstr "آمار"
+
+#: frontend/src/reports/tree_reports/index.ts:38
+#: frontend/src/sidebar/AsideContents.svelte:27
+msgid "Income Statement"
+msgstr "صورت حساب درآمد"
+
+#: frontend/src/reports/tree_reports/index.ts:49
+#: frontend/src/sidebar/AsideContents.svelte:28
+msgid "Balance Sheet"
+msgstr "ترازنامه"
+
+#: frontend/src/reports/tree_reports/index.ts:63
+#: frontend/src/sidebar/AsideContents.svelte:29
+msgid "Trial Balance"
+msgstr "تراز‌نامه ‌آزمایشی"
+
+#: frontend/src/sidebar/AccountSelector.svelte:22
+msgid "Go to account"
+msgstr "رفتن به حساب"
+
+#: frontend/src/sidebar/AsideContents.svelte:61
+msgid "Add Journal Entry"
+msgstr ""
+
+#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
+msgid "Help"
+msgstr "راهنما"
+
+#: frontend/src/sidebar/FilterForm.svelte:87
+msgid "Time"
+msgstr "زمان"
+
+#: frontend/src/sidebar/FilterForm.svelte:109
+#, fuzzy
+#| msgid "Filter by tag, payee, ..."
+msgid "Filter by tag, payee, …"
 msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 
-#: frontend/src/modals/Export.svelte:15
-msgid "Download currently filtered entries as a Beancount file"
-msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
-
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:123
-msgid "Yearly"
-msgstr "سالانه"
-
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:143
-msgid "Quarterly"
-msgstr "سه‌ماهه"
-
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
-msgid "Monthly"
-msgstr "ماهانه"
-
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
-msgid "Weekly"
-msgstr "هفتگی"
-
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:215
-msgid "Daily"
-msgstr "روزانه"
-
-#: frontend/src/reports/editor/EditorMenu.svelte:55
-msgid "Edit"
-msgstr "ویرایش"
-
-#: frontend/src/entry-forms/Posting.svelte:101
-msgid "Amount"
-msgstr "میزان"
-
-#: frontend/src/journal/JournalFilters.svelte:38
-msgid "Documents with a #linked tag"
-msgstr "اسناد با برچسب # مرتبط شده"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:12
-msgid "At Cost"
-msgstr "با قیمت"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:14
-msgid "At Market Value"
-msgstr "در ارزش بازار"
-
-#: frontend/src/charts/ConversionAndInterval.svelte:16
-#: src/fava/templates/_journal_table.html:51
-msgid "Units"
-msgstr "واحدها"
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
+#: src/fava/json_api.py:700
+msgid "Net Profit"
+msgstr "سود‌خالص"
 
 #: frontend/src/stores/chart.ts:28
 msgid "Treemap"
@@ -474,46 +614,9 @@ msgstr "نمودار درختی"
 msgid "Sunburst"
 msgstr "نمودار دایره‌ای"
 
-#: frontend/src/entry-forms/AccountInput.svelte:32
-msgid "Should be one of the declared accounts"
-msgstr "باید یکی از حساب های اعلام شده باشد"
-
-#: frontend/src/charts/ChartSwitcher.svelte:25
-#: frontend/src/reports/import/Extract.svelte:101
-msgid "Previous"
-msgstr "قبلی"
-
-#: frontend/src/charts/ChartSwitcher.svelte:32
-#: frontend/src/reports/import/Extract.svelte:106
-msgid "Next"
-msgstr "بعدی"
-
-#: frontend/src/modals/AddEntry.svelte:14
-msgid "Transaction"
-msgstr "تراکنش"
-
-#: frontend/src/modals/AddEntry.svelte:43
-msgid "Add"
-msgstr "افزودن"
-
-#: frontend/src/reports/documents/Documents.svelte:75
-msgid "Move or rename document"
-msgstr "انتقال یا تغییر نام سند"
-
-#: frontend/src/reports/documents/Table.svelte:27
-msgid "Name"
-msgstr "نام"
-
-#: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
-msgid "Documents"
-msgstr "اسناد"
-
-#: frontend/src/editor/DeleteButton.svelte:11
-#: frontend/src/editor/DeleteButton.svelte:14
-#: frontend/src/reports/import/FileList.svelte:47
-msgid "Delete"
-msgstr "حذف"
+#: frontend/src/stores/chart.ts:30
+msgid "Icicle"
+msgstr ""
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
@@ -523,34 +626,6 @@ msgstr "نمودار خطی"
 msgid "Area chart"
 msgstr "نمودار ناحیه ای"
 
-#: frontend/src/reports/import/FileList.svelte:94
-msgid "Continue"
-msgstr "ادامه"
-
-#: frontend/src/reports/import/FileList.svelte:103
-msgid "Clear"
-msgstr "پاک کردن"
-
-#: frontend/src/sidebar/AccountSelector.svelte:22
-msgid "Go to account"
-msgstr "رفتن به حساب"
-
-#: frontend/src/reports/import/Import.svelte:69
-msgid "Delete this file?"
-msgstr ""
-
-#: frontend/src/reports/import/Import.svelte:134
-msgid "No files were found for import."
-msgstr ""
-
-#: frontend/src/journal/JournalFilters.svelte:8
-msgid "Toggle %(type)s entries"
-msgstr ""
-
-#: frontend/src/charts/ConversionAndInterval.svelte:18
-msgid "Converted to %(currency)s"
-msgstr ""
-
 #: frontend/src/stores/chart.ts:57
 msgid "Stacked Bars"
 msgstr ""
@@ -559,60 +634,42 @@ msgstr ""
 msgid "Single Bars"
 msgstr ""
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
-msgid "Chart is empty."
+#: frontend/src/tree-table/AccountCellHeader.svelte:23
+msgid ""
+"Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr ""
+"نگه‌داشتن Shiftوکلیک‌کردن‌برای‌گسترش‌تمام‌سطح‌ها.\n"
+"نگه‌داشتن Ctrlیا Cmdوکلیک‌کردن‌برای‌گسترش‌یک‌سطح."
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:34
+msgid "Expand all accounts"
+msgstr "توسعه‌حساب‌ها"
+
+#: frontend/src/tree-table/AccountCellHeader.svelte:39
+msgid "Expand all"
+msgstr "توسعه‌همه"
+
+#: frontend/src/tree-table/TreeTable.svelte:41
+msgid "Other"
 msgstr ""
 
-#: frontend/src/journal/JournalFilters.svelte:43
-msgid "Toggle metadata"
-msgstr ""
-
-#: frontend/src/journal/JournalFilters.svelte:44
-msgid "Toggle postings"
-msgstr ""
-
-#: src/fava/internal_api.py:223
-msgid "Net Worth"
-msgstr ""
-
-#: src/fava/internal_api.py:172
+#: src/fava/internal_api.py:171
 msgid "Account Balance"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:96
-msgid "reload"
+#: src/fava/internal_api.py:219
+msgid "Net Worth"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:64
-msgid "continue"
-msgstr ""
+#: src/fava/json_api.py:688
+msgid "Income"
+msgstr "درآمد"
 
-#: frontend/src/editor/DeleteButton.svelte:11
-msgid "Deleting..."
-msgstr ""
+#: src/fava/json_api.py:694
+msgid "Expenses"
+msgstr "هزینه‌ها"
 
-#: frontend/src/sidebar/AsideContents.svelte:61
-msgid "Add Journal Entry"
-msgstr ""
-
-#: frontend/src/reports/documents/Documents.svelte:80
-#: frontend/src/reports/import/FileList.svelte:83
-msgid "Move"
-msgstr ""
-
-#: frontend/src/reports/import/Extract.svelte:76
-msgid "ignore duplicate"
-msgstr ""
-
-#: frontend/src/reports/import/ImportFileUpload.svelte:33
-msgid "Upload files for import"
-msgstr ""
-
-#: frontend/src/reports/options/Options.svelte:13
-msgid "Color scheme"
-msgstr ""
-
-#: frontend/src/stores/chart.ts:30
-msgid "Icicle"
-msgstr ""
-
+#: src/fava/templates/help.html:8
+msgid "Help pages"
+msgstr "صفحات‌راهنما"
