@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-23 11:09+0000\n"
+"PO-Revision-Date: 2026-03-04 05:09+0000\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/fava/fava/zh_Hans/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -629,15 +629,15 @@ msgstr "条形图"
 
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
-msgstr ""
+msgstr "遵循系统配置"
 
 #: frontend/src/stores/color_scheme.ts:16
 msgid "Dark"
-msgstr ""
+msgstr "深色"
 
 #: frontend/src/stores/color_scheme.ts:17
 msgid "Light"
-msgstr ""
+msgstr "浅色"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
