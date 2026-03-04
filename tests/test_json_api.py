@@ -25,6 +25,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.core import FavaLedger
 
+    from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
 
 
@@ -444,9 +445,14 @@ def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
     assert "Trying to read a non-source file" in err_msg
 
 
-def test_api_get_source_slice_unprocessable(test_client: FlaskClient) -> None:
+def test_api_get_source_slice_unprocessable(
+    test_client: FlaskClient, get_ledger: GetFavaLedger
+) -> None:
+    generated_open_entry = get_ledger("edit-example").all_entries[0]
+    entry_hash = hash_entry(generated_open_entry)
     response = test_client.get(
-        "/edit-example/api/source_slice?entry_hash=ba17fb171c2ef1789d8def32f58bf21f"
+        "/edit-example/api/source_slice",
+        query_string={"entry_hash": entry_hash},
     )
     assert_api_error(
         response,
