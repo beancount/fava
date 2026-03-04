@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: 2026-03-02 20:01+0000\n"
+"PO-Revision-Date: 2026-03-04 05:09+0000\n"
 "Last-Translator: kdm1jkm <me@kdm1jkm.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
@@ -203,7 +203,7 @@ msgstr "업로드"
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
 msgid "Balances before entry"
-msgstr ""
+msgstr "거래 입력 전 잔액"
 
 #: frontend/src/modals/EntryContextBalances.svelte:34
 msgid "Balances after entry"
@@ -312,7 +312,7 @@ msgstr "모두 접기"
 #: frontend/src/reports/options/index.ts:15
 #: frontend/src/sidebar/AsideContents.svelte:75
 msgid "Options"
-msgstr ""
+msgstr "옵션"
 
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
@@ -346,23 +346,23 @@ msgstr "설명"
 #: frontend/src/reports/events/index.ts:17
 #: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Events"
-msgstr ""
+msgstr "이벤트"
 
 #: frontend/src/reports/events/Events.svelte:31
 #, python-format
 msgid "Event: %(type)s"
-msgstr ""
+msgstr "이벤트: %(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
-msgstr ""
+msgstr "이벤트 없음."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
 #: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Holdings"
-msgstr ""
+msgstr "보유 자산"
 
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:28
@@ -371,94 +371,94 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:48
 msgid "Holdings by"
-msgstr ""
+msgstr "분류:"
 
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:49
 msgid "Cost currency"
-msgstr ""
+msgstr "취득 통화"
 
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
 #: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Query"
-msgstr ""
+msgstr "쿼리"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
-msgstr ""
+msgstr "가져오기"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "중복 무시"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
-msgstr ""
+msgstr "출처"
 
 #: frontend/src/reports/import/FileList.svelte:95
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 #: frontend/src/reports/import/FileList.svelte:95
 msgid "Extract"
-msgstr ""
+msgstr "추출"
 
 #: frontend/src/reports/import/FileList.svelte:104
 msgid "Clear"
-msgstr ""
+msgstr "비우기"
 
 #: frontend/src/reports/import/Import.svelte:78
 msgid "Delete this file?"
-msgstr ""
+msgstr "이 파일을 삭제할까요?"
 
 #: frontend/src/reports/import/Import.svelte:145
 msgid "No files were found for import."
-msgstr ""
+msgstr "가져올 파일이 없습니다."
 
 #: frontend/src/reports/import/Import.svelte:148
 msgid "Importable Files"
-msgstr ""
+msgstr "가져올 수 있는 파일"
 
 #: frontend/src/reports/import/Import.svelte:162
 msgid "Non-importable Files"
-msgstr ""
+msgstr "가져올 수 없는 파일"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
-msgstr ""
+msgstr "가져올 파일 업로드"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
 msgid "Toggle %(type)s entries"
-msgstr ""
+msgstr "%(type)s 항목 표시 전환"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:25
 msgid "Cleared transactions"
-msgstr ""
+msgstr "확인된 거래"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:26
 msgid "Pending transactions"
-msgstr ""
+msgstr "대기 중 거래"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:27
 msgid "Other transactions"
-msgstr ""
+msgstr "기타 거래"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:34
 msgid "Documents with a #discovered tag"
-msgstr ""
+msgstr "#discovered 태그가 있는 문서"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:38
 msgid "Documents with a #linked tag"
-msgstr ""
+msgstr "#linked 태그가 있는 문서"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:42
 msgid "Budget entries"
-msgstr ""
+msgstr "예산 항목"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:43
 msgid "Metadata"
