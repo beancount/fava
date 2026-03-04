@@ -306,6 +306,12 @@ msgstr "Rozšíriť všetko"
 msgid "Close all folds"
 msgstr "Zhrnúť všetko"
 
+#: frontend/src/reports/editor/EditorMenu.svelte:81
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
+msgid "Options"
+msgstr "Možnosti"
+
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
@@ -503,11 +509,6 @@ msgstr "pomoc"
 msgid "Beancount options"
 msgstr "Beancount možnosti"
 
-#: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
-msgid "Options"
-msgstr "Možnosti"
-
 #: frontend/src/reports/query/QueryEditor.svelte:21
 #, fuzzy
 #| msgid "...enter a BQL query. 'help' to list available commands."
@@ -636,6 +637,18 @@ msgstr ""
 
 #: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:15
+msgid "System"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:16
+msgid "Dark"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:17
+msgid "Light"
 msgstr ""
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23

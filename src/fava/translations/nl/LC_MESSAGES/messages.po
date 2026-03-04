@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
+"PO-Revision-Date: 2026-03-04 19:31+0000\n"
+"Last-Translator: Thomas den Hollander <thomasdh@proton.me>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/fava/fava/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -23,29 +27,29 @@ msgstr "Volgende"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "At Cost"
-msgstr ""
+msgstr "Kostprijs"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Market Value"
-msgstr ""
+msgstr "Marktwaarde"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:21
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
-msgstr ""
+msgstr "Eenheden"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:23
 #, python-format
 msgid "Converted to %(currency)s"
-msgstr ""
+msgstr "Omgezet naar %(currency)s"
 
 #: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
-msgstr ""
+msgstr "Grafiek is leeg."
 
 #: frontend/src/editor/DeleteButton.svelte:11
 msgid "Deleting…"
-msgstr ""
+msgstr "Bezig met verwijderen…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -54,10 +58,8 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#, fuzzy
-#| msgid "Saving..."
 msgid "Saving…"
-msgstr "Bezig met opslaan..."
+msgstr "Bezig met opslaan…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/modals/AddEntry.svelte:66
@@ -67,7 +69,7 @@ msgstr "Opslaan"
 
 #: frontend/src/editor/SliceEditor.svelte:102
 msgid "reload"
-msgstr ""
+msgstr "herladen"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
@@ -119,11 +121,11 @@ msgstr "Waarde"
 #: frontend/src/entry-forms/Note.svelte:27
 #: frontend/src/modals/AddEntry.svelte:16
 msgid "Note"
-msgstr ""
+msgstr "Opmerking"
 
 #: frontend/src/entry-forms/Posting.svelte:100
 msgid "Amount"
-msgstr ""
+msgstr "Hoeveelheid"
 
 #: frontend/src/entry-forms/Transaction.svelte:111
 #: frontend/src/entry-forms/Transaction.svelte:113
@@ -164,7 +166,7 @@ msgstr "Dagelijks"
 
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Transaction"
-msgstr ""
+msgstr "Transactie"
 
 #: frontend/src/modals/AddEntry.svelte:43
 msgid "Add"
@@ -172,33 +174,29 @@ msgstr "Toevoegen"
 
 #: frontend/src/modals/AddEntry.svelte:64
 msgid "continue"
-msgstr ""
+msgstr "doorgaan"
 
 #: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
-msgstr ""
+msgstr "Context"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
-msgstr ""
+msgstr "Bestand(en) uploaden"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "Bestand"
+msgstr "Bestanden"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents folder"
-msgstr "Documenten"
+msgstr "Documentenmap"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
 msgid "Upload"
-msgstr ""
+msgstr "Uploaden"
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
 msgid "Balances before entry"
@@ -210,12 +208,12 @@ msgstr ""
 
 #: frontend/src/modals/EntryContextLocation.svelte:14
 msgid "Location"
-msgstr ""
+msgstr "Locatie"
 
 #: frontend/src/modals/Export.svelte:13
 #: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Export"
-msgstr ""
+msgstr "Exporteren"
 
 #: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
@@ -271,7 +269,7 @@ msgstr "Document verplaatsen of hernoemen"
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:84
 msgid "Move"
-msgstr ""
+msgstr "Verplaatsen"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
@@ -306,6 +304,12 @@ msgstr ""
 #: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Close all folds"
 msgstr ""
+
+#: frontend/src/reports/editor/EditorMenu.svelte:81
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
+msgid "Options"
+msgstr "Opties"
 
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
@@ -501,11 +505,6 @@ msgstr ""
 msgid "Beancount options"
 msgstr "Beancount-opties"
 
-#: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
-msgid "Options"
-msgstr "Opties"
-
 #: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
@@ -629,6 +628,18 @@ msgstr ""
 
 #: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:15
+msgid "System"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:16
+msgid "Dark"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:17
+msgid "Light"
 msgstr ""
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
