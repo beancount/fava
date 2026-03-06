@@ -8,6 +8,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING
 
+import beancount.core
 import beangulp  # Importing tools
 import beangulp.importer
 from beancount.core import data  # Transaction, Posting, ...
