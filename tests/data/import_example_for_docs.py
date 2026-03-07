@@ -16,7 +16,6 @@ from beancount.core import data  # Transaction, Posting, ...
 from beangulp.importers import csvbase
 
 if TYPE_CHECKING:
-
     Importer: TypeAlias = beangulp.Importer
     Meta: TypeAlias = data.Meta
     Transaction: TypeAlias = data.Transaction
