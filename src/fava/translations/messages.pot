@@ -80,7 +80,7 @@ msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:15
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
 msgstr ""
@@ -239,8 +239,8 @@ msgid "Date"
 msgstr ""
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
-#: frontend/src/reports/journal/JournalHeaders.svelte:59
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
+#: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
 msgstr ""
 
@@ -460,12 +460,12 @@ msgstr ""
 msgid "F"
 msgstr ""
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
-#: frontend/src/reports/journal/JournalHeaders.svelte:58
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
+#: frontend/src/reports/journal/JournalHeaders.svelte:68
 msgid "Cost"
 msgstr ""
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
 msgid "Change"
 msgstr ""
 
