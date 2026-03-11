@@ -131,9 +131,11 @@ pattern = "src/fava/**/templates/**.html"
 [[tool.babel.mappings]]
 method = "javascript"
 pattern = "frontend/src/**.ts"
+parse_template_string = true
 [[tool.babel.mappings]]
 method = "fava._babel:extract_svelte"
 pattern = "frontend/src/**.svelte"
+parse_template_string = true
 
 [tool.black]
 line-length = 79

@@ -27,6 +27,7 @@ languages:
 - English (`en`)
 - French (`fr`)
 - German (`de`)
+- Korean (`ko`)
 - Japanese (`ja`)
 - Persian (`fa`)
 - Portuguese (`pt` and `pt_BR`)
@@ -128,15 +129,6 @@ changes is detected. By default only a notification is shown which you can click
 to reload the page. If the file change is due to user interaction, e.g.,
 uploading a document or adding a transaction, Fava will always reload the page
 automatically.
-
-______________________________________________________________________
-
-## `unrealized`
-
-Default: `Unrealized`
-
-The subaccount of the Equity account to post unrealized gains to if the account
-trees are shown at market value.
 
 ______________________________________________________________________
 

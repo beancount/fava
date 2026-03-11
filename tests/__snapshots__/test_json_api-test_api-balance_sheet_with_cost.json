@@ -568,7 +568,7 @@
           "balance": {},
           "balance_children": {
             "IRAUSD": -7200.0,
-            "USD": -87831.5,
+            "USD": -98949.40304,
             "VACHR": 82
           },
           "children": [
@@ -588,6 +588,15 @@
                 "VACHR": 82
               },
               "has_txns": true
+            },
+            {
+              "account": "Equity:Earnings:Unrealized",
+              "balance": { "USD": -11117.90304 },
+              "balance_children": { "USD": -11117.90304 },
+              "children": [],
+              "cost": {},
+              "cost_children": {},
+              "has_txns": true
             }
           ],
           "cost": {},
@@ -601,15 +610,6 @@
           "children": [],
           "cost": { "USD": -3553.18 },
           "cost_children": { "USD": -3553.18 },
-          "has_txns": true
-        },
-        {
-          "account": "Equity:Unrealized",
-          "balance": { "USD": -11117.90304 },
-          "balance_children": { "USD": -11117.90304 },
-          "children": [],
-          "cost": {},
-          "cost_children": {},
           "has_txns": true
         }
       ],

@@ -735,7 +735,6 @@
     "show_closed_accounts": false,
     "show_metadata_indicators": true,
     "sidebar_show_queries": 5,
-    "unrealized": "Unrealized",
     "upcoming_events": 7,
     "uptodate_indicator_grey_lookback_days": 60,
     "use_external_editor": false

@@ -52,6 +52,6 @@ def test_tree_from_entries(
 
 def test_tree_cap(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     tree = Tree(example_ledger.all_entries)
-    tree.cap(example_ledger.options, "Unrealized")
+    tree.cap(example_ledger.options)
 
     snapshot({n.name: n.balance.to_strings() for n in tree.values()})

@@ -309,6 +309,12 @@ msgstr "すべての折りたたみを開く"
 msgid "Close all folds"
 msgstr "すべての折りたたみを閉じる"
 
+#: frontend/src/reports/editor/EditorMenu.svelte:81
+#: frontend/src/reports/options/index.ts:15
+#: frontend/src/sidebar/AsideContents.svelte:75
+msgid "Options"
+msgstr "オプション"
+
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
@@ -503,11 +509,6 @@ msgstr "ヘルプ"
 msgid "Beancount options"
 msgstr "Beancountオプション"
 
-#: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
-msgid "Options"
-msgstr "オプション"
-
 #: frontend/src/reports/query/QueryEditor.svelte:21
 #, fuzzy
 #| msgid "...enter a BQL query. 'help' to list available commands."
@@ -637,6 +638,18 @@ msgstr "積み上げ棒グラフ"
 #: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
 msgstr "単一棒グラフ"
+
+#: frontend/src/stores/color_scheme.ts:15
+msgid "System"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:16
+msgid "Dark"
+msgstr ""
+
+#: frontend/src/stores/color_scheme.ts:17
+msgid "Light"
+msgstr ""
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
