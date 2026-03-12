@@ -323,13 +323,13 @@ msgstr "ویرایشگر"
 msgid "Line"
 msgstr "خط"
 
-#: frontend/src/reports/errors/Errors.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:49
 #, fuzzy, python-format
 #| msgid "Show source %(file)s:%(lineno)s"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr "بدون خطا."
 
