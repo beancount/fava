@@ -38,7 +38,8 @@
       </tr>
     </thead>
     <tbody>
-      {#each sorted_errors as { message, source } (source ? `${source.filename}-${source.lineno.toString()}-${message}` : message)}
+      <!-- eslint-disable-next-line svelte/require-each-key There could be duplicate errors -->
+      {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
             {@const url = $urlForSource(
@@ -58,7 +59,8 @@
             <td class="num"></td>
           {/if}
           <td class="pre">
-            {#each extract_accounts(message) as [type, text] (text)}
+            <!-- eslint-disable-next-line svelte/require-each-key The same account might occur multiple times -->
+            {#each extract_accounts(message) as [type, text]}
               {#if type === "text"}
                 {text}
               {:else}
