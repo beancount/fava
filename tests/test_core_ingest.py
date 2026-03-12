@@ -173,7 +173,9 @@ def test_ingest_examplefile(
     ingest_ledger = get_ledger("import")
 
     files = ingest_ledger.ingest.import_data()
-    assert len(files) > 10  # all files in the test datafolder
+    assert len(files) == len(
+        list(test_data_dir.iterdir())
+    )  # all files in the test datafolder
 
     with pytest.raises(ImporterExtractError):
         entries = ingest_ledger.ingest.extract(
