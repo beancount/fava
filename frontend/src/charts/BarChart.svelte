@@ -6,6 +6,7 @@
   import { urlForAccount } from "../helpers.ts";
   import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
   import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
+  import { url_chart_mode } from "../stores/url.ts";
   import Axis from "./Axis.svelte";
   import type { BarChart } from "./bar.ts";
   import {
@@ -44,10 +45,19 @@
     Math.min(width - margin.left - margin.right, maxWidth),
   );
 
-  /** Whether to display stacked bars. */
-  let showStackedBars = $derived(
-    $barChartMode === "stacked" && chart.hasStackedData,
+  // URL chart_mode takes precedence over store value if it's a valid bar mode
+  const valid_bar_modes = ["stacked", "single"] as const;
+  let mode = $derived(
+    $url_chart_mode != null &&
+      valid_bar_modes.includes(
+        $url_chart_mode as (typeof valid_bar_modes)[number],
+      )
+      ? ($url_chart_mode as (typeof valid_bar_modes)[number])
+      : $barChartMode,
   );
+
+  /** Whether to display stacked bars. */
+  let showStackedBars = $derived(mode === "stacked" && chart.hasStackedData);
   /** The currently hovered account. */
   let highlighted: string | null = $state(null);
 
