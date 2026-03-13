@@ -10,10 +10,12 @@
 
 {% macro _account_link(name) %}<a href='{{ url_for('account', name=name) }}'>{{ name }}</a>{% endmacro %}
 
-{% macro _render_metadata_indicators(metadata) -%}
+{% macro _render_metadata_indicators(metadata, show_indicators=True) -%}
+{% if show_indicators %}
 {% for key, value in metadata %}
 <span class='metadata-indicator' title='{{ key }}: {{ value }}'>{{ key[:2] }}</span>
 {% endfor %}
+{% endif %}
 {%- endmacro %}
 
 {% macro _render_metadata(metadata, entry_hash=None) -%}
@@ -40,6 +42,7 @@
 
 {% macro journal_table_contents(entries, show_change_and_balance=False, ledger=None) %}
 {% set ledger = ledger or g.ledger %}
+{% set show_metadata_indicators = ledger.fava_options.show_metadata_indicators %}
 {% autoescape false %}
 {% for entry in entries %}
     {% if show_change_and_balance %}
@@ -88,10 +91,10 @@
         {% endif %}
         </span>
         <span class='indicators'>
-          {{- _render_metadata_indicators(metadata_items) -}}
+          {{- _render_metadata_indicators(metadata_items, show_metadata_indicators) -}}
           {%- for posting in entry.postings -%}
           <span{% if posting.flag %} class='{{ posting.flag|flag_to_type }}'{% endif %}></span>
-          {{- _render_metadata_indicators(posting.meta|meta_items) -}}
+          {{- _render_metadata_indicators(posting.meta|meta_items, show_metadata_indicators) -}}
           {%- endfor -%}
         </span>
         {% if type == 'balance' %}
