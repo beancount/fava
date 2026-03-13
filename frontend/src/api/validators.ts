@@ -1,6 +1,11 @@
 import { account_hierarchy_validator } from "../charts/hierarchy.ts";
 import { chart_validator } from "../charts/index.ts";
-import { entryBaseValidator } from "../entries/index.ts";
+import {
+  Balance,
+  entryBaseValidator,
+  Note,
+  Transaction,
+} from "../entries/index.ts";
 import type { ValidationT } from "../lib/validation.ts";
 import {
   array,
@@ -137,6 +142,21 @@ export type Commodities = ValidationT<typeof commodities_validator>;
 
 export const context_validator = object({
   entry: entryBaseValidator,
+  balances_before: optional(record(array(string))),
+  balances_after: optional(record(array(string))),
+});
+export const context_balance_validator = object({
+  entry: Balance.validator,
+  balances_before: optional(record(array(string))),
+  balances_after: optional(record(array(string))),
+});
+export const context_note_validator = object({
+  entry: Note.validator,
+  balances_before: optional(record(array(string))),
+  balances_after: optional(record(array(string))),
+});
+export const context_transaction_validator = object({
+  entry: Transaction.validator,
   balances_before: optional(record(array(string))),
   balances_after: optional(record(array(string))),
 });

@@ -19,6 +19,9 @@ import { set_mtime } from "../stores/mtime.ts";
 import {
   account_report_validator,
   commodities_validator,
+  context_balance_validator,
+  context_note_validator,
+  context_transaction_validator,
   context_validator,
   error_validator,
   importable_files_validator,
@@ -237,9 +240,48 @@ export const get_commodities = define_endpoint(
   commodities_validator,
   filters,
 );
+/**
+ * The JSON returned by the endpoint contains full details of
+ * the beancount directive with this hash in "entry" but
+ * the validator discards most details, except a few
+ * which are in interface EntryBaseAttributes.
+ */
 export const get_context = define_endpoint("context", context_validator, [
   "entry_hash",
 ]);
+/**
+ * This is a specialized version of get_context which returns
+ * a Balance object as the value of "entry". This works only
+ * if you already know that the hash represents a balance
+ * directive in the beancount file.
+ */
+export const get_context_balance = define_endpoint(
+  "context",
+  context_balance_validator,
+  ["entry_hash"],
+);
+/**
+ * This is a specialized version of get_context which returns
+ * a Note object as the value of "entry". This works only
+ * if you already know that the hash represents a note
+ * directive in the beancount file.
+ */
+export const get_context_note = define_endpoint(
+  "context",
+  context_note_validator,
+  ["entry_hash"],
+);
+/**
+ * This is a specialized version of get_context which returns
+ * a Transaction object as the value of "entry". This works only
+ * if you already know that the hash represents a transaction
+ * directive in the beancount file.
+ */
+export const get_context_transaction = define_endpoint(
+  "context",
+  context_transaction_validator,
+  ["entry_hash"],
+);
 export const get_documents = define_endpoint(
   "documents",
   array(Document.validator),
