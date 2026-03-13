@@ -8,14 +8,16 @@ Beancount defines a language in which financial transactions are entered into a
 text-file, which then can be processed by Beancount. There are a few building
 blocks that are important to understand Beancount's syntax:
 
-- Commodities,
+- Commodities / Currencies,
 - Accounts,
 - Directives.
 
-## Commodities
+## Commodities / Currencies
 
-All in CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
-`AIRMILES`, `HOURS`.
+Anything that you want to track in some account is called a commodity in
+Beancount. We sometimes also use the word "Currency" interchangeably in the
+documentation. Write them in ALL-CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`,
+`RBF1005`, `HOME_MAYST`, `AIRMILES`, `HOURS`.
 
 ## Accounts
 
