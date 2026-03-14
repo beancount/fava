@@ -10,8 +10,9 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import ply.yacc  # type: ignore[import-untyped]
+import uromyces
 from beancount.core import account
-from beancount.ops.summarize import clamp_opt
+from beancount.ops import summarize
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
@@ -22,6 +23,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Sequence
+
+    from uromyces._uromyces import UromycesOptions
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
@@ -394,28 +397,35 @@ class EntryFilter(ABC):
 class TimeFilter(EntryFilter):
     """Filter by dates."""
 
-    __slots__ = ("_options", "date_range")
-
     def __init__(
         self,
         options: BeancountOptions,
         fava_options: FavaOptions,
         value: str,
+        uro_options: UromycesOptions | None,
     ) -> None:
-        self._options = options
+        self.options = options
+        self.uro_options = uro_options
         begin, end = parse_date(value, fava_options.fiscal_year_end)
         if not begin or not end:
             raise TimeFilterParseError(value)
         self.date_range = DateRange(begin, end)
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
-        clamped_entries, _ = clamp_opt(
+        if self.uro_options:
+            return uromyces.summarize_clamp(
+                entries,  # type: ignore[arg-type]
+                self.date_range.begin,
+                self.date_range.end,
+                self.uro_options,
+            )
+        ret, _ = summarize.clamp_opt(
             entries,  # type: ignore[arg-type]
             self.date_range.begin,
             self.date_range.end,
-            self._options,
+            self.options,
         )
-        return clamped_entries  # type: ignore[return-value]
+        return ret  # type: ignore[return-value]
 
 
 LEXER = FilterSyntaxLexer()

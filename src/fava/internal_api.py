@@ -21,6 +21,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from typing import Literal
 
+    from beancount.core.data import BeancountError
+
     from fava.beans.abc import Meta
     from fava.beans.abc import Query
     from fava.core.accounts import AccountDict
@@ -29,7 +31,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.extensions import ExtensionDetails
     from fava.core.fava_options import FavaOptions
     from fava.core.tree import SerialisedTreeNode
-    from fava.helpers import BeancountError
     from fava.util.date import Interval
 
 

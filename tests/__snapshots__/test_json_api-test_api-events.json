@@ -3,77 +3,91 @@
     "date": "2014-01-01",
     "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 3767
     },
     "t": "Event",
+    "tags": [],
     "type": "employer"
   },
   {
     "date": "2015-01-21",
     "description": "Chicago",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1548
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   },
   {
     "date": "2015-02-05",
     "description": "New Metropolis",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1628
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   },
   {
     "date": "2015-07-07",
     "description": "San Francisco",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 1914
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   },
   {
     "date": "2015-07-26",
     "description": "New Metropolis",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2078
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   },
   {
     "date": "2016-03-31",
     "description": "New York",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2560
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   },
   {
     "date": "2016-04-15",
     "description": "New Metropolis",
     "entry_hash": "ENTRY_HASH",
+    "links": [],
     "meta": {
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 2686
     },
     "t": "Event",
+    "tags": [],
     "type": "location"
   }
 ]
