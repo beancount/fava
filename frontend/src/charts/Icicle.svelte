@@ -96,4 +96,8 @@
   g:hover > g.current {
     opacity: 1;
   }
+
+  text {
+    fill: var(--text-color-chart);
+  }
 </style>
