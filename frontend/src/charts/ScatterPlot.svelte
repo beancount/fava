@@ -6,6 +6,7 @@
 
   import { day } from "../format.ts";
   import Axis from "./Axis.svelte";
+  import { dateRangeBrush } from "./brush.ts";
   import { scatterplotScale } from "./helpers.ts";
   import type { ScatterPlot, ScatterPlotDatum } from "./scatterplot.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
@@ -66,6 +67,7 @@
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
   <g
     {@attach positionedTooltip(tooltipFindNode)}
+    {@attach dateRangeBrush((px) => x.invert(px), innerWidth, innerHeight)}
     transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />

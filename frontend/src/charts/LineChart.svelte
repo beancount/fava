@@ -8,6 +8,7 @@
   import { chartToggledCurrencies, lineChartMode } from "../stores/chart.ts";
   import { ctx, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
+  import { dateRangeBrush } from "./brush.ts";
   import { currenciesScale, includeZero, padExtent } from "./helpers.ts";
   import type { LineChart, LineChartDatum } from "./line.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
@@ -91,6 +92,7 @@
   </filter>
   <g
     {@attach positionedTooltip(tooltipFindNode)}
+    {@attach dateRangeBrush((px) => x.invert(px), innerWidth, innerHeight)}
     transform={`translate(${margin.left.toString()},${margin.top.toString()})`}
   >
     <Axis x axis={xAxis} {innerHeight} />
