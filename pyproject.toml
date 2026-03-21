@@ -75,6 +75,11 @@ docs = ["furo>=2024", "sphinx>=7", "sphinx-autodoc-typehints>=2"]
 old-deps = ["pytest", "setuptools"]
 # Running pre-commit hooks.
 pre-commit = ["pre-commit>=4"]
+# Utilities to deal with github actions.
+github-actions = [
+  "gha-update; python_version>=\"3.12\"",
+  "zizmor",
+]
 # Dependencies for tests.
 test = [
   "fava[excel]",
@@ -100,6 +105,7 @@ build-backend = "_build_backend"
 backend-path = ["."]
 
 [tool.uv]
+exclude-newer = "7 days"
 python-preference = "system"
 # Pin some lower bounds for transitive dependencies in the old_deps tests
 # This a basically determined by increasing them until getting a combination that runs.
