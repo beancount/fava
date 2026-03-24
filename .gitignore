@@ -17,7 +17,6 @@
 /src/fava/static/*.map
 /src/fava/static/*.wasm
 /src/fava/static/*.woff2
-/src/fava/translations/messages.pot
 /src/fava/translations/**/messages.mo
 /venv/
 

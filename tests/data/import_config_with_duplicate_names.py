@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from beangulp import Importer
+from beangulp.importer import Importer
 
 try:
     from typing import override

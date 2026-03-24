@@ -734,7 +734,6 @@
     "show_accounts_with_zero_transactions": true,
     "show_closed_accounts": false,
     "sidebar_show_queries": 5,
-    "unrealized": "Unrealized",
     "upcoming_events": 7,
     "uptodate_indicator_grey_lookback_days": 60,
     "use_external_editor": false

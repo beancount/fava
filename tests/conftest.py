@@ -293,6 +293,7 @@ LedgerSlug: TypeAlias = Literal[
     "query-example",
     "long-example",
     "extension-report",
+    "edit-example",
     "import",
     "off-by-one",
     "invalid-unicode",

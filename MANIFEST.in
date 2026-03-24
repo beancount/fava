@@ -9,5 +9,4 @@ exclude .prettierignore
 prune .github
 
 graft src/fava/static
-exclude src/fava/translations/babel.conf
 recursive-include src/fava/translations *.mo

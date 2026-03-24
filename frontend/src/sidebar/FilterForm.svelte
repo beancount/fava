@@ -106,7 +106,7 @@
   />
   <AutocompleteInput
     bind:value={fql_filter_value}
-    placeholder={_("Filter by tag, payee, ...")}
+    placeholder={_("Filter by tag, payee, …")}
     suggestions={fql_filter_suggestions}
     key="f f"
     clearButton={true}

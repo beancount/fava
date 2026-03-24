@@ -18,7 +18,7 @@
     (state) => {
       value = state.sliceDoc();
     },
-    _("...enter a BQL query. 'help' to list available commands."),
+    _("…enter a BQL query. 'help' to list available commands."),
     () => submit,
   );
 

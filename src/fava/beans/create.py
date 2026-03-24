@@ -11,8 +11,6 @@ from beancount.core.amount import Amount as BeancountAmount
 from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
-from fava.beans import BEANCOUNT_V3
-
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from decimal import Decimal
@@ -182,13 +180,6 @@ def note(
     links: frozenset[str] | None = None,
 ) -> Note:
     """Create a Beancount Note."""
-    if not BEANCOUNT_V3:  # pragma: no cover
-        return data.Note(  # type: ignore[call-arg,return-value]
-            dict(meta),
-            date,
-            account,
-            comment,
-        )
     return data.Note(  # type: ignore[return-value]
         dict(meta),
         date,

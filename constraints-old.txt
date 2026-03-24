@@ -8,32 +8,25 @@ babel==2.11.0
     # via
     #   fava (pyproject.toml)
     #   flask-babel
-beancount==2.3.5
+beancount==3.2.0
     # via
     #   fava (pyproject.toml)
     #   beangulp
     #   beanquery
-beangulp==0.1.0
+beangulp==0.2.0
     # via fava (pyproject.toml)
 beanquery==0.1.0
     # via fava (pyproject.toml)
 beautifulsoup4==4.0.1
-    # via
-    #   beancount
-    #   beangulp
-bottle==0.12.20
-    # via
-    #   -c (workspace)
-    #   beancount
+    # via beangulp
 chardet==1.0
-    # via
-    #   beancount
-    #   beangulp
+    # via beangulp
 cheroot==8.0.0
     # via fava (pyproject.toml)
 click==8.0.1
     # via
     #   fava (pyproject.toml)
+    #   beancount
     #   beangulp
     #   beanquery
     #   flask
@@ -47,10 +40,6 @@ flask==2.2.0
     #   flask-babel
 flask-babel==3.0.0
     # via fava (pyproject.toml)
-google-api-python-client==1.0
-    # via beancount
-httplib2==0.7.6
-    # via google-api-python-client
 idna==2.8
     # via anyio
 importlib-metadata==3.6.0
@@ -79,7 +68,6 @@ lml==0.0.1
 lxml==5.3.0
     # via
     #   -c (workspace)
-    #   beancount
     #   beangulp
     #   pyexcel-ezodf
     #   pyexcel-ods3
@@ -101,9 +89,7 @@ packaging==14.0
 pluggy==0.12.0
     # via pytest
 ply==3.4
-    # via
-    #   fava (pyproject.toml)
-    #   beancount
+    # via fava (pyproject.toml)
 pyexcel==0.5.0
     # via fava (pyproject.toml)
 pyexcel-ezodf==0.3.3
@@ -120,24 +106,20 @@ pyexcel-xlsx==0.5.0
 pytest==7.2.0
     # via
     #   -c (workspace)
-    #   beancount
+    #   fava (pyproject.toml:old-deps)
 python-dateutil==2.6.0
     # via
     #   -c (workspace)
     #   beancount
     #   beanquery
-python-gflags==1.3
-    # via google-api-python-client
 python-magic==0.4.12
-    # via
-    #   beancount
-    #   beangulp
+    # via beangulp
 pytz==2022.7
     # via
     #   -c (workspace)
     #   babel
     #   flask-babel
-requests==0.2.0
+regex==2022.9.13
     # via beancount
 setuptools==67.0.0
     # via

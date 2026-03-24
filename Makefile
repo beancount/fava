@@ -1,14 +1,16 @@
 FRONTEND_SOURCES := $(shell find frontend/src frontend/css -type f)
+PY_SOURCES := $(shell find src/fava -name "*.py")
 
-all: src/fava/static/app.js
+all: src/fava/static/app.js src/fava/translations/messages.pot
 
 # Compile the frontend.
 src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
+src/fava/static/app.js: frontend/src/codemirror/bql-grammar.ts
 	cd frontend; npm run build
 
 # Install the frontend node_modules dependencies.
 frontend/node_modules: frontend/package-lock.json
-	cd frontend; npm install --no-progress
+	cd frontend; npm install --no-save --no-progress
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.
@@ -18,6 +20,11 @@ dev: .venv
 	uv sync
 	uv run pre-commit install
 	touch -m .venv
+
+# Build the frontend in watch mode.
+.PHONY: watch
+watch: .venv frontend/node_modules
+	uv run watchfiles make frontend
 
 # Remove the generated frontend and translations in addition to mostlyclean (see below).
 .PHONY: clean
@@ -86,8 +93,8 @@ update-constraints:
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
 update-frontend-deps:
-	-cd frontend; npm outdated
-	cd frontend; npm update
+	-cd frontend; npm outdated --min-release-age 7
+	cd frontend; npm update --min-release-age 7
 	cd frontend; npm run sync-pre-commit
 	touch -m frontend/node_modules
 
@@ -104,8 +111,8 @@ update-precommit:
 # Update github actions action versions.
 .PHONY: update-github-actions
 update-github-actions:
-	uvx gha-update
-	uvx zizmor .github/workflows/*.yml
+	uv run --no-dev --group github-actions gha-update
+	uv run --no-dev --group github-actions zizmor .github/workflows/*.yml
 
 # Update frontend deps, Python deps and pre-commit
 .PHONY: update
@@ -124,37 +131,19 @@ run-example:
 	BEANCOUNT_FILE= fava -p 3333 --debug tests/data/*.beancount
 
 # Generate the bql-grammar json file used by the frontend.
-.PHONY: bql-grammar
-bql-grammar: .venv contrib/scripts.py
-	uv run --group scripts contrib/scripts.py generate-bql-grammar-json
-	-uv run pre-commit run --files frontend/src/codemirror/bql-grammar.ts
+frontend/src/codemirror/bql-grammar.ts: .venv contrib/scripts.py
+	uv run contrib/scripts.py generate-bql-grammar-json
+	-uv run pre-commit run biome-check --files $@
+
+# Extract translation strings.
+src/fava/translations/messages.pot: .venv $(PY_SOURCES) $(FRONTEND_SOURCES)
+	uv run pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=$@ .
 
 # Build the distribution (sdist and wheel).
 .PHONY: dist
 dist:
 	rm -f dist/*{.tar.gz,.whl}
 	uv build
-
-# Build the bql-grammar and update translations with POEditor.com
-.PHONY: before-release
-before-release: bql-grammar translations-push translations-fetch
-
-# Extract translation strings.
-.PHONY: translations-extract
-translations-extract: .venv
-	uv run pybabel extract -F src/fava/translations/babel.conf -o src/fava/translations/messages.pot .
-
-# Extract translation strings and upload them to POEditor.com.
-# Requires the environment variable POEDITOR_TOKEN to be set to an API token
-# for POEditor.
-.PHONY: translations-push
-translations-push: .venv translations-extract
-	uv run --group scripts contrib/scripts.py upload-translations
-
-# Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
-.PHONY: translations-fetch
-translations-fetch: .venv
-	uv run --group scripts contrib/scripts.py download-translations
 
 # Create a binary using pyinstaller
 dist/fava: src/fava/static/app.js

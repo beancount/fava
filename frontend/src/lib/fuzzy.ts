@@ -109,11 +109,9 @@ export function fuzzywrap(pattern: string, text: string): FuzzyWrappedText {
   }
   if (plain != null) {
     result.push(["text", plain]);
-    plain = null;
   }
   if (match != null) {
     result.push(["match", match]);
-    match = null;
   }
   return result;
 }
