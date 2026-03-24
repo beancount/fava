@@ -1,7 +1,7 @@
 :root {
   /* Fonts */
   --font-family: "Fira Sans", sans-serif;
-  --font-family-monospaced: "Fira Mono", monospace;
+  --font-family-monospaced: "Fira Code", "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
 
   color-scheme: light dark;

@@ -20,6 +20,7 @@
 
   .num {
     font-family: var(--font-family-monospaced);
+    font-weight: 600;
     text-align: right;
   }
 
