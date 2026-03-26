@@ -111,7 +111,6 @@ class FavaOptions:
     show_accounts_with_zero_transactions: bool = True
     show_closed_accounts: bool = False
     sidebar_show_queries: int = 5
-    unrealized: str = "Unrealized"
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
     use_external_editor: bool = False

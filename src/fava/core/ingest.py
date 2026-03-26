@@ -20,6 +20,7 @@ from beangulp.importer import Importer
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
+from fava.util import listify
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -200,31 +201,8 @@ class WrappedImporter:
 
 
 # Copied here from beangulp to minimise the imports.
+# Skip files over 8MB
 _FILE_TOO_LARGE_THRESHOLD = 8 * 1024 * 1024
-
-
-def find_imports(
-    config: Sequence[WrappedImporter], directory: Path
-) -> Iterable[FileImporters]:
-    """Pair files and matching importers.
-
-    Yields:
-        For each file in directory, a pair of its filename and the matching
-        importers.
-    """
-    for path in walk_dir(directory):
-        stat = path.stat()
-        if stat.st_size > _FILE_TOO_LARGE_THRESHOLD:  # pragma: no cover
-            continue
-
-        importers = [
-            importer.file_import_info(path)
-            for importer in config
-            if importer.identify(path)
-        ]
-        yield FileImporters(
-            name=str(path), basename=path.name, importers=importers
-        )
 
 
 def extract_from_file(
@@ -348,23 +326,39 @@ class IngestModule(FavaModule):
             msg = f"Error in import config '{module_path}': {error!s}"
             self._error(msg)
 
-    def import_data(self) -> list[FileImporters]:
+    @listify
+    def import_data(self) -> Iterable[FileImporters]:
         """Identify files and importers that can be imported.
 
         Returns:
             A list of :class:`.FileImportInfo`.
         """
         if not self.importers:
-            return []
+            return
 
         importers = list(self.importers.values())
+        seen = set()
 
-        ret: list[FileImporters] = []
         for directory in self.ledger.fava_options.import_dirs:
-            full_path = self.ledger.join_path(directory)
-            ret.extend(find_imports(importers, full_path))
+            for path in walk_dir(self.ledger.join_path(directory)):
+                if path in seen:
+                    continue
+                seen.add(path)
 
-        return ret
+                if (
+                    path.stat().st_size > _FILE_TOO_LARGE_THRESHOLD
+                ):  # pragma: no cover
+                    continue
+
+                yield FileImporters(
+                    name=str(path),
+                    basename=path.name,
+                    importers=[
+                        importer.file_import_info(path)
+                        for importer in importers
+                        if importer.identify(path)
+                    ],
+                )
 
     def extract(self, filename: str, importer_name: str) -> list[Directive]:
         """Extract entries from filename with the specified importer.

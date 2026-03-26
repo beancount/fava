@@ -93,8 +93,8 @@ update-constraints:
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
 update-frontend-deps:
-	-cd frontend; npm outdated
-	cd frontend; npm update
+	-cd frontend; npm outdated --min-release-age 7
+	cd frontend; npm update --min-release-age 7
 	cd frontend; npm run sync-pre-commit
 	touch -m frontend/node_modules
 
@@ -111,8 +111,8 @@ update-precommit:
 # Update github actions action versions.
 .PHONY: update-github-actions
 update-github-actions:
-	uvx gha-update
-	uvx zizmor .github/workflows/*.yml
+	uv run --no-dev --group github-actions gha-update
+	uv run --no-dev --group github-actions zizmor .github/workflows/*.yml
 
 # Update frontend deps, Python deps and pre-commit
 .PHONY: update

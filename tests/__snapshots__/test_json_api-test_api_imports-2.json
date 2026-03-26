@@ -45,7 +45,7 @@
         "meta": {
           "__tolerances__": { "EUR": 0.005 },
           "filename": "TEST_DATA_DIR/import.beancount",
-          "lineno": 8
+          "lineno": 9
         },
         "narration": " BANKOMAT  00000483 K2 UM 11:56",
         "payee": "",
@@ -56,7 +56,7 @@
             "flag": null,
             "meta": {
               "filename": "TEST_DATA_DIR/import.beancount",
-              "lineno": 9
+              "lineno": 10
             },
             "price": null,
             "units": { "currency": "EUR", "number": -100.0 }

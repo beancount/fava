@@ -582,6 +582,15 @@
               "cost": null,
               "cost_children": null,
               "has_txns": true
+            },
+            {
+              "account": "Equity:Earnings:Unrealized",
+              "balance": {},
+              "balance_children": {},
+              "children": [],
+              "cost": null,
+              "cost_children": null,
+              "has_txns": true
             }
           ],
           "cost": null,
@@ -592,15 +601,6 @@
           "account": "Equity:Opening-Balances",
           "balance": { "USD": -3553.18 },
           "balance_children": { "USD": -3553.18 },
-          "children": [],
-          "cost": null,
-          "cost_children": null,
-          "has_txns": true
-        },
-        {
-          "account": "Equity:Unrealized",
-          "balance": {},
-          "balance_children": {},
           "children": [],
           "cost": null,
           "cost_children": null,
