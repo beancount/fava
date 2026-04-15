@@ -59,7 +59,7 @@ def test_hash_entry() -> None:
         "a note",
     )
     assert isinstance(hash_entry(note), str)
-    str_hash = hash_entry("asdf")  # type: ignore[arg-type]
+    str_hash = hash_entry("asdf")  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
     assert isinstance(str_hash, str)
 
 
@@ -94,7 +94,7 @@ def test_replace() -> None:
     assert note_new.comment == "asdfasdf"
 
     with pytest.raises(TypeError):
-        replace("", a="")  # type: ignore[type-var]
+        replace("", a="")  # type: ignore[type-var]  # ty:ignore[invalid-argument-type]
 
 
 def test_fava_price_map(load_doc_entries: Sequence[Directive]) -> None:

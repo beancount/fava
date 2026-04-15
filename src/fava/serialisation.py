@@ -45,7 +45,7 @@ def serialise(entry: Directive | Posting) -> Any:
     if not isinstance(entry, Directive):  # pragma: no cover
         msg = f"Unsupported object {entry}"
         raise TypeError(msg)
-    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["entry_hash"] = hash_entry(entry)
     ret["t"] = entry.__class__.__name__
     return ret
@@ -53,7 +53,7 @@ def serialise(entry: Directive | Posting) -> Any:
 
 @serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["meta"] = copy(entry.meta)
     ret["meta"].pop("__tolerances__", None)
     ret["t"] = "Transaction"
@@ -65,7 +65,7 @@ def _(entry: Transaction) -> Any:
 
 @serialise.register(Custom)
 def _(entry: Custom) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Custom"
     ret["entry_hash"] = hash_entry(entry)
     ret["values"] = [v.value for v in entry.values]
@@ -74,7 +74,7 @@ def _(entry: Custom) -> Any:
 
 @serialise.register(Balance)
 def _(entry: Balance) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Balance"
     ret["entry_hash"] = hash_entry(entry)
     amt = ret["amount"]
@@ -84,7 +84,7 @@ def _(entry: Balance) -> Any:
 
 @serialise.register(Price)
 def _(entry: Balance) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]
+    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Price"
     ret["entry_hash"] = hash_entry(entry)
     amt = ret["amount"]

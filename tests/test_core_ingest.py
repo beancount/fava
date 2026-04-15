@@ -129,7 +129,7 @@ class ImporterNameInvalidType(MinimalImporter):
     @override
     @property
     def name(self) -> str:
-        return False  # type: ignore[return-value]
+        return False  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
 
 
 def test_ingest_get_name_invalid_type() -> None:
