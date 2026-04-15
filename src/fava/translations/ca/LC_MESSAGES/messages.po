@@ -1,11 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
+"PO-Revision-Date: 2026-04-15 16:45+0000\n"
+"Last-Translator: Marc Riera <marcriera@softcatala.org>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/fava/fava/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -44,10 +48,8 @@ msgid "Chart is empty."
 msgstr "El gràfic és buit."
 
 #: frontend/src/editor/DeleteButton.svelte:11
-#, fuzzy
-#| msgid "Deleting..."
 msgid "Deleting…"
-msgstr "S'està suprimint..."
+msgstr "S'està suprimint…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -56,10 +58,8 @@ msgid "Delete"
 msgstr "Suprimeix"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#, fuzzy
-#| msgid "Saving..."
 msgid "Saving…"
-msgstr "S'està desant..."
+msgstr "S'està desant…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/modals/AddEntry.svelte:66
@@ -186,16 +186,12 @@ msgid "Upload file(s)"
 msgstr "Puja un fitxer"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "Fitxer"
+msgstr "Fitxers"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents folder"
-msgstr "Documents"
+msgstr "Carpeta de documents"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
@@ -355,10 +351,8 @@ msgid "Event: %(type)s"
 msgstr "Esdeveniment: %(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
-#, fuzzy
-#| msgid "Events"
 msgid "No events."
-msgstr "Esdeveniments"
+msgstr "No hi ha cap esdeveniment."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -495,7 +489,7 @@ msgstr "Llibre diari"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "Esquema de colors"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -510,11 +504,9 @@ msgid "Beancount options"
 msgstr "Opcions del Beancount"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
-#, fuzzy
-#| msgid "...enter a BQL query. 'help' to list available commands."
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
-"Introduïu una consulta SQL. Escriviu «help» per veure una llista de les "
+"Introduïu una consulta BQL. Escriviu «help» per veure una llista de les "
 "ordres disponibles."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
@@ -602,10 +594,8 @@ msgid "Time"
 msgstr "Data"
 
 #: frontend/src/sidebar/FilterForm.svelte:109
-#, fuzzy
-#| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
-msgstr "Filtreu per etiqueta, beneficiari, etc."
+msgstr "Filtreu per etiqueta, beneficiari…"
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
 #: src/fava/json_api.py:700
@@ -622,7 +612,7 @@ msgstr "Anells"
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "Jeràrquic"
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
@@ -642,15 +632,15 @@ msgstr "Barres senzilles"
 
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: frontend/src/stores/color_scheme.ts:16
 msgid "Dark"
-msgstr ""
+msgstr "Fosc"
 
 #: frontend/src/stores/color_scheme.ts:17
 msgid "Light"
-msgstr ""
+msgstr "Clar"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
