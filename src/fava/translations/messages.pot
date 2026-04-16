@@ -49,7 +49,7 @@ msgid "Saving…"
 msgstr ""
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/modals/AddEntry.svelte:116
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
 msgstr ""
@@ -79,7 +79,7 @@ msgid "Add metadata"
 msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:28
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/modals/AddEntry.svelte:18
 #: frontend/src/reports/journal/JournalHeaders.svelte:56
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
@@ -106,7 +106,7 @@ msgid "Value"
 msgstr ""
 
 #: frontend/src/entry-forms/Note.svelte:27
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/modals/AddEntry.svelte:19
 msgid "Note"
 msgstr ""
 
@@ -151,15 +151,19 @@ msgstr ""
 msgid "Daily"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:17
 msgid "Transaction"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:43
+#: frontend/src/modals/AddEntry.svelte:87
+msgid "Error loading entry. Error message:"
+msgstr ""
+
+#: frontend/src/modals/AddEntry.svelte:91
 msgid "Add"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:64
+#: frontend/src/modals/AddEntry.svelte:114
 msgid "continue"
 msgstr ""
 
