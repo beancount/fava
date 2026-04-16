@@ -8,6 +8,7 @@
   import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import type { BarChart } from "./bar.ts";
+  import { dateRangeBrush } from "./brush.ts";
   import {
     currenciesScale,
     filterTicks,
@@ -84,10 +85,29 @@
   let yAxis = $derived(
     axisLeft(y).tickPadding(6).tickSize(-innerWidth).tickFormat($short),
   );
+
+  /** Invert a pixel x position to the date of the nearest bar group. */
+  function invertX(px: number): Date {
+    const half = x0.bandwidth() / 2;
+    let bestDate = new Date();
+    let bestDist = Infinity;
+    for (const { label, date } of bar_groups) {
+      let position = x0(label) ?? 0;
+      const dist = Math.abs(px - position - half);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestDate = date;
+      }
+    }
+    return bestDate;
+  }
 </script>
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
-  <g transform={`translate(${offset.toString()},${margin.top.toString()})`}>
+  <g
+    {@attach dateRangeBrush(invertX, innerWidth, innerHeight)}
+    transform={`translate(${offset.toString()},${margin.top.toString()})`}
+  >
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} lineAtZero={y(0)} />
     {#each bar_groups as group (group.date)}
