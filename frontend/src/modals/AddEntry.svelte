@@ -1,9 +1,13 @@
 <script lang="ts">
   import { get_context, save_entries } from "../api/index.ts";
+  import { get_context, save_entries } from "../api/index.ts";
   import { Balance, Note, Transaction } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format.ts";
   import { _ } from "../i18n.ts";
+  import type { Result } from "../lib/result.ts";
+  import { Err } from "../lib/result.ts";
+  import type { ValidationError } from "../lib/validation.ts";
   import type { Result } from "../lib/result.ts";
   import { Err } from "../lib/result.ts";
   import type { ValidationError } from "../lib/validation.ts";
@@ -23,6 +27,7 @@
   let entry: Transaction | Balance | Note = $state.raw(
     Transaction.empty(todayAsString()),
   );
+  let error: ValidationError | null = $state(null);
   let error: ValidationError | null = $state(null);
 
   async function submit(event: SubmitEvent) {
@@ -49,10 +54,13 @@
         let fetchedEntry = data.entry;
         let result: Result<Transaction | Balance | Note, ValidationError>;
         if (fetchedEntry.t === "Transaction") {
+          fetchedEntry = fetchedEntry.set("date", todayAsString());
           result = Transaction.validator(fetchedEntry);
         } else if (fetchedEntry.t === "Balance") {
+          fetchedEntry = fetchedEntry.set("date", todayAsString());
           result = Balance.validator(fetchedEntry);
         } else if (fetchedEntry.t === "Note") {
+          fetchedEntry = fetchedEntry.set("date", todayAsString());
           result = Note.validator(fetchedEntry);
         } else {
           result = new Err({
@@ -75,6 +83,38 @@
 </script>
 
 <ModalBase {shown} focus=".payee input">
+  {#if error}
+    <p>{_("Error loading entry. Error message:")} {error.message}</p>
+  {:else}
+    <form onsubmit={submit} class="flex-column">
+      <h3>
+        {_("Add")}
+        {#each entryTypes as [Cls, displayName] (displayName)}
+          <button
+            type="button"
+            class:muted={!(entry instanceof Cls)}
+            onclick={() => {
+              // when switching between entry types, keep the date.
+              entry = Cls.empty(entry.date);
+            }}
+          >
+            {displayName}
+          </button>
+          <!-- eslint-disable-next-line svelte/no-useless-mustaches -->
+          {" "}
+        {/each}
+      </h3>
+      <Entry bind:entry />
+      <div class="flex-row">
+        <span class="spacer"></span>
+        <label>
+          <input type="checkbox" bind:checked={$addEntryContinue} />
+          <span>{_("continue")}</span>
+        </label>
+        <button type="submit">{_("Save")}</button>
+      </div>
+    </form>
+  {/if}
   {#if error}
     <p>{_("Error loading entry. Error message:")} {error.message}</p>
   {:else}
