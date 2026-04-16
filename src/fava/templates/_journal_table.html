@@ -50,9 +50,19 @@
     {% set type = entry.__class__.__name__.lower() %}
     {% set metadata_items = entry.meta|meta_items %}
     {% set entry_hash = entry|hash_entry -%}
-    <li class='{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}'>
+    <li class='{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}' onmouseleave="this.querySelector('.kebab-dropdown').style.display='none';">
         <p>
-        <span class='datecell' data-sort-value='{{ index }}'><a href='#context-{{ entry_hash }}'>{{ entry.date }}</a></span>
+        {# --- KEBAB MENU --- #}
+        <span class="entry-kebab" role="menuitem" tabindex="0">
+           
+          <!-- Kebab icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;padding: 2px 2px 0px 2px;">
+            <circle cx="12" cy="5" r="1"></circle>
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="12" cy="19" r="1"></circle>
+          </svg>
+        </span>
+        <span class='datecell' data-sort-value='{{ index }}'>{{ entry.date }}</span>
         <span class='flag'>{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
         <span class='description'>
         {% if type == 'open' or type == 'close' %}
@@ -118,6 +128,34 @@
           </span>
         {% endif %}
         </p>
+          <!-- Dropdown menu -->
+          <ul role="menu" class="kebab-dropdown" style="position: absolute; z-index: var(--z-index-floating-ui); width: 200px; max-height: 400px; margin: 0em 0 0 0em; display: none; overflow-y: auto; background: var(--background); border: 1px solid var(--border); box-shadow: var(--box-shadow-dropdown);" tabindex="0" onmouseleave="debugger;if (!event.relatedTarget || !this.closest('li').contains(event.relatedTarget)) {
+            this.style.display='none';
+        }">
+            
+            <li role="menuitem" class="duplicate-btn" style="border: none;padding: 0.4em 0.5em 0.3em 0.5em;" onmouseover="this.style.background='var(--sidebar-background)'"
+            onmouseout="this.style.background='white'"
+            onkeydown="if(event.key==='Enter' || event.key===' ') this.click()">
+              <!-- Copy ikon -->
+              <!--               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"> -->
+                <!-- lucide.dev/icons -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-icon lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Duplicate</span>
+            </li>
+
+            <li role="menuitem" class="edit-btn" style="border: none;padding: 0.3em 0.5em 0.25em 0.5em;"
+            onmouseover="this.style.background='var(--sidebar-background)'"
+            onmouseout="this.style.background='white'"
+            onclick="location.href='#context-{{ entry_hash }}'"
+            onkeydown="if(event.key==='Enter' || event.key===' ') this.click()">
+              <!-- Pencil ikon -->
+             <!--  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"> -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 21h8"/><path d="m15 5 4 4"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>
+              <span>Edit</span>
+            </li>
+          </ul>
+
         {{ _render_metadata(metadata_items, entry_hash) }}
         {% if entry.postings %}
           <ul class='postings'>

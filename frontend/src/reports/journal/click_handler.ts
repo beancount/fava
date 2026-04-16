@@ -44,5 +44,15 @@ export function handle_journal_click({ target }: Event): void {
   } else if (target.closest(".indicators")) {
     // Toggle postings and metadata by clicking on indicators.
     target.closest(".journal > li")?.classList.toggle("show-full-entry");
+  } else if (target.closest(".entry-kebab")) {
+    const li = target.closest("li");
+    if (li) {
+      const dropdown: HTMLElement | null = li.querySelector(".kebab-dropdown");
+
+      if (dropdown) {
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+      }
+    }
   }
 }

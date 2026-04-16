@@ -290,3 +290,23 @@
     }
   }
 }
+
+.kebab-dropdown button:hover {
+  background-color: var(--background-darker);
+}
+
+.kebab-dropdown {
+  animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
