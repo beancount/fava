@@ -492,7 +492,7 @@ def create_app(
     fava_app = Flask("fava")
     fava_app.register_blueprint(json_api, url_prefix="/<bfile>/api")
     fava_app.json = FavaJSONProvider(fava_app)
-    fava_app.app_ctx_globals_class = Context  # type: ignore[assignment]
+    fava_app.app_ctx_globals_class = Context  # type: ignore[assignment]  # ty:ignore[invalid-assignment]
     _setup_template_config(fava_app, incognito=incognito)
     _setup_babel(fava_app)
     _setup_filters(fava_app, read_only=read_only)
