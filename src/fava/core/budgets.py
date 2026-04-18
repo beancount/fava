@@ -197,7 +197,7 @@ def calculate_budget_children(
         A dictionary of currency to Decimal with the budget for the
         specified account and period.
     """
-    currency_dict: dict[str, Decimal] = Counter()  # type: ignore[assignment]
+    currency_dict: dict[str, Decimal] = Counter()  # type: ignore[assignment]  # ty:ignore[invalid-assignment]
 
     for child in budgets:
         if child.startswith(account):

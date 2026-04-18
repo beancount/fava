@@ -136,7 +136,7 @@ def main(  # noqa: PLR0913
 
         from fava.util import simple_wsgi
 
-        app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]
+        app.wsgi_app = DispatcherMiddleware(  # type: ignore[method-assign]  # ty:ignore[invalid-assignment]
             simple_wsgi,
             {prefix: app.wsgi_app},
         )
@@ -167,7 +167,7 @@ def main(  # noqa: PLR0913
 
         setup_debug_logging()
         if profile:
-            app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]
+            app.wsgi_app = ProfilerMiddleware(  # type: ignore[method-assign]  # ty:ignore[invalid-assignment]
                 app.wsgi_app,
                 restrictions=(30,),
                 profile_dir=profile_dir or None,

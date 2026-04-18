@@ -178,7 +178,7 @@ class Tree(dict[str, TreeNode]):
         name: str,
         *,
         insert: bool = False,
-    ) -> TreeNode:
+    ) -> TreeNode:  # ty:ignore[invalid-method-override]
         """Get an account.
 
         Args:

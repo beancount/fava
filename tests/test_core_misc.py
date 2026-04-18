@@ -25,5 +25,5 @@ def test_upcoming_events() -> None:
     entries, _, _ = load_string(
         f'{today} event "some_event" "test"\n2012-12-12 event "test" "test"',
     )
-    events = upcoming_events(entries, 1)  # type: ignore[arg-type]
+    events = upcoming_events(entries, 1)  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
     assert len(events) == 1

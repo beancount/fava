@@ -122,7 +122,7 @@ class FavaOptions:
         except re.error as err:
             raise NotARegularExpressionError(value) from err
         # It's typed as Sequence so that it's not externally mutated
-        self.collapse_pattern.append(pattern)  # type: ignore[attr-defined]
+        self.collapse_pattern.append(pattern)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
@@ -142,7 +142,7 @@ class FavaOptions:
     def set_import_dirs(self, value: str) -> None:
         """Add an import directory."""
         # It's typed as Sequence so that it's not externally mutated
-        self.import_dirs.append(value)  # type: ignore[attr-defined]
+        self.import_dirs.append(value)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
 
     def set_insert_entry(
         self, value: str, date: datetime.date, filename: str, lineno: int
@@ -154,7 +154,7 @@ class FavaOptions:
             raise NotARegularExpressionError(value) from err
         opt = InsertEntryOption(date, pattern, filename, lineno)
         # It's typed as Sequence so that it's not externally mutated
-        self.insert_entry.append(opt)  # type: ignore[attr-defined]
+        self.insert_entry.append(opt)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
 
     def set_language(self, value: str) -> None:
         """Set the locale option."""

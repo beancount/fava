@@ -104,7 +104,7 @@ export class HierarchyChart {
     this.currencies = [...this.data.keys()];
     const first_currency = this.currencies[0];
     this.treemap_currency =
-      first_currency != null ? writable<string>(first_currency) : null;
+      first_currency != null ? writable(first_currency) : null;
   }
 }
 
@@ -138,7 +138,7 @@ export class ParsedHierarchyChart implements ParsedFavaChart {
       new Map(
         currencies
           .map((currency) => {
-            const r = d3Hierarchy<AccountHierarchyDatum>(root);
+            const r = d3Hierarchy(root);
             const root_balance = sum(
               r.descendants(),
               (n) => n.data.balance[currency] ?? 0,
