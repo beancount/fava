@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { get as store_get } from "svelte/store";
+
   import { save_entries } from "../api/index.ts";
   import { Balance, Note, Transaction } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { router } from "../router.ts";
-  import { addEntryContinue } from "../stores/editor.ts";
+  import { addEntryContinue, initial_entry } from "../stores/editor.ts";
   import { hash } from "../stores/url.ts";
   import ModalBase from "./ModalBase.svelte";
 
@@ -20,6 +22,21 @@
   let entry: Transaction | Balance | Note = $state.raw(
     Transaction.empty(todayAsString()),
   );
+
+  $effect(() => {
+    // When the modal becomes visible...
+    if (shown) {
+      // Check if initial_entry has data
+      const data = store_get(initial_entry);
+      if (data) {
+        // Overwrite the state with the provided data
+        entry = data;
+        // Clear the store immediately so on subsequent
+        // opening of the dialog it is not pre-filled again.
+        initial_entry.set(null);
+      }
+    }
+  });
 
   async function submit(event: SubmitEvent) {
     event.preventDefault();
