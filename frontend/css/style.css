@@ -36,6 +36,7 @@
   --text-color: light-dark(hsl(0deg 0% 25%), hsl(0deg 0% 80%));
   --text-color-lighter: light-dark(hsl(0deg 0% 30%), hsl(0deg 0% 75%));
   --text-color-lightest: light-dark(hsl(0deg 0% 40%), hsl(0deg 0% 65%));
+  --text-color-chart: light-dark(hsl(0deg 0% 30%), hsl(0deg 0% 15%));
   --link-color: light-dark(hsl(203deg 100% 32%), hsl(203deg 100% 68%));
   --link-hover-color: var(--text-color-lighter);
 
