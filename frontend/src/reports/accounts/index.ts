@@ -18,6 +18,7 @@ const to_report_type = (s: string | null): AccountReportType =>
 export interface AccountReportProps {
   account: string;
   report_type: AccountReportType;
+  initial_chart_index: string | null;
   charts: ParsedFavaChart[];
   journal: DocumentFragment | null;
   interval_balances: AccountTreeNode[] | null;
@@ -52,6 +53,7 @@ export const account_report = new Route<AccountReportProps>(
   async (url) => {
     const account = get_account_from_url(url).unwrap();
     const report_type = to_report_type(url.searchParams.get("r"));
+    const initial_chart_index = url.searchParams.get("c");
     const { charts, journal, interval_balances, dates, budgets } =
       await get_account_report({
         ...getURLFilters(url),
@@ -67,6 +69,7 @@ export const account_report = new Route<AccountReportProps>(
       budgets,
       account,
       report_type,
+      initial_chart_index,
     };
   },
   (url) => {
