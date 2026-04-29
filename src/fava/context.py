@@ -10,4 +10,4 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava._ctx_globals_class import Context
 
 
-g: Context = flask_g  # type: ignore[assignment]
+g: Context = flask_g  # type: ignore[assignment]  # ty:ignore[invalid-assignment]

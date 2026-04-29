@@ -21,7 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def replace(entry: T, **kwargs: Any) -> T:
     """Create a copy of the given directive, replacing some arguments."""
     if hasattr(entry, "_replace"):
-        return entry._replace(**kwargs)  # type: ignore[no-any-return]
+        return entry._replace(**kwargs)  # type: ignore[no-any-return]  # ty:ignore[call-non-callable]
     msg = f"Could not replace attribute in type {type(entry)}"
     raise TypeError(msg)
 

@@ -131,9 +131,9 @@ def test_serialise_entry_types(
         (
             "100 USD",
             CostSpec(
-                MISSING,  # type: ignore[arg-type]
+                MISSING,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
                 None,
-                MISSING,  # type: ignore[arg-type]
+                MISSING,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
                 None,
                 None,
                 merge=False,
@@ -154,7 +154,7 @@ def test_serialise_posting(
     pos = create.posting(
         "Assets",
         amount,
-        cost,  # type: ignore[arg-type]
+        cost,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
         price,
         flag=None,
         meta=meta,
@@ -191,7 +191,7 @@ def test_deserialise_posting(
     pos = create.posting(
         "Assets",
         amount,
-        cost,  # type: ignore[arg-type]
+        cost,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
         price,
         flag=None,
         meta=meta,

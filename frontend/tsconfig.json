@@ -8,6 +8,7 @@
     "erasableSyntaxOnly": true,
     "allowImportingTsExtensions": true,
     "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedSideEffectImports": false,
     "verbatimModuleSyntax": true,
     "allowJs": true,
     "noEmit": true,
