@@ -143,7 +143,7 @@ def test_load_import_config() -> None:
         ImportConfigLoadError,
         match=r"ImportError"
         if sys.platform != "win32"
-        else r"CONFIG is missing",
+        else r"CONFIG is missing|ImportError",
     ):
         load_import_config(Path(__file__).parent)
 

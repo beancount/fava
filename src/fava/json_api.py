@@ -8,15 +8,18 @@ from __future__ import annotations
 
 import logging
 import shutil
+import subprocess
 from abc import abstractmethod
 from dataclasses import dataclass
 from dataclasses import fields
+from functools import lru_cache
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
 from pprint import pformat
+from string import Template
 from typing import Any
 from typing import TYPE_CHECKING
 
@@ -67,6 +70,12 @@ if TYPE_CHECKING:  # pragma: no cover
 
 json_api = Blueprint("json_api", __name__)
 log = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=128)
+def _which(command: str) -> str | None:
+    """Resolve executable path with an LRU cache."""
+    return shutil.which(command)
 
 
 class ValidationError(Exception):
@@ -180,6 +189,42 @@ class NotAFileError(FavaJSONAPIError):
 
     def __init__(self, filename: str) -> None:
         super().__init__(f"Not a file: '{filename}'")
+
+
+class NotASourceFileError(FavaJSONAPIError):
+    """The given path is not a Beancount source file."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, filename: str) -> None:
+        super().__init__(f"Not a Beancount source file: '{filename}'.")
+
+
+class ExternalEditorCommandMissingError(FavaJSONAPIError):
+    """External editor command not configured."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self) -> None:
+        super().__init__("No external editor command configured.")
+
+
+class ExternalEditorCommandTemplateError(FavaJSONAPIError):
+    """External editor command template invalid."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Invalid external editor command: {message}")
+
+
+class ExternalEditorCommandExecutionError(FavaJSONAPIError):
+    """Executing the external editor command failed."""
+
+    status = HTTPStatus.INTERNAL_SERVER_ERROR
+
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Failed to run external editor command: {message}.")
 
 
 @json_api.errorhandler(FavaAPIError)
@@ -423,6 +468,74 @@ def get_source() -> SourceFile:
     )
     source, sha256sum = g.ledger.file.get_source(Path(file_path))
     return SourceFile(file_path=file_path, sha256sum=sha256sum, source=source)
+
+
+@api_endpoint
+def put_open_in_editor(file_path: str, line: str) -> str:
+    """Execute the configured external editor command."""
+    command_template = None
+    if g.ledger.project_config is not None:
+        command_template = g.ledger.project_config.external_editor_command
+    if command_template is None:
+        raise ExternalEditorCommandMissingError
+
+    resolved_path = Path(file_path).resolve()
+    include_paths = {
+        Path(include).resolve() for include in g.ledger.options["include"]
+    }
+    if resolved_path not in include_paths:
+        raise NotASourceFileError(file_path)
+    if not resolved_path.is_file():
+        raise NotAFileError(file_path)
+
+    try:
+        line_num = int(line)
+    except ValueError as err:
+        msg = "line must be an integer"
+        raise ExternalEditorCommandTemplateError(msg) from err
+
+    if not command_template:
+        msg = "command is empty"
+        raise ExternalEditorCommandTemplateError(msg)
+
+    command, *args = command_template
+    if not command:
+        msg = "command is empty"
+        raise ExternalEditorCommandTemplateError(msg)
+
+    command_abs = _which(command)
+
+    if command_abs is None:  # pragma: no cover - depends on environment
+        msg = f"{command} not found in PATH"
+        raise ExternalEditorCommandExecutionError(msg)
+
+    try:
+        args = [
+            Template(part).substitute(
+                file=str(resolved_path),
+                line=str(line_num),
+            )
+            for part in args
+        ]
+    except KeyError as err:
+        missing = err.args[0] if err.args else "unknown"
+        msg = f"missing variable '{missing}'"
+        raise ExternalEditorCommandTemplateError(msg) from err
+
+    try:
+        subprocess.check_call([command_abs, *args])
+    except (
+        subprocess.CalledProcessError
+    ) as err:  # pragma: no cover - depends on environment
+        log.exception("Failed to run external editor command")
+        message = err.stderr or str(err)
+        raise ExternalEditorCommandExecutionError(message) from err
+    except OSError as err:  # pragma: no cover - depends on environment
+        log.exception("Failed to run external editor command")
+        message = err.strerror or str(err)
+        raise ExternalEditorCommandExecutionError(message) from err
+
+    return f"Launching: {' '.join(args)}"
 
 
 @api_endpoint

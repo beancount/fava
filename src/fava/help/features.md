@@ -79,11 +79,9 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 
 ## Opening an external editor
 
-Fava can open up your source file in your favorite editor directly from the web
-interface using the `use-external-editor` configuration variable through the
-`beancount://` URL handler. See the
-[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-pre-configured URL handlers for macOS and Cygwin.
+Fava can open your source file in your editor directly from the web interface.
+Configure `external-editor-command` in `pyproject.toml` under `[tool.fava]` and
+pass that file via `--config-file` when starting Fava.
 
 ## Multiple Beancount files
 

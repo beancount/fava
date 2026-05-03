@@ -1,21 +1,24 @@
 <script lang="ts">
   import type { EntryBaseAttributes } from "../entries/index.ts";
-  import { urlForSource } from "../helpers.ts";
   import { _ } from "../i18n.ts";
+  import SourceLink from "../SourceLink.svelte";
 
   interface Props {
     entry: EntryBaseAttributes;
   }
 
   let { entry }: Props = $props();
+  let line = $derived(entry.meta.lineno);
 </script>
 
 <p>
   {_("Location")}:
   <code>
-    <a href={$urlForSource(entry.meta.filename, entry.meta.lineno)}>
-      {entry.meta.filename}:{entry.meta.lineno}
-    </a>
+    <SourceLink
+      file_path={entry.meta.filename}
+      {line}
+      label={`${entry.meta.filename}:${entry.meta.lineno}`}
+    />
   </code>
 </p>
 

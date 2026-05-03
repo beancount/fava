@@ -30,6 +30,12 @@ click==8.0.1
     #   beangulp
     #   beanquery
     #   flask
+colorama==0.1
+    # via
+    #   click
+    #   pytest
+dacite==1.9.0
+    # via fava (pyproject.toml)
 et-xmlfile==1.0.0
     # via openpyxl
 exceptiongroup==1.0.0
@@ -43,17 +49,13 @@ flask-babel==3.0.0
 idna==2.8
     # via anyio
 importlib-metadata==3.6.0
-    # via
-    #   -c (workspace)
-    #   pluggy
+    # via pluggy
 iniconfig==0.1
     # via pytest
 itsdangerous==2.0.0
     # via flask
 jaraco-functools==4.0.0
-    # via
-    #   -c (workspace)
-    #   cheroot
+    # via cheroot
 jdcal==1.0.1
     # via openpyxl
 jinja2==3.1.2
@@ -67,7 +69,6 @@ lml==0.0.1
     #   pyexcel-io
 lxml==5.3.0
     # via
-    #   -c (workspace)
     #   beangulp
     #   pyexcel-ezodf
     #   pyexcel-ods3
@@ -79,7 +80,6 @@ markupsafe==2.1.1
     #   werkzeug
 more-itertools==6.0.0
     # via
-    #   -c (workspace)
     #   cheroot
     #   jaraco-functools
 openpyxl==2.4.4
@@ -104,32 +104,23 @@ pyexcel-ods3==0.5.0
 pyexcel-xlsx==0.5.0
     # via fava (pyproject.toml)
 pytest==7.2.0
-    # via
-    #   -c (workspace)
-    #   fava (pyproject.toml:old-deps)
+    # via fava (pyproject.toml:old-deps)
 python-dateutil==2.6.0
     # via
-    #   -c (workspace)
     #   beancount
     #   beanquery
-python-magic==0.4.12
-    # via beangulp
 pytz==2022.7
     # via
-    #   -c (workspace)
     #   babel
     #   flask-babel
 regex==2022.9.13
     # via beancount
 setuptools==67.0.0
-    # via
-    #   -c (workspace)
-    #   fava (pyproject.toml:old-deps)
+    # via fava (pyproject.toml:old-deps)
 simplejson==3.16.0
     # via fava (pyproject.toml)
 six==1.16.0
     # via
-    #   -c (workspace)
     #   cheroot
     #   python-dateutil
 sniffio==1.1.0
@@ -138,8 +129,10 @@ tatsu==5.7.4
     # via beanquery
 texttable==0.8.1
     # via pyexcel
-tomli==1.0.0
-    # via pytest
+tomli==2.0.0
+    # via
+    #   fava (pyproject.toml)
+    #   pytest
 typing-extensions==4.5.0
     # via fava (pyproject.toml)
 watchfiles==0.20.0
