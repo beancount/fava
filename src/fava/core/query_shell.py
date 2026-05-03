@@ -250,4 +250,4 @@ def _serialise(cursor: Cursor) -> QueryResultTable:
         tuple(mapper(row[i]) for i, mapper in enumerate(mappers))
         for row in cursor
     ]
-    return QueryResultTable(dtypes, mapped_rows)
+    return QueryResultTable(dtypes, mapped_rows)  # ty:ignore[invalid-argument-type]

@@ -13,7 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def hash_entry(entry: Directive) -> str:
     """Hash an entry."""
     if hasattr(entry, "_fields"):
-        return compare.hash_entry(entry)  # type: ignore[arg-type]
+        return compare.hash_entry(entry)  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
     return str(hash(entry))
 
 
