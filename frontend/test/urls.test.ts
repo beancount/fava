@@ -37,3 +37,13 @@ test("extract relative path from URL", () => {
     "Ä€/asdf",
   );
 });
+
+test("report name extraction", () => {
+  const getReport = (path: string) => path.slice(0, path.indexOf("/"));
+
+  equal(getReport("holdings/"), "holdings");
+  equal(getReport("query/"), "query");
+  // This demonstrates the current behavior where a missing trailing slash
+  // leads to an incorrect report name being extracted.
+  equal(getReport("query"), "quer");
+});
