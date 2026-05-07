@@ -16,6 +16,8 @@
     report_type,
     charts,
     journal,
+    load_page,
+    total_pages,
     interval_balances,
     dates,
     budgets,
@@ -82,6 +84,8 @@
   {#if report_type === "journal" && journal != null}
     <JournalTable
       {journal}
+      {load_page}
+      {total_pages}
       initial_sort={["date", "desc"]}
       show_change_and_balance={true}
     />

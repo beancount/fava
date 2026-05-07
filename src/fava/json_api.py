@@ -15,6 +15,7 @@ from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
+from math import ceil
 from pathlib import Path
 from pprint import pformat
 from typing import Any
@@ -757,6 +758,7 @@ class AccountReportJournal:
 
     charts: Sequence[ChartData]
     journal: str
+    total_pages: int
 
 
 @dataclass(frozen=True)
@@ -776,6 +778,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
 
     account_name = request.args.get("a", "")
     subreport = request.args.get("r")
+    page_number = int(request.args.get("page", "1"))
 
     charts = [
         ChartApi.account_balance(account_name),
@@ -842,17 +845,32 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     journal_table_contents = get_template_attribute(
         "_journal_table.html", "journal_table_contents"
     )
-    entries = reversed(
-        g.ledger.account_journal(
-            g.filtered,
-            account_name,
-            g.conv,
-            with_children=g.ledger.fava_options.account_journal_include_children,
+    all_entries = list(
+        reversed(
+            g.ledger.account_journal(
+                g.filtered,
+                account_name,
+                g.conv,
+                with_children=(
+                    g.ledger.fava_options.account_journal_include_children
+                ),
+            )
         )
     )
+    per_page = 250
+    total_pages = max(1, ceil(len(all_entries) / per_page))
+    if page_number > total_pages:
+        raise NotFoundError
+    page_entries = all_entries[
+        (page_number - 1) * per_page : page_number * per_page
+    ]
     return AccountReportJournal(
         charts,
-        journal=journal_table_contents(entries, show_change_and_balance=True),
+        journal=journal_table_contents(
+            page_entries,
+            show_change_and_balance=True,
+        ),
+        total_pages=total_pages,
     )
 
 
