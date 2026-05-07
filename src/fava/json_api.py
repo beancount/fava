@@ -857,7 +857,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             )
         )
     )
-    per_page = 250
+    per_page = 500
     total_pages = max(1, ceil(len(all_entries) / per_page))
     if page_number > total_pages:
         raise NotFoundError

@@ -254,7 +254,7 @@ class FilteredLedger:
     def paginate_journal(
         self,
         page: int,
-        per_page: int = 250,
+        per_page: int = 500,
         order: Literal["asc", "desc"] = "desc",
     ) -> JournalPage | None:
         """Get entries for a journal page with pagination info.
