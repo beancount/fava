@@ -75,6 +75,16 @@
     "name": "TEST_DATA_DIR/import_config_with_duplicate_names.py"
   },
   {
+    "basename": "import_example_for_docs.py",
+    "importers": [],
+    "name": "TEST_DATA_DIR/import_example_for_docs.py"
+  },
+  {
+    "basename": "import_for_docs.beancount",
+    "importers": [],
+    "name": "TEST_DATA_DIR/import_for_docs.beancount"
+  },
+  {
     "basename": "invalid-unicode.beancount",
     "importers": [],
     "name": "TEST_DATA_DIR/invalid-unicode.beancount"

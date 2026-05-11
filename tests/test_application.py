@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.application import _get_github_version
 from fava.application import create_app
 from fava.application import static_url
 from fava.beans import create
@@ -347,3 +348,53 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]
+
+
+def test_get_github_version_with_commit_hash() -> None:
+    """Test that commit hash is correctly extracted from version string."""
+    version_string = "v1.0.0.post3.dev10+g1234567"
+    assert _get_github_version(version_string) == "1234567"
+
+    version_string = "1.0.0.dev10+g1234567"
+    assert _get_github_version(version_string) == "1234567"
+
+
+def test_get_github_version_with_tag() -> None:
+    """Test that tag name is correctly extracted from version string."""
+    version_string = "v1.0.0"
+    assert _get_github_version(version_string) == "1.0.0"
+
+
+def test_get_github_version_with_dirty_suffix() -> None:
+    """Test that dirty suffix is removed from version string."""
+    version_string = "v1.0.0.dev10+g1234567.d20240101"
+    assert _get_github_version(version_string) == "1234567"
+
+    version_string = "v1.0.0+d20240101"
+    assert _get_github_version(version_string) == "1.0.0"
+
+
+def test_get_github_version_fallback_to_main() -> None:
+    """Test that fallback to 'main' works for invalid version strings."""
+    version_string = "invalid_version"
+    assert _get_github_version(version_string) == "main"
+
+
+def test_get_github_version_empty_string() -> None:
+    """Test that empty string falls back to 'main'."""
+    version_string = ""
+    assert _get_github_version(version_string) == "main"
+
+
+def test_get_github_version_no_prefix() -> None:
+    """Test version string without 'v' prefix."""
+    version_string = "1.0.0.dev10+g1234567"
+    assert _get_github_version(version_string) == "1234567"
+
+    version_string = "1.0.0.dev10.d20250101"
+    assert _get_github_version(version_string) == "1.0.0"
+
+
+def test_get_github_version_current_version() -> None:
+    v = _get_github_version(version("fava"))
+    assert v != "main"
