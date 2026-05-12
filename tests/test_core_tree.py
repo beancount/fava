@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import cast
 from typing import TYPE_CHECKING
 
-from fava.beans.types import BeancountOptions
 from fava.core.tree import Tree
 
 if TYPE_CHECKING:  # pragma: no cover
+    from fava.beans.types import BeancountOptions
     from fava.core import FavaLedger
 
     from .conftest import SnapshotFunc
