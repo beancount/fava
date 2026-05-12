@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from typing import cast
 from typing import TYPE_CHECKING
 
+from fava.beans.types import BeancountOptions
 from fava.core.tree import Tree
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -55,3 +57,13 @@ def test_tree_cap(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     tree.cap(example_ledger.options)
 
     snapshot({n.name: n.balance.to_strings() for n in tree.values()})
+
+
+def test_tree_cap_without_unrealized_gains_account(
+    example_ledger: FavaLedger,
+) -> None:
+    tree = Tree(example_ledger.all_entries)
+    options = dict(example_ledger.options)
+    options["account_unrealized_gains"] = None
+
+    tree.cap(cast(BeancountOptions, options))
