@@ -168,6 +168,7 @@ export const tree_report_validator = object({
 export const account_report_validator = object({
   charts: chart_validator,
   journal: optional(string),
+  total_pages: optional(number),
   dates: optional(array(date_range)),
   interval_balances: optional(array(account_hierarchy_validator)),
   budgets: optional(record(array(account_budget))),

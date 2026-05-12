@@ -1,4 +1,3 @@
-import { range } from "d3-array";
 import { get as store_get } from "svelte/store";
 
 import { get_journal_page } from "../../api/index.ts";
@@ -15,7 +14,8 @@ import Journal from "./Journal.svelte";
 export interface JournalReportProps {
   journal: DocumentFragment;
   initial_sort: JournalSort;
-  all_pages: Promise<DocumentFragment | null>[];
+  load_page: (page: number) => Promise<DocumentFragment | null>;
+  total_pages: number;
 }
 
 export const journal = new Route<JournalReportProps>(
@@ -34,8 +34,7 @@ export const journal = new Route<JournalReportProps>(
     });
 
     let error_shown = false;
-    const pages = range(2, total_pages + 1);
-    const all_pages = pages.map(async (page) => {
+    const load_page = async (page: number) => {
       return get_journal_page({ ...filters, page, order }).then(
         (res) => fragment_from_string(res.journal),
         (error: unknown) => {
@@ -47,12 +46,13 @@ export const journal = new Route<JournalReportProps>(
           return null;
         },
       );
-    });
+    };
 
     return {
       journal: fragment_from_string(journal),
       initial_sort: ["date", order],
-      all_pages,
+      load_page,
+      total_pages,
     };
   },
   () => _("Journal"),
