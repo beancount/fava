@@ -66,4 +66,4 @@ def test_tree_cap_without_unrealized_gains_account(
     options = dict(example_ledger.options)
     options["account_unrealized_gains"] = None
 
-    tree.cap(cast(BeancountOptions, options))
+    tree.cap(cast("BeancountOptions", options))
