@@ -73,7 +73,8 @@ export const account_report = new Route<AccountReportProps>(
         r: report_type,
         page,
       }).then(
-        (res) => (res.journal ? fragment_from_string(res.journal) : null),
+        (res) =>
+          res.journal != null ? fragment_from_string(res.journal) : null,
         (error: unknown) => {
           log_error(
             `Failed to fetch account journal page ${page.toString()}`,
