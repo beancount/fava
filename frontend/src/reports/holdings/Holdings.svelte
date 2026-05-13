@@ -53,7 +53,7 @@
 </div>
 
 <p>
-  <a href={$urlFor("query", { query_string })}>{_("Query")}</a>
+  <a href={$urlFor("query/", { query_string })}>{_("Query")}</a>
   <QueryLinks query={query_string} />
 </p>
 <QueryTable table={query_result_table} filter_empty="units" />
