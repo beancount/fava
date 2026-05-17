@@ -202,7 +202,12 @@ def test_query_download(test_client: FlaskClient) -> None:
 def test_statement_download(
     app: Flask, test_client: FlaskClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Download entry statement."""
+    """Download entry statement.
+
+    Document metadata on a posting (not the transaction) can also be
+    served, and a non-string value on an earlier posting does not shadow
+    a later one.
+    """
 
     path = Path(__file__)
     by_account = path.parent.parent / "found_by_account"
@@ -219,7 +224,19 @@ def test_statement_download(
         "*",
         "payee",
         "narration",
-        postings=[create.posting("Assets:Cash", create.amount("10 EUR"))],
+        postings=[
+            create.posting("Assets:Cash", create.amount("10 EUR")),
+            create.posting(
+                "Assets:Savings",
+                create.amount("-5 EUR"),
+                meta={"posting-statement": True},
+            ),
+            create.posting(
+                "Assets:Checking",
+                create.amount("-5 EUR"),
+                meta={"posting-statement": path.name},
+            ),
+        ],
     )
     txn_hash = hash_entry(txn)
     entries = [
@@ -246,6 +263,10 @@ def test_statement_download(
         assert (
             Path(g.ledger.statement_path(txn_hash, "account-statement"))
             == by_account
+        )
+        assert (
+            Path(g.ledger.statement_path(txn_hash, "posting-statement"))
+            == path
         )
 
         response = test_client.get(
