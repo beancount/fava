@@ -263,6 +263,38 @@ def test_statement_download(
         assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
+def test_statement_download_posting_metadata(
+    app: Flask, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Document metadata on a posting (not the transaction) can be served."""
+    path = Path(__file__)
+    date = datetime.date(2022, 1, 1)
+    txn = create.transaction(
+        {"filename": str(path), "lineno": 1},
+        date,
+        "*",
+        "payee",
+        "narration",
+        postings=[
+            create.posting(
+                "Assets:Cash",
+                create.amount("10 EUR"),
+                meta={"document": path.name},
+            )
+        ],
+    )
+    txn_hash = hash_entry(txn)
+    entries = [create.document({}, date, "Assets", str(path)), txn]
+
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        monkeypatch.setattr(g.ledger, "all_entries", entries)
+        monkeypatch.setattr(
+            g.ledger, "all_entries_by_type", group_entries_by_type(entries)
+        )
+        assert Path(g.ledger.statement_path(txn_hash, "document")) == path
+
+
 def test_incognito(test_data_dir: Path) -> None:
     """Numbers get obfuscated in incognito mode."""
     app = create_app([test_data_dir / "example.beancount"], incognito=True)
