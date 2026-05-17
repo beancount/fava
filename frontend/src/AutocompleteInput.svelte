@@ -221,6 +221,7 @@
   }
 
   input {
+    field-sizing: content;
     width: 100%;
   }
 
