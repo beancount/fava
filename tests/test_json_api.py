@@ -5,11 +5,13 @@ from difflib import Differ
 from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
+from textwrap import dedent
 from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.application import create_app
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.file import _sha256_str
@@ -824,6 +826,73 @@ def test_api_filter_error(
         "/long-example/api/commodities?time=20",
     )
     assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
+
+
+def test_api_documents_deduplication(tmp_path: Path) -> None:
+    """Documents endpoint deduplicates when explicit directive and
+    auto-discovery both reference the same file."""
+    doc_dir = tmp_path / "documents"
+    account_dir = doc_dir / "Assets" / "Bank"
+    account_dir.mkdir(parents=True)
+    statement = account_dir / "2020-01-31 statement.pdf"
+    statement.touch()
+
+    beancount_file = tmp_path / "dedup-test.beancount"
+    beancount_file.write_text(
+        dedent(f"""\
+            option "title" "Dedup Test"
+            option "operating_currency" "USD"
+            option "documents" "{doc_dir}"
+
+            2020-01-01 open Assets:Bank USD
+
+            2020-01-31 document Assets:Bank "{statement}"
+        """)
+    )
+
+    dedup_app = create_app([str(beancount_file)], load=True)
+    dedup_app.testing = True
+    client = dedup_app.test_client()
+
+    response = client.get("/dedup-test/api/documents")
+    data = assert_api_success(response)
+
+    # Only one document should be returned even though Beancount creates two
+    # Document entries (explicit directive + auto-discovery).
+    assert len(data) == 1
+    assert data[0]["filename"] == str(statement)
+    # Explicit directive (lineno > 0) should be preferred over auto-discovered.
+    assert data[0]["meta"]["lineno"] > 0
+
+
+def test_api_documents_dedup_two_explicit(tmp_path: Path) -> None:
+    """Documents endpoint keeps first entry when two explicit directives
+    reference the same file."""
+    statement = tmp_path / "statement.pdf"
+    statement.touch()
+
+    beancount_file = tmp_path / "dedup-explicit.beancount"
+    beancount_file.write_text(
+        dedent(f"""\
+            option "title" "Dedup Explicit"
+            option "operating_currency" "USD"
+
+            2020-01-01 open Assets:Bank USD
+
+            2020-01-31 document Assets:Bank "{statement}"
+            2020-01-31 document Assets:Bank "{statement}"
+        """)
+    )
+
+    dedup_app = create_app([str(beancount_file)], load=True)
+    dedup_app.testing = True
+    client = dedup_app.test_client()
+
+    response = client.get("/dedup-explicit/api/documents")
+    data = assert_api_success(response)
+
+    assert len(data) == 1
+    assert data[0]["filename"] == str(statement)
 
 
 @pytest.mark.parametrize(

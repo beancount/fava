@@ -606,9 +606,19 @@ def get_imports() -> Sequence[FileImporters]:
 def get_documents() -> Sequence[Document]:
     """Get all (filtered) documents."""
     g.ledger.changed()
-    return [
-        serialise(e) for e in g.filtered.entries if isinstance(e, Document)
-    ]
+    # Deduplicate by filename: prefer explicit directives (lineno > 0) over
+    # auto-discovered ones (lineno == 0).
+    seen: dict[str, Document] = {}
+    for entry in g.filtered.entries:
+        if not isinstance(entry, Document):
+            continue
+        existing = seen.get(entry.filename)
+        if existing is None or (
+            existing.meta.get("lineno", 0) == 0
+            and entry.meta.get("lineno", 0) != 0
+        ):
+            seen[entry.filename] = entry
+    return [serialise(e) for e in seen.values()]
 
 
 @dataclass(frozen=True)

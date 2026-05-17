@@ -46,7 +46,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each sorted_documents as doc (doc.filename)}
+    {#each sorted_documents as doc (doc.entry_hash)}
       <tr
         class:selected={selected === doc}
         draggable={true}
