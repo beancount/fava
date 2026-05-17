@@ -34,8 +34,7 @@
     "pythonpath": "[]",
     "render_commas": "False",
     "title": "Long Example",
-    "tolerance_multiplier": "0.5",
-    "use_precise_interpolation": "False"
+    "tolerance_multiplier": "0.5"
   },
   "fava_options": {
     "account-journal-include-children": "True",
