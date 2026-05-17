@@ -842,11 +842,11 @@ def test_api_documents_deduplication(tmp_path: Path) -> None:
         dedent(f"""\
             option "title" "Dedup Test"
             option "operating_currency" "USD"
-            option "documents" "{doc_dir}"
+            option "documents" "{doc_dir.as_posix()}"
 
             2020-01-01 open Assets:Bank USD
 
-            2020-01-31 document Assets:Bank "{statement}"
+            2020-01-31 document Assets:Bank "{statement.as_posix()}"
         """)
     )
 
@@ -860,7 +860,7 @@ def test_api_documents_deduplication(tmp_path: Path) -> None:
     # Only one document should be returned even though Beancount creates two
     # Document entries (explicit directive + auto-discovery).
     assert len(data) == 1
-    assert data[0]["filename"] == str(statement)
+    assert Path(data[0]["filename"]) == statement
     # Explicit directive (lineno > 0) should be preferred over auto-discovered.
     assert data[0]["meta"]["lineno"] > 0
 
@@ -879,8 +879,8 @@ def test_api_documents_dedup_two_explicit(tmp_path: Path) -> None:
 
             2020-01-01 open Assets:Bank USD
 
-            2020-01-31 document Assets:Bank "{statement}"
-            2020-01-31 document Assets:Bank "{statement}"
+            2020-01-31 document Assets:Bank "{statement.as_posix()}"
+            2020-01-31 document Assets:Bank "{statement.as_posix()}"
         """)
     )
 
@@ -892,7 +892,7 @@ def test_api_documents_dedup_two_explicit(tmp_path: Path) -> None:
     data = assert_api_success(response)
 
     assert len(data) == 1
-    assert data[0]["filename"] == str(statement)
+    assert Path(data[0]["filename"]) == statement
 
 
 @pytest.mark.parametrize(
