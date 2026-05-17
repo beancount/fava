@@ -608,16 +608,17 @@ def get_documents() -> Sequence[Document]:
     g.ledger.changed()
     # Deduplicate by filename: prefer explicit directives (lineno > 0) over
     # auto-discovered ones (lineno == 0).
-    seen: dict[str, Document] = {}
+    seen: dict[Path, Document] = {}
     for entry in g.filtered.entries:
         if not isinstance(entry, Document):
             continue
-        existing = seen.get(entry.filename)
+        key = Path(entry.filename)
+        existing = seen.get(key)
         if existing is None or (
             existing.meta.get("lineno", 0) == 0
             and entry.meta.get("lineno", 0) != 0
         ):
-            seen[entry.filename] = entry
+            seen[key] = entry
     return [serialise(e) for e in seen.values()]
 
 
