@@ -54,6 +54,7 @@ class BeancountOptions(TypedDict):
     pythonpath: Sequence[str]
     render_commas: bool
     tolerance_multiplier: Decimal
+    use_precise_interpolation: bool
 
     # deprecated ones
     allow_deprecated_none_for_tags_and_links: bool
