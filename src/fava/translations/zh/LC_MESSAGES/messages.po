@@ -322,12 +322,12 @@ msgstr "编辑器"
 msgid "Line"
 msgstr "行"
 
-#: frontend/src/reports/errors/Errors.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "源文件 %(file)s:%(lineno)s"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr "没有错误。"
 
