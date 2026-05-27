@@ -38,7 +38,8 @@
     --autocomplete-wrapper-flex="1"
   />
   <input
-    type="tel"
+    type="text"
+    inputmode="decimal"
     pattern="-?[0-9.,]*"
     placeholder={_("Number")}
     size={10}
