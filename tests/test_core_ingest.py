@@ -178,7 +178,7 @@ def test_ingest_examplefile(
     )  # all files in the test datafolder
 
     with pytest.raises(ImporterExtractError):
-        entries = ingest_ledger.ingest.extract(
+        ingest_ledger.ingest.extract(
             str(test_data_dir / "import.csv"),
             "<run_path>.TestImporterThatErrorsOnExtrac",
         )

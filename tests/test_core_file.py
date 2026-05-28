@@ -185,7 +185,7 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
     assert filename.read_text("utf-8") != contents
-    sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
+    save_entry_slice(entry, entry_source, new_sha256sum)
     assert filename.read_text("utf-8") == contents
 
     auto_account = ledger_in_tmp_path.all_entries[0]
