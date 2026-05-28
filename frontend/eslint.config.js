@@ -1,5 +1,3 @@
-// @ts-check
-
 import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -12,7 +10,6 @@ const ON = "error";
 
 const tsParserOptions = {
   projectService: true,
-  tsconfigRootDir: import.meta.dirname,
   extraFileExtensions: [".svelte"],
 };
 
