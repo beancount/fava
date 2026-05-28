@@ -13,9 +13,6 @@
   "engines": {
     "node": ">=22.18"
   },
-  "overrides": {
-    "parse5": "^7.3.0"
-  },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
     "@tsconfig/strictest": "^2.0.5",
