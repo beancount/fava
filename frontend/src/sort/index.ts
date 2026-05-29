@@ -21,7 +21,7 @@ export const get_direction = (o: SortOrder): SortDirection =>
 
 const collator = Intl.Collator();
 /** A compare function for strings using the default browser locale. */
-const compare_strings = collator.compare.bind(collator);
+export const compare_strings = collator.compare.bind(collator);
 
 /**
  * A column that can be used for sorting in some data.
@@ -55,7 +55,7 @@ export class Sorter<T = unknown> {
     return new Sorter(column, "asc");
   }
 
-  /** Sort the data. */
+  /** Sort the data (returning a sorted copy). */
   sort(data: readonly T[]): readonly T[] {
     return this.column.sort(data, get_direction(this.order));
   }

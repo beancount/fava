@@ -3,6 +3,7 @@ import { derived, type Readable, writable } from "svelte/store";
 import type { BeancountError, LedgerData } from "../api/validators.ts";
 import { get_internal_accounts } from "../lib/account.ts";
 import { derived_array } from "../lib/store.ts";
+import { compare_strings } from "../sort/index.ts";
 
 /** The Beancount errors. */
 export const errors = writable<readonly BeancountError[]>([]);
@@ -52,5 +53,5 @@ export const years = derived_array(ledgerData, (v) => v.years);
 
 /** The sorted array of all used currencies. */
 export const currencies_sorted = derived_array(currencies, ($currencies) =>
-  $currencies.toSorted(),
+  $currencies.toSorted(compare_strings),
 );

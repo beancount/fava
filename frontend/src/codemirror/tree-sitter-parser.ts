@@ -104,7 +104,7 @@ export function input_edit_for_fragments(
   }
 
   const before =
-    [...fragments].reverse().find((f) => !f.openStart && f.openEnd) ?? fragment;
+    fragments.toReversed().find((f) => !f.openStart && f.openEnd) ?? fragment;
   const after =
     fragments.find((f) => f.openStart && !f.openEnd) ?? last_element(fragments);
 

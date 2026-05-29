@@ -1,6 +1,7 @@
 import { derived } from "svelte/store";
 
 import { derived_array } from "../lib/store.ts";
+import { compare_strings } from "../sort/index.ts";
 import { ledgerData } from "./index.ts";
 
 /** Beancount's options */
@@ -9,7 +10,7 @@ const options = derived(ledgerData, (v) => v.options);
 export const ledger_title = derived(options, ($options) => $options.title);
 /** The operating currencies (sorted). */
 export const operating_currency = derived_array(options, ($options) =>
-  [...$options.operating_currency].sort(),
+  $options.operating_currency.toSorted(compare_strings),
 );
 const filename = derived(options, ($options) => $options.filename);
 const include = derived_array(options, ($options) => $options.include);
