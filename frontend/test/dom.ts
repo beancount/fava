@@ -21,7 +21,16 @@ export function setup_jsdom(): void {
     globalThis.sessionStorage = window.sessionStorage;
     ran_once = true;
   }
-  window.document.title = "";
-  window.document.head.innerHTML = "";
-  window.document.body.innerHTML = "";
+  document.title = "";
+  document.head.innerHTML = "";
+  document.body.innerHTML = "";
+
+  const article = document.createElement("article");
+  document.body.appendChild(article);
+
+  const script = document.createElement("script");
+  script.type = "application/json";
+  script.id = "translations";
+  script.textContent = "{}";
+  document.body.appendChild(script);
 }

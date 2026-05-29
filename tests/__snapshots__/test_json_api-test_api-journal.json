@@ -397,6 +397,16 @@
     "tags": ["discovered"]
   },
   {
+    "account": "Expenses:Food",
+    "date": "2012-12-15",
+    "entry_hash": "ENTRY_HASH",
+    "filename": "TEST_DATA_DIR/receipt.pdf",
+    "links": [],
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 81 },
+    "t": "Document",
+    "tags": []
+  },
+  {
     "date": "2012-12-17",
     "entry_hash": "ENTRY_HASH",
     "flag": "!",
@@ -496,7 +506,7 @@
     "account": "Assets:Account1",
     "date": "2014-01-01",
     "entry_hash": "ENTRY_HASH",
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 81 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 83 },
     "t": "Close"
   }
 ]

@@ -1,5 +1,5 @@
 import { deepEqual, equal, throws } from "node:assert/strict";
-import { beforeEach, test } from "node:test";
+import { test } from "node:test";
 
 import { get as store_get, writable } from "svelte/store";
 
@@ -7,7 +7,7 @@ import { derived_array, localStorageSyncedStore } from "../src/lib/store.ts";
 import { string } from "../src/lib/validation.ts";
 import { setup_jsdom } from "./dom.ts";
 
-beforeEach(setup_jsdom);
+test.beforeEach(setup_jsdom);
 
 test("derived store", () => {
   const source = writable<string[]>([]);

@@ -1,12 +1,12 @@
 import { equal, ok } from "node:assert/strict";
-import { beforeEach, test } from "node:test";
+import { test } from "node:test";
 
 import { flushSync, mount } from "svelte";
 
 import AutocompleteInput from "../src/AutocompleteInput.svelte";
 import { setup_jsdom } from "./dom.ts";
 
-beforeEach(setup_jsdom);
+test.beforeEach(setup_jsdom);
 
 test("AutocompleteInput: renders no suggestions if none match", () => {
   mount(AutocompleteInput, {
