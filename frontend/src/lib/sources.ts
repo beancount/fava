@@ -1,4 +1,4 @@
-import { dirnameBasename } from "./paths.ts";
+import { basename, split } from "./paths.ts";
 import { stratify, type TreeNode } from "./tree.ts";
 
 export type SourceNode = TreeNode<{ name: string; path: string }>;
@@ -14,45 +14,32 @@ export function build_compressed_sources_tree(
     sources,
     (path) => path,
     (path) => ({ name: basename(path), path }),
-    (path) => parent(path),
+    (path) => split(path)[0],
   );
-  // Simplify the tree by removing the nodes with only one children
   return compress_tree(root);
 }
 
-function basename(path: string): string {
-  const [_, basename] = dirnameBasename(path);
-  return basename;
-}
-
-export function parent(path: string): string {
-  const [dirname, _] = dirnameBasename(path);
-  return dirname;
-}
-
+/** Simplify the tree by removing the nodes with only one child. */
 function compress_tree(parent: SourceNode): SourceNode {
-  if (parent.children.length === 0) {
+  const { children, name, path } = parent;
+
+  if (children.length === 0) {
     return parent;
   }
 
-  if (parent.children.length === 1 && parent.children[0] !== undefined) {
-    const onlyChild = parent.children[0];
+  const [first_child] = children;
+  if (children.length === 1 && first_child != null) {
     // Do not compress leaf nodes (=files)
-    if (onlyChild.children.length === 0) {
+    if (first_child.children.length === 0) {
       return parent;
     }
 
-    const newName = parent.name + onlyChild.name;
     return compress_tree({
-      name: newName,
-      path: onlyChild.path,
-      children: onlyChild.children,
+      name: name + first_child.name,
+      path: first_child.path,
+      children: first_child.children,
     });
   } else {
-    const newChildren: SourceNode[] = [];
-    for (const child of parent.children) {
-      newChildren.push(compress_tree(child));
-    }
-    return { name: parent.name, path: parent.path, children: newChildren };
+    return { name, path, children: children.map(compress_tree) };
   }
 }
