@@ -20,7 +20,7 @@
 <div class="left">
   <h3>
     {_("Postings per Account")}
-    (<a href={$urlFor("query", { query_string: postings_per_account_query })}>
+    (<a href={$urlFor("query/", { query_string: postings_per_account_query })}>
       {_("Query")}
     </a>)
   </h3>

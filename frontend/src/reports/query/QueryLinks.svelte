@@ -21,8 +21,7 @@
   ({_("Download as")}
   <a href={$urlFor("download-query/query_result.csv", params)} data-remote>
     CSV
-  </a>
-  {#if $HAVE_EXCEL}
+  </a>{#if $HAVE_EXCEL}
     ,
     <a href={$urlFor("download-query/query_result.xlsx", params)} data-remote>
       XLSX
@@ -31,8 +30,7 @@
     <a href={$urlFor("download-query/query_result.ods", params)} data-remote>
       ODS
     </a>
-  {/if}
-  )
+  {/if})
 </span>
 
 <style>
