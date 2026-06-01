@@ -1,0 +1,9 @@
+option "title" "import"
+2017-01-01 custom "fava-option" "import-config" "import_example_for_docs.py"
+2017-01-01 custom "fava-option" "import-dirs" "."
+option "documents" "./"
+2017-01-01 open Assets:Checking
+2017-01-01 open Expenses:Widgets
+
+2017-02-14 * "" " BANKOMAT  00000483 K2 UM 11:56"
+  Assets:Checking -100.00 EUR
