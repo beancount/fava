@@ -10,7 +10,7 @@ src/fava/static/app.js: frontend/src/codemirror/bql-grammar.ts
 
 # Install the frontend node_modules dependencies.
 frontend/node_modules: frontend/package-lock.json
-	cd frontend; npm install --no-save --no-progress
+	cd frontend; npm install --no-save --no-progress --strict-allow-scripts
 	touch -m frontend/node_modules
 
 # Create and sync a dev environment.

@@ -81,14 +81,14 @@ def to_csv(types: list[Column], rows: list[ResultRow]) -> io.BytesIO:
 def _result_array(
     types: list[Column],
     rows: list[ResultRow],
-) -> list[list[str]]:
-    result_array = [[t.name for t in types]]
+) -> list[list[str | float]]:
+    result_array: list[list[str | float]] = [[t.name for t in types]]
     result_array.extend(_row_to_pyexcel(row, types) for row in rows)
     return result_array
 
 
-def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str]:
-    result = []
+def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str | float]:
+    result: list[str | float] = []
     for idx, column in enumerate(header):
         value = row[idx]
         if not value:
