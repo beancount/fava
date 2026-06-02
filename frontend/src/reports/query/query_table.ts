@@ -178,7 +178,7 @@ export interface QueryResultTable {
 }
 
 /** The parsed and validated result for a query text result. */
-export interface QueryResultText {
+interface QueryResultText {
   readonly t: "string";
   readonly contents: string;
 }

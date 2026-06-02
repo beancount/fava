@@ -26,10 +26,7 @@ export const documents = derived_array(
 );
 export const name_assets = derived(options, ($options) => $options.name_assets);
 export const name_equity = derived(options, ($options) => $options.name_equity);
-export const name_expenses = derived(
-  options,
-  ($options) => $options.name_expenses,
-);
+// name_expenses is currently not used.
 export const name_income = derived(options, ($options) => $options.name_income);
 export const name_liabilities = derived(
   options,

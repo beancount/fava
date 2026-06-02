@@ -107,7 +107,7 @@ export const loading_state = new LoadingState();
 /** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading = loading_state.is_loading;
 
-export class Router {
+class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
 

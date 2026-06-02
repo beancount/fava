@@ -51,7 +51,10 @@ export function padExtent([from, to]:
  * @param domain - The domain of values to filter.
  * @param count - The number of ticks that should be returned.
  */
-export function filterTicks(domain: string[], count: number): string[] {
+export function filterTicks(
+  domain: readonly string[],
+  count: number,
+): readonly string[] {
   if (domain.length <= count) {
     return domain;
   }
@@ -72,7 +75,7 @@ export function hclColorRange(
   count: number,
   chroma = 45,
   luminance = 70,
-): string[] {
+): readonly string[] {
   const offset = 270;
   const delta = 360 / count;
   const colors = [...Array(count).keys()].map((index) => {
