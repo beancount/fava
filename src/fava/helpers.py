@@ -15,15 +15,15 @@ class BeancountError(NamedTuple):
 
     source: Meta | None
     message: str
-    entry: Directive | None
+    entry: Directive | None = None
 
 
 class FavaAPIError(Exception):
     """Fava's base exception class."""
 
-    def __init__(self, message: str) -> None:
+    def __init__(self, message: str | None = None) -> None:
         super().__init__()
-        self.message = message
+        self.message = message if message is not None else self.__doc__ or ""
 
     def __str__(self) -> str:
         return self.message

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import datetime
-import sys
+import runpy
 from pathlib import Path
+from typing import Any
 from typing import TYPE_CHECKING
 
 import pytest
@@ -12,7 +13,12 @@ from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.ingest import ImportConfigLoadError
+from fava.core.ingest import ImportConfigConfigNotASequenceError
+from fava.core.ingest import ImportConfigDuplicateImporterError
+from fava.core.ingest import ImportConfigHooksNotASequenceCallablesError
+from fava.core.ingest import ImportConfigInvalidImporterError
+from fava.core.ingest import ImportConfigMissingConfigError
+from fava.core.ingest import ImportConfigRunpyError
 from fava.core.ingest import ImporterExtractError
 from fava.core.ingest import ImporterInvalidTypeError
 from fava.core.ingest import load_import_config
@@ -37,7 +43,12 @@ def test_ingest_file_import_info(
     test_data_dir: Path, get_ledger: GetFavaLedger
 ) -> None:
     ingest_ledger = get_ledger("import")
-    importer = next(iter(ingest_ledger.ingest.importers.values()))
+    assert ingest_ledger.ingest.loaded_config
+    ingest_ledger.ingest.load_file()
+    assert ingest_ledger.ingest.loaded_config
+    importer = next(
+        iter(ingest_ledger.ingest.loaded_config.importers.values())
+    )
     assert importer
 
     csv_path = test_data_dir / "import.csv"
@@ -138,25 +149,81 @@ def test_ingest_get_name_invalid_type() -> None:
         assert importer.name
 
 
-def test_load_import_config() -> None:
-    with pytest.raises(
-        ImportConfigLoadError,
-        match=r"ImportError"
-        if sys.platform != "win32"
-        else r"CONFIG is missing",
-    ):
-        load_import_config(Path(__file__).parent)
+@pytest.mark.parametrize(
+    ("mod", "error"),
+    [
+        ({}, ImportConfigMissingConfigError),
+        ({"CONFIG": object()}, ImportConfigConfigNotASequenceError),
+        ({"CONFIG": [object()]}, ImportConfigInvalidImporterError),
+        (
+            {"CONFIG": [MinimalImporter(), MinimalImporter()]},
+            ImportConfigDuplicateImporterError,
+        ),
+        (
+            {"CONFIG": [], "HOOKS": object()},
+            ImportConfigHooksNotASequenceCallablesError,
+        ),
+        (
+            {"CONFIG": [], "HOOKS": [object()]},
+            ImportConfigHooksNotASequenceCallablesError,
+        ),
+    ],
+)
+def test_load_import_config_errors(
+    mod: dict[str, Any],
+    error: type[Exception],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runpy, "run_path", lambda _: mod)
+    with pytest.raises(error):
+        load_import_config(Path())
 
-    with pytest.raises(ImportConfigLoadError, match=r"CONFIG is missing"):
+
+@pytest.mark.parametrize(
+    ("mod"),
+    [
+        {"CONFIG": []},
+        {"CONFIG": [], "HOOKS": []},
+        {"CONFIG": (), "HOOKS": ()},
+        {"CONFIG": [MinimalImporter()], "HOOKS": []},
+        {"CONFIG": (MinimalImporter(),), "HOOKS": (lambda x: x,)},
+    ],
+)
+def test_load_import_config_ok(
+    mod: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runpy, "run_path", lambda _: mod)
+    assert load_import_config(Path())
+
+
+def test_load_import_config(test_data_dir: Path) -> None:
+    with pytest.raises(ImportConfigRunpyError):
+        load_import_config(test_data_dir / "errors.beancount")
+    with pytest.raises(ImportConfigMissingConfigError):
         load_import_config(Path(__file__))
 
-    with pytest.raises(
-        ImportConfigLoadError, match=r"Duplicate importer name found"
-    ):
-        load_import_config(
-            Path(__file__).parent
-            / Path("data/import_config_with_duplicate_names.py")
+
+def test_ingest_errors_file_does_not_exist(
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ingest_ledger = get_ledger("import")
+    with monkeypatch.context() as m:
+        m.setattr(
+            ingest_ledger.fava_options, "import_config", "does_not_exist.py"
         )
+        ingest_ledger.ingest.load_file()
+        assert ingest_ledger.ingest.errors
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            ingest_ledger.fava_options, "import_config", "errors.beancount"
+        )
+        ingest_ledger.ingest.load_file()
+        assert ingest_ledger.ingest.errors
+
+    ingest_ledger.ingest.load_file()
 
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
@@ -171,6 +238,7 @@ def test_ingest_examplefile(
     snapshot: SnapshotFunc,
 ) -> None:
     ingest_ledger = get_ledger("import")
+    assert not ingest_ledger.ingest.errors
 
     files = ingest_ledger.ingest.import_data()
     assert len(files) == len(
@@ -217,22 +285,6 @@ def test_ingest_examplefile(
         "<run_path>.TestBeangulpImporter",
     )
     snapshot([serialise(e) for e in entries], json=True)
-
-
-def test_ingest_errors_file_does_not_exist(
-    get_ledger: GetFavaLedger,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    ingest_ledger = get_ledger("import")
-    ingest_ledger.ingest.load_file()
-    assert not ingest_ledger.ingest.errors
-    monkeypatch.setattr(
-        ingest_ledger.fava_options,
-        "import_config",
-        "does_not_exist.py",
-    )
-    ingest_ledger.ingest.load_file()
-    assert ingest_ledger.ingest.errors
 
 
 def test_filepath_in_primary_imports_folder(
