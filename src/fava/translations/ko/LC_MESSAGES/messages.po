@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: 2026-03-04 05:09+0000\n"
-"Last-Translator: kdm1jkm <me@kdm1jkm.com>\n"
+"PO-Revision-Date: 2026-06-11 06:13+0000\n"
+"Last-Translator: MunsuBahk <chiefdvm@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -180,9 +180,8 @@ msgstr "계속 추가"
 
 #: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
 #: frontend/src/modals/EntryContextBalances.svelte:25
-#, fuzzy
 msgid "Context"
-msgstr "관련 내역"
+msgstr "관련내역"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
@@ -462,219 +461,221 @@ msgstr "예산 항목"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:43
 msgid "Metadata"
-msgstr ""
+msgstr "메타데이터"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:43
 msgid "Toggle metadata"
-msgstr ""
+msgstr "메타데이터 토글"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Toggle postings"
-msgstr ""
+msgstr "분개 토글"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:40
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:55
 #: frontend/src/reports/journal/JournalHeaders.svelte:58
 msgid "Cost"
-msgstr ""
+msgstr "원가"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:55
 msgid "Change"
-msgstr ""
+msgstr "변동"
 
 #: frontend/src/reports/journal/index.ts:58
 #: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Journal"
-msgstr ""
+msgstr "거래기록"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "색상테마"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
-msgstr ""
+msgstr "Fava설정"
 
 #: frontend/src/reports/options/Options.svelte:21
 msgid "help"
-msgstr ""
+msgstr "도움말"
 
 #: frontend/src/reports/options/Options.svelte:25
 msgid "Beancount options"
-msgstr ""
+msgstr "빈카운트설정"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
-msgstr ""
+msgstr "…BQL 쿼리를 입력하세요. 사용 가능한 명령어를 보려면 'help'를 입력하세요."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
-msgstr ""
+msgstr "실행"
 
 #: frontend/src/reports/query/QueryLinks.svelte:21
 msgid "Download as"
-msgstr ""
+msgstr "파일내려받기"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:14
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:15
 msgid "# Entries"
-msgstr ""
+msgstr "거래수"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:41
 msgid "Total"
-msgstr ""
+msgstr "합계"
 
 #: frontend/src/reports/statistics/Statistics.svelte:22
 msgid "Postings per Account"
-msgstr ""
+msgstr "계정별분개수"
 
 #: frontend/src/reports/statistics/Statistics.svelte:32
 msgid "Update Activity"
-msgstr ""
+msgstr "업데이트활동"
 
 #: frontend/src/reports/statistics/Statistics.svelte:35
 msgid ""
 "Click to copy balance directives for accounts (except green ones) to the "
 "clipboard."
-msgstr ""
+msgstr "클립보드에 계정 잔액검증 지시어를 복사하려면 클릭하세요 (녹색 제외)."
 
 #: frontend/src/reports/statistics/Statistics.svelte:40
 msgid "Copy balance directives"
-msgstr ""
+msgstr "잔액검증지시어복사"
 
 #: frontend/src/reports/statistics/Statistics.svelte:47
 msgid "Entries per Type"
-msgstr ""
+msgstr "유형별거래수"
 
 #: frontend/src/reports/statistics/UpdateActivity.svelte:36
 msgid "Last Entry"
-msgstr ""
+msgstr "최근거래"
 
 #: frontend/src/reports/statistics/index.ts:37
 #: frontend/src/sidebar/AsideContents.svelte:54
 msgid "Statistics"
-msgstr ""
+msgstr "통계보고서"
 
 #: frontend/src/reports/tree_reports/index.ts:38
 #: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Income Statement"
-msgstr ""
+msgstr "손익계산서"
 
 #: frontend/src/reports/tree_reports/index.ts:49
 #: frontend/src/sidebar/AsideContents.svelte:28
 msgid "Balance Sheet"
-msgstr ""
+msgstr "재무상태표"
 
 #: frontend/src/reports/tree_reports/index.ts:63
 #: frontend/src/sidebar/AsideContents.svelte:29
 msgid "Trial Balance"
-msgstr ""
+msgstr "시산표"
 
 #: frontend/src/sidebar/AccountSelector.svelte:22
 msgid "Go to account"
-msgstr ""
+msgstr "계정이동"
 
 #: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
-msgstr ""
+msgstr "거래기록추가"
 
 #: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
 msgid "Help"
-msgstr ""
+msgstr "도움말"
 
 #: frontend/src/sidebar/FilterForm.svelte:87
 msgid "Time"
-msgstr ""
+msgstr "조회기간"
 
 #: frontend/src/sidebar/FilterForm.svelte:109
 msgid "Filter by tag, payee, …"
-msgstr ""
+msgstr "태그, 거래처 등으로 필터링…"
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
 #: src/fava/json_api.py:700
 msgid "Net Profit"
-msgstr ""
+msgstr "당기순이익"
 
 #: frontend/src/stores/chart.ts:28
 msgid "Treemap"
-msgstr ""
+msgstr "사각계층그래프"
 
 #: frontend/src/stores/chart.ts:29
 msgid "Sunburst"
-msgstr ""
+msgstr "원형계층그래프"
 
 #: frontend/src/stores/chart.ts:30
 msgid "Icicle"
-msgstr ""
+msgstr "수직계층그래프"
 
 #: frontend/src/stores/chart.ts:43
 msgid "Line chart"
-msgstr ""
+msgstr "꺾은선그래프"
 
 #: frontend/src/stores/chart.ts:44
 msgid "Area chart"
-msgstr ""
+msgstr "면적그래프"
 
 #: frontend/src/stores/chart.ts:57
 msgid "Stacked Bars"
-msgstr ""
+msgstr "누적막대그래프"
 
 #: frontend/src/stores/chart.ts:58
 msgid "Single Bars"
-msgstr ""
+msgstr "단일막대그래프"
 
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
-msgstr ""
+msgstr "시스템설정"
 
 #: frontend/src/stores/color_scheme.ts:16
 msgid "Dark"
-msgstr ""
+msgstr "어두운테마"
 
 #: frontend/src/stores/color_scheme.ts:17
 msgid "Light"
-msgstr ""
+msgstr "밝은테마"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
 "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
+"Shift 키를 누른 채 클릭하면 모든 하위 계정이 펼쳐집니다.\n"
+"Ctrl 또는 Cmd 키를 누른 채 클릭하면 한 단계만 펼쳐집니다."
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:34
 msgid "Expand all accounts"
-msgstr ""
+msgstr "모든계정펼치기"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:39
 msgid "Expand all"
-msgstr ""
+msgstr "모두펼치기"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "기타"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
-msgstr ""
+msgstr "계정잔액"
 
 #: src/fava/internal_api.py:219
 msgid "Net Worth"
-msgstr ""
+msgstr "순자산"
 
 #: src/fava/json_api.py:688
 msgid "Income"
-msgstr ""
+msgstr "수익"
 
 #: src/fava/json_api.py:694
 msgid "Expenses"
-msgstr ""
+msgstr "비용"
 
 #: src/fava/templates/help.html:8
 msgid "Help pages"
-msgstr ""
+msgstr "도움말페이지"
