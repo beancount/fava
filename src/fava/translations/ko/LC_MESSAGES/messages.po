@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: 2026-06-11 07:25+0000\n"
+"PO-Revision-Date: 2026-06-11 12:09+0000\n"
 "Last-Translator: MunsuBahk <chiefdvm@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
@@ -297,7 +297,7 @@ msgstr "금액 정렬"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Toggle Comment (selection)"
-msgstr "선택 항목의 코멘트 표시 전환"
+msgstr "선택영역 주석 처리 전환"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Open all folds"
@@ -545,7 +545,7 @@ msgstr "클립보드에 계정 잔액검증 지시어를 복사하려면 클릭�
 
 #: frontend/src/reports/statistics/Statistics.svelte:40
 msgid "Copy balance directives"
-msgstr "잔액검증지시어복사"
+msgstr "잔액 지시문 복사"
 
 #: frontend/src/reports/statistics/Statistics.svelte:47
 msgid "Entries per Type"
