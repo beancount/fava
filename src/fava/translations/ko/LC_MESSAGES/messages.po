@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: 2026-06-11 06:13+0000\n"
+"PO-Revision-Date: 2026-06-11 07:25+0000\n"
 "Last-Translator: MunsuBahk <chiefdvm@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
@@ -29,11 +29,11 @@ msgstr "다음"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "At Cost"
-msgstr "취득 원가"
+msgstr "취득원가"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Market Value"
-msgstr "시장 가치"
+msgstr "시장가치"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:21
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
@@ -152,7 +152,7 @@ msgstr "연도별"
 
 #: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
 msgid "Quarterly"
-msgstr "연도별"
+msgstr "분기별"
 
 #: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
 msgid "Monthly"
@@ -185,7 +185,7 @@ msgstr "관련내역"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
-msgstr "파일(들) 업로드"
+msgstr "파일업로드"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
 msgid "Files"
@@ -193,7 +193,7 @@ msgstr "파일"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
 msgid "Documents folder"
-msgstr "문서 폴더"
+msgstr "문서폴더"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:35
@@ -228,12 +228,12 @@ msgstr "오류"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "거래"
+msgstr "이 계정 및 하위 계정의 전체 거래기록"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr "계정 거래 내역"
+msgstr "계정별거래기록"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
@@ -361,7 +361,7 @@ msgstr "이벤트 없음."
 #: frontend/src/reports/holdings/index.ts:92
 #: frontend/src/sidebar/AsideContents.svelte:45
 msgid "Holdings"
-msgstr "보유 자산"
+msgstr "보유자산"
 
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:28
@@ -370,12 +370,12 @@ msgstr "보유 자산"
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:48
 msgid "Holdings by"
-msgstr "분류:"
+msgstr "보유자산분류"
 
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:49
 msgid "Cost currency"
-msgstr "취득 통화"
+msgstr "취득통화"
 
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
@@ -392,7 +392,7 @@ msgstr "가져오기"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr "중복 무시"
+msgstr "중복무시"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
@@ -503,7 +503,7 @@ msgstr "도움말"
 
 #: frontend/src/reports/options/Options.svelte:25
 msgid "Beancount options"
-msgstr "빈카운트설정"
+msgstr "Beancount설정"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
@@ -535,7 +535,7 @@ msgstr "계정별분개수"
 
 #: frontend/src/reports/statistics/Statistics.svelte:32
 msgid "Update Activity"
-msgstr "업데이트활동"
+msgstr "최근수정이력"
 
 #: frontend/src/reports/statistics/Statistics.svelte:35
 msgid ""
@@ -558,7 +558,7 @@ msgstr "최근거래"
 #: frontend/src/reports/statistics/index.ts:37
 #: frontend/src/sidebar/AsideContents.svelte:54
 msgid "Statistics"
-msgstr "통계보고서"
+msgstr "통계"
 
 #: frontend/src/reports/tree_reports/index.ts:38
 #: frontend/src/sidebar/AsideContents.svelte:27
