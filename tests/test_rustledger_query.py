@@ -12,6 +12,7 @@ import datetime
 from decimal import Decimal
 
 from rustfava.beans import create
+from rustfava.rustledger.query import _convert_row_value
 from rustfava.rustledger.query import _entries_to_source
 from rustfava.rustledger.types import RLCustom
 from rustfava.rustledger.types import RLCustomValue
@@ -132,3 +133,39 @@ def test_entries_to_source_skips_fava_custom_directives() -> None:
 
     assert "fava-option" not in source
     assert "budget" in source
+
+
+_INVENTORY_COL = {"name": "balance", "datatype": "Inventory"}
+
+
+def test_inventory_sums_same_currency_cost_lots() -> None:
+    """Regression for https://github.com/rustledger/rustfava/issues/155.
+
+    Now that the serializer preserves cost basis, a balances query returns
+    several positions of the same currency at different cost lots. Flattening
+    the inventory to ``{currency: number}`` must accumulate; the old
+    assignment kept only the last lot (e.g. 60 ITOT collapsed to 2).
+    """
+    value = {
+        "positions": [
+            {"units": {"number": "2", "currency": "ITOT"}},
+            {"units": {"number": "3", "currency": "ITOT"}},
+        ]
+    }
+
+    assert _convert_row_value(value, _INVENTORY_COL) == {"ITOT": Decimal("5")}
+
+
+def test_inventory_mixed_currencies_and_lots() -> None:
+    value = {
+        "positions": [
+            {"units": {"number": "2", "currency": "ITOT"}},
+            {"units": {"number": "3", "currency": "ITOT"}},
+            {"units": {"number": "100.00", "currency": "USD"}},
+        ]
+    }
+
+    assert _convert_row_value(value, _INVENTORY_COL) == {
+        "ITOT": Decimal("5"),
+        "USD": Decimal("100.00"),
+    }
