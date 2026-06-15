@@ -17,8 +17,12 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-# Supported API version prefix
-SUPPORTED_API_VERSION = "1."
+# The major version of the rustledger FFI ``api_version`` this build of
+# rustfava understands. Minor versions are additive and backward compatible,
+# so a higher minor (e.g. 2.1 against an expected 2.0) is accepted; a different
+# major is a wire-format break and is rejected. See rustledger-ffi-wasi's
+# ``API_VERSION`` policy (major-on-break, negotiate from the response payload).
+SUPPORTED_API_MAJOR = 2
 
 # Rustledger release to download
 RUSTLEDGER_VERSION = "v0.16.0"
@@ -34,6 +38,38 @@ class RustledgerError(Exception):
 
 class RustledgerAPIVersionError(RustledgerError):
     """Incompatible API version from rustledger."""
+
+
+def _check_api_version(api_version: object) -> None:
+    """Validate the FFI ``api_version`` carried on a response.
+
+    Minor versions are additive and backward compatible, so any version that
+    shares :data:`SUPPORTED_API_MAJOR` is accepted (a higher minor such as
+    ``2.1`` against an expected ``2.0`` is fine). A different major is a
+    wire-format break and is rejected. Responses without an ``api_version``
+    (not every method returns one) are left unchecked.
+
+    Raises:
+        RustledgerAPIVersionError: If the major version is incompatible or
+            cannot be parsed.
+    """
+    if api_version is None:
+        return
+    major_token = str(api_version).split(".", 1)[0]
+    try:
+        major = int(major_token)
+    except ValueError:
+        msg = (
+            f"Unparseable rustledger API version {api_version!r}; "
+            f"this rustfava build supports {SUPPORTED_API_MAJOR}.x"
+        )
+        raise RustledgerAPIVersionError(msg) from None
+    if major != SUPPORTED_API_MAJOR:
+        msg = (
+            f"Unsupported rustledger API version {api_version!r}; "
+            f"this rustfava build supports {SUPPORTED_API_MAJOR}.x"
+        )
+        raise RustledgerAPIVersionError(msg)
 
 
 class RustledgerEngine:
@@ -175,8 +211,12 @@ class RustledgerEngine:
             message = error.get("message", "Unknown error")
             raise RustledgerError(f"[{code}] {message}")
 
-        # Return the result
-        return dict(response.get("result", {}))
+        # Validate wire compatibility, then return the result. The server
+        # reports its api_version on the response payload; refuse an
+        # incompatible major rather than failing opaquely deeper in parsing.
+        result_dict = dict(response.get("result", {}))
+        _check_api_version(result_dict.get("api_version"))
+        return result_dict
 
     def load(self, source: str, filename: str = "<stdin>") -> dict[str, Any]:
         """Load/parse beancount source and return entries, errors, options.
