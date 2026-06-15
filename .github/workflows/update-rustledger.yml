@@ -56,14 +56,19 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          # Find and close any open PRs for older rustledger upgrades
-          gh pr list --state open --head "chore/upgrade-rustledger-" --json number,headRefName \
-            --jq '.[] | "\(.number) \(.headRefName)"' | while read -r pr_number branch; do
+          # Find and close any open PRs for older rustledger upgrades.
+          # NB: `gh pr list --head` matches an EXACT branch name, not a
+          # prefix, so the old `--head "chore/upgrade-rustledger-"` never
+          # matched anything and stale bump PRs piled up. Filter by branch
+          # prefix in jq instead.
+          gh pr list --state open --json number,headRefName \
+            --jq '.[] | select(.headRefName | startswith("chore/upgrade-rustledger-")) | "\(.number) \(.headRefName)"' | while read -r pr_number branch; do
             echo "Closing stale PR #$pr_number ($branch)"
             gh pr close "$pr_number" --comment "Superseded by upgrade to ${{ steps.version.outputs.version }}" --delete-branch || true
           done
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -78,3 +83,21 @@ jobs:
             See [rustledger releases](https://github.com/rustledger/rustledger/releases) for changelog.
           branch: chore/upgrade-rustledger-${{ steps.version.outputs.version }}
           delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          # Merge the bump automatically once required CI passes, so green
+          # bumps don't pile up unmerged. A bump that breaks against the new
+          # WASM (e.g. a wire-format change, as in the v0.16.0 bump) fails CI
+          # and stays open for a human.
+          #
+          # SAFETY: this only gates on CI if the repo has "Allow auto-merge"
+          # enabled AND the relevant checks marked as required branch
+          # protection. Without required checks, auto-merge merges as soon as
+          # it can — so configure branch protection before relying on this.
+          gh pr merge --auto --squash --delete-branch \
+            "${{ steps.cpr.outputs.pull-request-number }}" \
+            || echo "::warning::auto-merge not enabled on the repo; bump PR left open for manual merge"
