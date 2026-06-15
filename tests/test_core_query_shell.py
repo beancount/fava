@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import pytest
@@ -12,6 +13,7 @@ from rustfava.core.query_shell import QueryCompilationError
 from rustfava.core.query_shell import QueryNotFoundError
 from rustfava.core.query_shell import QueryParseError
 from rustfava.core.query_shell import TooManyRunArgsError
+from rustfava.core.query_shell import _numberify_rows
 from rustfava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -131,3 +133,24 @@ def test_query_to_excel_file(get_ledger: GetRustfavaLedger) -> None:
 
     name, _data = query_shell.query_to_file(entries, "run custom_query", "ods")
     assert name == "custom_query"
+
+
+def test_numberify_rows_renders_inventory_as_amount_strings() -> None:
+    """#155 criterion 2: the export layer renders the canonical inventory
+    representation ({currency: Decimal}, produced by query._convert_row_value)
+    as "<number> <currency>" parts, sorted and comma-joined for multi-currency
+    inventories -- not the Python dict repr it used to emit.
+    """
+    rows = [
+        ({"USD": Decimal("502.25")},),
+        ({"ITOT": Decimal("60")},),
+        ({"USD": Decimal("5"), "EUR": Decimal("3")},),
+    ]
+    columns = (object(),)  # single column; branch keys off the value, not col
+
+    out = _numberify_rows(rows, columns)
+
+    assert out[0] == ("502.25 USD",)
+    assert out[1] == ("60 ITOT",)
+    # multi-currency is sorted by currency for stable output
+    assert out[2] == ("3 EUR, 5 USD",)

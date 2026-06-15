@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import shlex
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from rustfava.core.module_base import FavaModule
@@ -269,14 +270,19 @@ def _numberify_rows(
                 # Amount-like
                 new_row.append(f"{value.number} {value.currency}")
             elif isinstance(value, dict):
-                # Inventory or other dict
-                if "positions" in value:
-                    # Inventory
-                    parts = []
-                    for pos in value.get("positions", []):
-                        units = pos.get("units", {})
-                        parts.append(f"{units.get('number', '')} {units.get('currency', '')}")
-                    new_row.append(", ".join(parts))
+                # Inventory. The cursor layer (query._convert_row_value) is the
+                # single place that interprets the engine's {"positions": [...]}
+                # payload, flattening it to {currency: Decimal} (summing cost
+                # lots). Render that canonical form here as "<number> <currency>"
+                # parts, matching the Amount case above and comma-joining
+                # multi-currency inventories (sorted for stable output).
+                if value and all(isinstance(v, Decimal) for v in value.values()):
+                    new_row.append(
+                        ", ".join(
+                            f"{number} {currency}"
+                            for currency, number in sorted(value.items())
+                        )
+                    )
                 else:
                     new_row.append(str(value))
             elif isinstance(value, (list, set, frozenset)):
