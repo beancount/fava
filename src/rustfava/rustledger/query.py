@@ -123,7 +123,12 @@ def _convert_row_value(value: Any, column: dict[str, str]) -> Any:
         return frozenset(value)
     if datatype == "Inventory" and isinstance(value, dict):
         # Inventory comes as {"positions": [{"units": {"number": "...", "currency": "..."}}]}
-        # Convert to simpler format for Fava
+        # The FFI payload carries units only -- no per-position cost basis -- so
+        # this units-summed {currency: Decimal} form is the complete information
+        # available for an inventory column. Cost basis / market value are
+        # exposed separately via the COST()/VALUE() BQL functions (which return
+        # scalar amounts). Preserving cost lots here would require the engine to
+        # emit cost per position first; see rustledger/rustfava#155.
         positions = value.get("positions", [])
         result = {}
         for pos in positions:

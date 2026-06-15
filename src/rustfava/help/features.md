@@ -36,6 +36,16 @@ WHERE
 GROUP BY payee, account
 ```
 
+An inventory column (e.g. `SUM(position)`) shows the summed **units** held per
+currency. It does not carry per-lot cost basis, so positions of the same
+currency bought at different costs are combined into a single units total. To
+work with cost basis or market value instead, wrap the position in the
+`COST(...)` or `VALUE(...)` functions, which return an amount:
+
+```
+SELECT account, COST(SUM(position)), VALUE(SUM(position)) GROUP BY account
+```
+
 Rustfava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xlsx` and
 `ods`, install rustfava with the `excel` feature:
