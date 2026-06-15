@@ -90,6 +90,30 @@ class RLAmount:
         )
 
 
+def cost_number_values(
+    raw: Any,
+) -> tuple[Decimal | None, Decimal | None]:
+    """Extract ``(per_unit, total)`` from a cost's ``number`` wire value.
+
+    rustledger v0.16+ encodes the cost number as a ``kind``-tagged object
+    (its ``CostNumber`` enum: ``per_unit`` / ``total`` /
+    ``per_unit_from_total``); older releases sent a flat numeric string.
+    Returns ``(None, None)`` when there is no cost number.
+    """
+    if isinstance(raw, dict):
+        kind = raw.get("kind")
+        if kind == "per_unit":
+            return Decimal(raw["value"]), None
+        if kind == "total":
+            return None, Decimal(raw["value"])
+        if kind == "per_unit_from_total":
+            return Decimal(raw["per_unit"]), Decimal(raw["total"])
+        return None, None
+    if raw:
+        return Decimal(str(raw)), None
+    return None, None
+
+
 @dataclass(frozen=True, slots=True)
 class RLCost:
     """Rustledger Cost type."""
@@ -128,11 +152,11 @@ class RLCost:
             if data.get("date")
             else default_date
         )
-        # Handle both per-unit (number) and total cost (number_total)
-        number = Decimal(data["number"]) if data.get("number") else None
-        number_total = (
-            Decimal(data["number_total"]) if data.get("number_total") else None
-        )
+        # v0.16+ sends the cost number as a `kind`-tagged object; older
+        # releases used flat `number` / `number_total` strings.
+        number, number_total = cost_number_values(data.get("number"))
+        if number_total is None and data.get("number_total"):
+            number_total = Decimal(str(data["number_total"]))
         # If we have total cost but not per-unit, compute per-unit
         if number is None and number_total is not None and units_number:
             number = number_total / abs(units_number)

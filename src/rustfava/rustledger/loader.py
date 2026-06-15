@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 from rustfava.rustledger.engine import RustledgerEngine
 from rustfava.rustledger.options import options_from_json
+from rustfava.rustledger.types import cost_number_values
 from rustfava.rustledger.types import directives_from_json
 
 if TYPE_CHECKING:
@@ -52,7 +53,12 @@ def _compute_display_precision(entries_json: list[dict[str, Any]]) -> dict[str, 
                 track_amount(posting.get("units"))
                 if posting.get("cost"):
                     cost = posting["cost"]
-                    track_amount({"number": cost.get("number"), "currency": cost.get("currency")})
+                    per_unit, total = cost_number_values(cost.get("number"))
+                    value = per_unit if per_unit is not None else total
+                    if value is not None:
+                        track_amount(
+                            {"number": str(value), "currency": cost.get("currency")}
+                        )
                 track_amount(posting.get("price"))
 
         elif entry_type == "balance":
