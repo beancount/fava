@@ -99,8 +99,11 @@ def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str]:
             result.append(float(value))
         elif type_ is int:
             result.append(value)
-        elif type_ is set:
-            result.append(" ".join(value))
+        elif type_ in (set, frozenset) or isinstance(value, (set, frozenset)):
+            # Tags/links come back as a frozenset (column datatype is
+            # reported as frozenset, not set), so match on both and guard
+            # by value type as well.
+            result.append(" ".join(sorted(value)))
         elif type_ is datetime.date:
             result.append(str(value))
         elif type_ is dict or isinstance(value, dict):

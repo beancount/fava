@@ -260,13 +260,21 @@ def _format_balance(
     indent: int = 2,
 ) -> str:
     """Format a balance entry."""
+    tolerance = getattr(entry, "tolerance", None)
     amount_str = amount_to_string(entry.amount)
     line = f"{entry.date.isoformat()} balance {entry.account}  {amount_str}"
     lines = [line]
     meta = dict(entry.meta) if entry.meta else {}
     lines.extend(_format_meta(meta, indent))
     result = "\n".join(lines)
-    return align(result, currency_column)
+    aligned = align(result, currency_column)
+    if tolerance is not None:
+        # Beancount syntax is `<number> ~ <tolerance> <currency>`. Insert
+        # the tolerance after alignment so the column math stays correct.
+        needle = f"{entry.amount.number} {entry.amount.currency}"
+        replacement = f"{entry.amount.number} ~ {tolerance} {entry.amount.currency}"
+        aligned = aligned.replace(needle, replacement, 1)
+    return aligned
 
 
 @to_string.register(Open)

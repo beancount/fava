@@ -117,3 +117,20 @@ def test_to_string_transaction_with_price() -> None:
             Liabilities:US:Chase:Slate            -10.00 USD
             Expenses:Food                          10.00 USD @ 10 EUR
         """)
+
+
+def test_to_string_balance_with_tolerance() -> None:
+    # Round-trip parse: tolerance must appear between number and currency.
+    # Without it FX-rounded assertions silently flip red after a regen
+    # (see https://github.com/rustledger/rustfava/issues/144).
+    toleranced = create.balance(
+        {},
+        datetime.date(2024, 12, 31),
+        "Assets:DE:Bank",
+        "900.00 EUR",
+        tolerance=Decimal("0.05"),
+    )
+    rendered = to_string(toleranced)
+    assert "900.00 ~ 0.05 EUR" in rendered
+    assert "balance Assets:DE:Bank" in rendered
+    assert rendered.startswith("2024-12-31 ")

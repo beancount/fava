@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+from rustfava.beans.str import to_string
 from rustfava.rustledger.engine import RustledgerEngine
 from rustfava.rustledger.types import RLAmount
 
@@ -130,7 +131,13 @@ def _convert_row_value(value: Any, column: dict[str, str]) -> Any:
             currency = units.get("currency", "")
             number = units.get("number", "0")
             if currency:
-                result[currency] = Decimal(number)
+                # Sum across lots: an inventory may hold several positions of
+                # the same currency at different cost bases (now that the
+                # serializer preserves cost). Flattening to {currency: number}
+                # must accumulate, not overwrite, or all but one lot is lost.
+                result[currency] = result.get(currency, Decimal(0)) + Decimal(
+                    number
+                )
         return result
 
     return value
@@ -233,99 +240,20 @@ class RLConnection:
 def _entries_to_source(entries: Sequence[Directive]) -> str:
     """Convert entries back to beancount source for querying.
 
-    This is a fallback when the original source isn't available.
+    Delegates to ``rustfava.beans.str.to_string``, which is the same
+    formatter rustfava uses elsewhere and handles tags, links, metadata,
+    posting flags, cost basis, prices, booking methods, and balance
+    tolerance. Custom directives whose type begins with ``fava`` are
+    skipped because rledger cannot parse them.
     """
-    lines = []
+    parts: list[str] = []
     for entry in entries:
-        line = _directive_to_source(entry)
-        if line:
-            lines.append(line)
-    return "\n".join(lines)
-
-
-def _directive_to_source(directive: Directive) -> str:
-    """Convert a directive to beancount source line."""
-    date = directive.date.isoformat()
-    dtype = type(directive).__name__.lower().removeprefix("rl")
-
-    if dtype == "open":
-        currencies = " ".join(getattr(directive, "currencies", []))
-        account = getattr(directive, "account", "")
-        return f'{date} open {account} {currencies}'.strip()
-
-    if dtype == "close":
-        account = getattr(directive, "account", "")
-        return f'{date} close {account}'
-
-    if dtype == "balance":
-        amt = getattr(directive, "amount", None)
-        account = getattr(directive, "account", "")
-        if amt:
-            return f'{date} balance {account} {amt.number} {amt.currency}'
-        return f'{date} balance {account}'
-
-    if dtype == "transaction":
-        flag = getattr(directive, "flag", "*")
-        payee = getattr(directive, "payee", None)
-        narration = getattr(directive, "narration", "")
-
-        if payee:
-            header = f'{date} {flag} "{payee}" "{narration}"'
-        else:
-            header = f'{date} {flag} "{narration}"'
-
-        posting_lines = []
-        for p in getattr(directive, "postings", []):
-            if p.units:
-                posting_lines.append(f'  {p.account}  {p.units.number} {p.units.currency}')
-            else:
-                posting_lines.append(f'  {p.account}')
-
-        return header + "\n" + "\n".join(posting_lines)
-
-    if dtype == "price":
-        amt = getattr(directive, "amount", None)
-        currency = getattr(directive, "currency", "")
-        if amt:
-            return f'{date} price {currency} {amt.number} {amt.currency}'
-        return f'{date} price {currency}'
-
-    if dtype == "commodity":
-        currency = getattr(directive, "currency", "")
-        return f'{date} commodity {currency}'
-
-    if dtype == "event":
-        event_type = getattr(directive, "type", "")
-        desc = getattr(directive, "description", "")
-        return f'{date} event "{event_type}" "{desc}"'
-
-    if dtype == "note":
-        comment = getattr(directive, "comment", "")
-        account = getattr(directive, "account", "")
-        return f'{date} note {account} "{comment}"'
-
-    if dtype == "document":
-        filename = getattr(directive, "filename", "")
-        account = getattr(directive, "account", "")
-        return f'{date} document {account} "{filename}"'
-
-    if dtype == "pad":
-        source_account = getattr(directive, "source_account", "")
-        account = getattr(directive, "account", "")
-        return f'{date} pad {account} {source_account}'
-
-    if dtype == "query":
-        name = getattr(directive, "name", "")
-        query_string = getattr(directive, "query_string", "")
-        return f'{date} query "{name}" "{query_string}"'
-
-    if dtype == "custom":
-        # Skip fava-specific custom directives that rustledger can't parse
-        custom_type = getattr(directive, "type", "")
-        if custom_type.startswith("fava"):
-            return ""
-        values = getattr(directive, "values", [])
-        values_str = " ".join(f'"{v}"' for v in values)
-        return f'{date} custom "{custom_type}" {values_str}'
-
-    return ""
+        if (
+            type(entry).__name__ == "RLCustom"
+            and getattr(entry, "type", "").startswith("fava")
+        ):
+            continue
+        rendered = to_string(entry)
+        if rendered:
+            parts.append(rendered)
+    return "\n".join(parts) + ("\n" if parts else "")
