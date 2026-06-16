@@ -237,7 +237,7 @@ msgstr "계정별거래기록"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:785
+#: src/fava/json_api.py:786
 msgid "Changes"
 msgstr "변동"
 
@@ -507,7 +507,8 @@ msgstr "Beancount설정"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
-msgstr "…BQL 쿼리를 입력하세요. 사용 가능한 명령어를 보려면 'help'를 입력하세요."
+msgstr ""
+"…BQL 쿼리를 입력하세요. 사용 가능한 명령어를 보려면 'help'를 입력하세요."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
@@ -595,8 +596,8 @@ msgstr "조회기간"
 msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
-#: src/fava/json_api.py:700
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
+#: src/fava/json_api.py:701
 msgid "Net Profit"
 msgstr "당기순이익"
 
@@ -668,11 +669,11 @@ msgstr "계정잔액"
 msgid "Net Worth"
 msgstr "순자산"
 
-#: src/fava/json_api.py:688
+#: src/fava/json_api.py:689
 msgid "Income"
 msgstr "수익"
 
-#: src/fava/json_api.py:694
+#: src/fava/json_api.py:695
 msgid "Expenses"
 msgstr "비용"
 

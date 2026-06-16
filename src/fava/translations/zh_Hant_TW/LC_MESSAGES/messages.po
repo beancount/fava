@@ -242,7 +242,7 @@ msgstr "賬戶日記賬"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:785
+#: src/fava/json_api.py:786
 msgid "Changes"
 msgstr "更動"
 
@@ -604,8 +604,8 @@ msgstr "時間"
 msgid "Filter by tag, payee, …"
 msgstr "以 Tag, 付款者, ... 篩選"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
-#: src/fava/json_api.py:700
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
+#: src/fava/json_api.py:701
 msgid "Net Profit"
 msgstr "淨利潤"
 
@@ -677,11 +677,11 @@ msgstr "賬戶餘額"
 msgid "Net Worth"
 msgstr "淨值"
 
-#: src/fava/json_api.py:688
+#: src/fava/json_api.py:689
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:694
+#: src/fava/json_api.py:695
 msgid "Expenses"
 msgstr "支出"
 
