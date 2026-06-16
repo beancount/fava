@@ -193,8 +193,14 @@ def test_deserialise_posting(
 
 
 def test_deserialise_posting_invalid_amount() -> None:
+    # Trailing garbage that rustledger's parser silently drops (it does not
+    # raise a parse error like Python beancount) — caught by the bare-number
+    # guard in deserialise_posting.
     with pytest.raises(InvalidAmountError):
         deserialise_posting({"account": "Assets", "amount": "10 ////"})
+    # A genuine parse error — caught directly from the load errors.
+    with pytest.raises(InvalidAmountError):
+        deserialise_posting({"account": "Assets", "amount": "abc"})
 
 
 def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:

@@ -150,7 +150,10 @@ test-py-typeguard:
 # Run JavaScript tests
 [group('test')]
 test-js: frontend-deps
-    cd frontend && bun test
+    # Use the package.json `test` script (node --conditions browser) — the same
+    # command CI runs. Plain `bun test` resolves svelte to its server build, so
+    # `mount()` (client-only) fails under jsdom.
+    cd frontend && bun run test
 
 # Update snapshot files
 [group('test')]

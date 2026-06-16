@@ -452,12 +452,15 @@ def test_api_get_source_slice_unprocessable(
     This test finds an auto_accounts-generated entry and verifies that
     trying to get its source slice returns 422 (Unprocessable Entity).
     """
-    # Get a generated entry (auto_accounts-generated Open directive)
+    # Get a generated entry (auto_accounts-generated Open directive). The engine
+    # marks synthesized directives with no real source position — a placeholder
+    # filename (starting with "<") and/or a falsy lineno — which is exactly what
+    # rustfava's ``_get_position`` keys on to forbid editing them.
     ledger = app.config["LEDGERS"]["edit-example"]
     generated_entry = None
     for entry in ledger.all_entries:
-        # auto_accounts-generated entries have filename "<auto_accounts>"
-        if entry.meta.get("filename") == "<auto_accounts>":
+        filename = entry.meta.get("filename", "")
+        if filename.startswith("<") or not entry.meta.get("lineno"):
             generated_entry = entry
             break
 

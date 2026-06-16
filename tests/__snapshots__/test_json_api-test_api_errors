@@ -2,8 +2,14 @@
              'beancount file.',
   'source': None,
   'type': 'FavaError'},
- {'message': 'interpolation failed: cannot infer currency for posting to '
-             'account Assets:Cash',
+ {'message': 'Not enough units in Assets:Stock: requested 1.0, available 0.1; '
+             'not enough to reduce (2020-01-01, "sell")',
   'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
-             'lineno': 11},
+             'lineno': 0},
+  'type': 'BeancountError'},
+ {'message': 'interpolation failed: multiple postings missing amounts or with '
+             'unresolved cost specs for currency USD (2 unknowns) (2018-07-07, '
+             '"b")',
+  'source': {'filename': 'TEST_DATA_DIR/errors.beancount',
+             'lineno': 0},
   'type': 'BeancountError'}]

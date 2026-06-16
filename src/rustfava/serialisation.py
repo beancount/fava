@@ -14,6 +14,7 @@ import datetime
 from collections.abc import Mapping
 from copy import copy
 from decimal import Decimal
+from decimal import InvalidOperation
 from functools import singledispatch
 from typing import Any
 
@@ -141,6 +142,15 @@ def _(posting: Posting) -> Any:
 _DUMMY_DATE = datetime.date(2000, 1, 1)
 
 
+def _is_bare_number(amount: str) -> bool:
+    """Whether ``amount`` is a plain numeric value (no currency/cost/price)."""
+    try:
+        Decimal(amount.strip().replace(",", ""))
+    except (InvalidOperation, ValueError):
+        return False
+    return True
+
+
 def deserialise_posting(posting: Any) -> Posting:
     """Parse JSON to a Beancount Posting."""
     amount = posting.get("amount", "")
@@ -158,6 +168,18 @@ def deserialise_posting(posting: Any) -> Posting:
         msg = "Expected transaction"
         raise TypeError(msg)
     pos = txn.postings[0]
+    # rustledger's parser silently drops trailing garbage (e.g. "10 ////")
+    # rather than raising a parse error like Python beancount. When the parsed
+    # posting carries no units/cost/price, a valid amount can only be a bare
+    # numeric value; anything else means invalid tokens were dropped.
+    if (
+        amount
+        and pos.units is None
+        and pos.cost is None
+        and pos.price is None
+        and not _is_bare_number(amount)
+    ):
+        raise InvalidAmountError(amount)
     # Strip dummy date from cost if present (booking assigns transaction date)
     cost = pos.cost
     if cost is not None and getattr(cost, "date", None) == _DUMMY_DATE:

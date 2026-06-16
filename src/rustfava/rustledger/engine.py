@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 SUPPORTED_API_MAJOR = 2
 
 # Rustledger release to download
-RUSTLEDGER_VERSION = "v0.16.0"
+RUSTLEDGER_VERSION = "v0.16.1"
 RUSTLEDGER_WASM_URL = (
     f"https://github.com/rustledger/rustledger/releases/download/"
     f"{RUSTLEDGER_VERSION}/rustledger-ffi-wasi-{RUSTLEDGER_VERSION}.wasm"

@@ -6,6 +6,10 @@ from collections import Counter
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from rustfava.beans.abc import Balance
+from rustfava.beans.abc import Close
+from rustfava.beans.abc import Document
+from rustfava.beans.abc import Open
 from rustfava.rustledger.engine import RustledgerEngine
 from rustfava.rustledger.options import options_from_json
 from rustfava.rustledger.types import cost_number_values
@@ -18,6 +22,22 @@ if TYPE_CHECKING:
     from rustfava.beans.abc import Directive
     from rustfava.beans.types import BeancountOptions
     from rustfava.helpers import BeancountError
+
+# Same-date ordering used by beancount (``beancount.core.data.sorted``): open
+# before balance before the rest, document/close last. The rustledger engine
+# returns entries in source order, but fava's model (charts, balances, journal)
+# assumes a date-sorted stream.
+_ENTRY_SORT_ORDER = {Open: -2, Balance: -1, Document: 1, Close: 2}
+
+
+def _sort_entries(entries: list[Directive]) -> list[Directive]:
+    """Sort directives by (date, type, lineno), as beancount does."""
+
+    def key(entry: Directive) -> tuple[object, int, int]:
+        lineno = (entry.meta or {}).get("lineno", 0)
+        return (entry.date, _ENTRY_SORT_ORDER.get(type(entry), 0), lineno)
+
+    return sorted(entries, key=key)
 
 
 def _compute_display_precision(entries_json: list[dict[str, Any]]) -> dict[str, int]:
@@ -135,8 +155,13 @@ def _run_plugins(
         if not plugin_name:
             continue
 
-        # Skip beancount.plugins.auto_accounts - handled natively by rustledger
-        if plugin_name == "beancount.plugins.auto_accounts":
+        # Skip auto_accounts - handled natively by rustledger. The engine
+        # reports it by its short name; older versions used the fully-qualified
+        # `beancount.plugins.auto_accounts`, so accept both.
+        if plugin_name in (
+            "auto_accounts",
+            "beancount.plugins.auto_accounts",
+        ):
             continue
 
         try:
@@ -225,7 +250,7 @@ def load_string(
         entries, plugin_errors = _run_plugins(entries, plugins, options)
         errors.extend(plugin_errors)
 
-    return entries, errors, options
+    return _sort_entries(entries), errors, options
 
 
 def load_uncached(
@@ -258,8 +283,12 @@ def load_uncached(
     main_path = Path(beancount_file_path)
     engine = RustledgerEngine.get_instance()
 
-    # Use load_full with auto_accounts plugin for sorting and account generation
-    result = engine.load_full(str(main_path), plugins=["auto_accounts"])
+    # auto_accounts is a synth plugin the engine runs from the ledger's own
+    # ``plugin "..."`` declaration during loading; it must NOT be passed via the
+    # ``plugins`` argument, which routes to the regular (post-booking) plugin
+    # runner and reports a spurious "Unknown plugin: auto_accounts" error.
+    # Entry sorting is handled below by ``_sort_entries``.
+    result = engine.load_full(str(main_path))
 
     entries_json = result.get("entries", [])
 
@@ -268,7 +297,7 @@ def load_uncached(
     if not options_json.get("display_precision"):
         options_json["display_precision"] = _compute_display_precision(entries_json)
 
-    entries = directives_from_json(entries_json)
+    entries = _sort_entries(list(directives_from_json(entries_json)))
     errors = list(_errors_from_json(result.get("errors", []), str(main_path)))
     options = options_from_json(options_json)
 
