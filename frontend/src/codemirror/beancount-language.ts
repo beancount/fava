@@ -1,8 +1,8 @@
 import {
   defineLanguageFacet,
   Language,
-  languageDataProp,
   LanguageSupport,
+  languageDataProp,
   syntaxHighlighting,
 } from "@codemirror/language";
 import { highlightTrailingWhitespace, keymap } from "@codemirror/view";

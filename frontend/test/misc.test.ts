@@ -5,9 +5,9 @@ import { is_non_empty, last_element, move } from "../src/lib/array.ts";
 import { shallow_equal } from "../src/lib/equals.ts";
 import { errorWithCauses } from "../src/lib/errors.ts";
 import {
+  FetchInvalidResponseError,
   fetch_json,
   fetch_text,
-  FetchInvalidResponseError,
 } from "../src/lib/fetch.ts";
 import { getInterval } from "../src/lib/interval.ts";
 import { parseJSON } from "../src/lib/json.ts";

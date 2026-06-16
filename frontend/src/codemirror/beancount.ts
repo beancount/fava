@@ -12,14 +12,15 @@ import { beancount_highlight } from "./beancount-highlight.ts";
 import { beancount_language_support } from "./beancount-language.ts";
 import { ruler_plugin } from "./ruler.ts";
 
+export { toggleComment } from "@codemirror/commands";
+export { foldAll, unfoldAll } from "@codemirror/language";
+
 export { beancount_format } from "./beancount-format.ts";
 export {
   replace_contents,
   scroll_to_line,
   set_errors,
 } from "./editor-transactions.ts";
-export { toggleComment } from "@codemirror/commands";
-export { foldAll, unfoldAll } from "@codemirror/language";
 
 export function init_textarea(el: HTMLTextAreaElement): void {
   const editor = new EditorView({

@@ -8,9 +8,9 @@
   import { is_supported_datatransfer } from "../../modals/document-upload.ts";
   import { is_loading, loading_state } from "../../router.ts";
   import {
+    type JournalSort,
     journal_show,
     journal_sort,
-    type JournalSort,
   } from "../../stores/journal.ts";
   import { get_account_from_url } from "../accounts/index.ts";
   import { handle_journal_click } from "./click_handler.ts";

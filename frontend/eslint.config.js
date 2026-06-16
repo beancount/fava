@@ -1,6 +1,5 @@
 import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintPluginSvelte from "eslint-plugin-svelte";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
@@ -21,9 +20,6 @@ export default defineConfig(
   {
     languageOptions: {
       parserOptions: tsParserOptions,
-    },
-    plugins: {
-      "simple-import-sort": simpleImportSort,
     },
     rules: {
       "no-undef": OFF, // better handled by Typescript
@@ -57,9 +53,6 @@ export default defineConfig(
           format: ["PascalCase"],
         },
       ],
-      // Sort import statements and members alphabetically.
-      "simple-import-sort/imports": ON,
-      "simple-import-sort/exports": ON,
     },
   },
   {

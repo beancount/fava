@@ -15,9 +15,9 @@
   import type { KeySpec } from "./keyboard-shortcuts.ts";
   import { keyboardShortcut } from "./keyboard-shortcuts.ts";
   import {
+    type FuzzyWrappedText,
     fuzzyfilter,
     fuzzywrap,
-    type FuzzyWrappedText,
   } from "./lib/fuzzy.ts";
 
   interface Props {

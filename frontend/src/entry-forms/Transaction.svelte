@@ -1,11 +1,11 @@
 <script lang="ts">
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import {
     get_narration_transaction,
     get_narrations,
     get_payee_accounts,
     get_payee_transaction,
   } from "../api/index.ts";
-  import AutocompleteInput from "../AutocompleteInput.svelte";
   import type { EntryMetadata, Transaction } from "../entries/index.ts";
   import { Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
@@ -158,11 +158,11 @@
 <div class="flex-row hide-on-desktop">
   <span class="label">{_("Postings")}:</span>
 </div>
-{#each entry.postings, index (index)}
+{#each entry.postings, index}
   <!-- Using the indexed access (instead of `as posting` in the each) seems to track
          the reactivity differently and avoids cursor jumping on the posting inputs. -->
   {@const posting = entry.postings[index]}
-  {#if posting}
+  {#if posting != null}
     <PostingSvelte
       bind:posting={
         () => posting,
