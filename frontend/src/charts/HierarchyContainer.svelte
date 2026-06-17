@@ -41,30 +41,28 @@
     height={treemap_height}
   />
 {:else if mode === "sunburst"}
+  {@const single_width = width / currencies.length}
   <svg viewBox={`0 0 ${width.toString()} ${sunburst_height.toString()}`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}
-      <g
-        transform={`translate(${((width * i) / currencies.length).toString()},0)`}
-      >
+      <g transform={`translate(${(single_width * i).toString()},0)`}>
         <Sunburst
           data={d}
           currency={chart_currency}
-          width={width / currencies.length}
+          width={single_width}
           height={sunburst_height}
         />
       </g>
     {/each}
   </svg>
 {:else if mode === "icicle"}
+  {@const single_width = width / currencies.length}
   <svg viewBox={`0 0 ${width.toString()} ${icicle_height.toString()}`}>
     {#each [...data] as [chart_currency, d], i (chart_currency)}
-      <g
-        transform={`translate(${((width * i) / currencies.length).toString()},0)`}
-      >
+      <g transform={`translate(${(single_width * i).toString()},0)`}>
         <Icicle
           data={d}
           currency={chart_currency}
-          width={width / currencies.length}
+          width={single_width}
           height={icicle_height}
         />
       </g>

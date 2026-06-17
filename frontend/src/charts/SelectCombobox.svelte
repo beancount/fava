@@ -40,7 +40,7 @@
   // svelte-ignore state_referenced_locally
   let index = $state(options.indexOf(value));
   /** The popup list element. */
-  let ul: HTMLUListElement | undefined = $state();
+  let ul = $state<HTMLUListElement>();
 
   const uid = $props.id();
   const listbox_id = `combobox-listbox-${uid}`;

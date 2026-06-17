@@ -27,7 +27,7 @@
   let { chart, children }: Props = $props();
 
   /** Width of the chart. */
-  let width: number | undefined = $state();
+  let width = $state<number>();
 </script>
 
 <div class="flex-row">

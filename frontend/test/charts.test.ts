@@ -10,7 +10,7 @@ import {
   padExtent,
 } from "../src/charts/helpers.ts";
 import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
-import { chart_validator } from "../src/charts/index.ts";
+import { charts_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
 import { loadJSONSnapshot } from "./helpers.ts";
@@ -41,7 +41,7 @@ test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
-  const validated = chart_validator(data).unwrap();
+  const validated = charts_validator(data).unwrap();
 
   const [hierarchy, balances, net_worth] = validated;
   ok(hierarchy instanceof ParsedHierarchyChart);

@@ -5,13 +5,13 @@
   import { arc } from "d3-shape";
   import { untrack } from "svelte";
 
-  import { formatPercentage } from "../format.ts";
   import { urlForAccount } from "../helpers.ts";
   import { ctx } from "../stores/format.ts";
   import { sunburstScale } from "./helpers.ts";
-  import type {
-    AccountHierarchyDatum,
-    AccountHierarchyNode,
+  import {
+    type AccountHierarchyDatum,
+    type AccountHierarchyNode,
+    balance_with_percentage,
   } from "./hierarchy.ts";
 
   interface Props {
@@ -30,23 +30,15 @@
     root.descendants().filter((d) => !d.data.dummy && d.depth > 0),
   );
 
-  let current: AccountHierarchyNode | null = $state(null);
+  let current = $state<AccountHierarchyNode>();
 
   $effect.pre(() => {
     // if-expression to run on each change of chart
     void data;
     untrack(() => {
-      current = null;
+      current = undefined;
     });
   });
-
-  function balanceText(d: AccountHierarchyNode): string {
-    const val = d.value ?? 0;
-    const total = root.value ?? 0;
-    return total
-      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / total)})`
-      : $ctx.amount(val, currency);
-  }
 
   const x = scaleLinear([0, 2 * Math.PI]);
   let y = $derived(scaleSqrt([0, radius]));
@@ -64,7 +56,7 @@
   {height}
   transform={`translate(${(width / 2).toString()},${(height / 2).toString()})`}
   onmouseleave={() => {
-    current = null;
+    current = undefined;
   }}
   role="img"
 >
@@ -73,7 +65,7 @@
     {(current ?? root).data.account}
   </text>
   <text class="balance" dy="1.2em" text-anchor="middle">
-    {balanceText(current ?? root)}
+    {balance_with_percentage($ctx, current ?? root, currency)}
   </text>
   {#each nodes as d (d.data.account)}
     <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>

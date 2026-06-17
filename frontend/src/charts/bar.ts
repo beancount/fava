@@ -96,7 +96,7 @@ export class BarChart {
 
   /** The tooltip for a hovered account in the stacked bar chart. */
   tooltipTextAccount(
-    c: FormatterContext,
+    $ctx: FormatterContext,
     d: BarChartDatum,
     account: string,
     $chartToggledCurrencies: readonly string[],
@@ -106,7 +106,7 @@ export class BarChart {
     d.values.forEach(({ currency }) => {
       if (!$chartToggledCurrencies.includes(currency)) {
         const value = d.account_balances[account]?.[currency] ?? 0;
-        content.push(domHelpers.t(c.amount(value, currency)));
+        content.push($ctx.amount(value, currency));
         content.push(domHelpers.br());
       }
     });
@@ -115,18 +115,13 @@ export class BarChart {
   }
 
   /** The tooltip for a hovered bar group in the bar chart. */
-  tooltipText(c: FormatterContext, d: BarChartDatum): TooltipContent {
+  tooltipText($ctx: FormatterContext, d: BarChartDatum): TooltipContent {
     const content = [];
-    d.values.forEach((a) => {
+    d.values.forEach(({ value, currency, budget }) => {
       content.push(
-        domHelpers.t(
-          a.budget
-            ? `${c.amount(a.value, a.currency)} / ${c.amount(
-                a.budget,
-                a.currency,
-              )}`
-            : c.amount(a.value, a.currency),
-        ),
+        budget
+          ? `${$ctx.amount(value, currency)} / ${$ctx.amount(budget, currency)}`
+          : $ctx.amount(value, currency),
       );
       content.push(domHelpers.br());
     });

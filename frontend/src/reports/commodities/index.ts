@@ -23,7 +23,7 @@ export const commodities = new Route<CommoditiesReportProps>(
         const values = prices.map((d) => ({ name, date: d[0], value: d[1] }));
 
         return new LineChart(name, [{ name, values }], (c, d) => [
-          domHelpers.t(`1 ${base} = ${c.amount(d.value, quote)}`),
+          `1 ${base} = ${c.amount(d.value, quote)}`,
           domHelpers.em(day(d.date)),
         ]);
       });

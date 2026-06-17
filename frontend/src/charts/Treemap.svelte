@@ -1,14 +1,14 @@
 <script lang="ts">
   import { treemap } from "d3-hierarchy";
 
-  import { formatPercentage } from "../format.ts";
   import { urlForAccount } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
   import { treemapScale } from "./helpers.ts";
-  import type {
-    AccountHierarchyDatum,
-    AccountHierarchyNode,
+  import {
+    type AccountHierarchyDatum,
+    type AccountHierarchyNode,
+    balance_with_percentage,
   } from "./hierarchy.ts";
   import { domHelpers, followingTooltip } from "./tooltip.ts";
 
@@ -29,22 +29,11 @@
 
   function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;
-    if (node.depth === 1 || !node.parent) {
-      return $treemapScale(node.data.account);
-    }
-    return $treemapScale(node.parent.data.account);
-  }
-
-  function tooltipText(d: AccountHierarchyNode) {
-    const val = d.value ?? 0;
-    const rootValue = root.value ?? 1;
-
-    return [
-      domHelpers.t(
-        `${$ctx.amount(val, currency)} (${formatPercentage(val / rootValue)})`,
-      ),
-      domHelpers.em(d.data.account),
-    ];
+    return $treemapScale(
+      node.depth === 1 || !node.parent
+        ? node.data.account
+        : node.parent.data.account,
+    );
   }
 </script>
 
@@ -53,7 +42,10 @@
     {@const account = d.data.account}
     <g
       transform={`translate(${d.x0.toString()},${d.y0.toString()})`}
-      {@attach followingTooltip(() => tooltipText(d))}
+      {@attach followingTooltip(() => [
+        balance_with_percentage($ctx, d, currency),
+        domHelpers.em(account),
+      ])}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <a href={$urlForAccount(account)}>

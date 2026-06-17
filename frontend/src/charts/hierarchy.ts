@@ -4,6 +4,7 @@ import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
+import type { FormatterContext } from "../format.ts";
 import type { TreeNode } from "../lib/tree.ts";
 import type { Validator } from "../lib/validation.ts";
 import {
@@ -66,6 +67,19 @@ type AccountHierarchyInputDatum = TreeNode<{
 
 /** A d3-hierarchy node for an account. */
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
+
+/** Render the account balance with a percentage of the total. */
+export function balance_with_percentage(
+  $ctx: FormatterContext,
+  d: AccountHierarchyNode,
+  currency: string,
+): string {
+  const value = d.value ?? 0;
+  const root_value = d.ancestors().at(-1)?.value ?? 0;
+  return root_value
+    ? `${$ctx.amount(value, currency)} (${$ctx.percentage(value / root_value)})`
+    : $ctx.amount(value, currency);
+}
 
 /**
  * Add internal nodes as dummy leaf nodes to their own children.

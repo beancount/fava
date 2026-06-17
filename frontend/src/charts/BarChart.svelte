@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { extent } from "d3-array";
+  import { extent, least } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
@@ -7,6 +7,7 @@
   import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
   import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
+  import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
   import {
     currenciesScale,
@@ -26,41 +27,41 @@
   let { chart, width }: Props = $props();
 
   const today = new Date();
-  const maxColumnWidth = 100;
+
+  // Constant dimensions
+  const max_column_width = 100;
   const margin = { top: 10, right: 10, bottom: 30, left: 40 };
   const height = 250;
+  const inner_height = height - margin.top - margin.bottom;
 
+  // Chart data
   let accounts = $derived(chart.accounts);
+  let { currencies, bar_groups, stacks } = $derived(
+    chart.filter($chartToggledCurrencies),
+  );
 
-  let filtered = $derived(chart.filter($chartToggledCurrencies));
-  let currencies = $derived(filtered.currencies);
-  let bar_groups = $derived(filtered.bar_groups);
-  let stacks = $derived(filtered.stacks);
-
-  let innerHeight = $derived(height - margin.top - margin.bottom);
-  let maxWidth = $derived(bar_groups.length * maxColumnWidth);
-  let offset = $derived(margin.left + Math.max(0, width - maxWidth) / 2);
-  let innerWidth = $derived(
-    Math.min(width - margin.left - margin.right, maxWidth),
+  // Computed dimensions
+  let max_width = $derived(bar_groups.length * max_column_width);
+  let offset = $derived(margin.left + Math.max(0, width - max_width) / 2);
+  let inner_width = $derived(
+    Math.min(width - margin.left - margin.right, max_width),
   );
 
   /** Whether to display stacked bars. */
-  let showStackedBars = $derived(
+  let show_stacked_bars = $derived(
     $barChartMode === "stacked" && chart.hasStackedData,
   );
-  /** The currently hovered account. */
-  let highlighted: string | null = $state(null);
 
   // Scales
   let x0 = $derived(
-    scaleBand([0, innerWidth])
+    scaleBand([0, inner_width])
       .domain(bar_groups.map((d) => d.label))
       .padding(0.1),
   );
   let x1 = $derived(scaleBand([0, x0.bandwidth()]).domain(currencies));
 
-  let yExtent = $derived(
-    showStackedBars
+  let y_extent = $derived(
+    show_stacked_bars
       ? extent(stacks.flatMap(([, s]) => s.flat(2)))
       : extent(
           bar_groups.flatMap((d) => d.values),
@@ -68,32 +69,44 @@
         ),
   );
   let y = $derived(
-    scaleLinear([innerHeight, 0]).domain(padExtent(includeZero(yExtent))),
+    scaleLinear([inner_height, 0]).domain(padExtent(includeZero(y_extent))),
   );
 
-  let colorScale = $derived(
+  let account_color_scale = $derived(
     scaleOrdinal(hclColorRange(accounts.length)).domain(accounts),
   );
 
   // Axes
-  let xAxis = $derived(
+  let x_axis = $derived(
     axisBottom(x0)
       .tickSizeOuter(0)
-      .tickValues(filterTicks(x0.domain(), innerWidth / 70)),
+      .tickValues(filterTicks(x0.domain(), inner_width / 70)),
   );
-  let yAxis = $derived(
-    axisLeft(y).tickPadding(6).tickSize(-innerWidth).tickFormat($short),
+  let y_axis = $derived(
+    axisLeft(y).tickPadding(6).tickSize(-inner_width).tickFormat($short),
   );
+
+  /** Invert a pixel x position to the date of the nearest bar group. */
+  function invert(px: number): Date {
+    const half = x0.bandwidth() / 2;
+    const closest = least(bar_groups, ({ label }) =>
+      Math.abs(px - (x0(label) ?? 0) - half),
+    );
+    return closest?.date ?? new Date();
+  }
 </script>
 
 <svg viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
-  <g transform={`translate(${offset.toString()},${margin.top.toString()})`}>
-    <Axis x axis={xAxis} {innerHeight} />
-    <Axis y axis={yAxis} lineAtZero={y(0)} />
+  <Brush
+    {invert}
+    height={inner_height}
+    transform={`translate(${offset.toString()},${margin.top.toString()})`}
+  >
+    <Axis x axis={x_axis} {inner_height} />
+    <Axis y axis={y_axis} line_at_zero={y(0)} />
     {#each bar_groups as group (group.date)}
       <g
-        class="group"
-        class:desaturate={group.date > today}
+        class={["group", group.date > today && "desaturate"]}
         {@attach followingTooltip(() => chart.tooltipText($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
@@ -101,7 +114,7 @@
           class="group-box"
           x={(x0.bandwidth() - x0.step()) / 2}
           width={x0.step()}
-          height={innerHeight}
+          height={inner_height}
         />
         <a
           href={urlForTimeFilter(group.date)}
@@ -109,12 +122,12 @@
         >
           <rect
             class="axis-group-box"
-            transform={`translate(0,${innerHeight.toString()})`}
+            y={inner_height}
             width={x0.bandwidth()}
             height={margin.bottom}
           />
         </a>
-        {#if !showStackedBars}
+        {#if !show_stacked_bars}
           {#each group.values as { currency, value, budget } (currency)}
             <rect
               fill={$currenciesScale(currency)}
@@ -134,36 +147,20 @@
         {/if}
       </g>
     {/each}
-    {#if showStackedBars}
-      {#each stacks as [currency, account_stacks] (currency)}
-        {#each account_stacks as stack (stack.key)}
-          {@const account = stack.key}
-          <a href={$urlForAccount(account)}>
-            <g
-              class="category"
-              class:faded={highlighted != null && account !== highlighted}
-              onmouseover={() => {
-                highlighted = account;
-              }}
-              onfocus={() => {
-                highlighted = account;
-              }}
-              onmouseout={() => {
-                highlighted = null;
-              }}
-              onblur={() => {
-                highlighted = null;
-              }}
-              role="img"
-            >
+    {#if show_stacked_bars}
+      <g class="stacks">
+        {#each stacks as [currency, account_stacks] (currency)}
+          {#each account_stacks as stack (stack.key)}
+            {@const account = stack.key}
+            <a href={$urlForAccount(account)}>
               {#each stack as bar (bar.data.date)}
                 <rect
-                  class:desaturate={bar.data.date > today}
+                  class={[bar.data.date > today && "desaturate"]}
                   width={x1.bandwidth()}
                   x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
                   y={y(Math.max(bar[0], bar[1]))}
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
-                  fill={colorScale(account)}
+                  fill={account_color_scale(account)}
                   {@attach followingTooltip(() =>
                     chart.tooltipTextAccount(
                       $ctx,
@@ -174,24 +171,20 @@
                   )}
                 />
               {/each}
-            </g>
-          </a>
+            </a>
+          {/each}
         {/each}
-      {/each}
+      </g>
     {/if}
-  </g>
+  </Brush>
 </svg>
 
 <style>
-  .category.faded {
+  .stacks:hover a:not(:hover) {
     opacity: 0.5;
   }
 
-  .axis-group-box {
-    cursor: pointer;
-    opacity: 0;
-  }
-
+  .axis-group-box,
   .group-box {
     opacity: 0;
   }

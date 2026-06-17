@@ -25,7 +25,7 @@ export interface ParsedFavaChart {
   with_context($chartContext: ChartContext): FavaChart;
 }
 
-export const chart_validator: Validator<ParsedFavaChart[]> = array(
+export const charts_validator: Validator<ParsedFavaChart[]> = array(
   tagged_union("type", {
     balances: ParsedLineChart.validator,
     bar: ParsedBarChart.validator,
