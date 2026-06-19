@@ -11,3 +11,14 @@
 {% macro render_num(ledger, currency, number) -%}
 <span title='{{ ledger.commodities.name(currency) }}'>{{ number|format_currency(currency)|incognito }} {{ currency }}</span>
 {%- endmacro %}
+
+{% macro render_price(ledger, base_currency, price) %}
+{% if price is none or price.number is none -%}
+  <span class='num'></span>
+{%- else -%}
+  {% set base = price.number|price_base %}
+  <span class='num' title='{{ ledger.commodities.name(price.currency) }}'>
+    {{- base|format_currency(base_currency)|incognito }} {{ base_currency }} = {{ (base * price.number)|format_currency(price.currency)|incognito }} {{ price.currency -}}
+  </span>
+{%- endif %}
+{% endmacro %}

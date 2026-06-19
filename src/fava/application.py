@@ -230,6 +230,7 @@ def _setup_template_config(fava_app: Flask, *, incognito: bool) -> None:
     fava_app.add_template_filter(template_filters.flag_to_type)
     fava_app.add_template_filter(template_filters.format_currency)
     fava_app.add_template_filter(template_filters.meta_items)
+    fava_app.add_template_filter(template_filters.price_base)
     fava_app.add_template_filter(
         template_filters.replace_numbers
         if incognito
