@@ -36,11 +36,9 @@ def test_render_price(app: Flask, example_ledger: FavaLedger) -> None:
         )
         res = "<span class='num'></span>"
         assert macro(example_ledger, "USD", None) == res
-        res = "  <span class='num' title='TEST'>100.00 USD = 2.00 TEST</span>"
+        res = "<span class='num' title='TEST'>100.00 USD = 2.00 TEST</span>"
         assert macro(example_ledger, "USD", create.amount("0.02 TEST")) == res
-        res = (
-            "  <span class='num' title='US Dollar'>1.00 TEST = 2.00 USD</span>"
-        )
+        res = "<span class='num' title='US Dollar'>1.00 TEST = 2.00 USD</span>"
         assert macro(example_ledger, "TEST", create.amount("2 USD")) == res
 
 

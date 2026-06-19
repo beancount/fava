@@ -16,7 +16,7 @@
 {% if price is none or price.number is none -%}
   <span class='num'></span>
 {%- else -%}
-  {% set base = price.number|price_base %}
+  {% set base = price.number|price_base -%}
   <span class='num' title='{{ ledger.commodities.name(price.currency) }}'>
     {{- base|format_currency(base_currency)|incognito }} {{ base_currency }} = {{ (base * price.number)|format_currency(price.currency)|incognito }} {{ price.currency -}}
   </span>
