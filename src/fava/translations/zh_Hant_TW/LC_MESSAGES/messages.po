@@ -238,7 +238,7 @@ msgstr "本帳戶和子帳戶所有條目的日誌"
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr "帳戶日記賬"
+msgstr "帳戶日記帳"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
