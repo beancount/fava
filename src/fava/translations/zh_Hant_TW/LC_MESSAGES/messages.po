@@ -267,7 +267,7 @@ msgstr "價格"
 #: frontend/src/reports/commodities/index.ts:32
 #: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
-msgstr "通貨"
+msgstr "貨幣"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
