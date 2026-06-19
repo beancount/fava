@@ -76,7 +76,7 @@ msgstr "重新加載"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
-msgstr "必須要是宣告過的賬戶"
+msgstr "必須要是宣告過的帳戶"
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
 #: frontend/src/modals/DocumentUpload.svelte:192
@@ -86,7 +86,7 @@ msgstr "必須要是宣告過的賬戶"
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
 #: frontend/src/sidebar/FilterForm.svelte:98
 msgid "Account"
-msgstr "賬戶"
+msgstr "帳戶"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
 #: frontend/src/entry-forms/EntryMetadata.svelte:53
@@ -238,7 +238,7 @@ msgstr "本帳戶和子帳戶所有條目的日誌"
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr "賬戶日記賬"
+msgstr "帳戶日記賬"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
@@ -584,7 +584,7 @@ msgstr "試算表"
 
 #: frontend/src/sidebar/AccountSelector.svelte:22
 msgid "Go to account"
-msgstr "轉到賬戶"
+msgstr "轉到帳戶"
 
 #: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
@@ -671,7 +671,7 @@ msgstr ""
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
-msgstr "賬戶餘額"
+msgstr "帳戶餘額"
 
 #: src/fava/internal_api.py:219
 msgid "Net Worth"
