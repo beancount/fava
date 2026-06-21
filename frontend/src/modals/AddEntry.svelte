@@ -4,8 +4,6 @@
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format.ts";
   import { _ } from "../i18n.ts";
-  import type { Result } from "../lib/result.ts";
-  import { Err } from "../lib/result.ts";
   import type { ValidationError } from "../lib/validation.ts";
   import { router } from "../router.ts";
   import { addEntryContinue } from "../stores/editor.ts";
@@ -47,27 +45,20 @@
       if (entry_hash) {
         const data = await get_context({ entry_hash });
         let fetchedEntry = data.entry;
-        let result: Result<Transaction | Balance | Note, ValidationError>;
         if (fetchedEntry.t === "Transaction") {
           fetchedEntry = fetchedEntry.set("date", todayAsString());
-          result = Transaction.validator(fetchedEntry);
+          entry = fetchedEntry;
         } else if (fetchedEntry.t === "Balance") {
           fetchedEntry = fetchedEntry.set("date", todayAsString());
-          result = Balance.validator(fetchedEntry);
+          entry = fetchedEntry;
         } else if (fetchedEntry.t === "Note") {
           fetchedEntry = fetchedEntry.set("date", todayAsString());
-          result = Note.validator(fetchedEntry);
+          entry = fetchedEntry;
         } else {
-          result = new Err({
+          error = {
             name: "ValidationError",
             message: `This entry type is not supported.`,
-          });
-        }
-
-        if (result.is_ok) {
-          entry = result.value;
-        } else {
-          error = result.error;
+          };
         }
       }
     }
