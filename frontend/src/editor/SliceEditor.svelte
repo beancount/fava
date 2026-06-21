@@ -15,8 +15,10 @@
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
-  import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
-  import { initial_entry } from "../stores/editor.ts";
+  import {
+    initial_entry,
+    reloadAfterSavingEntrySlice,
+  } from "../stores/editor.ts";
   import { currency_column, indent } from "../stores/fava_options.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import DuplicateButton from "./DuplicateButton.svelte";
