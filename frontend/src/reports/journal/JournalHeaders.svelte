@@ -17,6 +17,7 @@
 <ol class="flex-table journal">
   <li class="head">
     <p>
+      <span class="entry-kebab"></span>
       <button
         type="button"
         class="datecell unset"

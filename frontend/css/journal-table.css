@@ -130,6 +130,10 @@
     border-left: 1px solid var(--table-border);
   }
 
+  .entry-kebab {
+    width: 2rem;
+  }
+
   .datecell,
   .flag {
     text-align: center;
