@@ -18,7 +18,6 @@
 
   let { account, children } = $derived(node);
   let is_toggled = $derived($toggled_accounts.has(account));
-  const level = $derived(String(account.split(":").length - 1));
 </script>
 
 <span class="droptarget" data-account-name={account}>
@@ -33,7 +32,7 @@
       {is_toggled ? "▸" : "▾"}
     </button>
   {/if}
-  <a href={$urlForAccount(account)} class="account acclevel{level}">
+  <a href={$urlForAccount(account)} class="account">
     {leaf(account)}
   </a>
   <AccountIndicator {account} small />
@@ -58,16 +57,6 @@
     min-width: calc(14em - var(--account-indent, 0em));
     max-width: calc(30em - var(--account-indent, 0em));
     margin-left: var(--account-indent, 0);
-  }
-
-  .acclevel1 {
-    /* font-size: 16px; */
-    font-weight: 600;
-  }
-
-  .acclevel2 {
-    font-weight: 600;
-    opacity: 0.7;
   }
 
   /* Indent each level of account by one more 1em. */
