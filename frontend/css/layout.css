@@ -85,7 +85,33 @@ article:has(> .fixed-fullsize-container) {
 }
 
 @media print {
+  /*
+  Print using normal block flow. Firefox does not fragment a CSS grid
+  container across printed pages reliably, which clipped long reports to a
+  single viewport and stranded the account chart/journal on page 2 with
+  whitespace above it. Block flow releases the `100vh` body height and lays
+  out header -> chart -> journal naturally, paginating row by row.
+  (aside is hidden in print.)
+  */
   body {
-    grid-template: "header" max-content "main" 1fr;
+    display: block;
+    width: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  article {
+    overflow: visible;
+  }
+
+  .fixed-fullsize-container {
+    height: auto;
+    max-height: none;
+  }
+
+  /* Don't split a single transaction across a page break — keeps line items
+     intact for crossing off against a statement. */
+  .journal > li {
+    break-inside: avoid;
   }
 }
