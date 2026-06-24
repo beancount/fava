@@ -85,7 +85,23 @@ article:has(> .fixed-fullsize-container) {
 }
 
 @media print {
+  /*
+  Print using normal block flow. Firefox does not fragment a CSS grid
+  container across printed pages reliably.
+  */
   body {
-    grid-template: "header" max-content "main" 1fr;
+    display: block;
+    width: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  article {
+    overflow: visible;
+  }
+
+  .fixed-fullsize-container {
+    height: auto;
+    max-height: none;
   }
 }
