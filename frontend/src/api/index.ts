@@ -3,8 +3,8 @@ import { get as store_get } from "svelte/store";
 import {
   Document,
   type Entry,
-  entryValidator,
   Event,
+  entryValidator,
   Transaction,
 } from "../entries/index.ts";
 import type { NonEmptyArray } from "../lib/array.ts";
@@ -24,8 +24,8 @@ import {
   importable_files_validator,
   ledgerDataValidator,
   options_validator,
-  source_validator,
   type SourceFile,
+  source_validator,
   statistics_validator,
   tree_report_validator,
 } from "./validators.ts";

@@ -8,7 +8,6 @@ import pytest
 from fava.beans.funcs import hash_entry
 from fava.core import EntryNotFoundForHashError
 from fava.core import FilteredLedger
-from fava.helpers import FavaAPIError
 from fava.util.date import local_today
 from fava.util.date import Month
 
@@ -17,12 +16,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
-
-
-def test_apiexception() -> None:
-    with pytest.raises(FavaAPIError) as exception:
-        raise FavaAPIError("error")  # noqa: EM101
-    assert str(exception.value) == "error"
 
 
 def test_attributes(example_ledger: FavaLedger) -> None:

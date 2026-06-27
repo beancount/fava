@@ -8,9 +8,9 @@
   import { getQueryChart } from "../../charts/query-charts.ts";
   import type { CodemirrorBql } from "../../codemirror/types.ts";
   import type { Result } from "../../lib/result.ts";
-  import type { QueryResult } from "./query_table.ts";
   import QueryLinks from "./QueryLinks.svelte";
   import QueryTable from "./QueryTable.svelte";
+  import type { QueryResult } from "./query_table.ts";
   import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";
 
   interface Props {
@@ -47,7 +47,7 @@
       {codemirror_bql}
     />
     <span class="spacer"></span>
-    {#if result && result.is_ok && result.value.t === "table"}
+    {#if result != null && result.is_ok && result.value.t === "table"}
       <QueryLinks {query} />
     {/if}
     <button

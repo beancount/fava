@@ -6,17 +6,17 @@ import { type Component, mount, unmount } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import {
-  account_hierarchy_validator,
   type AccountTreeNode,
+  account_hierarchy_validator,
 } from "./charts/hierarchy.ts";
 import type { ParsedFavaChart } from "./charts/index.ts";
 import { chart_validator } from "./charts/index.ts";
 import { domHelpers } from "./charts/tooltip.ts";
 import type { Result } from "./lib/result.ts";
 import { log_error } from "./log.ts";
+import QueryTable from "./reports/query/QueryTable.svelte";
 import type { QueryResultTable } from "./reports/query/query_table.ts";
 import { query_table_validator } from "./reports/query/query_table.ts";
-import QueryTable from "./reports/query/QueryTable.svelte";
 import TreeTable from "./tree-table/TreeTable.svelte";
 
 /** This class pairs the components and their validation functions to use them in a type-safe way. */

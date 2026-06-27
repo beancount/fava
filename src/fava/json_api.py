@@ -368,6 +368,7 @@ def get_query(query_string: str) -> QueryResultTable | QueryResultText:
 @api_endpoint
 def get_extract(filename: str, importer: str) -> Sequence[Any]:
     """Extract entries using the ingest framework."""
+    g.ledger.changed()
     entries = g.ledger.ingest.extract(filename, importer)
     return list(map(serialise, entries))
 

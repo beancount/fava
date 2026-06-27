@@ -237,7 +237,7 @@ msgstr "مجله‌حساب"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:785
+#: src/fava/json_api.py:786
 msgid "Changes"
 msgstr "تغییرات"
 
@@ -323,13 +323,13 @@ msgstr "ویرایشگر"
 msgid "Line"
 msgstr "خط"
 
-#: frontend/src/reports/errors/Errors.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:49
 #, fuzzy, python-format
 #| msgid "Show source %(file)s:%(lineno)s"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr "بدون خطا."
 
@@ -602,8 +602,8 @@ msgstr "زمان"
 msgid "Filter by tag, payee, …"
 msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
-#: src/fava/json_api.py:700
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
+#: src/fava/json_api.py:701
 msgid "Net Profit"
 msgstr "سود‌خالص"
 
@@ -675,11 +675,11 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:688
+#: src/fava/json_api.py:689
 msgid "Income"
 msgstr "درآمد"
 
-#: src/fava/json_api.py:694
+#: src/fava/json_api.py:695
 msgid "Expenses"
 msgstr "هزینه‌ها"
 

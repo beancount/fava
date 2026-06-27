@@ -40,7 +40,7 @@ export class Posting {
   }
 
   /** Set a property and return an updated copy. */
-  set<T extends keyof Posting>(key: T, value: Posting[T]): Posting {
+  set<K extends keyof Posting>(key: K, value: Posting[K]): Posting {
     const copy = new Posting(this.meta, this.account, this.amount);
     copy[key] = value;
     return copy;
@@ -101,7 +101,7 @@ abstract class EntryBase<T extends string> {
   }
 
   /** Set a property and return an updated copy. */
-  set<T extends keyof typeof this>(key: T, value: (typeof this)[T]): this {
+  set<K extends keyof typeof this>(key: K, value: (typeof this)[K]): this {
     const copy = this.clone();
     copy[key] = value;
     return copy;

@@ -53,7 +53,11 @@
       const set = new Set(show);
       toggle(set, type);
       // Also toggle all entries that have `type` as their supertype.
-      buttons.filter((b) => b[4] === type).forEach((b) => toggle(set, b[0]));
+      buttons
+        .filter((b) => b[4] === type)
+        .forEach((b) => {
+          toggle(set, b[0]);
+        });
       return [...set].sort();
     });
   }

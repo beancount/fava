@@ -2,9 +2,9 @@
   import type { BeancountError } from "../../api/validators.ts";
   import { urlForAccount } from "../../helpers.ts";
   import { _, format } from "../../i18n.ts";
+  import SourceLink from "../../SourceLink.svelte";
   import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import SourceLink from "../../SourceLink.svelte";
   import { accounts, errors } from "../../stores/index.ts";
 
   let account_re = $derived(new RegExp(`(${$accounts.join("|")})`));

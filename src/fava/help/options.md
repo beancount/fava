@@ -272,7 +272,7 @@ Default: False
 
 In Beancount the Income, Liabilities and Equity accounts tend to have a negative
 balance (see
-[Types of Accounts](https://beancount.github.io/docs/the_double_entry_counting_method.html#types-of-accounts)).
+[Types of Accounts](https://beancount.github.io/docs/the_double_entry_counting_method/#types-of-accounts)).
 
 This Fava option flips the sign of these three accounts in the income statement
 and the balance sheet. This way, the net profit chart will show positive numbers

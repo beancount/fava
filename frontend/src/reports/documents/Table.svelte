@@ -46,7 +46,8 @@
     </tr>
   </thead>
   <tbody>
-    {#each sorted_documents as doc (doc.filename)}
+    <!-- eslint-disable-next-line svelte/require-each-key Documents might be duplicate -->
+    {#each sorted_documents as doc}
       <tr
         class:selected={selected === doc}
         draggable={true}

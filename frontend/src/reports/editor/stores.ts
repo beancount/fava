@@ -1,9 +1,9 @@
 import { derived, get, writable } from "svelte/store";
 
+import { split } from "../../lib/paths.ts";
 import {
   build_compressed_sources_tree,
   is_directory,
-  parent,
 } from "../../lib/sources.ts";
 import { all_matching } from "../../lib/tree.ts";
 import { sources } from "../../stores/options.ts";
@@ -43,7 +43,7 @@ export function toggle_directory(
     } else if (event.ctrlKey || event.metaKey) {
       const direct_children = all_matching(
         $sources_tree,
-        (node) => is_directory(node) && parent(node.path) === directory,
+        (node) => is_directory(node) && split(node.path)[0] === directory,
       );
 
       for (const node of direct_children) {

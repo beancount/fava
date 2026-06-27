@@ -17,7 +17,7 @@ import type { ParsedFavaChart } from "./index.ts";
 import type { TooltipContent } from "./tooltip.ts";
 import { domHelpers } from "./tooltip.ts";
 
-export interface BarChartDatumValue {
+interface BarChartDatumValue {
   currency: string;
   value: number;
   budget: number;

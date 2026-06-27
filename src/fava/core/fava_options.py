@@ -27,7 +27,6 @@ from fava.util.date import parse_fye_string
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from collections.abc import Sequence
-    from re import Pattern
 
     from fava.beans.abc import Custom
     from fava.config import FavaProjectConfig
@@ -47,7 +46,7 @@ class InsertEntryOption:
     """
 
     date: datetime.date
-    re: Pattern[str]
+    re: re.Pattern[str]
     filename: str
     lineno: int
 
@@ -93,7 +92,7 @@ class FavaOptions:
 
     account_journal_include_children: bool = True
     auto_reload: bool = False
-    collapse_pattern: Sequence[Pattern[str]] = field(default_factory=list)
+    collapse_pattern: Sequence[re.Pattern[str]] = field(default_factory=list)
     conversion_currencies: tuple[str, ...] = ()
     currency_column: int = 61
     default_file: str | None = None

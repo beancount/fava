@@ -62,7 +62,11 @@ def _compile_frontend() -> None:
         msg = "npm is missing"
         raise RuntimeError(msg)
 
-    subprocess.run((npm, "install", "--no-save"), cwd="frontend", check=True)
+    subprocess.run(
+        (npm, "install", "--no-save", "--strict-allow-scripts"),
+        cwd="frontend",
+        check=True,
+    )
     Path("frontend/node_modules").touch()
     subprocess.run((npm, "run", "build"), cwd="frontend", check=True)
 

@@ -4,15 +4,16 @@ from __future__ import annotations
 
 import datetime
 import os
+import runpy
 import sys
 import traceback
+from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import wraps
 from inspect import get_annotations
 from os import altsep
 from os import sep
 from pathlib import Path
-from runpy import run_path
 from typing import TYPE_CHECKING
 
 from beangulp.importer import Importer
@@ -27,7 +28,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Mapping
-    from collections.abc import Sequence
     from typing import Any
     from typing import ParamSpec
     from typing import TypeVar
@@ -75,19 +75,49 @@ class ImporterExtractError(ImporterMethodCallError):
 class MissingImporterConfigError(FavaAPIError):
     """Missing import-config option."""
 
-    def __init__(self) -> None:
-        super().__init__("Missing import-config option")
-
 
 class MissingImporterDirsError(FavaAPIError):
     """You need to set at least one imports-dir."""
 
-    def __init__(self) -> None:
-        super().__init__("You need to set at least one imports-dir.")
-
 
 class ImportConfigLoadError(FavaAPIError):
     """Error on loading the import config."""
+
+
+class ImportConfigRunpyError(ImportConfigLoadError):
+    """Error running the import config."""
+
+    def __init__(self) -> None:
+        super().__init__("".join(traceback.format_exception(*sys.exc_info())))
+
+
+class ImportConfigMissingConfigError(ImportConfigLoadError):
+    """CONFIG is missing."""
+
+
+class ImportConfigConfigNotASequenceError(ImportConfigLoadError):
+    """CONFIG is not a Sequence."""
+
+
+class ImportConfigHooksNotASequenceCallablesError(ImportConfigLoadError):
+    """HOOKS is not a Sequence of callables."""
+
+
+class ImportConfigInvalidImporterError(ImportConfigLoadError):
+    """Invalid importer (not a subclass of Importer)."""
+
+    def __init__(self, importer: Any) -> None:
+        name = importer.__class__.__name__
+        super().__init__(
+            f"Importer class '{name}' does not satisfy Importer protocol"
+        )
+
+
+class ImportConfigDuplicateImporterError(ImportConfigLoadError):
+    """Duplicate importer (by name)."""
+
+    def __init__(self, importer: WrappedImporter) -> None:
+        super().__init__(f"Duplicate importer name found: {importer.name}")
 
 
 IGNORE_DIRS = {
@@ -147,9 +177,9 @@ def _catch_any(func: Callable[P, T]) -> Callable[P, T]:
     def wrapper(*args: P.args, **kwds: P.kwargs) -> T:
         try:
             return func(*args, **kwds)
+        except ImporterInvalidTypeError:
+            raise
         except Exception as err:
-            if isinstance(err, ImporterInvalidTypeError):
-                raise
             raise ImporterMethodCallError from err
 
     return wrapper
@@ -228,9 +258,15 @@ def extract_from_file(
     return entries  # type: ignore[return-value]
 
 
-def load_import_config(
-    module_path: Path,
-) -> tuple[Mapping[str, WrappedImporter], Hooks]:
+@dataclass(frozen=True)
+class LoadedImportConfig:
+    """The import configuration that was successfully loaded."""
+
+    importers: Mapping[str, WrappedImporter]
+    hooks: Hooks
+
+
+def load_import_config(module_path: Path) -> LoadedImportConfig:
     """Load the given import config and extract importers and hooks.
 
     Args:
@@ -240,42 +276,30 @@ def load_import_config(
         A pair of the importers (by name) and the list of hooks.
     """
     try:
-        mod = run_path(str(module_path))
-    except Exception as error:  # pragma: no cover
-        message = "".join(traceback.format_exception(*sys.exc_info()))
-        raise ImportConfigLoadError(message) from error
+        mod = runpy.run_path(str(module_path))
+    except Exception as error:
+        raise ImportConfigRunpyError from error
 
-    if "CONFIG" not in mod:
-        msg = "CONFIG is missing"
-        raise ImportConfigLoadError(msg)
-    if not isinstance(mod["CONFIG"], list):  # pragma: no cover
-        msg = "CONFIG is not a list"
-        raise ImportConfigLoadError(msg)
+    config = mod.get("CONFIG")
+    if config is None:
+        raise ImportConfigMissingConfigError
+    if not isinstance(config, Sequence):
+        raise ImportConfigConfigNotASequenceError
 
-    config = mod["CONFIG"]
-    hooks = []
-    if "HOOKS" in mod:  # pragma: no cover
-        hooks = mod["HOOKS"]
-        if not isinstance(hooks, list) or not all(
-            callable(fn) for fn in hooks
-        ):
-            msg = "HOOKS is not a list of callables"
-            raise ImportConfigLoadError(msg)
+    hooks = mod.get("HOOKS", ())
+    if not isinstance(hooks, Sequence) or not all(
+        callable(fn) for fn in hooks
+    ):
+        raise ImportConfigHooksNotASequenceCallablesError
     importers = {}
     for importer in config:
-        if not isinstance(importer, Importer):  # pragma: no cover
-            name = importer.__class__.__name__
-            msg = (
-                f"Importer class '{name}' in '{module_path}' does "
-                "not satisfy importer protocol"
-            )
-            raise ImportConfigLoadError(msg)
+        if not isinstance(importer, Importer):
+            raise ImportConfigInvalidImporterError(importer)
         wrapped_importer = WrappedImporter(importer)
         if wrapped_importer.name in importers:
-            msg = f"Duplicate importer name found: {wrapped_importer.name}"
-            raise ImportConfigLoadError(msg)
+            raise ImportConfigDuplicateImporterError(wrapped_importer)
         importers[wrapped_importer.name] = wrapped_importer
-    return importers, hooks
+    return LoadedImportConfig(importers, tuple(hooks))
 
 
 class IngestModule(FavaModule):
@@ -283,48 +307,44 @@ class IngestModule(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.importers: Mapping[str, WrappedImporter] = {}
-        self.hooks: Hooks = []
+        self.loaded_config: LoadedImportConfig | None = None
         self.mtime: int | None = None
-        self.errors: list[IngestError] = []
+        self.errors: tuple[IngestError, ...] = ()
 
     @property
     def module_path(self) -> Path | None:
         """The path to the importer configuration."""
         config_path = self.ledger.fava_options.import_config
-        if not config_path:
-            return None
-        return self.ledger.join_path(config_path)
+        return self.ledger.join_path(config_path) if config_path else None
 
-    def _error(self, msg: str) -> None:
-        self.errors.append(
-            IngestError(
-                {"filename": str(self.module_path), "lineno": 0},
-                msg,
-                None,
-            ),
+    def _error(self, msg: str) -> tuple[IngestError]:
+        return (
+            IngestError({"filename": str(self.module_path), "lineno": 0}, msg),
         )
 
     def load_file(self) -> None:  # noqa: D102
-        self.errors = []
+        self.errors = ()
         module_path = self.module_path
         if module_path is None:
+            self.loaded_config = None
             return
 
         if not module_path.exists():
-            self._error("Import config does not exist")
+            self.loaded_config = None
+            self.errors = self._error("Import config does not exist")
             return
 
         new_mtime = module_path.stat().st_mtime_ns
-        if new_mtime == self.mtime:
+        if self.loaded_config and new_mtime == self.mtime:
             return
 
         try:
-            self.importers, self.hooks = load_import_config(module_path)
+            self.loaded_config = load_import_config(module_path)
             self.mtime = new_mtime
-        except FavaAPIError as error:  # pragma: no cover
-            msg = f"Error in import config '{module_path}': {error!s}"
-            self._error(msg)
+        except ImportConfigLoadError as error:
+            self.errors = self._error(
+                f"Error in import config '{module_path}': {error!s}"
+            )
 
     @listify
     def import_data(self) -> Iterable[FileImporters]:
@@ -333,10 +353,10 @@ class IngestModule(FavaModule):
         Returns:
             A list of :class:`.FileImportInfo`.
         """
-        if not self.importers:
+        if not self.loaded_config:
             return
 
-        importers = list(self.importers.values())
+        importers = list(self.loaded_config.importers.values())
         seen = set()
 
         for directory in self.ledger.fava_options.import_dirs:
@@ -370,15 +390,12 @@ class IngestModule(FavaModule):
         Returns:
             A list of new imported entries.
         """
-        if not self.module_path:
+        if not self.loaded_config:
             raise MissingImporterConfigError
-
-        # reload (if changed)
-        self.load_file()
 
         try:
             path = Path(filename)
-            importer = self.importers[importer_name]
+            importer = self.loaded_config.importers[importer_name]
             new_entries = extract_from_file(
                 importer,
                 path,
@@ -387,7 +404,7 @@ class IngestModule(FavaModule):
         except Exception as exc:
             raise ImporterExtractError from exc
 
-        for hook_fn in self.hooks:
+        for hook_fn in self.loaded_config.hooks:
             annotations = get_annotations(hook_fn)
             if any("Importer" in a for a in annotations.values()):
                 importer_info = importer.file_import_info(path)

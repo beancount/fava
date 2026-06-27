@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "files": {
     "includes": ["**", "!docs/templates/**/*.html", "!src/fava/**/*.html"]
   },
@@ -11,7 +11,20 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "off"
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ":ALIAS:",
+              ":BLANK_LINE:",
+              ":PATH:"
+            ]
+          }
+        }
       }
     }
   },
@@ -19,14 +32,24 @@
     "includes": ["**", "!**/frontend/src/**/*.svelte"],
     "useEditorconfig": true
   },
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  },
   "linter": {
     "domains": {
       "project": "recommended"
     },
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "correctness": {
         "useImportExtensions": "on"
+      },
+      "complexity": {
+        // clashes with eslint strict-boolean-expressions rule
+        "useOptionalChain": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"
@@ -42,9 +65,14 @@
       "includes": ["**/*.svelte"],
       "linter": {
         "rules": {
+          // Handled by eslint svelte plugin
+          "a11y": "off",
           "correctness": {
             "noUnusedImports": "off",
             "noUnusedVariables": "off"
+          },
+          "suspicious": {
+            "noGlobalAssign": "off"
           },
           "style": {
             "useConst": "off"

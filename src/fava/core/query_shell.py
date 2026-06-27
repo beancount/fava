@@ -128,7 +128,7 @@ class FavaBQLShell(BQLShell):
 
     on_Reload = noop  # noqa: N815
     do_exit = noop  # ty:ignore[invalid-method-override]
-    do_quit = noop
+    do_quit = noop  # ty:ignore[invalid-method-override]
     do_EOF = noop  # noqa: N815  # ty:ignore[invalid-method-override]
 
     def on_Select(self, statement: str) -> Cursor:  # noqa: D102, N802

@@ -3,8 +3,8 @@
   import {
     DEFAULT_INTERVAL,
     getInterval,
-    intervalLabel,
     INTERVALS,
+    intervalLabel,
   } from "../lib/interval.ts";
   import { router } from "../router.ts";
   import { conversions } from "../stores/chart.ts";

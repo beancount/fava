@@ -62,7 +62,11 @@ export const urlFor = derived(
   [base_url, syncedSearchParams],
   ([$base_url, $syncedSearchParams]) =>
     (
-      report: string,
+      report:
+        | `${string}/`
+        | `download-journal`
+        | `download-query/query_result.${string}`
+        | `help/${string}`,
       params?: Record<string, string | number | undefined>,
     ): string =>
       urlForInternal($base_url, $syncedSearchParams, report, params),

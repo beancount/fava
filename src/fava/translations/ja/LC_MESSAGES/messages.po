@@ -239,7 +239,7 @@ msgstr "アカウント仕訳帳"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:785
+#: src/fava/json_api.py:786
 msgid "Changes"
 msgstr "変更"
 
@@ -325,12 +325,12 @@ msgstr "エディタ"
 msgid "Line"
 msgstr "行"
 
-#: frontend/src/reports/errors/Errors.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "ソース表示 %(file)s:%(lineno)s"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr "エラーはありません。"
 
@@ -606,8 +606,8 @@ msgstr "時間"
 msgid "Filter by tag, payee, …"
 msgstr "タグ、支払先などでフィルター"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
-#: src/fava/json_api.py:700
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
+#: src/fava/json_api.py:701
 msgid "Net Profit"
 msgstr "純利益"
 
@@ -679,11 +679,11 @@ msgstr "口座残高"
 msgid "Net Worth"
 msgstr "純資産"
 
-#: src/fava/json_api.py:688
+#: src/fava/json_api.py:689
 msgid "Income"
 msgstr "収入"
 
-#: src/fava/json_api.py:694
+#: src/fava/json_api.py:695
 msgid "Expenses"
 msgstr "支出"
 

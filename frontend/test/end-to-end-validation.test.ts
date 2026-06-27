@@ -9,7 +9,7 @@ import {
   sunburstScale,
   treemapScale,
 } from "../src/charts/helpers.ts";
-import { entryValidator, Event } from "../src/entries/index.ts";
+import { Event, entryValidator } from "../src/entries/index.ts";
 import { array } from "../src/lib/validation.ts";
 import { conversions } from "../src/stores/chart.ts";
 import { currencies, ledgerData } from "../src/stores/index.ts";
@@ -67,5 +67,5 @@ test("validate journal", async () => {
   const res = array(entryValidator)(data);
   ok(res.is_ok);
   const entries = res.unwrap();
-  equal(entries.length, 25);
+  equal(entries.length, 26);
 });

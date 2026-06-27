@@ -13,9 +13,6 @@
   "engines": {
     "node": ">=22.18"
   },
-  "overrides": {
-    "parse5": "^7.3.0"
-  },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
     "@tsconfig/strictest": "^2.0.5",
@@ -36,16 +33,16 @@
     "esbuild": "^0.28.0",
     "esbuild-svelte": "^0.9.0",
     "eslint": "^10.0.0",
-    "eslint-plugin-simple-import-sort": "^13.0.0",
     "eslint-plugin-svelte": "^3.1.0",
     "jsdom": "^29.0.0",
     "postcss-html": "^1.0.1",
     "prettier": "^3.0.0",
-    "prettier-plugin-svelte": "^3.0.0",
+    "prettier-plugin-svelte": "^4",
     "stylelint": "^17.0.0",
     "stylelint-config-recess-order": "^7.0.0",
     "stylelint-config-standard": "^40.0.0",
     "svelte-check": "^4.0.1",
+    "svelte-eslint-parser": "^1",
     "typescript": "^6.0.0",
     "typescript-eslint": "^8.7.0",
     "typescript-svelte-plugin": "^0.3.47"
@@ -77,5 +74,8 @@
     "d3-time-format": "^4.1.0",
     "svelte": "^5.11.3",
     "web-tree-sitter": "^0.26"
+  },
+  "allowScripts": {
+    "esbuild": false
   }
 }

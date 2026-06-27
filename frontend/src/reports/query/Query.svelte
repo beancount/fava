@@ -9,9 +9,9 @@
   import { query_shell_history } from "../../stores/query.ts";
   import { searchParams } from "../../stores/url.ts";
   import type { QueryReportProps } from "./index.ts";
-  import type { QueryResult } from "./query_table.ts";
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
+  import type { QueryResult } from "./query_table.ts";
 
   let { codemirror_bql }: QueryReportProps = $props();
 

@@ -37,7 +37,7 @@ const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
     (link.host !== window.location.host || !link.protocol.startsWith("http")));
 
 /** The navigation API is still rather new so only optionally depend on it for now. */
-const navigation_api = "navigation" in window ? window.navigation : null;
+const navigation_api = "navigation" in globalThis ? navigation : null;
 
 /**
  * The various query parameters used in Fava.
@@ -107,7 +107,7 @@ export const loading_state = new LoadingState();
 /** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading = loading_state.is_loading;
 
-export class Router {
+class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
 

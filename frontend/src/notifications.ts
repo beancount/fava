@@ -49,15 +49,6 @@ export function notify(
 }
 
 /**
- * Notify the user about an warning and log to console.
- */
-export function notify_warn(msg: string): void {
-  notify(msg, "warning");
-
-  console.warn(msg);
-}
-
-/**
  * Notify the user about an error and log to console.
  */
 export function notify_err(

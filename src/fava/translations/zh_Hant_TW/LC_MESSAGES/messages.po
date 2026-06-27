@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-02-22 10:46+0000\n"
-"Last-Translator: Jakob Schnitzer <mail@jakobschnitzer.de>\n"
+"PO-Revision-Date: 2026-06-16 08:04+0000\n"
+"Last-Translator: GG Sin <singalieo@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/fava/fava/zh_Hant/>\n"
 "Language: zh_Hant_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
@@ -49,10 +49,8 @@ msgid "Chart is empty."
 msgstr "圖表爲空."
 
 #: frontend/src/editor/DeleteButton.svelte:11
-#, fuzzy
-#| msgid "Deleting..."
 msgid "Deleting…"
-msgstr "正在删除..."
+msgstr "正在刪除…"
 
 #: frontend/src/editor/DeleteButton.svelte:11
 #: frontend/src/editor/DeleteButton.svelte:14
@@ -64,7 +62,7 @@ msgstr "移除"
 #, fuzzy
 #| msgid "Saving..."
 msgid "Saving…"
-msgstr "儲存中..."
+msgstr "儲存中…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/modals/AddEntry.svelte:66
@@ -235,7 +233,7 @@ msgstr "錯誤"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "本帳戶和子帳戶所有條目的日誌"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
@@ -244,7 +242,7 @@ msgstr "賬戶日記賬"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:785
+#: src/fava/json_api.py:786
 msgid "Changes"
 msgstr "更動"
 
@@ -278,7 +276,7 @@ msgstr "移動或重命名檔案"
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:84
 msgid "Move"
-msgstr ""
+msgstr "移動"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
@@ -330,12 +328,12 @@ msgstr "編輯器"
 msgid "Line"
 msgstr "行"
 
-#: frontend/src/reports/errors/Errors.svelte:48
+#: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "原始文件 %(file)s:%(lineno)s"
 
-#: frontend/src/reports/errors/Errors.svelte:75
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr "沒有錯誤。"
 
@@ -360,10 +358,8 @@ msgid "Event: %(type)s"
 msgstr "事件：%(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
-#, fuzzy
-#| msgid "Events"
 msgid "No events."
-msgstr "事件"
+msgstr "無事件."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -401,7 +397,7 @@ msgstr "匯入"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "忽略複製"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
@@ -429,15 +425,15 @@ msgstr "未發現有可供匯入的檔案"
 
 #: frontend/src/reports/import/Import.svelte:148
 msgid "Importable Files"
-msgstr ""
+msgstr "可匯入檔案"
 
 #: frontend/src/reports/import/Import.svelte:162
 msgid "Non-importable Files"
-msgstr ""
+msgstr "不可匯入檔案"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:33
 msgid "Upload files for import"
-msgstr ""
+msgstr "上傳文件以供匯入"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
@@ -500,7 +496,7 @@ msgstr "日記帳"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "配色方案"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
@@ -592,7 +588,7 @@ msgstr "轉到賬戶"
 
 #: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
-msgstr ""
+msgstr "新增日誌條目"
 
 #: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
 msgid "Help"
@@ -608,8 +604,8 @@ msgstr "時間"
 msgid "Filter by tag, payee, …"
 msgstr "以 Tag, 付款者, ... 篩選"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:682
-#: src/fava/json_api.py:700
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
+#: src/fava/json_api.py:701
 msgid "Net Profit"
 msgstr "淨利潤"
 
@@ -681,11 +677,11 @@ msgstr "賬戶餘額"
 msgid "Net Worth"
 msgstr "淨值"
 
-#: src/fava/json_api.py:688
+#: src/fava/json_api.py:689
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:694
+#: src/fava/json_api.py:695
 msgid "Expenses"
 msgstr "支出"
 

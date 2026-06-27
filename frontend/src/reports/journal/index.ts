@@ -8,7 +8,7 @@ import { shallow_equal } from "../../lib/equals.ts";
 import { log_error } from "../../log.ts";
 import { notify_err } from "../../notifications.ts";
 import { getURLFilters } from "../../stores/filters.ts";
-import { journal_sort, type JournalSort } from "../../stores/journal.ts";
+import { type JournalSort, journal_sort } from "../../stores/journal.ts";
 import { Route } from "../route.ts";
 import Journal from "./Journal.svelte";
 

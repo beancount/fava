@@ -5,8 +5,8 @@
   import { lastActiveChartName } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
-  import { chartContext } from "./context.ts";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
+  import { chartContext } from "./context.ts";
   import type { ParsedFavaChart } from "./index.ts";
 
   interface Props {

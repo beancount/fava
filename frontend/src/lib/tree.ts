@@ -1,3 +1,4 @@
+import { compare_strings } from "../sort/index.ts";
 import { parent as parentAccount } from "./account.ts";
 
 /**
@@ -24,7 +25,7 @@ export function stratifyAccounts<T, S = null>(
   init: (name: string, datum?: T) => S,
 ): TreeNode<S> {
   return stratify(
-    [...data].sort((a, b) => id(a).localeCompare(id(b))),
+    [...data].sort((a, b) => compare_strings(id(a), id(b))),
     id,
     init,
     parentAccount,
