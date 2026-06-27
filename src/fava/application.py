@@ -45,6 +45,7 @@ from fava import LOCALES
 from fava import template_filters
 from fava._ctx_globals_class import Context
 from fava.beans import funcs
+from fava.config import load_project_config
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
@@ -134,7 +135,11 @@ class _LedgerSlugLoader:
 
     def _load(self) -> list[FavaLedger]:
         return [
-            FavaLedger(path, poll_watcher=self.poll_watcher)
+            FavaLedger(
+                path,
+                poll_watcher=self.poll_watcher,
+                project_config=self.fava_app.config["PROJECT_CONFIG"],
+            )
             for path in self.fava_app.config["BEANCOUNT_FILES"]
         ]
 
@@ -475,6 +480,7 @@ def _setup_babel(fava_app: Flask) -> None:
 def create_app(
     files: Iterable[Path | str],
     *,
+    config_file: str | None = None,
     load: bool = False,
     incognito: bool = False,
     read_only: bool = False,
@@ -484,6 +490,7 @@ def create_app(
 
     Arguments:
         files: The list of Beancount files (paths).
+        config_file: Optional path to pyproject.toml with [tool.fava] config.
         load: Whether to load the Beancount files directly.
         incognito: Whether to run in incognito mode.
         read_only: Whether to run in read-only mode.
@@ -498,8 +505,11 @@ def create_app(
     _setup_filters(fava_app, read_only=read_only)
     _setup_routes(fava_app)
 
+    project_config = load_project_config(config_file)
+
     fava_app.config["HAVE_EXCEL"] = HAVE_EXCEL
     fava_app.config["BEANCOUNT_FILES"] = [str(f) for f in files]
+    fava_app.config["PROJECT_CONFIG"] = project_config
     fava_app.config["INCOGNITO"] = incognito
     fava_app.config["LEDGERS"] = _LedgerSlugLoader(
         fava_app, load=load, poll_watcher=poll_watcher

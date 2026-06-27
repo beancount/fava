@@ -61,6 +61,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
+    from fava.config import FavaProjectConfig
     from fava.core.conversion import Conversion
     from fava.core.fava_options import FavaOptions
     from fava.core.group_entries import EntriesByType
@@ -317,6 +318,7 @@ class FavaLedger:
         "misc",
         "options",
         "prices",
+        "project_config",
         "query_shell",
         "watcher",
     )
@@ -375,15 +377,23 @@ class FavaLedger:
     #: A :class:`.QueryShell` instance.
     query_shell: QueryShell
 
-    def __init__(self, path: str, *, poll_watcher: bool = False) -> None:
+    def __init__(
+        self,
+        path: str,
+        *,
+        poll_watcher: bool = False,
+        project_config: FavaProjectConfig | None = None,
+    ) -> None:
         """Create an interface for a Beancount ledger.
 
         Arguments:
             path: Path to the main Beancount file.
             poll_watcher: Whether to use the polling file watcher.
+            project_config: Parsed project config from pyproject.toml.
         """
         #: The path to the main Beancount file.
         self.beancount_file_path = path
+        self.project_config = project_config
         self._is_encrypted = is_encrypted_file(path)
         self.get_filtered = lru_cache(maxsize=16)(self._get_filtered)
         self.get_entry = lru_cache(maxsize=16)(self._get_entry)
@@ -418,6 +428,7 @@ class FavaLedger:
 
         self.fava_options, self.fava_options_errors = parse_options(
             self.all_entries_by_type.Custom,
+            project_config=self.project_config,
         )
 
         if self._is_encrypted:  # pragma: no cover
