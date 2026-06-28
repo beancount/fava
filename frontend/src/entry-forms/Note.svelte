@@ -53,8 +53,7 @@
     (comment: string) => {
       entry = entry.set("comment", comment);
     }
-  }
-></textarea>
+  }></textarea>
 <EntryMetadataSvelte
   bind:meta={
     () => entry.meta,
