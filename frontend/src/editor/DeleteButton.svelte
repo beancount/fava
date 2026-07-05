@@ -2,15 +2,25 @@
   import { _ } from "../i18n.ts";
 
   interface Props {
-    deleting: boolean;
-    onDelete: () => void;
+    ondelete: () => Promise<void>;
   }
 
-  let { deleting, onDelete }: Props = $props();
+  let { ondelete }: Props = $props();
 
-  let buttonContent = $derived(deleting ? _("Deleting…") : _("Delete"));
+  let deleting = $state(false);
+
+  let content = $derived(deleting ? _("Deleting…") : _("Delete"));
+
+  async function onclick() {
+    deleting = true;
+    try {
+      await ondelete();
+    } finally {
+      deleting = false;
+    }
+  }
 </script>
 
-<button type="button" class="muted" onclick={onDelete} title={_("Delete")}>
-  {buttonContent}
+<button type="button" class="muted" {onclick} title={content}>
+  {content}
 </button>

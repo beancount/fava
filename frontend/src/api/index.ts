@@ -387,7 +387,7 @@ export async function delete_document(filename: string): Promise<boolean> {
 }
 
 /**
- * Save an array of entries.
+ * Save an array of entries, notify and reload.
  * @param entries - an array of entries to save to the Beancount file.
  */
 export async function save_entries(

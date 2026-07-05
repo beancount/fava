@@ -1,6 +1,11 @@
 <script lang="ts">
   import { save_entries } from "../api/index.ts";
-  import { Balance, Note, Transaction } from "../entries/index.ts";
+  import {
+    Balance,
+    type EditableEntry,
+    Note,
+    Transaction,
+  } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
   import { todayAsString } from "../format.ts";
   import { _ } from "../i18n.ts";
@@ -17,9 +22,7 @@
   ] as const;
 
   // For the first entry to be added, use today as the default date.
-  let entry: Transaction | Balance | Note = $state.raw(
-    Transaction.empty(todayAsString()),
-  );
+  let entry = $state.raw<EditableEntry>(Transaction.empty(todayAsString()));
 
   async function submit(event: SubmitEvent) {
     event.preventDefault();
@@ -46,14 +49,12 @@
           type="button"
           class:muted={!(entry instanceof Cls)}
           onclick={() => {
-            // when switching between entry types, keep the date.
+            // When switching between entry types, keep the date.
             entry = Cls.empty(entry.date);
           }}
         >
           {displayName}
         </button>
-        <!-- eslint-disable-next-line svelte/no-useless-mustaches -->
-        {" "}
       {/each}
     </h3>
     <Entry bind:entry />
@@ -71,6 +72,10 @@
 <style>
   h3 {
     margin: 0;
+
+    button {
+      margin-left: 0.25em;
+    }
   }
 
   label span {

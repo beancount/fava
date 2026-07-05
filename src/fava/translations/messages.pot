@@ -34,12 +34,11 @@ msgstr ""
 msgid "Chart is empty."
 msgstr ""
 
-#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:12
 msgid "Deleting…"
 msgstr ""
 
-#: frontend/src/editor/DeleteButton.svelte:11
-#: frontend/src/editor/DeleteButton.svelte:14
+#: frontend/src/editor/DeleteButton.svelte:12
 #: frontend/src/reports/import/FileList.svelte:47
 msgid "Delete"
 msgstr ""
@@ -49,13 +48,23 @@ msgid "Saving…"
 msgstr ""
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/editor/SliceEditor.svelte:156
+#: frontend/src/modals/AddEntry.svelte:67
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:102
+#: frontend/src/editor/SliceEditor.svelte:138
+msgid "Duplicate"
+msgstr ""
+
+#: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
+msgstr ""
+
+#: frontend/src/editor/SliceEditor.svelte:152
+#: frontend/src/modals/AddEntry.svelte:46
+msgid "Add"
 msgstr ""
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
@@ -79,7 +88,7 @@ msgid "Add metadata"
 msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:28
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:56
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
@@ -106,7 +115,7 @@ msgid "Value"
 msgstr ""
 
 #: frontend/src/entry-forms/Note.svelte:27
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
 msgstr ""
 
@@ -151,19 +160,15 @@ msgstr ""
 msgid "Daily"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:19
 msgid "Transaction"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:43
-msgid "Add"
-msgstr ""
-
-#: frontend/src/modals/AddEntry.svelte:64
+#: frontend/src/modals/AddEntry.svelte:65
 msgid "continue"
 msgstr ""
 
-#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/Context.svelte:37 frontend/src/modals/Context.svelte:41
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
 msgstr ""
