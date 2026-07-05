@@ -29,6 +29,9 @@ const default_journal_sort: JournalSort = ["date", "desc"];
 /** The column and order that the journal should be sorted in. */
 export const journal_sort = localStorageSyncedStore<JournalSort>(
   "journal-sort-order",
-  tuple(constants("date", "flag", "narration"), constants("asc", "desc")),
+  tuple(
+    constants("date", "flag", "narration", "change"),
+    constants("asc", "desc"),
+  ),
   () => default_journal_sort,
 );

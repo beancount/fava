@@ -1,18 +1,20 @@
 import { get_direction, sortElements } from "../../sort/index.ts";
 import type { JournalSort } from "../../stores/journal.ts";
 
-export type JournalSortColumn = "date" | "flag" | "narration";
+export type JournalSortColumn = "date" | "flag" | "narration" | "change";
 
 const journal_column_types = {
   date: "num",
   flag: "string",
   narration: "string",
+  change: "num",
 };
 
 const journal_column_selectors = {
   date: ".datecell",
   flag: ".flag",
   narration: ".description",
+  change: ".change",
 };
 
 export function sort_journal(ol: HTMLOListElement, sort: JournalSort): void {
