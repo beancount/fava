@@ -58,21 +58,6 @@ export class Posting {
     );
 }
 
-/** The properties that all entries share. */
-export interface EntryBaseAttributes {
-  t: string;
-  meta: EntryMetadata;
-  date: string;
-  entry_hash: string;
-}
-
-export const entryBaseValidator = object<EntryBaseAttributes>({
-  t: string,
-  meta: EntryMetadata.validator,
-  date: string,
-  entry_hash: string,
-});
-
 const string_array_validator = array(string);
 const optional_string_array_validator = optional(string_array_validator);
 
