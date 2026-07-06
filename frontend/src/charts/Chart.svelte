@@ -11,11 +11,13 @@
   import { show_charts } from "../stores/url.ts";
   import BarChart from "./BarChart.svelte";
   import ChartLegend from "./ChartLegend.svelte";
+  import { set_chart_tooltip } from "./context.ts";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import type { FavaChart } from "./index.ts";
   import LineChart from "./LineChart.svelte";
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
+  import { Tooltip } from "./tooltip.ts";
 
   interface Props {
     /** The chart to render. */
@@ -25,6 +27,9 @@
   }
 
   let { chart, children }: Props = $props();
+
+  const tooltip = new Tooltip();
+  set_chart_tooltip(tooltip);
 
   /** Width of the chart. */
   let width = $state<number>();
@@ -73,7 +78,12 @@
     {$show_charts ? "▼" : "◀"}
   </button>
 </div>
-<div hidden={!$show_charts} bind:clientWidth={width}>
+<div
+  class="chart-wrapper"
+  hidden={!$show_charts}
+  bind:clientWidth={width}
+  {@attach tooltip.init.bind(tooltip)}
+>
   {#if width}
     {#if chart.type === "barchart"}
       <BarChart {chart} {width} />
@@ -90,6 +100,10 @@
 <style>
   .flex-row {
     margin-bottom: var(--flex-gap);
+  }
+
+  .chart-wrapper {
+    position: relative;
   }
 
   @media print {

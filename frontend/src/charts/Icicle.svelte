@@ -4,13 +4,14 @@
   import { urlForAccount } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
+  import { get_chart_tooltip } from "./context.ts";
   import { sunburstScale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
     balance_with_percentage,
   } from "./hierarchy.ts";
-  import { domHelpers, followingTooltip } from "./tooltip.ts";
+  import { domHelpers } from "./tooltip.ts";
 
   interface Props {
     data: AccountHierarchyNode;
@@ -20,6 +21,8 @@
   }
 
   let { data, currency, width, height }: Props = $props();
+
+  const tooltip = get_chart_tooltip();
 
   let root = $derived(partition<AccountHierarchyDatum>()(data));
   let nodes = $derived(root.descendants().filter((d) => !d.data.dummy));
@@ -38,7 +41,7 @@
   {#each nodes as d (d.data.account)}
     {@const account = d.data.account}
     <g
-      {@attach followingTooltip(() => [
+      {@attach tooltip.following(() => [
         balance_with_percentage($ctx, d, currency),
         domHelpers.em(account),
       ])}

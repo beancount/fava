@@ -11,7 +11,8 @@
 
   import { router } from "../router.ts";
   import { currentTimeFilterDateFormat } from "../stores/format.ts";
-  import { hide, type TooltipFindNode, tooltip } from "./tooltip.ts";
+  import { get_chart_tooltip } from "./context.ts";
+  import type { TooltipFindNode } from "./tooltip.ts";
 
   /** Ignore tiny drags less than 5px. */
   const DRAG_THRESHOLD = 5;
@@ -27,6 +28,8 @@
   }
 
   let { invert, height, children, find, transform }: Props = $props();
+
+  const tooltip = get_chart_tooltip();
 
   let x_start = $state(0);
   let x_current = $state(0);
@@ -56,16 +59,14 @@
     const [x_pointer, y_pointer] = pointer(event);
     if (find != null) {
       const res = find(x_pointer, y_pointer);
-      const matrix = event.currentTarget.getScreenCTM();
+      const matrix = event.currentTarget.getCTM();
       if (res && matrix) {
         const [x, y, content] = res;
-        const t = tooltip();
-        t.style.opacity = "1";
-        t.replaceChildren(...content);
-        t.style.left = `${(window.scrollX + x + matrix.e).toString()}px`;
-        t.style.top = `${(window.scrollY + y + matrix.f - 15).toString()}px`;
+        const point = new DOMPoint(x, y).matrixTransform(matrix);
+        tooltip.content(content);
+        tooltip.position(point.x, point.y);
       } else {
-        hide();
+        tooltip.hide();
       }
     }
     if (event.pointerId !== active_pointer_id) {
@@ -93,7 +94,7 @@
   function onpointerleave() {
     // Cancel when leaving the container element
     active_pointer_id = undefined;
-    hide();
+    tooltip.hide();
   }
 </script>
 

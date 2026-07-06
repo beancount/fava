@@ -15,24 +15,24 @@ svg text {
   border: 1px solid var(--border);
   box-shadow: var(--box-shadow-button);
   opacity: 0;
-  transform: translate(-50%, -100%);
-}
+  transform: translate(-50%, calc(-10px - 100%));
 
-.tooltip::before {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -15px;
-  content: "";
-  border: 15px solid transparent;
-  border-top-color: var(--border);
-}
+  &::before {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -10px;
+    content: "";
+    border: 10px solid transparent;
+    border-top-color: var(--border);
+  }
 
-.tooltip em {
-  display: block;
-  margin-top: 5px;
-  font-family: var(--font-family);
-  color: var(--text-color-lightest);
+  em {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--font-family);
+    color: var(--text-color-lightest);
+  }
 }

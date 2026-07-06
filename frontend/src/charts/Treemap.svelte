@@ -4,13 +4,14 @@
   import { urlForAccount } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
+  import { get_chart_tooltip } from "./context.ts";
   import { treemapScale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
     balance_with_percentage,
   } from "./hierarchy.ts";
-  import { domHelpers, followingTooltip } from "./tooltip.ts";
+  import { domHelpers } from "./tooltip.ts";
 
   interface Props {
     data: AccountHierarchyNode;
@@ -20,6 +21,8 @@
   }
 
   let { data, width, height, currency }: Props = $props();
+
+  const tooltip = get_chart_tooltip();
 
   const tree = treemap<AccountHierarchyDatum>().paddingInner(2).round(true);
   let root = $derived(tree.size([width, height])(data.copy()));
@@ -42,7 +45,7 @@
     {@const account = d.data.account}
     <g
       transform={`translate(${d.x0.toString()},${d.y0.toString()})`}
-      {@attach followingTooltip(() => [
+      {@attach tooltip.following(() => [
         balance_with_percentage($ctx, d, currency),
         domHelpers.em(account),
       ])}

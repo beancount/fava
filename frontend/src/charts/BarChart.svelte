@@ -9,6 +9,7 @@
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
+  import { get_chart_tooltip } from "./context.ts";
   import {
     currenciesScale,
     filterTicks,
@@ -17,7 +18,6 @@
     padExtent,
     urlForTimeFilter,
   } from "./helpers.ts";
-  import { followingTooltip } from "./tooltip.ts";
 
   interface Props {
     chart: BarChart;
@@ -27,6 +27,7 @@
   let { chart, width }: Props = $props();
 
   const today = new Date();
+  const tooltip = get_chart_tooltip();
 
   // Constant dimensions
   const max_column_width = 100;
@@ -107,7 +108,7 @@
     {#each bar_groups as group (group.date)}
       <g
         class={["group", group.date > today && "desaturate"]}
-        {@attach followingTooltip(() => chart.tooltipText($ctx, group))}
+        {@attach tooltip.following(() => chart.tooltipText($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
         <rect
@@ -161,7 +162,7 @@
                   y={y(Math.max(bar[0], bar[1]))}
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={account_color_scale(account)}
-                  {@attach followingTooltip(() =>
+                  {@attach tooltip.following(() =>
                     chart.tooltipTextAccount(
                       $ctx,
                       bar.data,
