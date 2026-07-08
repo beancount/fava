@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-06-16 08:04+0000\n"
-"Last-Translator: GG Sin <singalieo@gmail.com>\n"
+"PO-Revision-Date: 2026-06-20 09:01+0000\n"
+"Last-Translator: Zombie <chuanghs@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/fava/fava/zh_Hant/>\n"
 "Language: zh_Hant_TW\n"
@@ -76,7 +76,7 @@ msgstr "重新加載"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
-msgstr "必須要是宣告過的賬戶"
+msgstr "必須要是宣告過的帳戶"
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
 #: frontend/src/modals/DocumentUpload.svelte:192
@@ -86,7 +86,7 @@ msgstr "必須要是宣告過的賬戶"
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
 #: frontend/src/sidebar/FilterForm.svelte:98
 msgid "Account"
-msgstr "賬戶"
+msgstr "帳戶"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
 #: frontend/src/entry-forms/EntryMetadata.svelte:53
@@ -189,8 +189,6 @@ msgid "Upload file(s)"
 msgstr "上傳檔案"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
-#, fuzzy
-#| msgid "File"
 msgid "Files"
 msgstr "文件"
 
@@ -238,7 +236,7 @@ msgstr "本帳戶和子帳戶所有條目的日誌"
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr "賬戶日記賬"
+msgstr "帳戶日記帳"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
@@ -267,7 +265,7 @@ msgstr "價格"
 #: frontend/src/reports/commodities/index.ts:32
 #: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
-msgstr "通貨"
+msgstr "貨幣"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
@@ -310,7 +308,7 @@ msgstr "打開所有折疊"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Close all folds"
-msgstr "關閉所有折疊"
+msgstr "收合所有折疊"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
@@ -584,7 +582,7 @@ msgstr "試算表"
 
 #: frontend/src/sidebar/AccountSelector.svelte:22
 msgid "Go to account"
-msgstr "轉到賬戶"
+msgstr "切換帳戶"
 
 #: frontend/src/sidebar/AsideContents.svelte:61
 msgid "Add Journal Entry"
@@ -639,15 +637,15 @@ msgstr "條形圖"
 
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
-msgstr ""
+msgstr "系統"
 
 #: frontend/src/stores/color_scheme.ts:16
 msgid "Dark"
-msgstr ""
+msgstr "暗色"
 
 #: frontend/src/stores/color_scheme.ts:17
 msgid "Light"
-msgstr ""
+msgstr "亮色"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
@@ -667,11 +665,11 @@ msgstr "展開所有"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
-msgstr "賬戶餘額"
+msgstr "帳戶餘額"
 
 #: src/fava/internal_api.py:219
 msgid "Net Worth"
