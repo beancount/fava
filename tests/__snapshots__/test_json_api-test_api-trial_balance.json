@@ -5,7 +5,7 @@
     {
       "account": "",
       "balance": {},
-      "balance_children": {},
+      "balance_children": { "USD": -0.00801 },
       "children": [
         {
           "account": "Assets",
@@ -198,27 +198,8 @@
         {
           "account": "Equity",
           "balance": {},
-          "balance_children": { "USD": -3553.17199 },
+          "balance_children": { "USD": -3553.18 },
           "children": [
-            {
-              "account": "Equity:Conversions",
-              "balance": {},
-              "balance_children": { "USD": 0.00801 },
-              "children": [
-                {
-                  "account": "Equity:Conversions:Current",
-                  "balance": { "USD": 0.00801 },
-                  "balance_children": { "USD": 0.00801 },
-                  "children": [],
-                  "cost": null,
-                  "cost_children": null,
-                  "has_txns": true
-                }
-              ],
-              "cost": null,
-              "cost_children": null,
-              "has_txns": false
-            },
             {
               "account": "Equity:Opening-Balances",
               "balance": { "USD": -3553.18 },
