@@ -400,19 +400,19 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:78
+#: frontend/src/reports/import/Import.svelte:82
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:145
+#: frontend/src/reports/import/Import.svelte:149
 msgid "No files were found for import."
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:148
+#: frontend/src/reports/import/Import.svelte:152
 msgid "Importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:162
+#: frontend/src/reports/import/Import.svelte:166
 msgid "Non-importable Files"
 msgstr ""
 

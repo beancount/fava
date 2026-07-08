@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
   import {
@@ -54,12 +53,17 @@
     files.filter((file) => !file.identified_by_importers),
   );
 
-  const preventNavigation = () =>
-    extract_cache.size > 0
-      ? "There are unfinished imports, are you sure you want to continue?"
-      : null;
-
-  onMount(() => router.add_interrupt_handler(preventNavigation));
+  let has_unfinished_imports = $derived(extract_cache.size > 0);
+  $effect(() =>
+    has_unfinished_imports
+      ? router.add_interrupt_handler(({ current, target }) =>
+          // On reload or query changes, the component state is kept
+          target?.pathname !== current.pathname
+            ? "There are unfinished imports, are you sure you want to continue?"
+            : null,
+        )
+      : undefined,
+  );
 
   /**
    * Move the given file to the new file name (and remove from the list).

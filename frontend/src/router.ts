@@ -107,6 +107,15 @@ export const loading_state = new LoadingState();
 /** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading = loading_state.is_loading;
 
+interface InterruptHandlerContext {
+  /** Current URL. */
+  current: URL;
+  /** Target URL - not present on unload. */
+  target?: URL;
+}
+
+type InterruptHandler = (context: InterruptHandlerContext) => string | null;
+
 class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
@@ -126,7 +135,7 @@ class Router {
    * If they return a string, that is displayed to the user in an alert to
    * confirm navigation.
    */
-  #interrupt_handlers = new Set<() => string | null>();
+  #interrupt_handlers = new Set<InterruptHandler>();
 
   constructor() {
     const article = document.querySelector("article");
@@ -162,13 +171,18 @@ class Router {
 
   /**
    * Add an interrupt handler. Returns a function that removes it.
-   * This can be used directly in a Svelte onMount hook.
+   *
+   * This can be used in a Svelte $effect to only add it when needed.
    */
-  add_interrupt_handler(handler: () => string | null): () => void {
+  add_interrupt_handler(handler: InterruptHandler): () => void {
     this.#interrupt_handlers.add(handler);
+    window.addEventListener("beforeunload", this.#beforeunload);
 
     return () => {
       this.#interrupt_handlers.delete(handler);
+      if (!this.has_interrupt_handler) {
+        window.removeEventListener("beforeunload", this.#beforeunload);
+      }
     };
   }
 
@@ -176,9 +190,9 @@ class Router {
    * Check whether any of the registered interruptHandlers wants to stop
    * navigation.
    */
-  #should_interrupt(): string | null {
+  #should_interrupt(context: InterruptHandlerContext): string | null {
     for (const handler of this.#interrupt_handlers) {
-      const leave_message = handler();
+      const leave_message = handler(context);
       if (leave_message != null) {
         return leave_message;
       }
@@ -213,8 +227,8 @@ class Router {
     raw_page_title.set(this.#current_report.title);
   }
 
-  #beforeunload = () => (event: BeforeUnloadEvent) => {
-    const leave_message = this.#should_interrupt();
+  #beforeunload = (event: BeforeUnloadEvent) => {
+    const leave_message = this.#should_interrupt({ current: this.current });
     if (leave_message != null) {
       event.preventDefault();
     }
@@ -292,7 +306,6 @@ class Router {
     this.#frontend_routes = frontend_routes;
     this.#render_route(this.current).catch(log_error);
 
-    window.addEventListener("beforeunload", this.#beforeunload);
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
     navigation_api?.addEventListener("navigate", this.#on_navigate);
@@ -323,7 +336,10 @@ class Router {
    * Might render in the frontend or load the whole page contents.
    */
   async #load_url(url: URL): Promise<void> {
-    const leave_message = this.#should_interrupt();
+    const leave_message = this.#should_interrupt({
+      current: this.current,
+      target: url,
+    });
     if (leave_message != null && !window.confirm(leave_message)) {
       return;
     }
