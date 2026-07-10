@@ -123,19 +123,19 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:111
-#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:77
+#: frontend/src/entry-forms/Transaction.svelte:79
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:126
-#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/entry-forms/Transaction.svelte:92
+#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:159
+#: frontend/src/entry-forms/Transaction.svelte:125
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr ""

@@ -26,7 +26,7 @@
     /** A placeholder for the input field. */
     placeholder: string;
     /** The suggestions for the value. */
-    suggestions: readonly string[];
+    suggestions?: readonly string[] | undefined;
     /** A function to extract the string that should be used for suggestion filtering. */
     valueExtractor?: (val: string, input: HTMLInputElement) => string;
     /** A function to update the value after selecting a suggestion. */
@@ -52,7 +52,7 @@
   let {
     value = $bindable(),
     placeholder,
-    suggestions,
+    suggestions = [],
     valueExtractor,
     valueSelector,
     setSize = false,
