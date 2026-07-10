@@ -39,7 +39,7 @@ msgid "Deleting…"
 msgstr ""
 
 #: frontend/src/editor/DeleteButton.svelte:12
-#: frontend/src/reports/import/FileList.svelte:47
+#: frontend/src/reports/import/FileList.svelte:71
 msgid "Delete"
 msgstr ""
 
@@ -186,7 +186,7 @@ msgid "Documents folder"
 msgstr ""
 
 #: frontend/src/modals/DocumentUpload.svelte:195
-#: frontend/src/reports/import/ImportFileUpload.svelte:35
+#: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgid "Move or rename document"
 msgstr ""
 
 #: frontend/src/reports/documents/Documents.svelte:80
-#: frontend/src/reports/import/FileList.svelte:84
+#: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
 msgstr ""
 
@@ -375,7 +375,7 @@ msgid "Query"
 msgstr ""
 
 #: frontend/src/reports/import/Extract.svelte:58
-#: frontend/src/reports/import/index.ts:59
+#: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr ""
@@ -388,35 +388,35 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Continue"
-msgstr ""
-
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Extract"
-msgstr ""
-
-#: frontend/src/reports/import/FileList.svelte:104
-msgid "Clear"
-msgstr ""
-
-#: frontend/src/reports/import/Import.svelte:82
+#: frontend/src/reports/import/FileList.svelte:44
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:149
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Continue"
+msgstr ""
+
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Extract"
+msgstr ""
+
+#: frontend/src/reports/import/FileList.svelte:130
+msgid "Clear"
+msgstr ""
+
+#: frontend/src/reports/import/Import.svelte:146
 msgid "No files were found for import."
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:152
+#: frontend/src/reports/import/Import.svelte:149
 msgid "Importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:166
+#: frontend/src/reports/import/Import.svelte:161
 msgid "Non-importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/ImportFileUpload.svelte:33
+#: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
 msgstr ""
 

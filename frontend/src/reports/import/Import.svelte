@@ -1,19 +1,16 @@
 <script lang="ts">
   import { SvelteMap } from "svelte/reactivity";
 
-  import {
-    delete_document,
-    get_extract,
-    move_document,
-    save_entries,
-  } from "../../api/index.ts";
+  import { get_extract, save_entries } from "../../api/index.ts";
   import type { Entry } from "../../entries/index.ts";
   import { urlFor } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
+  import { log_error } from "../../log.ts";
   import { notify, notify_err } from "../../notifications.ts";
-  import { router } from "../../router.ts";
+  import { loading_state, router, set_query_param } from "../../router.ts";
   import { import_config } from "../../stores/fava_options.ts";
+  import { searchParams } from "../../stores/url.ts";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
@@ -32,10 +29,10 @@
   let show_other_files = $state.raw(show_other_files_initially);
 
   /** The array of entries to show the modal for. */
-  let entries: Entry[] = $state([]);
+  let entries = $state<Entry[]>([]);
 
   /** Name of the currently selected file. */
-  let selected: string | null = $state.raw(null);
+  let selected = $state.raw<string>();
 
   /** The lists of entries for file and importer combos where extract was started and not completed. */
   let extract_cache = new SvelteMap<string, Entry[]>();
@@ -65,46 +62,22 @@
       : undefined,
   );
 
-  /**
-   * Move the given file to the new file name (and remove from the list).
-   */
-  async function move(filename: string, account: string, newName: string) {
-    const moved = await move_document(filename, account, newName);
-    if (moved) {
-      router.reload();
+  // Clear selection if file is removed.
+  $effect(() => {
+    if (!files.some(({ name }) => name === selected)) {
+      selected = undefined;
     }
-  }
+  });
 
-  /**
-   * Delete the given file and remove it from the displayed list.
-   */
-  async function remove(filename: string) {
-    if (!window.confirm(_("Delete this file?"))) {
-      return;
-    }
-    const removed = await delete_document(filename);
-    if (removed) {
-      if (selected === filename) {
-        selected = null;
-      }
-      router.reload();
-    }
-  }
+  const extract_filename = $derived($searchParams.get("extract_filename"));
+  const extract_importer = $derived($searchParams.get("extract_importer"));
 
-  /**
-   * Open the extract dialog for the given file/importer combination.
-   */
-  async function extract(filename: string, importer: string) {
-    const file_importer_key = `${filename}:${importer}`;
-    const cached = extract_cache.get(file_importer_key);
-    if (cached) {
-      entries = cached;
-      return;
-    }
+  /** Load the entries to extract for given file and importer. */
+  async function load_extract(filename: string, importer: string) {
     try {
-      entries = await get_extract({ filename, importer });
+      entries = await loading_state.await(get_extract({ filename, importer }));
       if (entries.length) {
-        extract_cache.set(file_importer_key, entries);
+        extract_cache.set(`${filename}:${importer}`, entries);
       } else {
         notify("No entries to import from this file.", "warning");
       }
@@ -113,16 +86,46 @@
     }
   }
 
+  // Load the entries to extract if the URL parameters are set.
+  $effect(() => {
+    if (extract_filename != null && extract_importer != null) {
+      const cached = extract_cache.get(
+        `${extract_filename}:${extract_importer}`,
+      );
+      if (cached) {
+        entries = cached;
+      } else {
+        load_extract(extract_filename, extract_importer).catch(log_error);
+      }
+    } else {
+      entries = [];
+    }
+  });
+
+  /**
+   * Open the extract dialog for the given file/importer combination.
+   */
+  function extract(filename: string, importer: string) {
+    const target = new URL(router.current);
+    set_query_param(target, "extract_filename", filename);
+    set_query_param(target, "extract_importer", importer);
+    router.navigate(target, false);
+  }
+
+  /** Close the extract dialog. */
+  function close_extract() {
+    extract("", "");
+  }
+
   /**
    * Save the current entries.
    */
   async function save() {
     const without_duplicates = entries.filter((e) => !e.is_duplicate());
-    const key = [...extract_cache].find(([, e]) => e === entries)?.[0];
-    if (key != null) {
-      extract_cache.delete(key);
+    if (extract_filename != null && extract_importer != null) {
+      extract_cache.delete(`${extract_filename}:${extract_importer}`);
     }
-    entries = [];
+    close_extract();
     if (is_non_empty(without_duplicates)) {
       await save_entries(without_duplicates);
     }
@@ -136,13 +139,7 @@
     > for more information.
   </p>
 {:else}
-  <Extract
-    bind:entries
-    close={() => {
-      entries = [];
-    }}
-    {save}
-  />
+  <Extract bind:entries close={close_extract} {save} />
   <div class="fixed-fullsize-container">
     <div class="filelist flex-column">
       {#if files.length === 0}
@@ -156,8 +153,6 @@
           {file_accounts}
           {file_names}
           bind:selected
-          {move}
-          {remove}
           {extract}
         />
       {/if}
@@ -170,8 +165,6 @@
             {file_accounts}
             {file_names}
             bind:selected
-            {move}
-            {remove}
             {extract}
           />
         </details>
@@ -190,11 +183,11 @@
   .fixed-fullsize-container {
     display: flex;
     align-items: stretch;
-  }
 
-  .fixed-fullsize-container > * {
-    flex: 1 1 40%;
-    overflow: auto;
+    > * {
+      flex: 1 1 40%;
+      overflow: auto;
+    }
   }
 
   .filelist {

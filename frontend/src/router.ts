@@ -46,6 +46,8 @@ type FavaQueryParameters =
   | "account"
   | "charts"
   | "conversion"
+  | "extract_filename"
+  | "extract_importer"
   | "filter"
   | "interval"
   | "query_string"
