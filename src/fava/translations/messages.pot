@@ -3,12 +3,10 @@ msgid "File change detected. Click to reload."
 msgstr ""
 
 #: frontend/src/charts/ChartSwitcher.svelte:35
-#: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr ""
 
 #: frontend/src/charts/ChartSwitcher.svelte:42
-#: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr ""
 
@@ -50,7 +48,7 @@ msgstr ""
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/editor/SliceEditor.svelte:156
 #: frontend/src/modals/AddEntry.svelte:67
-#: frontend/src/reports/import/Extract.svelte:115
+#: frontend/src/reports/import/Extract.svelte:111
 msgid "Save"
 msgstr ""
 
@@ -317,7 +315,7 @@ msgid "Editor"
 msgstr ""
 
 #: frontend/src/reports/errors/Errors.svelte:23
-#: frontend/src/reports/import/Extract.svelte:121
+#: frontend/src/reports/import/Extract.svelte:97
 msgid "Line"
 msgstr ""
 
@@ -391,17 +389,17 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:58
+#: frontend/src/reports/import/Extract.svelte:53
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:76
+#: frontend/src/reports/import/Extract.svelte:77
 msgid "ignore duplicate"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:120
+#: frontend/src/reports/import/Extract.svelte:96
 msgid "Source"
 msgstr ""
 

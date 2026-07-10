@@ -104,6 +104,11 @@ abstract class EntryBase<T extends string> {
     const value = this.meta.get("__duplicate__");
     return value != null && value !== false;
   }
+
+  /** A human-readable summary of the entry as a single string. */
+  summary(): string {
+    return "";
+  }
 }
 
 /** A balance. */
@@ -126,6 +131,10 @@ export class Balance extends EntryBase<"Balance"> {
   /** Create a new empty Balance entry on the date. */
   static empty(date: string): Balance {
     return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty());
+  }
+
+  override summary(): string {
+    return `${this.account} ${this.amount.number} ${this.amount.currency}`;
   }
 
   private static raw_validator = object({
@@ -244,6 +253,10 @@ export class Note extends EntryBase<"Note"> {
   /** Create a new empty Note entry on the date. */
   static empty(date: string): Note {
     return new Note(new EntryMetadata(), date, "", "", "", null, null);
+  }
+
+  override summary(): string {
+    return `${this.account} - ${this.comment}`;
   }
 
   private static raw_validator = object({
@@ -553,6 +566,13 @@ export class Transaction extends EntryBase<"Transaction"> {
       `${this.date} ${this.flag} "${this.payee}" "${this.narration}"` +
       `\n${postings.join("\n")}`
     );
+  }
+
+  override summary(): string {
+    const title = [this.payee, this.narration].filter((s) => s).join(" · ");
+    const posting = this.postings.find((p) => p.account);
+    const posting_info = posting ? `${posting.account} ${posting.amount}` : "";
+    return [title, posting_info].filter((s) => s).join(" - ");
   }
 
   toJSON(): ValidationT<typeof Transaction.raw_validator> {

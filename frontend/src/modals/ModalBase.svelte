@@ -118,7 +118,7 @@
       width: 100%;
       max-width: 767px;
       padding: 1em;
-      margin: 10vh 0.5em 0.5em;
+      margin: 5vh 0.5em 0.5em;
       background: var(--background);
       box-shadow: var(--box-shadow-overlay);
     }
