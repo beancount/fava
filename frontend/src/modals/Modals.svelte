@@ -3,9 +3,11 @@
   import Context from "./Context.svelte";
   import DocumentUpload from "./DocumentUpload.svelte";
   import Export from "./Export.svelte";
+  import GlobalExtract from "./GlobalExtract.svelte";
 </script>
 
 <AddEntry />
 <Context />
 <DocumentUpload />
 <Export />
+<GlobalExtract />
