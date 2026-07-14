@@ -224,7 +224,7 @@ const filters_conversion_interval = [
 export const get_account_report = define_endpoint(
   "account_report",
   account_report_validator,
-  [...filters_conversion_interval, "a", "r"],
+  [...filters_conversion_interval, "a", "r", "page"],
 );
 export const get_balance_sheet = define_endpoint(
   "balance_sheet",

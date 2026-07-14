@@ -817,6 +817,15 @@ def test_api_journal_page_not_found(
     assert_api_error(response, status=HTTPStatus.NOT_FOUND)
 
 
+def test_api_account_report_page_not_found(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/account_report?a=Assets&r=journal&page=1000"
+    )
+    assert_api_error(response, status=HTTPStatus.NOT_FOUND)
+
+
 def test_api_filter_error(
     test_client: FlaskClient,
 ) -> None:

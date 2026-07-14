@@ -20,17 +20,19 @@
   import { sort_journal } from "./sort.ts";
 
   interface Props {
-    all_pages?: Promise<DocumentFragment | null>[];
     initial_sort: JournalSort;
     journal: DocumentFragment;
+    load_page?: ((page: number) => Promise<DocumentFragment | null>) | null;
     show_change_and_balance: boolean;
+    total_pages?: number;
   }
 
   let {
-    all_pages = [],
     initial_sort,
     journal,
+    load_page,
     show_change_and_balance,
+    total_pages = 1,
   }: Props = $props();
 
   let ol: HTMLOListElement | undefined = $state();
@@ -97,7 +99,7 @@
   {ondragenter}
   {@attach (node: HTMLOListElement) => {
     void journal;
-    untrack(() => {
+    return untrack(() => {
       const sort = $journal_sort;
       node.innerHTML = "";
       node.append(journal);
@@ -107,21 +109,62 @@
       if (needs_sorting) {
         sort_journal(node, sort);
       }
-      if (all_pages.length > 0) {
-        loading_state
-          .run(async () => {
-            for (const page of all_pages) {
-              const fragment = await page;
-              if (fragment) {
-                node.append(fragment);
-              }
-            }
-            if (needs_sorting) {
-              sort_journal(node, sort);
-            }
-          })
-          .catch(log_error);
+      if (!load_page || total_pages <= 1) {
+        return undefined;
       }
+
+      const load_journal_page = load_page;
+      const scroll_container = node.closest("article");
+      let next_page = 2;
+      let loading_next_page = false;
+
+      function load_if_near_bottom() {
+        const distance_to_bottom =
+          scroll_container == null
+            ? node.getBoundingClientRect().bottom - window.innerHeight
+            : scroll_container.scrollHeight -
+              scroll_container.scrollTop -
+              scroll_container.clientHeight;
+
+        if (distance_to_bottom < 1000) {
+          load_next_page().catch(log_error);
+        }
+      }
+
+      async function load_next_page() {
+        if (loading_next_page || next_page > total_pages) {
+          return;
+        }
+        loading_next_page = true;
+        try {
+          await loading_state.run(async () => {
+            const fragment = await load_journal_page(next_page);
+            next_page += 1;
+            if (fragment) {
+              node.append(fragment);
+            }
+            const current_sort = $journal_sort;
+            if (!shallow_equal(current_sort, initial_sort)) {
+              sort_journal(node, current_sort);
+            }
+          });
+        } finally {
+          loading_next_page = false;
+        }
+        requestAnimationFrame(load_if_near_bottom);
+      }
+
+      const scroll_target = scroll_container ?? window;
+      scroll_target.addEventListener("scroll", load_if_near_bottom, {
+        passive: true,
+      });
+      window.addEventListener("resize", load_if_near_bottom);
+      requestAnimationFrame(load_if_near_bottom);
+
+      return () => {
+        scroll_target.removeEventListener("scroll", load_if_near_bottom);
+        window.removeEventListener("resize", load_if_near_bottom);
+      };
     });
   }}
 ></ol>

@@ -248,10 +248,12 @@ class Tree(dict[str, TreeNode]):
 
         unrealized_gains = -self.get("").balance_children
         # Insert unrealized gains.
-        self.insert(
-            equity + ":" + options["account_unrealized_gains"],
-            unrealized_gains,
-        )
+        unrealized_gains_account = options.get("account_unrealized_gains")
+        if unrealized_gains_account is not None:
+            self.insert(
+                equity + ":" + unrealized_gains_account,
+                unrealized_gains,
+            )
 
         # Transfer Income and Expenses
         self.insert(
