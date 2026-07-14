@@ -1,4 +1,4 @@
-{% from 'macros/_commodity_macros.html' import render_num, render_amount %}
+{% from 'macros/_commodity_macros.html' import render_num, render_amount, render_price %}
 
 {% set short_type = {
    'balance': 'Bal',
@@ -134,7 +134,7 @@
                 <span class='num'>{{ posting.cost.number|incognito }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
-                {{ render_amount(ledger, posting.price) }}
+                {{ render_price(ledger, posting.units.currency, posting.price) }}
             </p>
             {{ _render_metadata(posting.meta|meta_items) }}
         </li>
