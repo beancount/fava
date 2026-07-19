@@ -81,6 +81,7 @@ type ApiEndpoint = DeleteEndpoint | GetEndpoint | PutEndpoint;
 type ApiParams = Partial<{
   a: string;
   account: string;
+  average: string;
   conversion: string;
   entry_hash: string;
   filename: string;
@@ -265,7 +266,7 @@ export const get_imports = define_paramless_endpoint(
 export const get_income_statement = define_endpoint(
   "income_statement",
   tree_report_validator,
-  filters_conversion_interval,
+  [...filters_conversion_interval, "average"],
 );
 export const get_journal_page = define_endpoint(
   "journal_page",

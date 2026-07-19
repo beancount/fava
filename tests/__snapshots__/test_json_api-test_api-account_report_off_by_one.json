@@ -26,6 +26,7 @@
       "type": "balances"
     },
     {
+      "averages": null,
       "data": [
         {
           "account_balances": {

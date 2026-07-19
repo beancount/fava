@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from decimal import Decimal
 from difflib import Differ
 from http import HTTPStatus
 from io import BytesIO
@@ -12,11 +13,24 @@ import pytest
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
+from fava.core import FilteredLedger
+from fava.core.charts import DateAndBalance
+from fava.core.charts import DateAndBalanceWithBudget
 from fava.core.file import _sha256_str
 from fava.core.file import get_entry_slice
+from fava.core.inventory import SimpleCounterInventory
 from fava.core.misc import align
+from fava.core.tree import SerialisedTreeNode
+from fava.internal_api import BalancesChart
+from fava.internal_api import BarChart
+from fava.internal_api import HierarchyChart
+from fava.json_api import _average_bar_chart
+from fava.json_api import _average_divisor
+from fava.json_api import _average_range
+from fava.json_api import _scale_chart
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
+from fava.util.date import DateRange
 
 if TYPE_CHECKING:  # pragma: no cover
     from flask import Flask
@@ -27,6 +41,10 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
+
+
+def _simple_inv(**amounts: Decimal) -> SimpleCounterInventory:
+    return SimpleCounterInventory(amounts)
 
 
 def diff_strings(a: str, b: str) -> list[str]:
@@ -808,6 +826,207 @@ def test_api_commodities_empty(
     assert not data
 
 
+def test_api_income_statement_average(
+    test_client: FlaskClient,
+) -> None:
+    baseline = assert_api_success(
+        test_client.get("/long-example/api/income_statement?time=2014"),
+    )
+    averaged = assert_api_success(
+        test_client.get(
+            "/long-example/api/income_statement?time=2014&average=day",
+        ),
+    )
+
+    tree = next(tree for tree in baseline["trees"] if tree["balance_children"])
+    currency = next(iter(tree["balance_children"]))
+    baseline_tree_value = tree["balance_children"][currency]
+    averaged_tree_value = next(
+        tree for tree in averaged["trees"] if tree["balance_children"]
+    )["balance_children"][currency]
+    assert averaged_tree_value == pytest.approx(baseline_tree_value / 365)
+
+    baseline_chart_value = next(
+        item
+        for chart in baseline["charts"]
+        for item in chart["data"]
+        if item["balance"]
+    )["balance"][currency]
+    averaged_chart_value = next(
+        item
+        for chart in averaged["charts"]
+        for item in chart["data"]
+        if item["balance"]
+    )["balance"][currency]
+    assert averaged_chart_value == pytest.approx(baseline_chart_value)
+
+    average_chart = next(
+        chart for chart in averaged["charts"] if chart["averages"]
+    )
+    average_currency = next(iter(average_chart["averages"]))
+    average_values = [
+        item["balance"].get(average_currency, 0)
+        for item in average_chart["data"]
+    ]
+    assert average_chart["averages"][average_currency] == pytest.approx(
+        sum(average_values) / 365,
+    )
+
+
+def test_api_income_statement_average_uses_filter_window(
+    test_client: FlaskClient,
+) -> None:
+    baseline = assert_api_success(
+        test_client.get(
+            "/long-example/api/income_statement"
+            "?time=2016&account=Expenses:Food:Groceries",
+        ),
+    )
+    averaged = assert_api_success(
+        test_client.get(
+            "/long-example/api/income_statement"
+            "?time=2016&account=Expenses:Food:Groceries&average=month",
+        ),
+    )
+
+    tree = next(tree for tree in baseline["trees"] if tree["balance_children"])
+    currency = next(iter(tree["balance_children"]))
+    baseline_tree_value = tree["balance_children"][currency]
+    averaged_tree_value = next(
+        tree for tree in averaged["trees"] if tree["balance_children"]
+    )["balance_children"][currency]
+    assert averaged_tree_value == pytest.approx(baseline_tree_value / 12)
+
+    baseline_chart = next(
+        chart for chart in baseline["charts"] if chart["type"] == "bar"
+    )
+    averaged_chart = next(
+        chart for chart in averaged["charts"] if chart["type"] == "bar"
+    )
+    baseline_chart_value = next(
+        item["balance"][currency]
+        for item in baseline_chart["data"]
+        if item["balance"]
+    )
+    averaged_chart_value = next(
+        item["balance"][currency]
+        for item in averaged_chart["data"]
+        if item["balance"]
+    )
+    assert averaged_chart_value == pytest.approx(baseline_chart_value)
+    assert averaged_chart["averages"][currency] == pytest.approx(
+        baseline_tree_value / 12,
+    )
+
+
+def test_api_income_statement_average_invalid(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/income_statement?time=2014&average=century",
+    )
+    assert_api_error(response, status=HTTPStatus.BAD_REQUEST)
+
+
+def test_average_range_uses_filtered_bounds(
+    small_example_ledger: FavaLedger,
+) -> None:
+    filtered = FilteredLedger(small_example_ledger)
+    filtered.date_range = None
+    filtered._date_first = datetime.date(2014, 1, 1)
+    filtered._date_last = datetime.date(2015, 1, 1)
+
+    assert _average_range(filtered) == DateRange(
+        datetime.date(2014, 1, 1),
+        datetime.date(2015, 1, 1),
+    )
+    assert _average_divisor(filtered, "year") == Decimal(1)
+
+
+def test_average_divisor_without_dates(
+    small_example_ledger: FavaLedger,
+) -> None:
+    filtered = FilteredLedger(small_example_ledger)
+    filtered.date_range = None
+    filtered._date_first = None
+    filtered._date_last = None
+
+    assert _average_divisor(filtered, "month") is None
+
+
+def test_scale_chart_scales_all_chart_types() -> None:
+    divisor = Decimal(2)
+    day = datetime.date(2024, 1, 1)
+
+    balances = BalancesChart(
+        "Balances",
+        [DateAndBalance(day, _simple_inv(USD=Decimal(6)))],
+    )
+    scaled_balances = _scale_chart(balances, divisor)
+    assert isinstance(scaled_balances, BalancesChart)
+    assert scaled_balances.data[0].balance == _simple_inv(USD=Decimal(3))
+
+    bar = BarChart(
+        "Changes",
+        [
+            DateAndBalanceWithBudget(
+                day,
+                _simple_inv(USD=Decimal(8)),
+                {
+                    "Assets:Cash": _simple_inv(USD=Decimal(6)),
+                    "Assets:Empty": _simple_inv(),
+                },
+                {"USD": Decimal(4)},
+            )
+        ],
+    )
+    scaled_bar = _scale_chart(bar, divisor)
+    assert isinstance(scaled_bar, BarChart)
+    assert scaled_bar.data[0].balance == _simple_inv(USD=Decimal(4))
+    assert scaled_bar.data[0].account_balances == {
+        "Assets:Cash": _simple_inv(USD=Decimal(3)),
+        "Assets:Empty": _simple_inv(),
+    }
+    assert scaled_bar.data[0].budgets == {"USD": Decimal(2)}
+
+    tree = HierarchyChart(
+        "Assets",
+        SerialisedTreeNode(
+            "Assets",
+            _simple_inv(USD=Decimal(10)),
+            _simple_inv(USD=Decimal(12)),
+            (
+                SerialisedTreeNode(
+                    "Assets:Cash",
+                    _simple_inv(USD=Decimal(4)),
+                    _simple_inv(USD=Decimal(4)),
+                    (),
+                    has_txns=True,
+                ),
+            ),
+            has_txns=True,
+            cost=_simple_inv(USD=Decimal(14)),
+            cost_children=_simple_inv(USD=Decimal(16)),
+        ),
+    )
+    scaled_tree = _scale_chart(tree, divisor)
+    assert isinstance(scaled_tree, HierarchyChart)
+    assert scaled_tree.data.balance == _simple_inv(USD=Decimal(5))
+    assert scaled_tree.data.balance_children == _simple_inv(USD=Decimal(6))
+    assert scaled_tree.data.cost == _simple_inv(USD=Decimal(7))
+    assert scaled_tree.data.cost_children == _simple_inv(USD=Decimal(8))
+    assert scaled_tree.data.children[0].balance == _simple_inv(USD=Decimal(2))
+
+    other: Any = object()
+    assert _scale_chart(other, divisor) is other
+
+
+def test_average_bar_chart_empty_data() -> None:
+    chart = BarChart("Changes", [])
+
+    assert _average_bar_chart(chart, Decimal(3)).averages is None
+
+
 def test_api_journal_page_not_found(
     test_client: FlaskClient,
 ) -> None:
@@ -834,6 +1053,10 @@ def test_api_filter_error(
         ("events", "/long-example/api/events"),
         ("journal", "/example/api/journal"),
         ("income_statement", "/long-example/api/income_statement?time=2014"),
+        (
+            "income_statement_average",
+            "/long-example/api/income_statement?time=2014&average=day",
+        ),
         ("narrations", "/long-example/api/narrations"),
         ("trial_balance", "/long-example/api/trial_balance?time=2014"),
         ("balance_sheet", "/long-example/api/balance_sheet"),
