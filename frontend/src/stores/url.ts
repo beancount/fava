@@ -37,10 +37,27 @@ export const interval = derived(searchParams, ($searchParams) =>
   getInterval($searchParams.get("interval")),
 );
 
+const AVERAGE_INTERVALS = ["day", "week", "month", "quarter", "year"] as const;
+type AverageInterval = (typeof AVERAGE_INTERVALS)[number];
+
+function isAverageInterval(s: string | null): s is AverageInterval {
+  return s != null && AVERAGE_INTERVALS.includes(s as AverageInterval);
+}
+
+export function getAverage(s: string | null): string {
+  return isAverageInterval(s) ? s : "";
+}
+
+/** The current average used for income statements. */
+export const average = derived(searchParams, ($searchParams) =>
+  getAverage($searchParams.get("average")),
+);
+
 /** These URL parameters for filters and conversion / interval are synced for most links. */
 const synced_search_param_names = [
   "account",
   "charts",
+  "average",
   "conversion",
   "filter",
   "interval",

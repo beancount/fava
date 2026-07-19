@@ -47,6 +47,70 @@ export function padExtent([from, to]:
 }
 
 /**
+ * Separate marker positions so overlapping markers stay visible.
+ * @param positions - The original marker positions.
+ * @param min_gap - The minimum distance between adjacent markers.
+ * @param min_y - The smallest allowed marker position.
+ * @param max_y - The largest allowed marker position.
+ */
+export function separateMarkerPositions(
+  positions: readonly number[],
+  min_gap: number,
+  min_y: number,
+  max_y: number,
+): number[] {
+  if (positions.length <= 1) {
+    return [...positions];
+  }
+
+  const indexed = positions
+    .map((position, index) => ({ index, position }))
+    .sort((a, b) => a.position - b.position);
+
+  const adjusted = indexed.map((marker, index) => ({
+    ...marker,
+    position: index === 0 ? Math.max(min_y, marker.position) : marker.position,
+  }));
+
+  for (let index = 1; index < adjusted.length; index += 1) {
+    const current = adjusted[index];
+    const previous = adjusted[index - 1];
+    if (!current || !previous) {
+      continue;
+    }
+    current.position = Math.max(current.position, previous.position + min_gap);
+  }
+
+  const last = adjusted[adjusted.length - 1];
+  if (!last) {
+    return [];
+  }
+
+  const overflow = last.position - max_y;
+  if (overflow > 0) {
+    for (const marker of adjusted) {
+      marker.position -= overflow;
+    }
+  }
+
+  const first = adjusted[0];
+  if (!first) {
+    return [];
+  }
+
+  const underflow = min_y - first.position;
+  if (underflow > 0) {
+    for (const marker of adjusted) {
+      marker.position += underflow;
+    }
+  }
+
+  return adjusted
+    .sort((a, b) => a.index - b.index)
+    .map((marker) => marker.position);
+}
+
+/**
  * Filter ticks to have them not overlap.
  * @param domain - The domain of values to filter.
  * @param count - The number of ticks that should be returned.

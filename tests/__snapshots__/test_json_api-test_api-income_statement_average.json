@@ -1,7 +1,11 @@
 {
   "charts": [
     {
-      "averages": null,
+      "averages": {
+        "IRAUSD": 0.0,
+        "USD": -98.23901369863013,
+        "VACHR": -0.3561643835616438
+      },
       "data": [
         {
           "account_balances": {
@@ -365,7 +369,11 @@
       "type": "bar"
     },
     {
-      "averages": null,
+      "averages": {
+        "IRAUSD": -47.945205479452056,
+        "USD": -354.3445479452055,
+        "VACHR": -0.3561643835616438
+      },
       "data": [
         {
           "account_balances": {
@@ -503,7 +511,7 @@
       "type": "bar"
     },
     {
-      "averages": null,
+      "averages": { "IRAUSD": 47.945205479452056, "USD": 256.10553424657536 },
       "data": [
         {
           "account_balances": {
@@ -826,29 +834,32 @@
       "account": "Income",
       "balance": {},
       "balance_children": {
-        "IRAUSD": -17500,
-        "USD": -129335.76,
-        "VACHR": -130
+        "IRAUSD": -47.945205479452056,
+        "USD": -354.3445479452055,
+        "VACHR": -0.3561643835616438
       },
       "children": [
         {
           "account": "Income:US",
           "balance": {},
           "balance_children": {
-            "IRAUSD": -17500,
-            "USD": -129335.76,
-            "VACHR": -130
+            "IRAUSD": -47.945205479452056,
+            "USD": -354.3445479452055,
+            "VACHR": -0.3561643835616438
           },
           "children": [
             {
               "account": "Income:US:BayBook",
               "balance": {},
-              "balance_children": { "USD": -129382.2, "VACHR": -130 },
+              "balance_children": {
+                "USD": -354.47178082191783,
+                "VACHR": -0.3561643835616438
+              },
               "children": [
                 {
                   "account": "Income:US:BayBook:GroupTermLife",
-                  "balance": { "USD": -632.32 },
-                  "balance_children": { "USD": -632.32 },
+                  "balance": { "USD": -1.7323835616438357 },
+                  "balance_children": { "USD": -1.7323835616438357 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -856,8 +867,8 @@
                 },
                 {
                   "account": "Income:US:BayBook:Match401k",
-                  "balance": { "USD": -8750.0 },
-                  "balance_children": { "USD": -8750.0 },
+                  "balance": { "USD": -23.972602739726028 },
+                  "balance_children": { "USD": -23.972602739726028 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -865,8 +876,8 @@
                 },
                 {
                   "account": "Income:US:BayBook:Salary",
-                  "balance": { "USD": -119999.88 },
-                  "balance_children": { "USD": -119999.88 },
+                  "balance": { "USD": -328.76679452054793 },
+                  "balance_children": { "USD": -328.76679452054793 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -874,8 +885,8 @@
                 },
                 {
                   "account": "Income:US:BayBook:Vacation",
-                  "balance": { "VACHR": -130 },
-                  "balance_children": { "VACHR": -130 },
+                  "balance": { "VACHR": -0.3561643835616438 },
+                  "balance_children": { "VACHR": -0.3561643835616438 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -889,12 +900,12 @@
             {
               "account": "Income:US:ETrade",
               "balance": {},
-              "balance_children": { "USD": 46.44 },
+              "balance_children": { "USD": 0.12723287671232877 },
               "children": [
                 {
                   "account": "Income:US:ETrade:Dividends",
-                  "balance": { "USD": -51.68 },
-                  "balance_children": { "USD": -51.68 },
+                  "balance": { "USD": -0.1415890410958904 },
+                  "balance_children": { "USD": -0.1415890410958904 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -902,8 +913,8 @@
                 },
                 {
                   "account": "Income:US:ETrade:Gains",
-                  "balance": { "USD": 98.12 },
-                  "balance_children": { "USD": 98.12 },
+                  "balance": { "USD": 0.2688219178082192 },
+                  "balance_children": { "USD": 0.2688219178082192 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -917,12 +928,12 @@
             {
               "account": "Income:US:Federal",
               "balance": {},
-              "balance_children": { "IRAUSD": -17500 },
+              "balance_children": { "IRAUSD": -47.945205479452056 },
               "children": [
                 {
                   "account": "Income:US:Federal:PreTax401k",
-                  "balance": { "IRAUSD": -17500 },
-                  "balance_children": { "IRAUSD": -17500 },
+                  "balance": { "IRAUSD": -47.945205479452056 },
+                  "balance_children": { "IRAUSD": -47.945205479452056 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -945,8 +956,11 @@
     },
     {
       "account": "Net Profit",
-      "balance": { "USD": -35857.24, "VACHR": -130 },
-      "balance_children": { "USD": -35857.24, "VACHR": -130 },
+      "balance": { "USD": -98.23901369863013, "VACHR": -0.3561643835616438 },
+      "balance_children": {
+        "USD": -98.23901369863013,
+        "VACHR": -0.3561643835616438
+      },
       "children": [],
       "cost": null,
       "cost_children": null,
@@ -955,17 +969,20 @@
     {
       "account": "Expenses",
       "balance": {},
-      "balance_children": { "IRAUSD": 17500.0, "USD": 93478.52 },
+      "balance_children": {
+        "IRAUSD": 47.945205479452056,
+        "USD": 256.10553424657536
+      },
       "children": [
         {
           "account": "Expenses:Financial",
           "balance": {},
-          "balance_children": { "USD": 137.5 },
+          "balance_children": { "USD": 0.3767123287671233 },
           "children": [
             {
               "account": "Expenses:Financial:Commissions",
-              "balance": { "USD": 89.5 },
-              "balance_children": { "USD": 89.5 },
+              "balance": { "USD": 0.2452054794520548 },
+              "balance_children": { "USD": 0.2452054794520548 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -973,8 +990,8 @@
             },
             {
               "account": "Expenses:Financial:Fees",
-              "balance": { "USD": 48.0 },
-              "balance_children": { "USD": 48.0 },
+              "balance": { "USD": 0.13150684931506848 },
+              "balance_children": { "USD": 0.13150684931506848 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -988,7 +1005,7 @@
         {
           "account": "Expenses:Food",
           "balance": {},
-          "balance_children": { "USD": 6601.98 },
+          "balance_children": { "USD": 18.087616438356164 },
           "children": [
             {
               "account": "Expenses:Food:Alcohol",
@@ -1010,8 +1027,8 @@
             },
             {
               "account": "Expenses:Food:Groceries",
-              "balance": { "USD": 2424.91 },
-              "balance_children": { "USD": 2424.91 },
+              "balance": { "USD": 6.643589041095891 },
+              "balance_children": { "USD": 6.643589041095891 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1019,8 +1036,8 @@
             },
             {
               "account": "Expenses:Food:Restaurant",
-              "balance": { "USD": 4177.07 },
-              "balance_children": { "USD": 4177.07 },
+              "balance": { "USD": 11.444027397260275 },
+              "balance_children": { "USD": 11.444027397260275 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1034,17 +1051,17 @@
         {
           "account": "Expenses:Health",
           "balance": {},
-          "balance_children": { "USD": 2519.4 },
+          "balance_children": { "USD": 6.902465753424657 },
           "children": [
             {
               "account": "Expenses:Health:Dental",
               "balance": {},
-              "balance_children": { "USD": 75.4 },
+              "balance_children": { "USD": 0.20657534246575343 },
               "children": [
                 {
                   "account": "Expenses:Health:Dental:Insurance",
-                  "balance": { "USD": 75.4 },
-                  "balance_children": { "USD": 75.4 },
+                  "balance": { "USD": 0.20657534246575343 },
+                  "balance_children": { "USD": 0.20657534246575343 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -1058,12 +1075,12 @@
             {
               "account": "Expenses:Health:Life",
               "balance": {},
-              "balance_children": { "USD": 632.32 },
+              "balance_children": { "USD": 1.7323835616438357 },
               "children": [
                 {
                   "account": "Expenses:Health:Life:GroupTermLife",
-                  "balance": { "USD": 632.32 },
-                  "balance_children": { "USD": 632.32 },
+                  "balance": { "USD": 1.7323835616438357 },
+                  "balance_children": { "USD": 1.7323835616438357 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -1077,12 +1094,12 @@
             {
               "account": "Expenses:Health:Medical",
               "balance": {},
-              "balance_children": { "USD": 711.88 },
+              "balance_children": { "USD": 1.9503561643835616 },
               "children": [
                 {
                   "account": "Expenses:Health:Medical:Insurance",
-                  "balance": { "USD": 711.88 },
-                  "balance_children": { "USD": 711.88 },
+                  "balance": { "USD": 1.9503561643835616 },
+                  "balance_children": { "USD": 1.9503561643835616 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -1096,12 +1113,12 @@
             {
               "account": "Expenses:Health:Vision",
               "balance": {},
-              "balance_children": { "USD": 1099.8 },
+              "balance_children": { "USD": 3.013150684931507 },
               "children": [
                 {
                   "account": "Expenses:Health:Vision:Insurance",
-                  "balance": { "USD": 1099.8 },
-                  "balance_children": { "USD": 1099.8 },
+                  "balance": { "USD": 3.013150684931507 },
+                  "balance_children": { "USD": 3.013150684931507 },
                   "children": [],
                   "cost": null,
                   "cost_children": null,
@@ -1120,12 +1137,12 @@
         {
           "account": "Expenses:Home",
           "balance": {},
-          "balance_children": { "USD": 31302.44 },
+          "balance_children": { "USD": 85.7601095890411 },
           "children": [
             {
               "account": "Expenses:Home:Electricity",
-              "balance": { "USD": 780.0 },
-              "balance_children": { "USD": 780.0 },
+              "balance": { "USD": 2.136986301369863 },
+              "balance_children": { "USD": 2.136986301369863 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1133,8 +1150,8 @@
             },
             {
               "account": "Expenses:Home:Internet",
-              "balance": { "USD": 959.79 },
-              "balance_children": { "USD": 959.79 },
+              "balance": { "USD": 2.6295616438356166 },
+              "balance_children": { "USD": 2.6295616438356166 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1142,8 +1159,8 @@
             },
             {
               "account": "Expenses:Home:Phone",
-              "balance": { "USD": 762.65 },
-              "balance_children": { "USD": 762.65 },
+              "balance": { "USD": 2.0894520547945206 },
+              "balance_children": { "USD": 2.0894520547945206 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1151,8 +1168,8 @@
             },
             {
               "account": "Expenses:Home:Rent",
-              "balance": { "USD": 28800.0 },
-              "balance_children": { "USD": 28800.0 },
+              "balance": { "USD": 78.9041095890411 },
+              "balance_children": { "USD": 78.9041095890411 },
               "children": [],
               "cost": null,
               "cost_children": null,
@@ -1166,22 +1183,31 @@
         {
           "account": "Expenses:Taxes",
           "balance": {},
-          "balance_children": { "IRAUSD": 17500.0, "USD": 51477.2 },
+          "balance_children": {
+            "IRAUSD": 47.945205479452056,
+            "USD": 141.03342465753425
+          },
           "children": [
             {
               "account": "Expenses:Taxes:Y2014",
               "balance": {},
-              "balance_children": { "IRAUSD": 17500.0, "USD": 51477.2 },
+              "balance_children": {
+                "IRAUSD": 47.945205479452056,
+                "USD": 141.03342465753425
+              },
               "children": [
                 {
                   "account": "Expenses:Taxes:Y2014:US",
                   "balance": {},
-                  "balance_children": { "IRAUSD": 17500.0, "USD": 51477.2 },
+                  "balance_children": {
+                    "IRAUSD": 47.945205479452056,
+                    "USD": 141.03342465753425
+                  },
                   "children": [
                     {
                       "account": "Expenses:Taxes:Y2014:US:CityNYC",
-                      "balance": { "USD": 4547.92 },
-                      "balance_children": { "USD": 4547.92 },
+                      "balance": { "USD": 12.460054794520548 },
+                      "balance_children": { "USD": 12.460054794520548 },
                       "children": [],
                       "cost": null,
                       "cost_children": null,
@@ -1189,16 +1215,16 @@
                     },
                     {
                       "account": "Expenses:Taxes:Y2014:US:Federal",
-                      "balance": { "USD": 27635.92 },
+                      "balance": { "USD": 75.71484931506849 },
                       "balance_children": {
-                        "IRAUSD": 17500.0,
-                        "USD": 27635.92
+                        "IRAUSD": 47.945205479452056,
+                        "USD": 75.71484931506849
                       },
                       "children": [
                         {
                           "account": "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
-                          "balance": { "IRAUSD": 17500.0 },
-                          "balance_children": { "IRAUSD": 17500.0 },
+                          "balance": { "IRAUSD": 47.945205479452056 },
+                          "balance_children": { "IRAUSD": 47.945205479452056 },
                           "children": [],
                           "cost": null,
                           "cost_children": null,
@@ -1211,8 +1237,8 @@
                     },
                     {
                       "account": "Expenses:Taxes:Y2014:US:Medicare",
-                      "balance": { "USD": 2772.12 },
-                      "balance_children": { "USD": 2772.12 },
+                      "balance": { "USD": 7.594849315068493 },
+                      "balance_children": { "USD": 7.594849315068493 },
                       "children": [],
                       "cost": null,
                       "cost_children": null,
@@ -1220,8 +1246,8 @@
                     },
                     {
                       "account": "Expenses:Taxes:Y2014:US:SDI",
-                      "balance": { "USD": 29.12 },
-                      "balance_children": { "USD": 29.12 },
+                      "balance": { "USD": 0.07978082191780822 },
+                      "balance_children": { "USD": 0.07978082191780822 },
                       "children": [],
                       "cost": null,
                       "cost_children": null,
@@ -1229,8 +1255,8 @@
                     },
                     {
                       "account": "Expenses:Taxes:Y2014:US:SocSec",
-                      "balance": { "USD": 7000.04 },
-                      "balance_children": { "USD": 7000.04 },
+                      "balance": { "USD": 19.17819178082192 },
+                      "balance_children": { "USD": 19.17819178082192 },
                       "children": [],
                       "cost": null,
                       "cost_children": null,
@@ -1238,8 +1264,8 @@
                     },
                     {
                       "account": "Expenses:Taxes:Y2014:US:State",
-                      "balance": { "USD": 9492.08 },
-                      "balance_children": { "USD": 9492.08 },
+                      "balance": { "USD": 26.005698630136987 },
+                      "balance_children": { "USD": 26.005698630136987 },
                       "children": [],
                       "cost": null,
                       "cost_children": null,
@@ -1263,12 +1289,12 @@
         {
           "account": "Expenses:Transport",
           "balance": {},
-          "balance_children": { "USD": 1440.0 },
+          "balance_children": { "USD": 3.9452054794520546 },
           "children": [
             {
               "account": "Expenses:Transport:Tram",
-              "balance": { "USD": 1440.0 },
-              "balance_children": { "USD": 1440.0 },
+              "balance": { "USD": 3.9452054794520546 },
+              "balance_children": { "USD": 3.9452054794520546 },
               "children": [],
               "cost": null,
               "cost_children": null,

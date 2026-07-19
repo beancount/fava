@@ -23,6 +23,17 @@ export const short = derived(incognito, ($incognito) =>
     : short_format,
 );
 
+/** Render a number without SI prefixes when the currency is not known. */
+export const plainNum = derived(
+  [incognito, locale],
+  ([$incognito, $locale]) => {
+    const formatter = localeFormatter($locale);
+    return $incognito
+      ? (n: NumberValue) => replaceNumbers(formatter(Number(n)))
+      : formatter;
+  },
+);
+
 /** Format a number for which the currency is not known. */
 export const num = derived(locale, ($locale) => localeFormatter($locale));
 

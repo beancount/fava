@@ -25,8 +25,9 @@ export interface Filters extends Record<string, string> {
   time: string;
 }
 
-/** The three filters as well as conversion and interval. */
+/** The three filters as well as average, conversion and interval. */
 export interface FiltersConversionInterval extends Filters {
+  average: string;
   conversion: string;
   interval: string;
 }
@@ -44,6 +45,7 @@ export const filter_params = derived(
 export function getURLFilters(url: URL): FiltersConversionInterval {
   return {
     account: url.searchParams.get("account") ?? "",
+    average: url.searchParams.get("average") ?? "",
     filter: url.searchParams.get("filter") ?? "",
     time: url.searchParams.get("time") ?? "",
     conversion: url.searchParams.get("conversion") ?? "",
