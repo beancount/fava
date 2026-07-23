@@ -74,7 +74,7 @@ docs = ["furo>=2024", "sphinx>=7", "sphinx-autodoc-typehints>=2"]
 # (otherwise it is not added to the constraints as it's only a build dependency).
 old-deps = ["pytest", "setuptools"]
 # Running pre-commit hooks.
-pre-commit = ["pre-commit>=4"]
+pre-commit = ["prek"]
 # Utilities to deal with github actions.
 github-actions = [
   "gha-update; python_version>=\"3.12\"",
