@@ -12,7 +12,6 @@ import pytest
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
-from fava.core.file import _sha256_str
 from fava.core.file import get_entry_slice
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
@@ -122,9 +121,6 @@ def test_api_add_document_and_move_and_delete(
 
         # upload to temporary directory
         monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])  # ty:ignore[invalid-argument-type]
-        monkeypatch.setattr(
-            g.ledger.fava_options, "import_dirs", [str(account_dir)]
-        )
 
         response = test_client.put(add_url)
         assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
@@ -181,14 +177,14 @@ def test_api_add_document_and_move_and_delete(
         assert new_filename.exists()
 
         # delete
-        invalid_filename = tmp_path / "asdf"
+        invalid_filename = tmp_path.parent / "asdf"
         response = test_client.delete(
             delete_url,
             query_string={"filename": str(invalid_filename)},
         )
         assert_api_error(
             response,
-            f"Not valid document or import file: '{invalid_filename}'.",
+            f"Not a valid document file: '{invalid_filename}'.",
             HTTPStatus.BAD_REQUEST,
         )
 
@@ -203,50 +199,6 @@ def test_api_add_document_and_move_and_delete(
             query_string={"filename": str(new_filename)},
         )
         assert_api_success(response, f"Deleted {new_filename}.")
-
-
-def test_api_upload_import_file(
-    app: Flask,
-    test_client: FlaskClient,
-    tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    url = "/long-example/api/upload_import_file"
-
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-
-        monkeypatch.setattr(
-            g.ledger.fava_options, "import_dirs", [str(tmp_path)]
-        )
-
-        response = test_client.put(url)
-        assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
-
-        response = test_client.put(
-            url, data={"file": (BytesIO(b"asdfasdf"), "")}
-        )
-        assert_api_error(
-            response,
-            "Uploaded file is missing filename.",
-            HTTPStatus.BAD_REQUEST,
-        )
-
-        filename = tmp_path / "receipt.pdf"
-        assert not filename.is_file()
-        response = test_client.put(
-            url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
-        )
-        assert_api_success(response, f"Uploaded to {filename}")
-        assert filename.is_file()
-
-        # Uploading the exact same file should fail due to path conflict
-        response = test_client.put(
-            url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
-        )
-        assert_api_error(
-            response, f"{filename} already exists.", HTTPStatus.CONFLICT
-        )
 
 
 def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
@@ -376,29 +328,6 @@ def test_api_narration_transaction(
     assert data["t"] == "Transaction"
 
 
-def test_api_imports(
-    test_client: FlaskClient,
-    snapshot: SnapshotFunc,
-) -> None:
-    response = test_client.get("/import/api/imports")
-    data = assert_api_success(response)
-    assert data
-    snapshot(data, json=True)
-
-    importable = next(f for f in data if f["importers"])
-    assert importable
-
-    response = test_client.get(
-        "/import/api/extract",
-        query_string={
-            "filename": importable["name"],
-            "importer": importable["importers"][0]["importer_name"],
-        },
-    )
-    data = assert_api_success(response)
-    snapshot(data, json=True)
-
-
 def test_api_move(test_client: FlaskClient) -> None:
     response = test_client.put("/long-example/api/move")
     assert_api_error(
@@ -415,11 +344,11 @@ def test_api_move(test_client: FlaskClient) -> None:
         HTTPStatus.UNPROCESSABLE_ENTITY,
     )
 
-    response = test_client.put("/import/api/move", json=invalid)
+    response = test_client.put("/move-example/api/move", json=invalid)
     assert_api_error(response, "Not a valid account: 'Assets'")
 
     response = test_client.put(
-        "/import/api/move",
+        "/move-example/api/move",
         json={
             **invalid,
             "account": "Assets:Checking",
@@ -428,21 +357,6 @@ def test_api_move(test_client: FlaskClient) -> None:
     assert_api_error(
         response, "Not a file: 'old'", HTTPStatus.UNPROCESSABLE_ENTITY
     )
-
-
-def test_api_get_source_invalid_unicode(test_client: FlaskClient) -> None:
-    response = test_client.get("/invalid-unicode/api/source")
-    err_msg = assert_api_error(response)
-    assert "The source file contains invalid unicode" in err_msg
-
-
-def test_api_get_source_unknown_file(test_client: FlaskClient) -> None:
-    response = test_client.get(
-        "/example/api/source",
-        query_string={"filename": "/home/not-one-of-the-includes"},
-    )
-    err_msg = assert_api_error(response)
-    assert "Trying to read a non-source file" in err_msg
 
 
 def test_api_get_source_slice_unprocessable(
@@ -458,58 +372,6 @@ def test_api_get_source_slice_unprocessable(
         response,
         status=HTTPStatus.UNPROCESSABLE_ENTITY,
     )
-
-
-def test_api_put_source_bad_request(test_client: FlaskClient) -> None:
-    response = test_client.put("/example/api/source")
-    assert_api_error(
-        response,
-        "Invalid API request: Invalid JSON body.",
-        HTTPStatus.BAD_REQUEST,
-    )
-
-
-def test_api_source(app_in_tmp_dir: Flask) -> None:
-    test_client = app_in_tmp_dir.test_client()
-    ledger = app_in_tmp_dir.config["LEDGERS"]["edit-example"]
-    path = Path(ledger.beancount_file_path)
-    url = "/edit-example/api/source"
-
-    source = path.read_text("utf-8")
-    changed_source = source + "\n;comment"
-    sha256sum = _sha256_str(source)
-
-    # read
-    response = test_client.get(url)
-    data = assert_api_success(response)
-    assert data["source"] == source
-
-    # change source
-    response = test_client.put(
-        url,
-        json={
-            "file_path": str(path),
-            "sha256sum": sha256sum,
-            "source": changed_source,
-        },
-    )
-    sha256sum = _sha256_str(changed_source)
-    assert_api_success(response, sha256sum)
-
-    # check if the file has been written
-    assert path.read_text("utf-8") == changed_source
-
-    # write original source file
-    response = test_client.put(
-        url,
-        json={
-            "file_path": str(path),
-            "sha256sum": sha256sum,
-            "source": source,
-        },
-    )
-    assert_api_success(response)
-    assert path.read_text("utf-8") == source
 
 
 def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
@@ -841,6 +703,7 @@ def test_api_filter_error(
             "balance_sheet_with_cost",
             "/long-example/api/balance_sheet?conversion=at_value",
         ),
+        ("dashboard", "/long-example/api/dashboard"),
         (
             "account_report_off_by_one_journal",
             (

@@ -44,10 +44,8 @@
     "conversion-currencies": "()",
     "currency-column": "61",
     "default-file": "None",
-    "default-page": "'income_statement/'",
+    "default-page": "'dashboard/'",
     "fiscal-year-end": "FiscalYearEnd(month=12, day=31)",
-    "import-config": "None",
-    "import-dirs": "[]",
     "indent": "2",
     "insert-entry": "[]",
     "invert-gains-losses-colors": "False",
@@ -56,11 +54,10 @@
     "locale": "None",
     "show-accounts-with-zero-balance": "False",
     "show-accounts-with-zero-transactions": "True",
-    "show-metadata-indicators": "True",
     "show-closed-accounts": "False",
+    "show-metadata-indicators": "True",
     "sidebar-show-queries": "5",
     "upcoming-events": "7",
-    "uptodate-indicator-grey-lookback-days": "60",
-    "use-external-editor": "False"
+    "uptodate-indicator-grey-lookback-days": "60"
   }
 }

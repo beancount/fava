@@ -1,12 +1,6 @@
 import { get as store_get } from "svelte/store";
 
-import {
-  Document,
-  type Entry,
-  Event,
-  entryValidator,
-  Transaction,
-} from "../entries/index.ts";
+import { Document, type Entry, Event, Transaction } from "../entries/index.ts";
 import type { NonEmptyArray } from "../lib/array.ts";
 import { fetch_json } from "../lib/fetch.ts";
 import type { Validator } from "../lib/validation.ts";
@@ -20,12 +14,10 @@ import {
   account_report_validator,
   commodities_validator,
   context_validator,
+  dashboard_validator,
   error_validator,
-  importable_files_validator,
   ledgerDataValidator,
   options_validator,
-  type SourceFile,
-  source_validator,
   statistics_validator,
   tree_report_validator,
 } from "./validators.ts";
@@ -49,11 +41,10 @@ type GetEndpoint =
   | "changed"
   | "commodities"
   | "context"
+  | "dashboard"
   | "documents"
   | "errors"
   | "events"
-  | "extract"
-  | "imports"
   | "income_statement"
   | "journal_page"
   | "trial_balance"
@@ -64,7 +55,6 @@ type GetEndpoint =
   | "narration_transaction"
   | "narrations"
   | "query"
-  | "source"
   | "statistics";
 type PutEndpoint =
   | "add_document"
@@ -72,9 +62,7 @@ type PutEndpoint =
   | "attach_document"
   | "format_source"
   | "move"
-  | "source"
-  | "source_slice"
-  | "upload_import_file";
+  | "source_slice";
 
 type ApiEndpoint = DeleteEndpoint | GetEndpoint | PutEndpoint;
 
@@ -240,6 +228,11 @@ export const get_commodities = define_endpoint(
 export const get_context = define_endpoint("context", context_validator, [
   "entry_hash",
 ]);
+export const get_dashboard = define_endpoint(
+  "dashboard",
+  dashboard_validator,
+  filters_conversion_interval,
+);
 export const get_documents = define_endpoint(
   "documents",
   array(Document.validator),
@@ -253,14 +246,6 @@ export const get_events = define_endpoint(
   "events",
   array(Event.validator),
   filters,
-);
-export const get_extract = define_endpoint("extract", array(entryValidator), [
-  "filename",
-  "importer",
-]);
-export const get_imports = define_paramless_endpoint(
-  "imports",
-  importable_files_validator,
 );
 export const get_income_statement = define_endpoint(
   "income_statement",
@@ -303,9 +288,6 @@ export const get_query = define_endpoint("query", query_validator, [
   ...filters,
   "query_string",
 ]);
-export const get_source = define_endpoint("source", source_validator, [
-  "filename",
-]);
 export const get_source_slice = define_endpoint(
   "source_slice",
   object({ slice: string, sha256sum: string }),
@@ -340,13 +322,11 @@ const put_move: Put<{
   account: string;
   new_name: string;
 }> = define_put_json("move");
-export const put_source: Put<SourceFile> = define_put_json("source");
 export const put_source_slice: Put<{
   entry_hash: string;
   source: string;
   sha256sum: string;
 }> = define_put_json("source_slice");
-export const put_upload_import_file = define_put_form("upload_import_file");
 
 /**
  * Move a file, either in an import directory or a document.

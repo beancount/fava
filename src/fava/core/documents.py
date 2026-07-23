@@ -27,15 +27,19 @@ class NotAValidAccountError(FavaAPIError):
         super().__init__(f"Not a valid account: '{account}'")
 
 
-def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
-    """Check whether the filename is a document or in an import directory.
+def is_document_file(filename: str, ledger: FavaLedger) -> bool:
+    """Check whether the filename is one of the ledger's documents.
+
+    This also allows files placed in one of the ledger's configured
+    documents folders, even if Beancount has not (yet) picked them up as a
+    Document directive - e.g. a file that was just uploaded.
 
     Args:
         filename: The filename to check.
         ledger: The FavaLedger.
 
     Returns:
-        Whether this is one of the documents or a path in an import dir.
+        Whether this is one of the documents.
     """
     if any(
         filename == d.filename for d in ledger.all_entries_by_type.Document
@@ -44,7 +48,7 @@ def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
     file_path = Path(filename).resolve()
     return any(
         str(file_path).startswith(str(ledger.join_path(d)))
-        for d in ledger.fava_options.import_dirs
+        for d in ledger.options["documents"]
     )
 
 

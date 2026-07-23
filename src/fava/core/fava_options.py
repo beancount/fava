@@ -95,10 +95,8 @@ class FavaOptions:
     conversion_currencies: tuple[str, ...] = ()
     currency_column: int = 61
     default_file: str | None = None
-    default_page: str = "income_statement/"
+    default_page: str = "dashboard/"
     fiscal_year_end: FiscalYearEnd = END_OF_YEAR
-    import_config: str | None = None
-    import_dirs: Sequence[str] = field(default_factory=list)
     indent: int = 2
     insert_entry: Sequence[InsertEntryOption] = field(default_factory=list)
     invert_gains_losses_colors: bool = False
@@ -112,7 +110,6 @@ class FavaOptions:
     sidebar_show_queries: int = 5
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
-    use_external_editor: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""
@@ -137,11 +134,6 @@ class FavaOptions:
         if fye is None:
             raise InvalidFiscalYearEndOptionError(value)
         self.fiscal_year_end = fye
-
-    def set_import_dirs(self, value: str) -> None:
-        """Add an import directory."""
-        # It's typed as Sequence so that it's not externally mutated
-        self.import_dirs.append(value)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
 
     def set_insert_entry(
         self, value: str, date: datetime.date, filename: str, lineno: int
@@ -185,7 +177,7 @@ TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
 STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
 
 
-def parse_option_custom_entry(  # noqa: PLR0912
+def parse_option_custom_entry(
     entry: Custom,
     options: FavaOptions,
 ) -> None:
@@ -205,8 +197,6 @@ def parse_option_custom_entry(  # noqa: PLR0912
         options.set_default_file(value, filename)
     elif key == "fiscal_year_end":
         options.set_fiscal_year_end(value)
-    elif key == "import_dirs":
-        options.set_import_dirs(value)
     elif key == "insert_entry":
         options.set_insert_entry(value, entry.date, filename, lineno)
     elif key == "language":

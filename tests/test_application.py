@@ -73,7 +73,7 @@ def test_redirect(test_client: FlaskClient) -> None:
     """Redirect from root."""
     response = test_client.get("/")
     assert response.status_code == HTTPStatus.FOUND.value
-    assert response.location == "/long-example/income_statement/"
+    assert response.location == "/long-example/dashboard/"
 
 
 @pytest.mark.parametrize(
@@ -98,8 +98,8 @@ def test_urls_not_found(test_client: FlaskClient, url: str) -> None:
 @pytest.mark.parametrize(
     ("url", "option", "expect"),
     [
-        ("/", None, "/long-example/income_statement/"),
-        ("/long-example/", None, "/long-example/income_statement/"),
+        ("/", None, "/long-example/dashboard/"),
+        ("/long-example/", None, "/long-example/dashboard/"),
         ("/", "income_statement/", "/long-example/income_statement/"),
         (
             "/long-example/",

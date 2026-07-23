@@ -5,7 +5,6 @@ import os
 import re
 import shutil
 from datetime import date
-from hashlib import sha256
 from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
@@ -26,8 +25,6 @@ from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
-from fava.core.file import InvalidUnicodeError
-from fava.core.file import NonSourceFileError
 from fava.core.file import save_entry_slice
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -104,12 +101,10 @@ def test_windows_newlines(ledger_in_tmp_path: FavaLedger) -> None:
     path = Path(ledger_in_tmp_path.beancount_file_path)
     contents = path.read_text("utf-8")
     assert "\r\n" not in contents
-    source, sha256sum = ledger_in_tmp_path.file.get_source(path)
 
     # unix newlines are used if already present
     with path.open("w", encoding="utf-8", newline="\n") as file:
         file.write(contents)
-    ledger_in_tmp_path.file.set_source(path, source, sha256sum)
     assert _file_newline_character(path) == "\n"
     assert "\r\n" not in path.read_text("utf-8")
 
@@ -122,29 +117,6 @@ def test_windows_newlines(ledger_in_tmp_path: FavaLedger) -> None:
         file.write(contents)
     assert _file_newline_character(path) == "\r\n"
     assert b"\r\n" in path.read_bytes()
-    source, _sha256sum = ledger_in_tmp_path.file.get_source(path)
-    assert "\r\n" not in source
-    assert source == contents
-
-
-def test_get_and_set_source(ledger_in_tmp_path: FavaLedger) -> None:
-    with pytest.raises(NonSourceFileError):
-        ledger_in_tmp_path.file.get_source(Path("asdf"))
-
-    path = Path(ledger_in_tmp_path.beancount_file_path)
-    source, sha256sum = ledger_in_tmp_path.file.get_source(path)
-    assert source == path.read_text("utf-8")
-
-    with pytest.raises(ExternallyChangedError):
-        ledger_in_tmp_path.file.set_source(path, "test", "notasha256sum")
-
-    new_sha256sum = ledger_in_tmp_path.file.set_source(path, "test", sha256sum)
-    assert path.read_text("utf-8") == "test"
-    assert new_sha256sum == sha256(b"test").hexdigest()
-
-    path.write_bytes(b"\xc3\x28")
-    with pytest.raises(InvalidUnicodeError):
-        ledger_in_tmp_path.file.get_source(path)
 
 
 def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:

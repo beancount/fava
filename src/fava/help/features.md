@@ -3,19 +3,6 @@
 This is an overview of some of the more advanced features that Fava has to
 offer.
 
-## Editor
-
-The [editor](../editor) provides a convenient way to edit the source file. If
-you want to use a file different from the main file to be opened by default, use
-the [`default-file`](./options#default-file) option. If you have
-[`insert-entry`](./options#insert-entry) options set, the cursor will by default
-jump to the (date-wise) latest one in the opened file.
-
-The editor supports auto-completion for various entities, e.g., account names,
-payees, and tags. Trailing whitespace is highlighted in red. The Tab key in the
-editor can be used for indentation - to escape this keyboard trap, press Escape
-and then Tab directly after it.
-
 ## Queries
 
 On the [Query](../query/) report you can execute queries like with the
@@ -76,14 +63,6 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 - `show-accounts-with-zero-balance`
 - `show-accounts-with-zero-transactions`
 - `collapse-pattern`
-
-## Opening an external editor
-
-Fava can open up your source file in your favorite editor directly from the web
-interface using the `use-external-editor` configuration variable through the
-`beancount://` URL handler. See the
-[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-pre-configured URL handlers for macOS and Cygwin.
 
 ## Multiple Beancount files
 

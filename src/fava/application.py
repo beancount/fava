@@ -48,7 +48,7 @@ from fava.beans import funcs
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
-from fava.core.documents import is_document_or_import_file
+from fava.core.documents import is_document_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
@@ -73,12 +73,11 @@ setup_logging()
 CLIENT_SIDE_REPORTS = [
     "balance_sheet",
     "commodities",
+    "dashboard",
     "documents",
-    "editor",
     "errors",
     "events",
     "holdings",
-    "import",
     "journal",
     "income_statement",
     "options",
@@ -319,7 +318,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     def document() -> Response:
         """Download a document."""
         filename = request.args.get("filename", "")
-        if is_document_or_import_file(filename, g.ledger):
+        if is_document_file(filename, g.ledger):
             return send_file_inline(filename)
         return abort(404)
 

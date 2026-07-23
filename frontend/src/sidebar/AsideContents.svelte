@@ -24,10 +24,18 @@
   </ul>
 {/if}
 <ul class="navigation">
+  <Link report="dashboard" name={_("Dashboard")} key="g D" />
   <Link report="income_statement" name={_("Income Statement")} key="g i" />
   <Link report="balance_sheet" name={_("Balance Sheet")} key="g b" />
   <Link report="trial_balance" name={_("Trial Balance")} key="g t" />
-  <Link report="journal" name={_("Journal")} key="g j" />
+  <Link report="journal" name={_("Journal")} key="g j">
+    <a
+      href="#add-transaction"
+      class="secondary add-transaction"
+      title={_("Add Journal Entry")}
+      {@attach keyboardShortcut("n")}>+</a
+    >
+  </Link>
   <Link report="query" name={_("Query")} key="g q">
     {#if user_queries.length}
       <ul class="submenu">
@@ -54,14 +62,6 @@
   <Link report="statistics" name={_("Statistics")} key="g s" />
 </ul>
 <ul class="navigation">
-  <Link report="editor" name={_("Editor")} key="g e">
-    <a
-      href="#add-transaction"
-      class="secondary add-transaction"
-      title={_("Add Journal Entry")}
-      {@attach keyboardShortcut("n")}>+</a
-    >
-  </Link>
   {#if $errors.length > 0}
     <Link
       report="errors"
@@ -69,10 +69,9 @@
       bubble={[$errors.length, "error"]}
     />
   {/if}
-  <Link report="import" name={_("Import")} key="g n">
+  <Link report="options" name={_("Options")} key="g o">
     <a href="#export" class="secondary" title={_("Export")}>⬇</a>
   </Link>
-  <Link report="options" name={_("Options")} key="g o" />
   <Link report="help" name={_("Help")} key="g H" />
 </ul>
 {#if extension_reports.length}

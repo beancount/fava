@@ -221,7 +221,7 @@ def app(test_data_dir: Path) -> Flask:
                 "edit-example.beancount",
                 "example.beancount",
                 "extension-report-example.beancount",
-                "import.beancount",
+                "move-example.beancount",
                 "query-example.beancount",
                 "errors.beancount",
                 "off-by-one.beancount",
@@ -294,7 +294,7 @@ LedgerSlug: TypeAlias = Literal[
     "long-example",
     "extension-report",
     "edit-example",
-    "import",
+    "move-example",
     "off-by-one",
     "invalid-unicode",
 ]

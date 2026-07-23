@@ -51,18 +51,18 @@ ______________________________________________________________________
 
 ## `default-file`
 
-Use this option to specify a default file for the editor to open. This option
-may optionally take a value of a filename to be the default. If you don't
-provide a filename, the file this custom option is in is used.
+Use this option to specify a default file for new entries to be inserted into.
+This option may optionally take a value of a filename to be the default. If
+you don't provide a filename, the file this custom option is in is used.
 
 ______________________________________________________________________
 
 ## `default-page`
 
-Default: `income_statement/`
+Default: `dashboard/`
 
 Use this option to specify the page to be redirected to when visiting Fava. If
-this option is not specified, you are taken to the income statement. You may
+this option is not specified, you are taken to the dashboard. You may
 also use this option to set filters. For example, a `default-page` of
 `balance_sheet/?time=year-2+-+year` would result in you being redirected to a
 balance sheet reporting the current year and the two previous years.
@@ -204,17 +204,6 @@ that are three levels deep).
 
 ______________________________________________________________________
 
-## `use-external-editor`
-
-Default: `false`
-
-If `true`, instead of using the internal editor, the `beancount://` URL scheme
-is used. See the
-[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-details.
-
-______________________________________________________________________
-
 ## `account-journal-include-children`
 
 Default: `true`
@@ -230,24 +219,6 @@ Default: `60`
 
 If there has been no activity in given number of days since the last balance
 entry, then the grey uptodate-indicator is shown.
-
-______________________________________________________________________
-
-## `import-config`
-
-Default: Not set
-
-Path to a Beancount import configuration file. See the [Import](./import) help
-page for details.
-
-______________________________________________________________________
-
-## `import-dirs`
-
-Default: Not set
-
-Set a directory to be scanned by the Beancount import mechanism. This option can
-be specified multiple times to add multiple directories.
 
 ______________________________________________________________________
 

@@ -6,7 +6,6 @@ HELP_PAGES = {
     "_index": "Index",
     "budgets": "Budgets",
     "conversion": "Conversion",
-    "import": "Import",
     "options": "Options",
     "beancount_syntax": "Beancount Syntax",
     "features": "Fava's features",

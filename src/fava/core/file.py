@@ -59,13 +59,6 @@ def _sha256_str(val: str) -> str:
     return sha256(encode(val, encoding="utf-8")).hexdigest()
 
 
-class NonSourceFileError(FavaAPIError):
-    """Trying to read a non-source file."""
-
-    def __init__(self, path: Path) -> None:
-        super().__init__(f"Trying to read a non-source file at '{path}'")
-
-
 class ExternallyChangedError(FavaAPIError):
     """The file changed externally."""
 
@@ -78,15 +71,6 @@ class GeneratedEntryError(FavaAPIError):
 
     def __init__(self) -> None:
         super().__init__("The entry is generated and cannot be edited.")
-
-
-class InvalidUnicodeError(FavaAPIError):
-    """The source file contains invalid unicode."""
-
-    def __init__(self, reason: str) -> None:
-        super().__init__(
-            f"The source file contains invalid unicode: {reason}.",
-        )
 
 
 def _get_position(entry: Directive) -> tuple[Path, int]:
@@ -114,60 +98,6 @@ class FileModule(FavaModule):
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self._lock = threading.Lock()
-
-    def get_source(self, path: Path) -> tuple[str, str]:
-        """Get source files.
-
-        Args:
-            path: The path of the file.
-
-        Returns:
-            A string with the file contents and the `sha256sum` of the file.
-
-        Raises:
-            NonSourceFileError: If the file is not one of the source files.
-            InvalidUnicodeError: If the file contains invalid unicode.
-        """
-        if str(path) not in self.ledger.options["include"]:
-            raise NonSourceFileError(path)
-
-        try:
-            source = path.read_text("utf-8")
-        except UnicodeDecodeError as exc:
-            raise InvalidUnicodeError(str(exc)) from exc
-
-        return source, _sha256_str(source)
-
-    def set_source(self, path: Path, source: str, sha256sum: str) -> str:
-        """Write to source file.
-
-        Args:
-            path: The path of the file.
-            source: A string with the file contents.
-            sha256sum: Hash of the file.
-
-        Returns:
-            The `sha256sum` of the updated file.
-
-        Raises:
-            NonSourceFileError: If the file is not one of the source files.
-            InvalidUnicodeError: If the file contains invalid unicode.
-            ExternallyChangedError: If the file was changed externally.
-        """
-        with self._lock:
-            _, original_sha256sum = self.get_source(path)
-            if original_sha256sum != sha256sum:
-                raise ExternallyChangedError(path)
-
-            newline = _file_newline_character(path)
-            with path.open("w", encoding="utf-8", newline=newline) as file:
-                file.write(source)
-            self.ledger.watcher.notify(path)
-
-            self.ledger.extensions.after_write_source(str(path), source)
-            self.ledger.load_file()
-
-            return _sha256_str(source)
 
     def insert_metadata(
         self,

@@ -50,7 +50,6 @@ const fava_options = object({
   currency_column: number,
   conversion_currencies: array(string),
   collapse_pattern: array(string),
-  import_config: optional(string),
   indent: number,
   invert_gains_losses_colors: boolean,
   invert_income_liabilities_equity: boolean,
@@ -62,7 +61,6 @@ const fava_options = object({
   insert_entry: array(
     object({ date: string, filename: string, lineno: number, re: string }),
   ),
-  use_external_editor: boolean,
 });
 
 /** Validator for the Beancount options that are used in the frontend. */
@@ -112,21 +110,6 @@ export const ledgerDataValidator = object({
 
 export type LedgerData = ValidationT<typeof ledgerDataValidator>;
 
-export const importable_files_validator = array(
-  object({
-    name: string,
-    basename: string,
-    importers: array(
-      object({
-        account: string,
-        importer_name: string,
-        date: string,
-        name: string,
-      }),
-    ),
-  }),
-);
-
 const date_range = object({ begin: date, end: date });
 
 export const commodities_validator = array(
@@ -147,21 +130,14 @@ const account_budget = object({
 });
 export type AccountBudget = ValidationT<typeof account_budget>;
 
-/** One of the Beancount source files. */
-export interface SourceFile {
-  readonly file_path: string;
-  readonly sha256sum: string;
-  readonly source: string;
-}
-export const source_validator = object<SourceFile>({
-  file_path: string,
-  sha256sum: string,
-  source: string,
-});
-
 export const tree_report_validator = object({
   charts: charts_validator,
   trees: array(account_hierarchy_validator),
+  date_range: optional(date_range),
+});
+
+export const dashboard_validator = object({
+  charts: charts_validator,
   date_range: optional(date_range),
 });
 

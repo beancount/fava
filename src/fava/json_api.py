@@ -32,12 +32,11 @@ from fava.context import g
 from fava.core import EntryNotFoundForHashError
 from fava.core.conversion import UNITS
 from fava.core.documents import filepath_in_document_folder
-from fava.core.documents import is_document_or_import_file
+from fava.core.documents import is_document_file
 from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
-from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
@@ -56,7 +55,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
 
     from fava.beans.abc import Directive
-    from fava.core.ingest import FileImporters
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.query import QueryResultTable
     from fava.core.query import QueryResultText
@@ -164,13 +162,13 @@ class UploadedFileIsMissingFilenameError(FavaJSONAPIError):
         super().__init__("Uploaded file is missing filename.")
 
 
-class NotAValidDocumentOrImportFileError(FavaJSONAPIError):
-    """Not valid document or import file."""
+class NotAValidDocumentFileError(FavaJSONAPIError):
+    """Not a valid document file."""
 
     status = HTTPStatus.BAD_REQUEST
 
     def __init__(self, filename: str) -> None:
-        super().__init__(f"Not valid document or import file: '{filename}'.")
+        super().__init__(f"Not a valid document file: '{filename}'.")
 
 
 class NotAFileError(FavaJSONAPIError):
@@ -320,14 +318,6 @@ def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     )
 
 
-@api_endpoint
-def get_extract(filename: str, importer: str) -> Sequence[Any]:
-    """Extract entries using the ingest framework."""
-    g.ledger.changed()
-    entries = g.ledger.ingest.extract(filename, importer)
-    return list(map(serialise, entries))
-
-
 @dataclass(frozen=True)
 class Context:
     """Context for an entry."""
@@ -405,33 +395,6 @@ def get_narrations() -> Sequence[str]:
     return g.ledger.attributes.narrations
 
 
-@dataclass(frozen=True)
-class SourceFile:
-    """Source slice for an entry."""
-
-    file_path: str
-    sha256sum: str
-    source: str
-
-
-@api_endpoint
-def get_source() -> SourceFile:
-    """Load one of the source files."""
-    file_path = (
-        request.args.get("filename", "")
-        or g.ledger.fava_options.default_file
-        or g.ledger.beancount_file_path
-    )
-    source, sha256sum = g.ledger.file.get_source(Path(file_path))
-    return SourceFile(file_path=file_path, sha256sum=sha256sum, source=source)
-
-
-@api_endpoint
-def put_source(file_path: str, source: str, sha256sum: str) -> str:
-    """Write one of the source files and return the updated sha256sum."""
-    return g.ledger.file.set_source(Path(file_path), source, sha256sum)
-
-
 @api_endpoint
 def put_source_slice(entry_hash: str, source: str, sha256sum: str) -> str:
     """Write an entry source slice and return the updated sha256sum."""
@@ -439,16 +402,16 @@ def put_source_slice(entry_hash: str, source: str, sha256sum: str) -> str:
 
 
 @api_endpoint
+def put_format_source(source: str) -> str:
+    """Format a beancount source slice (aligns currency columns)."""
+    return align(source, g.ledger.fava_options.currency_column)
+
+
+@api_endpoint
 def delete_source_slice(entry_hash: str, sha256sum: str) -> str:
     """Delete an entry source slice."""
     g.ledger.file.delete_entry_slice(entry_hash, sha256sum)
     return f"Deleted entry {entry_hash}."
-
-
-@api_endpoint
-def put_format_source(source: str) -> str:
-    """Format beancount file."""
-    return align(source, g.ledger.fava_options.currency_column)
 
 
 class FileDoesNotExistError(FavaAPIError):
@@ -461,8 +424,8 @@ class FileDoesNotExistError(FavaAPIError):
 @api_endpoint
 def delete_document(filename: str) -> str:
     """Delete a document."""
-    if not is_document_or_import_file(filename, g.ledger):
-        raise NotAValidDocumentOrImportFileError(filename)
+    if not is_document_file(filename, g.ledger):
+        raise NotAValidDocumentFileError(filename)
 
     file_path = Path(filename)
     if not file_path.exists():
@@ -528,26 +491,6 @@ def put_add_entries(entries: list[Any]) -> str:
     return f"Stored {len(entries)} entries."
 
 
-@api_endpoint
-def put_upload_import_file() -> str:
-    """Upload a file for importing."""
-    upload = request.files.get("file", None)
-
-    if upload is None:
-        raise NoFileUploadedError
-    if not upload.filename:
-        raise UploadedFileIsMissingFilenameError
-    filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
-
-    if filepath.exists():
-        raise TargetPathAlreadyExistsError(filepath)
-
-    filepath.parent.mkdir(parents=True, exist_ok=True)
-    upload.save(filepath)
-
-    return f"Uploaded to {filepath}"
-
-
 ########################################################################
 # Reports
 
@@ -594,13 +537,6 @@ def get_events() -> Sequence[Event]:
     """Get all (filtered) events."""
     g.ledger.changed()
     return [serialise(e) for e in g.filtered.entries if isinstance(e, Event)]
-
-
-@api_endpoint
-def get_imports() -> Sequence[FileImporters]:
-    """Get a list of the importable files."""
-    g.ledger.changed()
-    return g.ledger.ingest.import_data()
 
 
 @api_endpoint
@@ -728,6 +664,28 @@ def get_balance_sheet() -> TreeReport:
         charts,
         trees=[tree.serialise_with_context() for tree in trees],
     )
+
+
+@dataclass(frozen=True)
+class DashboardReport:
+    """Data for the dashboard."""
+
+    date_range: DateRange | None
+    charts: Sequence[ChartData]
+
+
+@api_endpoint
+def get_dashboard() -> DashboardReport:
+    """Get the data for the dashboard."""
+    g.ledger.changed()
+    options = g.ledger.options
+
+    charts = [
+        ChartApi.net_worth(),
+        ChartApi.hierarchy(options["name_assets"]),
+    ]
+
+    return DashboardReport(g.filtered.date_range, charts)
 
 
 @api_endpoint

@@ -19,10 +19,6 @@ export const collapse_pattern = derived_array(
   fava_options,
   ($fava_options) => $fava_options.collapse_pattern,
 );
-export const import_config = derived(
-  fava_options,
-  ($fava_options) => $fava_options.import_config,
-);
 export const invert_income_liabilities_equity = derived(
   fava_options,
   ($fava_options) => $fava_options.invert_income_liabilities_equity,
@@ -50,10 +46,6 @@ export const currency_column = derived(
 export const indent = derived(
   fava_options,
   ($fava_options) => $fava_options.indent,
-);
-export const use_external_editor = derived(
-  fava_options,
-  ($fava_options) => $fava_options.use_external_editor,
 );
 export const auto_reload = derived(
   fava_options,

@@ -2,7 +2,6 @@ import { derived, get as store_get } from "svelte/store";
 
 import type { Result } from "./lib/result.ts";
 import { err, ok } from "./lib/result.ts";
-import { use_external_editor } from "./stores/fava_options.ts";
 import { base_url } from "./stores/index.ts";
 import { syncedSearchParams } from "./stores/url.ts";
 
@@ -83,16 +82,6 @@ export const urlForRaw = derived(
       params?: Record<string, string | number | undefined>,
     ): string =>
       urlForInternal($base_url, null, report, params),
-);
-
-/** URL for the editor to the source location of an entry. */
-export const urlForSource = derived(
-  [urlFor, use_external_editor],
-  ([$urlFor, $use_external_editor]) =>
-    (file_path: string, line: string): string =>
-      $use_external_editor
-        ? `beancount://${file_path}?lineno=${line}`
-        : $urlFor("editor/", { file_path, line }),
 );
 
 /** URL for the account report (derived store to keep track of filter changes.). */
