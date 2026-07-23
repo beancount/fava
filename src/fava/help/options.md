@@ -52,8 +52,8 @@ ______________________________________________________________________
 ## `default-file`
 
 Use this option to specify a default file for new entries to be inserted into.
-This option may optionally take a value of a filename to be the default. If
-you don't provide a filename, the file this custom option is in is used.
+This option may optionally take a value of a filename to be the default. If you
+don't provide a filename, the file this custom option is in is used.
 
 ______________________________________________________________________
 
@@ -62,8 +62,8 @@ ______________________________________________________________________
 Default: `dashboard/`
 
 Use this option to specify the page to be redirected to when visiting Fava. If
-this option is not specified, you are taken to the dashboard. You may
-also use this option to set filters. For example, a `default-page` of
+this option is not specified, you are taken to the dashboard. You may also use
+this option to set filters. For example, a `default-page` of
 `balance_sheet/?time=year-2+-+year` would result in you being redirected to a
 balance sheet reporting the current year and the two previous years.
 
