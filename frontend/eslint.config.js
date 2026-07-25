@@ -23,20 +23,11 @@ export default defineConfig(
     },
     rules: {
       "no-undef": OFF, // better handled by Typescript
-      "no-param-reassign": ON,
-      "no-restricted-syntax": [
-        ON,
-        "ForInStatement",
-        "LabelStatement",
-        "WithStatement",
-      ],
-      "@typescript-eslint/consistent-type-imports": ON,
+      "no-restricted-syntax": [ON, "ForInStatement", "LabelStatement"],
+      "@typescript-eslint/no-unused-vars": OFF, // handled by biome, except in svelte files
       "@typescript-eslint/explicit-module-boundary-types": ON,
       "@typescript-eslint/promise-function-async": ON,
       "@typescript-eslint/strict-boolean-expressions": ON,
-      curly: [ON, "all"],
-      eqeqeq: [ON, "always", { null: "never" }],
-      "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
       "@typescript-eslint/naming-convention": [
         ON,
         {
@@ -72,7 +63,7 @@ export default defineConfig(
     },
     rules: {
       "@typescript-eslint/no-useless-default-assignment": OFF,
-      "svelte/button-has-type": ON,
+      "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
     },
   },
 );
