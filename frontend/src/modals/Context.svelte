@@ -23,7 +23,7 @@
           <EntryContextBalances {balances_before} {balances_after} />
         {/if}
         {#if entry.meta.lineno !== "0" && !entry.meta.filename.startsWith("<")}
-          {#await Promise.all( [get_source_slice( { entry_hash }, ), import("../codemirror/beancount.ts")], )}
+          {#await Promise.all( [get_source_slice( { entry_hash } ), import("../codemirror/beancount.ts")] )}
             <p>Loading entry slice...</p>
           {:then [{ slice, sha256sum }, codemirror_beancount]}
             <SliceEditor

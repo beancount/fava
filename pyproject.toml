@@ -73,7 +73,7 @@ docs = ["furo>=2024", "sphinx>=7", "sphinx-autodoc-typehints>=2"]
 # Add setuptools for the old_deps constraints
 # (otherwise it is not added to the constraints as it's only a build dependency).
 old-deps = ["pytest", "setuptools"]
-# Running pre-commit hooks.
+# Running pre-commit hooks with prek.
 pre-commit = ["prek"]
 # Utilities to deal with github actions.
 github-actions = [

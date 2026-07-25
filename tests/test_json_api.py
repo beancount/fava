@@ -754,8 +754,10 @@ def test_api_add_entries(
         ("select sum(day)", "sum"),
         ("journal from year = 2014 and month = 1", "journal"),
         (
-            "select day, position, units(position), balance, payee, tags"
-            " from year = 2014 and month = 1",
+            (
+                "select day, position, units(position), balance, payee, tags"
+                " from year = 2014 and month = 1"
+            ),
             "misc",
         ),
         (".help", "help"),
