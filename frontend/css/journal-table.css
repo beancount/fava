@@ -239,6 +239,15 @@
   }
 }
 
+@media print {
+  .journal {
+    /* Don't split a single transaction across a page break. */
+    > li {
+      break-inside: avoid;
+    }
+  }
+}
+
 @media (width <= 767px) {
   .journal {
     p {

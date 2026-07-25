@@ -9,8 +9,23 @@ import ImportSvelte from "./Import.svelte";
  *
  * If it already starts with a date use it, otherwise prepend the date
  */
-function newFilename(date: string, basename: string): string {
+function new_filename(date: string, basename: string): string {
   return /^\d{4}-\d{2}-\d{2}/.test(basename) ? basename : `${date} ${basename}`;
+}
+
+class FileImporterInfo {
+  /** Account that the importer determined. */
+  readonly account: string;
+  /** Name of the importer (uniquely identifies the importer). */
+  readonly importer_name: string | null;
+  /** New file basename, as inititally determined by the importer */
+  readonly new_name: string;
+
+  constructor(account: string, importer_name: string | null, new_name: string) {
+    this.account = account;
+    this.importer_name = importer_name;
+    this.new_name = new_name;
+  }
 }
 
 export interface ProcessedImportableFile {
@@ -20,11 +35,7 @@ export interface ProcessedImportableFile {
   readonly basename: string;
   /** Whether at least one importer identified this file. */
   readonly identified_by_importers: boolean;
-  readonly importers: {
-    readonly account: string;
-    readonly importer_name: string;
-    readonly newName: string;
-  }[];
+  readonly importers: FileImporterInfo[];
 }
 
 export interface ImportReportProps {
@@ -37,23 +48,23 @@ export const import_report = new Route<ImportReportProps>(
   async () =>
     get_imports()
       .then((files) => {
-        // Initially set the file names for all importable files.
         const today = todayAsString();
-        return files.map((file) => {
-          const importers = file.importers.map(
-            ({ account, importer_name, date, name }) => ({
-              account,
-              importer_name,
-              newName: newFilename(date, name),
-            }),
-          );
-          const identified_by_importers = importers.length > 0;
-          if (!identified_by_importers) {
-            const newName = newFilename(today, file.basename);
-            importers.push({ account: "", newName, importer_name: "" });
-          }
-          return { ...file, identified_by_importers, importers };
-        });
+        return files.map(({ name, basename, importers }) => ({
+          name,
+          basename,
+          identified_by_importers: importers.length > 0,
+          importers:
+            importers.length > 0
+              ? importers.map(
+                  ({ account, importer_name, date, name }) =>
+                    new FileImporterInfo(
+                      account,
+                      importer_name,
+                      new_filename(date, name),
+                    ),
+                )
+              : [new FileImporterInfo("", null, new_filename(today, basename))],
+        }));
       })
       .then((files) => ({ files })),
   () => _("Import"),

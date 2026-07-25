@@ -26,7 +26,7 @@
     /** A placeholder for the input field. */
     placeholder: string;
     /** The suggestions for the value. */
-    suggestions: readonly string[];
+    suggestions?: readonly string[] | undefined;
     /** A function to extract the string that should be used for suggestion filtering. */
     valueExtractor?: (val: string, input: HTMLInputElement) => string;
     /** A function to update the value after selecting a suggestion. */
@@ -52,7 +52,7 @@
   let {
     value = $bindable(),
     placeholder,
-    suggestions,
+    suggestions = [],
     valueExtractor,
     valueSelector,
     setSize = false,
@@ -72,9 +72,6 @@
   let index = $state.raw(-1);
   let input: HTMLInputElement | undefined = $state.raw();
 
-  let size = $derived(
-    setSize ? Math.max(value.length, placeholder.length) + 1 : undefined,
-  );
   let extractedValue = $derived(
     input && valueExtractor ? valueExtractor(value, input) : value,
   );
@@ -154,6 +151,7 @@
     type="text"
     autocomplete="off"
     role="combobox"
+    class={{ "content-sized": setSize }}
     aria-expanded={expanded}
     aria-controls={autocomple_id}
     bind:value
@@ -172,7 +170,6 @@
     onkeydown={keydown}
     {placeholder}
     {required}
-    {size}
   />
   {#if clearButton && value}
     <button
@@ -222,6 +219,11 @@
 
   input {
     width: 100%;
+  }
+
+  input.content-sized {
+    min-width: calc(8rem + 2px);
+    field-sizing: content;
   }
 
   ul {

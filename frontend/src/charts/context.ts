@@ -1,9 +1,11 @@
+import { createContext } from "svelte";
 import { derived } from "svelte/store";
 
 import { currentDateFormat } from "../stores/format.ts";
 import { currencies } from "../stores/index.ts";
 import { operating_currency } from "../stores/options.ts";
 import { conversion } from "../stores/url.ts";
+import type { Tooltip } from "./tooltip.ts";
 
 /** Context data for parsing and rendering of the charts. */
 export interface ChartContext {
@@ -24,6 +26,8 @@ const operatingCurrenciesWithConversion = derived(
       ? [...$operating_currency, $conversion]
       : $operating_currency,
 );
+
+export const [get_chart_tooltip, set_chart_tooltip] = createContext<Tooltip>();
 
 export const chartContext = derived(
   [operatingCurrenciesWithConversion, currentDateFormat],

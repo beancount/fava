@@ -1,3 +1,7 @@
+<!--
+  @component
+  A chart axis (for either an x or y axis).
+-->
 <script lang="ts">
   import type { Axis } from "d3-axis";
   import type { NumberValue } from "d3-scale";
@@ -13,21 +17,21 @@
     /** True if this is a y axis. */
     y?: boolean;
     /** Show a pronounced line at zero (for y axis). */
-    lineAtZero?: number;
-    /** Height of the chart (needed for the correct offset of an x axis) */
-    innerHeight?: number;
+    line_at_zero?: number;
+    /** Height of the chart (needed for the correct offset of an x axis). */
+    inner_height?: number;
   }
 
   let {
     axis,
     x = false,
     y = false,
-    lineAtZero,
-    innerHeight = 0,
+    line_at_zero,
+    inner_height = 0,
   }: Props = $props();
 
   let transform = $derived(
-    x ? `translate(0,${innerHeight.toString()})` : undefined,
+    x ? `translate(0,${inner_height.toString()})` : undefined,
   );
 </script>
 
@@ -42,8 +46,8 @@
     });
   }}
 >
-  {#if y && lineAtZero != null}
-    <g class="zero" transform={`translate(0,${lineAtZero.toString()})`}>
+  {#if y && line_at_zero != null}
+    <g class="zero" transform={`translate(0,${line_at_zero.toString()})`}>
       <line x2={-axis.tickSizeInner()} />
     </g>
   {/if}

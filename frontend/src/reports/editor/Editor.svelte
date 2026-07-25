@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { EditorView } from "@codemirror/view";
-  import { onMount, untrack } from "svelte";
+  import { untrack } from "svelte";
 
   import { get_errors, put_source } from "../../api/index.ts";
   import { attach_editor } from "../../codemirror/dom.ts";
@@ -112,12 +112,13 @@
     );
   });
 
-  const checkEditorChanges = () =>
+  $effect(() =>
     changed
-      ? "There are unsaved changes. Are you sure you want to leave?"
-      : null;
-
-  onMount(() => router.add_interrupt_handler(checkEditorChanges));
+      ? router.add_interrupt_handler(
+          () => "There are unsaved changes. Are you sure you want to leave?",
+        )
+      : undefined,
+  );
 </script>
 
 <form

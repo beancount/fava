@@ -1,3 +1,7 @@
+<!--
+  @component
+  A chart legend, allowing toggling of items.
+-->
 <script lang="ts">
   import type { Writable } from "svelte/store";
 

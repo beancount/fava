@@ -15,9 +15,7 @@ if (is_main) {
     coverage: true,
     coverageIncludeGlobs: ["src/**/*.svelte", "src/**/*.ts"],
     watch,
-    // This would spped up the test run but does not work with
-    // coverage right now unfortunately:
-    // isolation: "none",
+    isolation: "none",
   })
     .on("test:fail", () => {
       process.exitCode = 1;

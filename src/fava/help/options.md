@@ -179,6 +179,17 @@ shown.
 
 ______________________________________________________________________
 
+## `show-metadata-indicators`
+
+Default: `true`
+
+Whether to show metadata indicators in journals. For each metadata key on an
+entry or posting, a small badge with the first two characters of the key is
+shown in the indicators column, with the full key and value available on hover.
+Set this to `false` to hide these indicators.
+
+______________________________________________________________________
+
 ## `collapse-pattern`
 
 Default: Not set

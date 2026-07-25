@@ -10,7 +10,7 @@ import {
   account_hierarchy_validator,
 } from "./charts/hierarchy.ts";
 import type { ParsedFavaChart } from "./charts/index.ts";
-import { chart_validator } from "./charts/index.ts";
+import { charts_validator } from "./charts/index.ts";
 import { domHelpers } from "./charts/tooltip.ts";
 import type { Result } from "./lib/result.ts";
 import { log_error } from "./log.ts";
@@ -59,7 +59,7 @@ const components = [
   new SvelteCustomElementComponent<{ charts: readonly ParsedFavaChart[] }>(
     "charts",
     ChartSwitcher,
-    (data) => chart_validator(data).map((charts) => ({ charts })),
+    (data) => charts_validator(data).map((charts) => ({ charts })),
   ),
   new SvelteCustomElementComponent<{ table: QueryResultTable }>(
     "query-table",

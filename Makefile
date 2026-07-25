@@ -18,7 +18,7 @@ frontend/node_modules: frontend/package-lock.json
 dev: .venv
 .venv: uv.lock pyproject.toml
 	uv sync
-	uv run pre-commit install
+	uv run prek install --overwrite
 	touch -m .venv
 
 # Build the frontend in watch mode.
@@ -52,7 +52,7 @@ mostlyclean:
 # Run linters.
 .PHONY: lint
 lint: frontend/node_modules ty
-	uv run pre-commit run -v -a
+	uv run prek run -v -a
 	cd frontend; npm exec tsc
 	cd frontend; npm exec svelte-check
 
@@ -82,7 +82,7 @@ test-py-typeguard:
 .PHONY: update-snapshots
 update-snapshots:
 	uv run pytest --snapshot-update --snapshot-clean
-	uv run pre-commit run -a biome-check
+	uv run prek run -a biome-check
 
 # Update the constraints file for Python dependencies
 .PHONY: update-constraints
@@ -103,10 +103,10 @@ update-frontend-deps:
 update-tree-sitter-beancount:
 	curl -L -o frontend/src/codemirror/tree-sitter-beancount.wasm https://github.com/yagebu/tree-sitter-beancount/releases/download/v0.0.3/tree-sitter-beancount.wasm
 
-# Update pre-commit hooks
+# Update prek hooks
 .PHONY: update-precommit
 update-precommit:
-	uv run pre-commit autoupdate
+	uv run prek autoupdate
 
 # Update github actions action versions.
 .PHONY: update-github-actions
@@ -114,7 +114,7 @@ update-github-actions:
 	uv run --no-dev --group github-actions gha-update
 	uv run --no-dev --group github-actions zizmor .github/workflows/*.yml
 
-# Update frontend deps, Python deps and pre-commit
+# Update frontend deps, Python deps and prek
 .PHONY: update
 update: update-constraints update-frontend-deps update-precommit update-github-actions
 
@@ -133,7 +133,7 @@ run-example:
 # Generate the bql-grammar json file used by the frontend.
 frontend/src/codemirror/bql-grammar.ts: .venv contrib/scripts.py
 	uv run contrib/scripts.py generate-bql-grammar-json
-	-uv run pre-commit run biome-check --files $@
+	-uv run prek run biome-check --files $@
 
 # Extract translation strings.
 src/fava/translations/messages.pot: .venv $(PY_SOURCES) $(FRONTEND_SOURCES)

@@ -58,21 +58,6 @@ export class Posting {
     );
 }
 
-/** The properties that all entries share. */
-export interface EntryBaseAttributes {
-  t: string;
-  meta: EntryMetadata;
-  date: string;
-  entry_hash: string;
-}
-
-export const entryBaseValidator = object<EntryBaseAttributes>({
-  t: string,
-  meta: EntryMetadata.validator,
-  date: string,
-  entry_hash: string,
-});
-
 const string_array_validator = array(string);
 const optional_string_array_validator = optional(string_array_validator);
 
@@ -101,6 +86,8 @@ abstract class EntryBase<T extends string> {
   }
 
   /** Set a property and return an updated copy. */
+  set(key: "date", value: string): this;
+  set<K extends keyof typeof this>(key: K, value: (typeof this)[K]): this;
   set<K extends keyof typeof this>(key: K, value: (typeof this)[K]): this {
     const copy = this.clone();
     copy[key] = value;
@@ -109,10 +96,7 @@ abstract class EntryBase<T extends string> {
 
   /** Set the value for a key and return an updated copy. */
   set_meta(key: string, value: MetadataValue): this {
-    const copy = this.clone();
-    // @ts-expect-error We can mutate it as we just created it and noone has access yet.
-    copy.meta = this.meta.set(key, value);
-    return copy;
+    return this.set("meta", this.meta.set(key, value));
   }
 
   /** Check whether the given entry is marked as duplicate (used in imports). */
@@ -638,3 +622,15 @@ export const entryValidator = tagged_union("t", {
 
 /** A Beancount entry, currently only supports some of the types. */
 export type Entry = ValidationT<typeof entryValidator>;
+
+/** The types that the entry component supports. */
+export type EditableEntry = Balance | Note | Transaction;
+
+/** Type guard for editable entry. */
+export function is_editable(entry: Entry): entry is EditableEntry {
+  return (
+    entry instanceof Balance ||
+    entry instanceof Note ||
+    entry instanceof Transaction
+  );
+}

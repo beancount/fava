@@ -40,6 +40,7 @@
 
 {% macro journal_table_contents(entries, show_change_and_balance=False, ledger=None) %}
 {% set ledger = ledger or g.ledger %}
+{% set show_metadata_indicators = ledger.fava_options.show_metadata_indicators %}
 {% autoescape false %}
 {% for entry in entries %}
     {% if show_change_and_balance %}
@@ -88,10 +89,10 @@
         {% endif %}
         </span>
         <span class='indicators'>
-          {{- _render_metadata_indicators(metadata_items) -}}
+          {%- if show_metadata_indicators %}{{- _render_metadata_indicators(metadata_items) -}}{% endif -%}
           {%- for posting in entry.postings -%}
           <span{% if posting.flag %} class='{{ posting.flag|flag_to_type }}'{% endif %}></span>
-          {{- _render_metadata_indicators(posting.meta|meta_items) -}}
+          {%- if show_metadata_indicators %}{{- _render_metadata_indicators(posting.meta|meta_items) -}}{% endif -%}
           {%- endfor -%}
         </span>
         {% if type == 'balance' %}

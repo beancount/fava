@@ -44,14 +44,14 @@ export class LineChart {
   readonly label: string | null;
   private readonly data: readonly LineChartSeries[];
   readonly tooltipText: (
-    c: FormatterContext,
+    $ctx: FormatterContext,
     d: LineChartDatum,
   ) => TooltipContent;
 
   constructor(
     label: string | null,
     data: readonly LineChartSeries[],
-    tooltipText: (c: FormatterContext, d: LineChartDatum) => TooltipContent,
+    tooltipText: ($ctx: FormatterContext, d: LineChartDatum) => TooltipContent,
   ) {
     this.label = label;
     this.data = sort(data, (d) => -d.values.length);
@@ -110,7 +110,7 @@ export class ParsedLineChart implements ParsedFavaChart {
     }));
 
     return new LineChart(this.label, data, (c, d) => [
-      domHelpers.t(c.amount(d.value, d.name)),
+      c.amount(d.value, d.name),
       domHelpers.em(day(d.date)),
     ]);
   }

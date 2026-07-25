@@ -21,7 +21,7 @@
   {:else if entry instanceof Transaction}
     <TransactionSvelte bind:entry />
   {:else}
-    Entry type unsupported for editing.
+    Entry type {entry.t} is not supported for editing.
   {/if}
 </div>
 

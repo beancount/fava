@@ -9,7 +9,7 @@
     /** The account name input value. */
     value: string;
     /** An optional list of accounts to suggest - otherwise the whole account list is used. */
-    suggestions?: string[] | undefined;
+    suggestions?: readonly string[] | undefined;
     /** The date to enter this account for to exclude closed accounts. */
     date?: string | undefined;
     /** Whether to mark the input as required. */

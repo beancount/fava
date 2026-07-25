@@ -45,12 +45,12 @@ def amount(amt: Decimal, currency: str) -> Amount: ...  # pragma: no cover
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     """Amount from a string or tuple."""
     if isinstance(amt, str):
-        return BEANCOUNT_A(amt)  # type: ignore[return-value]
+        return BEANCOUNT_A(amt)  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
     if hasattr(amt, "number") and hasattr(amt, "currency"):
         return amt  # ty:ignore[invalid-return-type]
     if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
-    return BeancountAmount(amt, currency)  # type: ignore[return-value]
+    return BeancountAmount(amt, currency)  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
 
 
 _amount = amount

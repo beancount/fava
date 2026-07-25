@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { EntryBaseAttributes } from "../entries/index.ts";
+  import type { Entry } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import SourceLink from "../SourceLink.svelte";
 
   interface Props {
-    entry: EntryBaseAttributes;
+    entry: Entry;
   }
 
   let { entry }: Props = $props();

@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.31 (unreleased)
-------------------
+v1.30.13 (2026-05-19)
+---------------------
 
 This version drops support for Beancount version 2. See also the previous
 release - this mainly means you will have to switch importers to use beangulp.

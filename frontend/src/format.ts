@@ -28,9 +28,9 @@ export function localeFormatter(
   return fmt.format.bind(fmt);
 }
 
-const formatterPer = format(".2f");
-export function formatPercentage(number: number): string {
-  return `${formatterPer(Math.abs(number) * 100)}%`;
+const percentage_format = format(".2f");
+function percentage(number: number): string {
+  return `${percentage_format(Math.abs(number) * 100)}%`;
 }
 
 /** Obscure numbers for incognito mode. */
@@ -42,6 +42,8 @@ export interface FormatterContext {
   amount: (num: number, currency: string) => string;
   /** Render an number for a currency like "2.00". */
   num: (num: number, currency: string) => string;
+  /** Render a percentage, e.g. a 0.8345 as "83.45%". */
+  percentage: (num: number) => string;
 }
 
 /** Build the formatter context for the given configuration */
@@ -63,11 +65,9 @@ export function formatter_context(
   const num = incognito
     ? (n: number, c: string) => replaceNumbers(num_raw(n, c))
     : num_raw;
+  const amount = (n: number, c: string) => `${num(n, c)} ${c}`;
 
-  return {
-    amount: (n, c) => `${num(n, c)} ${c}`,
-    num,
-  };
+  return { amount, num, percentage };
 }
 
 type DateFormatter = (date: Date) => string;

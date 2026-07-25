@@ -2,79 +2,45 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import {
     get_narration_transaction,
-    get_narrations,
-    get_payee_accounts,
     get_payee_transaction,
   } from "../api/index.ts";
   import type { EntryMetadata, Transaction } from "../entries/index.ts";
   import { Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import { move } from "../lib/array.ts";
-  import { notify_err } from "../notifications.ts";
   import { payees } from "../stores/index.ts";
+  import { ledger_mtime } from "../stores/mtime.ts";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
+  import {
+    fetch_narrations,
+    fetch_payee_accounts,
+  } from "./suggestions.svelte.ts";
 
   interface Props {
     entry: Transaction;
   }
 
   let { entry = $bindable() }: Props = $props();
-  let suggestions: string[] | undefined = $state.raw();
 
   let payee = $derived(entry.payee);
-  $effect(() => {
-    if (payee) {
-      suggestions = undefined;
-      if ($payees.includes(payee)) {
-        get_payee_accounts({ payee })
-          .then((s) => {
-            suggestions = s;
-          })
-          .catch((error: unknown) => {
-            notify_err(
-              error,
-              (err) =>
-                `Fetching account suggestions for payee ${payee} failed: ${err.message}`,
-            );
-          });
-      }
-    }
-  });
-
   let narration = $derived(entry.get_narration_tags_links());
-  let narration_suggestions: string[] = $state.raw([]);
-  $effect(() => {
-    get_narrations()
-      .then((s) => {
-        narration_suggestions = s;
-      })
-      .catch((error: unknown) => {
-        notify_err(
-          error,
-          (err) => `Fetching narration suggestions failed: ${err.message}`,
-        );
-      });
-  });
 
   // Autofill complete transactions.
-  async function autocompleteSelectPayee() {
+  async function autocomplete_select_payee() {
     if (entry.narration || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const payee_transaction = await get_payee_transaction({
-      payee: entry.payee,
-    });
-    entry = payee_transaction.set("date", entry.date);
+    const transaction = await get_payee_transaction({ payee });
+    entry = transaction.set("date", entry.date);
   }
-  async function autocompleteSelectNarration() {
+  async function autocomplete_select_narration() {
     if (entry.payee || entry.postings.some((p) => !p.is_empty())) {
       return;
     }
-    const data = await get_narration_transaction({ narration });
-    entry = data.set("date", entry.date); // Copy to "entry" and preserve the date set in the dialog
-    narration = entry.get_narration_tags_links();
+    const transaction = await get_narration_transaction({ narration });
+    entry = transaction.set("date", entry.date);
   }
 
   // Always have one empty posting at the end.
@@ -118,7 +84,7 @@
         }
       }
       suggestions={$payees}
-      onSelect={autocompleteSelectPayee}
+      onSelect={autocomplete_select_payee}
       --autocomplete-wrapper-flex="1"
     />
   </label>
@@ -127,8 +93,8 @@
     <AutocompleteInput
       placeholder={_("Narration")}
       bind:value={narration}
-      suggestions={narration_suggestions}
-      onSelect={autocompleteSelectNarration}
+      suggestions={fetch_narrations($ledger_mtime).data}
+      onSelect={autocomplete_select_narration}
       onEnter={() => {
         entry = entry.set_narration_tags_links(narration);
       }}
@@ -171,7 +137,9 @@
         }
       }
       {index}
-      {suggestions}
+      suggestions={$payees.includes(payee)
+        ? fetch_payee_accounts($ledger_mtime, payee).data
+        : undefined}
       date={entry.date}
       move={({ from, to }: { from: number; to: number }) => {
         entry = entry.set("postings", move(entry.postings, from, to));

@@ -7,16 +7,17 @@
   let input: HTMLInputElement | undefined = $state.raw();
 
   /** Upload the selected files and reload. */
-  async function uploadImports(event: SubmitEvent) {
+  async function upload_imports(event: SubmitEvent) {
     event.preventDefault();
     if (input?.files == null) {
       return;
     }
+    const files = Array.from(input.files);
     await Promise.all(
-      Array.from(input.files).map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file, file.name);
-        return put_upload_import_file(formData).then(
+      files.map(async (file) => {
+        const form_data = new FormData();
+        form_data.append("file", file, file.name);
+        return put_upload_import_file(form_data).then(
           notify,
           (error: unknown) => {
             notify_err(error, (err) => `Upload error: ${err.message}`);
@@ -29,7 +30,7 @@
   }
 </script>
 
-<form onsubmit={uploadImports}>
+<form onsubmit={upload_imports}>
   <h2>{_("Upload files for import")}</h2>
   <input bind:this={input} multiple type="file" />
   <button type="submit">{_("Upload")}</button>

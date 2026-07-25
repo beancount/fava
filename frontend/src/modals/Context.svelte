@@ -27,6 +27,7 @@
             <p>Loading entry slice...</p>
           {:then [{ slice, sha256sum }, codemirror_beancount]}
             <SliceEditor
+              {entry}
               {entry_hash}
               {slice}
               {sha256sum}
