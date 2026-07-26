@@ -3,88 +3,88 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-26 23:28+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-07-27 22:01+0000\n"
+"Last-Translator: Pyry Jahkola <pyry.jahkola@iki.fi>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/fava/fava/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 3.19.15\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: frontend/src/app.ts:84
 msgid "File change detected. Click to reload."
-msgstr ""
+msgstr "Tiedoston muutos havaittu. Päivitä napsauttamalla."
 
 #: frontend/src/charts/ChartSwitcher.svelte:26
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
-msgstr ""
+msgstr "Edellinen"
 
 #: frontend/src/charts/ChartSwitcher.svelte:33
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
-msgstr ""
+msgstr "Seuraava"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:17
 msgid "At Cost"
-msgstr ""
+msgstr "Ostohinta"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Market Value"
-msgstr ""
+msgstr "Markkinahinta"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:21
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
-msgstr ""
+msgstr "Yksiköt"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:23
 #, python-format
 msgid "Converted to %(currency)s"
-msgstr ""
+msgstr "Muunnettuna %(currency)s"
 
 #: frontend/src/charts/HierarchyContainer.svelte:33
 msgid "Chart is empty."
-msgstr ""
+msgstr "Kaavio on tyhjä."
 
 #: frontend/src/editor/DeleteButton.svelte:12
 msgid "Deleting…"
-msgstr ""
+msgstr "Poistetaan…"
 
 #: frontend/src/editor/DeleteButton.svelte:12
 #: frontend/src/reports/import/FileList.svelte:71
 msgid "Delete"
-msgstr ""
+msgstr "Poista"
 
 #: frontend/src/editor/SaveButton.svelte:14
 msgid "Saving…"
-msgstr ""
+msgstr "Tallennetaan…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/editor/SliceEditor.svelte:156
 #: frontend/src/modals/AddEntry.svelte:67
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: frontend/src/editor/SliceEditor.svelte:138
 msgid "Duplicate"
-msgstr ""
+msgstr "Monista"
 
 #: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
-msgstr ""
+msgstr "päivitä"
 
 #: frontend/src/editor/SliceEditor.svelte:152
 #: frontend/src/modals/AddEntry.svelte:46
 msgid "Add"
-msgstr ""
+msgstr "Lisää"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
-msgstr ""
+msgstr "Pitäisi olla jokin luetelluista tileistä"
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
 #: frontend/src/modals/DocumentUpload.svelte:192
@@ -94,272 +94,272 @@ msgstr ""
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
 #: frontend/src/sidebar/FilterForm.svelte:98
 msgid "Account"
-msgstr ""
+msgstr "Tili"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
 #: frontend/src/entry-forms/EntryMetadata.svelte:53
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
-msgstr ""
+msgstr "Lisää metadata"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
-msgstr ""
+msgstr "Summa"
 
 #: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
-msgstr ""
+msgstr "Valuutta"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:29
 #: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
-msgstr ""
+msgstr "Avain"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:40
 #: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
-msgstr ""
+msgstr "Arvo"
 
 #: frontend/src/entry-forms/Note.svelte:27
 #: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
-msgstr ""
+msgstr "Huomautus"
 
 #: frontend/src/entry-forms/Posting.svelte:100
 msgid "Amount"
-msgstr ""
+msgstr "Määrä"
 
 #: frontend/src/entry-forms/Transaction.svelte:77
 #: frontend/src/entry-forms/Transaction.svelte:79
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
-msgstr ""
+msgstr "Vastaanottaja"
 
 #: frontend/src/entry-forms/Transaction.svelte:92
 #: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
-msgstr ""
+msgstr "Selite"
 
 #: frontend/src/entry-forms/Transaction.svelte:125
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
-msgstr ""
+msgstr "Kohdennukset"
 
 #: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
 msgid "Yearly"
-msgstr ""
+msgstr "Vuodet"
 
 #: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
 msgid "Quarterly"
-msgstr ""
+msgstr "Kvartaalit"
 
 #: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
 msgid "Monthly"
-msgstr ""
+msgstr "Kuukaudet"
 
 #: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
 msgid "Weekly"
-msgstr ""
+msgstr "Viikot"
 
 #: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
 msgid "Daily"
-msgstr ""
+msgstr "Päivät"
 
 #: frontend/src/modals/AddEntry.svelte:19
 msgid "Transaction"
-msgstr ""
+msgstr "Tapahtuma"
 
 #: frontend/src/modals/AddEntry.svelte:65
 msgid "continue"
-msgstr ""
+msgstr "jatka"
 
 #: frontend/src/modals/Context.svelte:37 frontend/src/modals/Context.svelte:41
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
-msgstr ""
+msgstr "Konteksti"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
-msgstr ""
+msgstr "Lähetä tiedosto(ja)"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
 msgid "Files"
-msgstr ""
+msgstr "Tiedostot"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
 msgid "Documents folder"
-msgstr ""
+msgstr "Dokumentit-kansio"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
-msgstr ""
+msgstr "Lähetä"
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
 msgid "Balances before entry"
-msgstr ""
+msgstr "Saldot ennen merkintää"
 
 #: frontend/src/modals/EntryContextBalances.svelte:34
 msgid "Balances after entry"
-msgstr ""
+msgstr "Saldot merkinnän jälkeen"
 
 #: frontend/src/modals/EntryContextLocation.svelte:14
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: frontend/src/modals/Export.svelte:13
 #: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Export"
-msgstr ""
+msgstr "Vie"
 
 #: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
-msgstr ""
+msgstr "Lataa valitut merkinnät Beancount-tiedostona"
 
 #: frontend/src/reports/errors/Errors.svelte:24
 #: frontend/src/reports/route.ts:102
 msgid "Error"
-msgstr ""
+msgstr "Virhe"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:55
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "Päiväkirja sisältäen tämän tilin ja alatilien kaikki merkinnät"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 #: frontend/src/reports/accounts/AccountReport.svelte:60
 msgid "Account Journal"
-msgstr ""
+msgstr "Tilipäiväkirja"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
 #: src/fava/json_api.py:786
 msgid "Changes"
-msgstr ""
+msgstr "Muutokset"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:75
 #: frontend/src/reports/accounts/AccountReport.svelte:78
 msgid "Balances"
-msgstr ""
+msgstr "Saldot"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: frontend/src/reports/documents/Table.svelte:26
 #: frontend/src/reports/events/EventTable.svelte:14
 #: frontend/src/reports/journal/JournalHeaders.svelte:29
 msgid "Date"
-msgstr ""
+msgstr "Päivä"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
-msgstr ""
+msgstr "Hinta"
 
 #: frontend/src/reports/commodities/index.ts:32
 #: frontend/src/sidebar/AsideContents.svelte:46
 msgid "Commodities"
-msgstr ""
+msgstr "Kauppatavarat"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
-msgstr ""
+msgstr "Siirrä tai nimeä uudelleen dokumentti"
 
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
-msgstr ""
+msgstr "Siirrä"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: frontend/src/reports/documents/index.ts:19
 #: frontend/src/sidebar/AsideContents.svelte:47
 msgid "Documents"
-msgstr ""
+msgstr "Dokumentit"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:42
 #: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:52
 msgid "Edit"
-msgstr ""
+msgstr "Muokkaa"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:56
 msgid "Align Amounts"
-msgstr ""
+msgstr "Tasaa summat"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Toggle Comment (selection)"
-msgstr ""
+msgstr "Kommentti päälle/pois"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Open all folds"
-msgstr ""
+msgstr "Laajenna kaikki"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Close all folds"
-msgstr ""
+msgstr "Kutista kaikki"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
 #: frontend/src/sidebar/AsideContents.svelte:75
 msgid "Options"
-msgstr ""
+msgstr "Valinnat"
 
 #: frontend/src/reports/editor/index.ts:33
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Editor"
-msgstr ""
+msgstr "Editori"
 
 #: frontend/src/reports/errors/Errors.svelte:23
 #: frontend/src/reports/import/Extract.svelte:121
 msgid "Line"
-msgstr ""
+msgstr "Rivi"
 
 #: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
-msgstr ""
+msgstr "Näytä lähdekoodi %(file)s:%(lineno)s"
 
 #: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
-msgstr ""
+msgstr "Ei virheitä."
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:68
 msgid "Errors"
-msgstr ""
+msgstr "Virheet"
 
 #: frontend/src/reports/events/EventTable.svelte:15
 msgid "Description"
-msgstr ""
+msgstr "Kuvaus"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
 #: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Events"
-msgstr ""
+msgstr "Tapahtumat"
 
 #: frontend/src/reports/events/Events.svelte:31
 #, python-format
 msgid "Event: %(type)s"
-msgstr ""
+msgstr "Tapahtuma: %(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
-msgstr ""
+msgstr "Ei tapahtumia."
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -393,43 +393,43 @@ msgstr ""
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
-msgstr ""
+msgstr "Tuo"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "Ohita kaksoiskappale"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 #: frontend/src/reports/import/FileList.svelte:44
 msgid "Delete this file?"
-msgstr ""
+msgstr "Poistetaanko tämä tiedosto?"
 
 #: frontend/src/reports/import/FileList.svelte:121
 msgid "Continue"
-msgstr ""
+msgstr "Jatka"
 
 #: frontend/src/reports/import/FileList.svelte:121
 msgid "Extract"
-msgstr ""
+msgstr "Pura"
 
 #: frontend/src/reports/import/FileList.svelte:130
 msgid "Clear"
-msgstr ""
+msgstr "Tyhjennä"
 
 #: frontend/src/reports/import/Import.svelte:146
 msgid "No files were found for import."
-msgstr ""
+msgstr "Tuotavia tiedostoja ei löytynyt."
 
 #: frontend/src/reports/import/Import.svelte:149
 msgid "Importable Files"
-msgstr ""
+msgstr "Tuotavat tiedostot"
 
 #: frontend/src/reports/import/Import.svelte:161
 msgid "Non-importable Files"
-msgstr ""
+msgstr "Ei-tuotavat tiedostot"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
