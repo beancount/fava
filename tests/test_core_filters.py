@@ -75,7 +75,16 @@ def test_lexer_basic() -> None:
         ("STRING", "string"),
     ]
     with pytest.raises(FilterError):
-        list(lex("|"))
+        list(lex('"'))
+
+
+def test_lexer_emoji() -> None:
+    lex = FilterSyntaxLexer().lex
+    data = "☕ ⛽️"
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
+        ("STRING", "☕"),
+        ("STRING", "⛽️"),
+    ]
 
 
 def test_lexer_literals_in_string() -> None:
