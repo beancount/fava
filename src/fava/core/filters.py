@@ -104,7 +104,7 @@ class FilterSyntaxLexer:
         ("EQ_OP", r":"),
         ("CMP_OP", r"(=|>=|<=|<|>)"),
         ("NUMBER", r"\d*\.?\d+"),
-        ("STRING", r"""\w[-\w]*|"[^"]*"|'[^']*'"""),
+        ("STRING", r"""\w[-\w]*|"[^"]*"|'[^']*'|[^\s\-(),#^:="']+"""),
     )
 
     regex = re.compile(
