@@ -48,13 +48,12 @@ msgstr "轉為 %(currency)s"
 msgid "Chart is empty."
 msgstr "圖表爲空."
 
-#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:12
 msgid "Deleting…"
 msgstr "正在刪除…"
 
-#: frontend/src/editor/DeleteButton.svelte:11
-#: frontend/src/editor/DeleteButton.svelte:14
-#: frontend/src/reports/import/FileList.svelte:47
+#: frontend/src/editor/DeleteButton.svelte:12
+#: frontend/src/reports/import/FileList.svelte:71
 msgid "Delete"
 msgstr "移除"
 
@@ -65,14 +64,26 @@ msgid "Saving…"
 msgstr "儲存中…"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/editor/SliceEditor.svelte:156
+#: frontend/src/modals/AddEntry.svelte:67
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
 msgstr "儲存"
 
-#: frontend/src/editor/SliceEditor.svelte:102
+#: frontend/src/editor/SliceEditor.svelte:138
+#, fuzzy
+#| msgid "ignore duplicate"
+msgid "Duplicate"
+msgstr "忽略複製"
+
+#: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
 msgstr "重新加載"
+
+#: frontend/src/editor/SliceEditor.svelte:152
+#: frontend/src/modals/AddEntry.svelte:46
+msgid "Add"
+msgstr "新增"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
@@ -95,17 +106,17 @@ msgid "Add metadata"
 msgstr "新增元資料"
 
 #: frontend/src/entry-forms/Balance.svelte:28
-#: frontend/src/modals/AddEntry.svelte:15
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/modals/AddEntry.svelte:20
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
 msgstr "餘額"
 
-#: frontend/src/entry-forms/Balance.svelte:43
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr "數值"
 
-#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
@@ -122,7 +133,7 @@ msgid "Value"
 msgstr "值"
 
 #: frontend/src/entry-forms/Note.svelte:27
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
 msgstr "備註"
 
@@ -130,19 +141,19 @@ msgstr "備註"
 msgid "Amount"
 msgstr "金額"
 
-#: frontend/src/entry-forms/Transaction.svelte:111
-#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:77
+#: frontend/src/entry-forms/Transaction.svelte:79
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "收款人"
 
-#: frontend/src/entry-forms/Transaction.svelte:126
-#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/entry-forms/Transaction.svelte:92
+#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "摘要"
 
-#: frontend/src/entry-forms/Transaction.svelte:159
+#: frontend/src/entry-forms/Transaction.svelte:125
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "記錄"
@@ -167,19 +178,15 @@ msgstr "週"
 msgid "Daily"
 msgstr "日"
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:19
 msgid "Transaction"
 msgstr "交易"
 
-#: frontend/src/modals/AddEntry.svelte:43
-msgid "Add"
-msgstr "新增"
-
-#: frontend/src/modals/AddEntry.svelte:64
+#: frontend/src/modals/AddEntry.svelte:65
 msgid "continue"
 msgstr "繼續"
 
-#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/Context.svelte:37 frontend/src/modals/Context.svelte:41
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
 msgstr "前後文"
@@ -199,7 +206,7 @@ msgid "Documents folder"
 msgstr "憑證檔案"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
-#: frontend/src/reports/import/ImportFileUpload.svelte:35
+#: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
 msgstr "上傳"
 
@@ -257,8 +264,8 @@ msgid "Date"
 msgstr "日期"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
-#: frontend/src/reports/journal/JournalHeaders.svelte:59
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
+#: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
 msgstr "價格"
 
@@ -272,7 +279,7 @@ msgid "Move or rename document"
 msgstr "移動或重命名檔案"
 
 #: frontend/src/reports/documents/Documents.svelte:80
-#: frontend/src/reports/import/FileList.svelte:84
+#: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
 msgstr "移動"
 
@@ -388,7 +395,7 @@ msgid "Query"
 msgstr "查詢"
 
 #: frontend/src/reports/import/Extract.svelte:58
-#: frontend/src/reports/import/index.ts:59
+#: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr "匯入"
@@ -401,35 +408,35 @@ msgstr "忽略複製"
 msgid "Source"
 msgstr "來源"
 
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Continue"
-msgstr "繼續"
-
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Extract"
-msgstr "匯出"
-
-#: frontend/src/reports/import/FileList.svelte:104
-msgid "Clear"
-msgstr "清除"
-
-#: frontend/src/reports/import/Import.svelte:78
+#: frontend/src/reports/import/FileList.svelte:44
 msgid "Delete this file?"
 msgstr "刪除這個文件？"
 
-#: frontend/src/reports/import/Import.svelte:145
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Continue"
+msgstr "繼續"
+
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Extract"
+msgstr "匯出"
+
+#: frontend/src/reports/import/FileList.svelte:130
+msgid "Clear"
+msgstr "清除"
+
+#: frontend/src/reports/import/Import.svelte:146
 msgid "No files were found for import."
 msgstr "未發現有可供匯入的檔案"
 
-#: frontend/src/reports/import/Import.svelte:148
+#: frontend/src/reports/import/Import.svelte:149
 msgid "Importable Files"
 msgstr "可匯入檔案"
 
-#: frontend/src/reports/import/Import.svelte:162
+#: frontend/src/reports/import/Import.svelte:161
 msgid "Non-importable Files"
 msgstr "不可匯入檔案"
 
-#: frontend/src/reports/import/ImportFileUpload.svelte:33
+#: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
 msgstr "上傳文件以供匯入"
 
@@ -478,12 +485,12 @@ msgstr "切換記錄"
 msgid "F"
 msgstr "F"
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
-#: frontend/src/reports/journal/JournalHeaders.svelte:58
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
+#: frontend/src/reports/journal/JournalHeaders.svelte:68
 msgid "Cost"
 msgstr "成本"
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
 msgid "Change"
 msgstr "更動"
 
