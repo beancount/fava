@@ -91,16 +91,15 @@ def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str | float]:
     result: list[str | float] = []
     for idx, column in enumerate(header):
         value = row[idx]
-        if not value:
-            result.append(value)
-            continue
         type_ = column.datatype
-        if type_ is Decimal:
+        if type_ is set:
+            result.append(" ".join(value))
+        elif not value:
+            result.append(value)
+        elif type_ is Decimal:
             result.append(float(value))
         elif type_ is int:
             result.append(value)
-        elif type_ is set:
-            result.append(" ".join(value))
         elif type_ is datetime.date:
             result.append(str(value))
         else:

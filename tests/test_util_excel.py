@@ -43,6 +43,15 @@ def test_to_csv(example_ledger: FavaLedger) -> None:
 
 
 @pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
+def test_export_set_column(example_ledger: FavaLedger) -> None:
+    types, _ = _run_query(example_ledger, "select tags")
+    rows = [(frozenset(),), (frozenset({"food"}),)]
+
+    assert excel.to_csv(types, rows).getvalue() == b'tags\r\n""\r\nfood\r\n'
+    assert excel.to_excel(types, rows, "xlsx", "select tags").read(2) == b"PK"
+
+
+@pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
 def test_to_excel(example_ledger: FavaLedger) -> None:
     types, rows = _run_query(example_ledger, "balances")
     assert types
