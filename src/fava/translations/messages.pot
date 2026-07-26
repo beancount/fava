@@ -94,11 +94,11 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:43
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
