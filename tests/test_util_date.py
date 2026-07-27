@@ -17,6 +17,7 @@ from fava.util.date import InvalidDateRangeError
 from fava.util.date import Month
 from fava.util.date import month_offset
 from fava.util.date import parse_date
+from fava.util.date import parse_date_resolved
 from fava.util.date import parse_fye_string
 from fava.util.date import Quarter
 from fava.util.date import substitute
@@ -464,3 +465,83 @@ def test_parse_fye_string(fye_str: str, month: int, day: int) -> None:
 )
 def test_parse_fye_invalid_string(fye_str: str) -> None:
     assert parse_fye_string(fye_str) is None
+
+
+@pytest.mark.parametrize(
+    ("expect_start", "expect_end", "text"),
+    [
+        ("2026-07-26", "2026-07-27", "now"),
+        ("2026-07-25", "2026-07-26", "now-1d"),
+        ("2026-07-19", "2026-07-20", "now-7d"),
+        ("2026-07-13", "2026-07-20", "now-1w"),
+        ("2026-06-01", "2026-07-01", "now-1M"),
+        ("2025-01-01", "2026-01-01", "now-1y"),
+        ("2026-08-01", "2026-09-01", "now+1M"),
+        ("2026-07-26", "2026-07-27", "now/d"),
+        ("2026-07-01", "2026-08-01", "now/M"),
+        ("2026-01-01", "2027-01-01", "now/y"),
+        ("2025-01-01", "2026-01-01", "now-1y/y"),
+        ("2026-06-01", "2026-07-01", "now-1M/M"),
+        ("2026-07-25", "2026-07-26", "now-1d/d"),
+        ("2026-07-20", "2026-07-27", "now/w"),
+        ("2026-07-13", "2026-07-20", "now-1w/w"),
+    ],
+)
+def test_parse_date_datemath(
+    expect_start: str,
+    expect_end: str,
+    text: str,
+) -> None:
+    start, end = fromisoformat(expect_start), fromisoformat(expect_end)
+    with mock.patch("fava.util.date.local_today", return_value=fromisoformat("2026-07-26")):
+        assert parse_date(text) == (start, end)
+
+
+@pytest.mark.parametrize(
+    ("expect_start", "expect_end", "text"),
+    [
+        ("2026-07-01", "2027-07-01", "now/fy"),
+        ("2025-07-01", "2026-07-01", "now-1y/fy"),
+        ("2026-07-01", "2026-10-01", "now/fQ"),
+    ],
+)
+def test_parse_date_datemath_fiscal(
+    expect_start: str,
+    expect_end: str,
+    text: str,
+) -> None:
+    start, end = fromisoformat(expect_start), fromisoformat(expect_end)
+    with mock.patch("fava.util.date.local_today", return_value=fromisoformat("2026-07-26")):
+        assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
+
+
+@pytest.mark.parametrize(
+    ("expect_start", "expect_end", "text"),
+    [
+        ("2026-06-26", "2026-07-26", "now-30d - now"),
+        ("2025-07-26", "2026-07-26", "now-1y - now"),
+        ("2026-07-01", "2026-07-26", "now/M - now"),
+        ("2025-01-01", "2026-01-01", "now-1y/y - now/y"),
+        ("2026-07-19", "2026-07-25", "now-7d - now-1d"),
+    ],
+)
+def test_parse_date_datemath_range(
+    expect_start: str,
+    expect_end: str,
+    text: str,
+) -> None:
+    start, end = fromisoformat(expect_start), fromisoformat(expect_end)
+    with mock.patch("fava.util.date.local_today", return_value=fromisoformat("2026-07-26")):
+        assert parse_date(text) == (start, end)
+
+
+def test_parse_date_resolved() -> None:
+    with mock.patch("fava.util.date.local_today", return_value=fromisoformat("2026-07-26")):
+        _, _, desc = parse_date_resolved("now-1y")
+        assert desc == "2025-01-01 to 2025-12-31"
+        _, _, desc = parse_date_resolved("now/M")
+        assert desc == "2026-07-01 to 2026-07-31"
+        _, _, desc = parse_date_resolved("2024")
+        assert desc == "2024-01-01 to 2024-12-31"
+        _, _, desc = parse_date_resolved("")
+        assert desc == ""
