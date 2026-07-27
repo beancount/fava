@@ -30,6 +30,7 @@ from urllib.parse import urlunparse
 from flask import abort
 from flask import current_app
 from flask import Flask
+from flask import jsonify
 from flask import redirect
 from flask import render_template
 from flask import render_template_string
@@ -355,7 +356,10 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         key = (endpoint, request.method)
         if ext is None or key not in ext.endpoints:
             return abort(404)
-        response = ext.endpoints[key](ext)
+        try:
+            response = ext.endpoints[key](ext)
+        except Exception as e:
+            return jsonify({"error": str(e), "extension": extension_name, "endpoint": endpoint}), 500
 
         return (
             fava_app.make_response(response)
