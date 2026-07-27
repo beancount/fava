@@ -347,3 +347,15 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]
+
+
+def test_load_extension_endpoint_error(test_client: FlaskClient) -> None:
+    """Exceptions in extension endpoints return JSON with a 500 status."""
+    url = "/extension-report/extension/FavaExtTest/example_error"
+    response = test_client.get(url)
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR.value
+    assert response.json == {
+        "error": "example error",
+        "extension": "FavaExtTest",
+        "endpoint": "example_error",
+    }

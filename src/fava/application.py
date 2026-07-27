@@ -359,7 +359,16 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         try:
             response = ext.endpoints[key](ext)
         except Exception as e:
-            return jsonify({"error": str(e), "extension": extension_name, "endpoint": endpoint}), 500
+            log.exception("Extension endpoint error")
+            response = jsonify(
+                {
+                    "error": str(e),
+                    "extension": extension_name,
+                    "endpoint": endpoint,
+                }
+            )
+            response.status_code = 500
+            return response
 
         return (
             fava_app.make_response(response)
