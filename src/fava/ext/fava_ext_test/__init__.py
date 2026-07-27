@@ -184,6 +184,12 @@ class FavaExtTest(FavaExtensionBase):
         """Return some data with a GET endpoint."""
         return jsonify(["some data"])
 
+    @extension_endpoint
+    def example_error(self) -> Response:
+        """Raise an exception for testing error handling."""
+        msg = "example error"
+        raise RuntimeError(msg)
+
     def chart_data(self) -> list[BalancesChart]:
         """Return some chart data."""
         return [

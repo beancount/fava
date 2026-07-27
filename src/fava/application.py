@@ -18,6 +18,7 @@ from datetime import date
 from datetime import datetime
 from datetime import UTC
 from functools import lru_cache
+from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
 from threading import Lock
@@ -52,6 +53,7 @@ from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
+from fava.json_api import json_err
 from fava.util import next_key
 from fava.util import send_file_inline
 from fava.util import setup_logging
@@ -353,7 +355,11 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         key = (endpoint, request.method)
         if ext is None or key not in ext.endpoints:
             return abort(404)
-        response = ext.endpoints[key](ext)
+        try:
+            response = ext.endpoints[key](ext)
+        except Exception as e:
+            log.exception("Extension endpoint error")
+            return json_err(e, HTTPStatus.INTERNAL_SERVER_ERROR)
 
         return (
             fava_app.make_response(response)
