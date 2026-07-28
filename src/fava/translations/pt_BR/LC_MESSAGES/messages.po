@@ -95,7 +95,7 @@ msgstr "Deve ser uma das contas declaradas"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Conta"
 
@@ -147,13 +147,13 @@ msgstr "Valor"
 msgid "Payee"
 msgstr "Beneficiário"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Descrição"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Lançamentos"
@@ -593,7 +593,7 @@ msgstr "Balanço Patrimonial"
 msgid "Trial Balance"
 msgstr "Balanço de Verificação"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Ir para conta"
 
@@ -605,11 +605,11 @@ msgstr "Adicionar Entrada"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Data"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"

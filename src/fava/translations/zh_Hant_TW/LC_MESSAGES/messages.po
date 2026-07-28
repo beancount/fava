@@ -95,7 +95,7 @@ msgstr "必須要是宣告過的帳戶"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "帳戶"
 
@@ -147,13 +147,13 @@ msgstr "金額"
 msgid "Payee"
 msgstr "收款人"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "摘要"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "記錄"
@@ -587,7 +587,7 @@ msgstr "資產負債表"
 msgid "Trial Balance"
 msgstr "試算表"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "切換帳戶"
 
@@ -599,11 +599,11 @@ msgstr "新增日誌條目"
 msgid "Help"
 msgstr "幫助"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "時間"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"

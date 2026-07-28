@@ -94,7 +94,7 @@ msgstr "선언된 계정 중 하나여야 합니다"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "계정"
 
@@ -146,13 +146,13 @@ msgstr "금액"
 msgid "Payee"
 msgstr "거래처"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "적요"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "분개"
@@ -583,7 +583,7 @@ msgstr "재무상태표"
 msgid "Trial Balance"
 msgstr "시산표"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "계정이동"
 
@@ -595,11 +595,11 @@ msgstr "거래기록추가"
 msgid "Help"
 msgstr "도움말"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "조회기간"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
