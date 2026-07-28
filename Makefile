@@ -83,7 +83,7 @@ update-snapshots:
 .PHONY: update-constraints
 update-constraints:
 	uv lock --upgrade
-	uv pip compile --quiet --extra excel --group old-deps --resolution=lowest --python-version 3.10 --upgrade --output-file constraints-old.txt pyproject.toml
+	uv pip compile --quiet --extra excel --group old-deps --resolution=lowest --universal --upgrade --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
