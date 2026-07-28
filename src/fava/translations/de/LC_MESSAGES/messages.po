@@ -138,19 +138,19 @@ msgstr "Notiz"
 msgid "Amount"
 msgstr "Betrag"
 
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Empfänger"
 
-#: frontend/src/entry-forms/Transaction.svelte:90
-#: frontend/src/entry-forms/Transaction.svelte:92
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Beschreibung"
 
-#: frontend/src/entry-forms/Transaction.svelte:120
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Einträge"
