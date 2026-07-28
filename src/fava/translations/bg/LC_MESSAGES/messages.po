@@ -136,19 +136,19 @@ msgstr "Бележка"
 msgid "Amount"
 msgstr "Сума"
 
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Бенефициент"
 
-#: frontend/src/entry-forms/Transaction.svelte:90
-#: frontend/src/entry-forms/Transaction.svelte:92
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Основание"
 
-#: frontend/src/entry-forms/Transaction.svelte:120
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Публикации"
