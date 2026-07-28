@@ -48,15 +48,14 @@ msgstr "Convertido para %(currency)s"
 msgid "Chart is empty."
 msgstr "Gráfico está vazio."
 
-#: frontend/src/editor/DeleteButton.svelte:11
+#: frontend/src/editor/DeleteButton.svelte:12
 #, fuzzy
 #| msgid "Deleting..."
 msgid "Deleting…"
 msgstr "Apagando..."
 
-#: frontend/src/editor/DeleteButton.svelte:11
-#: frontend/src/editor/DeleteButton.svelte:14
-#: frontend/src/reports/import/FileList.svelte:47
+#: frontend/src/editor/DeleteButton.svelte:12
+#: frontend/src/reports/import/FileList.svelte:71
 msgid "Delete"
 msgstr "Apagar"
 
@@ -67,14 +66,24 @@ msgid "Saving…"
 msgstr "Salvando..."
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/editor/SliceEditor.svelte:156
+#: frontend/src/modals/AddEntry.svelte:67
 #: frontend/src/reports/import/Extract.svelte:115
 msgid "Save"
 msgstr "Salvar"
 
-#: frontend/src/editor/SliceEditor.svelte:102
+#: frontend/src/editor/SliceEditor.svelte:138
+msgid "Duplicate"
+msgstr ""
+
+#: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
 msgstr "recarregar"
+
+#: frontend/src/editor/SliceEditor.svelte:152
+#: frontend/src/modals/AddEntry.svelte:46
+msgid "Add"
+msgstr "Adicionar"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
@@ -97,17 +106,17 @@ msgid "Add metadata"
 msgstr "Adicionar metadado"
 
 #: frontend/src/entry-forms/Balance.svelte:28
-#: frontend/src/modals/AddEntry.svelte:15
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/modals/AddEntry.svelte:20
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
 msgstr "Saldo"
 
-#: frontend/src/entry-forms/Balance.svelte:43
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr "Número"
 
-#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
@@ -124,7 +133,7 @@ msgid "Value"
 msgstr "Valor"
 
 #: frontend/src/entry-forms/Note.svelte:27
-#: frontend/src/modals/AddEntry.svelte:16
+#: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
 msgstr "Nota"
 
@@ -132,19 +141,19 @@ msgstr "Nota"
 msgid "Amount"
 msgstr "Valor"
 
-#: frontend/src/entry-forms/Transaction.svelte:111
-#: frontend/src/entry-forms/Transaction.svelte:113
+#: frontend/src/entry-forms/Transaction.svelte:77
+#: frontend/src/entry-forms/Transaction.svelte:79
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Beneficiário"
 
-#: frontend/src/entry-forms/Transaction.svelte:126
-#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/entry-forms/Transaction.svelte:92
+#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Descrição"
 
-#: frontend/src/entry-forms/Transaction.svelte:159
+#: frontend/src/entry-forms/Transaction.svelte:125
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Lançamentos"
@@ -169,19 +178,15 @@ msgstr "Semanal"
 msgid "Daily"
 msgstr "Diário"
 
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/modals/AddEntry.svelte:19
 msgid "Transaction"
 msgstr "Transação"
 
-#: frontend/src/modals/AddEntry.svelte:43
-msgid "Add"
-msgstr "Adicionar"
-
-#: frontend/src/modals/AddEntry.svelte:64
+#: frontend/src/modals/AddEntry.svelte:65
 msgid "continue"
 msgstr "continuar"
 
-#: frontend/src/modals/Context.svelte:36 frontend/src/modals/Context.svelte:40
+#: frontend/src/modals/Context.svelte:37 frontend/src/modals/Context.svelte:41
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
 msgstr "Contexto"
@@ -203,7 +208,7 @@ msgid "Documents folder"
 msgstr "Documentos"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
-#: frontend/src/reports/import/ImportFileUpload.svelte:35
+#: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
 msgstr "Enviar"
 
@@ -261,8 +266,8 @@ msgid "Date"
 msgstr "Data"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
-#: frontend/src/reports/journal/JournalHeaders.svelte:59
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
+#: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
 msgstr "Preço"
 
@@ -276,7 +281,7 @@ msgid "Move or rename document"
 msgstr "Mover ou renomear documento"
 
 #: frontend/src/reports/documents/Documents.svelte:80
-#: frontend/src/reports/import/FileList.svelte:84
+#: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
 msgstr ""
 
@@ -394,7 +399,7 @@ msgid "Query"
 msgstr "Consulta"
 
 #: frontend/src/reports/import/Extract.svelte:58
-#: frontend/src/reports/import/index.ts:59
+#: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:72
 msgid "Import"
 msgstr "Importar"
@@ -407,35 +412,35 @@ msgstr ""
 msgid "Source"
 msgstr "Fonte"
 
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Continue"
-msgstr "Continuar"
-
-#: frontend/src/reports/import/FileList.svelte:95
-msgid "Extract"
-msgstr "Extrair"
-
-#: frontend/src/reports/import/FileList.svelte:104
-msgid "Clear"
-msgstr "Recomeçar"
-
-#: frontend/src/reports/import/Import.svelte:78
+#: frontend/src/reports/import/FileList.svelte:44
 msgid "Delete this file?"
 msgstr "Apagar este arquivo?"
 
-#: frontend/src/reports/import/Import.svelte:145
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Continue"
+msgstr "Continuar"
+
+#: frontend/src/reports/import/FileList.svelte:121
+msgid "Extract"
+msgstr "Extrair"
+
+#: frontend/src/reports/import/FileList.svelte:130
+msgid "Clear"
+msgstr "Recomeçar"
+
+#: frontend/src/reports/import/Import.svelte:146
 msgid "No files were found for import."
 msgstr "Nenhum arquivo encontrado para importar."
 
-#: frontend/src/reports/import/Import.svelte:148
+#: frontend/src/reports/import/Import.svelte:149
 msgid "Importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:162
+#: frontend/src/reports/import/Import.svelte:161
 msgid "Non-importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/ImportFileUpload.svelte:33
+#: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
 msgstr ""
 
@@ -484,12 +489,12 @@ msgstr "Alternar exibição lançamentos"
 msgid "F"
 msgstr "S"
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
-#: frontend/src/reports/journal/JournalHeaders.svelte:58
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
+#: frontend/src/reports/journal/JournalHeaders.svelte:68
 msgid "Cost"
 msgstr "Custo"
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
 msgid "Change"
 msgstr "Valor"
 
