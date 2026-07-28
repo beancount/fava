@@ -77,14 +77,12 @@
     <span class="hide-on-desktop">{_("Payee")}:</span>
     <AutocompleteInput
       placeholder={_("Payee")}
-      bind:value={
-        () => entry.payee,
-        (payee: string) => {
-          entry = entry.set("payee", payee);
-        }
-      }
+      value={entry.payee}
+      onchange={(value: string) => {
+        entry = entry.set("payee", value);
+      }}
       suggestions={$payees}
-      onSelect={autocomplete_select_payee}
+      onselect={autocomplete_select_payee}
       --autocomplete-wrapper-flex="1"
     />
   </label>
@@ -92,15 +90,12 @@
     <span class="hide-on-desktop">{_("Narration")}:</span>
     <AutocompleteInput
       placeholder={_("Narration")}
-      bind:value={narration}
+      value={narration}
       suggestions={fetch_narrations($ledger_mtime).data}
-      onSelect={autocomplete_select_narration}
-      onEnter={() => {
-        entry = entry.set_narration_tags_links(narration);
+      onchange={(value: string) => {
+        entry = entry.set_narration_tags_links(value);
       }}
-      onBlur={() => {
-        entry = entry.set_narration_tags_links(narration);
-      }}
+      onselect={autocomplete_select_narration}
       --autocomplete-wrapper-flex="2"
     />
     <AddMetadataButton

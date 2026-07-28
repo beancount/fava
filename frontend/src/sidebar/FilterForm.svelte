@@ -2,7 +2,7 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n.ts";
   import { escape_for_regex } from "../lib/regex.ts";
-  import { router, set_query_param } from "../router.ts";
+  import { router } from "../router.ts";
   import {
     account_filter,
     fql_filter,
@@ -33,79 +33,33 @@
         )}${value}${input.value.slice(selectionStart)}`
       : value;
   }
-
-  let account_filter_value = $state("");
-  let fql_filter_value = $state("");
-  let time_filter_value = $state("");
-  account_filter.subscribe((v) => {
-    account_filter_value = v;
-  });
-  fql_filter.subscribe((v) => {
-    fql_filter_value = v;
-  });
-  time_filter.subscribe((v) => {
-    time_filter_value = v;
-  });
-
-  /** Set the target we want to navigate to to avoid duplicate navigation. */
-  let target: URL | null = null;
-
-  /**
-   * Submit the filter form.
-   *
-   * This is called on all the three possible events (blur, select, enter)
-   * and also on the form submit. Having the listener on:enter would
-   * theoretically be unnecessary (as the form would also be submitted) but
-   * it seems to work around a Safari bug, see #809 and #1528.
-   */
-  function submit() {
-    const url = new URL(router.current);
-    set_query_param(url, "account", account_filter_value);
-    set_query_param(url, "filter", fql_filter_value);
-    set_query_param(url, "time", time_filter_value);
-    if (url.href !== router.current.href) {
-      target = url;
-      setTimeout(() => {
-        if (target) {
-          router.navigate(target);
-          target = null;
-        }
-      });
-    }
-  }
 </script>
 
-<form
-  class="flex-row"
-  onsubmit={(ev) => {
-    ev.preventDefault();
-    submit();
-  }}
->
+<div class="flex-row">
   <AutocompleteInput
-    bind:value={time_filter_value}
+    value={$time_filter}
     placeholder={_("Time")}
     suggestions={$years}
     key="f t"
     clearButton={true}
     setSize={true}
-    onBlur={submit}
-    onSelect={submit}
-    onEnter={submit}
+    onchange={(v: string) => {
+      router.set_search_param("time", v);
+    }}
   />
   <AutocompleteInput
-    bind:value={account_filter_value}
+    value={$account_filter}
     placeholder={_("Account")}
     suggestions={$accounts}
     key="f a"
     clearButton={true}
     setSize={true}
-    onBlur={submit}
-    onSelect={submit}
-    onEnter={submit}
+    onchange={(v: string) => {
+      router.set_search_param("account", v);
+    }}
   />
   <AutocompleteInput
-    bind:value={fql_filter_value}
+    value={$fql_filter}
     placeholder={_("Filter by tag, payee, …")}
     suggestions={fql_filter_suggestions}
     key="f f"
@@ -113,48 +67,42 @@
     setSize={true}
     {valueExtractor}
     {valueSelector}
-    onBlur={submit}
-    onSelect={submit}
-    onEnter={submit}
+    onchange={(v: string) => {
+      router.set_search_param("filter", v);
+    }}
   />
-  <!-- svelte-ignore a11y_consider_explicit_label -->
-  <button type="submit"></button>
-</form>
+</div>
 
 <style>
-  form {
+  div {
     color: var(--text-color);
 
     --placeholder-color: var(--header-placeholder-color);
     --placeholder-background: var(--header-placeholder-background);
     --input-padding: 8px 25px 8px 10px;
-  }
 
-  form > :global(span) {
-    max-width: 18rem;
-  }
+    & > :global(span) {
+      max-width: 18rem;
+    }
 
-  form :global(input) {
-    outline: none;
-    background-color: var(--background);
-    border: 0;
-  }
+    & :global(input) {
+      outline: none;
+      background-color: var(--background);
+      border: 0;
+    }
 
-  form :global([type="text"]:focus) {
-    background-color: var(--background);
-  }
-
-  [type="submit"] {
-    display: none;
+    & :global([type="text"]:focus) {
+      background-color: var(--background);
+    }
   }
 
   @media print {
-    form {
+    div {
       --input-padding: 8px 10px;
-    }
 
-    form :global(input):placeholder-shown {
-      display: none;
+      & :global(input):placeholder-shown {
+        display: none;
+      }
     }
   }
 </style>

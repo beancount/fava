@@ -6,11 +6,12 @@
   import { accounts } from "../stores/index.ts";
 
   let value = $state("");
+  let autocomplete = $state.raw<{ blur: () => void }>();
 
-  function select(el: HTMLInputElement) {
+  function select() {
     if (value) {
       router.navigate($urlForAccount(value));
-      el.blur();
+      autocomplete?.blur();
       value = "";
     }
   }
@@ -19,11 +20,12 @@
 <li>
   <AutocompleteInput
     bind:value
+    bind:this={autocomplete}
     placeholder={_("Go to account")}
     suggestions={$accounts}
     key="g a"
-    onSelect={select}
-    onEnter={select}
+    onselect={select}
+    onenter={select}
   />
 </li>
 
