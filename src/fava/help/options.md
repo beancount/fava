@@ -25,6 +25,7 @@ languages:
 - Chinese (`zh_CN` and `zh_TW`)
 - Dutch (`nl`)
 - English (`en`)
+- Finnish (`fi`)
 - French (`fr`)
 - German (`de`)
 - Korean (`ko`)

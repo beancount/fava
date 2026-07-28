@@ -8,6 +8,7 @@ LOCALES = [
     "de",
     "es",
     "fa",
+    "fi",
     "fr",
     "ja",
     "ko",
