@@ -92,7 +92,7 @@ msgstr "Muss eines der deklarierten Konten sein"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Konto"
 
@@ -144,13 +144,13 @@ msgstr "Betrag"
 msgid "Payee"
 msgstr "Empfänger"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Beschreibung"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Einträge"
@@ -583,7 +583,7 @@ msgstr "Bilanz"
 msgid "Trial Balance"
 msgstr "Zwischenbilanz"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Zum Konto"
 
@@ -595,11 +595,11 @@ msgstr "Journal-Eintrag hinzufügen"
 msgid "Help"
 msgstr "Hilfe"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Zeitraum"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr "Filtern nach Markierung, Empfänger, …"
 

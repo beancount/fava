@@ -90,7 +90,7 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Rekening"
 
@@ -142,13 +142,13 @@ msgstr "Hoeveelheid"
 msgid "Payee"
 msgstr "Begunstigde"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Omschrijving"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr ""
@@ -582,7 +582,7 @@ msgstr "Balans"
 msgid "Trial Balance"
 msgstr "Proefbalans"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr ""
 
@@ -594,11 +594,11 @@ msgstr ""
 msgid "Help"
 msgstr "Hulp"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Periode"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr ""
 

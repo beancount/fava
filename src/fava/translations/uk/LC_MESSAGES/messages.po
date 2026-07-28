@@ -88,7 +88,7 @@ msgstr "Мусить бути одним з задекларованих ака�
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Рахунок"
 
@@ -140,13 +140,13 @@ msgstr "Сума"
 msgid "Payee"
 msgstr "Отримувач"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Опис"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Записи"
@@ -586,7 +586,7 @@ msgstr "Баланс"
 msgid "Trial Balance"
 msgstr "Оборотно-сальдова відомість"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Перейти до акаунту"
 
@@ -598,11 +598,11 @@ msgstr ""
 msgid "Help"
 msgstr "Допомога"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Час"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"

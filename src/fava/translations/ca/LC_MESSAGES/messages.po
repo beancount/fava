@@ -90,7 +90,7 @@ msgstr "Ha de ser un dels comptes declarats"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Compte"
 
@@ -142,13 +142,13 @@ msgstr "Import"
 msgid "Payee"
 msgstr "Beneficiari"
 
+#: frontend/src/entry-forms/Transaction.svelte:90
 #: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Descripció"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:120
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Comptabilitzacions"
@@ -582,7 +582,7 @@ msgstr "Balanç de situació"
 msgid "Trial Balance"
 msgstr "Balanç de comprovació"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Vés al compte"
 
@@ -594,11 +594,11 @@ msgstr "Afegeix una entrada al llibre diari"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Data"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr "Filtreu per etiqueta, beneficiari…"
 
