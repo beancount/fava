@@ -18,7 +18,6 @@ constraints = [
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "more-itertools", specifier = ">=6" },
     { name = "pytest", specifier = ">=8.0.2" },
-    { name = "setuptools", specifier = ">=67" },
     { name = "six", specifier = ">=1.16" },
     { name = "texttable", specifier = ">=1" },
 ]
@@ -565,16 +564,15 @@ excel = [
 [package.dev-dependencies]
 dev = [
     { name = "fava", extra = ["excel"] },
+    { name = "hatchling" },
     { name = "mypy" },
     { name = "prek" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
-    { name = "setuptools" },
     { name = "ty" },
     { name = "typeguard" },
     { name = "types-requests" },
-    { name = "types-setuptools" },
     { name = "types-simplejson" },
 ]
 docs = [
@@ -592,7 +590,6 @@ github-actions = [
 ]
 old-deps = [
     { name = "pytest" },
-    { name = "setuptools" },
 ]
 pre-commit = [
     { name = "prek" },
@@ -601,16 +598,15 @@ test = [
     { name = "fava", extra = ["excel"] },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "setuptools" },
     { name = "typeguard" },
 ]
 types = [
+    { name = "hatchling" },
     { name = "mypy" },
     { name = "pytest" },
     { name = "ty" },
     { name = "typeguard" },
     { name = "types-requests" },
-    { name = "types-setuptools" },
     { name = "types-simplejson" },
 ]
 
@@ -640,16 +636,15 @@ provides-extras = ["excel"]
 [package.metadata.requires-dev]
 dev = [
     { name = "fava", extras = ["excel"] },
+    { name = "hatchling", specifier = ">=1.27" },
     { name = "mypy", specifier = ">=1.14" },
     { name = "prek" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=6" },
     { name = "ruff", specifier = ">=0.11" },
-    { name = "setuptools", specifier = ">=67" },
     { name = "ty", specifier = ">=0.0.2" },
     { name = "typeguard", specifier = ">=4" },
     { name = "types-requests", specifier = ">=2.32.0.20250515" },
-    { name = "types-setuptools", specifier = ">=67" },
     { name = "types-simplejson", specifier = ">=3" },
 ]
 docs = [
@@ -661,25 +656,21 @@ github-actions = [
     { name = "gha-update", marker = "python_full_version >= '3.12'" },
     { name = "zizmor" },
 ]
-old-deps = [
-    { name = "pytest" },
-    { name = "setuptools" },
-]
+old-deps = [{ name = "pytest" }]
 pre-commit = [{ name = "prek" }]
 test = [
     { name = "fava", extras = ["excel"] },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=6" },
-    { name = "setuptools", specifier = ">=67" },
     { name = "typeguard", specifier = ">=4" },
 ]
 types = [
+    { name = "hatchling", specifier = ">=1.27" },
     { name = "mypy", specifier = ">=1.14" },
     { name = "pytest", specifier = ">=8" },
     { name = "ty", specifier = ">=0.0.2" },
     { name = "typeguard", specifier = ">=4" },
     { name = "types-requests", specifier = ">=2.32.0.20250515" },
-    { name = "types-setuptools", specifier = ">=67" },
     { name = "types-simplejson", specifier = ">=3" },
 ]
 
@@ -753,6 +744,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1", size = 101250, upload-time = "2025-04-24T03:35:25.427Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86", size = 37515, upload-time = "2025-04-24T03:35:24.344Z" },
+]
+
+[[package]]
+name = "hatchling"
+version = "1.31.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "pluggy" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+    { name = "trove-classifiers" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/25/e2/dfa73fe78f773018dcaebc6d09b819bc10d328ff5a6b4a66efa1e3d71f52/hatchling-1.31.0.tar.gz", hash = "sha256:6b48ad4068a482ed7239b3a8215bc55b47aad3345d58dfc94e553c5d2d46211b", size = 57208, upload-time = "2026-07-08T01:48:32.237Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/e2/2c0af0a52d16be74a4f194564fcdc417521ed863e9b65e4bc9052dacba6f/hatchling-1.31.0-py3-none-any.whl", hash = "sha256:aac80bec8b6fe35e8480f1c335be8910fa210a0e6f735a139be205dadcacb544", size = 77747, upload-time = "2026-07-08T01:48:31.024Z" },
 ]
 
 [[package]]
@@ -1608,15 +1615,6 @@ wheels = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "83.0.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/34/26/f5d29e25ffdb535afef2d35cdb55b325298f96debd670da4c325e08d70f4/setuptools-83.0.0.tar.gz", hash = "sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef", size = 1154254, upload-time = "2026-07-04T15:31:22.699Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/40/e1e72872c6354b306daef1703549e8e83b4d43cfea356311bf722a043752/setuptools-83.0.0-py3-none-any.whl", hash = "sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3", size = 1008090, upload-time = "2026-07-04T15:31:20.885Z" },
-]
-
-[[package]]
 name = "simplejson"
 version = "3.20.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1985,6 +1983,15 @@ wheels = [
 ]
 
 [[package]]
+name = "trove-classifiers"
+version = "2026.6.1.19"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c2/e3/7ca82ee24c82d344584abd5b8637b3bd056f2900226e8d82fc22f1184b92/trove_classifiers-2026.6.1.19.tar.gz", hash = "sha256:c5132b4b61a829d11cfbd2d72e97f20a45ed6edb95e45c5efdeb5e00836b2745", size = 17059, upload-time = "2026-06-01T19:41:34.649Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7c/a4/81502f486f01db95bc8320646a8a12511f5e556cb63d5e224d91816605c4/trove_classifiers-2026.6.1.19-py3-none-any.whl", hash = "sha256:ab4c4ec93cc4a4e7815fa759906e05e6bb3f2fbd92ea0f897288c6a43efd15b3", size = 14211, upload-time = "2026-06-01T19:41:33.434Z" },
+]
+
+[[package]]
 name = "ty"
 version = "0.0.63"
 source = { registry = "https://pypi.org/simple" }
@@ -2031,15 +2038,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/db/51/703318f7b7be8bee126ec13bf615050f932d0179b8784420f3a0199cc769/types_requests-2.33.0.20260712.tar.gz", hash = "sha256:2141b67ab534a5c5cd2dac5034f2a35f42e699c5bf185eee608c5246a069d7fb", size = 25084, upload-time = "2026-07-12T05:14:20.455Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/e7/010c87f559e216d83f9dc51e939633fd0d0ead3377340181ab0e223cd3b5/types_requests-2.33.0.20260712-py3-none-any.whl", hash = "sha256:de027e28c171d3da529689cbfa023b0b4eab188c8dfa22fd834eebd2cee6e7bb", size = 21392, upload-time = "2026-07-12T05:14:19.616Z" },
-]
-
-[[package]]
-name = "types-setuptools"
-version = "83.0.0.20260724"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/9d/8c/e069673eb23a7a8242f6e28184ef6911849b2667a61b3bf298d86b807f33/types_setuptools-83.0.0.20260724.tar.gz", hash = "sha256:fe2801176b667f1e8209f8571b0839ca6c34318d743825aeacf3f29970c8d46f", size = 45746, upload-time = "2026-07-24T04:57:55.054Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/5d/5c32313e6eb7298944ca0fad6486157e8ed549760a25598cddb8ac7e08c6/types_setuptools-83.0.0.20260724-py3-none-any.whl", hash = "sha256:eed1a91e1ed9d8ec9f3e71908e5bb17272e41e0852d37d1485ecd9cd33165e1a", size = 68758, upload-time = "2026-07-24T04:57:53.976Z" },
 ]
 
 [[package]]

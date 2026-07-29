@@ -117,10 +117,6 @@ pytz==2022.7
     #   flask-babel
 regex==2022.9.13
     # via beancount
-setuptools==67.0.0
-    # via
-    #   -c (workspace)
-    #   fava (pyproject.toml:old-deps)
 simplejson==3.16.0
     # via fava (pyproject.toml)
 six==1.16.0
