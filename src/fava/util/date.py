@@ -152,7 +152,7 @@ class _IntervalQuarter(Interval):
 
     def get_prev(self, date: datetime.date) -> datetime.date:
         for i in [10, 7, 4]:
-            if date.month > i:
+            if date.month >= i:
                 return datetime.date(date.year, i, 1)
         return datetime.date(date.year, 1, 1)
 
