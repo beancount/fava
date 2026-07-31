@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.22
+    rev: v0.16.0
     hooks:
       - id: ruff-check
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.61
+    rev: v0.0.63
     hooks:
       - id: ty
         args: [--no-default-groups, --group=types]
@@ -18,7 +18,7 @@ repos:
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.5.4
+    rev: v2.5.5
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
@@ -33,7 +33,7 @@ repos:
         additional_dependencies:
           - "prettier@3.9.6"
           - "prettier-plugin-svelte@4.1.1"
-          - "svelte@5.56.7"
+          - "svelte@5.56.8"
       - id: stylelint
         name: stylelint
         language: node

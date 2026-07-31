@@ -123,8 +123,9 @@ setuptools==67.0.0
     #   fava (pyproject.toml:old-deps)
 simplejson==3.16.0
     # via fava (pyproject.toml)
-six==1.11.0
+six==1.16.0
     # via
+    #   -c (workspace)
     #   cheroot
     #   python-dateutil
 sniffio==1.1.0
