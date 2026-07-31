@@ -46,11 +46,14 @@
   const listbox_id = `combobox-listbox-${uid}`;
 
   const SEPARATOR = ",";
-  let values = $derived(value.split(SEPARATOR));
+  let values = $derived(value === "" ? [] : value.split(SEPARATOR));
+  let active_id = $derived(
+    !hidden && index > -1 ? `${listbox_id}-${index.toString()}` : undefined,
+  );
 
   // Scroll focused element into view.
   $effect(() => {
-    if (!hidden && index) {
+    if (!hidden && index > -1) {
       ul?.children[index]?.scrollIntoView({
         block: "nearest",
         inline: "nearest",
@@ -66,7 +69,10 @@
     },
     /** Find the first element matching the typed letter and focus it. */
     find_letter: (key: string, event: KeyboardEvent) => {
-      const match = options.findIndex((o) => o.toLowerCase().startsWith(key));
+      const lower_key = key.toLowerCase();
+      const match = options.findIndex((o) =>
+        o.toLowerCase().startsWith(lower_key),
+      );
       if (match > -1) {
         event.stopPropagation();
         index = match;
@@ -80,12 +86,12 @@
     },
     /** Focus the last element and open if not open yet. */
     last: () => {
-      index = 0;
+      index = options.length - 1;
       hidden = false;
     },
-    /** Focus the previous element in the popup. */
+    /** Focus the next element in the popup. */
     next: () => {
-      index = index === 0 ? options.length - 1 : index - 1;
+      index = index === options.length - 1 ? 0 : index + 1;
     },
     /** Open the popup list. */
     open: () => {
@@ -93,7 +99,7 @@
     },
     /** Focus the previous element in the popup. */
     previous: () => {
-      index = index === options.length - 1 ? 0 : index + 1;
+      index = index === 0 ? options.length - 1 : index - 1;
     },
     /** Select the given or the focused element in the options list. */
     select: (o?: string) => {
@@ -141,10 +147,10 @@
       return actions.close;
     }
     if (key === "ArrowUp") {
-      return hidden ? actions.open : actions.next;
+      return hidden ? actions.open : actions.previous;
     }
     if (key === "ArrowDown") {
-      return hidden ? actions.open : actions.previous;
+      return hidden ? actions.open : actions.next;
     }
     return null;
   }
@@ -156,6 +162,7 @@
     role="combobox"
     aria-expanded={!hidden}
     aria-controls={listbox_id}
+    aria-activedescendant={active_id}
     class="muted"
     onclick={actions.toggle}
     onblur={actions.close}
@@ -163,6 +170,7 @@
       const action = key_action(event);
       if (action) {
         event.preventDefault();
+        event.stopPropagation();
         action();
       }
     }}
@@ -172,6 +180,7 @@
   <ul {hidden} role="listbox" id={listbox_id} bind:this={ul}>
     {#each options as option, i (option)}
       <li
+        id={`${listbox_id}-${i.toString()}`}
         role="option"
         aria-selected={values.includes(option)}
         class:current={i === index}
@@ -213,8 +222,12 @@
     border: var(--link-color) dotted 2px;
   }
 
-  li[aria-selected="true"],
   li:hover {
+    color: var(--background);
+    background-color: var(--link-color-lighter);
+  }
+
+  li[aria-selected="true"] {
     color: var(--background);
     background-color: var(--link-color);
   }

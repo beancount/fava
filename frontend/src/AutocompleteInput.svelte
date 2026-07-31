@@ -13,12 +13,8 @@
 -->
 <script lang="ts">
   import type { KeySpec } from "./keyboard-shortcuts.ts";
-  import { keyboardShortcut } from "./keyboard-shortcuts.ts";
-  import {
-    type FuzzyWrappedText,
-    fuzzyfilter,
-    fuzzywrap,
-  } from "./lib/fuzzy.ts";
+  import { keyboardShortcut, normalise_key } from "./keyboard-shortcuts.ts";
+  import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy.ts";
 
   interface Props {
     /** The currently entered value (bindable). */
@@ -41,12 +37,12 @@
     required?: boolean | undefined;
     /** Whether to show a button to clear the input. */
     clearButton?: boolean;
-    /** An event handler to run on blur. */
-    onBlur?: (el: HTMLInputElement) => void;
     /** An event handler to run on enter. */
-    onEnter?: (el: HTMLInputElement) => void;
+    onenter?: () => void;
     /** An event handler to run on an element being selected. */
-    onSelect?: (el: HTMLInputElement) => void;
+    onselect?: () => void;
+    /** An event handler to run whenever the value changes (on select, enter, or blur). */
+    onchange?: (value: string) => void;
   }
 
   let {
@@ -60,9 +56,9 @@
     checkValidity,
     clearButton = false,
     required,
-    onBlur,
-    onEnter,
-    onSelect,
+    onenter,
+    onselect,
+    onchange,
   }: Props = $props();
 
   const uid = $props.id();
@@ -72,20 +68,12 @@
   let index = $state.raw(-1);
   let input: HTMLInputElement | undefined = $state.raw();
 
-  let extractedValue = $derived(
+  let extracted_value = $derived(
     input && valueExtractor ? valueExtractor(value, input) : value,
   );
-  let filteredSuggestions: {
-    suggestion: string;
-    fuzzywrapped: FuzzyWrappedText;
-  }[] = $derived.by(() => {
-    const filtered = fuzzyfilter(extractedValue, suggestions)
-      .slice(0, 30)
-      .map((suggestion) => ({
-        suggestion,
-        fuzzywrapped: fuzzywrap(extractedValue, suggestion),
-      }));
-    return filtered.length === 1 && filtered[0]?.suggestion === extractedValue
+  let filtered_suggestions: string[] = $derived.by(() => {
+    const filtered = fuzzyfilter(extracted_value, suggestions).slice(0, 30);
+    return filtered.length === 1 && filtered[0] === extracted_value
       ? []
       : filtered;
   });
@@ -97,52 +85,65 @@
 
   $effect.pre(() => {
     // ensure the index is pointing to a valid element.
-    index = Math.min(index, filteredSuggestions.length - 1);
+    index = Math.min(index, filtered_suggestions.length - 1);
   });
+
+  export function blur(): void {
+    input?.blur();
+  }
 
   function select(suggestion: string) {
     value =
       input && valueSelector ? valueSelector(suggestion, input) : suggestion;
-    if (input) {
-      onSelect?.(input);
-    }
+    onchange?.(value);
+    onselect?.();
     hidden = true;
   }
 
-  function mousedown(event: MouseEvent, suggestion: string) {
-    if (event.button === 0) {
-      select(suggestion);
-    }
-  }
+  let expanded = $derived(!hidden && filtered_suggestions.length > 0);
+  let active_suggestion = $derived(
+    expanded && index > -1 ? filtered_suggestions[index] : undefined,
+  );
+  let active_id = $derived(
+    expanded && index > -1 ? `${autocomple_id}-${index.toString()}` : undefined,
+  );
 
-  let expanded = $derived(!hidden && filteredSuggestions.length > 0);
-
-  function keydown(event: KeyboardEvent) {
-    if (event.key === "Enter") {
-      const suggestion = filteredSuggestions[index]?.suggestion;
-      if (index > -1 && !hidden && suggestion != null) {
-        event.preventDefault();
-        select(suggestion);
-      } else if (input) {
-        onEnter?.(input);
+  function onkeydown(event: KeyboardEvent) {
+    const key = normalise_key(event);
+    if (key === "Enter") {
+      if (active_suggestion != null) {
+        select(active_suggestion);
+      } else {
+        onchange?.(value);
+        onenter?.();
+        return;
       }
-    } else if (event.key === " " && event.ctrlKey) {
-      hidden = false;
-    } else if (event.key === "Escape") {
-      event.stopPropagation();
+    } else if (key === "Escape") {
       if (expanded) {
         index = -1;
         hidden = true;
       } else {
         value = "";
       }
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      index = index === 0 ? filteredSuggestions.length - 1 : index - 1;
-    } else if (event.key === "ArrowDown") {
-      event.preventDefault();
-      index = index === filteredSuggestions.length - 1 ? 0 : index + 1;
+    } else if (key === "ArrowUp") {
+      if (expanded) {
+        index = index <= 0 ? filtered_suggestions.length - 1 : index - 1;
+      }
+    } else if (key === "ArrowDown") {
+      if (expanded) {
+        index = index === filtered_suggestions.length - 1 ? 0 : index + 1;
+      } else {
+        hidden = false;
+      }
+    } else if (key === "Alt+ArrowDown") {
+      hidden = false;
+    } else if (key === "Alt+ArrowUp") {
+      hidden = true;
+    } else {
+      return;
     }
+    event.preventDefault();
+    event.stopPropagation();
   }
 </script>
 
@@ -154,12 +155,14 @@
     class={{ "content-sized": setSize }}
     aria-expanded={expanded}
     aria-controls={autocomple_id}
+    aria-autocomplete="list"
+    aria-activedescendant={active_id}
     bind:value
     bind:this={input}
     {@attach keyboardShortcut(key)}
-    onblur={(event) => {
+    onblur={() => {
+      onchange?.(value);
       hidden = true;
-      onBlur?.(event.currentTarget);
     }}
     onfocus={() => {
       hidden = false;
@@ -167,7 +170,7 @@
     oninput={() => {
       hidden = false;
     }}
-    onkeydown={keydown}
+    {onkeydown}
     {placeholder}
     {required}
   />
@@ -178,26 +181,26 @@
       class="muted round"
       onclick={() => {
         value = "";
-        if (input) {
-          onSelect?.(input);
-        }
+        onchange?.(value);
       }}
     >
       ×
     </button>
   {/if}
-  {#if filteredSuggestions.length}
-    <ul {hidden} role="listbox" id={autocomple_id}>
-      {#each filteredSuggestions as { fuzzywrapped, suggestion }, i (suggestion)}
+  {#if expanded}
+    <ul role="listbox" id={autocomple_id}>
+      {#each filtered_suggestions as suggestion, i (suggestion)}
         <li
+          id={`${autocomple_id}-${i.toString()}`}
           role="option"
           aria-selected={i === index}
-          class:selected={i === index}
-          onmousedown={(ev) => {
-            mousedown(ev, suggestion);
+          onmousedown={(event) => {
+            if (event.button === 0) {
+              select(suggestion);
+            }
           }}
         >
-          {#each fuzzywrapped as [type, text], i (i)}
+          {#each fuzzywrap(extracted_value, suggestion) as [type, text], i (i)}
             {#if type === "text"}
               {text}
             {:else}
@@ -242,8 +245,12 @@
     cursor: pointer;
   }
 
-  li.selected,
   li:hover {
+    color: var(--background);
+    background-color: var(--link-color-lighter);
+  }
+
+  li[aria-selected="true"] {
     color: var(--background);
     background-color: var(--link-color);
   }

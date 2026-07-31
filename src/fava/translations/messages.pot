@@ -77,7 +77,7 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr ""
 
@@ -89,16 +89,16 @@ msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:43
+#: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:54
+#: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
@@ -123,19 +123,19 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr ""
@@ -244,8 +244,8 @@ msgid "Date"
 msgstr ""
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
-#: frontend/src/reports/journal/JournalHeaders.svelte:56
-#: frontend/src/reports/journal/JournalHeaders.svelte:59
+#: frontend/src/reports/journal/JournalHeaders.svelte:66
+#: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
 msgstr ""
 
@@ -465,12 +465,12 @@ msgstr ""
 msgid "F"
 msgstr ""
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
-#: frontend/src/reports/journal/JournalHeaders.svelte:58
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
+#: frontend/src/reports/journal/JournalHeaders.svelte:68
 msgid "Cost"
 msgstr ""
 
-#: frontend/src/reports/journal/JournalHeaders.svelte:55
+#: frontend/src/reports/journal/JournalHeaders.svelte:64
 msgid "Change"
 msgstr ""
 
@@ -565,7 +565,7 @@ msgstr ""
 msgid "Trial Balance"
 msgstr ""
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr ""
 
@@ -577,11 +577,11 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr ""
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr ""
 

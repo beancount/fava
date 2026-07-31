@@ -60,7 +60,7 @@ fava = "fava.cli:main"
 
 [project.optional-dependencies]
 # Extra dependencies that are needed for the export to excel.
-excel = ["pyexcel>=0.5", "pyexcel-ods3>=0.5", "pyexcel-xlsx>=0.5"]
+excel = ["pyexcel>=0.7", "pyexcel-ods3>=0.6", "pyexcel-xlsx>=0.6"]
 
 [dependency-groups]
 # Stuff for the dev environment.
@@ -75,7 +75,7 @@ docs = ["furo>=2024", "sphinx>=7", "sphinx-autodoc-typehints>=2"]
 # Add setuptools for the old_deps constraints
 # (otherwise it is not added to the constraints as it's only a build dependency).
 old-deps = ["pytest", "setuptools"]
-# Running pre-commit hooks.
+# Running pre-commit hooks with prek.
 pre-commit = ["prek"]
 # Utilities to deal with github actions.
 github-actions = [
@@ -112,14 +112,11 @@ python-preference = "system"
 # Pin some lower bounds for transitive dependencies in the old_deps tests
 # This a basically determined by increasing them until getting a combination that runs.
 constraint-dependencies = [
-  "bottle>=0.12.20",         # older ones didn't build
-  "importlib_metadata>=3.6",
   "jaraco-functools>=4",
   "lxml>=5.3.0",             # older ones don't have wheels for recent Python versions
   "more-itertools>=6",
-  "pytest>=7.2",             # also used for running the tests of Fava, needs to somewhat recent
-  "python-dateutil>=2",
-  "pytz>=2020",
+  "pytest>=8.0.2",           # also used for running the tests of Fava, needs to somewhat recent
+  "texttable>=1",
   "setuptools>=67",
   "six>=1.16",
 ]

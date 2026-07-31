@@ -75,7 +75,34 @@ def test_lexer_basic() -> None:
         ("STRING", "string"),
     ]
     with pytest.raises(FilterError):
-        list(lex("|"))
+        list(lex('"'))
+
+
+def test_lexer_emoji() -> None:
+    lex = FilterSyntaxLexer().lex
+    data = "☕ ⛽️"
+    assert [(tok.type, tok.value) for tok in lex(data)] == [
+        ("STRING", "☕"),
+        ("STRING", "⛽️"),
+    ]
+
+
+def test_emoji_search_in_narration() -> None:
+    txn = create.transaction(
+        {},
+        datetime.date(2026, 6, 24),
+        "*",
+        "Cafe ☕",
+        "Coffee",
+        frozenset(),
+        frozenset(),
+        [create.posting("Expenses:Food:Coffee", "5.00 AUD")],
+    )
+    filter_ = AdvancedFilter("☕")
+    assert filter_.apply([txn]) == [txn]
+
+    filter_no_match = AdvancedFilter("⛽")
+    assert filter_no_match.apply([txn]) == []
 
 
 def test_lexer_literals_in_string() -> None:

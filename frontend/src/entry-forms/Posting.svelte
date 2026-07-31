@@ -32,7 +32,7 @@
   }: Props = $props();
 
   let amount_number = $derived(posting.amount.replace(/[^\-?0-9.]/g, ""));
-  let amountSuggestions = $derived(
+  let amount_suggestions = $derived(
     $currencies.map((c) => `${amount_number} ${c}`),
   );
 
@@ -98,7 +98,7 @@
   />
   <AutocompleteInput
     placeholder={_("Amount")}
-    suggestions={amountSuggestions}
+    suggestions={amount_suggestions}
     bind:value={
       () => posting.amount,
       (amount: string) => {

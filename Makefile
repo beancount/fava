@@ -51,7 +51,7 @@ mostlyclean:
 
 # Run linters.
 .PHONY: lint
-lint: frontend/node_modules ty
+lint: frontend/node_modules
 	uv run prek run -v -a
 	cd frontend; npm exec tsc
 	cd frontend; npm exec svelte-check
@@ -60,11 +60,6 @@ lint: frontend/node_modules ty
 .PHONY: mypy
 mypy:
 	uv run --no-dev --group types mypy
-
-# Run ty for Python type-checking.
-.PHONY: ty
-ty:
-	uv run --no-dev --group types ty check --error-on-warning
 
 # Run tests.
 .PHONY: test test-js test-py test-py-old-deps
@@ -88,7 +83,7 @@ update-snapshots:
 .PHONY: update-constraints
 update-constraints:
 	uv lock --upgrade
-	uv pip compile --quiet --extra excel --group old-deps --resolution=lowest --python-version 3.10 --upgrade --output-file constraints-old.txt pyproject.toml
+	uv pip compile --quiet --extra excel --group old-deps --resolution=lowest --universal --upgrade --output-file constraints-old.txt pyproject.toml
 
 # Update the frontend dependencies.
 .PHONY: update-frontend-deps
@@ -106,7 +101,7 @@ update-tree-sitter-beancount:
 # Update prek hooks
 .PHONY: update-precommit
 update-precommit:
-	uv run prek autoupdate
+	uv run prek update --cooldown-days 7
 
 # Update github actions action versions.
 .PHONY: update-github-actions

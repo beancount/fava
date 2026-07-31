@@ -27,6 +27,12 @@
   let payee = $derived(entry.payee);
   let narration = $derived(entry.get_narration_tags_links());
 
+  let payee_accounts = $derived(
+    $payees.includes(payee)
+      ? fetch_payee_accounts($ledger_mtime, payee)
+      : undefined,
+  );
+
   // Autofill complete transactions.
   async function autocomplete_select_payee() {
     if (entry.narration || entry.postings.some((p) => !p.is_empty())) {
@@ -77,14 +83,12 @@
     <span class="hide-on-desktop">{_("Payee")}:</span>
     <AutocompleteInput
       placeholder={_("Payee")}
-      bind:value={
-        () => entry.payee,
-        (payee: string) => {
-          entry = entry.set("payee", payee);
-        }
-      }
+      value={entry.payee}
+      onchange={(value: string) => {
+        entry = entry.set("payee", value);
+      }}
       suggestions={$payees}
-      onSelect={autocomplete_select_payee}
+      onselect={autocomplete_select_payee}
       --autocomplete-wrapper-flex="1"
     />
   </label>
@@ -92,15 +96,12 @@
     <span class="hide-on-desktop">{_("Narration")}:</span>
     <AutocompleteInput
       placeholder={_("Narration")}
-      bind:value={narration}
+      value={narration}
       suggestions={fetch_narrations($ledger_mtime).data}
-      onSelect={autocomplete_select_narration}
-      onEnter={() => {
-        entry = entry.set_narration_tags_links(narration);
+      onchange={(value: string) => {
+        entry = entry.set_narration_tags_links(value);
       }}
-      onBlur={() => {
-        entry = entry.set_narration_tags_links(narration);
-      }}
+      onselect={autocomplete_select_narration}
       --autocomplete-wrapper-flex="2"
     />
     <AddMetadataButton
@@ -124,31 +125,25 @@
 <div class="flex-row hide-on-desktop">
   <span class="label">{_("Postings")}:</span>
 </div>
-{#each entry.postings, index}
-  <!-- Using the indexed access (instead of `as posting` in the each) seems to track
-         the reactivity differently and avoids cursor jumping on the posting inputs. -->
-  {@const posting = entry.postings[index]}
-  {#if posting != null}
-    <PostingSvelte
-      bind:posting={
-        () => posting,
-        (posting: Posting) => {
-          entry = entry.set("postings", entry.postings.with(index, posting));
-        }
+<!-- eslint-disable-next-line svelte/require-each-key -->
+{#each entry.postings as posting, index}
+  <PostingSvelte
+    bind:posting={
+      () => posting,
+      (posting: Posting) => {
+        entry = entry.set("postings", entry.postings.with(index, posting));
       }
-      {index}
-      suggestions={$payees.includes(payee)
-        ? fetch_payee_accounts($ledger_mtime, payee).data
-        : undefined}
-      date={entry.date}
-      move={({ from, to }: { from: number; to: number }) => {
-        entry = entry.set("postings", move(entry.postings, from, to));
-      }}
-      remove={() => {
-        entry = entry.set("postings", entry.postings.toSpliced(index, 1));
-      }}
-    />
-  {/if}
+    }
+    {index}
+    suggestions={payee_accounts?.data}
+    date={entry.date}
+    move={({ from, to }: { from: number; to: number }) => {
+      entry = entry.set("postings", move(entry.postings, from, to));
+    }}
+    remove={() => {
+      entry = entry.set("postings", entry.postings.toSpliced(index, 1));
+    }}
+  />
 {/each}
 
 <style>

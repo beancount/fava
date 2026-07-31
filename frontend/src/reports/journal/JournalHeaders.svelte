@@ -52,7 +52,17 @@
       </button>
       <span class="num">{_("Units")}</span>
       {#if show_change_and_balance}
-        <span class="num">{_("Cost")} / {_("Change")}</span>
+        <button
+          type="button"
+          class="num unset"
+          data-order={name === "change" ? order : undefined}
+          {disabled}
+          onclick={() => {
+            set_sort_column("change");
+          }}
+        >
+          {_("Cost")} / {_("Change")}
+        </button>
         <span class="num">{_("Price")} / {_("Balance")}</span>
       {:else}
         <span class="num">{_("Cost")}</span>
@@ -69,5 +79,14 @@
 
   button {
     position: relative;
+  }
+
+  button.num {
+    padding-left: 18px;
+  }
+
+  button.num[data-order]::after {
+    right: auto;
+    left: 4px;
   }
 </style>

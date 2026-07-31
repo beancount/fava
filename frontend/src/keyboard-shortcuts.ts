@@ -107,6 +107,23 @@ const keyboardShortcuts = new Map<string, KeyboardShortcutAction>();
 let lastChar = "";
 
 /**
+ * Normalise an event key, including modifiers, e.g. `Control+Enter`
+ */
+export function normalise_key(event: KeyboardEvent): string {
+  let key = event.key;
+  if (event.metaKey) {
+    key = `Meta+${key}`;
+  }
+  if (event.altKey) {
+    key = `Alt+${key}`;
+  }
+  if (event.ctrlKey) {
+    key = `Control+${key}`;
+  }
+  return key;
+}
+
+/**
  * Handle a `keydown` event on the document.
  *
  * Dispatch to the relevant handler.
@@ -116,16 +133,7 @@ function keydown(event: KeyboardEvent): void {
     // ignore events in editable elements.
     return;
   }
-  let eventKey = event.key;
-  if (event.metaKey) {
-    eventKey = `Meta+${eventKey}`;
-  }
-  if (event.altKey) {
-    eventKey = `Alt+${eventKey}`;
-  }
-  if (event.ctrlKey) {
-    eventKey = `Control+${eventKey}`;
-  }
+  const eventKey = normalise_key(event);
   const lastTwoKeys = `${lastChar} ${eventKey}`;
   const handler =
     keyboardShortcuts.get(lastTwoKeys) ?? keyboardShortcuts.get(eventKey);
