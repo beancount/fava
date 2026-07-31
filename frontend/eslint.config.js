@@ -28,6 +28,15 @@ export default defineConfig(
       "@typescript-eslint/explicit-module-boundary-types": ON,
       "@typescript-eslint/promise-function-async": ON,
       "@typescript-eslint/strict-boolean-expressions": ON,
+      "@typescript-eslint/no-floating-promises": [
+        ON,
+        {
+          allowForKnownSafeCalls: [
+            { from: "package", name: ["test"], package: "node:test" },
+          ],
+        },
+      ],
+
       "@typescript-eslint/naming-convention": [
         ON,
         {
@@ -44,12 +53,6 @@ export default defineConfig(
           format: ["PascalCase"],
         },
       ],
-    },
-  },
-  {
-    files: ["**/*.test.ts"],
-    rules: {
-      "@typescript-eslint/no-floating-promises": OFF,
     },
   },
   {

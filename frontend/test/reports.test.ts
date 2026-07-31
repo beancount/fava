@@ -28,5 +28,5 @@ test("render documents report", async () => {
 
   equal(document.querySelectorAll("table tbody tr").length, documents.length);
 
-  unmount(component);
+  await unmount(component);
 });

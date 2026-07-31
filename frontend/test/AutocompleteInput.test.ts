@@ -25,8 +25,8 @@ function mount_autocomplete(
   });
   flushSync();
 
-  t.after(() => {
-    unmount(component);
+  t.after(async () => {
+    await unmount(component);
   });
 
   const input = document.body.querySelector("input");
