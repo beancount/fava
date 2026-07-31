@@ -164,15 +164,15 @@ msgstr "По годам"
 msgid "Quarterly"
 msgstr "По кварталам"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
 msgid "Monthly"
 msgstr "По месяцам"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
 msgid "Weekly"
 msgstr "По неделям"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
 msgid "Daily"
 msgstr "По дням"
 

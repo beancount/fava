@@ -163,15 +163,15 @@ msgstr "Vuodet"
 msgid "Quarterly"
 msgstr "Kvartaalit"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
 msgid "Monthly"
 msgstr "Kuukaudet"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
 msgid "Weekly"
 msgstr "Viikot"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
 msgid "Daily"
 msgstr "Päivät"
 
