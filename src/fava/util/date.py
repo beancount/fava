@@ -151,17 +151,12 @@ class _IntervalQuarter(Interval):
         return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
 
     def get_prev(self, date: datetime.date) -> datetime.date:
-        for i in [10, 7, 4]:
-            if date.month > i:
-                return datetime.date(date.year, i, 1)
-        return datetime.date(date.year, 1, 1)
+        return datetime.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
 
     def get_next(self, date: datetime.date) -> datetime.date:
-        for i in [4, 7, 10]:
-            if date.month < i:
-                return datetime.date(date.year, i, 1)
+        month = (date.month - 1) // 3 * 3 + 4
         try:
-            return datetime.date(date.year + 1, 1, 1)
+            return datetime.date(date.year + (month > 12), month % 12, 1)
         except ValueError:
             return datetime.date.max
 

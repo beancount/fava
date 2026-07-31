@@ -101,6 +101,11 @@ def test_get_next_interval_max() -> None:
         ("2016-12-31", Month, "2016-12-01"),
         ("2016-12-31", Quarter, "2016-10-01"),
         ("2016-12-31", Year, "2016-01-01"),
+        ("2016-04-01", Quarter, "2016-04-01"),
+        ("2016-04-15", Quarter, "2016-04-01"),
+        ("2016-07-01", Quarter, "2016-07-01"),
+        ("2016-09-30", Quarter, "2016-07-01"),
+        ("2016-10-01", Quarter, "2016-10-01"),
         ("9999-12-31", Quarter, "9999-10-01"),
         ("9999-12-31", Year, "9999-01-01"),
     ],
@@ -359,6 +364,10 @@ def test_parse_date_relative(
         (Quarter, "2016-12-01", 92),
         (Year, "2015-02-01", 365),
         (Year, "2016-01-01", 366),
+        # dates in the first month of a quarter
+        (Quarter, "2015-04-01", 91),
+        (Quarter, "2015-07-01", 92),
+        (Quarter, "2016-10-15", 92),
     ],
 )
 def test_number_of_days_in_period(
