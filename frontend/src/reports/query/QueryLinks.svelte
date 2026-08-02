@@ -4,7 +4,7 @@
   other formats.
 -->
 <script lang="ts">
-  import { urlFor } from "../../helpers.ts";
+  import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { HAVE_EXCEL } from "../../stores/index.ts";
 
@@ -19,15 +19,15 @@
 
 <span>
   ({_("Download as")}
-  <a href={$urlFor("download-query/query_result.csv", params)} data-remote>
+  <a href={$url_for("download-query/query_result.csv", params)} data-remote>
     CSV
   </a>{#if $HAVE_EXCEL}
     ,
-    <a href={$urlFor("download-query/query_result.xlsx", params)} data-remote>
+    <a href={$url_for("download-query/query_result.xlsx", params)} data-remote>
       XLSX
     </a>
     , or
-    <a href={$urlFor("download-query/query_result.ods", params)} data-remote>
+    <a href={$url_for("download-query/query_result.ods", params)} data-remote>
       ODS
     </a>
   {/if})

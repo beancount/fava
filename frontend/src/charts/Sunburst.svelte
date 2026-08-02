@@ -5,7 +5,7 @@
   import { arc } from "d3-shape";
   import { untrack } from "svelte";
 
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { ctx } from "../stores/format.ts";
   import { sunburstScale } from "./helpers.ts";
   import {
@@ -68,7 +68,7 @@
     {balance_with_percentage($ctx, current ?? root, currency)}
   </text>
   {#each nodes as d (d.data.account)}
-    <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
+    <a href={$url_for_account(d.data.account)} aria-label={d.data.account}>
       <path
         onmouseover={() => {
           current = d;

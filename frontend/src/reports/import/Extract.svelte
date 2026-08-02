@@ -27,7 +27,7 @@
     }
   });
 
-  function submitOrNext(event: SubmitEvent) {
+  function submit_or_next(event: SubmitEvent) {
     event.preventDefault();
     if (currentIndex < count - 1) {
       currentIndex += 1;
@@ -36,11 +36,11 @@
     }
   }
 
-  function previousEntry() {
+  function previous_entry() {
     currentIndex = Math.max(currentIndex - 1, 0);
   }
 
-  function toggleDuplicate() {
+  function toggle_duplicate() {
     if (entry) {
       entries[currentIndex] = entry.set_meta(
         "__duplicate__",
@@ -53,8 +53,8 @@
   let count_without_duplicates = $derived(count - count_duplicates);
 </script>
 
-<ModalBase {shown} closeHandler={close}>
-  <form class="flex-column" novalidate={duplicate} onsubmit={submitOrNext}>
+<ModalBase {shown} close_handler={close}>
+  <form class="flex-column" novalidate={duplicate} onsubmit={submit_or_next}>
     <h3>{_("Import")}</h3>
     {#if entry}
       <div class="flex-row">
@@ -71,7 +71,7 @@
           <input
             type="checkbox"
             checked={duplicate}
-            onclick={toggleDuplicate}
+            onclick={toggle_duplicate}
           />
           {_("ignore duplicate")}
         </label>
@@ -96,7 +96,7 @@
           >
             ⏮
           </button>
-          <button type="button" class="muted" onclick={previousEntry}>
+          <button type="button" class="muted" onclick={previous_entry}>
             {_("Previous")}
           </button>
         {/if}

@@ -44,14 +44,8 @@ export default defineConfig(
           format: ["camelCase", "snake_case", "UPPER_CASE"],
           leadingUnderscore: "allow",
         },
-        {
-          selector: "function",
-          format: ["camelCase", "snake_case"],
-        },
-        {
-          selector: "typeLike",
-          format: ["PascalCase"],
-        },
+        { selector: "function", format: ["snake_case"] },
+        { selector: "typeLike", format: ["PascalCase"] },
       ],
     },
   },

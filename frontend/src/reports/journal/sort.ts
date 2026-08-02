@@ -1,4 +1,4 @@
-import { get_direction, sortElements } from "../../sort/index.ts";
+import { get_direction, sort_elements } from "../../sort/index.ts";
 import type { JournalSort } from "../../stores/journal.ts";
 
 export type JournalSortColumn = "date" | "flag" | "narration" | "change";
@@ -21,7 +21,7 @@ export function sort_journal(ol: HTMLOListElement, sort: JournalSort): void {
   const [column, order] = sort;
   const type = journal_column_types[column];
   const selector = journal_column_selectors[column];
-  sortElements<HTMLLIElement>(
+  sort_elements<HTMLLIElement>(
     ol,
     [].slice.call(ol.children),
     (li) => li.querySelector(selector),

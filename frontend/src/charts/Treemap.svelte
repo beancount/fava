@@ -1,7 +1,7 @@
 <script lang="ts">
   import { treemap } from "d3-hierarchy";
 
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
@@ -51,7 +51,7 @@
       ])}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
-      <a href={$urlForAccount(account)}>
+      <a href={$url_for_account(account)}>
         <text
           dy=".5em"
           x={(d.x1 - d.x0) / 2}

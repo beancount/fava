@@ -5,19 +5,19 @@ import { ParsedBarChart } from "../src/charts/bar.ts";
 import {
   colors10,
   colors15,
-  filterTicks,
-  includeZero,
-  padExtent,
+  filter_ticks,
+  include_zero,
+  pad_extent,
 } from "../src/charts/helpers.ts";
 import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
 import { charts_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
-import { loadJSONSnapshot } from "./helpers.ts";
+import { load_json_snapshot } from "./helpers.ts";
 
 test("chart helpers (filter ticks)", () => {
-  deepEqual(filterTicks(["1", "2", "3"], 2), ["1", "3"]);
-  deepEqual(filterTicks(["1", "2", "3"], 4), ["1", "2", "3"]);
+  deepEqual(filter_ticks(["1", "2", "3"], 2), ["1", "3"]);
+  deepEqual(filter_ticks(["1", "2", "3"], 4), ["1", "2", "3"]);
 });
 
 test("chart helpers (color scales)", () => {
@@ -26,21 +26,23 @@ test("chart helpers (color scales)", () => {
 });
 
 test("chart helpers (include zero in extent)", () => {
-  deepEqual(includeZero([2, 5]), [0, 5]);
-  deepEqual(includeZero([-12, -5]), [-12, 0]);
-  deepEqual(includeZero([-5, 5]), [-5, 5]);
-  deepEqual(includeZero([undefined, undefined]), [0, 1]);
+  deepEqual(include_zero([2, 5]), [0, 5]);
+  deepEqual(include_zero([-12, -5]), [-12, 0]);
+  deepEqual(include_zero([-5, 5]), [-5, 5]);
+  deepEqual(include_zero([undefined, undefined]), [0, 1]);
 });
 
 test("chart helpers (pad extent)", () => {
-  deepEqual(padExtent([0, 1]), [-0.03, 1.03]);
-  deepEqual(padExtent([undefined, undefined]), [0, 1]);
+  deepEqual(pad_extent([0, 1]), [-0.03, 1.03]);
+  deepEqual(pad_extent([undefined, undefined]), [0, 1]);
 });
 
 test("handle data for hierarchical chart", async () => {
   const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
-  const data = await loadJSONSnapshot("test_internal_api-test_chart_api.json");
+  const data = await load_json_snapshot(
+    "test_internal_api-test_chart_api.json",
+  );
   const validated = charts_validator(data).unwrap();
 
   const [hierarchy, balances, net_worth] = validated;

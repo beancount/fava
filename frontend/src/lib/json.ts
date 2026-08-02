@@ -4,7 +4,7 @@ import { err, ok } from "./result.ts";
 /**
  * Parse a JSON string into an object.
  */
-export function parseJSON(data: string): Result<unknown, SyntaxError> {
+export function parse_json(data: string): Result<unknown, SyntaxError> {
   try {
     return ok(JSON.parse(data));
   } catch (error) {

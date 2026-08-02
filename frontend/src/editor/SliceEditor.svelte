@@ -16,7 +16,7 @@
     is_editable,
   } from "../entries/index.ts";
   import EntrySvelte from "../entry-forms/Entry.svelte";
-  import { todayAsString } from "../format.ts";
+  import { today_as_string } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
@@ -129,7 +129,7 @@
         class="muted"
         onclick={() => {
           if (duplicated_entry == null) {
-            duplicated_entry = entry.set("date", todayAsString());
+            duplicated_entry = entry.set("date", today_as_string());
           } else {
             duplicated_entry = undefined;
           }

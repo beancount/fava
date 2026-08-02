@@ -1,6 +1,6 @@
 import { derived, writable } from "svelte/store";
 
-import { getInterval } from "../lib/interval.ts";
+import { get_interval } from "../lib/interval.ts";
 
 /** The current URL. Should only be updated by the router. */
 export const current_url = writable<URL>();
@@ -14,27 +14,27 @@ export const pathname = derived(current_url, (u) => u.pathname);
 /** The current URL search. */
 const search = derived(current_url, (u) => u.search);
 
-/** The current URL searchParams. */
-export const searchParams = derived(
+/** The current URL search_params. */
+export const search_params = derived(
   search,
   ($search) => new URLSearchParams($search),
 );
 
 /** Whether the charts should be shown. */
 export const show_charts = derived(
-  searchParams,
-  ($searchParams) => $searchParams.get("charts") !== "false",
+  search_params,
+  ($search_params) => $search_params.get("charts") !== "false",
 );
 
 /** The current conversion used for reports. */
 export const conversion = derived(
-  searchParams,
-  ($searchParams) => $searchParams.get("conversion") ?? "at_cost",
+  search_params,
+  ($search_params) => $search_params.get("conversion") ?? "at_cost",
 );
 
 /** The current interval used for reports. */
-export const interval = derived(searchParams, ($searchParams) =>
-  getInterval($searchParams.get("interval")),
+export const interval = derived(search_params, ($search_params) =>
+  get_interval($search_params.get("interval")),
 );
 
 /** These URL parameters for filters and conversion / interval are synced for most links. */
@@ -47,11 +47,11 @@ const synced_search_param_names = [
   "time",
 ];
 
-/** The current searchParams containing all values that are synced to the URL. */
-export const syncedSearchParams = derived(searchParams, ($searchParams) => {
+/** The current search_params containing all values that are synced to the URL. */
+export const synced_search_params = derived(search_params, ($search_params) => {
   const params = new URLSearchParams();
   for (const name of synced_search_param_names) {
-    const value = $searchParams.get(name);
+    const value = $search_params.get(name);
     if (value != null && value) {
       params.set(name, value);
     }

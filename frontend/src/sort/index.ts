@@ -48,7 +48,7 @@ export class Sorter<T = unknown> {
   }
 
   /** Get a new sorter by switching to a possibly different column. */
-  switchColumn(column: SortColumn<T>): Sorter<T> {
+  switch_column(column: SortColumn<T>): Sorter<T> {
     if (column === this.column) {
       return new Sorter(column, this.order === "asc" ? "desc" : "asc");
     }
@@ -158,7 +158,7 @@ function compare_numbers(a: string, b: string): number {
  * @param order - The sort order.
  * @param type - The type of the value that should be sorted by.
  */
-export function sortElements<T extends Element>(
+export function sort_elements<T extends Element>(
   parent: Element,
   elements: T[],
   selector: (e: T) => Element | null,

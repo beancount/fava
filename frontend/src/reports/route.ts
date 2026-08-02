@@ -1,7 +1,7 @@
 import { type Component, mount, unmount } from "svelte";
 
 import { _ } from "../i18n.ts";
-import { getScriptTagValue } from "../lib/dom.ts";
+import { get_script_tag_value } from "../lib/dom.ts";
 import { fetch_text } from "../lib/fetch.ts";
 import { string } from "../lib/validation.ts";
 import { read_mtime } from "../stores/mtime.ts";
@@ -40,7 +40,7 @@ export class RenderedReport {
 
 class BackendRenderedReport extends RenderedReport {
   constructor(route: BaseRoute, url: URL, target: HTMLElement) {
-    const title = getScriptTagValue("#page-title", string).unwrap_or(
+    const title = get_script_tag_value("#page-title", string).unwrap_or(
       "ERROR: reading #page-title failed.",
     );
     super(route, url, title, () => {

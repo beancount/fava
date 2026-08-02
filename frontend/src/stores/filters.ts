@@ -1,21 +1,21 @@
 import { derived } from "svelte/store";
 
-import { searchParams } from "./url.ts";
+import { search_params } from "./url.ts";
 
 /** The time filter. */
 export const time_filter = derived(
-  searchParams,
-  ($searchParams) => $searchParams.get("time") ?? "",
+  search_params,
+  ($search_params) => $search_params.get("time") ?? "",
 );
 /** The account filter. */
 export const account_filter = derived(
-  searchParams,
-  ($searchParams) => $searchParams.get("account") ?? "",
+  search_params,
+  ($search_params) => $search_params.get("account") ?? "",
 );
 /** The filter with our custom query syntax. */
 export const fql_filter = derived(
-  searchParams,
-  ($searchParams) => $searchParams.get("filter") ?? "",
+  search_params,
+  ($search_params) => $search_params.get("filter") ?? "",
 );
 
 /** The three entry filters that Fava supports. */
@@ -41,7 +41,7 @@ export const filter_params = derived(
   }),
 );
 
-export function getURLFilters(url: URL): FiltersConversionInterval {
+export function get_url_filters(url: URL): FiltersConversionInterval {
   return {
     account: url.searchParams.get("account") ?? "",
     filter: url.searchParams.get("filter") ?? "",

@@ -5,7 +5,7 @@
 <script lang="ts">
   import { Amount, Position } from "../../entries/index.ts";
   import { day } from "../../format.ts";
-  import { urlForAccount } from "../../helpers.ts";
+  import { url_for_account } from "../../helpers.ts";
   import { is_empty } from "../../lib/objects.ts";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
   import { Sorter, UnsortedColumn } from "../../sort/index.ts";
@@ -70,7 +70,7 @@
           {:else if typeof value === "string"}
             <td>
               {#if $accounts_set.has(value)}
-                <a href={$urlForAccount(value)}>{value}</a>
+                <a href={$url_for_account(value)}>{value}</a>
                 <AccountIndicator account={value} small />
               {:else if value.length === 32 && /[a-z0-9]/.test(value)}
                 <a href={`#context-${value}`}>{value}</a>

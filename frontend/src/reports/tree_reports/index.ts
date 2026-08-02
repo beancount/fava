@@ -9,7 +9,7 @@ import {
 } from "../../charts/hierarchy.ts";
 import type { ParsedFavaChart } from "../../charts/index.ts";
 import { _ } from "../../i18n.ts";
-import { getURLFilters } from "../../stores/filters.ts";
+import { get_url_filters } from "../../stores/filters.ts";
 import { Route } from "../route.ts";
 import BalanceSheet from "./BalanceSheet.svelte";
 import IncomeStatement from "./IncomeStatement.svelte";
@@ -25,7 +25,7 @@ export const income_statement = new Route(
   "income_statement",
   IncomeStatement,
   async (url) => {
-    const report = await get_income_statement(getURLFilters(url));
+    const report = await get_income_statement(get_url_filters(url));
     const [income, _profit, expenses] = report.trees;
     if (income && expenses) {
       report.charts.push(
@@ -42,7 +42,7 @@ export const balance_sheet = new Route(
   "balance_sheet",
   BalanceSheet,
   async (url) => {
-    const report = await get_balance_sheet(getURLFilters(url));
+    const report = await get_balance_sheet(get_url_filters(url));
     report.charts.push(...report.trees.map(ParsedHierarchyChart.from_node));
     return report;
   },
@@ -53,7 +53,7 @@ export const trial_balance = new Route(
   "trial_balance",
   TrialBalance,
   async (url) => {
-    const report = await get_trial_balance(getURLFilters(url));
+    const report = await get_trial_balance(get_url_filters(url));
     const root = report.trees[0];
     if (root) {
       report.charts.push(...root.children.map(ParsedHierarchyChart.from_node));

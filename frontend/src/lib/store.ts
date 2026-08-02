@@ -3,7 +3,7 @@ import { derived, writable } from "svelte/store";
 
 import type { StrictEquality } from "./equals.ts";
 import { shallow_equal } from "./equals.ts";
-import { parseJSON } from "./json.ts";
+import { parse_json } from "./json.ts";
 import type { Validator } from "./validation.ts";
 
 /**
@@ -47,7 +47,7 @@ const local_storage_synced_stores = new Set();
  * @param init - A default to initialise the store with if localStorage is empty.
  * @param values - An optional enumerator of all possible values and descriptions.
  */
-export function localStorageSyncedStore<T>(
+export function local_storage_synced_store<T>(
   key: string,
   validator: Validator<T>,
   init: () => T,
@@ -72,7 +72,7 @@ export function localStorageSyncedStore<T>(
     const set_from_stored_value = (stored: string | null) => {
       let initial: T | null = null;
       if (stored != null) {
-        const res = parseJSON(stored).and_then(validator);
+        const res = parse_json(stored).and_then(validator);
         if (res.is_ok) {
           initial = res.value;
         }

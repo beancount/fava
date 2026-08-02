@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Entry } from "../entries/index.ts";
-  import { urlForSource } from "../helpers.ts";
+  import { url_for_source } from "../helpers.ts";
   import { _ } from "../i18n.ts";
 
   interface Props {
@@ -13,7 +13,7 @@
 <p>
   {_("Location")}:
   <code>
-    <a href={$urlForSource(entry.meta.filename, entry.meta.lineno)}>
+    <a href={$url_for_source(entry.meta.filename, entry.meta.lineno)}>
       {entry.meta.filename}:{entry.meta.lineno}
     </a>
   </code>

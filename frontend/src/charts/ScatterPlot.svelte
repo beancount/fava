@@ -58,13 +58,13 @@
     ),
   );
 
-  function tooltipText(d: ScatterPlotDatum) {
+  function tooltip_text(d: ScatterPlotDatum) {
     return [d.description, domHelpers.em(day(d.date))];
   }
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.type) ?? 0, tooltipText(d)];
+    return d && [x(d.date), y(d.type) ?? 0, tooltip_text(d)];
   };
 </script>
 

@@ -29,13 +29,13 @@ import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
 import { BeancountTextarea } from "./codemirror/dom.ts";
 import { _ } from "./i18n.ts";
-import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts.ts";
-import { getScriptTagValue } from "./lib/dom.ts";
+import { init_global_keyboard_shortcuts } from "./keyboard-shortcuts.ts";
+import { get_script_tag_value } from "./lib/dom.ts";
 import { log_error } from "./log.ts";
 import { notify, notify_err } from "./notifications.ts";
 import { frontend_routes } from "./reports/routes.ts";
 import { router } from "./router.ts";
-import { initSidebar } from "./sidebar/index.ts";
+import { init_sidebar } from "./sidebar/index.ts";
 import { has_changes } from "./sidebar/page-title.ts";
 import { SortableTable } from "./sort/sortable-table.ts";
 import { init_color_scheme } from "./stores/color_scheme.ts";
@@ -51,7 +51,7 @@ import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element.t
 /**
  * Define the custom elements that Fava uses.
  */
-function defineCustomElements() {
+function define_custom_elements() {
   customElements.define("beancount-textarea", BeancountTextarea, {
     extends: "textarea",
   });
@@ -67,7 +67,7 @@ function defineCustomElements() {
 /**
  * Update the ledger data and errors; Reload if automatic reloading is configured.
  */
-function onChanges() {
+function on_changes() {
   get_ledger_data()
     .then((v) => {
       ledgerData.set(v);
@@ -95,12 +95,12 @@ function onChanges() {
  *
  * This will be scheduled every 5 seconds.
  */
-function pollForChanges(): void {
+function poll_for_changes(): void {
   get_changed().catch(log_error);
 }
 
 function init(): void {
-  const initial = getScriptTagValue("#ledger-data", ledgerDataValidator);
+  const initial = get_script_tag_value("#ledger-data", ledgerDataValidator);
   if (initial.is_ok) {
     ledgerData.set(initial.value);
   } else {
@@ -115,14 +115,14 @@ function init(): void {
       return;
     }
     has_changes.set(true);
-    onChanges();
+    on_changes();
   });
 
   router.init(frontend_routes);
-  initSidebar();
-  initGlobalKeyboardShortcuts();
-  defineCustomElements();
-  setInterval(pollForChanges, 5000);
+  init_sidebar();
+  init_global_keyboard_shortcuts();
+  define_custom_elements();
+  setInterval(poll_for_changes, 5000);
 
   ledgerData.subscribe((val) => {
     errors.set(val.errors);

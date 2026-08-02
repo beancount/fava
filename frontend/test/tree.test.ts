@@ -1,22 +1,22 @@
 import { deepEqual } from "node:assert/strict";
 import { test } from "node:test";
 
-import { stratify, stratifyAccounts } from "../src/lib/tree.ts";
+import { stratify, stratify_accounts } from "../src/lib/tree.ts";
 
-test("tree: stratifyAccounts", () => {
-  const empty = stratifyAccounts(
+test("tree: stratify_accounts", () => {
+  const empty = stratify_accounts(
     [],
     () => "",
     () => null,
   );
   deepEqual(empty, { children: [] });
-  const emptyWithData = stratifyAccounts(
+  const emptyWithData = stratify_accounts(
     [],
     () => "",
     () => ({ test: "test" }),
   );
   deepEqual(emptyWithData, { children: [], test: "test" });
-  const tree = stratifyAccounts(
+  const tree = stratify_accounts(
     ["aName:cName", "aName", "aName:bName"],
     (s) => s,
     (name) => ({ name }),
@@ -35,7 +35,7 @@ test("tree: stratifyAccounts", () => {
     name: "",
   });
   deepEqual(
-    stratifyAccounts(
+    stratify_accounts(
       ["Assets:Cash"],
       (s) => s,
       (name) => ({ name }),

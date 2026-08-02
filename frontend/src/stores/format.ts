@@ -6,7 +6,7 @@ import type { FormatterContext } from "../format.ts";
 import {
   dateFormat,
   formatter_context,
-  localeFormatter,
+  locale_formatter,
   replaceNumbers,
   timeFilterDateFormat,
 } from "../format.ts";
@@ -24,7 +24,7 @@ export const short = derived(incognito, ($incognito) =>
 );
 
 /** Format a number for which the currency is not known. */
-export const num = derived(locale, ($locale) => localeFormatter($locale));
+export const num = derived(locale, ($locale) => locale_formatter($locale));
 
 /** Formatting context for currencies. */
 export const ctx = derived(

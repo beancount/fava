@@ -11,7 +11,7 @@ import { operating_currency } from "../stores/options.ts";
  * @param date - a date.
  * @returns A URL for the given interval.
  */
-export function urlForTimeFilter(date: Date): string {
+export function url_for_time_filter(date: Date): string {
   const url = new URL(window.location.href);
   url.searchParams.set("time", store_get(currentTimeFilterDateFormat)(date));
   return url.toString();
@@ -22,7 +22,7 @@ export function urlForTimeFilter(date: Date): string {
  *
  * For convenience this also turns a empty extent into [0,1].
  */
-export function includeZero([from, to]:
+export function include_zero([from, to]:
   | [number, number]
   | [undefined, undefined]): [number, number] {
   if (from === undefined) {
@@ -36,7 +36,7 @@ export function includeZero([from, to]:
  *
  * For convenience this also turns a empty extent into [0,1].
  */
-export function padExtent([from, to]:
+export function pad_extent([from, to]:
   | [number, number]
   | [undefined, undefined]): [number, number] {
   if (from === undefined) {
@@ -51,7 +51,7 @@ export function padExtent([from, to]:
  * @param domain - The domain of values to filter.
  * @param count - The number of ticks that should be returned.
  */
-export function filterTicks(
+export function filter_ticks(
   domain: readonly string[],
   count: number,
 ): readonly string[] {
@@ -71,7 +71,7 @@ export function filterTicks(
  * @param chroma - optional, the chroma channel value.
  * @param luminance - optional, the luminance channel value.
  */
-export function hclColorRange(
+export function hcl_color_range(
   count: number,
   chroma = 45,
   luminance = 70,
@@ -85,8 +85,8 @@ export function hclColorRange(
   return colors.map((c) => c.toString());
 }
 
-export const colors10 = hclColorRange(10);
-export const colors15 = hclColorRange(15, 30, 80);
+export const colors10 = hcl_color_range(10);
+export const colors15 = hcl_color_range(15, 30, 80);
 
 /*
  * The color scales for the charts.

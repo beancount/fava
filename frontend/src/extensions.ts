@@ -10,7 +10,7 @@ import type {
   ExtensionContext,
   ExtensionModule,
 } from "./extension-api.d.ts";
-import { getUrlPath, urlForRaw } from "./helpers.ts";
+import { get_url_path, url_for_raw } from "./helpers.ts";
 import { log_error } from "./log.ts";
 import { extensions } from "./stores/index.ts";
 
@@ -30,8 +30,8 @@ class ExtensionApiImpl implements ExtensionApi {
     body?: unknown,
     output: "json" | "string" | "raw" = "json",
   ): Promise<unknown> {
-    const $urlForRaw = store_get(urlForRaw);
-    const url = $urlForRaw(`extension/${this.#name}/${endpoint}`, params);
+    const $url_for_raw = store_get(url_for_raw);
+    const url = $url_for_raw(`extension/${this.#name}/${endpoint}`, params);
     let opts = {};
     if (body != null) {
       opts =
@@ -91,8 +91,8 @@ class ExtensionData {
 }
 
 async function load_extension_module(name: string): Promise<ExtensionData> {
-  const $urlForRaw = store_get(urlForRaw);
-  const url = $urlForRaw(`extension_js_module/${name}.js`);
+  const $url_for_raw = store_get(url_for_raw);
+  const url = $url_for_raw(`extension_js_module/${name}.js`);
   const mod = await (import(url) as Promise<{ default?: ExtensionModule }>);
   if (typeof mod.default === "object") {
     return new ExtensionData(mod.default, { api: new ExtensionApiImpl(name) });
@@ -120,7 +120,7 @@ async function get_or_init_extension(name: string): Promise<ExtensionData> {
 /**
  * On page load, run check if the new page is an extension report page and run hooks.
  */
-export function handleExtensionPageLoad(): void {
+export function handle_extension_page_load(): void {
   const exts = store_get(extensions).filter((e) => e.has_js_module);
   for (const { name } of exts) {
     // Run the onPageLoad handler for all pages.
@@ -130,7 +130,7 @@ export function handleExtensionPageLoad(): void {
       })
       .catch(log_error);
   }
-  const path = getUrlPath(window.location).unwrap_or("");
+  const path = get_url_path(window.location).unwrap_or("");
   if (path.startsWith("extension/")) {
     for (const { name } of exts) {
       if (path.startsWith(`extension/${name}`)) {

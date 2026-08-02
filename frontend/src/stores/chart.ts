@@ -2,7 +2,7 @@ import { derived, writable } from "svelte/store";
 
 import { _ } from "../i18n.ts";
 import iso4217currencies from "../lib/iso4217.ts";
-import { localStorageSyncedStore } from "../lib/store.ts";
+import { local_storage_synced_store } from "../lib/store.ts";
 import type { ValidationT } from "../lib/validation.ts";
 import { array, constants, string } from "../lib/validation.ts";
 import { conversion_currencies } from "./fava_options.ts";
@@ -20,22 +20,23 @@ const hierarchy_chart_mode_validator = constants(
 type HierarchyChartMode = ValidationT<typeof hierarchy_chart_mode_validator>;
 
 /** The currently selected hierarchy chart mode. */
-export const hierarchyChartMode = localStorageSyncedStore<HierarchyChartMode>(
-  "hierarchy-chart-mode",
-  hierarchy_chart_mode_validator,
-  () => "treemap",
-  () => [
-    ["treemap", _("Treemap")],
-    ["sunburst", _("Sunburst")],
-    ["icicle", _("Icicle")],
-  ],
-);
+export const hierarchyChartMode =
+  local_storage_synced_store<HierarchyChartMode>(
+    "hierarchy-chart-mode",
+    hierarchy_chart_mode_validator,
+    () => "treemap",
+    () => [
+      ["treemap", _("Treemap")],
+      ["sunburst", _("Sunburst")],
+      ["icicle", _("Icicle")],
+    ],
+  );
 
 const line_chart_mode_validator = constants("line", "area");
 type LineChartMode = ValidationT<typeof line_chart_mode_validator>;
 
 /** The currently selected line chart mode. */
-export const lineChartMode = localStorageSyncedStore<LineChartMode>(
+export const lineChartMode = local_storage_synced_store<LineChartMode>(
   "line-chart-mode",
   line_chart_mode_validator,
   () => "line",
@@ -49,7 +50,7 @@ const bar_chart_mode_validator = constants("stacked", "single");
 type BarChartMode = ValidationT<typeof bar_chart_mode_validator>;
 
 /** The currently selected bar chart mode. */
-export const barChartMode = localStorageSyncedStore<BarChartMode>(
+export const barChartMode = local_storage_synced_store<BarChartMode>(
   "bar-chart-mode",
   bar_chart_mode_validator,
   () => "stacked",
@@ -60,7 +61,7 @@ export const barChartMode = localStorageSyncedStore<BarChartMode>(
 );
 
 /** The currencies that are currently not shown in the bar and line charts. */
-export const chartToggledCurrencies = localStorageSyncedStore(
+export const chartToggledCurrencies = local_storage_synced_store(
   "chart-toggled-currencies",
   array(string),
   () => [],

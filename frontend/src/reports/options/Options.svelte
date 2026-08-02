@@ -1,6 +1,6 @@
 <script lang="ts">
   import ModeSwitch from "../../charts/ModeSwitch.svelte";
-  import { urlFor } from "../../helpers.ts";
+  import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { color_scheme } from "../../stores/color_scheme.ts";
   import type { OptionsReportProps } from "./index.ts";
@@ -18,7 +18,7 @@
 
 <h2>
   {_("Fava options")}
-  <a href={$urlFor("help/options")}>({_("help")})</a>
+  <a href={$url_for("help/options")}>({_("help")})</a>
 </h2>
 <OptionsTable options={fava_options} />
 

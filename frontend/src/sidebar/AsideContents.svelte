@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { urlFor } from "../helpers.ts";
+  import { url_for } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
   import { errors, extensions, ledgerData } from "../stores/index.ts";
@@ -33,7 +33,7 @@
       <ul class="submenu">
         {#each user_queries as { query_string, name } (query_string)}
           <li>
-            <a href={$urlFor("query/", { query_string })}>{truncate(name)}</a>
+            <a href={$url_for("query/", { query_string })}>{truncate(name)}</a>
           </li>
         {/each}
       </ul>

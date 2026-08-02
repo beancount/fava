@@ -4,7 +4,7 @@
 -->
 <script lang="ts">
   import type { AccountTreeNode } from "../charts/hierarchy.ts";
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import AccountIndicator from "../sidebar/AccountIndicator.svelte";
   import { toggle_account, toggled_accounts } from "../stores/accounts.ts";
@@ -32,7 +32,7 @@
       {is_toggled ? "▸" : "▾"}
     </button>
   {/if}
-  <a href={$urlForAccount(account)} class="account">
+  <a href={$url_for_account(account)} class="account">
     {leaf(account)}
   </a>
   <AccountIndicator {account} small />

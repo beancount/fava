@@ -8,7 +8,7 @@ const FOCUSABLE_ELEMENTS = [
   "[contenteditable]",
 ].join(", ");
 
-export function getFocusableElements(el: Element): Element[] {
+export function get_focusable_elements(el: Element): Element[] {
   return [...el.querySelectorAll(FOCUSABLE_ELEMENTS)];
 }
 
@@ -16,7 +16,7 @@ export function getFocusableElements(el: Element): Element[] {
  * Focus a node (if possible).
  * @returns whether focusing succeeded.
  */
-export function attemptFocus(el: Node): boolean {
+export function attempt_focus(el: Node): boolean {
   try {
     // @ts-expect-error We are attempting to focus any kind of element here.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call

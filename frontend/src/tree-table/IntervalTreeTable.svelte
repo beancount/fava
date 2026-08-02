@@ -4,7 +4,7 @@
 
   import type { AccountBudget } from "../api/validators.ts";
   import type { AccountTreeNode } from "../charts/hierarchy.ts";
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import type { NonEmptyArray } from "../lib/array.ts";
   import { currentTimeFilterDateFormat } from "../stores/format.ts";
   import AccountCellHeader from "./AccountCellHeader.svelte";
@@ -56,7 +56,7 @@
       <AccountCellHeader {account} />
       {#each time_filters as [title, time] (time)}
         <span class="num other">
-          <a href={$urlForAccount(account, { time })}>
+          <a href={$url_for_account(account, { time })}>
             {title}
           </a>
         </span>

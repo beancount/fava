@@ -7,7 +7,7 @@ import { fragment_from_string } from "../../lib/dom.ts";
 import { shallow_equal } from "../../lib/equals.ts";
 import { log_error } from "../../log.ts";
 import { notify_err } from "../../notifications.ts";
-import { getURLFilters } from "../../stores/filters.ts";
+import { get_url_filters } from "../../stores/filters.ts";
 import { type JournalSort, journal_sort } from "../../stores/journal.ts";
 import { Route } from "../route.ts";
 import Journal from "./Journal.svelte";
@@ -22,7 +22,7 @@ export const journal = new Route<JournalReportProps>(
   "journal",
   Journal,
   async (url: URL) => {
-    const filters = getURLFilters(url);
+    const filters = get_url_filters(url);
     const $journal_sort = store_get(journal_sort);
     const order = shallow_equal($journal_sort, ["date", "asc"])
       ? "asc"

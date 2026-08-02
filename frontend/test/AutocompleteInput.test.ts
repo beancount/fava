@@ -401,7 +401,7 @@ test("AutocompleteInput: clearButton is only shown when there is a value and cle
   ok(!document.body.querySelector("button"));
 });
 
-test("AutocompleteInput: valueExtractor and valueSelector operate on a substring of the value", (t) => {
+test("AutocompleteInput: value_extractor and value_selector operate on a substring of the value", (t) => {
   // Simulate autocompleting the last comma-separated tag of the value.
   const value_extractor = t.mock.fn(
     (val: string, _input: HTMLInputElement): string =>

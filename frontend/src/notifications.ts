@@ -1,4 +1,4 @@
-import { errorWithCauses } from "./lib/errors.ts";
+import { error_with_causes } from "./lib/errors.ts";
 import { log_error } from "./log.ts";
 
 /** The notification list div, lazily created. */
@@ -53,7 +53,7 @@ export function notify(
  */
 export function notify_err(
   error: unknown,
-  msg: (e: Error) => string = errorWithCauses,
+  msg: (e: Error) => string = error_with_causes,
 ): void {
   if (error instanceof Error) {
     notify(msg(error), "error");

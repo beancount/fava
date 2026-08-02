@@ -1,5 +1,5 @@
 import { get_imports } from "../../api/index.ts";
-import { todayAsString } from "../../format.ts";
+import { today_as_string } from "../../format.ts";
 import { _ } from "../../i18n.ts";
 import { Route } from "../route.ts";
 import ImportSvelte from "./Import.svelte";
@@ -48,7 +48,7 @@ export const import_report = new Route<ImportReportProps>(
   async () =>
     get_imports()
       .then((files) => {
-        const today = todayAsString();
+        const today = today_as_string();
         return files.map(({ name, basename, importers }) => ({
           name,
           basename,

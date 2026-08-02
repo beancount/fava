@@ -8,8 +8,8 @@
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
-import { handleExtensionPageLoad } from "./extensions.ts";
-import { getUrlPath } from "./helpers.ts";
+import { handle_extension_page_load } from "./extensions.ts";
+import { get_url_path } from "./helpers.ts";
 import { get_el } from "./lib/dom.ts";
 import { assert_is_error } from "./lib/errors.ts";
 import { log_error } from "./log.ts";
@@ -207,7 +207,7 @@ class Router {
    */
   async #render_route(url: URL, before_render?: () => void): Promise<void> {
     const previous = this.#current_report;
-    const relative_path = getUrlPath(url).unwrap();
+    const relative_path = get_url_path(url).unwrap();
     const report = relative_path.slice(0, relative_path.indexOf("/"));
     const route =
       this.#frontend_routes.find((r) => r.report === report) ?? backend_route;
@@ -312,7 +312,7 @@ class Router {
     document.addEventListener("click", this.#intercept_link_click);
     navigation_api?.addEventListener("navigate", this.#on_navigate);
 
-    handleExtensionPageLoad();
+    handle_extension_page_load();
   }
 
   /**
@@ -360,7 +360,7 @@ class Router {
     await this.#render_route(url, before_render);
 
     has_changes.set(false);
-    handleExtensionPageLoad();
+    handle_extension_page_load();
 
     const hash = this.current.hash.slice(1);
     if (hash) {

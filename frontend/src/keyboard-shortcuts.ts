@@ -5,7 +5,7 @@ import type { Attachment } from "svelte/attachments";
  * @param target - The target element to show the tooltip on.
  * @returns A function to remove event handler.
  */
-function showTooltip(target: HTMLElement, description: string): () => void {
+function show_tooltip(target: HTMLElement, description: string): () => void {
   const hidden = target.hidden !== false;
   if (hidden) {
     target.hidden = false;
@@ -33,12 +33,12 @@ function showTooltip(target: HTMLElement, description: string): () => void {
 /**
  * Show all keyboard shortcut tooltips.
  */
-function showTooltips(): () => void {
+function show_tooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
     const key = el.getAttribute("data-key");
     if (el instanceof HTMLElement && key != null) {
-      removes.push(showTooltip(el, key));
+      removes.push(show_tooltip(el, key));
     }
   });
   return () => {
@@ -54,7 +54,7 @@ function showTooltips(): () => void {
  * @returns true if the element is one of input/select/textarea or a
  *          contentEditable element.
  */
-function isEditableElement(element: EventTarget | null): boolean {
+function is_editable_element(element: EventTarget | null): boolean {
   return (
     element instanceof HTMLElement &&
     (element instanceof HTMLInputElement ||
@@ -129,7 +129,7 @@ export function normalise_key(event: KeyboardEvent): string {
  * Dispatch to the relevant handler.
  */
 function keydown(event: KeyboardEvent): void {
-  if (isEditableElement(event.target)) {
+  if (is_editable_element(event.target)) {
     // ignore events in editable elements.
     return;
   }
@@ -169,7 +169,7 @@ export const modKey = isMac ? "Cmd" : "Ctrl";
  * Get the keyboard key specifier string for the current platform.
  * @param spec - The key spec.
  */
-function getKeySpecKey(spec: KeySpec): KeyCombo {
+function get_key_spec_key(spec: KeySpec): KeyCombo {
   if (typeof spec === "string") {
     return spec;
   }
@@ -180,7 +180,7 @@ function getKeySpecKey(spec: KeySpec): KeyCombo {
  * Get the keyboard key description.
  * @param spec - The key spec.
  */
-function getKeySpecDescription(spec: KeySpec): string {
+function get_key_spec_description(spec: KeySpec): string {
   if (typeof spec === "string") {
     return spec;
   }
@@ -194,8 +194,8 @@ function getKeySpecDescription(spec: KeySpec): string {
  * @param handler - The callback to run on key press.
  * @returns A function to unbind the keyboard handler.
  */
-function bindKey(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
-  const key = getKeySpecKey(spec);
+function bind_key(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
+  const key = get_key_spec_key(spec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     console.error("Only key sequences of length <=2 are supported: ", key);
@@ -223,8 +223,8 @@ export const keyboardShortcut = (
     return null;
   }
   return (node) => {
-    node.setAttribute("data-key", getKeySpecDescription(spec));
-    const unbind = bindKey(spec, node);
+    node.setAttribute("data-key", get_key_spec_description(spec));
+    const unbind = bind_key(spec, node);
     return () => {
       unbind();
       node.removeAttribute("data-key");
@@ -235,11 +235,11 @@ export const keyboardShortcut = (
 /**
  * Register the keys to show/hide the tooltips and register the global keydown handler.
  */
-export function initGlobalKeyboardShortcuts(): void {
+export function init_global_keyboard_shortcuts(): void {
   document.addEventListener("keydown", keydown);
 
-  bindKey("?", () => {
-    const hide = showTooltips();
+  bind_key("?", () => {
+    const hide = show_tooltips();
     const once = () => {
       hide();
       document.removeEventListener("mousedown", once);

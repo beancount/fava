@@ -7,7 +7,7 @@
     Transaction,
   } from "../entries/index.ts";
   import Entry from "../entry-forms/Entry.svelte";
-  import { todayAsString } from "../format.ts";
+  import { today_as_string } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { router } from "../router.ts";
   import { addEntryContinue } from "../stores/editor.ts";
@@ -22,7 +22,7 @@
   ] as const;
 
   // For the first entry to be added, use today as the default date.
-  let entry = $state.raw<EditableEntry>(Transaction.empty(todayAsString()));
+  let entry = $state.raw<EditableEntry>(Transaction.empty(today_as_string()));
 
   async function submit(event: SubmitEvent) {
     event.preventDefault();

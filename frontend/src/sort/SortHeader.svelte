@@ -20,7 +20,7 @@
 {#if is_sortable}
   <th
     onclick={() => {
-      sorter = sorter.switchColumn(column);
+      sorter = sorter.switch_column(column);
     }}
     data-order={column === sorter.column ? sorter.order : undefined}
     data-sort

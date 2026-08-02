@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BeancountError } from "../../api/validators.ts";
-  import { urlForAccount, urlForSource } from "../../helpers.ts";
+  import { url_for_account, url_for_source } from "../../helpers.ts";
   import { _, format } from "../../i18n.ts";
   import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
@@ -42,7 +42,7 @@
       {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
-            {@const url = $urlForSource(
+            {@const url = $url_for_source(
               source.filename,
               source.lineno.toString(),
             )}
@@ -64,7 +64,7 @@
               {#if type === "text"}
                 {text}
               {:else}
-                <a href={$urlForAccount(text)}>{text}</a>
+                <a href={$url_for_account(text)}>{text}</a>
               {/if}
             {/each}
           </td>

@@ -95,7 +95,7 @@ export class BarChart {
   }
 
   /** The tooltip for a hovered account in the stacked bar chart. */
-  tooltipTextAccount(
+  tooltip_text_account(
     $ctx: FormatterContext,
     d: BarChartDatum,
     account: string,
@@ -115,7 +115,7 @@ export class BarChart {
   }
 
   /** The tooltip for a hovered bar group in the bar chart. */
-  tooltipText($ctx: FormatterContext, d: BarChartDatum): TooltipContent {
+  tooltip_text($ctx: FormatterContext, d: BarChartDatum): TooltipContent {
     const content = [];
     d.values.forEach(({ value, currency, budget }) => {
       content.push(

@@ -1,4 +1,4 @@
-import { getScriptTagValue } from "./lib/dom.ts";
+import { get_script_tag_value } from "./lib/dom.ts";
 import { ok } from "./lib/result.ts";
 import { record, string } from "./lib/validation.ts";
 import { log_error } from "./log.ts";
@@ -16,7 +16,7 @@ export function _(text: string): string {
       // The DOM is not available in tests
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       globalThis.document !== undefined
-        ? getScriptTagValue("#translations", validator)
+        ? get_script_tag_value("#translations", validator)
         : ok({});
     translations = res.unwrap_or({});
     if (res.is_err) {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { day } from "../format.ts";
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { ancestors, leaf } from "../lib/account.ts";
   import { account_details } from "../stores/index.ts";
   import AccountIndicator from "./AccountIndicator.svelte";
@@ -18,7 +18,7 @@
 
 <span class="droptarget" data-account-name={account}>
   {#each parts as name, index (index)}
-    <a href={$urlForAccount(name)} title={name}>{leaf(name)}</a
+    <a href={$url_for_account(name)} title={name}>{leaf(name)}</a
     >{#if index < parts.length - 1}:{/if}
   {/each}
   <AccountIndicator {account} />

@@ -9,7 +9,7 @@
   import { ctx, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
-  import { currenciesScale, includeZero, padExtent } from "./helpers.ts";
+  import { currenciesScale, include_zero, pad_extent } from "./helpers.ts";
   import type { LineChart, LineChartDatum } from "./line.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
 
@@ -44,10 +44,10 @@
   let value_extent = $derived(extent(all_values, (v) => v.value));
   // Include zero in area charts so the entire area is shown, not a cropped part of it
   let y_extent = $derived(
-    $lineChartMode === "area" ? includeZero(value_extent) : value_extent,
+    $lineChartMode === "area" ? include_zero(value_extent) : value_extent,
   );
   // Span y-axis as max minus min value plus 5 percent margin
-  let y = $derived(scaleLinear([inner_height, 0]).domain(padExtent(y_extent)));
+  let y = $derived(scaleLinear([inner_height, 0]).domain(pad_extent(y_extent)));
 
   // Quadtree for hover.
   let quad = $derived(
@@ -81,7 +81,7 @@
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.value), chart.tooltipText($ctx, d)];
+    return d && [x(d.date), y(d.value), chart.tooltip_text($ctx, d)];
   };
 
   let desaturate_filter_id = $derived(`desaturate-future-${uid}`);

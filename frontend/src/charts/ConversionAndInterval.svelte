@@ -3,9 +3,9 @@
   import { _, format } from "../i18n.ts";
   import {
     DEFAULT_INTERVAL,
-    getInterval,
+    get_interval,
     INTERVALS,
-    intervalLabel,
+    interval_label,
   } from "../lib/interval.ts";
   import { router } from "../router.ts";
   import { conversions } from "../stores/chart.ts";
@@ -51,5 +51,5 @@
     }
   }
   options={INTERVALS}
-  description={(o: string) => intervalLabel(getInterval(o))}
+  description={(o: string) => interval_label(get_interval(o))}
 />

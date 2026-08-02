@@ -1,4 +1,4 @@
-import { isJsonObject, object, string } from "./validation.ts";
+import { is_json_object, object, string } from "./validation.ts";
 
 export class FetchError extends Error {}
 
@@ -43,7 +43,7 @@ export async function fetch_json(
       response.status,
     );
   }
-  if (!isJsonObject(json)) {
+  if (!is_json_object(json)) {
     throw new FetchInvalidResponseError("Not a valid JSON object");
   }
   return json;

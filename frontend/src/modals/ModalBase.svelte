@@ -8,20 +8,20 @@
   import type { Snippet } from "svelte";
   import type { Attachment } from "svelte/attachments";
 
-  import { attemptFocus, getFocusableElements } from "../lib/focus.ts";
+  import { attempt_focus, get_focusable_elements } from "../lib/focus.ts";
   import { router } from "../router.ts";
 
   interface Props {
     shown: boolean;
     focus?: string;
-    closeHandler?: () => void;
+    close_handler?: () => void;
     children: Snippet;
   }
 
   let {
     shown,
     focus,
-    closeHandler = router.close_overlay,
+    close_handler = router.close_overlay,
     children,
   }: Props = $props();
 
@@ -31,28 +31,28 @@
   const handleFocus: Attachment<HTMLDivElement> = (el) => {
     const keydown = (ev: KeyboardEvent) => {
       if (ev.key === "Tab") {
-        const focusable = getFocusableElements(el);
+        const focusable = get_focusable_elements(el);
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
         if (ev.shiftKey && document.activeElement === first && last) {
           ev.preventDefault();
-          attemptFocus(last);
+          attempt_focus(last);
         } else if (!ev.shiftKey && document.activeElement === last && first) {
           ev.preventDefault();
-          attemptFocus(first);
+          attempt_focus(first);
         }
       } else if (ev.key === "Escape") {
         ev.preventDefault();
-        closeHandler();
+        close_handler();
       }
     };
 
     document.addEventListener("keydown", keydown);
 
     const selectorFocusEl = focus != null ? el.querySelector(focus) : undefined;
-    const focusEl = selectorFocusEl ?? getFocusableElements(el)[0];
+    const focusEl = selectorFocusEl ?? get_focusable_elements(el)[0];
     if (focusEl) {
-      attemptFocus(focusEl);
+      attempt_focus(focusEl);
     }
 
     return () => {
@@ -63,10 +63,10 @@
 
 {#if shown}
   <div class="overlay">
-    <div class="background" onclick={closeHandler} aria-hidden="true"></div>
+    <div class="background" onclick={close_handler} aria-hidden="true"></div>
     <div class="content" role="dialog" aria-modal="true" {@attach handleFocus}>
       {@render children()}
-      <button type="button" class="muted close" onclick={closeHandler}>
+      <button type="button" class="muted close" onclick={close_handler}>
         x
       </button>
     </div>

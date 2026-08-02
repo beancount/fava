@@ -1,10 +1,10 @@
 import { log_error } from "../log.ts";
 
 /** Render the message of an error, with causes if set. */
-export function errorWithCauses(error: Error): string {
+export function error_with_causes(error: Error): string {
   const msg = error.message;
   return error.cause instanceof Error
-    ? `${msg}\n  Caused by: ${errorWithCauses(error.cause)}`
+    ? `${msg}\n  Caused by: ${error_with_causes(error.cause)}`
     : error.message;
 }
 

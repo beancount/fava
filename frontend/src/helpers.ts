@@ -4,7 +4,7 @@ import type { Result } from "./lib/result.ts";
 import { err, ok } from "./lib/result.ts";
 import { use_external_editor } from "./stores/fava_options.ts";
 import { base_url } from "./stores/index.ts";
-import { syncedSearchParams } from "./stores/url.ts";
+import { synced_search_params } from "./stores/url.ts";
 
 export class NonRelativeUrlPathError extends Error {
   constructor(pathname: string, $base_url: string) {
@@ -15,7 +15,7 @@ export class NonRelativeUrlPathError extends Error {
 /**
  * Get the URL path relative to the base url of the current ledger.
  */
-export function getUrlPath(
+export function get_url_path(
   url: Pick<URL | Location, "pathname">,
 ): Result<string, NonRelativeUrlPathError> {
   const { pathname } = url;
@@ -28,39 +28,39 @@ export function getUrlPath(
 /**
  * Get the URL string for one of Fava's reports (pure internal function, just exported for tests).
  * @param $base_url - the current value of base_url
- * @param $searchParams - the current value of searchParams or null
+ * @param $search_params - the current value of search_params or null
  *                        if url-synced parameters are not needed.
  * @param report - report name
  * @param params - URL params to set
  * @returns The URL string.
  */
-export function urlForInternal(
+export function url_for_internal(
   $base_url: string,
-  $syncedSearchParams: URLSearchParams | null,
+  $synced_search_params: URLSearchParams | null,
   report: string,
   params: Record<string, string | number | undefined> | undefined,
 ): string {
   const url = `${$base_url}${report}`;
-  const urlParams = $syncedSearchParams
-    ? new URLSearchParams($syncedSearchParams)
+  const url_params = $synced_search_params
+    ? new URLSearchParams($synced_search_params)
     : new URLSearchParams();
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value != null) {
-        urlParams.set(key, value.toString());
+        url_params.set(key, value.toString());
       }
     });
   }
-  const urlParamString = urlParams.toString();
-  return urlParamString ? `${url}?${urlParams.toString()}` : url;
+  const url_param_string = url_params.toString();
+  return url_param_string ? `${url}?${url_params.toString()}` : url;
 }
 
 /**
  * Get the URL string for one of Fava's reports.
  */
-export const urlFor = derived(
-  [base_url, syncedSearchParams],
-  ([$base_url, $syncedSearchParams]) =>
+export const url_for = derived(
+  [base_url, synced_search_params],
+  ([$base_url, $synced_search_params]) =>
     (
       report:
         | `${string}/`
@@ -69,36 +69,36 @@ export const urlFor = derived(
         | `help/${string}`,
       params?: Record<string, string | number | undefined>,
     ): string =>
-      urlForInternal($base_url, $syncedSearchParams, report, params),
+      url_for_internal($base_url, $synced_search_params, report, params),
 );
 
 /**
  * Get the URL string for one of Fava's reports - without synced params.
  */
-export const urlForRaw = derived(
+export const url_for_raw = derived(
   [base_url],
   ([$base_url]) =>
     (
       report: string,
       params?: Record<string, string | number | undefined>,
     ): string =>
-      urlForInternal($base_url, null, report, params),
+      url_for_internal($base_url, null, report, params),
 );
 
 /** URL for the editor to the source location of an entry. */
-export const urlForSource = derived(
-  [urlFor, use_external_editor],
-  ([$urlFor, $use_external_editor]) =>
+export const url_for_source = derived(
+  [url_for, use_external_editor],
+  ([$url_for, $use_external_editor]) =>
     (file_path: string, line: string): string =>
       $use_external_editor
         ? `beancount://${file_path}?lineno=${line}`
-        : $urlFor("editor/", { file_path, line }),
+        : $url_for("editor/", { file_path, line }),
 );
 
 /** URL for the account report (derived store to keep track of filter changes.). */
-export const urlForAccount = derived(
-  urlFor,
-  ($urlFor) =>
+export const url_for_account = derived(
+  url_for,
+  ($url_for) =>
     (account: string, params?: Record<string, string>): string =>
-      $urlFor(`account/${account}/`, params),
+      $url_for(`account/${account}/`, params),
 );

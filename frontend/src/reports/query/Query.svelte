@@ -7,7 +7,7 @@
   import { router } from "../../router.ts";
   import { filter_params } from "../../stores/filters.ts";
   import { query_shell_history } from "../../stores/query.ts";
-  import { searchParams } from "../../stores/url.ts";
+  import { search_params } from "../../stores/url.ts";
   import type { QueryReportProps } from "./index.ts";
   import QueryBox from "./QueryBox.svelte";
   import QueryEditor from "./QueryEditor.svelte";
@@ -23,8 +23,8 @@
   const is_open: Record<string, boolean> = $state({});
 
   onMount(() =>
-    searchParams.subscribe(($searchParams) => {
-      const search_query_string = $searchParams.get("query_string") ?? "";
+    search_params.subscribe(($search_params) => {
+      const search_query_string = $search_params.get("query_string") ?? "";
       // Set the query string to the value from the URL query if that changes (e.g. on navigation).
       if (search_query_string !== query_string) {
         query_string = search_query_string;

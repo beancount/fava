@@ -19,7 +19,7 @@ export type TreeNode<S> = S & { readonly children: TreeNode<S>[] };
  * @param id - A getter to obtain the node name for an input datum.
  * @param init - A getter for any extra properties to set on the node.
  */
-export function stratifyAccounts<T, S = null>(
+export function stratify_accounts<T, S = null>(
   data: Iterable<T>,
   id: (datum: T) => string,
   init: (name: string, datum?: T) => S,
@@ -53,7 +53,7 @@ export function stratify<T, S = null>(
   const map = new Map<string, TreeNode<S>>();
   map.set("", root);
 
-  function addNode(name: string, datum?: T): TreeNode<S> {
+  function add_node(name: string, datum?: T): TreeNode<S> {
     const existing = map.get(name);
     if (existing) {
       Object.assign(existing, init(name, datum));
@@ -62,13 +62,13 @@ export function stratify<T, S = null>(
     const node: TreeNode<S> = { children: [], ...init(name, datum) };
     map.set(name, node);
     const parentName = parent(name);
-    const parentNode = map.get(parentName) ?? addNode(parentName);
+    const parentNode = map.get(parentName) ?? add_node(parentName);
     parentNode.children.push(node);
     return node;
   }
 
   [...data].forEach((datum) => {
-    addNode(id(datum), datum);
+    add_node(id(datum), datum);
   });
   return root;
 }
