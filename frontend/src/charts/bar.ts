@@ -99,12 +99,12 @@ export class BarChart {
     $ctx: FormatterContext,
     d: BarChartDatum,
     account: string,
-    $chartToggledCurrencies: readonly string[],
+    $chart_toggled_currencies: readonly string[],
   ): TooltipContent {
     const content = [];
     content.push(domHelpers.em(account));
     d.values.forEach(({ currency }) => {
-      if (!$chartToggledCurrencies.includes(currency)) {
+      if (!$chart_toggled_currencies.includes(currency)) {
         const value = d.account_balances[account]?.[currency] ?? 0;
         content.push($ctx.amount(value, currency));
         content.push(domHelpers.br());
@@ -133,7 +133,7 @@ export class BarChart {
 /** Get the currencies to use for the bar chart. */
 function currencies_to_show(
   data: ParsedBarChartData,
-  $chartContext: ChartContext,
+  $chart_context: ChartContext,
 ): string[] {
   // Count the usage of each currency in the data.
   const counts = rollup(
@@ -146,7 +146,7 @@ function currencies_to_show(
   );
 
   // Show all operating currencies that are used in the data.
-  const to_show = $chartContext.currencies.filter((c) => counts.delete(c));
+  const to_show = $chart_context.currencies.filter((c) => counts.delete(c));
 
   // Also add some of the most common other currencies (up to 5 in total)
   to_show.push(
@@ -186,8 +186,8 @@ export class ParsedBarChart implements ParsedFavaChart {
       ({ label, data }) => new ParsedBarChart(label, data),
     );
 
-  with_context($chartContext: ChartContext): BarChart {
-    const currencies = currencies_to_show(this.data, $chartContext);
+  with_context($chart_context: ChartContext): BarChart {
+    const currencies = currencies_to_show(this.data, $chart_context);
 
     const bar_groups = this.data.map((interval) => ({
       values: currencies.map((currency) => ({
@@ -196,7 +196,7 @@ export class ParsedBarChart implements ParsedFavaChart {
         budget: interval.budgets[currency] ?? 0,
       })),
       date: interval.date,
-      label: $chartContext.dateFormat(interval.date),
+      label: $chart_context.dateFormat(interval.date),
       account_balances: interval.account_balances,
     }));
 

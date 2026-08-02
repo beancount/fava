@@ -2,11 +2,11 @@
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
-  import { lastActiveChartName } from "../stores/chart.ts";
+  import { last_active_chart_name } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
-  import { chartContext } from "./context.ts";
+  import { chart_context } from "./context.ts";
   import type { ParsedFavaChart } from "./index.ts";
 
   interface Props {
@@ -16,7 +16,7 @@
   let { charts }: Props = $props();
 
   let active_chart = $derived(
-    charts.find((c) => c.label === $lastActiveChartName) ?? charts[0],
+    charts.find((c) => c.label === $last_active_chart_name) ?? charts[0],
   );
 
   // Get the shortcut key for jumping to the previous chart.
@@ -36,7 +36,7 @@
 </script>
 
 {#if active_chart}
-  <Chart chart={active_chart.with_context($chartContext)}>
+  <Chart chart={active_chart.with_context($chart_context)}>
     <ConversionAndInterval />
   </Chart>
   <div hidden={!$show_charts}>
@@ -46,7 +46,7 @@
         class="unset"
         class:selected={chart === active_chart}
         onclick={() => {
-          $lastActiveChartName = chart.label;
+          $last_active_chart_name = chart.label;
         }}
         {@attach keyboardShortcut(shortcutPrevious(index))}
         {@attach keyboardShortcut(shortcutNext(index))}

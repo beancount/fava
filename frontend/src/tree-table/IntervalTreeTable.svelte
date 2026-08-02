@@ -6,7 +6,7 @@
   import type { AccountTreeNode } from "../charts/hierarchy.ts";
   import { url_for_account } from "../helpers.ts";
   import type { NonEmptyArray } from "../lib/array.ts";
-  import { currentTimeFilterDateFormat } from "../stores/format.ts";
+  import { current_time_filter_date_format } from "../stores/format.ts";
   import AccountCellHeader from "./AccountCellHeader.svelte";
   import { get_not_shown, setTreeTableNotShownContext } from "./helpers.ts";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
@@ -38,11 +38,11 @@
     accumulate ? min(dates, (d) => d.begin) : undefined,
   );
   let start_date_filter = $derived(
-    start_date ? $currentTimeFilterDateFormat(start_date) : undefined,
+    start_date ? $current_time_filter_date_format(start_date) : undefined,
   );
   let time_filters = $derived(
     dates.map((date_range): [string, string] => {
-      const title = $currentTimeFilterDateFormat(date_range.begin);
+      const title = $current_time_filter_date_format(date_range.begin);
       return start_date_filter != null
         ? [title, `${start_date_filter}-${title}`]
         : [title, title];

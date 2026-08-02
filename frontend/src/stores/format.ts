@@ -33,8 +33,8 @@ export const ctx = derived(
     formatter_context($incognito, $locale, $precisions),
 );
 
-export const currentDateFormat = derived(interval, (val) => dateFormat[val]);
-export const currentTimeFilterDateFormat = derived(
+export const current_date_format = derived(interval, (val) => dateFormat[val]);
+export const current_time_filter_date_format = derived(
   interval,
   (val) => timeFilterDateFormat[val],
 );

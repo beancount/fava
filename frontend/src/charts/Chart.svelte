@@ -3,10 +3,10 @@
 
   import { router } from "../router.ts";
   import {
-    barChartMode,
-    chartToggledCurrencies,
-    hierarchyChartMode,
-    lineChartMode,
+    bar_chart_mode,
+    chart_toggled_currencies,
+    hierarchy_chart_mode,
+    line_chart_mode,
   } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
   import BarChart from "./BarChart.svelte";
@@ -40,18 +40,18 @@
     {#if chart.type === "barchart"}
       <ChartLegend
         legend={chart.currencies}
-        color={!($barChartMode === "stacked" && chart.hasStackedData)}
-        toggled={chartToggledCurrencies}
+        color={!($bar_chart_mode === "stacked" && chart.hasStackedData)}
+        toggled={chart_toggled_currencies}
       />
     {/if}
     {#if chart.type === "linechart"}
       <ChartLegend
         legend={chart.series_names}
         color={true}
-        toggled={chartToggledCurrencies}
+        toggled={chart_toggled_currencies}
       />
     {/if}
-    {#if chart.type === "hierarchy" && $hierarchyChartMode === "treemap" && chart.treemap_currency}
+    {#if chart.type === "hierarchy" && $hierarchy_chart_mode === "treemap" && chart.treemap_currency}
       <ChartLegend
         legend={chart.currencies}
         color={false}
@@ -60,11 +60,11 @@
     {/if}
     <span class="spacer"></span>
     {#if chart.type === "hierarchy"}
-      <ModeSwitch store={hierarchyChartMode} />
+      <ModeSwitch store={hierarchy_chart_mode} />
     {:else if chart.type === "linechart"}
-      <ModeSwitch store={lineChartMode} />
+      <ModeSwitch store={line_chart_mode} />
     {:else if chart.type === "barchart" && chart.hasStackedData}
-      <ModeSwitch store={barChartMode} />
+      <ModeSwitch store={bar_chart_mode} />
     {/if}
   {:else}<span class="spacer"></span>{/if}
   {@render children?.()}

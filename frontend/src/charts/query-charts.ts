@@ -12,7 +12,7 @@ import { ParsedLineChart } from "./line.ts";
 /** Get the query chart, if possible, from a query result */
 export function get_query_chart(
   table: QueryResultTable,
-  $chartContext: ChartContext,
+  $chart_context: ChartContext,
 ): HierarchyChart | LineChart | null {
   const { columns } = table;
   const [first, second] = columns;
@@ -29,7 +29,7 @@ export function get_query_chart(
       (account, d) => ({ account, balance: d?.balance ?? {} }),
     );
     root.account = "(root)";
-    return new ParsedHierarchyChart(null, root).with_context($chartContext);
+    return new ParsedHierarchyChart(null, root).with_context($chart_context);
   }
   if (first.dtype === "date" && second.dtype === "Inventory") {
     const bals = (table.rows as [Date, Inventory][]).map(([date, inv]) => ({

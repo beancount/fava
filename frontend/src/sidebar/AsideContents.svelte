@@ -2,15 +2,15 @@
   import { url_for } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
-  import { errors, extensions, ledgerData } from "../stores/index.ts";
+  import { errors, extensions, ledger_data } from "../stores/index.ts";
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
-  let user_queries = $derived($ledgerData.user_queries);
-  let upcoming_events_count = $derived($ledgerData.upcoming_events_count);
-  let sidebar_links = $derived($ledgerData.sidebar_links);
+  let user_queries = $derived($ledger_data.user_queries);
+  let upcoming_events_count = $derived($ledger_data.upcoming_events_count);
+  let sidebar_links = $derived($ledger_data.sidebar_links);
   let extension_reports = $derived(
     $extensions.filter((e) => e.report_title != null),
   );

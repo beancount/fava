@@ -1,6 +1,6 @@
 <script lang="ts">
   import { _ } from "../i18n.ts";
-  import { hierarchyChartMode } from "../stores/chart.ts";
+  import { hierarchy_chart_mode } from "../stores/chart.ts";
   import type { HierarchyChart } from "./hierarchy.ts";
   import Icicle from "./Icicle.svelte";
   import Sunburst from "./Sunburst.svelte";
@@ -17,7 +17,7 @@
   let currencies = $derived(chart.currencies);
 
   let treemap_currency = $derived(chart.treemap_currency);
-  let mode = $derived($hierarchyChartMode);
+  let mode = $derived($hierarchy_chart_mode);
   let treemap = $derived(
     mode === "treemap" ? data.get($treemap_currency ?? "") : undefined,
   );

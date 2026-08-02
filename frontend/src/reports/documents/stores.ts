@@ -1,3 +1,3 @@
 import { writable } from "svelte/store";
 
-export const selectedAccount = writable("");
+export const selected_account = writable("");

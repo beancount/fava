@@ -20,7 +20,7 @@
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
-  import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
+  import { reload_after_saving_entry_slice } from "../stores/editor.ts";
   import { currency_column, indent } from "../stores/fava_options.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
@@ -61,7 +61,7 @@
         source: current_slice,
         sha256sum,
       });
-      if ($reloadAfterSavingEntrySlice) {
+      if ($reload_after_saving_entry_slice) {
         router.reload();
       }
       router.close_overlay();
@@ -88,7 +88,7 @@
     try {
       await delete_source_slice({ entry_hash, sha256sum });
       entry_hash = "";
-      if ($reloadAfterSavingEntrySlice) {
+      if ($reload_after_saving_entry_slice) {
         router.reload();
       }
       router.close_overlay();
@@ -140,7 +140,7 @@
     {/if}
     <span class="spacer"></span>
     <label>
-      <input type="checkbox" bind:checked={$reloadAfterSavingEntrySlice} />
+      <input type="checkbox" bind:checked={$reload_after_saving_entry_slice} />
       <span>{_("reload")}</span>
     </label>
     <DeleteButton ondelete={delete_slice} />

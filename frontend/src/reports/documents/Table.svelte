@@ -5,7 +5,7 @@
   import { basename } from "../../lib/paths.ts";
   import { DateColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
-  import { selectedAccount } from "./stores.ts";
+  import { selected_account } from "./stores.ts";
 
   interface Props {
     data: Document[];
@@ -29,7 +29,7 @@
   let sorter = $state(new Sorter(columns[0], "desc"));
 
   let is_descendant_of_selected = $derived(
-    is_descendant_or_equal($selectedAccount),
+    is_descendant_or_equal($selected_account),
   );
   let filtered_documents = $derived(
     data.filter((doc) => is_descendant_of_selected(doc.account)),

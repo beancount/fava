@@ -10,7 +10,7 @@ import { currencies_sorted } from "./index.ts";
 import { operating_currency } from "./options.ts";
 
 /** This store is used to switch to the same chart (as identified by name) on navigation. */
-export const lastActiveChartName = writable<string | null>(null);
+export const last_active_chart_name = writable<string | null>(null);
 
 const hierarchy_chart_mode_validator = constants(
   "treemap",
@@ -20,7 +20,7 @@ const hierarchy_chart_mode_validator = constants(
 type HierarchyChartMode = ValidationT<typeof hierarchy_chart_mode_validator>;
 
 /** The currently selected hierarchy chart mode. */
-export const hierarchyChartMode =
+export const hierarchy_chart_mode =
   local_storage_synced_store<HierarchyChartMode>(
     "hierarchy-chart-mode",
     hierarchy_chart_mode_validator,
@@ -36,7 +36,7 @@ const line_chart_mode_validator = constants("line", "area");
 type LineChartMode = ValidationT<typeof line_chart_mode_validator>;
 
 /** The currently selected line chart mode. */
-export const lineChartMode = local_storage_synced_store<LineChartMode>(
+export const line_chart_mode = local_storage_synced_store<LineChartMode>(
   "line-chart-mode",
   line_chart_mode_validator,
   () => "line",
@@ -50,7 +50,7 @@ const bar_chart_mode_validator = constants("stacked", "single");
 type BarChartMode = ValidationT<typeof bar_chart_mode_validator>;
 
 /** The currently selected bar chart mode. */
-export const barChartMode = local_storage_synced_store<BarChartMode>(
+export const bar_chart_mode = local_storage_synced_store<BarChartMode>(
   "bar-chart-mode",
   bar_chart_mode_validator,
   () => "stacked",
@@ -61,7 +61,7 @@ export const barChartMode = local_storage_synced_store<BarChartMode>(
 );
 
 /** The currencies that are currently not shown in the bar and line charts. */
-export const chartToggledCurrencies = local_storage_synced_store(
+export const chart_toggled_currencies = local_storage_synced_store(
   "chart-toggled-currencies",
   array(string),
   () => [],

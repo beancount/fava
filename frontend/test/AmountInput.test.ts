@@ -5,11 +5,11 @@ import { flushSync, mount, unmount } from "svelte";
 import { get } from "svelte/store";
 
 import AmountInput from "../src/entry-forms/AmountInput.svelte";
-import { ledgerData } from "../src/stores/index.ts";
+import { ledger_data } from "../src/stores/index.ts";
 import { setup_jsdom, user_events } from "./dom.ts";
-import { initialiseLedgerData } from "./helpers.ts";
+import { initialise_ledger_data } from "./helpers.ts";
 
-test.before(initialiseLedgerData);
+test.before(initialise_ledger_data);
 test.beforeEach(setup_jsdom);
 
 /** Mount the `AmountInput` component and return the `<input>`. */
@@ -132,10 +132,10 @@ test("AmountInput: Tab triggers automatic selection and updates the value", (t) 
 test("AmountInput: only uses the leading number, ignoring digits later in the value", (t) => {
   // Use a currency that itself contains digits, so that a regression to
   // naively stripping all non-numeric characters would be caught here.
-  const original_ledger_data = get(ledgerData);
-  ledgerData.set({ ...original_ledger_data, currencies: ["A123", "USD"] });
+  const original_ledger_data = get(ledger_data);
+  ledger_data.set({ ...original_ledger_data, currencies: ["A123", "USD"] });
   t.after(() => {
-    ledgerData.set(original_ledger_data);
+    ledger_data.set(original_ledger_data);
   });
 
   const input = mount_amount_input(t, "");

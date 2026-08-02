@@ -1,7 +1,7 @@
 import { createContext } from "svelte";
 import { derived } from "svelte/store";
 
-import { currentDateFormat } from "../stores/format.ts";
+import { current_date_format } from "../stores/format.ts";
 import { currencies } from "../stores/index.ts";
 import { operating_currency } from "../stores/options.ts";
 import { conversion } from "../stores/url.ts";
@@ -18,7 +18,7 @@ export interface ChartContext {
 /**
  * The list of operating currencies, adding in the current conversion currency.
  */
-const operatingCurrenciesWithConversion = derived(
+const operating_currencies_with_conversion = derived(
   [operating_currency, currencies, conversion],
   ([$operating_currency, $currencies, $conversion]) =>
     $currencies.includes($conversion) &&
@@ -29,10 +29,13 @@ const operatingCurrenciesWithConversion = derived(
 
 export const [get_chart_tooltip, set_chart_tooltip] = createContext<Tooltip>();
 
-export const chartContext = derived(
-  [operatingCurrenciesWithConversion, currentDateFormat],
-  ([$operatingCurrenciesWithConversion, $currentDateFormat]): ChartContext => ({
-    currencies: $operatingCurrenciesWithConversion,
-    dateFormat: $currentDateFormat,
+export const chart_context = derived(
+  [operating_currencies_with_conversion, current_date_format],
+  ([
+    $operating_currencies_with_conversion,
+    $current_date_format,
+  ]): ChartContext => ({
+    currencies: $operating_currencies_with_conversion,
+    dateFormat: $current_date_format,
   }),
 );

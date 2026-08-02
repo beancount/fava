@@ -7,7 +7,7 @@
 
   import { url_for_account } from "../helpers.ts";
   import { ctx } from "../stores/format.ts";
-  import { sunburstScale } from "./helpers.ts";
+  import { sunburst_scale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
@@ -78,7 +78,7 @@
         }}
         class:half={current && !current.data.account.startsWith(d.data.account)}
         fill-rule="evenodd"
-        fill={$sunburstScale(d.data.account)}
+        fill={$sunburst_scale(d.data.account)}
         d={arcShape(d)}
         role="img"
       />

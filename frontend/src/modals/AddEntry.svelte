@@ -10,7 +10,7 @@
   import { today_as_string } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { router } from "../router.ts";
-  import { addEntryContinue } from "../stores/editor.ts";
+  import { add_entry_continue } from "../stores/editor.ts";
   import { hash } from "../stores/url.ts";
   import ModalBase from "./ModalBase.svelte";
 
@@ -32,7 +32,7 @@
     // @ts-expect-error all these entries have that static method, but TS is not able to determine that
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     entry = entry.constructor.empty(added_entry_date);
-    if (!$addEntryContinue) {
+    if (!$add_entry_continue) {
       router.close_overlay();
     }
   }
@@ -61,7 +61,7 @@
     <div class="flex-row">
       <span class="spacer"></span>
       <label>
-        <input type="checkbox" bind:checked={$addEntryContinue} />
+        <input type="checkbox" bind:checked={$add_entry_continue} />
         <span>{_("continue")}</span>
       </label>
       <button type="submit">{_("Save")}</button>

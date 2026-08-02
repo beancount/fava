@@ -4,14 +4,18 @@
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
   import { url_for_account } from "../helpers.ts";
-  import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
-  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
+  import { bar_chart_mode, chart_toggled_currencies } from "../stores/chart.ts";
+  import {
+    ctx,
+    current_time_filter_date_format,
+    short,
+  } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
   import { get_chart_tooltip } from "./context.ts";
   import {
-    currenciesScale,
+    currencies_scale,
     filter_ticks,
     hcl_color_range,
     include_zero,
@@ -38,7 +42,7 @@
   // Chart data
   let accounts = $derived(chart.accounts);
   let { currencies, bar_groups, stacks } = $derived(
-    chart.filter($chartToggledCurrencies),
+    chart.filter($chart_toggled_currencies),
   );
 
   // Computed dimensions
@@ -50,7 +54,7 @@
 
   /** Whether to display stacked bars. */
   let show_stacked_bars = $derived(
-    $barChartMode === "stacked" && chart.hasStackedData,
+    $bar_chart_mode === "stacked" && chart.hasStackedData,
   );
 
   // Scales
@@ -119,7 +123,7 @@
         />
         <a
           href={url_for_time_filter(group.date)}
-          aria-label={$currentTimeFilterDateFormat(group.date)}
+          aria-label={$current_time_filter_date_format(group.date)}
         >
           <rect
             class="axis-group-box"
@@ -131,7 +135,7 @@
         {#if !show_stacked_bars}
           {#each group.values as { currency, value, budget } (currency)}
             <rect
-              fill={$currenciesScale(currency)}
+              fill={$currencies_scale(currency)}
               width={x1.bandwidth()}
               x={x1(currency)}
               y={y(Math.max(0, value))}
@@ -167,7 +171,7 @@
                       $ctx,
                       bar.data,
                       account,
-                      $chartToggledCurrencies,
+                      $chart_toggled_currencies,
                     ),
                   )}
                 />

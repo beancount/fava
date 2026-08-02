@@ -43,7 +43,7 @@ import {
   auto_reload,
   invert_gains_losses_colors,
 } from "./stores/fava_options.ts";
-import { errors, ledgerData } from "./stores/index.ts";
+import { errors, ledger_data } from "./stores/index.ts";
 import { ledger_mtime, read_mtime } from "./stores/mtime.ts";
 import { SvelteCustomElement } from "./svelte-custom-elements.ts";
 import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element.ts";
@@ -70,7 +70,7 @@ function define_custom_elements() {
 function on_changes() {
   get_ledger_data()
     .then((v) => {
-      ledgerData.set(v);
+      ledger_data.set(v);
     })
     .catch((e: unknown) => {
       notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
@@ -102,7 +102,7 @@ function poll_for_changes(): void {
 function init(): void {
   const initial = get_script_tag_value("#ledger-data", ledgerDataValidator);
   if (initial.is_ok) {
-    ledgerData.set(initial.value);
+    ledger_data.set(initial.value);
   } else {
     log_error(initial.error);
   }
@@ -124,7 +124,7 @@ function init(): void {
   define_custom_elements();
   setInterval(poll_for_changes, 5000);
 
-  ledgerData.subscribe((val) => {
+  ledger_data.subscribe((val) => {
     errors.set(val.errors);
   });
 

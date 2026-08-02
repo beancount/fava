@@ -5,7 +5,7 @@
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
-  import { treemapScale } from "./helpers.ts";
+  import { treemap_scale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
@@ -32,7 +32,7 @@
 
   function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;
-    return $treemapScale(
+    return $treemap_scale(
       node.depth === 1 || !node.parent
         ? node.data.account
         : node.parent.data.account,
