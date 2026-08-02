@@ -61,6 +61,10 @@ export default defineConfig(
     rules: {
       "@typescript-eslint/no-useless-default-assignment": OFF,
       "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
+      "@typescript-eslint/naming-convention": [
+        ON,
+        { selector: "typeProperty", format: ["snake_case"] },
+      ],
     },
   },
 );

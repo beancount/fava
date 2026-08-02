@@ -19,7 +19,7 @@
   interface MoveDetails {
     account: string;
     filename: string;
-    newName: string;
+    new_name: string;
   }
 
   let grouped = $derived(group(documents, (d) => d.account));
@@ -42,7 +42,7 @@
       moving = {
         account: selected.account,
         filename: selected.filename,
-        newName: basename(selected.filename),
+        new_name: basename(selected.filename),
       };
     }
   }
@@ -53,7 +53,7 @@
       const moved = await move_document(
         moving.filename,
         moving.account,
-        moving.newName,
+        moving.new_name,
       );
       if (moved) {
         moving = null;
@@ -76,7 +76,7 @@
       <p><code>{moving.filename}</code></p>
       <p>
         <AccountInput bind:value={moving.account} />
-        <input size={40} bind:value={moving.newName} />
+        <input size={40} bind:value={moving.new_name} />
         <button type="submit">{_("Move")}</button>
       </p>
     </form>
@@ -86,7 +86,7 @@
   <Accounts
     {node}
     move={(arg: { account: string; filename: string }) => {
-      moving = { ...arg, newName: basename(arg.filename) };
+      moving = { ...arg, new_name: basename(arg.filename) };
     }}
   />
   <div>

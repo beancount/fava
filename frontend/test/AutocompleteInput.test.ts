@@ -385,7 +385,7 @@ test("AutocompleteInput: blur hides the suggestion list and fires onchange", (t)
   deepEqual(suggestion_texts(), []);
 });
 
-test("AutocompleteInput: clearButton is only shown when there is a value and clears it on click", (t) => {
+test("AutocompleteInput: clear_button is only shown when there is a value and clears it on click", (t) => {
   const onchange = t.mock.fn();
   const input = mount_autocomplete(t, { clear_button: true, onchange });
   ok(!document.body.querySelector("button"));
@@ -434,15 +434,12 @@ test("AutocompleteInput: value_extractor and value_selector operate on a substri
   deepEqual(value_selector.mock.calls[0]?.arguments, ["banana", input]);
 });
 
-test("AutocompleteInput: checkValidity sets a custom validity message on the input", (t) => {
+test("AutocompleteInput: check_validity sets a custom validity message on the input", (t) => {
   const check_validity = t.mock.fn((val: string): string =>
     val === "invalid" ? "not a valid value" : "",
   );
 
-  const input = mount_autocomplete(t, {
-    value: "invalid",
-    check_validity,
-  });
+  const input = mount_autocomplete(t, { value: "invalid", check_validity });
   equal(input.validationMessage, "not a valid value");
   equal(input.checkValidity(), false);
   equal(check_validity.mock.callCount(), 1);

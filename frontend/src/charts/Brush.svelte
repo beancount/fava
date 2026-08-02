@@ -7,7 +7,7 @@
 <script lang="ts">
   import { pointer } from "d3-selection";
   import type { Snippet } from "svelte";
-  import type { SVGAttributes } from "svelte/elements";
+  import type { PointerEventHandler, SVGAttributes } from "svelte/elements";
 
   import { router } from "../router.ts";
   import { currentTimeFilterDateFormat } from "../stores/format.ts";
@@ -55,7 +55,7 @@
     event.preventDefault();
   }
 
-  function onpointermove(event: PointerEvent & { currentTarget: SVGGElement }) {
+  const onpointermove: PointerEventHandler<SVGGElement> = (event) => {
     const [x_pointer, y_pointer] = pointer(event);
     if (find != null) {
       const res = find(x_pointer, y_pointer);
@@ -73,7 +73,7 @@
       return;
     }
     x_current = x_pointer;
-  }
+  };
 
   function onpointerup(event: PointerEvent) {
     if (event.pointerId !== active_pointer_id) {
