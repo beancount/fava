@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { range } from "d3-array";
 import { type ComponentProps, flushSync, mount, unmount } from "svelte";
 
-import AutocompleteInput from "../src/AutocompleteInput.svelte";
+import AutocompleteInput from "../src/components/AutocompleteInput.svelte";
 import { setup_jsdom, user_events } from "./dom.ts";
 
 test.beforeEach(setup_jsdom);
@@ -95,6 +95,170 @@ test("AutocompleteInput: ArrowDown/ArrowUp cycle through suggestions", (t) => {
   equal(selected(), "avocado");
   user_events.keydown(input, "ArrowUp");
   equal(selected(), "apricot");
+});
+
+test("AutocompleteInput: typing resets the highlighted suggestion", (t) => {
+  const input = mount_autocomplete(t, {
+    suggestions: ["apple", "apricot", "avocado"],
+  });
+  user_events.type(input, "a");
+  user_events.keydown(input, "ArrowDown");
+  user_events.keydown(input, "ArrowDown");
+  equal(selected(), "apricot");
+
+  user_events.type(input, "av");
+  equal(selected(), undefined);
+});
+
+test("AutocompleteInput: automatic selection highlights the first suggestion", (t) => {
+  const input = mount_autocomplete(t, {
+    suggestions: ["apple", "apricot", "avocado"],
+    automatic_selection: true,
+  });
+  // The list is only shown (and hence a suggestion highlighted) once open.
+  equal(selected(), undefined);
+
+  user_events.focus(input);
+  equal(selected(), "apple");
+
+  // Typing highlights the first of the updated suggestions.
+  user_events.type(input, "av");
+  deepEqual(suggestion_texts(), ["avocado"]);
+  equal(selected(), "avocado");
+
+  // Without any matching suggestion, nothing is highlighted.
+  user_events.type(input, "nomatch");
+  deepEqual(suggestion_texts(), []);
+  equal(selected(), undefined);
+});
+
+test("AutocompleteInput: automatic selection allows moving to other suggestions", (t) => {
+  const input = mount_autocomplete(t, {
+    suggestions: ["apple", "apricot", "avocado"],
+    automatic_selection: true,
+  });
+  user_events.type(input, "a");
+  equal(selected(), "apple");
+
+  user_events.keydown(input, "ArrowDown");
+  equal(selected(), "apricot");
+  // ArrowUp from the automatically highlighted first suggestion wraps around.
+  user_events.keydown(input, "ArrowUp");
+  equal(selected(), "apple");
+  user_events.keydown(input, "ArrowUp");
+  equal(selected(), "avocado");
+});
+
+test("AutocompleteInput: Enter selects the automatically highlighted suggestion", (t) => {
+  const onenter = t.mock.fn();
+  const onselect = t.mock.fn();
+  const input = mount_autocomplete(t, {
+    automatic_selection: true,
+    onenter,
+    onselect,
+  });
+  user_events.type(input, "ban");
+
+  user_events.keydown(input, "Enter");
+  equal(input.value, "banana");
+  equal(onselect.mock.callCount(), 1);
+  equal(onenter.mock.callCount(), 0);
+});
+
+test("AutocompleteInput: Tab selects the automatically highlighted suggestion", (t) => {
+  const onselect = t.mock.fn();
+  const onchange = t.mock.fn();
+  const input = mount_autocomplete(t, {
+    automatic_selection: true,
+    onselect,
+    onchange,
+  });
+  user_events.type(input, "ban");
+  user_events.keydown(input, "Tab");
+  user_events.blur(input);
+
+  equal(input.value, "banana");
+  equal(onselect.mock.callCount(), 1);
+  equal(onchange.mock.callCount(), 1);
+  deepEqual(onchange.mock.calls[0]?.arguments, ["banana"]);
+  deepEqual(suggestion_texts(), []);
+});
+
+test("AutocompleteInput: blur without Tab does not select the automatically highlighted suggestion", (t) => {
+  // On mobile, blur can happen for reasons other than explicit confirmation
+  // and there is no Escape key to back out of an unwanted selection, so
+  // only leaving via Tab should trigger automatic selection.
+  const onselect = t.mock.fn();
+  const onchange = t.mock.fn();
+  const input = mount_autocomplete(t, {
+    automatic_selection: true,
+    onselect,
+    onchange,
+  });
+  user_events.type(input, "ban");
+  user_events.blur(input);
+
+  equal(input.value, "ban");
+  equal(onselect.mock.callCount(), 0);
+  equal(onchange.mock.callCount(), 1);
+  deepEqual(onchange.mock.calls[0]?.arguments, ["ban"]);
+});
+
+test("AutocompleteInput: blur does not select a suggestion of a closed list", (t) => {
+  const onselect = t.mock.fn();
+  const onchange = t.mock.fn();
+  const input = mount_autocomplete(t, {
+    automatic_selection: true,
+    onselect,
+    onchange,
+  });
+  user_events.type(input, "ban");
+  user_events.keydown(input, "Escape");
+  user_events.blur(input);
+
+  equal(input.value, "ban");
+  equal(onselect.mock.callCount(), 0);
+  equal(onchange.mock.callCount(), 1);
+  deepEqual(onchange.mock.calls[0]?.arguments, ["ban"]);
+});
+
+test("AutocompleteInput: blur does not select a suggestion with manual selection", (t) => {
+  const onselect = t.mock.fn();
+  const onchange = t.mock.fn();
+  const input = mount_autocomplete(t, { onselect, onchange });
+  user_events.type(input, "ban");
+  user_events.keydown(input, "ArrowDown");
+  equal(selected(), "banana");
+
+  user_events.blur(input);
+  equal(input.value, "ban");
+  equal(onselect.mock.callCount(), 0);
+  equal(onchange.mock.callCount(), 1);
+});
+
+test("AutocompleteInput: automatic selection does not highlight in a closed list", (t) => {
+  const onenter = t.mock.fn();
+  const onselect = t.mock.fn();
+  const input = mount_autocomplete(t, {
+    automatic_selection: true,
+    onenter,
+    onselect,
+  });
+  user_events.type(input, "ban");
+  equal(selected(), "banana");
+
+  user_events.keydown(input, "Escape");
+  equal(selected(), undefined);
+
+  // With the list closed, Enter does not select the first suggestion.
+  user_events.keydown(input, "Enter");
+  equal(input.value, "ban");
+  equal(onselect.mock.callCount(), 0);
+  equal(onenter.mock.callCount(), 1);
+
+  // Reopening the list highlights the first suggestion again.
+  user_events.keydown(input, "ArrowDown", { altKey: true });
+  equal(selected(), "banana");
 });
 
 test("AutocompleteInput: Enter selects the highlighted suggestion", (t) => {
@@ -223,10 +387,7 @@ test("AutocompleteInput: blur hides the suggestion list and fires onchange", (t)
 
 test("AutocompleteInput: clearButton is only shown when there is a value and clears it on click", (t) => {
   const onchange = t.mock.fn();
-  const input = mount_autocomplete(t, {
-    clearButton: true,
-    onchange,
-  });
+  const input = mount_autocomplete(t, { clear_button: true, onchange });
   ok(!document.body.querySelector("button"));
 
   user_events.type(input, "app");
@@ -242,11 +403,11 @@ test("AutocompleteInput: clearButton is only shown when there is a value and cle
 
 test("AutocompleteInput: valueExtractor and valueSelector operate on a substring of the value", (t) => {
   // Simulate autocompleting the last comma-separated tag of the value.
-  const valueExtractor = t.mock.fn(
+  const value_extractor = t.mock.fn(
     (val: string, _input: HTMLInputElement): string =>
       val.split(",").at(-1) ?? "",
   );
-  const valueSelector = t.mock.fn(
+  const value_selector = t.mock.fn(
     (selected: string, el: HTMLInputElement): string => {
       const parts = el.value.split(",");
       parts[parts.length - 1] = selected;
@@ -256,39 +417,42 @@ test("AutocompleteInput: valueExtractor and valueSelector operate on a substring
 
   const input = mount_autocomplete(t, {
     value: "foo,ba",
-    valueExtractor,
-    valueSelector,
+    value_extractor,
+    value_selector,
   });
   user_events.focus(input);
 
   deepEqual(suggestion_texts(), ["banana"]);
-  deepEqual(valueExtractor.mock.calls[0]?.arguments, ["foo,ba", input]);
+  deepEqual(value_extractor.mock.calls[0]?.arguments, ["foo,ba", input]);
 
   const li = document.body.querySelector("li");
   ok(li);
   user_events.mousedown(li, { button: 0 });
 
   equal(input.value, "foo,banana");
-  equal(valueSelector.mock.callCount(), 1);
-  deepEqual(valueSelector.mock.calls[0]?.arguments, ["banana", input]);
+  equal(value_selector.mock.callCount(), 1);
+  deepEqual(value_selector.mock.calls[0]?.arguments, ["banana", input]);
 });
 
 test("AutocompleteInput: checkValidity sets a custom validity message on the input", (t) => {
-  const checkValidity = t.mock.fn((val: string): string =>
+  const check_validity = t.mock.fn((val: string): string =>
     val === "invalid" ? "not a valid value" : "",
   );
 
-  const input = mount_autocomplete(t, { value: "invalid", checkValidity });
+  const input = mount_autocomplete(t, {
+    value: "invalid",
+    check_validity,
+  });
   equal(input.validationMessage, "not a valid value");
   equal(input.checkValidity(), false);
-  equal(checkValidity.mock.callCount(), 1);
-  deepEqual(checkValidity.mock.calls[0]?.arguments, ["invalid"]);
+  equal(check_validity.mock.callCount(), 1);
+  deepEqual(check_validity.mock.calls[0]?.arguments, ["invalid"]);
 
   user_events.type(input, "valid");
   equal(input.validationMessage, "");
   equal(input.checkValidity(), true);
-  equal(checkValidity.mock.callCount(), 2);
-  deepEqual(checkValidity.mock.calls[1]?.arguments, ["valid"]);
+  equal(check_validity.mock.callCount(), 2);
+  deepEqual(check_validity.mock.calls[1]?.arguments, ["valid"]);
 });
 
 test("AutocompleteInput: required prop is reflected on the input", (t) => {

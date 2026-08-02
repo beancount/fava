@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import type { EntryMetadata, Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
   import { currencies } from "../stores/index.ts";

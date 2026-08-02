@@ -1,9 +1,9 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
   import {
     get_narration_transaction,
     get_payee_transaction,
   } from "../api/index.ts";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import type { EntryMetadata, Transaction } from "../entries/index.ts";
   import { Posting } from "../entries/index.ts";
   import { _ } from "../i18n.ts";

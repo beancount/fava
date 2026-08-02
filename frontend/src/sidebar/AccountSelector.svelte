@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import { urlForAccount } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import { router } from "../router.ts";

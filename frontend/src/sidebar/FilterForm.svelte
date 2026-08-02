@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import { _ } from "../i18n.ts";
   import { escape_for_regex } from "../lib/regex.ts";
   import { router } from "../router.ts";
@@ -16,13 +16,13 @@
     ...$payees.map((payee) => `payee:"${escape_for_regex(payee)}"`),
   ]);
 
-  function valueExtractor(value: string, input: HTMLInputElement) {
+  function value_extractor(value: string, input: HTMLInputElement) {
     const match = /\S*$/.exec(
       value.slice(0, input.selectionStart ?? undefined),
     );
     return match?.[0] ?? value;
   }
-  function valueSelector(value: string, input: HTMLInputElement) {
+  function value_selector(value: string, input: HTMLInputElement) {
     const selectionStart = input.selectionStart ?? 0;
     const match = /\S*$/.exec(input.value.slice(0, selectionStart));
     const matchLength = match?.[0]?.length;
@@ -41,8 +41,8 @@
     placeholder={_("Time")}
     suggestions={$years}
     key="f t"
-    clearButton={true}
-    setSize={true}
+    clear_button={true}
+    set_size={true}
     onchange={(v: string) => {
       router.set_search_param("time", v);
     }}
@@ -52,8 +52,8 @@
     placeholder={_("Account")}
     suggestions={$accounts}
     key="f a"
-    clearButton={true}
-    setSize={true}
+    clear_button={true}
+    set_size={true}
     onchange={(v: string) => {
       router.set_search_param("account", v);
     }}
@@ -63,10 +63,10 @@
     placeholder={_("Filter by tag, payee, …")}
     suggestions={fql_filter_suggestions}
     key="f f"
-    clearButton={true}
-    setSize={true}
-    {valueExtractor}
-    {valueSelector}
+    clear_button={true}
+    set_size={true}
+    {value_extractor}
+    {value_selector}
     onchange={(v: string) => {
       router.set_search_param("filter", v);
     }}
