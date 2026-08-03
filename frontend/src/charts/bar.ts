@@ -9,6 +9,7 @@ import {
   date,
   number,
   object,
+  optional,
   record,
   string,
 } from "../lib/validation.ts";
@@ -49,15 +50,19 @@ export class BarChart {
   readonly currencies: readonly string[];
   /** The data for the (single) bars for all the intervals in this chart. */
   private readonly bar_groups: BarChartDatum[];
+  /** Optional average values for the visible currencies. */
+  readonly averages: Record<string, number> | null;
 
   constructor(
     label: string | null,
     currencies: readonly string[],
     bar_groups: BarChartDatum[],
+    averages: Record<string, number> | null = null,
   ) {
     this.label = label;
     this.currencies = currencies;
     this.bar_groups = bar_groups;
+    this.averages = averages;
     this.accounts = Array.from(
       new Set(bar_groups.map((d) => Object.keys(d.account_balances)).flat(2)),
     ).sort();
@@ -75,6 +80,7 @@ export class BarChart {
   filter(hidden_names: string[]): {
     currencies: string[];
     bar_groups: BarChartDatum[];
+    averages: Record<string, number> | null;
     stacks: [currency: string, stacks: Series<BarChartDatum, string>[]][];
   } {
     const hidden_names_set = new Set(hidden_names);
@@ -86,7 +92,14 @@ export class BarChart {
       values: b.values.filter((v) => currencies.has(v.currency)),
     }));
     const stacks = this.stacks.filter((s) => currencies.has(s[0]));
-    return { currencies: [...currencies], bar_groups, stacks };
+    const averages = this.averages
+      ? Object.fromEntries(
+          Object.entries(this.averages).filter(([currency]) =>
+            currencies.has(currency),
+          ),
+        )
+      : null;
+    return { currencies: [...currencies], bar_groups, averages, stacks };
   }
 
   /** Whether this chart contains any stacks (or is just a single account). */
@@ -170,20 +183,31 @@ const bar_validator = array(
 
 type ParsedBarChartData = ValidationT<typeof bar_validator>;
 
-const bar_chart_validator = object({ label: string, data: bar_validator });
+const bar_chart_validator = object({
+  label: string,
+  data: bar_validator,
+  averages: optional(record(number)),
+});
 
 export class ParsedBarChart implements ParsedFavaChart {
   readonly label: string | null;
   readonly data: ParsedBarChartData;
+  readonly averages: Record<string, number> | null;
 
-  constructor(label: string | null, data: ParsedBarChartData) {
+  constructor(
+    label: string | null,
+    data: ParsedBarChartData,
+    averages: Record<string, number> | null,
+  ) {
     this.label = label;
     this.data = data;
+    this.averages = averages;
   }
 
   static validator: Validator<ParsedBarChart> = (json) =>
     bar_chart_validator(json).map(
-      ({ label, data }) => new ParsedBarChart(label, data),
+      ({ label, data, averages }) =>
+        new ParsedBarChart(label, data, averages ?? null),
     );
 
   with_context($chartContext: ChartContext): BarChart {
@@ -200,6 +224,6 @@ export class ParsedBarChart implements ParsedFavaChart {
       account_balances: interval.account_balances,
     }));
 
-    return new BarChart(this.label, currencies, bar_groups);
+    return new BarChart(this.label, currencies, bar_groups, this.averages);
   }
 }

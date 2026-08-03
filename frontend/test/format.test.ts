@@ -42,6 +42,10 @@ test("formatter context", () => {
   const incognito_ctx = formatter_context(true, null, { USD: 4 });
   equal(incognito_ctx.num(10, "EUR"), "XX.XX");
   equal(incognito_ctx.num(10, "USD"), "XX.XXXX");
+
+  const average_ctx = formatter_context(false, null, { VACHR: 0 });
+  equal(average_ctx.num(-0.5, "VACHR"), "−0.50");
+  equal(average_ctx.amount(-0.5, "VACHR"), "−0.50 VACHR");
 });
 
 test("time filter date formatting", () => {

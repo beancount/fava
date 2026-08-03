@@ -46,6 +46,13 @@ export interface FormatterContext {
   percentage: (num: number) => string;
 }
 
+const extra_precision_digits = 2;
+
+function isRepresentableWithPrecision(num: number, precision: number): boolean {
+  const factor = 10 ** precision;
+  return Math.abs(num * factor - Math.round(num * factor)) < 1e-8;
+}
+
 /** Build the formatter context for the given configuration */
 export function formatter_context(
   incognito: boolean,
@@ -59,8 +66,25 @@ export function formatter_context(
       localeFormatter(locale, prec),
     ]),
   );
-  const num_raw = (n: number, c: string) =>
-    (currencyFormatters[c] ?? formatter)(n);
+  const formatterCache = new Map<number, (num: number) => string>();
+
+  const getFormatter = (precision: number) => {
+    const cached = formatterCache.get(precision);
+    if (cached) {
+      return cached;
+    }
+    const next = localeFormatter(locale, precision);
+    formatterCache.set(precision, next);
+    return next;
+  };
+
+  const num_raw = (n: number, c: string) => {
+    const precision = precisions[c];
+    if (precision == null || isRepresentableWithPrecision(n, precision)) {
+      return (currencyFormatters[c] ?? formatter)(n);
+    }
+    return getFormatter(Math.max(precision, extra_precision_digits))(n);
+  };
 
   const num = incognito
     ? (n: number, c: string) => replaceNumbers(num_raw(n, c))

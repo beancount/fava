@@ -227,7 +227,7 @@ msgstr ""
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:935
 msgid "Changes"
 msgstr ""
 
@@ -550,6 +550,15 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
+#: frontend/src/reports/tree_reports/IncomeStatement.svelte:18
+msgid "No Average"
+msgstr ""
+
+#: frontend/src/reports/tree_reports/IncomeStatement.svelte:20
+#, python-format
+msgid "%(interval)s average"
+msgstr ""
+
 #: frontend/src/reports/tree_reports/index.ts:38
 #: frontend/src/sidebar/AsideContents.svelte:27
 msgid "Income Statement"
@@ -585,8 +594,8 @@ msgstr ""
 msgid "Filter by tag, payee, …"
 msgstr ""
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:820
+#: src/fava/json_api.py:838
 msgid "Net Profit"
 msgstr ""
 
@@ -648,19 +657,19 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:222
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:826
 msgid "Income"
 msgstr ""
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:832
 msgid "Expenses"
 msgstr ""
 

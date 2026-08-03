@@ -45,6 +45,7 @@ const navigation_api = "navigation" in globalThis ? navigation : null;
 type FavaQueryParameters =
   | "account"
   | "charts"
+  | "average"
   | "conversion"
   | "extract_filename"
   | "extract_importer"
@@ -377,6 +378,7 @@ class Router {
   set_search_param(
     key:
       | "account"
+      | "average"
       | "conversion"
       | "filter"
       | "interval"

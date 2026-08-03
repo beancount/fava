@@ -11,6 +11,8 @@ import shutil
 from abc import abstractmethod
 from dataclasses import dataclass
 from dataclasses import fields
+from dataclasses import replace
+from decimal import Decimal
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
@@ -38,31 +40,38 @@ from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import filepath_in_primary_imports_folder
+from fava.core.inventory import SimpleCounterInventory
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
+from fava.internal_api import BalancesChart
+from fava.internal_api import BarChart
 from fava.internal_api import ChartApi
 from fava.internal_api import get_errors
 from fava.internal_api import get_ledger_data
+from fava.internal_api import HierarchyChart
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
+from fava.util.date import DateRange
+from fava.util.date import dateranges
+from fava.util.date import INTERVALS
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
     from collections.abc import Mapping
     from collections.abc import Sequence
     from datetime import date
-    from decimal import Decimal
 
     from flask.wrappers import Response
 
     from fava.beans.abc import Directive
+    from fava.core import FilteredLedger
+    from fava.core.charts import DateAndBalance
+    from fava.core.charts import DateAndBalanceWithBudget
     from fava.core.ingest import FileImporters
-    from fava.core.inventory import SimpleCounterInventory
     from fava.core.query import QueryResultTable
     from fava.core.query import QueryResultText
     from fava.core.tree import SerialisedTreeNode
     from fava.internal_api import ChartData
-    from fava.util.date import DateRange
 
 
 json_api = Blueprint("json_api", __name__)
@@ -108,6 +117,131 @@ def json_success(data: Any) -> Response:
     return jsonify(
         {"data": data, "mtime": str(g.ledger.mtime)},
     )
+
+
+def _average_range(filtered: FilteredLedger) -> DateRange | None:
+    """Get the date range used for average calculations."""
+    if filtered.date_range is not None:
+        return filtered.date_range
+    if filtered._date_first is None or filtered._date_last is None:  # noqa: SLF001
+        return None
+    return DateRange(filtered._date_first, filtered._date_last)  # noqa: SLF001
+
+
+def _average_divisor(
+    filtered: FilteredLedger,
+    average: str | None,
+) -> Decimal | None:
+    """Get the divisor for the selected average interval."""
+    if not average:
+        return None
+    interval = INTERVALS.get(average)
+    if interval is None:
+        raise InvalidAverageError(average)
+    date_range = _average_range(filtered)
+    if date_range is None:
+        return None
+    divisor = len(
+        dateranges(
+            date_range.begin,
+            date_range.end,
+            interval,
+            complete=False,
+        ),
+    )
+    return Decimal(divisor) if divisor else None
+
+
+def _scale_inventory(
+    inventory: SimpleCounterInventory,
+    divisor: Decimal,
+) -> SimpleCounterInventory:
+    return SimpleCounterInventory(
+        {currency: number / divisor for currency, number in inventory.items()},
+    )
+
+
+def _scale_optional_inventory(
+    inventory: SimpleCounterInventory | None,
+    divisor: Decimal,
+) -> SimpleCounterInventory | None:
+    if inventory is None:
+        return None
+    return _scale_inventory(inventory, divisor)
+
+
+def _scale_date_and_balance(
+    item: DateAndBalance,
+    divisor: Decimal,
+) -> DateAndBalance:
+    return replace(item, balance=_scale_inventory(item.balance, divisor))
+
+
+def _scale_date_and_balance_with_budget(
+    item: DateAndBalanceWithBudget,
+    divisor: Decimal,
+) -> DateAndBalanceWithBudget:
+    return replace(
+        item,
+        balance=_scale_inventory(item.balance, divisor),
+        account_balances={
+            account: _scale_inventory(balance, divisor)
+            for account, balance in item.account_balances.items()
+        },
+        budgets={
+            currency: amount / divisor
+            for currency, amount in item.budgets.items()
+        },
+    )
+
+
+def _scale_tree(
+    node: SerialisedTreeNode,
+    divisor: Decimal,
+) -> SerialisedTreeNode:
+    return replace(
+        node,
+        balance=_scale_inventory(node.balance, divisor),
+        balance_children=_scale_inventory(node.balance_children, divisor),
+        cost=_scale_optional_inventory(node.cost, divisor),
+        cost_children=_scale_optional_inventory(node.cost_children, divisor),
+        children=tuple(_scale_tree(child, divisor) for child in node.children),
+    )
+
+
+def _scale_chart(chart: ChartData, divisor: Decimal) -> ChartData:
+    if isinstance(chart, BalancesChart):
+        return replace(
+            chart,
+            data=[
+                _scale_date_and_balance(item, divisor) for item in chart.data
+            ],
+        )
+    if isinstance(chart, BarChart):
+        return replace(
+            chart,
+            data=[
+                _scale_date_and_balance_with_budget(item, divisor)
+                for item in chart.data
+            ],
+        )
+    if isinstance(chart, HierarchyChart):
+        return replace(chart, data=_scale_tree(chart.data, divisor))
+    return chart
+
+
+def _average_bar_chart(chart: BarChart, divisor: Decimal) -> BarChart:
+    """Compute average values for a bar chart."""
+    if not chart.data:
+        return replace(chart, averages=None)
+    totals: dict[str, Decimal] = {}
+    for item in chart.data:
+        for currency, value in item.balance.items():
+            totals[currency] = totals.get(currency, Decimal()) + value
+    averages = {
+        currency: total / divisor for currency, total in totals.items()
+    }
+    return replace(chart, averages=averages)
 
 
 class FavaJSONAPIError(FavaAPIError):
@@ -180,6 +314,15 @@ class NotAFileError(FavaJSONAPIError):
 
     def __init__(self, filename: str) -> None:
         super().__init__(f"Not a file: '{filename}'")
+
+
+class InvalidAverageError(FavaJSONAPIError):
+    """Invalid average interval."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, average: str) -> None:
+        super().__init__(f"Invalid average interval: '{average}'.")
 
 
 @json_api.errorhandler(FavaAPIError)
@@ -675,6 +818,7 @@ def get_income_statement() -> TreeReport:
     g.ledger.changed()
     options = g.ledger.options
     invert = g.ledger.fava_options.invert_income_liabilities_equity
+    divisor = _average_divisor(g.filtered, request.args.get("average"))
 
     charts = [
         ChartApi.interval_totals(
@@ -702,10 +846,22 @@ def get_income_statement() -> TreeReport:
         root_tree.get(options["name_expenses"]),
     ]
 
-    return TreeReport(
+    report = TreeReport(
         g.filtered.date_range,
         charts,
         trees=[tree.serialise_with_context() for tree in trees],
+    )
+    if divisor is None:
+        return report
+    return TreeReport(
+        report.date_range,
+        [
+            _average_bar_chart(chart, divisor)
+            if isinstance(chart, BarChart)
+            else _scale_chart(chart, divisor)
+            for chart in report.charts
+        ],
+        [_scale_tree(tree, divisor) for tree in report.trees],
     )
 
 

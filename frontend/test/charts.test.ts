@@ -8,6 +8,7 @@ import {
   filterTicks,
   includeZero,
   padExtent,
+  separateMarkerPositions,
 } from "../src/charts/helpers.ts";
 import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
 import { charts_validator } from "../src/charts/index.ts";
@@ -35,6 +36,18 @@ test("chart helpers (include zero in extent)", () => {
 test("chart helpers (pad extent)", () => {
   deepEqual(padExtent([0, 1]), [-0.03, 1.03]);
   deepEqual(padExtent([undefined, undefined]), [0, 1]);
+});
+
+test("chart helpers (separate marker positions)", () => {
+  deepEqual(
+    separateMarkerPositions([100, 101, 102], 8, 0, 210),
+    [100, 108, 116],
+  );
+  deepEqual(separateMarkerPositions([2, 3], 8, 0, 210), [2, 10]);
+  deepEqual(
+    separateMarkerPositions([205, 206, 207], 8, 0, 210),
+    [194, 202, 210],
+  );
 });
 
 test("handle data for hierarchical chart", async () => {
@@ -275,7 +288,11 @@ test("handle data for bar chart without stacked data", () => {
   ];
   // even without the operating currencies, the two most popular ones will be selected
   const ctx = { currencies: [], dateFormat: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const chart = ParsedBarChart.validator({
+    label: "name",
+    data,
+    averages: { EUR: 55, USD: 5 },
+  })
     .unwrap()
     .with_context(ctx);
   equal(false, chart.hasStackedData);
@@ -283,8 +300,10 @@ test("handle data for bar chart without stacked data", () => {
     ["EUR", []],
     ["USD", []],
   ]);
+  deepEqual(chart.filter([]).averages, { EUR: 55, USD: 5 });
   const without_usd = chart.filter(["USD"]);
   deepEqual(without_usd.stacks, [["EUR", []]]);
+  deepEqual(without_usd.averages, { EUR: 55 });
   deepEqual(without_usd.bar_groups, [
     {
       date: new Date("2000-01-01"),

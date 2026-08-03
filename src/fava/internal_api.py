@@ -18,7 +18,9 @@ from fava.context import g
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Mapping
     from collections.abc import Sequence
+    from decimal import Decimal
     from typing import Literal
 
     from fava.beans.abc import Meta
@@ -145,6 +147,7 @@ class BarChart:
 
     label: str
     data: Sequence[DateAndBalanceWithBudget]
+    averages: Mapping[str, Decimal] | None = None
     type: Literal["bar"] = "bar"
 
 
