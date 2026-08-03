@@ -1,10 +1,8 @@
 <script lang="ts">
-  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import type { EntryMetadata, Posting } from "../entries/index.ts";
-  import { _ } from "../i18n.ts";
-  import { currencies } from "../stores/index.ts";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
+  import AmountInput from "./AmountInput.svelte";
   import EntryMetadataSvelte from "./EntryMetadata.svelte";
 
   interface Props {
@@ -31,31 +29,26 @@
     remove,
   }: Props = $props();
 
-  let amount_number = $derived(posting.amount.replace(/[^\-?0-9.]/g, ""));
-  let amount_suggestions = $derived(
-    $currencies.map((c) => `${amount_number} ${c}`),
-  );
-
   let drag = $state.raw(false);
   let draggable = $state.raw(true);
 
-  function mousemove(event: MouseEvent) {
+  function onmousemove(event: MouseEvent) {
     draggable = !(event.target instanceof HTMLInputElement);
   }
-  function dragstart(event: DragEvent) {
+  function ondragstart(event: DragEvent) {
     event.dataTransfer?.setData("fava/posting", index.toString());
   }
-  function dragenter(event: DragEvent) {
+  function ondragenter(event: DragEvent) {
     const types = event.dataTransfer?.types ?? [];
     if (types.includes("fava/posting")) {
       event.preventDefault();
       drag = true;
     }
   }
-  function dragleave() {
+  function ondragleave() {
     drag = false;
   }
-  function drop(event: DragEvent) {
+  function ondrop(event: DragEvent) {
     event.preventDefault();
     const from = event.dataTransfer?.getData("fava/posting");
     if (from != null) {
@@ -69,12 +62,12 @@
   class="flex-row"
   class:drag
   {draggable}
-  onmousemove={mousemove}
-  ondragstart={dragstart}
-  ondragenter={dragenter}
-  ondragover={dragenter}
-  ondragleave={dragleave}
-  ondrop={drop}
+  {onmousemove}
+  {ondragstart}
+  {ondragenter}
+  ondragover={ondragenter}
+  {ondragleave}
+  {ondrop}
   role="group"
 >
   <button
@@ -96,15 +89,14 @@
     {date}
     --autocomplete-wrapper-flex="2"
   />
-  <AutocompleteInput
-    placeholder={_("Amount")}
-    suggestions={amount_suggestions}
+  <AmountInput
     bind:value={
       () => posting.amount,
       (amount: string) => {
         posting = posting.set("amount", amount);
       }
     }
+    account={posting.account}
     --autocomplete-wrapper-flex="1"
   />
   <AddMetadataButton

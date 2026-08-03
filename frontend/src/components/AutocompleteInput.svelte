@@ -36,9 +36,7 @@
      * to list autocomplete with automatic selection: whenever the list of
      * suggestions is shown, the first one is highlighted, so that pressing
      * Enter will select it. The highlighted suggestion also becomes the value
-     * of the combobox when leaving it via Tab - but not on other kinds of
-     * blur, as on mobile there is no way to cancel out of an unwanted
-     * selection (no Escape key).
+     * of the combobox when leaving it via Tab.
      */
     automatic_selection?: boolean | undefined;
     /** Automatically adjust the size of the input element. */
