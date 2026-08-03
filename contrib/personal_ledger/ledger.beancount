@@ -1,0 +1,19 @@
+option "title" "Personal Ledger"
+option "operating_currency" "EUR"
+
+2026-01-01 custom "fava-option" "import-config" "import_config.py"
+2026-01-01 custom "fava-option" "import-dirs" "downloads"
+
+plugin "personal_ledger"
+
+2026-01-01 open Assets:Checking EUR
+2026-01-01 open Expenses:Groceries EUR
+2026-01-01 open Income:Salary EUR
+
+2026-01-31 * "Employer" "Salary"
+  Income:Salary  -2500.00 EUR
+  Assets:Checking
+
+2026-02-03 * "Supermarket" "Groceries"
+  Expenses:Groceries  64.20 EUR
+  Assets:Checking

@@ -34,6 +34,40 @@ the following command to install the optional dependencies for this feature::
    pip install --upgrade fava[excel]
 
 
+Installing with uv
+------------------
+
+Alternatively, you can install Fava using `uv <https://docs.astral.sh/uv/>`_,
+a fast Python package manager. This approach uses a dedicated folder for Fava
+and a so-called virtual environment, keeping Fava and its dependencies isolated
+from other Python projects on your system.
+
+First, `install uv <https://docs.astral.sh/uv/getting-started/installation/>`_
+if you haven't already. Then create a project folder and install Fava::
+
+    uv init --package ~/personal-ledger
+    cd ~/personal-ledger
+    uv add fava
+
+The ``--package`` option sets the folder up as a Python package, so you can
+write your own Beancount plugins and importers in ``src/personal_ledger`` and
+use them from your ledger, for example with ``plugin "personal_ledger"``. See
+`contrib/personal_ledger
+<https://github.com/beancount/fava/tree/main/contrib/personal_ledger>`_ for an
+example.
+
+To start Fava, either activate the virtual environment at ``.venv`` or run
+Fava directly without activation, passing the path to your Beancount file (here
+assumed to be in the project folder)::
+
+    uv run fava ledger.beancount
+
+To update Fava and the other dependencies later::
+
+    uv lock --upgrade
+    uv sync
+
+
 Starting Fava
 -------------
 

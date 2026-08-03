@@ -175,6 +175,7 @@ line-length = 79
 preview = true
 
 [tool.ty.environment]
+extra-paths = ["contrib/personal_ledger/src"]
 python-version = "3.12"
 
 [tool.ty.rules]
@@ -196,6 +197,11 @@ follow_untyped_imports = true
 [[tool.mypy.overrides]]
 module = ["beanquery.*"]
 follow_untyped_imports = true
+
+# The contrib/personal_ledger example project (only type-checked by ty).
+[[tool.mypy.overrides]]
+module = ["personal_ledger.*"]
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = ["flask_babel.*"]
