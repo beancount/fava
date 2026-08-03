@@ -103,6 +103,10 @@ msgstr "账户"
 msgid "Add metadata"
 msgstr "添加元数据"
 
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "金额"
+
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
@@ -134,10 +138,6 @@ msgstr "值"
 #: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
 msgstr "备注"
-
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "金额"
 
 #: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
