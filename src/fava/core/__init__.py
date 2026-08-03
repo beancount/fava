@@ -714,6 +714,14 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         value = entry.meta.get(metadata_key, None)
         if not isinstance(value, str):
+            for posting in getattr(entry, "postings", []):
+                if posting.meta is None:
+                    continue
+                v = posting.meta.get(metadata_key, None)
+                if isinstance(v, str):
+                    value = v
+                    break
+        if not isinstance(value, str):
             raise StatementMetadataInvalidError(metadata_key)
 
         accounts = set(get_entry_accounts(entry))
