@@ -102,6 +102,10 @@ msgstr "Konto"
 msgid "Add metadata"
 msgstr "Metadaten hinzufügen"
 
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "Betrag"
+
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
@@ -133,10 +137,6 @@ msgstr "Wert"
 #: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
 msgstr "Notiz"
-
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "Betrag"
 
 #: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
