@@ -39,6 +39,7 @@
   placeholder={_("Account")}
   bind:value
   {check_validity}
+  automatic_selection={true}
   {required}
   suggestions={filtered_suggestions}
 />
