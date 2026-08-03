@@ -88,7 +88,7 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Účet"
 
@@ -97,6 +97,10 @@ msgstr "Účet"
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
 msgstr "Pridať metadáta"
+
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "Suma"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
@@ -130,23 +134,19 @@ msgstr "Hodnota"
 msgid "Note"
 msgstr "Poznámka"
 
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "Suma"
-
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Príjemca"
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Popis"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Položky"
@@ -159,15 +159,15 @@ msgstr "Ročne"
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
 msgid "Daily"
 msgstr "Denne"
 
@@ -589,7 +589,7 @@ msgstr "Súvaha"
 msgid "Trial Balance"
 msgstr "Hrubá súvaha"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr ""
 
@@ -601,11 +601,11 @@ msgstr ""
 msgid "Help"
 msgstr "Pomoc"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Čas"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"

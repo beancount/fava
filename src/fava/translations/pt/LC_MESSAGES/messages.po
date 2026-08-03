@@ -93,7 +93,7 @@ msgstr "Deve ser uma das contas declaradas"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Conta"
 
@@ -102,6 +102,10 @@ msgstr "Conta"
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
 msgstr "Adicionar metadado"
+
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "Quantidade"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
@@ -135,23 +139,19 @@ msgstr "Valor"
 msgid "Note"
 msgstr "Nota"
 
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "Quantidade"
-
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Beneficiário"
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Descrição"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Lançamentos"
@@ -164,15 +164,15 @@ msgstr "Anual"
 msgid "Quarterly"
 msgstr "Trimestral"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
 msgid "Monthly"
 msgstr "Mensal"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
 msgid "Weekly"
 msgstr "Semanal"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
 msgid "Daily"
 msgstr "Diário"
 
@@ -585,7 +585,7 @@ msgstr "Balanço"
 msgid "Trial Balance"
 msgstr "Balancete"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Ir para conta"
 
@@ -597,11 +597,11 @@ msgstr "Adicionar Entrada de Journal"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Data"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr ""
 
