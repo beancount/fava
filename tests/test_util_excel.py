@@ -12,12 +12,15 @@ from fava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
+    from fava.core import FilteredLedger
 
 
 def _run_query(ledger: FavaLedger, query: str) -> Any:
+    filtered: FilteredLedger = ledger.get_filtered()
+    query_entries = filtered.entries_with_all_prices
     conn = beanquery.connect(
         "beancount:",
-        entries=ledger.all_entries,
+        entries=query_entries,
         options=ledger.options,
         errors=ledger.errors,
     )

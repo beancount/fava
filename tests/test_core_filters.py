@@ -239,6 +239,7 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
         example_ledger.options,
         example_ledger.fava_options,
         "2017",
+        example_ledger.uro_options,
     )
 
     date_range = time_filter.date_range
@@ -252,6 +253,7 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
         example_ledger.options,
         example_ledger.fava_options,
         "1000",
+        example_ledger.uro_options,
     )
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert not filtered_entries
@@ -261,4 +263,5 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
             example_ledger.options,
             example_ledger.fava_options,
             "no_date",
+            example_ledger.uro_options,
         )
