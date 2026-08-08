@@ -34,6 +34,8 @@ colorama==0.1 ; sys_platform == 'win32'
     # via
     #   click
     #   pytest
+dacite==1.9.0
+    # via fava (pyproject.toml)
 et-xmlfile==1.0.0
     # via openpyxl
 flask==2.2.0
@@ -132,6 +134,8 @@ texttable==1.0.0
     # via
     #   -c (workspace)
     #   pyexcel
+tomli==2.0.0
+    # via fava (pyproject.toml)
 watchfiles==0.20.0
     # via fava (pyproject.toml)
 werkzeug==2.2.0

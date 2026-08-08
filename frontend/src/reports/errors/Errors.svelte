@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { BeancountError } from "../../api/validators.ts";
-  import { urlForAccount, urlForSource } from "../../helpers.ts";
+  import { urlForAccount } from "../../helpers.ts";
   import { _, format } from "../../i18n.ts";
+  import SourceLink from "../../SourceLink.svelte";
   import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
   import SortHeader from "../../sort/SortHeader.svelte";
   import { accounts, errors } from "../../stores/index.ts";
@@ -42,17 +43,19 @@
       {#each sorted_errors as { message, source }}
         <tr>
           {#if source}
-            {@const url = $urlForSource(
-              source.filename,
-              source.lineno.toString(),
-            )}
             {@const title = format(_("Show source %(file)s:%(lineno)s"), {
               file: source.filename,
               lineno: source.lineno.toString(),
             })}
             <td>{source.filename}</td>
             <td class="num">
-              <a class="source" href={url} {title}>{source.lineno}</a>
+              <SourceLink
+                class_name="source"
+                file_path={source.filename}
+                line={source.lineno.toString()}
+                {title}
+                label={source.lineno.toString()}
+              />
             </td>
           {:else}
             <td></td>
