@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from rustfava.beans.funcs import hash_entry
+from rustfava.core import AmbiguousEntryHashError
 from rustfava.core import EntryNotFoundForHashError
 from rustfava.core import FilteredLedger
 from rustfava.helpers import RustfavaAPIError
@@ -63,6 +64,41 @@ def test_ledger_get_entry(
 
     with pytest.raises(EntryNotFoundForHashError):
         small_example_ledger.get_entry("asdfa")
+
+
+def test_ledger_get_entry_refuses_an_ambiguous_hash(
+    small_example_ledger: RustfavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An ambiguous hash must raise, not silently resolve to the first match.
+
+    ``get_entry`` is how every mutating endpoint finds the line it is about to
+    rewrite or delete, so picking a winner among several candidates edits the
+    wrong part of the user's ledger with no indication anything went wrong.
+
+    Nothing guarantees hashes are unique: two transactions identical in every
+    hashed field collide, and duplicates like that are ordinary in real
+    ledgers. The duplicate here is the *same object* listed twice, which is the
+    strongest form of the case — no hash function of directive content can
+    tell those apart, so this cannot be fixed by hashing more fields.
+    """
+    first = small_example_ledger.all_entries[0]
+    entries = [first, *small_example_ledger.all_entries, first]
+    monkeypatch.setattr(small_example_ledger, "all_entries", entries)
+    # `get_entry` is an `lru_cache` over `_get_entry` and the ledger fixture is
+    # shared, so without this the lookup is answered from a neighbouring test's
+    # cached result and never reaches the code under test. (Production clears
+    # the same cache in `changed()`.)
+    small_example_ledger.get_entry.cache_clear()
+
+    with pytest.raises(AmbiguousEntryHashError) as exception:
+        small_example_ledger.get_entry(hash_entry(first))
+
+    message = str(exception.value)
+    assert "3 entries share the hash" in message, message
+    # The message has to say what to DO about it — an error that only reports
+    # a dead end sends the user back to the same click.
+    assert "metadata" in message, message
 
 
 def test_paths_to_watch(

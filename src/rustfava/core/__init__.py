@@ -22,9 +22,7 @@ from rustfava.beans.funcs import hash_entry
 from rustfava.beans.helpers import slice_entry_dates
 from rustfava.beans.load import load_uncached
 from rustfava.beans.prices import RustfavaPriceMap
-from rustfava.beans.str import to_string
 from rustfava.core.accounts import AccountDict
-from rustfava.rustledger import is_encrypted_file
 from rustfava.core.attributes import AttributesModule
 from rustfava.core.budgets import BudgetModule
 from rustfava.core.charts import ChartModule
@@ -47,6 +45,7 @@ from rustfava.core.tree import Tree
 from rustfava.core.watcher import Watcher
 from rustfava.core.watcher import WatchfilesWatcher
 from rustfava.helpers import RustfavaAPIError
+from rustfava.rustledger import is_encrypted_file
 from rustfava.util import listify
 from rustfava.util.date import dateranges
 
@@ -73,6 +72,19 @@ class EntryNotFoundForHashError(RustfavaAPIError):
 
     def __init__(self, entry_hash: str) -> None:
         super().__init__(f'No entry found for hash "{entry_hash}"')
+
+
+class AmbiguousEntryHashError(RustfavaAPIError):
+    """More than one entry has this hash."""
+
+    def __init__(self, entry_hash: str, count: int) -> None:
+        super().__init__(
+            f'{count} entries share the hash "{entry_hash}", so this '
+            f"operation cannot tell which one you meant. Two directives "
+            f"that are identical in every field rustledger hashes will "
+            f"collide; adding a metadata key to one of them makes them "
+            f"distinct."
+        )
 
 
 class StatementNotFoundError(RustfavaAPIError):
@@ -614,7 +626,20 @@ class RustfavaLedger:
                 )
 
     def _get_entry(self, entry_hash: str) -> Directive:
-        """Find an entry.
+        """Find the one entry with this hash.
+
+        The hash is not a label — it is a write address. Callers resolve an
+        entry through it and then mutate that entry's line in the source file
+        (``save_entry_slice``, ``delete_entry_slice``, ``insert_metadata``), so
+        resolving to the wrong entry edits the wrong part of the user's ledger.
+
+        This used to be ``next(...)``: the first match won and the docstring
+        asserted the result was "the (unique) entry" without anything checking
+        it. Nothing guarantees uniqueness — two transactions identical in date,
+        narration and postings hash the same, and duplicates like that occur in
+        real ledgers. Refusing an ambiguous hash turns a silent wrong-target
+        edit into a visible error, which is the difference between losing data
+        and being told to disambiguate.
 
         Arguments:
             entry_hash: Hash of the entry.
@@ -624,15 +649,20 @@ class RustfavaLedger:
 
         Raises:
             EntryNotFoundForHashError: If there is no entry for the given hash.
+            AmbiguousEntryHashError: If more than one entry has that hash.
         """
-        try:
-            return next(
-                entry
-                for entry in self.all_entries
-                if entry_hash == hash_entry(entry)
-            )
-        except StopIteration as exc:
-            raise EntryNotFoundForHashError(entry_hash) from exc
+        # Deliberately NOT short-circuiting on the first match: knowing whether
+        # the hash is ambiguous requires looking at all of them.
+        matches = [
+            entry
+            for entry in self.all_entries
+            if entry_hash == hash_entry(entry)
+        ]
+        if not matches:
+            raise EntryNotFoundForHashError(entry_hash)
+        if len(matches) > 1:
+            raise AmbiguousEntryHashError(entry_hash, len(matches))
+        return matches[0]
 
     def context(
         self,
