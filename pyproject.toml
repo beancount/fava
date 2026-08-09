@@ -49,7 +49,7 @@ dependencies = [
     # (rustledger #1384), the default engine. Core dep, not an extra, since the
     # component backend is the default (RUSTFAVA_RUSTLEDGER_BACKEND=jsonrpc opts
     # back to the legacy JSON-RPC engine).
-    "wasmtime>=45,<47",
+    "wasmtime>=45,<48",
 ]
 
 [project.urls]

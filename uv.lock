@@ -1486,7 +1486,7 @@ requires-dist = [
     { name = "pyexcel-ods3", marker = "extra == 'excel'", specifier = ">=0.5" },
     { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.5" },
     { name = "simplejson", specifier = ">=3.19" },
-    { name = "wasmtime", specifier = ">=45,<47" },
+    { name = "wasmtime", specifier = ">=45,<48" },
     { name = "watchfiles", specifier = ">=0.20.0" },
     { name = "werkzeug", specifier = ">=2.2,<4" },
 ]
