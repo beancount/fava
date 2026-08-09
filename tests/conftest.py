@@ -194,6 +194,20 @@ def snapshot(
         # from rustledger)
         out = re.sub(r'_hash": ?"[0-9a-f]+', '_hash":"ENTRY_HASH', out)
         out = re.sub(r'_hash": ?"-?[0-9]+', '_hash":"ENTRY_HASH', out)
+        # replace the `hash` metadata key rustledger attaches to every
+        # directive. The `_hash":` patterns above deliberately require the
+        # underscore, so they match `entry_hash` and miss this one — which
+        # left 62 literal digests pinned in
+        # test_internal_api-test_get_ledger_data.json. Those digests are
+        # rustledger's directive-identity hash: an implementation detail of a
+        # separate repo, tested by its own suite, and nothing about rustfava's
+        # behaviour is asserted by their exact values. Pinning them meant any
+        # change to the hash function turned this suite red and forced a
+        # lockstep snapshot regeneration (rustledger#1984). Anchored on the
+        # opening quote so `entry_hash` is untouched, and on a full-length
+        # digest so user metadata that happens to be called `hash` is not
+        # silently swallowed.
+        out = re.sub(r'"hash": ?"[0-9a-f]{64}"', '"hash":"META_HASH"', out)
         out = re.sub(r"context-[0-9a-f]+", "context-ENTRY_HASH", out)
         out = re.sub(r"context--?[0-9]+", "context-ENTRY_HASH", out)
         out = re.sub(r"data-entry='[0-9a-f]+", "data-entry='ENTRY_HASH", out)
