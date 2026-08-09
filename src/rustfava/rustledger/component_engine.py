@@ -52,11 +52,40 @@ from rustfava.rustledger.engine import _check_api_version
 from rustfava.rustledger.engine import RUSTLEDGER_VERSION
 from rustfava.rustledger.engine import RustledgerError
 
-# The exported WIT interfaces of package ``rustledger:ledger``. The interface
-# IDs embed the full WIT package version (independent of the rustledger release
-# version), so a WIT bump means updating ``_WIT_VERSION`` here — a mismatch
-# makes ``get_export_index`` return ``None`` and every call fail.
-_WIT_VERSION = "3.3.0"
+# The WIT interfaces of package ``rustledger:ledger``. This version string is
+# used two ways: to build the interface IDs passed to ``get_export_index``, and
+# to name the ``host`` instance registered on the linker below.
+#
+# Matching is by MAJOR, not by exact version. Measured against the pinned
+# v0.21.0 component, which exports ``@3.4.0``:
+#
+#     pin 3.0.0 / 3.3.0 / 3.4.0 / 3.5.0 / 3.11.0
+#         -> instantiates, version() = 3.4
+#     pin 2.4.0 / 4.0.0
+#         -> WasmtimeError
+#
+# Either direction works within a major; only a different major fails. Note
+# where it fails — at instantiation, on the IMPORT side ("component imports
+# instance ``rustledger:ledger/host@3.4.0``, but a match ..."), because
+# ``_HOST`` below names the instance the linker offers -- not on export
+# lookup, which is where the old note pointed.
+#
+# So a MINOR bump does not require touching this, and the previous note here —
+# that a mismatch "makes ``get_export_index`` return ``None`` and every call
+# fail" — was wrong: this file has been pinned to 3.3.0 against a 3.4.0
+# component for as long as v0.21.0 has been pinned, and works.
+#
+# What a bump can genuinely break is a new MANDATORY IMPORT, which no version
+# string reveals: WIT 3.1 -> 3.2 added ``host.decrypt`` and made the component
+# un-instantiable until the linker grew the binding (the #218 incident).
+# ``update-rustledger.yml`` therefore holds ANY WIT change for human review,
+# and the question to answer is "what does the component import that
+# ``_define_host_interface`` does not define" — inspect it with
+# ``wasm-tools component wit``, not by comparing this constant.
+#
+# Kept in step with the pinned release anyway, as documentation of what the
+# bindings were written against.
+_WIT_VERSION = "3.4.0"
 _LEDGER = f"rustledger:ledger/ledger@{_WIT_VERSION}"
 _BUILDER = f"rustledger:ledger/builder@{_WIT_VERSION}"
 _UTIL = f"rustledger:ledger/util@{_WIT_VERSION}"
