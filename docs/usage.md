@@ -1,7 +1,8 @@
 # Getting Started
 
 If you're new to Beancount-format files or double-entry accounting in general,
-we recommend [Command-line Accounting in Context](https://docs.google.com/document/d/1e4Vz3wZB_8-ZcAwIFde8X5CjzKshE4-OXtVVHm4RQ8s/),
+we recommend
+[Command-line Accounting in Context](https://docs.google.com/document/d/1e4Vz3wZB_8-ZcAwIFde8X5CjzKshE4-OXtVVHm4RQ8s/),
 a motivational document written by Martin Blais, the creator of the Beancount
 format.
 
@@ -15,15 +16,17 @@ page.
 
 ### Option 1: Desktop App (Recommended)
 
-Download the desktop app from [GitHub Releases](https://github.com/rustledger/rustfava/releases):
+Download the desktop app from
+[GitHub Releases](https://github.com/rustledger/rustfava/releases):
 
-| Platform | Download |
-|----------|----------|
-| **macOS** | `rustfava_x.x.x_aarch64.dmg` |
-| **Windows** | `rustfava_x.x.x_x64-setup.exe` |
-| **Linux** | `rustfava_x.x.x_amd64.AppImage` |
+| Platform    | Download                        |
+| ----------- | ------------------------------- |
+| **macOS**   | `rustfava_x.x.x_aarch64.dmg`    |
+| **Windows** | `rustfava_x.x.x_x64-setup.exe`  |
+| **Linux**   | `rustfava_x.x.x_amd64.AppImage` |
 
-Double-click to launch, then open your `.beancount` file. No Python or other dependencies required.
+Double-click to launch, then open your `.beancount` file. No Python or other
+dependencies required.
 
 ### Option 2: Command Line (PyPI)
 
@@ -65,15 +68,17 @@ uv tool install rustfava[ingest]
 docker run -p 5000:5000 -v /path/to/ledger:/data ghcr.io/rustledger/rustfava /data/main.beancount
 ```
 
-See [Docker deployment](../contrib/docker/README.md) for advanced options.
+See
+[Docker deployment](https://github.com/rustledger/rustfava/blob/main/contrib/docker/README.md)
+for advanced options.
 
 ## Starting rustfava
 
 ### Desktop App
 
 1. Launch the app
-2. Click "Open File" or use File → Open
-3. Select your `.beancount` file
+1. Click "Open File" or use File → Open
+1. Select your `.beancount` file
 
 ### Command Line
 

@@ -182,9 +182,15 @@ mypy:
 # ============================================================================
 
 # Build documentation website
+#
+# `--strict` turns mkdocs warnings into failures: a dead cross-reference or an
+# unparseable docstring is a broken page, and without it the build reports the
+# problem and exits 0. Kept here rather than only in CI so the two run the same
+# command — three dead links and a griffe warning had accumulated precisely
+# because nothing was failing on them.
 [group('docs')]
 docs:
-    uv run --no-dev --group docs mkdocs build -d build/docs
+    uv run --no-dev --group docs mkdocs build --strict -d build/docs
 
 # Generate BQL grammar JSON
 [group('docs')]

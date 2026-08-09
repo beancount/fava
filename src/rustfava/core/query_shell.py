@@ -226,7 +226,7 @@ class QueryShell(FavaModule):
 
         Raises:
             RustfavaAPIError: If the result format is not supported or the
-            query failed.
+                query failed.
         """
         name = "query_result"
 

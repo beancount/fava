@@ -5,8 +5,8 @@ There are several ways to deploy rustfava depending on your needs.
 ## Engine
 
 rustfava runs the rustledger engine as a WebAssembly component in-process via
-the `wasmtime` Python package, which is installed automatically as a
-dependency. Nothing extra to set up.
+the `wasmtime` Python package, which is installed automatically as a dependency.
+Nothing extra to set up.
 
 > The legacy JSON-RPC engine (which shelled out to the `wasmtime` CLI) was
 > removed in rustfava 1.31 after its embedding surface was retired upstream;
@@ -14,7 +14,9 @@ dependency. Nothing extra to set up.
 
 ## Desktop App
 
-For personal use, the [desktop app](https://github.com/rustledger/rustfava/releases) is the simplest option. It runs entirely locally with no server setup required.
+For personal use, the
+[desktop app](https://github.com/rustledger/rustfava/releases) is the simplest
+option. It runs entirely locally with no server setup required.
 
 ## Docker
 
@@ -24,7 +26,9 @@ For server deployments, Docker is recommended:
 docker run -p 5000:5000 -v /path/to/ledger:/data ghcr.io/rustledger/rustfava /data/main.beancount
 ```
 
-For advanced Docker configurations (authentication, HTTPS, docker-compose), see the [Docker deployment guide](../contrib/docker/README.md).
+For advanced Docker configurations (authentication, HTTPS, docker-compose), see
+the
+[Docker deployment guide](https://github.com/rustledger/rustfava/blob/main/contrib/docker/README.md).
 
 ## Systemd Service
 
@@ -95,8 +99,9 @@ Caddy automatically handles HTTPS with Let's Encrypt.
 When exposing rustfava to the internet:
 
 1. **Use HTTPS** - Never expose plain HTTP to the public internet
-2. **Add authentication** - Use a reverse proxy with OAuth2 or basic auth
-3. **Restrict access** - Use firewall rules to limit access to trusted IPs
-4. **Keep updated** - Regularly update rustfava for security patches
+1. **Add authentication** - Use a reverse proxy with OAuth2 or basic auth
+1. **Restrict access** - Use firewall rules to limit access to trusted IPs
+1. **Keep updated** - Regularly update rustfava for security patches
 
-See [SECURITY.md](../SECURITY.md) for more security best practices.
+See [SECURITY.md](https://github.com/rustledger/rustfava/blob/main/SECURITY.md)
+for more security best practices.
