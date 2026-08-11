@@ -244,7 +244,7 @@ msgstr "계정별거래기록"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:810
 msgid "Changes"
 msgstr "변동"
 
@@ -603,8 +603,8 @@ msgstr "조회기간"
 msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
+#: src/fava/json_api.py:725
 msgid "Net Profit"
 msgstr "당기순이익"
 
@@ -676,11 +676,11 @@ msgstr "계정잔액"
 msgid "Net Worth"
 msgstr "순자산"
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:713
 msgid "Income"
 msgstr "수익"
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:719
 msgid "Expenses"
 msgstr "비용"
 

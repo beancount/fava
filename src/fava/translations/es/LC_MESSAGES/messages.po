@@ -242,7 +242,7 @@ msgstr "Diario de cuenta"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:810
 msgid "Changes"
 msgstr "Cambios"
 
@@ -602,8 +602,8 @@ msgstr "Hora"
 msgid "Filter by tag, payee, …"
 msgstr "Filtro por etiqueta, beneficiario, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
+#: src/fava/json_api.py:725
 msgid "Net Profit"
 msgstr "Beneficio neto"
 
@@ -676,11 +676,11 @@ msgstr "Balance de cuenta"
 msgid "Net Worth"
 msgstr "Valor neto"
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:713
 msgid "Income"
 msgstr "Ingresos"
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:719
 msgid "Expenses"
 msgstr "Gastos"
 
