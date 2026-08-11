@@ -615,31 +615,31 @@ msgstr "Филтриране по таг, бенефициент, ..."
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "Дървовидна диаграма"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "Пръстеновиднa диаграмa"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Линейна диаграма"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "Площна диаграма"
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "Стълбовидна диаграма с натрупване"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "Стълбовидна диаграма без натрупване"
 
