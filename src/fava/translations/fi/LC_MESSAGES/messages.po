@@ -605,31 +605,31 @@ msgstr ""
 msgid "Net Profit"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr ""
 

@@ -616,31 +616,31 @@ msgstr "タグ、支払先などでフィルター"
 msgid "Net Profit"
 msgstr "純利益"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "ツリーマップ"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "サンバースト"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "折れ線グラフ"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "エリアチャート"
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "積み上げ棒グラフ"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "単一棒グラフ"
 

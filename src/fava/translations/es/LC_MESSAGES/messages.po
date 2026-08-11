@@ -607,31 +607,31 @@ msgstr "Filtro por etiqueta, beneficiario, …"
 msgid "Net Profit"
 msgstr "Beneficio neto"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "Árbol"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "Explosión solar"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr "Carámbano"
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Gráfico lineal"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "Gráfico de área"
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "Barras apiladas"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "Barras individuales"
 
