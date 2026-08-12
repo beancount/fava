@@ -1,13 +1,12 @@
 # Fava's features
 
-This is an overview of some of the more advanced features that Fava has to
-offer.
+This is an overview of some of the features that Fava has to offer.
 
 ## Editor
 
-The [editor](../editor) provides a convenient way to edit the source file. If
-you want to use a file different from the main file to be opened by default, use
-the [`default-file`](./options#default-file) option. If you have
+The [Editor](../editor) allows you to edit the source file(s). If you want to
+use a file different from the main file to be opened by default, use the
+[`default-file`](./options#default-file) option. If you have
 [`insert-entry`](./options#insert-entry) options set, the cursor will by default
 jump to the (date-wise) latest one in the opened file.
 
@@ -16,7 +15,7 @@ payees, and tags. Trailing whitespace is highlighted in red. The Tab key in the
 editor can be used for indentation - to escape this keyboard trap, press Escape
 and then Tab directly after it.
 
-## Queries
+## Query
 
 On the [Query](../query/) report you can execute queries like with the
 `bean-query` command-line tool. For an explanation of how these queries work see
@@ -32,7 +31,7 @@ SELECT
     SUM(COST(position)) AS balance
 WHERE
     account ~ 'Expenses'
-GROUP BY payee, account
+GROUP BY payee
 ```
 
 Fava supports downloading the result of these queries in various file formats.
@@ -104,12 +103,6 @@ utilizing the `custom` directive:
 link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
-
-Two frequently used custom links are for showing all Documents and all Notes
-found in the journal:
-
-- For all Documents: `/<slug>/journal/?show=document`
-- For all Notes: `/<slug>/journal/?show=note`
 
 There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the

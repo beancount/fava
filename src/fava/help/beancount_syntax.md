@@ -19,7 +19,7 @@ All in CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
 
 ## Accounts
 
-Account are given by a colon-separated list of capitalized words. They must
+Accounts are given by a colon-separated list of capitalized words. They must
 begin with one of the five root accounts listed in the table below. The
 separation by colons defines an implicit hierarchy, for example we say that
 `Assets:Cash` is a sub-account of `Assets`.
@@ -54,7 +54,7 @@ General syntax: `YYYY-MM-DD <directive> <arguments...>`
 
 To open or close an account use the `open` and `close` directives:
 
-<pre><textarea is="beancount-textarea" is="beancount-textarea">
+<pre><textarea is="beancount-textarea">
 2015-05-29 open Expenses:Restaurant
 ; Account with some currency constraints:
 2015-05-29 open Assets:Checking     USD,EUR

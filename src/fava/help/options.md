@@ -10,8 +10,6 @@ following to your Beancount file.
 
 Below is a list of all possible options for Fava.
 
-______________________________________________________________________
-
 ## `language`
 
 Default: Not set
@@ -38,8 +36,6 @@ languages:
 - Swedish (`sv`)
 - Ukrainian (`uk`)
 
-______________________________________________________________________
-
 ## `locale`
 
 Default: Not set or `en` if the Beancount `render_commas` option is set.
@@ -48,15 +44,11 @@ This sets the locale that is used to render out numbers. For example, with the
 locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
 `1,111,111.33` with locale `en`, or `1.111.111,33` with locale `de`.
 
-______________________________________________________________________
-
 ## `default-file`
 
 Use this option to specify a default file for the editor to open. This option
 may optionally take a value of a filename to be the default. If you don't
 provide a filename, the file this custom option is in is used.
-
-______________________________________________________________________
 
 ## `default-page`
 
@@ -71,8 +63,6 @@ balance sheet reporting the current year and the two previous years.
 Note that the supplied path is relative. It is probably easiest to navigate to
 the URL in your browser and copy the portion of the URL after the 'title' of
 your beancount file into this option.
-
-______________________________________________________________________
 
 ## `fiscal-year-end`
 
@@ -94,15 +84,11 @@ Examples are:
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.
 
-______________________________________________________________________
-
 ## `indent`
 
 Default: 2.
 
-The number spaces for indentation.
-
-______________________________________________________________________
+The number of spaces for indentation.
 
 ## `insert-entry`
 
@@ -119,8 +105,6 @@ the second to last posting and so on will be tried. If no `insert-entry` option
 matches or none is given, the entry will be inserted at the end of the default
 file.
 
-______________________________________________________________________
-
 ## `auto-reload`
 
 Default: `false`
@@ -131,8 +115,6 @@ to reload the page. If the file change is due to user interaction, e.g.,
 uploading a document or adding a transaction, Fava will always reload the page
 automatically.
 
-______________________________________________________________________
-
 ## `currency-column`
 
 Default: `61`
@@ -142,8 +124,6 @@ file or when using 'Align Amounts' in the editor. Fava tries to align so that
 the currencies all occur in the given column. Also, Fava will show a vertical
 line before this column in the editor.
 
-______________________________________________________________________
-
 ## `sidebar-show-queries`
 
 Default: `5`
@@ -151,16 +131,12 @@ Default: `5`
 The maximum number of queries to link to in the sidebar. Set this value to `0`
 to hide the links altogether.
 
-______________________________________________________________________
-
 ## `upcoming-events`
 
 Default: `7`
 
 Show a notification bubble in the sidebar displaying the number of events less
 than `upcoming-events` days away. Set this value to `0` to disable this feature.
-
-______________________________________________________________________
 
 ## `show-closed-accounts`
 
@@ -178,8 +154,6 @@ These three options specify which accounts (not) to show in the account trees,
 like on the income statement. Accounts with a non-zero balance will always be
 shown.
 
-______________________________________________________________________
-
 ## `show-metadata-indicators`
 
 Default: `true`
@@ -188,8 +162,6 @@ Whether to show metadata indicators in journals. For each metadata key on an
 entry or posting, a small badge with the first two characters of the key is
 shown in the indicators column, with the full key and value available on hover.
 Set this to `false` to hide these indicators.
-
-______________________________________________________________________
 
 ## `collapse-pattern`
 
@@ -203,8 +175,6 @@ Collapsing all accounts below a specific depth in the account tree can be
 accomplished by a regex such as: `.*:.*:.*` (this example collapses all accounts
 that are three levels deep).
 
-______________________________________________________________________
-
 ## `use-external-editor`
 
 Default: `false`
@@ -214,16 +184,12 @@ is used. See the
 [Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
 details.
 
-______________________________________________________________________
-
 ## `account-journal-include-children`
 
 Default: `true`
 
 This determines if the journal in the account report includes entries of
 sub-accounts.
-
-______________________________________________________________________
 
 ## `uptodate-indicator-grey-lookback-days`
 
@@ -232,8 +198,6 @@ Default: `60`
 If there has been no activity in given number of days since the last balance
 entry, then the grey uptodate-indicator is shown.
 
-______________________________________________________________________
-
 ## `import-config`
 
 Default: Not set
@@ -241,16 +205,12 @@ Default: Not set
 Path to a Beancount import configuration file. See the [Import](./import) help
 page for details.
 
-______________________________________________________________________
-
 ## `import-dirs`
 
 Default: Not set
 
 Set a directory to be scanned by the Beancount import mechanism. This option can
 be specified multiple times to add multiple directories.
-
-______________________________________________________________________
 
 ## `invert-gains-losses-colors`
 
@@ -265,11 +225,9 @@ losses. This is useful for users from regions where the opposite convention is
 used, such as Chinese stock markets where red represents gains and green
 represents losses.
 
-______________________________________________________________________
-
 ## `invert-income-liabilities-equity`
 
-Default: False
+Default: `false`
 
 In Beancount the Income, Liabilities and Equity accounts tend to have a negative
 balance (see
@@ -281,8 +239,6 @@ if the income is greater than the expenses for a given timespan.
 
 Note: To keep consistency with the internal accounting of beancount, the journal
 and the individual account pages are not affected by this configuration option.
-
-______________________________________________________________________
 
 ## `conversion-currencies`
 
