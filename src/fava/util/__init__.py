@@ -43,6 +43,7 @@ def setup_logging() -> None:
 def setup_debug_logging() -> None:  # pragma: no cover
     """Set up debug level logging for Fava."""
     logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger("markdown_it").setLevel(logging.INFO)
     logging.getLogger("watchfiles").setLevel(logging.INFO)
 
 
