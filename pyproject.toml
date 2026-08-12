@@ -38,7 +38,7 @@ dependencies = [
   "beanquery>=0.1,<0.3",
   "cheroot>=8,<12",
   "click>=7,<9",
-  "markdown2>=2.3.0,<3",
+  "markdown-it-py>=3,<5",
   "ply>=3.4",
   "simplejson>=3.16.0,<4",
   "typing-extensions>=4.5; python_version<\"3.12\"",
@@ -194,10 +194,6 @@ follow_untyped_imports = true
 
 [[tool.mypy.overrides]]
 module = ["flask_babel.*"]
-follow_untyped_imports = true
-
-[[tool.mypy.overrides]]
-module = ["markdown2.*"]
 follow_untyped_imports = true
 
 [tool.pytest.ini_options]

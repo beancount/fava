@@ -51,9 +51,10 @@ the same name).
 Extensions allow for an optional configuration options string, whose structure
 is specified by the individual extension.
 
-<pre><textarea is="beancount-textarea">
+```beancount
 2010-01-01 custom "fava-extension" "extension-name"
-2010-01-01 custom "fava-extension" "extension-with-options" "{'option': 'config_value'}"</textarea></pre>
+2010-01-01 custom "fava-extension" "extension-with-options" "{'option': 'config_value'}"
+```
 
 ## Hooks
 

@@ -95,7 +95,7 @@ If you regularly use certain views in Fava with different filters, you can put
 links to them in the sidebar. Custom links can be put in the Beancount file,
 utilizing the `custom` directive:
 
-```
+```beancount
 2016-05-04 custom "fava-sidebar-link" "Income 2014" "../income_statement?time=2014"
 ```
 
@@ -142,7 +142,7 @@ generate Document entries for them.
 When enabling the `tag_discovered_documents`-plugin, these Document entries will
 be tagged with `#discovered` and can be filtered in the Journal:
 
-```
+```beancount
 plugin "fava.plugins.tag_discovered_documents"
 ```
 
@@ -161,7 +161,7 @@ When enabling the `link_documents`-plugin, the Document entries created by
 Beancount (see above) will be tagged with `#linked`, linked to the corresponding
 transaction and can be filtered in the Journal:
 
-```
+```beancount
 plugin "fava.plugins.link_documents"
 ```
 

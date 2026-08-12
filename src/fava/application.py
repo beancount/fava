@@ -48,8 +48,6 @@ from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
 from fava.core.documents import is_document_or_import_file
-from fava.help import HELP_PAGES
-from fava.help import render_help_page
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
@@ -411,6 +409,9 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
         """Fava's included documentation."""
+        from fava.help import HELP_PAGES
+        from fava.help import render_help_page
+
         help_html = render_help_page(page_slug)
         if help_html is None:
             return abort(404)
