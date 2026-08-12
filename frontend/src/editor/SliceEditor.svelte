@@ -41,7 +41,7 @@
     codemirror_beancount,
   }: Props = $props();
 
-  // Keep the initital slice value to check for changes.
+  // Keep the initial slice value to check for changes.
   // svelte-ignore state_referenced_locally
   const initial_slice = slice;
 

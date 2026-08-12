@@ -18,7 +18,7 @@ class FileImporterInfo {
   readonly account: string;
   /** Name of the importer (uniquely identifies the importer). */
   readonly importer_name: string | null;
-  /** New file basename, as inititally determined by the importer */
+  /** New file basename, as initially determined by the importer */
   readonly new_name: string;
 
   constructor(account: string, importer_name: string | null, new_name: string) {

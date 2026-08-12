@@ -75,7 +75,7 @@
   }: Props = $props();
 
   const uid = $props.id();
-  const autocomple_id = `combobox-autocomplete-${uid}`;
+  const autocomplete_id = `combobox-autocomplete-${uid}`;
 
   let hidden = $state.raw(true);
   let index = $state.raw(-1);
@@ -124,7 +124,9 @@
     expanded && index > -1 ? filtered_suggestions[index] : undefined,
   );
   let active_id = $derived(
-    expanded && index > -1 ? `${autocomple_id}-${index.toString()}` : undefined,
+    expanded && index > -1
+      ? `${autocomplete_id}-${index.toString()}`
+      : undefined,
   );
 
   function onkeydown(event: KeyboardEvent) {
@@ -174,7 +176,7 @@
     role="combobox"
     class={{ "content-sized": set_size }}
     aria-expanded={expanded}
-    aria-controls={autocomple_id}
+    aria-controls={autocomplete_id}
     aria-autocomplete="list"
     aria-activedescendant={active_id}
     bind:value
@@ -218,10 +220,10 @@
     </button>
   {/if}
   {#if expanded}
-    <ul role="listbox" id={autocomple_id}>
+    <ul role="listbox" id={autocomplete_id}>
       {#each filtered_suggestions as suggestion, i (suggestion)}
         <li
-          id={`${autocomple_id}-${i.toString()}`}
+          id={`${autocomplete_id}-${i.toString()}`}
           role="option"
           aria-selected={i === index}
           onmousedown={(event) => {

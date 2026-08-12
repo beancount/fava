@@ -25,7 +25,7 @@ export class RenderedReport {
   readonly destroy: () => void;
 
   /**
-   * A succesfully rendered report.
+   * A successfully rendered report.
    * @param route - The route that is rendered.
    * @param url - The URL that is rendered.
    * @param title - The title for this report.

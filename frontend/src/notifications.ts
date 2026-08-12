@@ -26,7 +26,7 @@ type NotificationType = "info" | "warning" | "error";
  * The notification is automatically removed after 5 seconds and on click
  * `callback` is called.
  *
- * @param msg - The message to diplay
+ * @param msg - The message to display
  * @param cls - The message type.
  * @param callback - The callback to execute on click..
  */

@@ -54,7 +54,7 @@ export type FuzzyWrappedText = ["text" | "match", string][];
 /**
  * Wrap fuzzy matched characters.
  *
- * Wrap all occurences of characters of `pattern` (in order) in `string` in
+ * Wrap all occurrences of characters of `pattern` (in order) in `string` in
  * tuples with a "match" marker (and the others as plain "text") to allow for
  * the matches to be wrapped in markers to highlight them in the HTML.
  */

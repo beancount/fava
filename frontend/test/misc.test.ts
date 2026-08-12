@@ -15,10 +15,10 @@ import { is_empty } from "../src/lib/objects.ts";
 import { toggle } from "../src/lib/set.ts";
 
 test("move array elements", () => {
-  const initital = [0, 1, 2, 3];
-  const moved = move(initital, 1, 2);
+  const initial = [0, 1, 2, 3];
+  const moved = move(initial, 1, 2);
   deepEqual(moved, [0, 2, 1, 3]);
-  deepEqual(initital, [0, 1, 2, 3]);
+  deepEqual(initial, [0, 1, 2, 3]);
 });
 
 test("shallow array equality", () => {
