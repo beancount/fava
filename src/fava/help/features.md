@@ -6,9 +6,8 @@ This is an overview of some of the features that Fava has to offer.
 
 The [Editor](../editor) allows you to edit the source file(s). If you want to
 use a file different from the main file to be opened by default, use the
-[`default-file`](./options#default-file) option. If you have
-[`insert-entry`](./options#insert-entry) options set, the cursor will by default
-jump to the (date-wise) latest one in the opened file.
+`default-file` option. If you have `insert-entry` options set, the cursor will
+by default jump to the (date-wise) latest one in the opened file.
 
 The editor supports auto-completion for various entities, e.g., account names,
 payees, and tags. Trailing whitespace is highlighted in red. The Tab key in the
@@ -47,10 +46,10 @@ pip3 install fava[excel]
 By clicking the `+` button or using the `n` keyboard shortcut you can open a
 form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
-[`insert-entry`](./options#insert-entry) option. If you want to set a bookmark
-to this form, adding `#add-transaction` to any URL in Fava will open it on load.
-Tags and links can be added in the form by adding them (separated by spaces) to
-the narration field, e.g., `narration #tag ^somelink`.
+`insert-entry` option. If you want to set a bookmark to this form, adding
+`#add-transaction` to any URL in Fava will open it on load. Tags and links can
+be added in the form by adding them (separated by spaces) to the narration
+field, e.g., `narration #tag ^somelink`.
 
 ## Up-to-date indicators
 
@@ -110,9 +109,9 @@ current page but change the time filter to the current month.
 
 ## Language
 
-You can change the language of the interface by specifying the
-[`language`](./options#language) option. If no option is specified, Fava tries
-to guess the language from your browser settings.
+You can change the language of the interface by specifying the `language`
+option. If no option is specified, Fava tries to guess the language from your
+browser settings.
 
 ## Documents upload
 

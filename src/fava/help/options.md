@@ -11,7 +11,7 @@ following to your Beancount file.
 
 Below is a list of all possible options for Fava.
 
-## `language`
+## language
 
 Default: Not set
 
@@ -37,7 +37,7 @@ languages:
 - Swedish (`sv`)
 - Ukrainian (`uk`)
 
-## `locale`
+## locale
 
 Default: Not set or `en` if the Beancount `render_commas` option is set.
 
@@ -45,13 +45,13 @@ This sets the locale that is used to render out numbers. For example, with the
 locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
 `1,111,111.33` with locale `en`, or `1.111.111,33` with locale `de`.
 
-## `default-file`
+## default-file
 
 Use this option to specify a default file for the editor to open. This option
 may optionally take a value of a filename to be the default. If you don't
 provide a filename, the file this custom option is in is used.
 
-## `default-page`
+## default-page
 
 Default: `income_statement/`
 
@@ -65,7 +65,7 @@ Note that the supplied path is relative. It is probably easiest to navigate to
 the URL in your browser and copy the portion of the URL after the 'title' of
 your beancount file into this option.
 
-## `fiscal-year-end`
+## fiscal-year-end
 
 Default: `12-31`
 
@@ -85,13 +85,13 @@ Examples are:
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.
 
-## `indent`
+## indent
 
 Default: 2.
 
 The number of spaces for indentation.
 
-## `insert-entry`
+## insert-entry
 
 Default: Not set.
 
@@ -106,7 +106,7 @@ the second to last posting and so on will be tried. If no `insert-entry` option
 matches or none is given, the entry will be inserted at the end of the default
 file.
 
-## `auto-reload`
+## auto-reload
 
 Default: `false`
 
@@ -116,7 +116,7 @@ to reload the page. If the file change is due to user interaction, e.g.,
 uploading a document or adding a transaction, Fava will always reload the page
 automatically.
 
-## `currency-column`
+## currency-column
 
 Default: `61`
 
@@ -125,29 +125,29 @@ file or when using 'Align Amounts' in the editor. Fava tries to align so that
 the currencies all occur in the given column. Also, Fava will show a vertical
 line before this column in the editor.
 
-## `sidebar-show-queries`
+## sidebar-show-queries
 
 Default: `5`
 
 The maximum number of queries to link to in the sidebar. Set this value to `0`
 to hide the links altogether.
 
-## `upcoming-events`
+## upcoming-events
 
 Default: `7`
 
 Show a notification bubble in the sidebar displaying the number of events less
 than `upcoming-events` days away. Set this value to `0` to disable this feature.
 
-## `show-closed-accounts`
+## show-closed-accounts
 
 Default: `false`
 
-## `show-accounts-with-zero-transactions`
+## show-accounts-with-zero-transactions
 
 Default: `true`
 
-## `show-accounts-with-zero-balance`
+## show-accounts-with-zero-balance
 
 Default: `true`
 
@@ -155,7 +155,7 @@ These three options specify which accounts (not) to show in the account trees,
 like on the income statement. Accounts with a non-zero balance will always be
 shown.
 
-## `show-metadata-indicators`
+## show-metadata-indicators
 
 Default: `true`
 
@@ -164,7 +164,7 @@ entry or posting, a small badge with the first two characters of the key is
 shown in the indicators column, with the full key and value available on hover.
 Set this to `false` to hide these indicators.
 
-## `collapse-pattern`
+## collapse-pattern
 
 Default: Not set
 
@@ -176,7 +176,7 @@ Collapsing all accounts below a specific depth in the account tree can be
 accomplished by a regex such as: `.*:.*:.*` (this example collapses all accounts
 that are three levels deep).
 
-## `use-external-editor`
+## use-external-editor
 
 Default: `false`
 
@@ -185,35 +185,35 @@ is used. See the
 [Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
 details.
 
-## `account-journal-include-children`
+## account-journal-include-children
 
 Default: `true`
 
 This determines if the journal in the account report includes entries of
 sub-accounts.
 
-## `uptodate-indicator-grey-lookback-days`
+## uptodate-indicator-grey-lookback-days
 
 Default: `60`
 
 If there has been no activity in given number of days since the last balance
 entry, then the grey uptodate-indicator is shown.
 
-## `import-config`
+## import-config
 
 Default: Not set
 
 Path to a Beancount import configuration file. See the [Import](./import) help
 page for details.
 
-## `import-dirs`
+## import-dirs
 
 Default: Not set
 
 Set a directory to be scanned by the Beancount import mechanism. This option can
 be specified multiple times to add multiple directories.
 
-## `invert-gains-losses-colors`
+## invert-gains-losses-colors
 
 Default: `false`
 
@@ -226,7 +226,7 @@ losses. This is useful for users from regions where the opposite convention is
 used, such as Chinese stock markets where red represents gains and green
 represents losses.
 
-## `invert-income-liabilities-equity`
+## invert-income-liabilities-equity
 
 Default: `false`
 
@@ -241,7 +241,7 @@ if the income is greater than the expenses for a given timespan.
 Note: To keep consistency with the internal accounting of beancount, the journal
 and the individual account pages are not affected by this configuration option.
 
-## `conversion-currencies`
+## conversion-currencies
 
 Default: Not set
 
