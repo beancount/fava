@@ -663,6 +663,26 @@ def get_options() -> Options:
 
 
 @dataclass(frozen=True)
+class HelpPage:
+    """A rendered help page and the list of all help pages."""
+
+    html: str
+    pages: Sequence[tuple[str, str]]
+
+
+@api_endpoint
+def get_help(page_slug: str) -> HelpPage:
+    """Get one of Fava's help pages, rendered to HTML."""
+    from fava.help import HELP_PAGES
+    from fava.help import render_help_page
+
+    html = render_help_page(page_slug)
+    if html is None:
+        raise NotFoundError
+    return HelpPage(html, list(HELP_PAGES.items()))
+
+
+@dataclass(frozen=True)
 class CommodityPairWithPrices:
     """A pair of commodities and prices for them."""
 

@@ -1,5 +1,3 @@
-# Fava's features
-
 This is an overview of some of the features that Fava has to offer.
 
 ## Editor

@@ -1,5 +1,3 @@
-# Options
-
 To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 

@@ -15,7 +15,6 @@ import "../css/components.css";
 import "../css/editor.css";
 import "../css/grid.css";
 import "../css/fonts.css";
-import "../css/help.css";
 import "../css/journal-table.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
@@ -118,11 +117,12 @@ function init(): void {
     on_changes();
   });
 
-  router.init(frontend_routes);
   init_sidebar();
   init_global_keyboard_shortcuts();
   define_custom_elements();
   setInterval(poll_for_changes, 5000);
+
+  router.init(frontend_routes).catch(log_error);
 
   ledger_data.subscribe((val) => {
     errors.set(val.errors);

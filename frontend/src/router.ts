@@ -203,6 +203,16 @@ class Router {
   }
 
   /**
+   * Scroll to the element that the hash of the current URL refers to (if any).
+   */
+  #scroll_to_hash(): void {
+    const hash = this.current.hash.slice(1);
+    if (hash) {
+      document.getElementById(hash)?.scrollIntoView();
+    }
+  }
+
+  /**
    * Render the route for the given URL.
    */
   async #render_route(url: URL, before_render?: () => void): Promise<void> {
@@ -304,15 +314,17 @@ class Router {
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(frontend_routes: FrontendRoute[]): void {
+  async init(frontend_routes: FrontendRoute[]): Promise<void> {
     this.#frontend_routes = frontend_routes;
-    this.#render_route(this.current).catch(log_error);
 
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
     navigation_api?.addEventListener("navigate", this.#on_navigate);
 
+    await this.#render_route(this.current);
+
     handle_extension_page_load();
+    this.#scroll_to_hash();
   }
 
   /**
@@ -361,11 +373,7 @@ class Router {
 
     has_changes.set(false);
     handle_extension_page_load();
-
-    const hash = this.current.hash.slice(1);
-    if (hash) {
-      document.getElementById(hash)?.scrollIntoView();
-    }
+    this.#scroll_to_hash();
   }
 
   /**

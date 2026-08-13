@@ -1,5 +1,3 @@
-# Import
-
 Fava can use Beancount's import system to semi-automatically import entries into
 your Beancount ledger. See
 [Importing External Data in Beancount](http://furius.ca/beancount/doc/ingest)

@@ -1,5 +1,3 @@
-# Budgets
-
 Budgets on a per-account basis can be added via `custom` directives in the
 Beancount file:
 

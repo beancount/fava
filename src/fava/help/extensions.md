@@ -1,5 +1,3 @@
-# Extensions
-
 Fava supports extensions. Extensions allow you to register hooks and generate
 your own report pages.
 

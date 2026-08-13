@@ -10,7 +10,14 @@ import {
 import type { NonEmptyArray } from "../lib/array.ts";
 import { fetch_json } from "../lib/fetch.ts";
 import type { Validator } from "../lib/validation.ts";
-import { array, boolean, number, object, string } from "../lib/validation.ts";
+import {
+  array,
+  boolean,
+  number,
+  object,
+  string,
+  tuple,
+} from "../lib/validation.ts";
 import { notify, notify_err } from "../notifications.ts";
 import { query_validator } from "../reports/query/query_table.ts";
 import { router } from "../router.ts";
@@ -53,6 +60,7 @@ type GetEndpoint =
   | "errors"
   | "events"
   | "extract"
+  | "help"
   | "imports"
   | "income_statement"
   | "journal_page"
@@ -90,6 +98,7 @@ type ApiParams = Partial<{
   narration: string;
   order: "asc" | "desc";
   page: number;
+  page_slug: string;
   payee: string;
   query_string: string;
   r: string;
@@ -258,6 +267,11 @@ export const get_extract = define_endpoint("extract", array(entryValidator), [
   "filename",
   "importer",
 ]);
+export const get_help = define_endpoint(
+  "help",
+  object({ html: string, pages: array(tuple(string, string)) }),
+  ["page_slug"],
+);
 export const get_imports = define_paramless_endpoint(
   "imports",
   importable_files_validator,

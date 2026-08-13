@@ -1,5 +1,3 @@
-# Beancount Syntax
-
 Below is a short reference of the Beancount language syntax. Also see the full
 [Syntax Documentation](http://furius.ca/beancount/doc/syntax) and the
 [Syntax Cheat Sheet](http://furius.ca/beancount/doc/cheatsheet).

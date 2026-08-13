@@ -408,19 +408,12 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
-        """Fava's included documentation."""
+        """Get the client-side-rendered help page."""
         from fava.help import HELP_PAGES
-        from fava.help import render_help_page
 
-        help_html = render_help_page(page_slug)
-        if help_html is None:
+        if page_slug not in HELP_PAGES:
             return abort(404)
-        return render_template(
-            "help.html",
-            page_slug=page_slug,
-            help_html=Markup(help_html),  # noqa: S704
-            HELP_PAGES=HELP_PAGES,
-        )
+        return render_template("_layout.html", content="")
 
     @fava_app.route("/jump")
     def jump() -> WerkzeugResponse:

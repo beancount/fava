@@ -126,10 +126,6 @@
   --placeholder-background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 30%));
   --dragover-background: hsl(203deg 100% 32% / 50%);
   --overlay-wrapper-background: hsl(0deg 0% 50% / 50%);
-
-  /* Help pages */
-  --help-sidebar-background: var(--background-darker);
-  --help-sidebar-border: var(--border-lighter);
 }
 
 :root.invert-gains-losses {

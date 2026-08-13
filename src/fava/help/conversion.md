@@ -1,5 +1,3 @@
-# Conversion
-
 In most reports in Fava, a conversion can be selected with the select dropdown
 at the top of the chart. These conversions will use the prices defined in the
 Beancount file, so these should be defined manually or by some plugin (using

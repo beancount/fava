@@ -32,7 +32,7 @@ HELP_PAGES = {
     "import": "Import",
     "options": "Options",
     "beancount_syntax": "Beancount Syntax",
-    "features": "Fava's features",
+    "features": "Features",
     "filters": "Filtering entries",
     "extensions": "Extensions",
 }

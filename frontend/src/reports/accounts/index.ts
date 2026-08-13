@@ -69,8 +69,5 @@ export const account_report = new Route<AccountReportProps>(
       report_type,
     };
   },
-  (url) => {
-    const [, account] = get_url_path(url).unwrap().split("/");
-    return `account:${account ?? "ERROR"}`;
-  },
+  ({ account }) => `account:${account}`,
 );

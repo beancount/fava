@@ -120,7 +120,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   readonly report: string;
   private readonly Component: Component<T>;
   private readonly load: (url: URL) => T | Promise<T>;
-  readonly get_title: (url: URL) => string;
+  readonly get_title: (props: T) => string;
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
     | {
@@ -140,7 +140,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
     report: string,
     Component: Component<T>,
     load: (url: URL) => T | Promise<T>,
-    get_title: (url: URL) => string,
+    get_title: (props: T) => string,
   ) {
     this.report = report;
     this.Component = Component;
@@ -170,7 +170,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
         update_props,
       };
     }
-    return new RenderedReport(this, url, this.get_title(url), () => {
+    return new RenderedReport(this, url, this.get_title(raw_props), () => {
       if (this.instance) {
         void unmount(this.instance.component);
       }
@@ -188,7 +188,7 @@ export class DatalessRoute extends Route<NoProps> {
   constructor(
     report: string,
     Component: Component<NoProps>,
-    get_title: (url: URL) => string,
+    get_title: () => string,
   ) {
     super(report, Component, noload, get_title);
   }

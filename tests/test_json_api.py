@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 from difflib import Differ
 from http import HTTPStatus
+from importlib.metadata import version
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -873,6 +874,24 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
     )
     msg = assert_api_error(response)
     assert "Query parse error: syntax error" in msg
+
+
+def test_api_help(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/help",
+        query_string={"page_slug": "_index"},
+    )
+    data = assert_api_success(response)
+    assert f"Fava <code>{version('fava')}</code>" in data["html"]
+    assert ["_index", "Index"] in data["pages"]
+
+
+def test_api_help_not_found(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/help",
+        query_string={"page_slug": "asdfasdf"},
+    )
+    assert_api_error(response, "Not found.", HTTPStatus.NOT_FOUND)
 
 
 def test_api_commodities_empty(
