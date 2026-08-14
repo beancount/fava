@@ -1,7 +1,10 @@
 <script lang="ts">
   import { url_for } from "../helpers.ts";
   import { _ } from "../i18n.ts";
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import {
+    keyboardShortcut,
+    show_keyboard_shortcuts,
+  } from "../keyboard-shortcuts.ts";
   import { errors, extensions, ledger_data } from "../stores/index.ts";
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
@@ -59,8 +62,10 @@
       href="#add-transaction"
       class="secondary add-transaction"
       title={_("Add Journal Entry")}
-      {@attach keyboardShortcut("n")}>+</a
+      {@attach keyboardShortcut("n")}
     >
+      +
+    </a>
   </Link>
   {#if $errors.length > 0}
     <Link
@@ -73,7 +78,17 @@
     <a href="#export" class="secondary" title={_("Export")}>⬇</a>
   </Link>
   <Link report="options" name={_("Options")} key="g o" />
-  <Link report="help" name={_("Help")} key="g H" />
+  <Link report="help" name={_("Help")} key="g H">
+    <button
+      type="button"
+      class="secondary link"
+      title={_("Show keyboard shortcuts")}
+      onclick={show_keyboard_shortcuts}
+      {@attach keyboardShortcut("?")}
+    >
+      ?
+    </button>
+  </Link>
 </ul>
 {#if extension_reports.length}
   <ul class="navigation">
