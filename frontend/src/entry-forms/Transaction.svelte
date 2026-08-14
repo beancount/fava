@@ -92,7 +92,7 @@
       --autocomplete-wrapper-flex="1"
     />
   </label>
-  <label class="narration">
+  <label>
     <span class="hide-on-desktop">{_("Narration")}:</span>
     <AutocompleteInput
       placeholder={_("Narration")}

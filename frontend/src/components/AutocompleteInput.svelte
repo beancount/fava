@@ -144,8 +144,10 @@
       if (expanded) {
         index = -1;
         hidden = true;
-      } else {
+      } else if (value) {
         value = "";
+      } else {
+        return;
       }
     } else if (key === "ArrowUp") {
       if (expanded) {

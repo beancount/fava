@@ -40,7 +40,7 @@
   let shown = $derived($hash === "add-transaction");
 </script>
 
-<ModalBase {shown} focus=".payee input">
+<ModalBase {shown} focus="input[autocomplete=off]">
   <form onsubmit={submit} class="flex-column">
     <h3>
       {_("Add")}

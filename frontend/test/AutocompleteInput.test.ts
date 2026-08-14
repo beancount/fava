@@ -330,7 +330,7 @@ test("AutocompleteInput: Escape closes an open suggestion list without clearing 
   user_events.type(input, "app");
   deepEqual(suggestion_texts(), ["apple"]);
 
-  user_events.keydown(input, "Escape");
+  equal(user_events.keydown(input, "Escape"), false);
 
   equal(input.value, "app");
   deepEqual(suggestion_texts(), []);
@@ -344,7 +344,7 @@ test("AutocompleteInput: Escape clears the value when the suggestion list is clo
   const input = mount_autocomplete(t, { value: "app", onselect, onchange });
   deepEqual(suggestion_texts(), []);
 
-  user_events.keydown(input, "Escape");
+  equal(user_events.keydown(input, "Escape"), false);
 
   equal(input.value, "");
   equal(onselect.mock.callCount(), 0);
@@ -353,6 +353,15 @@ test("AutocompleteInput: Escape clears the value when the suggestion list is clo
   user_events.blur(input);
   equal(onselect.mock.callCount(), 0);
   equal(onchange.mock.callCount(), 1);
+});
+
+test("AutocompleteInput: Escape is not handled if there is nothing to dismiss", (t) => {
+  // Otherwise the modal that the input is in could not be closed with Escape.
+  const input = mount_autocomplete(t, { value: "" });
+  deepEqual(suggestion_texts(), []);
+
+  ok(user_events.keydown(input, "Escape"));
+  equal(input.value, "");
 });
 
 test("AutocompleteInput: (Alt+)ArrowDown opens the suggestion list and Alt+ArrowUp closes it", (t) => {

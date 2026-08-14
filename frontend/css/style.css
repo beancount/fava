@@ -9,8 +9,7 @@
   /* Scale of z-index values */
   --z-index-floating-ui: 1;
   --z-index-autocomplete: 2;
-  --z-index-overlay: 3;
-  --z-index-keyboard-overlays: 4;
+  --z-index-keyboard-overlays: 3;
 
   /* Named colors */
   --error: hsl(0deg 100% 30%);
