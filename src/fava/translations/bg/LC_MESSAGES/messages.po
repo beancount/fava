@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 
@@ -244,7 +244,7 @@ msgstr "Счетоводен Дневник"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Промени"
 
@@ -364,6 +364,15 @@ msgstr "Събитие: %(type)s"
 #| msgid "Events"
 msgid "No events."
 msgstr "Събития"
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "Помощни страници"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "Помощ"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -596,10 +605,6 @@ msgstr "Отвори сметката"
 msgid "Add Journal Entry"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Помощ"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Време"
@@ -610,8 +615,8 @@ msgstr "Време"
 msgid "Filter by tag, payee, …"
 msgstr "Филтриране по таг, бенефициент, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
@@ -683,14 +688,10 @@ msgstr "Баланс по сметката"
 msgid "Net Worth"
 msgstr "Нетна Стойност"
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Разходи"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Помощни страници"

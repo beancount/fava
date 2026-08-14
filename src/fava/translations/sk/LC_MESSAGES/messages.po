@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -241,7 +241,7 @@ msgstr "Register účtu"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Zmeny"
 
@@ -361,6 +361,16 @@ msgstr "Udalosť: %(type)s"
 #| msgid "Events"
 msgid "No events."
 msgstr "Udalosti"
+
+#: frontend/src/reports/help/Help.svelte:11
+#, fuzzy
+msgid "Help pages"
+msgstr "Pomocné stránky"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "Pomoc"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -597,10 +607,6 @@ msgstr ""
 msgid "Add Journal Entry"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Pomoc"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Čas"
@@ -611,8 +617,8 @@ msgstr "Čas"
 msgid "Filter by tag, payee, …"
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Čistý zisk"
 
@@ -684,15 +690,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Príjem"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Výdavky"
-
-#: src/fava/templates/help.html:8
-#, fuzzy
-msgid "Help pages"
-msgstr "Pomocné stránky"
