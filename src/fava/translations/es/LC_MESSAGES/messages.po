@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.17.1\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Modificación del archivo detectado. Pulse para recargar."
 
@@ -242,7 +242,7 @@ msgstr "Diario de cuenta"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Cambios"
 
@@ -360,6 +360,15 @@ msgstr "Evento: %(type)s"
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
 msgstr "Sin eventos."
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "Páginas de ayuda"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "Ayuda"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -590,10 +599,6 @@ msgstr "Ir a cuenta"
 msgid "Add Journal Entry"
 msgstr "Agregar Asiento de Diario"
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Ayuda"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Hora"
@@ -602,8 +607,8 @@ msgstr "Hora"
 msgid "Filter by tag, payee, …"
 msgstr "Filtro por etiqueta, beneficiario, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Beneficio neto"
 
@@ -676,14 +681,10 @@ msgstr "Balance de cuenta"
 msgid "Net Worth"
 msgstr "Valor neto"
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Ingresos"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Gastos"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Páginas de ayuda"

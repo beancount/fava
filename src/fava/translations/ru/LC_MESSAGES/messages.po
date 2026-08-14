@@ -12,7 +12,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.16.1-dev\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Содержимое файла изменилось. Нажмите, чтобы перезагрузить."
 
@@ -247,7 +247,7 @@ msgstr "Журнал счёта"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Изменения"
 
@@ -367,6 +367,15 @@ msgstr "Событие: %(type)s"
 #| msgid "Events"
 msgid "No events."
 msgstr "События"
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "Страницы помощи"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "Помощь"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -599,10 +608,6 @@ msgstr "Перейти к счёту"
 msgid "Add Journal Entry"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Помощь"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Время"
@@ -613,8 +618,8 @@ msgstr "Время"
 msgid "Filter by tag, payee, …"
 msgstr "Фильтровать по тегу, контрагенту, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Чистый доход"
 
@@ -684,14 +689,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Расходы"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Страницы помощи"
