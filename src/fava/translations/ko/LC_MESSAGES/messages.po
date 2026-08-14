@@ -220,7 +220,7 @@ msgid "Location"
 msgstr "위치"
 
 #: frontend/src/modals/Export.svelte:13
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:78
 msgid "Export"
 msgstr "내보내기"
 
@@ -267,7 +267,7 @@ msgid "Price"
 msgstr "가격"
 
 #: frontend/src/reports/commodities/index.ts:32
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Commodities"
 msgstr "통화/자산"
 
@@ -285,7 +285,7 @@ msgid "Name"
 msgstr "이름"
 
 #: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Documents"
 msgstr "문서"
 
@@ -316,12 +316,12 @@ msgstr "모두 접기"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
+#: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"
 msgstr "옵션"
 
 #: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
+#: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "편집기"
 
@@ -340,7 +340,7 @@ msgid "No errors."
 msgstr "오류 없음."
 
 #: frontend/src/reports/errors/index.ts:6
-#: frontend/src/sidebar/AsideContents.svelte:68
+#: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Errors"
 msgstr "오류"
 
@@ -350,7 +350,7 @@ msgstr "설명"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
-#: frontend/src/sidebar/AsideContents.svelte:50
+#: frontend/src/sidebar/AsideContents.svelte:53
 msgid "Events"
 msgstr "이벤트"
 
@@ -368,14 +368,14 @@ msgid "Help pages"
 msgstr "도움말페이지"
 
 #: frontend/src/reports/help/index.ts:35
-#: frontend/src/sidebar/AsideContents.svelte:76
+#: frontend/src/sidebar/AsideContents.svelte:81
 msgid "Help"
 msgstr "도움말"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:48
 msgid "Holdings"
 msgstr "보유자산"
 
@@ -396,13 +396,13 @@ msgstr "취득통화"
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
-#: frontend/src/sidebar/AsideContents.svelte:31
+#: frontend/src/sidebar/AsideContents.svelte:34
 msgid "Query"
 msgstr "쿼리"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:70
-#: frontend/src/sidebar/AsideContents.svelte:72
+#: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "가져오기"
 
@@ -501,7 +501,7 @@ msgid "Change"
 msgstr "변동"
 
 #: frontend/src/reports/journal/index.ts:58
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "거래기록"
 
@@ -573,22 +573,22 @@ msgid "Last Entry"
 msgstr "최근거래"
 
 #: frontend/src/reports/statistics/index.ts:37
-#: frontend/src/sidebar/AsideContents.svelte:54
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "통계"
 
 #: frontend/src/reports/tree_reports/index.ts:38
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Income Statement"
 msgstr "손익계산서"
 
 #: frontend/src/reports/tree_reports/index.ts:49
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Balance Sheet"
 msgstr "재무상태표"
 
 #: frontend/src/reports/tree_reports/index.ts:63
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:32
 msgid "Trial Balance"
 msgstr "시산표"
 
@@ -596,9 +596,13 @@ msgstr "시산표"
 msgid "Go to account"
 msgstr "계정이동"
 
-#: frontend/src/sidebar/AsideContents.svelte:61
+#: frontend/src/sidebar/AsideContents.svelte:64
 msgid "Add Journal Entry"
 msgstr "거래기록추가"
+
+#: frontend/src/sidebar/AsideContents.svelte:85
+msgid "Show keyboard shortcuts"
+msgstr ""
 
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
