@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "ファイルの変更が検出されました。クリックして再読み込みしてください。"
 
@@ -244,7 +244,7 @@ msgstr "アカウント仕訳帳"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "変更"
 
@@ -364,6 +364,15 @@ msgstr "イベント: %(type)s"
 #| msgid "Events"
 msgid "No events."
 msgstr "イベント"
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "ヘルプページ"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "ヘルプ"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -597,10 +606,6 @@ msgstr "アカウントに移動"
 msgid "Add Journal Entry"
 msgstr "仕訳を追加"
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "ヘルプ"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "時間"
@@ -611,8 +616,8 @@ msgstr "時間"
 msgid "Filter by tag, payee, …"
 msgstr "タグ、支払先などでフィルター"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "純利益"
 
@@ -684,14 +689,10 @@ msgstr "口座残高"
 msgid "Net Worth"
 msgstr "純資産"
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "収入"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "支出"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "ヘルプページ"

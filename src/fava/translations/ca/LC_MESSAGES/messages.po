@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.17.1-dev\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
@@ -240,7 +240,7 @@ msgstr "Llibre diari del compte"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Canvis"
 
@@ -358,6 +358,15 @@ msgstr "Esdeveniment: %(type)s"
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
 msgstr "No hi ha cap esdeveniment."
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "Pàgines d'ajuda"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "Ajuda"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -590,10 +599,6 @@ msgstr "Vés al compte"
 msgid "Add Journal Entry"
 msgstr "Afegeix una entrada al llibre diari"
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Ajuda"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Data"
@@ -602,8 +607,8 @@ msgstr "Data"
 msgid "Filter by tag, payee, …"
 msgstr "Filtreu per etiqueta, beneficiari…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Benefici net"
 
@@ -675,14 +680,10 @@ msgstr "Balanç del compte"
 msgid "Net Worth"
 msgstr "Patrimoni net"
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Ingressos"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Despeses"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Pàgines d'ajuda"

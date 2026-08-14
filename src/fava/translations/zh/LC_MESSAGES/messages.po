@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.17-dev\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -243,7 +243,7 @@ msgstr "账户日记账"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:810
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "变更"
 
@@ -361,6 +361,15 @@ msgstr "事件：%(type)s"
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
 msgstr "暂无事件。"
+
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "帮助页"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:76
+msgid "Help"
+msgstr "帮助"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
@@ -589,10 +598,6 @@ msgstr "前往账户"
 msgid "Add Journal Entry"
 msgstr "添加日记账条目"
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "帮助"
-
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "时间"
@@ -601,8 +606,8 @@ msgstr "时间"
 msgid "Filter by tag, payee, …"
 msgstr "筛选（标签，收款人等等）"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:707
-#: src/fava/json_api.py:725
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "净利润"
 
@@ -674,14 +679,10 @@ msgstr "账户余额"
 msgid "Net Worth"
 msgstr "净值"
 
-#: src/fava/json_api.py:713
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:719
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "支出"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "帮助页"
