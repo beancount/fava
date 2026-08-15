@@ -4,7 +4,10 @@ Changelog
 Unreleased
 ----------
 
-A Finnish translation was added.
+A Finnish translation was added. The date filter parser was rewritten from
+a regex-based implementation to a proper lexer/parser, fixing several edge-case
+bugs. As part of this, the undocumented `to` range separator (e.g. `2010 to
+2012-10`) is no longer supported - use `-` instead (e.g. `2010 - 2012-10`).
 
 v1.30.13 (2026-05-19)
 ---------------------

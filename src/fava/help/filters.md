@@ -6,17 +6,21 @@ matching all of them will be selected.
 
 Filter entries by their date. You can specify dates and intervals like years,
 quarters, months, weeks, and days (for example `2015`, `2012-Q1`, `2010-10`,
-`2016-W12`, or `2015-06-12`). You can specify a range of dates like
-`2010 - 2012-10` which will display all entries between the start of 2010 and
-the end of October 2012.
+`2016-W12`, or `2015-06-12`), as well as fiscal years and fiscal quarters like
+`FY2018` and `FY2018-Q3` (see the `fiscal-year-end` option). You can specify a
+range of dates like `2010 - 2012-10` which will display all entries between the
+start of 2010 and the end of October 2012.
 
 To refer to dates relative to the current day, you can use the variables `year`,
-`quarter`, `month`, `week`, and `day`. These will be substituted with the
-current date expressed in the respective format, and support addition and
-subtraction. For example you can write `year - day` for all entries in the
-current year up to today, or `year-1 - year` for all entries of the last and
-current year. To prevent subtraction, use parentheses: `(month)-10` refers to
-the 10th of this month, whereas `month-10` would be 10 months ago.
+`quarter`, `month`, `week`, `day`, `fiscal_year`, and `fiscal_quarter`. Each of
+them denotes the corresponding period around today. For example you can write
+`year - day` for all entries in the current year up to today, or `year-1 - year`
+for all entries of the last and current year.
+
+Adding or subtracting a number shifts the period, so `month-10` is ten months
+ago and `week+2` is the week after next. The offset can have at most three
+digits. To narrow a variable down instead of shifting it, put it in parentheses:
+`(month)-10` is the 10th of this month and `(year)-3` is March of this year.
 
 ### Summarisation of previous balances and conversions
 

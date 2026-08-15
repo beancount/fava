@@ -140,23 +140,23 @@ msgstr ""
 msgid "Postings"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:102
 msgid "Yearly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:122
 msgid "Quarterly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:143
 msgid "Monthly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:165
 msgid "Weekly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:190
 msgid "Daily"
 msgstr ""
 

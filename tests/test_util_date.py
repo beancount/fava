@@ -2,24 +2,20 @@ from __future__ import annotations
 
 from datetime import date
 from typing import TYPE_CHECKING
-from unittest import mock
 
 import pytest
 
 from fava.util.date import DateRange
 from fava.util.date import dateranges
 from fava.util.date import Day
-from fava.util.date import FiscalYearEnd
 from fava.util.date import get_fiscal_period
 from fava.util.date import interval_ends
 from fava.util.date import INTERVALS
 from fava.util.date import InvalidDateRangeError
 from fava.util.date import Month
 from fava.util.date import month_offset
-from fava.util.date import parse_date
 from fava.util.date import parse_fye_string
 from fava.util.date import Quarter
-from fava.util.date import substitute
 from fava.util.date import Week
 from fava.util.date import Year
 
@@ -211,137 +207,6 @@ def test_dateranges_single_date() -> None:
         list(interval_ends(date_, date_, Month, complete=True))
     with pytest.raises(InvalidDateRangeError):
         dateranges(date_, date_, Month, complete=True)
-
-
-@pytest.mark.parametrize(
-    ("string", "output"),
-    [
-        ("year", "2016"),
-        ("(year-1)", "2015"),
-        ("year-1-2", "2015-2"),
-        ("(year)-1-2", "2016-1-2"),
-        ("(year+3)", "2019"),
-        ("(year+3)month", "20192016-06"),
-        ("(year-1000)", "1016"),
-        ("quarter", "2016-Q2"),
-        ("quarter+2", "2016-Q4"),
-        ("quarter+20", "2021-Q2"),
-        ("(month)", "2016-06"),
-        ("month+6", "2016-12"),
-        ("(month+24)", "2018-06"),
-        ("week", "2016-W25"),
-        ("week+20", "2016-W45"),
-        ("week+2000", "2054-W43"),
-        ("day", "2016-06-24"),
-        ("day+20", "2016-07-14"),
-    ],
-)
-def test_substitute(string: str, output: str) -> None:
-    with mock.patch("fava.util.date.local_today") as mock_local_today:
-        mock_local_today.return_value = fromisoformat("2016-06-24")
-        assert substitute(string) == output
-
-
-@pytest.mark.parametrize(
-    ("fye_str", "test_date", "string", "output"),
-    [
-        ("06-30", "2018-02-02", "fiscal_year", "FY2018"),
-        ("06-30", "2018-08-02", "fiscal_year", "FY2019"),
-        ("06-30", "2018-07-01", "fiscal_year", "FY2019"),
-        ("06-30", "2018-08-02", "fiscal_year-1", "FY2018"),
-        ("06-30", "2018-02-02", "fiscal_year+6", "FY2024"),
-        ("06-30", "2018-08-02", "fiscal_year+6", "FY2025"),
-        ("06-30", "2018-08-02", "fiscal_quarter", "FY2019-Q1"),
-        ("06-30", "2018-10-01", "fiscal_quarter", "FY2019-Q2"),
-        ("06-30", "2018-12-30", "fiscal_quarter", "FY2019-Q2"),
-        ("06-30", "2018-02-02", "fiscal_quarter", "FY2018-Q3"),
-        ("06-30", "2018-07-03", "fiscal_quarter-1", "FY2018-Q4"),
-        ("06-30", "2018-07-03", "fiscal_quarter+6", "FY2020-Q3"),
-        ("15-31", "2018-02-02", "fiscal_year", "FY2017"),
-        ("15-31", "2018-05-02", "fiscal_year", "FY2018"),
-        ("15-31", "2018-05-02", "fiscal_year-1", "FY2017"),
-        ("15-31", "2018-02-02", "fiscal_year+6", "FY2023"),
-        ("15-31", "2018-05-02", "fiscal_year+6", "FY2024"),
-        ("15-31", "2018-02-02", "fiscal_quarter", "FY2017-Q4"),
-        ("15-31", "2018-05-02", "fiscal_quarter", "FY2018-Q1"),
-        ("15-31", "2018-08-02", "fiscal_quarter", "FY2018-Q2"),
-        ("15-31", "2018-11-02", "fiscal_quarter", "FY2018-Q3"),
-        ("15-31", "2018-05-02", "fiscal_quarter-1", "FY2017-Q4"),
-        ("15-31", "2018-05-02", "fiscal_quarter+6", "FY2019-Q3"),
-        ("04-05", "2018-07-03", "fiscal_quarter", None),
-    ],
-)
-def test_fiscal_substitute(
-    fye_str: str,
-    test_date: str,
-    string: str,
-    output: str | None,
-) -> None:
-    fye = parse_fye_string(fye_str)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = fromisoformat(test_date)
-        mock_date.side_effect = date
-        if output is None:
-            with pytest.raises(
-                ValueError,
-                match="Cannot use fiscal quarter if fiscal year",
-            ):
-                substitute(string, fye)
-        else:
-            assert substitute(string, fye) == output
-
-
-@pytest.mark.parametrize(
-    ("expect_start", "expect_end", "text"),
-    [
-        ("2000-01-01", "2001-01-01", "   2000   "),
-        ("2010-10-01", "2010-11-01", "2010-10"),
-        ("2000-01-03", "2000-01-04", "2000-01-03"),
-        ("2014-12-29", "2015-01-05", "2015-W01"),
-        ("2024-12-30", "2025-01-06", "2025-W01"),
-        ("2015-04-01", "2015-07-01", "2015-Q2"),
-        ("2014-01-01", "2016-01-01", "2014 to 2015"),
-        ("2014-01-01", "2016-01-01", "2014-2015"),
-        ("2011-10-01", "2016-01-01", "2011-10 - 2015"),
-        ("2018-07-01", "2020-07-01", "FY2019 - FY2020"),
-        ("2018-07-01", "2021-01-01", "FY2019 - 2020"),
-        ("2010-07-01", "2015-07-01", "FY2011 to FY2015"),
-        ("2011-01-01", "2015-07-01", "2011 to FY2015"),
-    ],
-)
-def test_parse_date(expect_start: str, expect_end: str, text: str) -> None:
-    expected = (fromisoformat(expect_start), fromisoformat(expect_end))
-    assert parse_date(text, FiscalYearEnd(6, 30)) == expected
-    if "FY" not in text:
-        assert parse_date(text, None) == expected
-
-
-def test_parse_date_empty() -> None:
-    assert parse_date("     ", FiscalYearEnd(6, 30)) == (None, None)
-    assert parse_date("     ", None) == (None, None)
-
-
-@pytest.mark.parametrize(
-    ("expect_start", "expect_end", "text"),
-    [
-        ("2014-01-01", "2016-06-27", "year-2-day+2"),
-        ("2016-01-01", "2016-06-25", "year-day"),
-        ("2015-01-01", "2017-01-01", "2015-year"),
-        ("2016-01-01", "2016-04-01", "quarter-1"),
-        ("2013-07-01", "2014-07-01", "fiscal_year-2"),
-        ("2016-04-01", "2016-07-01", "fiscal_quarter"),
-    ],
-)
-def test_parse_date_relative(
-    expect_start: str,
-    expect_end: str,
-    text: str,
-) -> None:
-    start, end = fromisoformat(expect_start), fromisoformat(expect_end)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = fromisoformat("2016-06-24")
-        mock_date.side_effect = date
-        assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
 
 
 @pytest.mark.parametrize(

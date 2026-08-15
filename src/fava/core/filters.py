@@ -15,8 +15,7 @@ from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
 from fava.helpers import FavaAPIError
-from fava.util.date import DateRange
-from fava.util.date import parse_date
+from fava.util.date_parser import parse_date
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
@@ -403,10 +402,10 @@ class TimeFilter(EntryFilter):
         value: str,
     ) -> None:
         self._options = options
-        begin, end = parse_date(value, fava_options.fiscal_year_end)
-        if not begin or not end:
+        date_range = parse_date(value, fava_options.fiscal_year_end)
+        if date_range is None:
             raise TimeFilterParseError(value)
-        self.date_range = DateRange(begin, end)
+        self.date_range = date_range
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         clamped_entries, _ = clamp_opt(
