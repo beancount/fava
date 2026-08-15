@@ -39,7 +39,6 @@ dependencies = [
   "cheroot>=8,<12",
   "click>=7,<9",
   "markdown-it-py>=3,<5",
-  "ply>=3.4",
   "simplejson>=3.16.0,<4",
   "typing-extensions>=4.5; python_version<\"3.12\"",
   "watchfiles>=0.20.0",
@@ -252,7 +251,6 @@ max-args = 9
 "tests/conftest.py" = ["S101"]
 "tests/test_*.py" = ["D", "PLC2701", "S101", "SLF001"]
 "tests/data/import_config.py" = ["D", "INP", "S101"]
-"src/fava/core/filters.py" = ["D"]
 # Lazy imports in CLI and request handlers (for conditionally used deps)
 "src/fava/{__init__,application,json_api,cli}.py" = ["PLC0415"]
 

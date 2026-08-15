@@ -600,7 +600,6 @@ dependencies = [
     { name = "flask-babel" },
     { name = "jinja2" },
     { name = "markdown-it-py" },
-    { name = "ply" },
     { name = "simplejson" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
     { name = "watchfiles" },
@@ -675,7 +674,6 @@ requires-dist = [
     { name = "flask-babel", specifier = ">=3,<5" },
     { name = "jinja2", specifier = ">=3,<4" },
     { name = "markdown-it-py", specifier = ">=3,<5" },
-    { name = "ply", specifier = ">=3.4" },
     { name = "pyexcel", marker = "extra == 'excel'", specifier = ">=0.7" },
     { name = "pyexcel-ods3", marker = "extra == 'excel'", specifier = ">=0.6" },
     { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.6" },
@@ -1381,15 +1379,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3", size = 69412, upload-time = "2025-05-15T12:30:07.975Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
-]
-
-[[package]]
-name = "ply"
-version = "3.11"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3", size = 159130, upload-time = "2018-02-15T19:01:31.097Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce", size = 49567, upload-time = "2018-02-15T19:01:27.172Z" },
 ]
 
 [[package]]

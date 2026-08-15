@@ -51,7 +51,7 @@ class TokenKind(Generic[T]):
 
 
 class LiteralTokenKind(TokenKind[str]):
-    """A token for a literal character."""
+    """A token for a literal character or string."""
 
     def __init__(self, char: str) -> None:
         super().__init__(re.escape(char), str)
@@ -92,6 +92,8 @@ class Lexer:
 
     Args:
         rules: The kinds of token to split the string into.
+        error: The exception to raise for a character that cannot start a
+            token - it is passed that character.
         flags: re flags to apply.
         skip: A pattern for the text between tokens, which is ignored.
     """
@@ -99,10 +101,14 @@ class Lexer:
     def __init__(
         self,
         rules: Sequence[TokenKind[Any]],
+        /,
+        *,
+        error: Callable[[str], Exception] = UnexpectedTokenError,
         flags: int = 0,
         skip: str = r"\s+",
     ) -> None:
         self._rules = tuple(rules)
+        self._error = error
         # Each kind is matched by a group named after its index - prefixed,
         # since group names need to be identifiers. The two groups at the end
         # match everything that is not a token, so that no character is
@@ -121,13 +127,16 @@ class Lexer:
 
         Yields:
             The tokens of the given string.
+
+        Raises:
+            Exception: The error for a character that cannot start a token.
         """
         for match in self._regex.finditer(string):
             name = match.lastgroup or "ERROR"
             if name == "SKIP":
                 continue
             if name == "ERROR":
-                raise UnexpectedTokenError(match.group())
+                raise self._error(match.group())
             index = int(name.removeprefix("RULE"))
             yield Token(self._rules[index], match.group())
 
@@ -157,6 +166,14 @@ class ParserBase:
         token = self._tokens[self._pos]
         self._pos += 1
         return token
+
+    def accept(self, kind: TokenKind[Any]) -> bool:
+        """Consume the current token if it is of the given kind."""
+        token = self.peek()
+        if token is None or token.kind is not kind:
+            return False
+        self._pos += 1
+        return True
 
     def expect(self, kind: TokenKind[T]) -> T:
         """Consume the current token of the given kind and get its value."""

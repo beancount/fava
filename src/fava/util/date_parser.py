@@ -85,7 +85,7 @@ CLOSE = LiteralTokenKind(")")
 #: The lexer for date expressions.
 _LEXER = Lexer(
     (FY, YEAR, VARIABLE, QUARTER, WEEK, NUMBER, PLUS, DASH, OPEN, CLOSE),
-    re.IGNORECASE,
+    flags=re.IGNORECASE,
 )
 
 
