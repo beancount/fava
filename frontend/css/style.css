@@ -4,8 +4,6 @@
   --font-family-monospaced: "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
 
-  color-scheme: light dark;
-
   /* Scale of z-index values */
   --z-index-floating-ui: 1;
   --z-index-autocomplete: 2;
@@ -125,6 +123,8 @@
   --placeholder-background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 30%));
   --dragover-background: hsl(203deg 100% 32% / 50%);
   --overlay-wrapper-background: hsl(0deg 0% 50% / 50%);
+
+  color-scheme: light dark;
 }
 
 /*

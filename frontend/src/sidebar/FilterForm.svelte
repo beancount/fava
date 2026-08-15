@@ -75,11 +75,11 @@
 
 <style>
   div {
-    color: var(--text-color);
-
     --placeholder-color: var(--header-placeholder-color);
     --placeholder-background: var(--header-placeholder-background);
     --input-padding: 8px 25px 8px 10px;
+
+    color: var(--text-color);
 
     & > :global(span) {
       max-width: 18rem;

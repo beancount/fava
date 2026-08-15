@@ -42,7 +42,6 @@ repos:
         require_serial: true
         additional_dependencies:
           - "stylelint@17.14.1"
-          - "stylelint-config-recess-order@7.7.0"
           - "stylelint-config-standard@40.0.0"
           - "postcss-html@2.0.0"
       - id: eslint
