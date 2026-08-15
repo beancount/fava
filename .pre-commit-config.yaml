@@ -34,16 +34,6 @@ repos:
           - "prettier@3.9.6"
           - "prettier-plugin-svelte@4.1.1"
           - "svelte@5.56.8"
-      - id: stylelint
-        name: stylelint
-        language: node
-        entry: stylelint --fix --config frontend/stylelint.config.js
-        types_or: ["css", "svelte"]
-        require_serial: true
-        additional_dependencies:
-          - "stylelint@17.14.1"
-          - "stylelint-config-standard@40.0.0"
-          - "postcss-html@2.0.0"
       - id: eslint
         name: eslint
         language: node
