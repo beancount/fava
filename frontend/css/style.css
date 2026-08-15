@@ -128,6 +128,21 @@
   --overlay-wrapper-background: hsl(0deg 0% 50% / 50%);
 }
 
+/*
+ * The color scheme that the user selected in the options, see color_scheme.ts.
+ *
+ * This needs to be declared here instead of setting the `color-scheme` property
+ * from Javascript so that the build can also switch the `light-dark()` colors
+ * for the browsers that do not support them yet.
+ */
+:root[data-color-scheme="light"] {
+  color-scheme: light;
+}
+
+:root[data-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
 :root.invert-gains-losses {
   --diff-negative: var(--diff-green);
   --diff-positive: var(--diff-red);

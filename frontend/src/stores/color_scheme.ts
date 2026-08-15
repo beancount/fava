@@ -18,9 +18,9 @@ export const color_scheme = local_storage_synced_store<
   ],
 );
 
-/** Set the color scheme on store changes. */
+/** Set the color scheme on store changes (see style.css). */
 export function init_color_scheme(): void {
   color_scheme.subscribe(($theme) => {
-    document.documentElement.style.colorScheme = $theme;
+    document.documentElement.dataset.colorScheme = $theme;
   });
 }
