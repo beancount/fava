@@ -28,9 +28,3 @@ and visit the web interface at `http://localhost:5000
 If you want to hack on Fava or run a development version, see the
 `Development <https://beancount.github.io/fava/development.html>`__ page on the
 website for details. Contributions are very welcome!
-
-.. image:: https://i.imgbox.com/rfb9I7Zw.png
-   :alt: Fava Screenshot
-   :width: 100%
-   :align: center
-   :target: https://fava.pythonanywhere.com
