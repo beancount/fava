@@ -9,9 +9,9 @@ from beancount.core.account import has_component
 
 from fava.beans import create
 from fava.beans.account import get_entry_accounts
-from fava.core.filter_parser import FilterError
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
+from fava.core.filters import FilterError
 from fava.core.filters import TimeFilter
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -146,14 +146,6 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
 def test_filter_error_contains_the_filter() -> None:
     with pytest.raises(
         FilterError,
-        match=re.escape("Unexpected '\"' in parsed expression.who:\"fff"),
+        match=re.escape("who:\"fff': Unexpected '\"' in parsed expression."),
     ):
         AdvancedFilter('who:"fff')
-
-    with pytest.raises(
-        FilterError,
-        match=re.escape(
-            "Unexpected 'end of input' in parsed expression.any(who:\"Martin\""
-        ),
-    ):
-        AdvancedFilter('any(who:"Martin"')

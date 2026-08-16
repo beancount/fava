@@ -17,11 +17,11 @@ from typing import TYPE_CHECKING
 from fava.util.date import DateRange
 from fava.util.date import Day
 from fava.util.date import END_OF_YEAR
-from fava.util.date import FyeHasNoQuartersError
 from fava.util.date import get_fiscal_period
 from fava.util.date import InvalidDateRangeError
 from fava.util.date import local_today
 from fava.util.date import Month
+from fava.util.date import month_offset
 from fava.util.date import Quarter
 from fava.util.date import Week
 from fava.util.date import Year
@@ -89,31 +89,12 @@ _LEXER = Lexer(
 )
 
 
-def _make_date(year: int, month: int, day: int) -> datetime.date:
-    """Build a date, for a date that does not exist raise an error."""
-    try:
-        return datetime.date(year, month, day)
-    except ValueError as err:
-        raise NoSuchPeriodError from err
-
-
-def _iso_week_start(year: int, week: int) -> datetime.date:
-    """The Monday of the given week of the ISO week-based year."""
-    try:
-        return (
-            datetime.datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%w")
-            .replace(tzinfo=datetime.timezone.utc)
-            .date()
-        )
-    except ValueError as err:
-        raise NoSuchPeriodError from err
-
-
 class _Period(ABC):
     """A period of time that (part of) a date expression denotes."""
 
+    @property
     @abstractmethod
-    def date_range(self, fye: FiscalYearEnd) -> DateRange:
+    def date_range(self) -> DateRange:
         """The range of dates that this period spans."""
 
     def refine(self, token: Token) -> _Period:
@@ -129,7 +110,8 @@ class _IntervalPeriod(_Period):
     interval: Interval
 
     @override
-    def date_range(self, fye: FiscalYearEnd) -> DateRange:
+    @property
+    def date_range(self) -> DateRange:
         return DateRange(self.begin, self.interval.get_next(self.begin))
 
 
@@ -140,8 +122,9 @@ class _YearPeriod(_Period):
     year: int
 
     @override
-    def date_range(self, fye: FiscalYearEnd) -> DateRange:
-        begin = _make_date(self.year, 1, 1)
+    @property
+    def date_range(self) -> DateRange:
+        begin = datetime.date(self.year, 1, 1)
         return DateRange(begin, Year.get_next(begin))
 
     @override
@@ -150,9 +133,11 @@ class _YearPeriod(_Period):
             return _MonthPeriod(self.year, NUMBER.value(token))
         if token.kind is QUARTER:
             month = (QUARTER.value(token) - 1) * 3 + 1
-            return _IntervalPeriod(_make_date(self.year, month, 1), Quarter)
+            return _IntervalPeriod(datetime.date(self.year, month, 1), Quarter)
         if token.kind is WEEK:
-            begin = _iso_week_start(self.year, WEEK.value(token))
+            begin = datetime.date.fromisocalendar(
+                self.year, WEEK.value(token), 1
+            )
             return _IntervalPeriod(begin, Week)
         raise UnexpectedTokenError(token.text)
 
@@ -165,14 +150,15 @@ class _MonthPeriod(_Period):
     month: int
 
     @override
-    def date_range(self, fye: FiscalYearEnd) -> DateRange:
-        begin = _make_date(self.year, self.month, 1)
+    @property
+    def date_range(self) -> DateRange:
+        begin = datetime.date(self.year, self.month, 1)
         return DateRange(begin, Month.get_next(begin))
 
     @override
     def refine(self, token: Token) -> _Period:
         if token.kind is NUMBER:
-            begin = _make_date(self.year, self.month, NUMBER.value(token))
+            begin = datetime.date(self.year, self.month, NUMBER.value(token))
             return _IntervalPeriod(begin, Day)
         raise UnexpectedTokenError(token.text)
 
@@ -181,23 +167,20 @@ class _MonthPeriod(_Period):
 class _FiscalYearPeriod(_Period):
     """A fiscal year, which can be refined to one of its quarters."""
 
+    fye: FiscalYearEnd
     year: int
     quarter: int | None = None
 
     @override
-    def date_range(self, fye: FiscalYearEnd) -> DateRange:
-        try:
-            begin, end = get_fiscal_period(self.year, fye, self.quarter)
-        except ValueError as err:  # the year is out of range
-            raise NoSuchPeriodError from err
-        if begin is None or end is None:  # the fye has no quarters
-            raise NoSuchPeriodError
+    @property
+    def date_range(self) -> DateRange:
+        begin, end = get_fiscal_period(self.year, self.fye, self.quarter)
         return DateRange(begin, end)
 
     @override
     def refine(self, token: Token) -> _Period:
         if token.kind is QUARTER and self.quarter is None:
-            return _FiscalYearPeriod(self.year, QUARTER.value(token))
+            return _FiscalYearPeriod(self.fye, self.year, QUARTER.value(token))
         raise UnexpectedTokenError(token.text)
 
 
@@ -210,34 +193,25 @@ def _period_for_variable(  # noqa: PLR0911
     today = local_today()
     if name == "fiscal_year":
         after_fye = (today.month, today.day) > (fye.month_of_year, fye.day)
-        year = today.year + (1 if after_fye else 0) - fye.year_offset
-        return _FiscalYearPeriod(year + offset)
+        year = today.year + after_fye - fye.year_offset + offset
+        return _FiscalYearPeriod(fye, year)
     if name == "fiscal_quarter":
-        if not fye.has_quarters():
-            raise FyeHasNoQuartersError
-        # Do not build a date for the offset month - the year might well be
-        # out of range, which is detected when the date range is computed.
-        year_delta, month_index = divmod(today.month - 1 + offset * 3, 12)
-        month = month_index + 1
-        after_fye = month > fye.month_of_year
-        year = today.year + year_delta - fye.year_offset
-        quarter = ((month - fye.month_of_year - 1) // 3) % 4 + 1
-        return _FiscalYearPeriod(year + (1 if after_fye else 0), quarter)
+        month = month_offset(today.replace(day=1), offset * 3)
+        after_fye = month.month > fye.month_of_year
+        year = month.year + after_fye - fye.year_offset
+        quarter = ((month.month - fye.month_of_year - 1) // 3) % 4 + 1
+        return _FiscalYearPeriod(fye, year, quarter)
     if name == "year":
         return _YearPeriod(today.year + offset)
     if name == "quarter":
-        quarter_today = (today.month - 1) // 3 + 1
-        year = today.year + (quarter_today + offset - 1) // 4
-        quarter = (quarter_today + offset - 1) % 4 + 1
-        month = (quarter - 1) * 3 + 1
-        return _IntervalPeriod(_make_date(year, month, 1), Quarter)
+        begin = month_offset(Quarter.get_prev(today), offset * 3)
+        return _IntervalPeriod(begin, Quarter)
     if name == "month":
-        year = today.year + (today.month + offset - 1) // 12
-        month = (today.month + offset - 1) % 12 + 1
-        return _MonthPeriod(year, month)
+        begin = month_offset(Month.get_prev(today), offset)
+        return _MonthPeriod(begin.year, begin.month)
     if name == "week":
         return _IntervalPeriod(
-            Week.get_prev(today + timedelta(offset * 7)), Week
+            Week.get_prev(today) + timedelta(offset * 7), Week
         )
     assert_type(name, Literal["day"])
     return _IntervalPeriod(today + timedelta(offset), Day)
@@ -262,10 +236,10 @@ class _DateExpressionParser(ParserBase):
 
     def parse(self) -> DateRange:
         """Parse the whole expression into a date range."""
-        date_range = self._period().date_range(self._fye)
+        date_range = self._period().date_range
         if self._at_separator():
             self.advance()
-            end = self._period().date_range(self._fye).end
+            end = self._period().date_range.end
             date_range = DateRange(date_range.begin, end)
         if remaining := self.peek():
             raise UnexpectedTokenError(remaining.text)
@@ -286,7 +260,7 @@ class _DateExpressionParser(ParserBase):
         if token.kind is YEAR:
             period: _Period = _YearPeriod(YEAR.value(token))
         elif token.kind is FY:
-            period = _FiscalYearPeriod(FY.value(token))
+            period = _FiscalYearPeriod(self._fye, FY.value(token))
         elif token.kind is VARIABLE:
             period = self._variable(VARIABLE.value(token))
         elif token.kind is OPEN:
@@ -309,16 +283,10 @@ class _DateExpressionParser(ParserBase):
             self.advance()
             number = self.expect(NUMBER)
             offset = number if sign is PLUS else -number
-        try:
-            return _period_for_variable(name, offset, self._fye)
-        except FyeHasNoQuartersError as err:
-            raise NoSuchPeriodError from err
+        return _period_for_variable(name, offset, self._fye)
 
 
-def parse_date(
-    string: str,
-    fye: FiscalYearEnd | None = None,
-) -> DateRange | None:
+def parse_date(string: str, fye: FiscalYearEnd = END_OF_YEAR) -> DateRange:
     """Parse a date.
 
     Example of supported formats:
@@ -344,10 +312,16 @@ def parse_date(
         fye: The fiscal year end to consider.
 
     Returns:
-        The range of dates - None if it could not be parsed or if it does
-        not span at least one day.
+        The range of dates.
+
+    Raises:
+        ParseError: If parsing the string failed.
+        InvalidDateRangeError: For an invalid date range, e.g. '2012 - 2010'
     """
     try:
-        return _DateExpressionParser(string, fye or END_OF_YEAR).parse()
-    except (ParseError, OverflowError, InvalidDateRangeError):
-        return None
+        return _DateExpressionParser(string, fye).parse()
+    except ValueError as error:
+        if isinstance(error, (ParseError, InvalidDateRangeError)):
+            raise
+        # Errors from a date creation or similar (e.g. invalid month)
+        raise NoSuchPeriodError from error

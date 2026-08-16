@@ -14,7 +14,6 @@ from fava.core.filter_parser import CMP_OP
 from fava.core.filter_parser import COMMA
 from fava.core.filter_parser import DASH
 from fava.core.filter_parser import EQ_OP
-from fava.core.filter_parser import FilterError
 from fava.core.filter_parser import KEY
 from fava.core.filter_parser import LINK
 from fava.core.filter_parser import Match
@@ -24,6 +23,7 @@ from fava.core.filter_parser import OPEN
 from fava.core.filter_parser import parse_filter
 from fava.core.filter_parser import STRING
 from fava.core.filter_parser import TAG
+from fava.util.parsing import ParseError
 from fava.util.parsing import UnexpectedTokenError
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -161,5 +161,5 @@ def test_lexer_comma() -> None:
     ],
 )
 def test_parse_filter_invalid(string: str, error: str) -> None:
-    with pytest.raises(FilterError, match=re.escape(error)):
+    with pytest.raises(ParseError, match=re.escape(error)):
         parse_filter(string)

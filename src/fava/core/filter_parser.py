@@ -7,10 +7,8 @@ from decimal import Decimal
 from typing import Any
 from typing import TYPE_CHECKING
 
-from fava.helpers import FavaAPIError
 from fava.util.parsing import Lexer
 from fava.util.parsing import LiteralTokenKind
-from fava.util.parsing import ParseError
 from fava.util.parsing import ParserBase
 from fava.util.parsing import TokenKind
 from fava.util.parsing import UnexpectedTokenError
@@ -23,10 +21,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
     #: A filter, matching entries or postings.
     FilterFunction = Callable[[Any], bool]
-
-
-class FilterError(FavaAPIError):
-    """Filter exception."""
 
 
 def _unquote(text: str) -> str:
@@ -310,8 +304,4 @@ def parse_filter(string: str) -> FilterFunction:
     Raises:
         FilterError: If the filter could not be parsed.
     """
-    try:
-        return _FilterParser(string).parse()
-    except ParseError as error:
-        message = f"Failed to parse filter, {error}"
-        raise FilterError(message) from error
+    return _FilterParser(string).parse()

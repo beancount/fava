@@ -10,10 +10,12 @@ from beancount.core import account
 from beancount.ops.summarize import clamp_opt
 
 from fava.beans.account import get_entry_accounts
-from fava.core.filter_parser import FilterError
 from fava.core.filter_parser import Match
 from fava.core.filter_parser import parse_filter
+from fava.helpers import FavaAPIError
+from fava.util.date import InvalidDateRangeError
 from fava.util.date_parser import parse_date
+from fava.util.parsing import ParseError
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
@@ -21,13 +23,25 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.beans.types import BeancountOptions
     from fava.core.fava_options import FavaOptions
+    from fava.util.date import DateRange
+
+
+class FilterError(FavaAPIError):
+    """Filter exception."""
 
 
 class TimeFilterParseError(FilterError):
     """Time filter parse error."""
 
-    def __init__(self, value: str) -> None:
-        super().__init__(f"Failed to parse date: {value}")
+    def __init__(self, value: str, err: Exception) -> None:
+        super().__init__(f"Failed to parse date '{value}': {err!s}")
+
+
+class AdvancedFilterParseError(FilterError):
+    """Filter parse error."""
+
+    def __init__(self, value: str, err: Exception) -> None:
+        super().__init__(f"Failed to parse filter '{value}': {err!s}")
 
 
 class EntryFilter(ABC):
@@ -43,6 +57,8 @@ class TimeFilter(EntryFilter):
 
     __slots__ = ("_options", "date_range")
 
+    date_range: DateRange
+
     def __init__(
         self,
         options: BeancountOptions,
@@ -50,10 +66,10 @@ class TimeFilter(EntryFilter):
         value: str,
     ) -> None:
         self._options = options
-        date_range = parse_date(value, fava_options.fiscal_year_end)
-        if date_range is None:
-            raise TimeFilterParseError(value)
-        self.date_range = date_range
+        try:
+            self.date_range = parse_date(value, fava_options.fiscal_year_end)
+        except (ParseError, InvalidDateRangeError) as error:
+            raise TimeFilterParseError(value, error) from error
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         """Filter and summarise the entries in the date range."""
@@ -74,9 +90,8 @@ class AdvancedFilter(EntryFilter):
     def __init__(self, value: str) -> None:
         try:
             self._include = parse_filter(value)
-        except FilterError as exception:
-            exception.message += value
-            raise
+        except ParseError as error:
+            raise AdvancedFilterParseError(value, error) from error
 
     def apply(self, entries: Sequence[Directive]) -> Sequence[Directive]:
         """Filter the entries matching the filter expression."""

@@ -47,6 +47,7 @@ class FiscalYearEnd:
         """Number of years that this is offset into the future."""
         return (self.month - 1) // 12
 
+    @property
     def has_quarters(self) -> bool:
         """Whether this fiscal year end supports fiscal quarters."""
         return (
@@ -341,9 +342,9 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 
 def get_fiscal_period(
     year: int,
-    fye: FiscalYearEnd | None,
+    fye: FiscalYearEnd = END_OF_YEAR,
     quarter: int | None = None,
-) -> tuple[datetime.date | None, datetime.date | None]:
+) -> tuple[datetime.date, datetime.date]:
     """Calculate fiscal periods.
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
@@ -356,9 +357,7 @@ def get_fiscal_period(
 
     Returns:
         A tuple (start, end) of dates.
-
     """
-    fye = fye or END_OF_YEAR
     start = (
         datetime.date(year - 1 + fye.year_offset, fye.month_of_year, fye.day)
         + ONE_DAY
@@ -370,11 +369,12 @@ def get_fiscal_period(
     if quarter is None:
         return start, start.replace(year=start.year + 1)
 
-    if not fye.has_quarters():
-        return None, None
+    if not fye.has_quarters:
+        raise FyeHasNoQuartersError
 
     if quarter < 1 or quarter > 4:
-        return None, None
+        msg = f"quarter must be in 1..4, not {quarter}"
+        raise ValueError(msg)
 
     start = month_offset(start, (quarter - 1) * 3)
 

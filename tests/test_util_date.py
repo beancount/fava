@@ -8,6 +8,7 @@ import pytest
 from fava.util.date import DateRange
 from fava.util.date import dateranges
 from fava.util.date import Day
+from fava.util.date import END_OF_YEAR
 from fava.util.date import get_fiscal_period
 from fava.util.date import interval_ends
 from fava.util.date import INTERVALS
@@ -284,7 +285,6 @@ def test_month_offset(
         (2018, 4, "06-30", "2018-04-01", "2018-07-01"),
         # 5th Apr - UK [FYE=04-05]
         (2018, None, "04-05", "2017-04-06", "2018-04-06"),
-        (2018, 1, "04-05", "None", "None"),
         # 28th February - consider leap years [FYE=02-28]
         (2016, None, "02-28", "2015-03-01", "2016-03-01"),
         (2017, None, "02-28", "2016-03-01", "2017-03-01"),
@@ -294,9 +294,6 @@ def test_month_offset(
         (2018, 4, "15-31", "2019-01-01", "2019-04-01"),
         # None
         (2018, None, None, "2018-01-01", "2019-01-01"),
-        # expected errors
-        (2018, 0, "12-31", "None", "None"),
-        (2018, 5, "12-31", "None", "None"),
     ],
 )
 def test_get_fiscal_period(
@@ -307,9 +304,27 @@ def test_get_fiscal_period(
     expect_end: str,
 ) -> None:
     fye = parse_fye_string(fye_str) if fye_str else None
-    start_date, end_date = get_fiscal_period(year, fye, quarter)
+    start_date, end_date = get_fiscal_period(year, fye or END_OF_YEAR, quarter)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end
+
+
+@pytest.mark.parametrize(
+    ("year", "quarter", "fye_str", "msg"),
+    [
+        (2018, 0, "12-31", "quarter must be in 1..4"),
+        (2018, 5, "12-31", "quarter must be in 1..4"),
+        # 5th Apr - UK [FYE=04-05]
+        (2018, 1, "04-05", "fiscal year does not start on first"),
+    ],
+)
+def test_get_fiscal_period_errors(
+    year: int, quarter: int, fye_str: str, msg: str
+) -> None:
+    fye = parse_fye_string(fye_str)
+    assert fye
+    with pytest.raises(ValueError, match=msg):
+        get_fiscal_period(year, fye, quarter)
 
 
 @pytest.mark.parametrize(

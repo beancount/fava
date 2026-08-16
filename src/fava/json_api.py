@@ -36,7 +36,7 @@ from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
-from fava.core.filter_parser import FilterError
+from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align

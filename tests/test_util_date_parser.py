@@ -10,7 +10,6 @@ from fava.util.date import DateRange
 from fava.util.date import END_OF_YEAR
 from fava.util.date import FiscalYearEnd
 from fava.util.date import parse_fye_string
-from fava.util.date_parser import _DateExpressionParser
 from fava.util.date_parser import parse_date
 
 
@@ -70,6 +69,7 @@ NO_SUCH_PERIOD = "Date expression denotes a period that does not exist."
         ("2016-13", NO_SUCH_PERIOD),
         ("2016-02-30", NO_SUCH_PERIOD),
         ("2016-w99", NO_SUCH_PERIOD),
+        ("     ", "Unexpected 'end of input' in parsed expression."),
         ("2016-", "Unexpected 'end of input' in parsed expression."),
         ("(year", "Unexpected 'end of input' in parsed expression."),
         ("(2016)", "Unexpected '2016' in parsed expression."),
@@ -98,9 +98,8 @@ NO_SUCH_PERIOD = "Date expression denotes a period that does not exist."
 def test_parse_date_invalid(string: str, error: str) -> None:
     with mock.patch("fava.util.date_parser.local_today") as mock_local_today:
         mock_local_today.return_value = MOCKED_TODAY
-        assert parse_date(string) is None
         with pytest.raises(ValueError, match=f"^{re.escape(error)}$"):
-            _DateExpressionParser(string, END_OF_YEAR).parse()
+            parse_date(string)
 
 
 @pytest.mark.parametrize(
@@ -166,7 +165,9 @@ def test_parse_date_fiscal_variables(
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = date.fromisoformat(test_date)
         mock_date.side_effect = date
-        assert parse_date(string, fye) == date_range(expect_start, expect_end)
+        assert parse_date(string, fye or END_OF_YEAR) == date_range(
+            expect_start, expect_end
+        )
 
 
 @pytest.mark.parametrize("string", ["fiscal_quarter", "fy2018-q1"])
@@ -175,12 +176,11 @@ def test_parse_date_fiscal_quarter_without_quarters(string: str) -> None:
     assert fye is not None
     with mock.patch("fava.util.date_parser.local_today") as mock_local_today:
         mock_local_today.return_value = date.fromisoformat("2018-07-03")
-        assert parse_date(string, fye) is None
         with pytest.raises(
             ValueError,
             match=f"^{re.escape(NO_SUCH_PERIOD)}$",
         ):
-            _DateExpressionParser(string, fye).parse()
+            parse_date(string, fye)
 
 
 @pytest.mark.parametrize(
@@ -204,12 +204,7 @@ def test_parse_date(expect_start: str, expect_end: str, text: str) -> None:
     expected = date_range(expect_start, expect_end)
     assert parse_date(text, FiscalYearEnd(6, 30)) == expected
     if "FY" not in text:
-        assert parse_date(text, None) == expected
-
-
-def test_parse_date_empty() -> None:
-    assert parse_date("     ", FiscalYearEnd(6, 30)) is None
-    assert parse_date("     ", None) is None
+        assert parse_date(text) == expected
 
 
 @pytest.mark.parametrize(
