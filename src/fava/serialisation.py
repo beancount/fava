@@ -29,7 +29,6 @@ from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
 from fava.helpers import FavaAPIError
-from fava.util.date import parse_date
 
 
 class InvalidAmountError(FavaAPIError):
@@ -135,10 +134,11 @@ def deserialise(json_entry: Any) -> Directive:
         KeyError: if one of the required entry fields is missing.
         FavaAPIError: if the type of the given entry is not supported.
     """
-    date = parse_date(json_entry.get("date", ""))[0]
-    if not isinstance(date, datetime.date):
+    try:
+        date = datetime.date.fromisoformat(json_entry.get("date", ""))
+    except ValueError as error:
         msg = "Invalid entry date."
-        raise FavaAPIError(msg)
+        raise FavaAPIError(msg) from error
     if json_entry["t"] == "Transaction":
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
         return create.transaction(
