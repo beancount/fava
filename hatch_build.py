@@ -42,7 +42,7 @@ def _compile_frontend(root: Path) -> None:
     """Compile the frontend (if changed or missing)."""
     source_mtime = max(p.stat().st_mtime_ns for p in _frontend_sources(root))
     app_js = root / "src/fava/static/app.js"
-    if app_js.exists() and source_mtime < app_js.stat().st_mtime_ns:
+    if app_js.exists() and source_mtime <= app_js.stat().st_mtime_ns:
         return
 
     npm = shutil.which("npm")
