@@ -43,7 +43,7 @@ def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
         return True
     file_path = Path(filename).resolve()
     return any(
-        str(file_path).startswith(str(ledger.join_path(d)))
+        file_path.is_relative_to(ledger.join_path(d))
         for d in ledger.fava_options.import_dirs
     )
 
