@@ -63,7 +63,7 @@ class KeywordTokenKind(TokenKind[T]):
     def __init__(self, keywords: Any) -> None:
         # Match the longest keyword first
         _keywords: list[str] = sorted(get_args(keywords), key=len)[::-1]
-        assert all(kw.islower() for kw in _keywords)  # noqa: S101
+        assert all(kw == kw.lower() for kw in _keywords)  # noqa: S101
         super().__init__(
             "|".join(re.escape(kw) for kw in _keywords),
             cast(

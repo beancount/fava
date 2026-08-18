@@ -72,7 +72,7 @@ This final filter allows you to filter entries by various attributes.
 
 - Filter by `#tag` or `^link`.
 - Filter by amount, such as `= 100.20` or `>= 100` (comparing the absolute of
-  the units).
+  the units). These match on transactions where any posting has matching units.
 - Filter by any entry attribute, such as payee `payee:"restaurant"` or narration
   `narration:'Dinner with Joe'`. The argument is a regular expression which
   needs to be quoted (with `'` or `"`) if it contains spaces or special

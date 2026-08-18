@@ -66,6 +66,7 @@ def test_emoji_search_in_narration() -> None:
         (">=17500", 3),
         (">=17500 <18000", 1),
         ("any(units >= 17500)", 3),
+        ("any(>=17500)", 3),
     ],
 )
 def test_advanced_filter(

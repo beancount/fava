@@ -11,9 +11,9 @@ from fava.beans import create
 from fava.core.filter_parser import _LEXER
 from fava.core.filter_parser import CLOSE
 from fava.core.filter_parser import CMP_OP
+from fava.core.filter_parser import COLON
 from fava.core.filter_parser import COMMA
 from fava.core.filter_parser import DASH
-from fava.core.filter_parser import EQ_OP
 from fava.core.filter_parser import KEY
 from fava.core.filter_parser import LINK
 from fava.core.filter_parser import Match
@@ -103,11 +103,11 @@ def test_lexer_key() -> None:
     data = 'payee:asdfasdf ^some_link somekey:"testtest" units>80.2 '
     assert lex(data) == [
         (KEY, "payee"),
-        (EQ_OP, ":"),
+        (COLON, ":"),
         (STRING, "asdfasdf"),
         (LINK, "some_link"),
         (KEY, "somekey"),
-        (EQ_OP, ":"),
+        (COLON, ":"),
         (STRING, "testtest"),
         (KEY, "units"),
         (CMP_OP, ">"),
@@ -120,13 +120,13 @@ def test_lexer_parentheses() -> None:
     assert lex(data) == [
         (OPEN, "("),
         (KEY, "payee"),
-        (EQ_OP, ":"),
+        (COLON, ":"),
         (STRING, "asdfasdf"),
         (LINK, "some_link"),
         (CLOSE, ")"),
         (OPEN, "("),
         (KEY, "somekey"),
-        (EQ_OP, ":"),
+        (COLON, ":"),
         (STRING, "testtest"),
         (CLOSE, ")"),
     ]
@@ -153,11 +153,16 @@ def test_lexer_comma() -> None:
         ("#a #b)", "Unexpected ')' in parsed expression."),
         ("#a,", "Unexpected 'end of input' in parsed expression."),
         (",#a", "Unexpected ',' in parsed expression."),
-        ("any(#a", "Unexpected 'end of input' in parsed expression."),
+        ("any(#a", "Unexpected '#a' in parsed expression."),
         ("(#a,#b", "Unexpected 'end of input' in parsed expression."),
         ("units>#a", "Unexpected '#a' in parsed expression."),
         ("payee:>", "Unexpected '>' in parsed expression."),
         ("payee)", "Unexpected ')' in parsed expression."),
+        ("any(#a)", "Unexpected '#a' in parsed expression."),
+        ("all(^a)", "Unexpected '^a' in parsed expression."),
+        ("any(string)", "Unexpected 'string' in parsed expression."),
+        ("any(any(units>=1))", "Unexpected 'any(' in parsed expression."),
+        ("any(all(units>=1))", "Unexpected 'all(' in parsed expression."),
     ],
 )
 def test_parse_filter_invalid(string: str, error: str) -> None:
