@@ -157,23 +157,23 @@ msgstr "적요"
 msgid "Postings"
 msgstr "분개"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "연도별"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
 msgid "Quarterly"
 msgstr "분기별"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
 msgid "Monthly"
 msgstr "월별"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
 msgid "Weekly"
 msgstr "주별"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
 msgid "Daily"
 msgstr "일별"
 
