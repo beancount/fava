@@ -153,23 +153,23 @@ msgstr "Descripció"
 msgid "Postings"
 msgstr "Comptabilitzacions"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "Per any"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
 msgid "Quarterly"
 msgstr "Per trimestre"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:169
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
 msgid "Monthly"
 msgstr "Per mes"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:191
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
 msgid "Weekly"
 msgstr "Per setmana"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:216
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
 msgid "Daily"
 msgstr "Per dia"
 
