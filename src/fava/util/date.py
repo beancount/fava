@@ -55,6 +55,16 @@ VARIABLE_RE = re.compile(
     r"|month|week|day)(?:([-+])(\d+))?\)?",
 )
 
+# Elasticsearch/Grafana date-math: now[+/-Nunit][/snap]
+# Units: y, M, w, d (date-only, no h/m/s for beancount)
+# Snaps: y, M, w, d, fy, fQ
+DATEMATH_RE = re.compile(
+    r"now"
+    r"(?:\s*([+-])\s*(\d+)\s*([yMwWd]))?"
+    r"(?:\s*/\s*(fy|fq|[yMwWd]))?",
+    re.IGNORECASE,
+)
+
 
 @dataclass(frozen=True)
 class FiscalYearEnd:
@@ -335,6 +345,123 @@ def local_today() -> datetime.date:
     return datetime.date.today()  # noqa: DTZ011
 
 
+def _snap_date(
+    date: datetime.date,
+    snap: str,
+    fye: FiscalYearEnd,
+) -> datetime.date:
+    """Snap a date to the start of the given period.
+
+    Supports: y, M, w, d, fy (fiscal year), fQ (fiscal quarter).
+    """
+    snap_lower = snap.lower()
+    if snap_lower == "d":
+        return date
+    if snap_lower == "w":
+        return date - timedelta(date.weekday())
+    if snap_lower == "m":
+        return datetime.date(date.year, date.month, 1)
+    if snap_lower == "y":
+        return datetime.date(date.year, 1, 1)
+    if snap_lower == "fy":
+        after_fye = (date.month, date.day) > (fye.month_of_year, fye.day)
+        year = date.year + (1 if after_fye else 0) - fye.year_offset
+        start, _ = get_fiscal_period(year, fye)
+        return start if start is not None else datetime.date.min
+    if snap_lower == "fq":
+        if not fye.has_quarters():
+            raise FyeHasNoQuartersError
+        after_fye = (date.month, date.day) > (fye.month_of_year, fye.day)
+        year = date.year + (1 if after_fye else 0) - fye.year_offset
+        # find which fiscal quarter the date falls into
+        start_year, _ = get_fiscal_period(year, fye)
+        if start_year is None:
+            return datetime.date.min
+        # how many months since fiscal year start
+        months_since = (date.year - start_year.year) * 12 + date.month - start_year.month
+        quarter = max(1, min(4, months_since // 3 + 1))
+        start, _ = get_fiscal_period(year, fye, quarter)
+        return start if start is not None else datetime.date.min
+    msg = f"Unknown date math snap: {snap}"
+    raise ValueError(msg)
+
+
+def _period_end_from_snap(date: datetime.date, snap: str, fye: FiscalYearEnd) -> datetime.date:
+    """Given a snapped start date, return the (exclusive) end date."""
+    snap_lower = snap.lower()
+    if snap_lower == "d":
+        return Day.get_next(date)
+    if snap_lower == "w":
+        return Week.get_next(date)
+    if snap_lower == "m":
+        return Month.get_next(date)
+    if snap_lower == "y":
+        return Year.get_next(date)
+    if snap_lower == "fy":
+        # determine the fiscal year label for this start date
+        after_fye = (date.month, date.day) > (fye.month_of_year, fye.day)
+        year = date.year + (1 if after_fye else 0) - fye.year_offset
+        _, end = get_fiscal_period(year, fye)
+        return end if end is not None else datetime.date.max
+    if snap_lower == "fq":
+        # determine fiscal year/quarter for this start date
+        after_fye = (date.month, date.day) > (fye.month_of_year, fye.day)
+        year = date.year + (1 if after_fye else 0) - fye.year_offset
+        if not fye.has_quarters():
+            raise FyeHasNoQuartersError
+        start_year, _ = get_fiscal_period(year, fye)
+        if start_year is None:
+            return datetime.date.max
+        months_since = (date.year - start_year.year) * 12 + date.month - start_year.month
+        quarter = max(1, min(4, months_since // 3 + 1))
+        _, end = get_fiscal_period(year, fye, quarter)
+        return end if end is not None else datetime.date.max
+    msg = f"Unknown date math snap: {snap}"
+    raise ValueError(msg)
+
+
+def _unit_from_match(match: re.Match[str]) -> str:
+    """Extract the unit from a DATEMATH_RE match, defaulting to 'd'."""
+    return match.group(3) or "d"
+
+
+def _eval_datemath(
+    string: str,
+    fye: FiscalYearEnd,
+) -> datetime.date | None:
+    """Evaluate a single date-math expression like 'now-1y' or 'now/M'.
+
+    Returns the (possibly snapped) anchor date, or None if the string is
+    not date math.  Without an explicit snap, the offset is applied as a
+    simple shift (no period snapping).  With a snap (/d, /M, /y, /fy, /fQ),
+    the result is rounded down to the start of that period.
+    """
+    match = DATEMATH_RE.match(string.strip())
+    if not match:
+        return None
+    today = local_today()
+    plusminus, amount_str, unit, snap = match.group(1, 2, 3, 4)
+    date = today
+    if amount_str:
+        amount = int(amount_str)
+        unit_lower = (unit or "d").lower()
+        delta: int = amount if plusminus == "+" else -amount
+        if unit_lower == "d":
+            date += timedelta(days=delta)
+        elif unit_lower == "w":
+            date += timedelta(weeks=delta)
+        elif unit_lower == "m":
+            date = month_offset(date.replace(day=1), delta)
+        elif unit_lower == "y":
+            try:
+                date = date.replace(year=date.year + delta)
+            except ValueError:
+                return None  # pragma: no cover
+    if snap:
+        return _snap_date(date, snap, fye)
+    return date
+
+
 def substitute(
     string: str,
     fye: FiscalYearEnd | None = None,
@@ -393,6 +520,53 @@ def substitute(
     return string
 
 
+# Date-math range: "now-30d - now", "now/M - now/d", etc.
+DATEMATH_RANGE_RE = re.compile(
+    r"(now\S*)\s*(?:-|to)\s*(now\S*)",
+    re.IGNORECASE,
+)
+
+
+def _parse_datemath(
+    string: str,
+    fye: FiscalYearEnd,
+) -> tuple[datetime.date | None, datetime.date | None]:
+    """Try to parse a date-math expression (now-1y, now/M, etc.).
+
+    Returns (begin, end) or (None, None) if not a date-math expression.
+    """
+    s = string.strip().lower()
+    if not s.startswith("now"):
+        return None, None
+
+    # Check for range: now-30d - now, now/M - now/d, etc.
+    range_match = DATEMATH_RANGE_RE.match(s)
+    if range_match:
+        start = _eval_datemath(range_match.group(1), fye)
+        end = _eval_datemath(range_match.group(2), fye)
+        if start is not None and end is not None:
+            return start, end
+        return None, None
+
+    # Single date-math expression
+    start = _eval_datemath(s, fye)
+    if start is None:
+        return None, None
+
+    # Determine end from the snap or unit.
+    # Without an explicit snap, the unit determines both the snap and the
+    # period length, e.g. now-1M means "the calendar month one month ago".
+    match = DATEMATH_RE.match(s)
+    if match:
+        snap = match.group(4)
+        period = snap or _unit_from_match(match) or "d"
+        start = _snap_date(start, period, fye)
+        end = _period_end_from_snap(start, period, fye)
+        return start, end
+
+    return start, Day.get_next(start)
+
+
 def parse_date(  # noqa: PLR0911
     string: str,
     fye: FiscalYearEnd | None = None,
@@ -404,6 +578,7 @@ def parse_date(  # noqa: PLR0911
     - 2010-03-15, 2010-03, 2010
     - 2010-W01, 2010-Q3
     - FY2012, FY2012-Q2
+    - now, now-1y, now/M, now-1y/y, now-1M - now
 
     Ranges of dates can be expressed in the following forms:
 
@@ -422,6 +597,13 @@ def parse_date(  # noqa: PLR0911
     string = string.strip().lower()
     if not string:
         return None, None
+
+    fye = fye or END_OF_YEAR
+
+    # Try date-math first (now-1y, now/M, etc.)
+    datemath_result = _parse_datemath(string, fye)
+    if datemath_result != (None, None):
+        return datemath_result
 
     string = substitute(string, fye).lower()
 
@@ -480,6 +662,22 @@ def parse_date(  # noqa: PLR0911
         return get_fiscal_period(year, fye, quarter)
 
     return None, None
+
+
+def parse_date_resolved(
+    string: str,
+    fye: FiscalYearEnd | None = None,
+) -> tuple[datetime.date | None, datetime.date | None, str]:
+    """Like parse_date but also returns a human-readable description.
+
+    Returns:
+        A tuple (start, end, description) where description is something
+        like "2024-01-01 to 2024-12-31" showing the resolved range.
+    """
+    begin, end = parse_date(string, fye)
+    if begin is None or end is None:
+        return None, None, ""
+    return begin, end, f"{begin.isoformat()} to {(end - ONE_DAY).isoformat()}"
 
 
 def month_offset(date: datetime.date, months: int) -> datetime.date:
