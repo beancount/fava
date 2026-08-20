@@ -1,8 +1,9 @@
 """Beancount plugin to link entries to documents.
 
-It goes through all entries with a `document` metadata-key, and tries to
-associate them to Document entries. For transactions, it then also adds a link
-from the transaction to documents, as well as the "#linked" tag.
+It goes through all entries with a `document` metadata-key, either on the
+entry itself or on one of its postings, and tries to associate them to
+Document entries. For transactions, it then also adds a link from the
+transaction to documents, as well as the "#linked" tag.
 """
 
 from __future__ import annotations
@@ -52,11 +53,22 @@ def link_documents(
 
     new_entries = list(entries)
     for index, entry in enumerate(entries):
+        # Documents found via metadata, paired with the accounts that they
+        # may be filed under - either all of the entry's accounts, or just
+        # the account of the posting the metadata was found on.
         disk_docs = [
-            value
+            (value, get_entry_accounts(entry))
             for key, value in entry.meta.items()
             if key.startswith("document") and isinstance(value, str)
         ]
+        for posting in getattr(entry, "postings", []):
+            if posting.meta is None:
+                continue
+            disk_docs.extend(
+                (value, [posting.account])
+                for key, value in posting.meta.items()
+                if key.startswith("document") and isinstance(value, str)
+            )
 
         if not disk_docs:
             continue
@@ -65,13 +77,12 @@ def link_documents(
         # not necessarily be unique, but it shows which date the linked entry
         # is on (and it will probably narrow it down enough)
         entry_link = f"dok-{entry.date}"
-        entry_accounts = get_entry_accounts(entry)
         entry_filename, _ = get_position(entry)
-        for disk_doc in disk_docs:
+        for disk_doc, accounts in disk_docs:
             documents = [
                 j
                 for j, document in by_basename[disk_doc]
-                if document.account in entry_accounts
+                if document.account in accounts
             ]
             disk_doc_path = normpath(
                 Path(entry_filename).parent / disk_doc,
