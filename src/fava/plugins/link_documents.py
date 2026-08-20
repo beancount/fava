@@ -9,7 +9,6 @@ transaction to documents, as well as the "#linked" tag.
 from __future__ import annotations
 
 from collections import defaultdict
-from os.path import normpath
 from pathlib import Path
 from typing import Any
 from typing import TYPE_CHECKING
@@ -48,8 +47,9 @@ def link_documents(
 
     for index, entry in enumerate(entries):
         if isinstance(entry, Document):
-            by_fullname[entry.filename] = index
-            by_basename[Path(entry.filename).name].append((index, entry))
+            fullname = Path(entry.filename)
+            by_fullname[fullname] = index
+            by_basename[fullname.name].append((index, entry))
 
     new_entries = list(entries)
     for index, entry in enumerate(entries):
@@ -84,9 +84,7 @@ def link_documents(
                 for j, document in by_basename[disk_doc]
                 if document.account in accounts
             ]
-            disk_doc_path = normpath(
-                Path(entry_filename).parent / disk_doc,
-            )
+            disk_doc_path = (Path(entry_filename).parent / disk_doc).resolve()
             if disk_doc_path in by_fullname:
                 documents.append(by_fullname[disk_doc_path])
 
