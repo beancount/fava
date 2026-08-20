@@ -22,13 +22,13 @@
     "entry_hash": "ENTRY_HASH",
     "meta": {
       "account-value": "Assets:Cash",
-      "amount-value": { "currency": "USD", "number": 10 },
+      "amount-value": { "currency": "USD", "number": "10", "t": "Amount" },
       "bool-value": true,
       "currency-value": "USD",
       "date-value": "2022-12-12",
       "filename": "<string>",
       "lineno": 6,
-      "number-value": 20,
+      "number-value": { "t": "Decimal", "value": "20" },
       "string-value": "value"
     },
     "t": "Event",

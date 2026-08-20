@@ -9,6 +9,7 @@ from beancount.core.number import MISSING
 from beancount.core.position import CostSpec
 
 from fava.beans import create
+from fava.beans.abc import Transaction
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
@@ -76,6 +77,84 @@ def test_serialise_txn() -> None:
     json_txn["entry_hash"] = hash_entry(txn)
     serialised = loads(dumps(serialise(txn)))
     assert serialised == json_txn
+
+
+def test_meta_decimal_and_amount_roundtrip() -> None:
+    """Decimal and Amount metadata values roundtrip through JSON."""
+    number = Decimal("0.1234567891011121314151617")
+    amt = create.amount("10.10 USD")
+    txn = create.transaction(
+        {"number-value": number, "amount-value": amt},
+        datetime.date(2017, 12, 12),
+        "*",
+        "Test3",
+        "asdfasd",
+        frozenset(),
+        frozenset(),
+        [
+            create.posting(
+                "Assets:ETrade:Cash",
+                "100 USD",
+                meta={"posting-number": number, "posting-amount": amt},
+            ),
+        ],
+    )
+
+    json_txn = loads(dumps(serialise(txn)))
+    assert json_txn["meta"]["number-value"] == {
+        "t": "Decimal",
+        "value": "0.1234567891011121314151617",
+    }
+    assert json_txn["meta"]["amount-value"] == {
+        "t": "Amount",
+        "number": "10.10",
+        "currency": "USD",
+    }
+    assert json_txn["postings"][0]["meta"] == {
+        "posting-number": {
+            "t": "Decimal",
+            "value": "0.1234567891011121314151617",
+        },
+        "posting-amount": {
+            "t": "Amount",
+            "number": "10.10",
+            "currency": "USD",
+        },
+    }
+
+    roundtripped = deserialise(json_txn)
+    assert isinstance(roundtripped, Transaction)
+    assert roundtripped.meta["number-value"] == number
+    assert isinstance(roundtripped.meta["number-value"], Decimal)
+    assert roundtripped.meta["amount-value"] == amt
+    posting_meta = roundtripped.postings[0].meta
+    assert posting_meta is not None
+    assert posting_meta["posting-number"] == number
+    assert isinstance(posting_meta["posting-number"], Decimal)
+    assert posting_meta["posting-amount"] == amt
+
+
+def test_meta_deserialise_passthrough_for_unknown_dict_tag() -> None:
+    """Dict metadata values with an unrecognised / missing tag pass through."""
+    json_txn: dict[str, Any] = {
+        "t": "Transaction",
+        "date": "2017-12-12",
+        "flag": "*",
+        "payee": "Test3",
+        "narration": "asdfasd",
+        "tags": [],
+        "links": [],
+        "meta": {
+            "plain-dict": {"foo": "bar"},
+            "string-value": "just a string",
+        },
+        "postings": [],
+    }
+
+    roundtripped = deserialise(json_txn)
+    assert isinstance(roundtripped, Transaction)
+    assert roundtripped.meta["plain-dict"] == {"foo": "bar"}
+    assert roundtripped.meta["string-value"] == "just a string"
 
 
 def test_serialise_entry_types(
