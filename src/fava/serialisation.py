@@ -17,6 +17,7 @@ from functools import singledispatch
 from typing import Any
 
 from beancount.parser.parser import parse_string
+from simplejson import loads as simplejson_loads
 
 from fava.beans import create
 from fava.beans.abc import Balance
@@ -44,6 +45,11 @@ def serialise(entry: Directive | Posting) -> Any:
     if not isinstance(entry, Directive):  # pragma: no cover
         msg = f"Unsupported object {entry}"
         raise TypeError(msg)
+    if hasattr(entry, "to_json"):
+        ret = simplejson_loads(entry.to_json())  # ty:ignore[call-non-callable]
+        ret["entry_hash"] = hash_entry(entry)
+        return ret
+
     ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["entry_hash"] = hash_entry(entry)
     ret["t"] = entry.__class__.__name__
@@ -52,6 +58,11 @@ def serialise(entry: Directive | Posting) -> Any:
 
 @serialise.register(Transaction)
 def _(entry: Transaction) -> Any:
+    if hasattr(entry, "to_json"):
+        ret = simplejson_loads(entry.to_json())  # ty:ignore[call-non-callable]
+        ret["postings"] = list(map(serialise, entry.postings))
+        ret["entry_hash"] = hash_entry(entry)
+        return ret
     ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["meta"] = copy(entry.meta)
     ret["meta"].pop("__tolerances__", None)
@@ -64,6 +75,10 @@ def _(entry: Transaction) -> Any:
 
 @serialise.register(Custom)
 def _(entry: Custom) -> Any:
+    if hasattr(entry, "to_json"):
+        ret = simplejson_loads(entry.to_json())  # ty:ignore[call-non-callable]
+        ret["entry_hash"] = hash_entry(entry)
+        return ret
     ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Custom"
     ret["entry_hash"] = hash_entry(entry)
@@ -73,6 +88,10 @@ def _(entry: Custom) -> Any:
 
 @serialise.register(Balance)
 def _(entry: Balance) -> Any:
+    if hasattr(entry, "to_json"):
+        ret = simplejson_loads(entry.to_json())  # ty:ignore[call-non-callable]
+        ret["entry_hash"] = hash_entry(entry)
+        return ret
     ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Balance"
     ret["entry_hash"] = hash_entry(entry)
@@ -82,7 +101,11 @@ def _(entry: Balance) -> Any:
 
 
 @serialise.register(Price)
-def _(entry: Balance) -> Any:
+def _(entry: Price) -> Any:
+    if hasattr(entry, "to_json"):
+        ret = simplejson_loads(entry.to_json())  # ty:ignore[call-non-callable]
+        ret["entry_hash"] = hash_entry(entry)
+        return ret
     ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
     ret["t"] = "Price"
     ret["entry_hash"] = hash_entry(entry)
@@ -100,7 +123,7 @@ def _(posting: Posting) -> Any:
 
     ret: dict[str, Any] = {"account": posting.account, "amount": position_str}
     if posting.meta:
-        ret["meta"] = copy(posting.meta)
+        ret["meta"] = dict(posting.meta)
     return ret
 
 
