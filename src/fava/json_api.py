@@ -8,25 +8,27 @@ from __future__ import annotations
 
 import logging
 import shutil
+from abc import ABC
 from abc import abstractmethod
-from dataclasses import dataclass
-from dataclasses import fields
 from functools import wraps
 from http import HTTPStatus
 from inspect import Parameter
 from inspect import signature
 from pathlib import Path
 from pprint import pformat
-from typing import Any
-from typing import Literal
 from typing import TYPE_CHECKING
+from typing import TypeVar
 
+import msgspec
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 from flask_babel import gettext
+from msgspec import Struct
+from msgspec.structs import astuple
 
+from fava import _structs  # noqa: TC001 - needed for msgspec
 from fava.beans.abc import Document
 from fava.beans.abc import Event
 from fava.context import g
@@ -34,6 +36,7 @@ from fava.core import EntryNotFoundForHashError
 from fava.core.conversion import UNITS
 from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
+from fava.core.fava_options import All_OPTS
 from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
@@ -55,8 +58,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
 
     from flask.wrappers import Response
+    from werkzeug.datastructures import FileStorage
 
-    from fava.beans.abc import Directive
     from fava.core.ingest import FileImporters
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.query import QueryResultTable
@@ -70,56 +73,27 @@ json_api = Blueprint("json_api", __name__)
 log = logging.getLogger(__name__)
 
 
-class ValidationError(Exception):
-    """Validation of data failed."""
+class ErrorResponse(Struct, frozen=True):
+    """Error response object structure."""
+
+    error: str
 
 
-class MissingParameterValidationError(ValidationError):
-    """Validation failed due to missing parameter."""
+class SuccessResponse(Struct, frozen=True):
+    """Response structure."""
 
-    def __init__(self, param: str) -> None:
-        super().__init__(f"Parameter `{param}` is missing.")
-
-
-class IncorrectTypeValidationError(ValidationError):
-    """Validation failed due to incorrect type of parameter."""
-
-    def __init__(self, param: str, expected: type) -> None:
-        super().__init__(
-            f"Parameter `{param}` of incorrect type - expected {expected}.",
-        )
-
-
-class InvalidJsonRequestError(ValidationError):
-    """Validation failed due to invalid JSON in body."""
-
-    def __init__(self) -> None:
-        super().__init__("Invalid JSON body.")
-
-
-def _form_param(name: str) -> str:
-    """Get a required parameter from the form data of the request."""
-    value = request.form.get(name)
-    if value is None:
-        raise MissingParameterValidationError(name)
-    return value
+    data: object
+    mtime: str
 
 
 def json_err(msg: str, status: HTTPStatus) -> Response:
     """Jsonify the error message."""
-    res = jsonify({"error": msg})
+    res = jsonify(ErrorResponse(msg))
     res.status = status
     return res
 
 
-def json_success(data: Any) -> Response:
-    """Jsonify the response."""
-    return jsonify(
-        {"data": data, "mtime": str(g.ledger.mtime)},
-    )
-
-
-class FavaJSONAPIError(FavaAPIError):
+class FavaJSONAPIError(ABC, FavaAPIError):
     """An error with a HTTPStatus."""
 
     @property
@@ -128,13 +102,26 @@ class FavaJSONAPIError(FavaAPIError):
         """HTTP status that should be used for the response."""
 
 
+class ValidationError(FavaJSONAPIError):
+    """Validation of data failed."""
+
+    status = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, reason: str) -> None:
+        super().__init__(f"Invalid API request: {reason}")
+
+
+class InvalidJsonRequestError(ValidationError):
+    """Invalid JSON body."""
+
+    def __init__(self) -> None:
+        super().__init__(self.__doc__ or "")
+
+
 class NotFoundError(FavaJSONAPIError):
     """Not found."""
 
     status = HTTPStatus.NOT_FOUND
-
-    def __init__(self) -> None:
-        super().__init__("Not found.")
 
 
 class TargetPathAlreadyExistsError(FavaJSONAPIError):
@@ -147,12 +134,9 @@ class TargetPathAlreadyExistsError(FavaJSONAPIError):
 
 
 class DocumentDirectoryMissingError(FavaJSONAPIError):
-    """No document directory was specified."""
+    """You need to set a documents folder."""
 
     status = HTTPStatus.UNPROCESSABLE_ENTITY
-
-    def __init__(self) -> None:
-        super().__init__("You need to set a documents folder.")
 
 
 class NoFileUploadedError(FavaJSONAPIError):
@@ -160,17 +144,11 @@ class NoFileUploadedError(FavaJSONAPIError):
 
     status = HTTPStatus.BAD_REQUEST
 
-    def __init__(self) -> None:
-        super().__init__("No file uploaded.")
-
 
 class UploadedFileIsMissingFilenameError(FavaJSONAPIError):
     """Uploaded file is missing filename."""
 
     status = HTTPStatus.BAD_REQUEST
-
-    def __init__(self) -> None:
-        super().__init__("Uploaded file is missing filename.")
 
 
 class NotAValidDocumentOrImportFileError(FavaJSONAPIError):
@@ -213,11 +191,6 @@ def _(error: OSError) -> Response:  # pragma: no cover
     return json_err(error.strerror or "", HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
-@json_api.errorhandler(ValidationError)
-def _(error: ValidationError) -> Response:
-    return json_err(f"Invalid API request: {error!s}", HTTPStatus.BAD_REQUEST)
-
-
 @json_api.errorhandler(EntryNotFoundForHashError)
 def _(error: EntryNotFoundForHashError) -> Response:
     return json_err(error.message, HTTPStatus.NOT_FOUND)
@@ -228,91 +201,116 @@ def _(error: GeneratedEntryError) -> Response:
     return json_err(error.message, HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
-def validate_func_arguments(
-    func: Callable[..., Any],
-) -> Callable[[Mapping[str, Any]], list[str | int | list[Any]]] | None:
-    """Validate arguments for a function.
+def _build_param_struct(func: Callable[..., object]) -> type[Struct] | None:
+    """Build a msgspec Struct type matching a function's parameters."""
+    struct_fields = []
+    for param in signature(func).parameters.values():
+        assert param.kind == Parameter.POSITIONAL_OR_KEYWORD, (  # noqa: S101
+            f"Param {param.name} should be positional"
+        )
+        struct_fields.append(
+            (param.name, param.annotation)
+            if param.default is Parameter.empty
+            else (param.name, param.annotation, param.default)
+        )
 
-    This currently only works for strings, ints and lists (but only does a
-    shallow validation for lists).
-
-    Args:
-        func: The function to check parameters for.
-
-    Returns:
-        A function, which takes a Mapping and tries to construct a list of
-        positional parameters for the given function or None if the function
-        has no parameters.
-    """
-    sig = signature(func)
-    params: list[tuple[str, Literal["str", "int", "list[Any]"]]] = []
-    for param in sig.parameters.values():
-        if param.annotation not in {
-            "str",
-            "int",
-            "list[Any]",
-        }:  # pragma: no cover
-            msg = f"Type of param {param.name} needs to be str, int or list"
-            raise ValueError(msg)
-        if param.kind != Parameter.POSITIONAL_OR_KEYWORD:  # pragma: no cover
-            msg = f"Param {param.name} should be positional"
-            raise ValueError(msg)
-        params.append((param.name, param.annotation))
-
-    if not params:
+    if not struct_fields:
         return None
 
-    def validator(mapping: Mapping[str, Any]) -> list[str | int | list[Any]]:
-        args: list[str | int | list[Any]] = []
-        for param, type_ in params:
-            val = mapping.get(param, None)
-            if val is None:
-                raise MissingParameterValidationError(param)
-            if type_ == "str":
-                if not isinstance(val, str):
-                    raise IncorrectTypeValidationError(param, str)
-            elif type_ == "list[Any]":
-                if not isinstance(val, list):
-                    raise IncorrectTypeValidationError(param, list)
-            else:
-                try:
-                    val = int(val)
-                except ValueError as error:
-                    raise IncorrectTypeValidationError(param, int) from error
-            args.append(val)
-        return args
-
-    return validator
+    return msgspec.defstruct(f"{func.__name__}_params", struct_fields)  # ty:ignore[unresolved-attribute]
 
 
-def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
+def build_json_body_decoder(
+    func: Callable[..., object],
+) -> Callable[[bytes], Sequence[object]] | None:
+    """Build a msgspec-typed decoder for the JSON body of an endpoint."""
+    param_struct = _build_param_struct(func)
+    if param_struct is None:
+        return None
+    decoder = msgspec.json.Decoder(param_struct)
+
+    def decode(data: bytes) -> Sequence[object]:
+        try:
+            return astuple(decoder.decode(data))
+        except msgspec.ValidationError as error:
+            raise ValidationError(str(error)) from error
+        except msgspec.DecodeError as error:
+            raise InvalidJsonRequestError from error
+
+    return decode
+
+
+def build_query_string_decoder(
+    func: Callable[..., object],
+) -> Callable[[Mapping[str, str]], Sequence[object]] | None:
+    """Build a msgspec-typed decoder for an endpoint's query string."""
+    param_struct = _build_param_struct(func)
+    if param_struct is None:
+        return None
+
+    def decode(args: Mapping[str, str]) -> Sequence[object]:
+        try:
+            return astuple(
+                msgspec.convert(args, type=param_struct, strict=False)
+            )
+        except msgspec.ValidationError as error:
+            raise ValidationError(str(error)) from error
+
+    return decode
+
+
+T = TypeVar("T")
+
+
+def validate_form(t: type[T]) -> T:
+    """Validate the provided form fields to match the passed type."""
+    try:
+        return msgspec.convert(dict(request.form), t)
+    except msgspec.ValidationError as error:
+        raise ValidationError(str(error)) from error
+
+
+def validate_file() -> tuple[FileStorage, str]:
+    """Validate the form request contains a file with filename."""
+    upload = request.files.get("file", None)
+
+    if upload is None:
+        raise NoFileUploadedError
+    if not upload.filename:
+        raise UploadedFileIsMissingFilenameError
+
+    return (upload, upload.filename)
+
+
+def api_endpoint(func: Callable[..., object]) -> Callable[[], Response]:
     """Register an API endpoint.
 
     The part of the function name up to the first underscore determines
     the accepted HTTP method. For GET and DELETE endpoints, the function
-    parameters are extracted from the URL query string and passed to the
-    decorated endpoint handler.
+    parameters are converted from the URL query string; for PUT endpoints,
+    they are decoded from the JSON request body. Both use a msgspec Struct
+    generated from the function's parameters for the typed validation.
     """
     method, _, name = func.__name__.partition("_")  # ty:ignore[unresolved-attribute]
-    if method not in {"get", "delete", "put"}:  # pragma: no cover
-        msg = f"Invalid endpoint function name: {func.__name__}"  # ty:ignore[unresolved-attribute]
-        raise ValueError(msg)
-    validator = validate_func_arguments(func)
+    assert method in {"get", "delete", "put"}, (  # noqa: S101
+        f"Invalid endpoint function name: {func.__name__}"  # ty: ignore[unresolved-attribute]
+    )
+
+    if method == "put":
+        decode_body = build_json_body_decoder(func)
+
+        def get_args() -> Sequence[object]:
+            return decode_body(request.get_data()) if decode_body else []
+    else:
+        decode_args = build_query_string_decoder(func)
+
+        def get_args() -> Sequence[object]:
+            return decode_args(dict(request.args)) if decode_args else []
 
     @json_api.route(f"/{name}", methods=[method])
     @wraps(func)
     def _wrapper() -> Response:
-        if validator is not None:
-            if method == "put":
-                data = request.get_json(silent=True)
-                if not isinstance(data, dict):
-                    raise InvalidJsonRequestError
-            else:
-                data = request.args
-            res = func(*validator(data))
-        else:
-            res = func()
-        return json_success(res)
+        return jsonify(SuccessResponse(func(*get_args()), str(g.ledger.mtime)))
 
     return _wrapper
 
@@ -342,18 +340,17 @@ def get_query(query_string: str) -> QueryResultTable | QueryResultText:
 
 
 @api_endpoint
-def get_extract(filename: str, importer: str) -> Sequence[Any]:
+def get_extract(filename: str, importer: str) -> Sequence[object]:
     """Extract entries using the ingest framework."""
     g.ledger.changed()
     entries = g.ledger.ingest.extract(filename, importer)
     return list(map(serialise, entries))
 
 
-@dataclass(frozen=True)
-class Context:
+class Context(Struct, frozen=True):
     """Context for an entry."""
 
-    entry: Any
+    entry: object
     balances_before: Mapping[str, Sequence[str]] | None
     balances_after: Mapping[str, Sequence[str]] | None
 
@@ -365,8 +362,7 @@ def get_context(entry_hash: str) -> Context:
     return Context(serialise(entry), before, after)
 
 
-@dataclass(frozen=True)
-class SourceSlice:
+class SourceSlice(Struct, frozen=True):
     """Source slice for an entry."""
 
     sha256sum: str
@@ -388,10 +384,7 @@ def put_move(account: str, new_name: str, filename: str) -> str:
         raise DocumentDirectoryMissingError
 
     new_path = filepath_in_document_folder(
-        g.ledger.options["documents"][0],
-        account,
-        new_name,
-        g.ledger,
+        g.ledger.options["documents"][0], account, new_name, g.ledger
     )
     file_path = Path(filename)
 
@@ -409,14 +402,14 @@ def put_move(account: str, new_name: str, filename: str) -> str:
 
 
 @api_endpoint
-def get_payee_transaction(payee: str) -> Any:
+def get_payee_transaction(payee: str) -> object:
     """Last transaction for the given payee."""
     entry = g.ledger.attributes.payee_transaction(payee)
     return serialise(entry) if entry else None
 
 
 @api_endpoint
-def get_narration_transaction(narration: str) -> Any:
+def get_narration_transaction(narration: str) -> object:
     """Last transaction for the given narration."""
     entry = g.ledger.attributes.narration_transaction(narration)
     return serialise(entry) if entry else None
@@ -428,8 +421,7 @@ def get_narrations() -> Sequence[str]:
     return g.ledger.attributes.narrations
 
 
-@dataclass(frozen=True)
-class SourceFile:
+class SourceFile(Struct, frozen=True):
     """Source slice for an entry."""
 
     file_path: str
@@ -438,10 +430,10 @@ class SourceFile:
 
 
 @api_endpoint
-def get_source() -> SourceFile:
+def get_source(filename: str = "") -> SourceFile:
     """Load one of the source files."""
     file_path = (
-        request.args.get("filename", "")
+        filename
         or g.ledger.fava_options.default_file
         or g.ledger.beancount_file_path
     )
@@ -497,24 +489,24 @@ def delete_document(filename: str) -> str:
     return f"Deleted {filename}."
 
 
+class AddDocumentForm(Struct, frozen=True):
+    """Required form fields when adding a document."""
+
+    folder: str
+    account: str
+    hash: str = ""
+
+
 @api_endpoint
 def put_add_document() -> str:
     """Upload a document."""
     if not g.ledger.options["documents"]:
         raise DocumentDirectoryMissingError
 
-    upload = request.files.get("file", None)
-
-    if upload is None:
-        raise NoFileUploadedError
-    if not upload.filename:
-        raise UploadedFileIsMissingFilenameError
-
+    upload, name = validate_file()
+    form = validate_form(AddDocumentForm)
     filepath = filepath_in_document_folder(
-        _form_param("folder"),
-        _form_param("account"),
-        upload.filename,
-        g.ledger,
+        form.folder, form.account, name, g.ledger
     )
 
     if filepath.exists():
@@ -523,12 +515,8 @@ def put_add_document() -> str:
     filepath.parent.mkdir(parents=True, exist_ok=True)
     upload.save(filepath)
 
-    if request.form.get("hash"):
-        g.ledger.file.insert_metadata(
-            request.form["hash"],
-            "document",
-            filepath.name,
-        )
+    if form.hash:
+        g.ledger.file.insert_metadata(form.hash, "document", filepath.name)
     return f"Uploaded to {filepath}"
 
 
@@ -540,15 +528,11 @@ def put_attach_document(filename: str, entry_hash: str) -> str:
 
 
 @api_endpoint
-def put_add_entries(entries: list[Any]) -> str:
+def put_add_entries(
+    entries: list[_structs.Balance | _structs.Note | _structs.Transaction],
+) -> str:
     """Add multiple entries."""
-    try:
-        entries = [deserialise(entry) for entry in entries]
-    except KeyError as error:  # pragma: no cover
-        msg = f"KeyError: {error}"
-        raise FavaAPIError(msg) from error
-
-    g.ledger.file.insert_entries(entries)
+    g.ledger.file.insert_entries([deserialise(entry) for entry in entries])
 
     return f"Stored {len(entries)} entries."
 
@@ -556,13 +540,8 @@ def put_add_entries(entries: list[Any]) -> str:
 @api_endpoint
 def put_upload_import_file() -> str:
     """Upload a file for importing."""
-    upload = request.files.get("file", None)
-
-    if upload is None:
-        raise NoFileUploadedError
-    if not upload.filename:
-        raise UploadedFileIsMissingFilenameError
-    filepath = filepath_in_primary_imports_folder(upload.filename, g.ledger)
+    upload, name = validate_file()
+    filepath = filepath_in_primary_imports_folder(name, g.ledger)
 
     if filepath.exists():
         raise TargetPathAlreadyExistsError(filepath)
@@ -578,14 +557,13 @@ def put_upload_import_file() -> str:
 
 
 @api_endpoint
-def get_journal() -> Sequence[Directive]:
+def get_journal() -> Sequence[object]:
     """Get all (filtered) entries."""
     g.ledger.changed()
     return [serialise(e) for e in g.filtered.entries]
 
 
-@dataclass(frozen=True)
-class JournalPage:
+class JournalPage(Struct, frozen=True):
     """A rendered journal page."""
 
     page: int
@@ -614,7 +592,7 @@ def get_journal_page(page: int, order: str) -> JournalPage:
 
 
 @api_endpoint
-def get_events() -> Sequence[Event]:
+def get_events() -> Sequence[object]:
     """Get all (filtered) events."""
     g.ledger.changed()
     return [serialise(e) for e in g.filtered.entries if isinstance(e, Event)]
@@ -628,7 +606,7 @@ def get_imports() -> Sequence[FileImporters]:
 
 
 @api_endpoint
-def get_documents() -> Sequence[Document]:
+def get_documents() -> Sequence[object]:
     """Get all (filtered) documents."""
     g.ledger.changed()
     return [
@@ -636,8 +614,7 @@ def get_documents() -> Sequence[Document]:
     ]
 
 
-@dataclass(frozen=True)
-class Options:
+class Options(Struct, frozen=True):
     """Fava and Beancount options as strings."""
 
     fava_options: Mapping[str, str]
@@ -651,10 +628,8 @@ def get_options() -> Options:
 
     fava_options = g.ledger.fava_options
     pprinted_fava_options = {
-        field.name.replace("_", "-"): pformat(
-            getattr(fava_options, field.name)
-        )
-        for field in fields(fava_options)
+        name.replace("_", "-"): pformat(getattr(fava_options, name))
+        for name in All_OPTS
     }
     return Options(
         pprinted_fava_options,
@@ -662,8 +637,7 @@ def get_options() -> Options:
     )
 
 
-@dataclass(frozen=True)
-class HelpPage:
+class HelpPage(Struct, frozen=True):
     """A rendered help page and the list of all help pages."""
 
     html: str
@@ -682,8 +656,7 @@ def get_help(page_slug: str) -> HelpPage:
     return HelpPage(html, list(HELP_PAGES.items()))
 
 
-@dataclass(frozen=True)
-class CommodityPairWithPrices:
+class CommodityPairWithPrices(Struct, frozen=True):
     """A pair of commodities and prices for them."""
 
     base: str
@@ -704,8 +677,7 @@ def get_commodities() -> Sequence[CommodityPairWithPrices]:
     return ret
 
 
-@dataclass(frozen=True)
-class TreeReport:
+class TreeReport(Struct, frozen=True):
     """Data for the tree reports."""
 
     date_range: DateRange | None
@@ -788,24 +760,21 @@ def get_trial_balance() -> TreeReport:
     )
 
 
-@dataclass(frozen=True)
-class AccountBudget:
+class AccountBudget(Struct, frozen=True):
     """Budgets for an account."""
 
     budget: Mapping[str, Decimal]
     budget_children: Mapping[str, Decimal]
 
 
-@dataclass(frozen=True)
-class AccountReportJournal:
+class AccountReportJournal(Struct, frozen=True):
     """Data for the journal account report."""
 
     charts: Sequence[ChartData]
     journal: str
 
 
-@dataclass(frozen=True)
-class AccountReportTree:
+class AccountReportTree(Struct, frozen=True):
     """Data for the tree account reports."""
 
     charts: Sequence[ChartData]
@@ -815,29 +784,25 @@ class AccountReportTree:
 
 
 @api_endpoint
-def get_account_report() -> AccountReportJournal | AccountReportTree:
+def get_account_report(
+    a: str = "", r: str = ""
+) -> AccountReportJournal | AccountReportTree:
     """Get the data for the account report."""
     g.ledger.changed()
 
-    account_name = request.args.get("a", "")
-    subreport = request.args.get("r")
-
     charts = [
-        ChartApi.account_balance(account_name),
+        ChartApi.account_balance(a),
         ChartApi.interval_totals(
             g.interval,
-            account_name,
+            a,
             label=gettext("Changes"),
         ),
     ]
 
-    if subreport in {"changes", "balances"}:
-        accumulate = subreport == "balances"
+    if r in {"changes", "balances"}:
+        accumulate = r == "balances"
         interval_balances, dates = g.ledger.interval_balances(
-            g.filtered,
-            g.interval,
-            account_name,
-            accumulate=accumulate,
+            g.filtered, g.interval, a, accumulate=accumulate
         )
         if not dates:
             return AccountReportTree(
@@ -847,9 +812,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         all_accounts = (
             interval_balances[0].accounts if interval_balances else []
         )
-        budget_accounts = [
-            a for a in all_accounts if a.startswith(account_name)
-        ]
+        budget_accounts = [acc for acc in all_accounts if acc.startswith(a)]
         budgets_mod = g.ledger.budgets
         first_date_range = dates[-1]
         budgets = {
@@ -874,7 +837,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
         return AccountReportTree(
             charts,
             interval_balances=[
-                tree.get(account_name).serialise(
+                tree.get(a).serialise(
                     g.conv,
                     g.ledger.prices,
                     date_range.end_inclusive,
@@ -894,7 +857,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     entries = reversed(
         g.ledger.account_journal(
             g.filtered,
-            account_name,
+            a,
             g.conv,
             with_children=g.ledger.fava_options.account_journal_include_children,
         )
@@ -905,8 +868,7 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
     )
 
 
-@dataclass(frozen=True)
-class Statistics:
+class Statistics(Struct, frozen=True):
     """Data for the statistics report."""
 
     all_balance_directives: str
@@ -919,12 +881,7 @@ def get_statistics() -> Statistics:
     """Get the data for the statistics report."""
     g.ledger.changed()
 
-    entries_by_type = {
-        type_: len(entries)
-        for type_, entries in group_entries_by_type(g.filtered.entries)
-        ._asdict()
-        .items()
-    }
+    entries_by_type = group_entries_by_type(g.filtered.entries).count_by_type()
 
     balances = {
         account_name: UNITS.apply(node.balance)

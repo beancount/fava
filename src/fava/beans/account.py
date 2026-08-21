@@ -70,7 +70,11 @@ def get_entry_accounts(entry: Directive) -> Sequence[str]:
     if isinstance(entry, Transaction):
         return list(reversed([p.account for p in entry.postings]))
     if isinstance(entry, Custom):
-        return [val.value for val in entry.values if val.dtype == ACCOUNT_TYPE]
+        return [
+            val.value
+            for val in entry.values
+            if val.dtype == ACCOUNT_TYPE and isinstance(val.value, str)
+        ]
     if isinstance(entry, Pad):
         return [entry.account, entry.source_account]
     account_ = getattr(entry, "account", None)

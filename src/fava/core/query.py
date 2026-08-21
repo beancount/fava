@@ -7,11 +7,13 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import Amount
+from beancount.core import amount
+from beancount.core import position
 from beancount.core.inventory import Inventory
-from beancount.core.position import Position
 
 from fava.core.conversion import UNITS
+from fava.core.inventory import _Amount
+from fava.core.inventory import _Position
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
@@ -19,6 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import TypeAlias
     from typing import TypeVar
 
+    from fava.beans import protocols
     from fava.core.inventory import SimpleCounterInventory
 
     T = TypeVar("T")
@@ -34,13 +37,14 @@ if TYPE_CHECKING:  # pragma: no cover
         | str
         | datetime.date
         | Decimal
-        | Position
+        | _Amount
+        | _Position
         | SimpleCounterInventory
         | None
     )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class QueryResultTable:
     """Table query result."""
 
@@ -49,7 +53,7 @@ class QueryResultTable:
     t: Literal["table"] = "table"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class QueryResultText:
     """Text query result."""
 
@@ -60,7 +64,7 @@ class QueryResultText:
 QueryResult: TypeAlias = QueryResultTable | QueryResultText
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class BaseColumn:
     """A query column."""
 
@@ -75,63 +79,73 @@ class BaseColumn:
         return val  # type: ignore[no-any-return]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class BoolColumn(BaseColumn):
     """A boolean query column."""
 
     dtype: str = "bool"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class DecimalColumn(BaseColumn):
     """A Decimal query column."""
 
     dtype: str = "Decimal"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class IntColumn(BaseColumn):
     """A int query column."""
 
     dtype: str = "int"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class StrColumn(BaseColumn):
     """A str query column."""
 
     dtype: str = "str"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class DateColumn(BaseColumn):
     """A date query column."""
 
     dtype: str = "date"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class PositionColumn(BaseColumn):
     """A Position query column."""
 
     dtype: str = "Position"
 
+    @staticmethod
+    def serialise(val: protocols.Position | None) -> _Position | None:
+        """Serialise a position, avoiding it being treated as a tuple."""
+        return _Position.from_position(val)
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, slots=True)
 class SetColumn(BaseColumn):
     """A set query column."""
 
     dtype: str = "set"
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class AmountColumn(BaseColumn):
     """An amount query column."""
 
     dtype: str = "Amount"
 
+    @staticmethod
+    def serialise(val: protocols.Amount | None) -> _Amount | None:
+        """Serialise an amount, avoiding it being treated as a tuple."""
+        return _Amount.from_amount(val)
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, slots=True)
 class ObjectColumn(BaseColumn):
     """An object query column."""
 
@@ -143,7 +157,7 @@ class ObjectColumn(BaseColumn):
         return str(val)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class InventoryColumn(BaseColumn):
     """A str query column."""
 
@@ -158,10 +172,10 @@ class InventoryColumn(BaseColumn):
 
 
 COLUMNS = {
-    Amount: AmountColumn,
+    amount.Amount: AmountColumn,
     Decimal: DecimalColumn,
     Inventory: InventoryColumn,
-    Position: PositionColumn,
+    position.Position: PositionColumn,
     bool: BoolColumn,
     datetime.date: DateColumn,
     int: IntColumn,

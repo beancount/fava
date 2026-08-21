@@ -17,7 +17,7 @@ ONE_MILLISECOND = 0.001
 TEN_MILLISECONDS = 0.010
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class WatcherTestSet:
     """A set of paths to test the file watchers with."""
 

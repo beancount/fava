@@ -1,7 +1,7 @@
 import { type FormatterContext, day as format_day } from "../format.ts";
 import {
   date,
-  number,
+  decimal,
   object,
   optional,
   optional_string,
@@ -41,7 +41,7 @@ export class Cost {
   }
 
   private static raw_validator = object({
-    number,
+    number: decimal,
     currency: string,
     date: optional(date),
     label: optional_string,

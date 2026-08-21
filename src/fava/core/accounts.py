@@ -77,7 +77,7 @@ def balance_string(tree_node: TreeNode) -> str:
     return res
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class LastEntry:
     """Date and hash of the last entry for an account."""
 
@@ -88,7 +88,7 @@ class LastEntry:
     entry_hash: str
 
 
-@dataclass
+@dataclass(slots=True)
 class AccountData:
     """Holds information about an account."""
 

@@ -57,8 +57,8 @@ test("handle data for hierarchical chart", async () => {
 test("handle data for balances chart", () => {
   ok(ParsedLineChart.validator({ label: "name", data: "" }).is_err);
   const data: unknown = [
-    { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
-    { date: "2000-02-01", balance: { EUR: 10 } },
+    { date: "2000-01-01", balance: { EUR: "10", USD: "10" } },
+    { date: "2000-02-01", balance: { EUR: "10" } },
   ];
   const parsed = ParsedLineChart.validator({ label: "name", data })
     .unwrap()
@@ -101,21 +101,21 @@ test("handle data for bar chart with stacked data", () => {
   const data: unknown = [
     {
       date: "2000-01-01",
-      balance: { EUR: 10, USD: 10 },
-      budgets: { USD: 20 },
+      balance: { EUR: "10", USD: "10" },
+      budgets: { USD: "20" },
       account_balances: {
-        "Expenses:Dining": { USD: 8 },
-        "Expenses:Transportation": { EUR: 6 },
-        "Expenses:Taxes": { USD: 2, EUR: 4 },
+        "Expenses:Dining": { USD: "8" },
+        "Expenses:Transportation": { EUR: "6" },
+        "Expenses:Taxes": { USD: "2", EUR: "4" },
       },
     },
     {
       date: "2000-02-01",
-      balance: { EUR: 100 },
-      budgets: { EUR: 50 },
+      balance: { EUR: "100" },
+      budgets: { EUR: "50" },
       account_balances: {
-        "Expenses:Shoes": { EUR: 60 },
-        "Expenses:Taxes": { EUR: 40 },
+        "Expenses:Shoes": { EUR: "60" },
+        "Expenses:Taxes": { EUR: "40" },
       },
     },
   ];
@@ -264,14 +264,14 @@ test("handle data for bar chart without stacked data", () => {
   const data: unknown = [
     {
       date: "2000-01-01",
-      balance: { EUR: 10, USD: 10 },
-      budgets: { USD: 20 },
+      balance: { EUR: "10", USD: "10" },
+      budgets: { USD: "20" },
       account_balances: {},
     },
     {
       date: "2000-02-01",
-      balance: { EUR: 100 },
-      budgets: { EUR: 50 },
+      balance: { EUR: "100" },
+      budgets: { EUR: "50" },
       account_balances: {},
     },
   ];
@@ -307,14 +307,14 @@ test("only use currencies in records for bar chart", () => {
   const data: unknown = [
     {
       date: "2000-01-01",
-      balance: { AUD: 10, USD: 10 },
-      budgets: { USD: 20 },
+      balance: { AUD: "10", USD: "10" },
+      budgets: { USD: "20" },
       account_balances: {},
     },
     {
       date: "2000-02-01",
-      balance: { AUD: 100 },
-      budgets: { AUD: 50 },
+      balance: { AUD: "100" },
+      budgets: { AUD: "50" },
       account_balances: {},
     },
   ];

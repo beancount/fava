@@ -50,7 +50,7 @@ class SnapshotFunc(Protocol):
 
     def __call__(
         self,
-        data: Any,
+        data: object,
         /,
         *,
         name: str = ...,
@@ -168,7 +168,7 @@ def snapshot(
     snap_count = SnapCount()
 
     def snapshot_data(
-        data: Any,
+        data: object,
         *,
         name: str | None = None,
         json: bool = False,

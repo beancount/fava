@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from collections import Counter
 from collections import defaultdict
+from dataclasses import dataclass
 from decimal import Decimal
-from typing import NamedTuple
 from typing import TYPE_CHECKING
+
+import msgspec
+from beancount.core.amount import Amount
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
@@ -23,7 +26,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.util.date import Interval
 
 
-class Budget(NamedTuple):
+@dataclass(frozen=True, slots=True)
+class Budget:
     """A budget entry."""
 
     account: str
@@ -51,7 +55,7 @@ class BudgetModule(FavaModule):
 
     def load_file(self) -> None:  # noqa: D102
         self._budget_entries, self.errors = parse_budgets(
-            self.ledger.all_entries_by_type.Custom,
+            self.ledger.all_entries_by_type.Custom
         )
 
     def calculate(
@@ -62,10 +66,7 @@ class BudgetModule(FavaModule):
     ) -> Mapping[str, Decimal]:
         """Calculate the budget for an account in an interval."""
         return calculate_budget(
-            self._budget_entries,
-            account,
-            begin_date,
-            end_date,
+            self._budget_entries, account, begin_date, end_date
         )
 
     def calculate_children(
@@ -76,11 +77,25 @@ class BudgetModule(FavaModule):
     ) -> Mapping[str, Decimal]:
         """Calculate the budget for an account including its children."""
         return calculate_budget_children(
-            self._budget_entries,
-            account,
-            begin_date,
-            end_date,
+            self._budget_entries, account, begin_date, end_date
         )
+
+
+def _parse_budget(entry: Custom) -> Budget:
+    values = msgspec.convert(
+        tuple(v.value for v in entry.values), tuple[str, str, Amount]
+    )
+    interval = INTERVALS.get(str(values[1]).lower())
+    if not interval:
+        msg = "Invalid interval for budget entry"
+        raise TypeError(msg)
+    return Budget(
+        values[0],
+        entry.date,
+        interval,
+        values[2].number or Decimal(),
+        values[2].currency,
+    )
 
 
 def parse_budgets(
@@ -102,27 +117,15 @@ def parse_budgets(
 
     for entry in (entry for entry in custom_entries if entry.type == "budget"):
         try:
-            interval = INTERVALS.get(str(entry.values[1].value).lower())
-            if not interval:
-                errors.append(
-                    BudgetError(
-                        entry.meta,
-                        "Invalid interval for budget entry",
-                        entry,
-                    ),
-                )
-                continue
-            budget = Budget(
-                entry.values[0].value,
-                entry.date,
-                interval,
-                entry.values[2].value.number,
-                entry.values[2].value.currency,
-            )
+            budget = _parse_budget(entry)
             budgets[budget.account].append(budget)
-        except (IndexError, TypeError):
+        except (TypeError, msgspec.ValidationError) as error:
             errors.append(
-                BudgetError(entry.meta, "Failed to parse budget entry", entry),
+                BudgetError(
+                    entry.meta,
+                    f"Failed to parse budget entry: {error!s}",
+                    entry,
+                ),
             )
 
     return budgets, errors

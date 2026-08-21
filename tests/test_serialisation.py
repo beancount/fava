@@ -4,32 +4,49 @@ import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
+import msgspec
 import pytest
 from beancount.core.number import MISSING
 from beancount.core.position import CostSpec
 
+from fava._structs import Balance
+from fava._structs import Note
+from fava._structs import Posting
+from fava._structs import Transaction
+from fava.beans import abc
 from fava.beans import create
-from fava.beans.abc import Transaction
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
 from fava.core.charts import dumps
 from fava.core.charts import loads
-from fava.helpers import FavaAPIError
+from fava.serialisation import _deserialise_posting
+from fava.serialisation import _serialise_posting
 from fava.serialisation import deserialise
-from fava.serialisation import deserialise_posting
 from fava.serialisation import InvalidAmountError
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
-    from typing import Any
 
     from beancount.core.data import Meta
 
     from fava.beans.abc import Directive
 
     from .conftest import SnapshotFunc
+
+
+def _entry(json_entry: object) -> Balance | Note | Transaction:
+    """Decode a JSON entry the way the JSON API does, for testing."""
+    return msgspec.convert(
+        json_entry,
+        type=Balance | Note | Transaction,
+    )
+
+
+def _posting(json_posting: object) -> Posting:
+    """Decode a JSON posting the way the JSON API does, for testing."""
+    return msgspec.convert(json_posting, type=Posting)
 
 
 def test_serialise_txn() -> None:
@@ -101,29 +118,24 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     )
 
     json_txn = loads(dumps(serialise(txn)))
-    assert json_txn["meta"]["number-value"] == {
-        "t": "Decimal",
-        "value": "0.1234567891011121314151617",
-    }
-    assert json_txn["meta"]["amount-value"] == {
-        "t": "Amount",
-        "number": "10.10",
-        "currency": "USD",
+    assert isinstance(json_txn, dict)
+    assert json_txn["meta"] == {
+        "number-value": "0.1234567891011121314151617",
+        "amount-value": {
+            "number": "10.10",
+            "currency": "USD",
+        },
     }
     assert json_txn["postings"][0]["meta"] == {
-        "posting-number": {
-            "t": "Decimal",
-            "value": "0.1234567891011121314151617",
-        },
+        "posting-number": "0.1234567891011121314151617",
         "posting-amount": {
-            "t": "Amount",
             "number": "10.10",
             "currency": "USD",
         },
     }
 
-    roundtripped = deserialise(json_txn)
-    assert isinstance(roundtripped, Transaction)
+    roundtripped = deserialise(_entry(json_txn))
+    assert isinstance(roundtripped, abc.Transaction)
     assert roundtripped.meta["number-value"] == number
     assert isinstance(roundtripped.meta["number-value"], Decimal)
     assert roundtripped.meta["amount-value"] == amt
@@ -132,29 +144,6 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     assert posting_meta["posting-number"] == number
     assert isinstance(posting_meta["posting-number"], Decimal)
     assert posting_meta["posting-amount"] == amt
-
-
-def test_meta_deserialise_passthrough_for_unknown_dict_tag() -> None:
-    """Dict metadata values with an unrecognised / missing tag pass through."""
-    json_txn: dict[str, Any] = {
-        "t": "Transaction",
-        "date": "2017-12-12",
-        "flag": "*",
-        "payee": "Test3",
-        "narration": "asdfasd",
-        "tags": [],
-        "links": [],
-        "meta": {
-            "plain-dict": {"foo": "bar"},
-            "string-value": "just a string",
-        },
-        "postings": [],
-    }
-
-    roundtripped = deserialise(json_txn)
-    assert isinstance(roundtripped, Transaction)
-    assert roundtripped.meta["plain-dict"] == {"foo": "bar"}
-    assert roundtripped.meta["string-value"] == "just a string"
 
 
 def test_serialise_entry_types(
@@ -238,11 +227,11 @@ def test_serialise_posting(
         flag=None,
         meta=meta,
     )
-    json: dict[str, Any] = {"account": "Assets", "amount": amount_string}
+    json: dict[str, object] = {"account": "Assets", "amount": amount_string}
     if meta:
         json["meta"] = meta
-    assert loads(dumps(serialise(pos))) == json
-    assert deserialise_posting(json) == pos
+    assert loads(dumps(_serialise_posting(pos))) == json
+    assert _deserialise_posting(_posting(json)) == pos
 
 
 @pytest.mark.parametrize(
@@ -275,15 +264,17 @@ def test_deserialise_posting(
         flag=None,
         meta=meta,
     )
-    json: dict[str, Any] = {"account": "Assets", "amount": amount_string}
+    json: dict[str, object] = {"account": "Assets", "amount": amount_string}
     if meta is not None:
         json["meta"] = meta
-    assert deserialise_posting(json) == pos
+    assert _deserialise_posting(_posting(json)) == pos
 
 
 def test_deserialise_posting_invalid_amount() -> None:
     with pytest.raises(InvalidAmountError):
-        deserialise_posting({"account": "Assets", "amount": "10 ////"})
+        _deserialise_posting(
+            _posting({"account": "Assets", "amount": "10 ////"})
+        )
 
 
 def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
@@ -296,8 +287,12 @@ def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
         frozenset(["tag"]),
         frozenset(["link"]),
         [
-            deserialise_posting({"account": "Assets", "amount": "10"}),
-            deserialise_posting({"account": "Assets", "amount": "10 EUR @"}),
+            _deserialise_posting(
+                _posting({"account": "Assets", "amount": "10"})
+            ),
+            _deserialise_posting(
+                _posting({"account": "Assets", "amount": "10 EUR @"})
+            ),
         ],
     )
     snapshot(to_string(txn))
@@ -362,13 +357,13 @@ def test_deserialise() -> None:
             ),
         ],
     )
-    assert deserialise(json_txn) == txn
+    assert deserialise(_entry(json_txn)) == txn
 
-    with pytest.raises(FavaAPIError):
-        deserialise({})
+    with pytest.raises(msgspec.ValidationError):
+        _entry({})
 
-    with pytest.raises(FavaAPIError):
-        deserialise({"t": "NoEntry"})
+    with pytest.raises(msgspec.ValidationError):
+        _entry({"t": "NoEntry"})
 
 
 def test_deserialise_balance() -> None:
@@ -385,7 +380,7 @@ def test_deserialise_balance() -> None:
         account="Assets:ETrade:Cash",
         amount="100 USD",
     )
-    assert deserialise(json_bal) == bal
+    assert deserialise(_entry(json_bal)) == bal
 
 
 def test_deserialise_note() -> None:
@@ -402,7 +397,7 @@ def test_deserialise_note() -> None:
         account="Assets:ETrade:Cash",
         comment="This is some comment or note",
     )
-    assert deserialise(json_note) == note
+    assert deserialise(_entry(json_note)) == note
 
 
 def test_deserialise_unknown() -> None:
@@ -411,5 +406,5 @@ def test_deserialise_unknown() -> None:
         "date": "2017-12-12",
         "meta": {},
     }
-    with pytest.raises(FavaAPIError):
-        deserialise(json_custom)
+    with pytest.raises(msgspec.ValidationError):
+        _entry(json_custom)

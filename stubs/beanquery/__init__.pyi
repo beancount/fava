@@ -24,6 +24,6 @@ def connect(
     dsn: str,
     *,
     entries: Sequence[Any],
-    options: Any,
+    options: object,
     errors: Sequence[Any],
 ) -> Connection: ...

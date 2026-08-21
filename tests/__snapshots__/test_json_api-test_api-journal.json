@@ -22,7 +22,11 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 5 },
+    "meta": {
+      "__tolerances__": { "EUR": "0.005" },
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 5
+    },
     "narration": "Narration with many postings and long narration",
     "payee": "Payee",
     "postings": [
@@ -185,7 +189,12 @@
     "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 36 },
     "t": "Custom",
     "type": "type",
-    "values": [true, true, "Assets:Other", { "currency": "USD", "number": 20 }]
+    "values": [
+      true,
+      true,
+      "Assets:Other",
+      { "currency": "USD", "number": "20" }
+    ]
   },
   {
     "date": "2012-11-20",
@@ -196,7 +205,7 @@
     "values": [
       "Expenses:Books",
       "weekly",
-      { "currency": "EUR", "number": 20.0 }
+      { "currency": "EUR", "number": "20.00" }
     ]
   },
   {
@@ -289,6 +298,7 @@
     "flag": "*",
     "links": [],
     "meta": {
+      "__tolerances__": { "EUR": "0.005" },
       "document": "receipt.pdf",
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 45
@@ -327,7 +337,11 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 51 },
+    "meta": {
+      "__tolerances__": { "EUR": "0.005" },
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 51
+    },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -358,7 +372,7 @@
     "account": "Assets:Account1",
     "amount": { "currency": "EUR", "number": "10.00" },
     "date": "2012-12-15",
-    "diff_amount": { "currency": "EUR", "number": -20.0 },
+    "diff_amount": { "currency": "EUR", "number": "-20.00" },
     "entry_hash": "ENTRY_HASH",
     "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 70 },
     "t": "Balance",
@@ -415,7 +429,11 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "!",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 55 },
+    "meta": {
+      "__tolerances__": { "EUR": "0.005" },
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 55
+    },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -447,7 +465,11 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "P",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 60 },
+    "meta": {
+      "__tolerances__": { "EUR": "0.005" },
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 60
+    },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -474,7 +496,11 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": ["link1"],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 64 },
+    "meta": {
+      "__tolerances__": { "EUR": "0.005" },
+      "filename": "TEST_DATA_DIR/example.beancount",
+      "lineno": 64
+    },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [

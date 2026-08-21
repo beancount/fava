@@ -5,11 +5,11 @@
     "meta": { "filename": "<string>", "lineno": 20 },
     "t": "Custom",
     "type": "string",
-    "values": [{ "currency": "EUR", "number": 1 }, false]
+    "values": [{ "currency": "EUR", "number": "1" }, false]
   },
   {
     "account": "Assets:Cash",
-    "booking": "Booking.STRICT",
+    "booking": "STRICT",
     "currencies": ["USD"],
     "date": "2017-12-11",
     "entry_hash": "ENTRY_HASH",
@@ -22,13 +22,13 @@
     "entry_hash": "ENTRY_HASH",
     "meta": {
       "account-value": "Assets:Cash",
-      "amount-value": { "currency": "USD", "number": "10", "t": "Amount" },
+      "amount-value": { "currency": "USD", "number": "10" },
       "bool-value": true,
       "currency-value": "USD",
       "date-value": "2022-12-12",
       "filename": "<string>",
       "lineno": 6,
-      "number-value": { "t": "Decimal", "value": "20" },
+      "number-value": "20",
       "string-value": "value"
     },
     "t": "Event",
@@ -38,7 +38,7 @@
     "account": "Assets:Cash",
     "amount": { "currency": "USD", "number": "1" },
     "date": "2017-12-13",
-    "diff_amount": { "currency": "USD", "number": -1 },
+    "diff_amount": { "currency": "USD", "number": "-1" },
     "entry_hash": "ENTRY_HASH",
     "meta": { "filename": "<string>", "lineno": 3 },
     "t": "Balance",
@@ -52,7 +52,7 @@
     "entry_hash": "ENTRY_HASH",
     "meta": { "filename": "<string>", "lineno": 4 },
     "t": "Balance",
-    "tolerance": 1.0
+    "tolerance": "1.0"
   },
   {
     "account": "Assets:Cash",

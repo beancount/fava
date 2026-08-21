@@ -6,7 +6,6 @@ import os
 import re
 import threading
 from codecs import encode
-from dataclasses import replace
 from hashlib import sha256
 from operator import attrgetter
 from pathlib import Path
@@ -495,7 +494,7 @@ def insert_entry(
         path,
         [
             (
-                replace(option, lineno=option.lineno + added_lines)
+                option.set_lineno(option.lineno + added_lines)
                 if option.filename == filename and option.lineno > lineno
                 else option
             )

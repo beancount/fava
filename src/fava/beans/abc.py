@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from abc import ABC
 from abc import abstractmethod
-from typing import Any
 from typing import TYPE_CHECKING
 
 from beancount.core import data
@@ -181,7 +180,7 @@ class Custom(Directive):
 
     @property
     @abstractmethod
-    def values(self) -> Sequence[Any]:
+    def values(self) -> Sequence[protocols.ValueType]:
         """Custom values."""
 
 
@@ -200,12 +199,12 @@ class Document(Directive):
 
     @property
     @abstractmethod
-    def tags(self) -> frozenset[str]:
+    def tags(self) -> frozenset[str] | None:
         """Entry tags."""
 
     @property
     @abstractmethod
-    def links(self) -> frozenset[str]:
+    def links(self) -> frozenset[str] | None:
         """Entry links."""
 
 
@@ -214,8 +213,13 @@ class Event(Directive):
 
     @property
     @abstractmethod
-    def account(self) -> str:
-        """Account of the directive."""
+    def type(self) -> str:
+        """Type of the event."""
+
+    @property
+    @abstractmethod
+    def description(self) -> str:
+        """Description of the event."""
 
 
 class Note(Directive):
@@ -231,6 +235,16 @@ class Note(Directive):
     def comment(self) -> str:
         """Note comment."""
 
+    @property
+    @abstractmethod
+    def tags(self) -> frozenset[str] | None:
+        """Entry tags."""
+
+    @property
+    @abstractmethod
+    def links(self) -> frozenset[str] | None:
+        """Entry links."""
+
 
 class Open(Directive):
     """A Beancount Open directive."""
@@ -242,7 +256,7 @@ class Open(Directive):
 
     @property
     @abstractmethod
-    def currencies(self) -> Sequence[str]:
+    def currencies(self) -> Sequence[str] | None:
         """Valid currencies for the account."""
 
     @property

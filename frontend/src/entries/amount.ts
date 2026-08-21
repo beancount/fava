@@ -1,6 +1,6 @@
 import type { FormatterContext } from "../format.ts";
 import type { Validator } from "../lib/validation.ts";
-import { number, object, string } from "../lib/validation.ts";
+import { decimal, object, string } from "../lib/validation.ts";
 
 /** An amount is a pair of number and currency. */
 export class Amount {
@@ -17,7 +17,7 @@ export class Amount {
     return $ctx.amount(this.number, this.currency);
   }
 
-  private static raw_validator = object({ number, currency: string });
+  private static raw_validator = object({ number: decimal, currency: string });
 
   static validator: Validator<Amount> = (json) =>
     Amount.raw_validator(json).map(
@@ -27,12 +27,10 @@ export class Amount {
 
 /** A raw amount is a pair of number (as a string) and currency. */
 export class RawAmount {
-  readonly t: "Amount";
   readonly number: string;
   readonly currency: string;
 
   constructor(number: string, currency: string) {
-    this.t = "Amount";
     this.number = number;
     this.currency = currency;
   }

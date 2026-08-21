@@ -10,7 +10,6 @@ import re
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
-from typing import Any
 from typing import TYPE_CHECKING
 
 from flask import jsonify
@@ -34,7 +33,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.tree import TreeNode
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class Portfolio:
     """A portfolio.
 
@@ -132,7 +131,7 @@ def account_metadata_pattern_portfolio(
 
 
 def portfolio_accounts(
-    config: Any,
+    config: object,
     filter_str: str | None = None,
 ) -> list[Portfolio]:
     """Get an account tree based on matching regex patterns."""
@@ -142,6 +141,7 @@ def portfolio_accounts(
         return [account_name_pattern_portfolio(tree, filter_str)]
 
     portfolios = []
+    assert isinstance(config, list)  # noqa: S101
     for key, value in config:
         if key == "account_name_pattern":
             portfolios.append(account_name_pattern_portfolio(tree, value))

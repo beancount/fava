@@ -11,29 +11,36 @@ This is not intended to work well enough for full roundtrips yet.
 from __future__ import annotations
 
 import datetime
-from copy import copy
+import re
+from collections.abc import Mapping
 from decimal import Decimal
 from functools import singledispatch
 from typing import Any
-from typing import TYPE_CHECKING
 
+from beancount.core import amount
 from beancount.parser.parser import parse_string
 
+from fava._structs import Balance
+from fava._structs import Close
+from fava._structs import Commodity
+from fava._structs import Custom
+from fava._structs import Document
+from fava._structs import Event
+from fava._structs import Note
+from fava._structs import Open
+from fava._structs import Pad
+from fava._structs import Posting
+from fava._structs import Price
+from fava._structs import Query
+from fava._structs import Transaction
+from fava.beans import abc
 from fava.beans import create
-from fava.beans.abc import Balance
-from fava.beans.abc import Custom
-from fava.beans.abc import Directive
-from fava.beans.abc import Posting
-from fava.beans.abc import Price
-from fava.beans.abc import Transaction
+from fava.beans import protocols
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
+from fava.core.inventory import _Amount
 from fava.helpers import FavaAPIError
-
-if TYPE_CHECKING:  # pragma: no cover
-    from fava.beans.abc import Meta
-    from fava.beans.abc import MetaValue
 
 
 class InvalidAmountError(FavaAPIError):
@@ -43,187 +50,258 @@ class InvalidAmountError(FavaAPIError):
         super().__init__(f"Invalid amount: {amount}")
 
 
-def _serialise_meta_value(value: MetaValue) -> Any:
-    """Serialise a single metadata value, tagging Decimal and Amount."""
-    if isinstance(value, Decimal):
-        return {"t": "Decimal", "value": str(value)}
-    if hasattr(value, "number") and hasattr(value, "currency"):
-        return {
-            "t": "Amount",
-            "number": str(value.number),
-            "currency": value.currency,
-        }
-    return value
-
-
-def _serialise_meta(meta: Meta | None) -> dict[str, Any]:
-    """Serialise a metadata mapping, tagging Decimal and Amount values."""
-    if not meta:
-        return {}
-    return {key: _serialise_meta_value(value) for key, value in meta.items()}
-
-
-def _deserialise_meta_value(value: Any) -> Any:
-    """Deserialise a single metadata value, restoring Decimal and Amount."""
-    if isinstance(value, dict):
-        tag = value.get("t")
-        if tag == "Decimal":
-            return Decimal(value["value"])
-        if tag == "Amount":
-            return create.amount(Decimal(value["number"]), value["currency"])
-    return value
-
-
-def _deserialise_meta(meta: Any) -> dict[str, Any]:
-    """Deserialise a metadata mapping, restoring Decimal and Amount values."""
-    if not meta:
-        return {}
-    return {key: _deserialise_meta_value(value) for key, value in meta.items()}
+SerialisableValue = (
+    abc.Directive
+    | amount.Amount
+    | protocols.Amount
+    | datetime.date
+    | str
+    | int
+    | Decimal
+    | Mapping[str, "SerialisableValue"]
+)
 
 
 @singledispatch
-def serialise(entry: Directive | Posting) -> Any:
-    """Serialise an entry or posting."""
-    if not isinstance(entry, Directive):  # pragma: no cover
-        msg = f"Unsupported object {entry}"
-        raise TypeError(msg)
-    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
-    ret["meta"] = _serialise_meta(entry.meta)
-    ret["entry_hash"] = hash_entry(entry)
-    ret["t"] = entry.__class__.__name__
-    return ret
+def serialise(o: SerialisableValue) -> object:
+    """Map a value so that it can be serialised to JSON."""
+    # Serialise a value that does not need any special handling
+    return o
 
 
-@serialise.register(Transaction)
-def _(entry: Transaction) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
-    ret["meta"] = copy(entry.meta)
-    ret["meta"].pop("__tolerances__", None)
-    ret["meta"] = _serialise_meta(ret["meta"])
-    ret["t"] = "Transaction"
-    ret["entry_hash"] = hash_entry(entry)
-    ret["payee"] = entry.payee or ""
-    ret["postings"] = list(map(serialise, entry.postings))
-    return ret
+def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
+    return {k: serialise(v) for k, v in o.items()}
 
 
-@serialise.register(Custom)
-def _(entry: Custom) -> Any:
-    ret = entry._asdict()  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
-    ret["meta"] = _serialise_meta(entry.meta)
-    ret["t"] = "Custom"
-    ret["entry_hash"] = hash_entry(entry)
-    ret["values"] = [v.value for v in entry.values]
-    return ret
+serialise.register(dict, _serialise_dict)
 
 
-@serialise.register(Balance)
-def _(entry: Balance) -> Any:
-    amount = entry.amount
-    return {
-        "t": "Balance",
-        "entry_hash": hash_entry(entry),
-        "date": entry.date,
-        "meta": _serialise_meta(entry.meta),
-        "account": entry.account,
-        "amount": {"number": str(amount.number), "currency": amount.currency},
-        "diff_amount": entry.diff_amount,
-        "tolerance": entry.tolerance,
-    }
+@serialise.register
+def _(o: amount.Amount) -> _Amount:
+    return _Amount.from_amount(o)
 
 
-@serialise.register(Price)
-def _(entry: Price) -> Any:
-    amount = entry.amount
-    return {
-        "t": "Price",
-        "entry_hash": hash_entry(entry),
-        "date": entry.date,
-        "meta": _serialise_meta(entry.meta),
-        "currency": entry.currency,
-        "amount": {"number": str(amount.number), "currency": amount.currency},
-    }
+@serialise.register
+def _(o: abc.Balance) -> Balance:
+    return Balance(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+        amount=_Amount.from_amount(o.amount),
+        diff_amount=_Amount.from_amount(o.diff_amount),
+        tolerance=o.tolerance,
+    )
 
 
-@serialise.register(Posting)
-def _(posting: Posting) -> Any:
-    position_str = to_string(posting) if posting.units is not None else ""
-
-    if posting.price is not None:
-        position_str += f" @ {to_string(posting.price)}"
-
-    ret: dict[str, Any] = {"account": posting.account, "amount": position_str}
-    if posting.meta:
-        ret["meta"] = _serialise_meta(posting.meta)
-    return ret
+@serialise.register
+def _(o: abc.Close) -> Close:
+    return Close(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+    )
 
 
-def deserialise_posting(posting: Any) -> Posting:
+@serialise.register
+def _(o: abc.Commodity) -> Commodity:
+    return Commodity(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        currency=o.currency,
+    )
+
+
+@serialise.register
+def _(o: abc.Custom) -> Custom:
+    return Custom(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        type=o.type,
+        values=[serialise(v.value) for v in o.values],  # type: ignore[misc]  # ty: ignore[invalid-argument-type]
+    )
+
+
+@serialise.register
+def _(o: abc.Document) -> Document:
+    return Document(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+        filename=o.filename,
+        tags=o.tags,
+        links=o.links,
+    )
+
+
+@serialise.register
+def _(o: abc.Event) -> Event:
+    return Event(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        type=o.type,
+        description=o.description,
+    )
+
+
+@serialise.register
+def _(o: abc.Note) -> Note:
+    return Note(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+        comment=o.comment,
+        tags=o.tags,
+        links=o.links,
+    )
+
+
+@serialise.register
+def _(o: abc.Open) -> Open:
+    return Open(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+        currencies=list(o.currencies) if o.currencies else None,
+        booking=o.booking,
+    )
+
+
+@serialise.register
+def _(o: abc.Pad) -> Pad:
+    return Pad(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        account=o.account,
+        source_account=o.source_account,
+    )
+
+
+@serialise.register
+def _(o: abc.Price) -> Price:
+    return Price(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        currency=o.currency,
+        amount=_Amount.from_amount(o.amount),
+    )
+
+
+@serialise.register
+def _(o: abc.Query) -> Query:
+    return Query(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        name=o.name,
+        query_string=o.query_string,
+    )
+
+
+def _serialise_posting(o: abc.Posting) -> Posting:
+    position_str = to_string(o) if o.units is not None else ""
+
+    if o.price is not None:
+        position_str += f" @ {to_string(o.price)}"
+
+    return Posting(
+        account=o.account,
+        amount=position_str,
+        meta=_serialise_dict(o.meta) if o.meta is not None else None,
+    )
+
+
+@serialise.register
+def _(o: abc.Transaction) -> Transaction:
+    return Transaction(
+        entry_hash=hash_entry(o),
+        date=o.date,
+        meta=_serialise_dict(o.meta),
+        flag=o.flag,
+        narration=o.narration,
+        postings=list(map(_serialise_posting, o.postings)),
+        payee=o.payee or "",
+        tags=o.tags,
+        links=o.links,
+    )
+
+
+# Matches a bare decimal number, e.g. "10.10" or "-5", as sent by the
+# frontend for metadata values that are Decimal instances there.
+_DECIMAL_RE = re.compile(r"-?\d+(?:\.\d+)?")
+
+
+def _deserialise_meta_value(
+    o: str | bool | _Amount,  # noqa: FBT001
+) -> str | bool | Decimal | protocols.Amount:
+    """Deserialise a single metadata value, restoring Decimal and Amount."""
+    if isinstance(o, str) and _DECIMAL_RE.fullmatch(o):
+        return Decimal(o)
+    if isinstance(o, _Amount):
+        return create.amount(o.number, o.currency)
+    return o
+
+
+def _deserialise_meta(
+    o: Mapping[str, str | bool | _Amount],
+) -> Mapping[str, str | bool | Decimal | protocols.Amount]:
+    """Deserialise a metadata mapping, restoring Decimal and Amount values."""
+    return {key: _deserialise_meta_value(value) for key, value in o.items()}
+
+
+def _deserialise_posting(posting: Posting) -> abc.Posting:
     """Parse JSON to a Beancount Posting."""
-    amount = posting.get("amount", "")
     entries, errors, _ = parse_string(
-        f'2000-01-01 * "" ""\n Assets:Account {amount}',
+        f'2000-01-01 * "" ""\n Assets:Account {posting.amount}',
     )
     if errors:
-        raise InvalidAmountError(amount)
+        raise InvalidAmountError(posting.amount)
     txn = entries[0]
-    if not isinstance(txn, Transaction):  # pragma: no cover
+    if not isinstance(txn, abc.Transaction):  # pragma: no cover
         msg = "Expected transaction"
         raise TypeError(msg)
     pos = txn.postings[0]
     return replace(
         pos,
-        account=posting["account"],
-        meta=_deserialise_meta(posting.get("meta")) or None,
+        account=posting.account,
+        meta=_deserialise_meta(posting.meta) if posting.meta else None,
     )
 
 
-def deserialise(json_entry: Any) -> Directive:
-    """Parse JSON to a Beancount entry.
-
-    Args:
-        json_entry: The entry.
-
-    Raises:
-        KeyError: if one of the required entry fields is missing.
-        FavaAPIError: if the type of the given entry is not supported.
-    """
-    try:
-        date = datetime.date.fromisoformat(json_entry.get("date", ""))
-    except ValueError as error:
-        msg = "Invalid entry date."
-        raise FavaAPIError(msg) from error
-    if json_entry["t"] == "Transaction":
-        postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
+def deserialise(entry: Balance | Note | Transaction) -> abc.Directive:
+    """Convert an entry received from the frontend to a Beancount entry."""
+    if isinstance(entry, Transaction):
         return create.transaction(
-            meta=_deserialise_meta(json_entry["meta"]),
-            date=date,
-            flag=json_entry.get("flag", ""),
-            payee=json_entry.get("payee", ""),
-            narration=json_entry["narration"] or "",
-            tags=frozenset(json_entry["tags"]),
-            links=frozenset(json_entry["links"]),
-            postings=postings,
+            meta=_deserialise_meta(entry.meta),
+            date=entry.date,
+            flag=entry.flag,
+            payee=entry.payee,
+            narration=entry.narration,
+            tags=entry.tags,
+            links=entry.links,
+            postings=[_deserialise_posting(pos) for pos in entry.postings],
         )
-    if json_entry["t"] == "Balance":
-        raw_amount = json_entry["amount"]
-        amount = create.amount(
-            Decimal(raw_amount["number"]), raw_amount["currency"]
+    if isinstance(entry, Balance):
+        return create.balance(
+            meta=_deserialise_meta(entry.meta),
+            date=entry.date,
+            account=entry.account,
+            amount=create.amount(entry.amount.number, entry.amount.currency),
         )
 
-        return create.balance(
-            meta=_deserialise_meta(json_entry["meta"]),
-            date=date,
-            account=json_entry["account"],
-            amount=amount,
-        )
-    if json_entry["t"] == "Note":
-        comment = json_entry["comment"].replace('"', "")
-        return create.note(
-            meta=_deserialise_meta(json_entry["meta"]),
-            date=date,
-            account=json_entry["account"],
-            comment=comment,
-        )
-    msg = "Unsupported entry type."
-    raise FavaAPIError(msg)
+    comment = entry.comment.replace('"', "")
+    return create.note(
+        meta=_deserialise_meta(entry.meta),
+        date=entry.date,
+        account=entry.account,
+        comment=comment,
+    )

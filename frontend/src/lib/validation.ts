@@ -24,6 +24,11 @@ class TypeDateValidationError extends ValidationError {
     super("Validation of date failed: invalid type or length");
   }
 }
+class DecimalValidationError extends ValidationError {
+  constructor() {
+    super("Validation of decimal failed.");
+  }
+}
 class ConstantValidationError extends ValidationError {
   constructor() {
     super("Validation of constant failed");
@@ -142,6 +147,23 @@ export const number: Validator<number> = (json) =>
   typeof json === "number"
     ? ok(json)
     : err(new PrimitiveValidationError("number"));
+
+/**
+ * Validate a decimal number.
+ *
+ * These are serialised as strings (rather than JSON numbers) by the backend
+ * to avoid loss of precision, so this parses the string back to a JS number
+ * - which is fine as we do not need arbitrary precision on the frontend.
+ */
+export const decimal: Validator<number> = (json) => {
+  if (typeof json === "string") {
+    const parsed = Number(json);
+    if (!Number.isNaN(parsed)) {
+      return ok(parsed);
+    }
+  }
+  return err(new DecimalValidationError());
+};
 
 /**
  * Validate a date (from a string).

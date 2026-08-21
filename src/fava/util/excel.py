@@ -5,16 +5,17 @@ from __future__ import annotations
 import csv
 import datetime
 import io
+from collections.abc import Set as AbstractSet
 from decimal import Decimal
 from importlib.util import find_spec
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any
+    from collections.abc import Sequence
 
     from beanquery import Column
 
-    ResultRow = tuple[Any, ...]
+    ResultRow = tuple[object, ...]
 
 
 # Just check whether it's installed here without importing.
@@ -27,8 +28,8 @@ class InvalidResultFormatError(ValueError):  # noqa: D101
 
 
 def to_excel(
-    types: list[Column],
-    rows: list[ResultRow],
+    types: Sequence[Column],
+    rows: Sequence[ResultRow],
     result_format: str,
     query_string: str,
 ) -> io.BytesIO:
@@ -62,7 +63,7 @@ def to_excel(
     return resp
 
 
-def to_csv(types: list[Column], rows: list[ResultRow]) -> io.BytesIO:
+def to_csv(types: Sequence[Column], rows: Sequence[ResultRow]) -> io.BytesIO:
     """Save result to CSV.
 
     Args:
@@ -79,26 +80,28 @@ def to_csv(types: list[Column], rows: list[ResultRow]) -> io.BytesIO:
 
 
 def _result_array(
-    types: list[Column],
-    rows: list[ResultRow],
+    types: Sequence[Column],
+    rows: Sequence[ResultRow],
 ) -> list[list[str | float]]:
     result_array: list[list[str | float]] = [[t.name for t in types]]
     result_array.extend(_row_to_pyexcel(row, types) for row in rows)
     return result_array
 
 
-def _row_to_pyexcel(row: ResultRow, header: list[Column]) -> list[str | float]:
+def _row_to_pyexcel(
+    row: ResultRow, header: Sequence[Column]
+) -> list[str | float]:
     result: list[str | float] = []
     for idx, column in enumerate(header):
         value = row[idx]
         type_ = column.datatype
-        if type_ is set:
+        if type_ is set and isinstance(value, AbstractSet):
             result.append(" ".join(value))
-        elif not value:
-            result.append(value)
-        elif type_ is Decimal:
+        elif value is None:
+            result.append("")
+        elif type_ is Decimal and isinstance(value, Decimal):
             result.append(float(value))
-        elif type_ is int:
+        elif type_ is int and isinstance(value, int):
             result.append(value)
         elif type_ is datetime.date:
             result.append(str(value))

@@ -102,7 +102,7 @@ class _Period(ABC):
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _IntervalPeriod(_Period):
     """A period given by its first day and the interval that it spans."""
 
@@ -115,7 +115,7 @@ class _IntervalPeriod(_Period):
         return DateRange(self.begin, self.interval.get_next(self.begin))
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _YearPeriod(_Period):
     """A calendar year, which can be refined to a month, quarter or week."""
 
@@ -142,7 +142,7 @@ class _YearPeriod(_Period):
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _MonthPeriod(_Period):
     """A month, which can be refined to one of its days."""
 
@@ -163,7 +163,7 @@ class _MonthPeriod(_Period):
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _FiscalYearPeriod(_Period):
     """A fiscal year, which can be refined to one of its quarters."""
 

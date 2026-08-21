@@ -92,7 +92,7 @@ class StatementMetadataInvalidError(FavaAPIError):
         )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class JournalPage:
     """A page of journal entries."""
 

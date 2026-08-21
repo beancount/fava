@@ -10,6 +10,7 @@ import {
   constant,
   constants,
   date,
+  decimal,
   default_value,
   number,
   object,
@@ -52,7 +53,7 @@ const query_table_raw = object({
   rows: array(array(unknown)),
 });
 
-const optional_number_record = optional(record(number));
+const optional_number_record = optional(record(decimal));
 
 export class Inventory {
   readonly value: Record<string, number>;
@@ -123,11 +124,17 @@ function get_query_column(type: QueryType, index: number) {
         v == null ? 0 : +v,
       );
     case "int":
-    case "Decimal":
       return new NumberSortedQueryColumn(
         type,
         index,
         optional(number),
+        (v) => v ?? 0,
+      );
+    case "Decimal":
+      return new NumberSortedQueryColumn(
+        type,
+        index,
+        optional(decimal),
         (v) => v ?? 0,
       );
     case "set":

@@ -6,7 +6,7 @@ import type { Validator } from "../lib/validation.ts";
 import {
   array,
   date,
-  number,
+  decimal,
   object,
   record,
   string,
@@ -72,7 +72,7 @@ export class LineChart {
 
 const balances_validator = object({
   label: string,
-  data: array(object({ date, balance: record(number) })),
+  data: array(object({ date, balance: record(decimal) })),
 });
 
 type ParsedLineChartData = { date: Date; balance: Record<string, number> }[];

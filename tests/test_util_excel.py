@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 from typing import TYPE_CHECKING
 
 import beanquery
@@ -11,10 +10,14 @@ from beanquery.numberify import numberify_results
 from fava.util import excel
 
 if TYPE_CHECKING:  # pragma: no cover
+    from beanquery import Column
+
     from fava.core import FavaLedger
 
 
-def _run_query(ledger: FavaLedger, query: str) -> Any:
+def _run_query(
+    ledger: FavaLedger, query: str
+) -> tuple[list[Column], list[tuple[object, ...]]]:
     conn = beanquery.connect(
         "beancount:",
         entries=ledger.all_entries,

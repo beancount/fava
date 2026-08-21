@@ -3,7 +3,11 @@
   "entry_hash": "ENTRY_HASH",
   "flag": "*",
   "links": [],
-  "meta": { "filename": "TEST_DATA_DIR/long-example.beancount", "lineno": 729 },
+  "meta": {
+    "__tolerances__": { "USD": "0.005" },
+    "filename": "TEST_DATA_DIR/long-example.beancount",
+    "lineno": 729
+  },
   "narration": "",
   "payee": "EDISON POWER",
   "postings": [

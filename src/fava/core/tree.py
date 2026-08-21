@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass
 from operator import attrgetter
 from typing import TYPE_CHECKING
+
+from msgspec import Struct
 
 from fava.beans.abc import Open
 from fava.beans.account import parent as account_parent
@@ -28,8 +29,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.inventory import SimpleCounterInventory
 
 
-@dataclass(frozen=True)
-class SerialisedTreeNode:
+class SerialisedTreeNode(Struct, frozen=True, omit_defaults=True):
     """A serialised TreeNode."""
 
     account: str
