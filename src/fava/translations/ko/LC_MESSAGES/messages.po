@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.6\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "파일 변경이 감지되었습니다. 클릭하여 새로고침하세요."
 
@@ -94,7 +94,7 @@ msgstr "선언된 계정 중 하나여야 합니다"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "계정"
 
@@ -103,6 +103,10 @@ msgstr "계정"
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
 msgstr "메타데이터 추가"
+
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "금액"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
@@ -136,44 +140,40 @@ msgstr "값"
 msgid "Note"
 msgstr "비고"
 
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "금액"
-
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "거래처"
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "적요"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "분개"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "연도별"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
 msgid "Quarterly"
 msgstr "분기별"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
 msgid "Monthly"
 msgstr "월별"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
 msgid "Weekly"
 msgstr "주별"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
 msgid "Daily"
 msgstr "일별"
 
@@ -220,7 +220,7 @@ msgid "Location"
 msgstr "위치"
 
 #: frontend/src/modals/Export.svelte:13
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:78
 msgid "Export"
 msgstr "내보내기"
 
@@ -244,7 +244,7 @@ msgstr "계정별거래기록"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "변동"
 
@@ -267,7 +267,7 @@ msgid "Price"
 msgstr "가격"
 
 #: frontend/src/reports/commodities/index.ts:32
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Commodities"
 msgstr "통화/자산"
 
@@ -285,7 +285,7 @@ msgid "Name"
 msgstr "이름"
 
 #: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Documents"
 msgstr "문서"
 
@@ -316,12 +316,12 @@ msgstr "모두 접기"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
+#: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"
 msgstr "옵션"
 
 #: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
+#: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "편집기"
 
@@ -340,7 +340,7 @@ msgid "No errors."
 msgstr "오류 없음."
 
 #: frontend/src/reports/errors/index.ts:6
-#: frontend/src/sidebar/AsideContents.svelte:68
+#: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Errors"
 msgstr "오류"
 
@@ -350,7 +350,7 @@ msgstr "설명"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
-#: frontend/src/sidebar/AsideContents.svelte:50
+#: frontend/src/sidebar/AsideContents.svelte:53
 msgid "Events"
 msgstr "이벤트"
 
@@ -363,10 +363,19 @@ msgstr "이벤트: %(type)s"
 msgid "No events."
 msgstr "이벤트 없음."
 
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "도움말페이지"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:81
+msgid "Help"
+msgstr "도움말"
+
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:48
 msgid "Holdings"
 msgstr "보유자산"
 
@@ -387,13 +396,13 @@ msgstr "취득통화"
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
-#: frontend/src/sidebar/AsideContents.svelte:31
+#: frontend/src/sidebar/AsideContents.svelte:34
 msgid "Query"
 msgstr "쿼리"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:70
-#: frontend/src/sidebar/AsideContents.svelte:72
+#: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "가져오기"
 
@@ -492,7 +501,7 @@ msgid "Change"
 msgstr "변동"
 
 #: frontend/src/reports/journal/index.ts:58
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "거래기록"
 
@@ -564,75 +573,75 @@ msgid "Last Entry"
 msgstr "최근거래"
 
 #: frontend/src/reports/statistics/index.ts:37
-#: frontend/src/sidebar/AsideContents.svelte:54
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "통계"
 
 #: frontend/src/reports/tree_reports/index.ts:38
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Income Statement"
 msgstr "손익계산서"
 
 #: frontend/src/reports/tree_reports/index.ts:49
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Balance Sheet"
 msgstr "재무상태표"
 
 #: frontend/src/reports/tree_reports/index.ts:63
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:32
 msgid "Trial Balance"
 msgstr "시산표"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "계정이동"
 
-#: frontend/src/sidebar/AsideContents.svelte:61
+#: frontend/src/sidebar/AsideContents.svelte:64
 msgid "Add Journal Entry"
 msgstr "거래기록추가"
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "도움말"
+#: frontend/src/sidebar/AsideContents.svelte:85
+msgid "Show keyboard shortcuts"
+msgstr ""
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "조회기간"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "당기순이익"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "사각계층그래프"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "원형계층그래프"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr "수직계층그래프"
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "꺾은선그래프"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "면적그래프"
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr "누적막대그래프"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr "단일막대그래프"
 
@@ -676,14 +685,10 @@ msgstr "계정잔액"
 msgid "Net Worth"
 msgstr "순자산"
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "수익"
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "비용"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "도움말페이지"

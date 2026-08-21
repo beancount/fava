@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -88,7 +88,7 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Účet"
 
@@ -97,6 +97,10 @@ msgstr "Účet"
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
 msgstr "Pridať metadáta"
+
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "Suma"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
@@ -130,44 +134,40 @@ msgstr "Hodnota"
 msgid "Note"
 msgstr "Poznámka"
 
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "Suma"
-
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Príjemca"
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Popis"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Položky"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "Ročne"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
 msgid "Daily"
 msgstr "Denne"
 
@@ -216,7 +216,7 @@ msgid "Location"
 msgstr "Poloha"
 
 #: frontend/src/modals/Export.svelte:13
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:78
 msgid "Export"
 msgstr "Exportovať"
 
@@ -241,7 +241,7 @@ msgstr "Register účtu"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Zmeny"
 
@@ -264,7 +264,7 @@ msgid "Price"
 msgstr "Cena"
 
 #: frontend/src/reports/commodities/index.ts:32
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Commodities"
 msgstr "Komodity"
 
@@ -282,7 +282,7 @@ msgid "Name"
 msgstr ""
 
 #: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Documents"
 msgstr ""
 
@@ -313,12 +313,12 @@ msgstr "Zhrnúť všetko"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
+#: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"
 msgstr "Možnosti"
 
 #: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
+#: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Editor"
 
@@ -337,7 +337,7 @@ msgid "No errors."
 msgstr "Žiadne chyby."
 
 #: frontend/src/reports/errors/index.ts:6
-#: frontend/src/sidebar/AsideContents.svelte:68
+#: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Errors"
 msgstr "Chyby"
 
@@ -347,7 +347,7 @@ msgstr "Popis"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
-#: frontend/src/sidebar/AsideContents.svelte:50
+#: frontend/src/sidebar/AsideContents.svelte:53
 msgid "Events"
 msgstr "Udalosti"
 
@@ -362,10 +362,20 @@ msgstr "Udalosť: %(type)s"
 msgid "No events."
 msgstr "Udalosti"
 
+#: frontend/src/reports/help/Help.svelte:11
+#, fuzzy
+msgid "Help pages"
+msgstr "Pomocné stránky"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:81
+msgid "Help"
+msgstr "Pomoc"
+
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:48
 #, fuzzy
 msgid "Holdings"
 msgstr "Vlastníctvo"
@@ -387,14 +397,14 @@ msgstr "Mena výdavku"
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
-#: frontend/src/sidebar/AsideContents.svelte:31
+#: frontend/src/sidebar/AsideContents.svelte:34
 #, fuzzy
 msgid "Query"
 msgstr "Dotaz"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:70
-#: frontend/src/sidebar/AsideContents.svelte:72
+#: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "Importovať"
 
@@ -494,7 +504,7 @@ msgid "Change"
 msgstr "Zmena"
 
 #: frontend/src/reports/journal/index.ts:58
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Účtovná kniha"
 
@@ -569,78 +579,78 @@ msgid "Last Entry"
 msgstr "Posledný zápis"
 
 #: frontend/src/reports/statistics/index.ts:37
-#: frontend/src/sidebar/AsideContents.svelte:54
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Štatistiky"
 
 #: frontend/src/reports/tree_reports/index.ts:38
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Income Statement"
 msgstr "Výkaz ziskov a strát"
 
 #: frontend/src/reports/tree_reports/index.ts:49
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Balance Sheet"
 msgstr "Súvaha"
 
 #: frontend/src/reports/tree_reports/index.ts:63
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:32
 #, fuzzy
 msgid "Trial Balance"
 msgstr "Hrubá súvaha"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:61
+#: frontend/src/sidebar/AsideContents.svelte:64
 msgid "Add Journal Entry"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Pomoc"
+#: frontend/src/sidebar/AsideContents.svelte:85
+msgid "Show keyboard shortcuts"
+msgstr ""
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Čas"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Čistý zisk"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr ""
 
@@ -684,15 +694,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Príjem"
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Výdavky"
-
-#: src/fava/templates/help.html:8
-#, fuzzy
-msgid "Help pages"
-msgstr "Pomocné stránky"

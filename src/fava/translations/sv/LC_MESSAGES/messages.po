@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.16.1-dev\n"
 
-#: frontend/src/app.ts:84
+#: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
 msgstr "Filändring upptäckt. Klicka för att ladda om."
 
@@ -92,7 +92,7 @@ msgstr "Bör vara ett av de deklarerade kontona"
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
-#: frontend/src/sidebar/FilterForm.svelte:98
+#: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
 msgstr "Konto"
 
@@ -101,6 +101,10 @@ msgstr "Konto"
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
 msgstr "Lägg till metadata"
+
+#: frontend/src/entry-forms/AmountInput.svelte:36
+msgid "Amount"
+msgstr "Belopp"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
@@ -134,44 +138,40 @@ msgstr "Värde"
 msgid "Note"
 msgstr "Anteckning"
 
-#: frontend/src/entry-forms/Posting.svelte:100
-msgid "Amount"
-msgstr "Belopp"
-
-#: frontend/src/entry-forms/Transaction.svelte:77
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Mottagare"
 
-#: frontend/src/entry-forms/Transaction.svelte:92
-#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:96
+#: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr "Beskrivning"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr "Poster"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:128
+#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
 msgid "Yearly"
 msgstr "Årligt"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:148
+#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
 msgid "Quarterly"
 msgstr "Kvartalsvis"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:174
+#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
 msgid "Monthly"
 msgstr "Månatligt"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:196
+#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
 msgid "Weekly"
 msgstr "Veckovis"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:221
+#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
 msgid "Daily"
 msgstr "Dagligt"
 
@@ -222,7 +222,7 @@ msgid "Location"
 msgstr "Plats"
 
 #: frontend/src/modals/Export.svelte:13
-#: frontend/src/sidebar/AsideContents.svelte:73
+#: frontend/src/sidebar/AsideContents.svelte:78
 msgid "Export"
 msgstr "Exportera"
 
@@ -246,7 +246,7 @@ msgstr "Kontojournal"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:786
+#: src/fava/json_api.py:830
 msgid "Changes"
 msgstr "Ändringar"
 
@@ -269,7 +269,7 @@ msgid "Price"
 msgstr "Pris"
 
 #: frontend/src/reports/commodities/index.ts:32
-#: frontend/src/sidebar/AsideContents.svelte:46
+#: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Commodities"
 msgstr "Handelsvaror"
 
@@ -287,7 +287,7 @@ msgid "Name"
 msgstr "Namn"
 
 #: frontend/src/reports/documents/index.ts:19
-#: frontend/src/sidebar/AsideContents.svelte:47
+#: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Documents"
 msgstr "Dokument"
 
@@ -318,12 +318,12 @@ msgstr "Stäng alla sektioner"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
-#: frontend/src/sidebar/AsideContents.svelte:75
+#: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"
 msgstr "Inställningar"
 
 #: frontend/src/reports/editor/index.ts:33
-#: frontend/src/sidebar/AsideContents.svelte:57
+#: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Redigerare"
 
@@ -342,7 +342,7 @@ msgid "No errors."
 msgstr "Inga fel."
 
 #: frontend/src/reports/errors/index.ts:6
-#: frontend/src/sidebar/AsideContents.svelte:68
+#: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Errors"
 msgstr "Fel"
 
@@ -352,7 +352,7 @@ msgstr "Beskrivning"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
-#: frontend/src/sidebar/AsideContents.svelte:50
+#: frontend/src/sidebar/AsideContents.svelte:53
 msgid "Events"
 msgstr "Händelser"
 
@@ -367,10 +367,19 @@ msgstr "Händelse: %(type)s"
 msgid "No events."
 msgstr "Händelser"
 
+#: frontend/src/reports/help/Help.svelte:11
+msgid "Help pages"
+msgstr "Hjälpsidor"
+
+#: frontend/src/reports/help/index.ts:35
+#: frontend/src/sidebar/AsideContents.svelte:81
+msgid "Help"
+msgstr "Hjälp"
+
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
-#: frontend/src/sidebar/AsideContents.svelte:45
+#: frontend/src/sidebar/AsideContents.svelte:48
 msgid "Holdings"
 msgstr "Innehav"
 
@@ -391,13 +400,13 @@ msgstr "Valutakostnad"
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
-#: frontend/src/sidebar/AsideContents.svelte:31
+#: frontend/src/sidebar/AsideContents.svelte:34
 msgid "Query"
 msgstr "Uppslag"
 
 #: frontend/src/reports/import/Extract.svelte:58
 #: frontend/src/reports/import/index.ts:70
-#: frontend/src/sidebar/AsideContents.svelte:72
+#: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "Importera"
 
@@ -496,7 +505,7 @@ msgid "Change"
 msgstr "Ändra"
 
 #: frontend/src/reports/journal/index.ts:58
-#: frontend/src/sidebar/AsideContents.svelte:30
+#: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Huvudbok"
 
@@ -572,77 +581,77 @@ msgid "Last Entry"
 msgstr "Senaste inlägg"
 
 #: frontend/src/reports/statistics/index.ts:37
-#: frontend/src/sidebar/AsideContents.svelte:54
+#: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Statistik"
 
 #: frontend/src/reports/tree_reports/index.ts:38
-#: frontend/src/sidebar/AsideContents.svelte:27
+#: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Income Statement"
 msgstr "Resultaträkning"
 
 #: frontend/src/reports/tree_reports/index.ts:49
-#: frontend/src/sidebar/AsideContents.svelte:28
+#: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Balance Sheet"
 msgstr "Balansräkning"
 
 #: frontend/src/reports/tree_reports/index.ts:63
-#: frontend/src/sidebar/AsideContents.svelte:29
+#: frontend/src/sidebar/AsideContents.svelte:32
 msgid "Trial Balance"
 msgstr "Råbalans"
 
-#: frontend/src/sidebar/AccountSelector.svelte:22
+#: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
 msgstr "Gå till konto"
 
-#: frontend/src/sidebar/AsideContents.svelte:61
+#: frontend/src/sidebar/AsideContents.svelte:64
 msgid "Add Journal Entry"
 msgstr ""
 
-#: frontend/src/sidebar/AsideContents.svelte:76 src/fava/templates/help.html:3
-msgid "Help"
-msgstr "Hjälp"
+#: frontend/src/sidebar/AsideContents.svelte:85
+msgid "Show keyboard shortcuts"
+msgstr ""
 
-#: frontend/src/sidebar/FilterForm.svelte:87
+#: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
 msgstr "Tid"
 
-#: frontend/src/sidebar/FilterForm.svelte:109
+#: frontend/src/sidebar/FilterForm.svelte:63
 #, fuzzy
 #| msgid "Filter by tag, payee, ..."
 msgid "Filter by tag, payee, …"
 msgstr "Filtrera efter etikett, mottagare, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:683
-#: src/fava/json_api.py:701
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
+#: src/fava/json_api.py:745
 msgid "Net Profit"
 msgstr "Nettoresultat"
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:29
 msgid "Treemap"
 msgstr "Trädkarta"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:30
 msgid "Sunburst"
 msgstr "Sunburst"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:31
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:44
 msgid "Line chart"
 msgstr "Linjediagram"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:45
 msgid "Area chart"
 msgstr "Områdesdiagram"
 
-#: frontend/src/stores/chart.ts:57
+#: frontend/src/stores/chart.ts:58
 msgid "Stacked Bars"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:59
 msgid "Single Bars"
 msgstr ""
 
@@ -686,14 +695,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:689
+#: src/fava/json_api.py:733
 msgid "Income"
 msgstr "Intäkter"
 
-#: src/fava/json_api.py:695
+#: src/fava/json_api.py:739
 msgid "Expenses"
 msgstr "Utgifter"
-
-#: src/fava/templates/help.html:8
-msgid "Help pages"
-msgstr "Hjälpsidor"
