@@ -1,15 +1,18 @@
 from __future__ import annotations
 
+import datetime
 from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
 
 from beancount.loader import load_file
 
+from fava.beans import create
 from fava.beans.abc import Document
 from fava.beans.abc import Transaction
 from fava.beans.load import load_string
 from fava.plugins.link_documents import DocumentError
+from fava.plugins.link_documents import link_documents
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.types import LoaderResult
@@ -100,6 +103,80 @@ def test_link_documents_error(load_doc: LoaderResult) -> None:
 
     assert len(errors) == 1
     assert len(entries) == 3
+
+
+def test_plugins_posting_metadata(tmp_path: Path) -> None:
+    expenses_foo = tmp_path / "documents" / "Expenses" / "Foo"
+    expenses_foo.mkdir(parents=True)
+    (expenses_foo / "2016-11-02 Test 1.pdf").touch()
+    assets_cash = tmp_path / "documents" / "Assets" / "Cash"
+    assets_cash.mkdir(parents=True)
+    (assets_cash / "2016-11-05 Test 4.pdf").touch()
+
+    beancount_file = tmp_path / "example.beancount"
+    beancount_file.write_text(
+        dedent(
+            f"""
+        option "title" "Test"
+        option "operating_currency" "EUR"
+        option "documents" "{tmp_path / "documents"}"
+
+        plugin "fava.plugins.link_documents"
+
+        2016-10-30 open Expenses:Foo
+        2016-10-31 open Assets:Cash
+
+        2016-11-01 * "Foo" "Bar"
+            Expenses:Foo                100 EUR
+                document: "2016-11-02 Test 1.pdf"
+            Assets:Cash
+                document: "2016-11-05 Test 4.pdf"
+        """.replace("\\", "\\\\")
+        )
+    )
+
+    entries, errors, _ = load_file(str(beancount_file))
+
+    assert not errors
+    assert len(entries) == 5
+
+    assert isinstance(entries[2], Transaction)
+    assert isinstance(entries[3], Document)
+    assert entries[3].tags
+    assert "linked" in entries[3].tags
+    assert isinstance(entries[4], Document)
+    assert entries[4].tags
+    assert "linked" in entries[4].tags
+    assert entries[2].links == entries[3].links == entries[4].links
+
+
+def test_link_documents_posting_without_meta() -> None:
+    """A posting without any metadata is skipped without error."""
+    date = datetime.date(2016, 11, 1)
+    doc = create.document({}, date, "Assets:Cash", "Test.pdf")
+    txn = create.transaction(
+        {"filename": "<string>", "lineno": 1},
+        date,
+        "*",
+        "Foo",
+        "Bar",
+        postings=[
+            create.posting("Assets:Cash", create.amount("10 EUR")),
+            create.posting(
+                "Assets:Cash",
+                create.amount("-10 EUR"),
+                meta={"document": "Test.pdf"},
+            ),
+        ],
+    )
+
+    new_entries, errors = link_documents([doc, txn], None)
+
+    assert not errors
+    linked_doc = new_entries[0]
+    assert isinstance(linked_doc, Document)
+    assert linked_doc.tags
+    assert "linked" in linked_doc.tags
 
 
 def test_link_documents_missing(tmp_path: Path) -> None:

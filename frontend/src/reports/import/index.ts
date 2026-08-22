@@ -1,5 +1,5 @@
 import { get_imports } from "../../api/index.ts";
-import { todayAsString } from "../../format.ts";
+import { today_as_string } from "../../format.ts";
 import { _ } from "../../i18n.ts";
 import { Route } from "../route.ts";
 import ImportSvelte from "./Import.svelte";
@@ -18,7 +18,7 @@ class FileImporterInfo {
   readonly account: string;
   /** Name of the importer (uniquely identifies the importer). */
   readonly importer_name: string | null;
-  /** New file basename, as inititally determined by the importer */
+  /** New file basename, as initially determined by the importer */
   readonly new_name: string;
 
   constructor(account: string, importer_name: string | null, new_name: string) {
@@ -48,7 +48,7 @@ export const import_report = new Route<ImportReportProps>(
   async () =>
     get_imports()
       .then((files) => {
-        const today = todayAsString();
+        const today = today_as_string();
         return files.map(({ name, basename, importers }) => ({
           name,
           basename,

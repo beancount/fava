@@ -1,60 +1,12 @@
 import type { Attachment } from "svelte/attachments";
 
 /**
- * Add a tooltip showing the keyboard shortcut over the target element.
- * @param target - The target element to show the tooltip on.
- * @returns A function to remove event handler.
- */
-function showTooltip(target: HTMLElement, description: string): () => void {
-  const hidden = target.hidden !== false;
-  if (hidden) {
-    target.hidden = false;
-  }
-  const tooltip = document.createElement("div");
-  tooltip.className = "keyboard-tooltip";
-  tooltip.textContent = description;
-  document.body.appendChild(tooltip);
-  const targetRect = target.getBoundingClientRect();
-  // Padded 10px to the left if there is space or centered otherwise
-  const left =
-    targetRect.left +
-    Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
-  const top = targetRect.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
-  tooltip.style.left = `${left.toString()}px`;
-  tooltip.style.top = `${(top + window.scrollY).toString()}px`;
-  return () => {
-    tooltip.remove();
-    if (hidden) {
-      target.hidden = true;
-    }
-  };
-}
-
-/**
- * Show all keyboard shortcut tooltips.
- */
-function showTooltips(): () => void {
-  const removes: (() => void)[] = [];
-  document.querySelectorAll("[data-key]").forEach((el) => {
-    const key = el.getAttribute("data-key");
-    if (el instanceof HTMLElement && key != null) {
-      removes.push(showTooltip(el, key));
-    }
-  });
-  return () => {
-    removes.forEach((r) => {
-      r();
-    });
-  };
-}
-
-/**
  * Ignore events originating from editable elements.
  * @param element - The element to check.
  * @returns true if the element is one of input/select/textarea or a
  *          contentEditable element.
  */
-function isEditableElement(element: EventTarget | null): boolean {
+function is_editable_element(element: EventTarget | null): boolean {
   return (
     element instanceof HTMLElement &&
     (element instanceof HTMLInputElement ||
@@ -129,7 +81,7 @@ export function normalise_key(event: KeyboardEvent): string {
  * Dispatch to the relevant handler.
  */
 function keydown(event: KeyboardEvent): void {
-  if (isEditableElement(event.target)) {
+  if (is_editable_element(event.target)) {
     // ignore events in editable elements.
     return;
   }
@@ -169,7 +121,7 @@ export const modKey = isMac ? "Cmd" : "Ctrl";
  * Get the keyboard key specifier string for the current platform.
  * @param spec - The key spec.
  */
-function getKeySpecKey(spec: KeySpec): KeyCombo {
+function get_key_spec_key(spec: KeySpec): KeyCombo {
   if (typeof spec === "string") {
     return spec;
   }
@@ -180,7 +132,7 @@ function getKeySpecKey(spec: KeySpec): KeyCombo {
  * Get the keyboard key description.
  * @param spec - The key spec.
  */
-function getKeySpecDescription(spec: KeySpec): string {
+function get_key_spec_description(spec: KeySpec): string {
   if (typeof spec === "string") {
     return spec;
   }
@@ -194,8 +146,8 @@ function getKeySpecDescription(spec: KeySpec): string {
  * @param handler - The callback to run on key press.
  * @returns A function to unbind the keyboard handler.
  */
-function bindKey(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
-  const key = getKeySpecKey(spec);
+function bind_key(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
+  const key = get_key_spec_key(spec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     console.error("Only key sequences of length <=2 are supported: ", key);
@@ -223,8 +175,8 @@ export const keyboardShortcut = (
     return null;
   }
   return (node) => {
-    node.setAttribute("data-key", getKeySpecDescription(spec));
-    const unbind = bindKey(spec, node);
+    node.setAttribute("data-key", get_key_spec_description(spec));
+    const unbind = bind_key(spec, node);
     return () => {
       unbind();
       node.removeAttribute("data-key");
@@ -232,22 +184,77 @@ export const keyboardShortcut = (
   };
 };
 
+interface Tooltip {
+  target: HTMLElement;
+  tooltip: HTMLDivElement;
+  target_was_hidden: boolean;
+}
+
+/**
+ * Show keyboard shortcut tooltips.
+ */
+export function show_keyboard_shortcuts(): void {
+  const controller = new AbortController();
+  const { signal } = controller;
+
+  const tooltips: Tooltip[] = [];
+
+  document.querySelectorAll("[data-key]").forEach((target) => {
+    const key = target.getAttribute("data-key");
+    if (target instanceof HTMLElement && key != null) {
+      const target_was_hidden = target.hidden !== false;
+      if (target_was_hidden) {
+        target.hidden = false;
+      }
+      const tooltip = document.createElement("div");
+      tooltip.className = "keyboard-tooltip";
+      tooltip.textContent = key;
+      document.body.appendChild(tooltip);
+
+      tooltips.push({ target, tooltip, target_was_hidden });
+    }
+  });
+
+  tooltips
+    .map(({ target, tooltip }) => {
+      const rect = target.getBoundingClientRect();
+      const left =
+        rect.left +
+        Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10) +
+        window.scrollX;
+      const top =
+        rect.top +
+        (target.offsetHeight - tooltip.offsetHeight) / 2 +
+        window.scrollY;
+      return { left, top, tooltip };
+    })
+    .forEach(({ left, top, tooltip }) => {
+      tooltip.style.left = `${left.toString()}px`;
+      tooltip.style.top = `${top.toString()}px`;
+    });
+
+  const clear_tooltips = () => {
+    tooltips.forEach(({ tooltip, target, target_was_hidden }) => {
+      if (target_was_hidden) {
+        target.hidden = true;
+      }
+      tooltip.remove();
+    });
+    controller.abort();
+  };
+
+  document.addEventListener("mousedown", clear_tooltips, { signal });
+  document.addEventListener("keydown", clear_tooltips, { signal });
+  document.addEventListener("scroll", clear_tooltips, {
+    capture: true,
+    signal,
+  });
+  window.addEventListener("resize", clear_tooltips, { signal });
+}
+
 /**
  * Register the keys to show/hide the tooltips and register the global keydown handler.
  */
-export function initGlobalKeyboardShortcuts(): void {
+export function init_global_keyboard_shortcuts(): void {
   document.addEventListener("keydown", keydown);
-
-  bindKey("?", () => {
-    const hide = showTooltips();
-    const once = () => {
-      hide();
-      document.removeEventListener("mousedown", once);
-      document.removeEventListener("keydown", once);
-      document.removeEventListener("scroll", once);
-    };
-    document.addEventListener("mousedown", once);
-    document.addEventListener("keydown", once);
-    document.addEventListener("scroll", once);
-  });
 }

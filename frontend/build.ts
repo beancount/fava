@@ -1,14 +1,45 @@
-import { readdir, unlink } from "node:fs/promises";
+import { readdir, readFile, unlink } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { type BuildResult, context } from "esbuild";
+import { type BuildResult, context, type Plugin } from "esbuild";
 import svelte from "esbuild-svelte";
+import { Features, transform as transform_css } from "lightningcss";
 
 const filename = fileURLToPath(import.meta.url);
 const outdir = join(dirname(filename), "..", "src", "fava", "static");
 const entryPoints = [join(dirname(filename), "src", "app.ts")];
+
+// Minimum supported browsers. Chrome and Safari are pinned by the ES2023
+// change-array-by-copy methods (`toSorted` and friends), Firefox by the
+// `:has()` CSS selectors.
+const target = ["chrome110", "safari16.4", "firefox121"];
+
+/**
+ * Lower the `light-dark()` colour values in style.css.
+ *
+ * Adds support for Safari < 17.5 (relevant for iOS users stuck on devices only
+ * receiving security fixes) and Chrome < 123. All other lowering is left to esbuild.
+ */
+const lightningcss_plugin: Plugin = {
+  name: "lightningcss",
+  setup(build) {
+    build.onLoad({ filter: /\.css$/ }, async ({ path }) => {
+      const { code, warnings } = transform_css({
+        filename: path,
+        code: await readFile(path),
+        include: Features.LightDark,
+      });
+      return {
+        contents: code,
+        loader: "css",
+        resolveDir: dirname(path),
+        warnings: warnings.map((warning) => ({ text: warning.message })),
+      };
+    });
+  },
+};
 
 async function cleanup_outdir(result: BuildResult<{ metafile: true }>) {
   // Clean all files in outdir except the ones from this build and favicon.ico
@@ -44,12 +75,13 @@ async function run_build(dev: boolean) {
       ".woff2": "file",
     },
     plugins: [
+      lightningcss_plugin,
       svelte({
         compilerOptions: { dev, runes: true },
       }),
     ],
     sourcemap: true,
-    target: "esnext",
+    target,
   });
   console.log(`starting build, dev=${dev.toString()}`);
   try {

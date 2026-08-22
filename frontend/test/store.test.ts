@@ -3,7 +3,7 @@ import { test } from "node:test";
 
 import { get as store_get, writable } from "svelte/store";
 
-import { derived_array, localStorageSyncedStore } from "../src/lib/store.ts";
+import { derived_array, local_storage_synced_store } from "../src/lib/store.ts";
 import { string } from "../src/lib/validation.ts";
 import { setup_jsdom } from "./dom.ts";
 
@@ -30,7 +30,7 @@ test("derived store", () => {
 });
 
 test("localStorage-synced stores", () => {
-  const a = localStorageSyncedStore("test-store", string, () => "default");
+  const a = local_storage_synced_store("test-store", string, () => "default");
   equal(a.key, "fava-test-store");
   deepEqual(a.values(), []);
 
@@ -82,10 +82,10 @@ test("localStorage-synced stores", () => {
 
   throws(() => {
     // The prefix is added automatically.
-    localStorageSyncedStore("fava-test-store", string, () => "value");
+    local_storage_synced_store("fava-test-store", string, () => "value");
   });
   throws(() => {
     // No duplicate stores
-    localStorageSyncedStore("test-store", string, () => "value");
+    local_storage_synced_store("test-store", string, () => "value");
   });
 });

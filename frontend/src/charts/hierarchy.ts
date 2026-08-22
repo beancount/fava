@@ -10,7 +10,7 @@ import type { Validator } from "../lib/validation.ts";
 import {
   array,
   boolean,
-  defaultValue,
+  default_value,
   lazy,
   number,
   object,
@@ -50,7 +50,7 @@ export const account_hierarchy_validator: Validator<AccountTreeNode> = object({
   ),
   cost: optional(inventory),
   cost_children: optional(inventory),
-  has_txns: defaultValue(boolean, () => false),
+  has_txns: default_value(boolean, () => false),
 });
 
 /** The data for a single account in a d3-hierarchy. */

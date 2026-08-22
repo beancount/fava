@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import { _ } from "../i18n.ts";
   import { date as validate_date } from "../lib/validation.ts";
   import { is_closed_account } from "../stores/accounts.ts";
@@ -18,7 +18,7 @@
 
   let { value = $bindable(), suggestions, date, required }: Props = $props();
 
-  let checkValidity = $derived((val: string) =>
+  let check_validity = $derived((val: string) =>
     !$accounts_set.size || $accounts_set.has(val) || (required !== true && !val)
       ? ""
       : _("Should be one of the declared accounts"),
@@ -38,7 +38,8 @@
 <AutocompleteInput
   placeholder={_("Account")}
   bind:value
-  {checkValidity}
+  {check_validity}
+  automatic_selection={true}
   {required}
   suggestions={filtered_suggestions}
 />

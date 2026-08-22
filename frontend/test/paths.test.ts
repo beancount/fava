@@ -1,7 +1,12 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { test } from "node:test";
 
-import { basename, documentHasAccount, ext, split } from "../src/lib/paths.ts";
+import {
+  basename,
+  document_has_account,
+  ext,
+  split,
+} from "../src/lib/paths.ts";
 
 test("get basename of file", () => {
   equal(basename("/home/Assets/Cash/document.pdf"), "document.pdf");
@@ -23,19 +28,19 @@ test("get file extension", () => {
 test("detect account of document", () => {
   equal(
     true,
-    documentHasAccount("/home/Assets/Cash/document.pdf", "Assets:Cash"),
+    document_has_account("/home/Assets/Cash/document.pdf", "Assets:Cash"),
   );
   equal(
     false,
-    documentHasAccount("/home/Assets/Test/Cash/document.pdf", "Assets:Cash"),
+    document_has_account("/home/Assets/Test/Cash/document.pdf", "Assets:Cash"),
   );
   equal(
     true,
-    documentHasAccount("C:\\Assets\\Cash\\document.pdf", "Assets:Cash"),
+    document_has_account("C:\\Assets\\Cash\\document.pdf", "Assets:Cash"),
   );
   equal(
     false,
-    documentHasAccount("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
+    document_has_account("C:\\Assets\\Test\\Cash\\document.pdf", "Assets:Cash"),
   );
 });
 

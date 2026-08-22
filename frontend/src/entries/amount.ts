@@ -27,12 +27,18 @@ export class Amount {
 
 /** A raw amount is a pair of number (as a string) and currency. */
 export class RawAmount {
+  readonly t: "Amount";
   readonly number: string;
   readonly currency: string;
 
   constructor(number: string, currency: string) {
+    this.t = "Amount";
     this.number = number;
     this.currency = currency;
+  }
+
+  toString(): string {
+    return `${this.number} ${this.currency}`;
   }
 
   /** Set the currency return an updated copy. */

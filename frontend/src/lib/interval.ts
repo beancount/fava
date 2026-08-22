@@ -12,12 +12,12 @@ export const INTERVALS: Interval[] = [
   "day",
 ];
 
-export function getInterval(s: string | null): Interval {
+export function get_interval(s: string | null): Interval {
   return INTERVALS.includes(s as Interval) ? (s as Interval) : DEFAULT_INTERVAL;
 }
 
-/** Get the translateable label for an interval. */
-export function intervalLabel(s: Interval): string {
+/** Get the translatable label for an interval. */
+export function interval_label(s: Interval): string {
   return {
     year: _("Yearly"),
     quarter: _("Quarterly"),

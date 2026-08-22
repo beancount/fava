@@ -1,5 +1,5 @@
 Welcome to the help pages for Fava! You are running Beancount version
-`{{ beancount_version }}` and Fava `{{ fava_version }}`
+`BEANCOUNT_VERSION` and Fava `FAVA_VERSION`
 ([changelog](https://beancount.github.io/fava/changelog.html)). There are help
 pages for the following topics:
 
@@ -23,11 +23,10 @@ If you discover a bug in Fava, or have some ideas for improvement, please open a
 
 ### Related websites
 
-- Fava's [website](https://beancount.github.io/fava/),
-  [chat](https://gitter.im/beancount/fava) and Fava on
+- Fava's [website](https://beancount.github.io/fava/), and Fava on
   [GitHub](https://github.com/beancount/fava),
 - Beancount's [documentation](http://furius.ca/beancount/doc/index),
-  [mailing list](https://groups.google.com/forum/#!forum/beancount), and
-  [bug tracker](https://bitbucket.org/blais/beancount/issues),
+  [mailing list](https://groups.google.com/g/beancount), and
+  [bug tracker](https://github.com/beancount/beancount/issues),
 - An overview of other implementations of command-line accounting:
   [Plain Text Accounting](http://plaintextaccounting.org).

@@ -1,4 +1,4 @@
-import { errorWithCauses } from "./lib/errors.ts";
+import { error_with_causes } from "./lib/errors.ts";
 import { log_error } from "./log.ts";
 
 /** The notification list div, lazily created. */
@@ -26,7 +26,7 @@ type NotificationType = "info" | "warning" | "error";
  * The notification is automatically removed after 5 seconds and on click
  * `callback` is called.
  *
- * @param msg - The message to diplay
+ * @param msg - The message to display
  * @param cls - The message type.
  * @param callback - The callback to execute on click..
  */
@@ -53,7 +53,7 @@ export function notify(
  */
 export function notify_err(
   error: unknown,
-  msg: (e: Error) => string = errorWithCauses,
+  msg: (e: Error) => string = error_with_causes,
 ): void {
   if (error instanceof Error) {
     notify(msg(error), "error");

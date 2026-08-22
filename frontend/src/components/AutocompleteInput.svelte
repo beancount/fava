@@ -10,11 +10,13 @@
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
   In particular it should match the Editable Combobox With List Autocomplete example at
     https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/
+  With the `automatic_selection` prop, it uses list autocomplete with automatic
+  selection instead of manual selection.
 -->
 <script lang="ts">
-  import type { KeySpec } from "./keyboard-shortcuts.ts";
-  import { keyboardShortcut, normalise_key } from "./keyboard-shortcuts.ts";
-  import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy.ts";
+  import type { KeySpec } from "./../keyboard-shortcuts.ts";
+  import { keyboardShortcut, normalise_key } from "./../keyboard-shortcuts.ts";
+  import { fuzzyfilter, fuzzywrap } from "./../lib/fuzzy.ts";
 
   interface Props {
     /** The currently entered value (bindable). */
@@ -24,19 +26,29 @@
     /** The suggestions for the value. */
     suggestions?: readonly string[] | undefined;
     /** A function to extract the string that should be used for suggestion filtering. */
-    valueExtractor?: (val: string, input: HTMLInputElement) => string;
+    value_extractor?: (val: string, input: HTMLInputElement) => string;
     /** A function to update the value after selecting a suggestion. */
-    valueSelector?: (val: string, input: HTMLInputElement) => string;
+    value_selector?: (val: string, input: HTMLInputElement) => string;
+    /**
+     * Whether the first suggestion should be highlighted automatically.
+     *
+     * This switches the combobox from list autocomplete with manual selection
+     * to list autocomplete with automatic selection: whenever the list of
+     * suggestions is shown, the first one is highlighted, so that pressing
+     * Enter will select it. The highlighted suggestion also becomes the value
+     * of the combobox when leaving it via Tab.
+     */
+    automatic_selection?: boolean | undefined;
     /** Automatically adjust the size of the input element. */
-    setSize?: boolean;
+    set_size?: boolean;
     /** A key binding to add for this input. */
     key?: KeySpec;
     /** A function that checks the entered value for validity. */
-    checkValidity?: (val: string) => string;
+    check_validity?: (val: string) => string;
     /** Whether to mark the input as required. */
     required?: boolean | undefined;
     /** Whether to show a button to clear the input. */
-    clearButton?: boolean;
+    clear_button?: boolean;
     /** An event handler to run on enter. */
     onenter?: () => void;
     /** An event handler to run on an element being selected. */
@@ -49,12 +61,13 @@
     value = $bindable(),
     placeholder,
     suggestions = [],
-    valueExtractor,
-    valueSelector,
-    setSize = false,
+    value_extractor,
+    value_selector,
+    automatic_selection = false,
+    set_size = false,
     key,
-    checkValidity,
-    clearButton = false,
+    check_validity,
+    clear_button = false,
     required,
     onenter,
     onselect,
@@ -62,14 +75,17 @@
   }: Props = $props();
 
   const uid = $props.id();
-  const autocomple_id = `combobox-autocomplete-${uid}`;
+  const autocomplete_id = `combobox-autocomplete-${uid}`;
 
   let hidden = $state.raw(true);
   let index = $state.raw(-1);
   let input: HTMLInputElement | undefined = $state.raw();
+  // Whether the upcoming blur is caused by pressing Tab - only then should
+  // automatic selection apply, see the doc comment on `automatic_selection`.
+  let tab_pressed = false;
 
   let extracted_value = $derived(
-    input && valueExtractor ? valueExtractor(value, input) : value,
+    input && value_extractor ? value_extractor(value, input) : value,
   );
   let filtered_suggestions: string[] = $derived.by(() => {
     const filtered = fuzzyfilter(extracted_value, suggestions).slice(0, 30);
@@ -79,13 +95,16 @@
   });
 
   $effect(() => {
-    const msg = checkValidity ? checkValidity(value) : "";
+    const msg = check_validity ? check_validity(value) : "";
     input?.setCustomValidity(msg);
   });
 
   $effect.pre(() => {
-    // ensure the index is pointing to a valid element.
-    index = Math.min(index, filtered_suggestions.length - 1);
+    // ensure the index is pointing to a valid element - with automatic
+    // selection, the first suggestion is highlighted if there is any.
+    const last = filtered_suggestions.length - 1;
+    const first = automatic_selection && last > -1 ? 0 : -1;
+    index = Math.min(Math.max(index, first), last);
   });
 
   export function blur(): void {
@@ -94,7 +113,7 @@
 
   function select(suggestion: string) {
     value =
-      input && valueSelector ? valueSelector(suggestion, input) : suggestion;
+      input && value_selector ? value_selector(suggestion, input) : suggestion;
     onchange?.(value);
     onselect?.();
     hidden = true;
@@ -105,11 +124,14 @@
     expanded && index > -1 ? filtered_suggestions[index] : undefined,
   );
   let active_id = $derived(
-    expanded && index > -1 ? `${autocomple_id}-${index.toString()}` : undefined,
+    expanded && index > -1
+      ? `${autocomplete_id}-${index.toString()}`
+      : undefined,
   );
 
   function onkeydown(event: KeyboardEvent) {
     const key = normalise_key(event);
+    tab_pressed = key === "Tab";
     if (key === "Enter") {
       if (active_suggestion != null) {
         select(active_suggestion);
@@ -122,8 +144,10 @@
       if (expanded) {
         index = -1;
         hidden = true;
-      } else {
+      } else if (value) {
         value = "";
+      } else {
+        return;
       }
     } else if (key === "ArrowUp") {
       if (expanded) {
@@ -152,29 +176,39 @@
     type="text"
     autocomplete="off"
     role="combobox"
-    class={{ "content-sized": setSize }}
+    class={{ "content-sized": set_size }}
     aria-expanded={expanded}
-    aria-controls={autocomple_id}
+    aria-controls={autocomplete_id}
     aria-autocomplete="list"
     aria-activedescendant={active_id}
     bind:value
     bind:this={input}
     {@attach keyboardShortcut(key)}
     onblur={() => {
-      onchange?.(value);
-      hidden = true;
+      if (automatic_selection && tab_pressed && active_suggestion != null) {
+        // The automatically selected suggestion becomes the value of the
+        // combobox when it is left via Tab.
+        select(active_suggestion);
+      } else {
+        onchange?.(value);
+        hidden = true;
+      }
+      tab_pressed = false;
     }}
     onfocus={() => {
       hidden = false;
     }}
     oninput={() => {
       hidden = false;
+      // Reset the highlighted suggestion - with automatic selection, the
+      // first one of the updated suggestions will be highlighted again.
+      index = -1;
     }}
     {onkeydown}
     {placeholder}
     {required}
   />
-  {#if clearButton && value}
+  {#if clear_button && value}
     <button
       type="button"
       tabindex={-1}
@@ -188,10 +222,10 @@
     </button>
   {/if}
   {#if expanded}
-    <ul role="listbox" id={autocomple_id}>
+    <ul role="listbox" id={autocomplete_id}>
       {#each filtered_suggestions as suggestion, i (suggestion)}
         <li
-          id={`${autocomple_id}-${i.toString()}`}
+          id={`${autocomplete_id}-${i.toString()}`}
           role="option"
           aria-selected={i === index}
           onmousedown={(event) => {

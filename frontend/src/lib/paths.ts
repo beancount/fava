@@ -39,7 +39,10 @@ export function ext(filename: string): string {
 /**
  * Check whether the given filename includes the account parts at the end.
  */
-export function documentHasAccount(filename: string, account: string): boolean {
+export function document_has_account(
+  filename: string,
+  account: string,
+): boolean {
   const accountParts = account.split(":").reverse();
   const folders = filename.split(/\/|\\/).reverse().slice(1);
   return accountParts.every((part, index) => part === folders[index]);

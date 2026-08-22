@@ -13,7 +13,7 @@
   interface Props {
     /** The account node to show. */
     node: AccountTreeNode;
-    /** Whther to invert all numbers (either `1` or `-1`). */
+    /** Whether to invert all numbers (either `1` or `-1`). */
     invert: number;
   }
 

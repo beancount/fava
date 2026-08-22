@@ -8,21 +8,21 @@ import { compare_strings } from "../sort/index.ts";
 /** The Beancount errors. */
 export const errors = writable<readonly BeancountError[]>([]);
 
-export const ledgerData = writable<LedgerData>();
+export const ledger_data = writable<LedgerData>();
 
 /** Commodity display precisions. */
-export const precisions = derived(ledgerData, (v) => v.precisions);
+export const precisions = derived(ledger_data, (v) => v.precisions);
 /** Whether Fava supports exporting to Excel. */
-export const HAVE_EXCEL = derived(ledgerData, (v) => v.have_excel);
+export const HAVE_EXCEL = derived(ledger_data, (v) => v.have_excel);
 /** Whether Fava should obscure all numbers. */
-export const incognito = derived(ledgerData, (v) => v.incognito);
+export const incognito = derived(ledger_data, (v) => v.incognito);
 /** Base URL. */
-export const base_url = derived(ledgerData, (v) => v.base_url);
+export const base_url = derived(ledger_data, (v) => v.base_url);
 /** The Fava extensions. */
-export const extensions = derived(ledgerData, (v) => v.extensions);
+export const extensions = derived(ledger_data, (v) => v.extensions);
 
 /** The ranked array of all accounts. */
-export const accounts = derived_array(ledgerData, (v) => v.accounts);
+export const accounts = derived_array(ledger_data, (v) => v.accounts);
 export const accounts_set: Readable<ReadonlySet<string>> = derived(
   accounts,
   ($accounts) => new Set($accounts),
@@ -32,24 +32,24 @@ export const accounts_internal = derived_array(accounts, get_internal_accounts);
 
 /** Get the name (as given per metadata) of a currency. */
 export const currency_name = derived(
-  ledgerData,
+  ledger_data,
   ({ currency_names }) =>
     (c: string) =>
       currency_names[c] ?? c,
 );
 
 /** Account information. */
-export const account_details = derived(ledgerData, (v) => v.account_details);
+export const account_details = derived(ledger_data, (v) => v.account_details);
 /** The ranked array of all currencies. */
-export const currencies = derived_array(ledgerData, (v) => v.currencies);
+export const currencies = derived_array(ledger_data, (v) => v.currencies);
 /** The ranked array of all links. */
-export const links = derived_array(ledgerData, (v) => v.links);
+export const links = derived_array(ledger_data, (v) => v.links);
 /** The ranked array of all payees. */
-export const payees = derived_array(ledgerData, (v) => v.payees);
+export const payees = derived_array(ledger_data, (v) => v.payees);
 /** The ranked array of all tags. */
-export const tags = derived_array(ledgerData, (v) => v.tags);
+export const tags = derived_array(ledger_data, (v) => v.tags);
 /** The array of all years. */
-export const years = derived_array(ledgerData, (v) => v.years);
+export const years = derived_array(ledger_data, (v) => v.years);
 
 /** The sorted array of all used currencies. */
 export const currencies_sorted = derived_array(currencies, ($currencies) =>

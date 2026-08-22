@@ -3,22 +3,22 @@ import { test } from "node:test";
 
 import { is_non_empty, last_element, move } from "../src/lib/array.ts";
 import { shallow_equal } from "../src/lib/equals.ts";
-import { errorWithCauses } from "../src/lib/errors.ts";
+import { error_with_causes } from "../src/lib/errors.ts";
 import {
   FetchInvalidResponseError,
   fetch_json,
   fetch_text,
 } from "../src/lib/fetch.ts";
-import { getInterval } from "../src/lib/interval.ts";
-import { parseJSON } from "../src/lib/json.ts";
+import { get_interval } from "../src/lib/interval.ts";
+import { parse_json } from "../src/lib/json.ts";
 import { is_empty } from "../src/lib/objects.ts";
 import { toggle } from "../src/lib/set.ts";
 
 test("move array elements", () => {
-  const initital = [0, 1, 2, 3];
-  const moved = move(initital, 1, 2);
+  const initial = [0, 1, 2, 3];
+  const moved = move(initial, 1, 2);
   deepEqual(moved, [0, 2, 1, 3]);
-  deepEqual(initital, [0, 1, 2, 3]);
+  deepEqual(initial, [0, 1, 2, 3]);
 });
 
 test("shallow array equality", () => {
@@ -29,8 +29,8 @@ test("shallow array equality", () => {
 });
 
 test("validate interval", () => {
-  equal(getInterval("year"), "year");
-  equal(getInterval("yasdfaear"), "month");
+  equal(get_interval("year"), "year");
+  equal(get_interval("yasdfaear"), "month");
 });
 
 test("check whether objects are empty", () => {
@@ -39,9 +39,9 @@ test("check whether objects are empty", () => {
 });
 
 test("parse json", () => {
-  deepEqual(parseJSON("{}").unwrap(), {});
+  deepEqual(parse_json("{}").unwrap(), {});
 
-  const invalid = parseJSON("invalid").unwrap_err();
+  const invalid = parse_json("invalid").unwrap_err();
   ok(invalid instanceof SyntaxError);
 });
 
@@ -62,8 +62,8 @@ test("print out error with causes", () => {
   const err1 = new Error("a reason");
   const err2 = new Error("b reason", { cause: err1 });
 
-  equal(errorWithCauses(err1), "a reason");
-  equal(errorWithCauses(err2), "b reason\n  Caused by: a reason");
+  equal(error_with_causes(err1), "a reason");
+  equal(error_with_causes(err2), "b reason\n  Caused by: a reason");
 });
 
 test("request handling - successful JSON response", async (t) => {

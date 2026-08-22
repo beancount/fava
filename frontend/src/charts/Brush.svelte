@@ -7,10 +7,10 @@
 <script lang="ts">
   import { pointer } from "d3-selection";
   import type { Snippet } from "svelte";
-  import type { SVGAttributes } from "svelte/elements";
+  import type { PointerEventHandler, SVGAttributes } from "svelte/elements";
 
   import { router } from "../router.ts";
-  import { currentTimeFilterDateFormat } from "../stores/format.ts";
+  import { current_time_filter_date_format } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
 
@@ -55,7 +55,7 @@
     event.preventDefault();
   }
 
-  function onpointermove(event: PointerEvent & { currentTarget: SVGGElement }) {
+  const onpointermove: PointerEventHandler<SVGGElement> = (event) => {
     const [x_pointer, y_pointer] = pointer(event);
     if (find != null) {
       const res = find(x_pointer, y_pointer);
@@ -73,7 +73,7 @@
       return;
     }
     x_current = x_pointer;
-  }
+  };
 
   function onpointerup(event: PointerEvent) {
     if (event.pointerId !== active_pointer_id) {
@@ -83,8 +83,8 @@
       const [x_end] = pointer(event);
       const start_date = invert(Math.min(x_start, x_end));
       const end_date = invert(Math.max(x_start, x_end));
-      const start = $currentTimeFilterDateFormat(start_date);
-      const end = $currentTimeFilterDateFormat(end_date);
+      const start = $current_time_filter_date_format(start_date);
+      const end = $current_time_filter_date_format(end_date);
       const time_filter = start === end ? start : `${start} - ${end}`;
       router.set_search_param("time", time_filter);
     }

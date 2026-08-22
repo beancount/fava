@@ -3,20 +3,24 @@
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
-  import { urlForAccount } from "../helpers.ts";
-  import { barChartMode, chartToggledCurrencies } from "../stores/chart.ts";
-  import { ctx, currentTimeFilterDateFormat, short } from "../stores/format.ts";
+  import { url_for_account } from "../helpers.ts";
+  import { bar_chart_mode, chart_toggled_currencies } from "../stores/chart.ts";
+  import {
+    ctx,
+    current_time_filter_date_format,
+    short,
+  } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
   import { get_chart_tooltip } from "./context.ts";
   import {
-    currenciesScale,
-    filterTicks,
-    hclColorRange,
-    includeZero,
-    padExtent,
-    urlForTimeFilter,
+    currencies_scale,
+    filter_ticks,
+    hcl_color_range,
+    include_zero,
+    pad_extent,
+    url_for_time_filter,
   } from "./helpers.ts";
 
   interface Props {
@@ -38,7 +42,7 @@
   // Chart data
   let accounts = $derived(chart.accounts);
   let { currencies, bar_groups, stacks } = $derived(
-    chart.filter($chartToggledCurrencies),
+    chart.filter($chart_toggled_currencies),
   );
 
   // Computed dimensions
@@ -50,7 +54,7 @@
 
   /** Whether to display stacked bars. */
   let show_stacked_bars = $derived(
-    $barChartMode === "stacked" && chart.hasStackedData,
+    $bar_chart_mode === "stacked" && chart.hasStackedData,
   );
 
   // Scales
@@ -70,18 +74,18 @@
         ),
   );
   let y = $derived(
-    scaleLinear([inner_height, 0]).domain(padExtent(includeZero(y_extent))),
+    scaleLinear([inner_height, 0]).domain(pad_extent(include_zero(y_extent))),
   );
 
   let account_color_scale = $derived(
-    scaleOrdinal(hclColorRange(accounts.length)).domain(accounts),
+    scaleOrdinal(hcl_color_range(accounts.length)).domain(accounts),
   );
 
   // Axes
   let x_axis = $derived(
     axisBottom(x0)
       .tickSizeOuter(0)
-      .tickValues(filterTicks(x0.domain(), inner_width / 70)),
+      .tickValues(filter_ticks(x0.domain(), inner_width / 70)),
   );
   let y_axis = $derived(
     axisLeft(y).tickPadding(6).tickSize(-inner_width).tickFormat($short),
@@ -108,7 +112,7 @@
     {#each bar_groups as group (group.date)}
       <g
         class={["group", group.date > today && "desaturate"]}
-        {@attach tooltip.following(() => chart.tooltipText($ctx, group))}
+        {@attach tooltip.following(() => chart.tooltip_text($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
         <rect
@@ -118,8 +122,8 @@
           height={inner_height}
         />
         <a
-          href={urlForTimeFilter(group.date)}
-          aria-label={$currentTimeFilterDateFormat(group.date)}
+          href={url_for_time_filter(group.date)}
+          aria-label={$current_time_filter_date_format(group.date)}
         >
           <rect
             class="axis-group-box"
@@ -131,7 +135,7 @@
         {#if !show_stacked_bars}
           {#each group.values as { currency, value, budget } (currency)}
             <rect
-              fill={$currenciesScale(currency)}
+              fill={$currencies_scale(currency)}
               width={x1.bandwidth()}
               x={x1(currency)}
               y={y(Math.max(0, value))}
@@ -153,7 +157,7 @@
         {#each stacks as [currency, account_stacks] (currency)}
           {#each account_stacks as stack (stack.key)}
             {@const account = stack.key}
-            <a href={$urlForAccount(account)}>
+            <a href={$url_for_account(account)}>
               {#each stack as bar (bar.data.date)}
                 <rect
                   class={[bar.data.date > today && "desaturate"]}
@@ -163,11 +167,11 @@
                   height={Math.abs(y(bar[1]) - y(bar[0]))}
                   fill={account_color_scale(account)}
                   {@attach tooltip.following(() =>
-                    chart.tooltipTextAccount(
+                    chart.tooltip_text_account(
                       $ctx,
                       bar.data,
                       account,
-                      $chartToggledCurrencies,
+                      $chart_toggled_currencies,
                     ),
                   )}
                 />

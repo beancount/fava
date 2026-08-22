@@ -34,6 +34,8 @@ def test_is_document_or_import_file(
     assert is_document_or_import_file(path, example_ledger)
     assert is_document_or_import_file("/test/err/../err", example_ledger)
     assert is_document_or_import_file("/test/err/../err", example_ledger)
+    assert not is_document_or_import_file("/test_private/err", example_ledger)
+    assert not is_document_or_import_file("/test.bak/err", example_ledger)
 
 
 def test_filepath_in_documents_folder(

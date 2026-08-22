@@ -4,6 +4,7 @@ import datetime
 import subprocess
 from difflib import Differ
 from http import HTTPStatus
+from importlib.metadata import version
 from io import BytesIO
 from pathlib import Path
 from shutil import which
@@ -56,6 +57,11 @@ def test_validate_get_args() -> None:
     assert validator
     with pytest.raises(ValidationError):
         validator({"notest": "value"})
+    with pytest.raises(
+        ValidationError,
+        match="Parameter `test` of incorrect type",
+    ):
+        validator({"test": ["value"]})
     assert validator({"test": "value"}) == ["value"]
 
 
@@ -139,6 +145,16 @@ def test_api_add_document_and_move_and_delete(
             HTTPStatus.BAD_REQUEST,
         )
 
+        for missing in ("folder", "account"):
+            data = _data("2015-12-12 test")
+            del data[missing]
+            response = test_client.put(add_url, data=data)
+            assert_api_error(
+                response,
+                f"Invalid API request: Parameter `{missing}` is missing.",
+                HTTPStatus.BAD_REQUEST,
+            )
+
         filename = account_dir / "2015-12-12 test"
         assert not filename.exists()
         response = test_client.put(add_url, data=_data("2015-12-12 test"))
@@ -199,7 +215,11 @@ def test_api_add_document_and_move_and_delete(
             delete_url,
             query_string={"filename": str(filename)},
         )
-        assert_api_error(response, f"{filename} does not exist.")
+        assert_api_error(
+            response,
+            f"{filename} does not exist.",
+            HTTPStatus.NOT_FOUND,
+        )
 
         response = test_client.delete(
             delete_url,
@@ -400,6 +420,62 @@ def test_api_imports(
     )
     data = assert_api_success(response)
     snapshot(data, json=True)
+
+
+def test_api_move_not_a_document(
+    test_client: FlaskClient,
+    tmp_path: Path,
+) -> None:
+    """Only documents and files in an import dir may be moved."""
+    other_file = tmp_path / "some-other-file"
+    other_file.write_text("not a document")
+
+    response = test_client.put(
+        "/import/api/move",
+        json={
+            "account": "Assets:Checking",
+            "new_name": "new",
+            "filename": str(other_file),
+        },
+    )
+    assert_api_error(
+        response,
+        f"Not valid document or import file: '{other_file}'.",
+        HTTPStatus.BAD_REQUEST,
+    )
+    assert other_file.is_file()
+
+
+@pytest.mark.parametrize("body", [["account"], "account", 1, None])
+def test_api_put_invalid_json_body(
+    test_client: FlaskClient,
+    body: Any,
+) -> None:
+    """The body of a PUT request needs to be a JSON object."""
+    response = test_client.put("/long-example/api/move", json=body)
+    assert_api_error(
+        response,
+        "Invalid API request: Invalid JSON body.",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+@pytest.mark.parametrize("value", [["new"], {"a": "new"}, 1, True])
+def test_api_put_incorrect_parameter_type(
+    test_client: FlaskClient,
+    value: Any,
+) -> None:
+    """A parameter that is declared as a string needs to be one."""
+    response = test_client.put(
+        "/long-example/api/move",
+        json={"account": "Assets", "new_name": value, "filename": "old"},
+    )
+    assert_api_error(
+        response,
+        "Invalid API request: Parameter `new_name` of incorrect type"
+        " - expected <class 'str'>.",
+        HTTPStatus.BAD_REQUEST,
+    )
 
 
 def test_api_move(test_client: FlaskClient) -> None:
@@ -1032,6 +1108,24 @@ def test_api_query_result_error(test_client: FlaskClient) -> None:
     assert "Query parse error: syntax error" in msg
 
 
+def test_api_help(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/help",
+        query_string={"page_slug": "_index"},
+    )
+    data = assert_api_success(response)
+    assert f"Fava <code>{version('fava')}</code>" in data["html"]
+    assert ["_index", "Index"] in data["pages"]
+
+
+def test_api_help_not_found(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/help",
+        query_string={"page_slug": "asdfasdf"},
+    )
+    assert_api_error(response, "Not found.", HTTPStatus.NOT_FOUND)
+
+
 def test_api_commodities_empty(
     test_client: FlaskClient,
 ) -> None:
@@ -1049,6 +1143,37 @@ def test_api_journal_page_not_found(
         "/long-example/api/journal_page?page=1000&order=desc"
     )
     assert_api_error(response, status=HTTPStatus.NOT_FOUND)
+
+
+def test_api_journal_page_invalid_page(
+    test_client: FlaskClient,
+) -> None:
+    response = test_client.get(
+        "/long-example/api/journal_page?page=asdf&order=desc"
+    )
+    assert_api_error(
+        response,
+        "Invalid API request: Parameter `page` of "
+        "incorrect type - expected <class 'int'>.",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+def test_api_account_report_empty(
+    test_client: FlaskClient,
+) -> None:
+    """A filter matching no entries gives empty interval balances."""
+    response = test_client.get(
+        "/long-example/api/account_report",
+        query_string={"a": "Assets", "r": "balances", "filter": "payee:asdf"},
+    )
+    data = assert_api_success(response)
+    assert data == {
+        "budgets": {},
+        "charts": data["charts"],
+        "dates": [],
+        "interval_balances": [],
+    }
 
 
 def test_api_filter_error(

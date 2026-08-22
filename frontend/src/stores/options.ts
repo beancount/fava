@@ -2,10 +2,10 @@ import { derived } from "svelte/store";
 
 import { derived_array } from "../lib/store.ts";
 import { compare_strings } from "../sort/index.ts";
-import { ledgerData } from "./index.ts";
+import { ledger_data } from "./index.ts";
 
 /** Beancount's options */
-const options = derived(ledgerData, (v) => v.options);
+const options = derived(ledger_data, (v) => v.options);
 /** Beancount ledger title */
 export const ledger_title = derived(options, ($options) => $options.title);
 /** The operating currencies (sorted). */

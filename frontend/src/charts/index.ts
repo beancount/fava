@@ -22,7 +22,7 @@ export type FavaChart = HierarchyChart | BarChart | ScatterPlot | LineChart;
  */
 export interface ParsedFavaChart {
   readonly label: string | null;
-  with_context($chartContext: ChartContext): FavaChart;
+  with_context($chart_context: ChartContext): FavaChart;
 }
 
 export const charts_validator: Validator<ParsedFavaChart[]> = array(

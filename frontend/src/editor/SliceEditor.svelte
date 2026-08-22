@@ -16,11 +16,11 @@
     is_editable,
   } from "../entries/index.ts";
   import EntrySvelte from "../entry-forms/Entry.svelte";
-  import { todayAsString } from "../format.ts";
+  import { today_as_string } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
-  import { reloadAfterSavingEntrySlice } from "../stores/editor.ts";
+  import { reload_after_saving_entry_slice } from "../stores/editor.ts";
   import { currency_column, indent } from "../stores/fava_options.ts";
   import DeleteButton from "./DeleteButton.svelte";
   import SaveButton from "./SaveButton.svelte";
@@ -41,7 +41,7 @@
     codemirror_beancount,
   }: Props = $props();
 
-  // Keep the initital slice value to check for changes.
+  // Keep the initial slice value to check for changes.
   // svelte-ignore state_referenced_locally
   const initial_slice = slice;
 
@@ -61,7 +61,7 @@
         source: current_slice,
         sha256sum,
       });
-      if ($reloadAfterSavingEntrySlice) {
+      if ($reload_after_saving_entry_slice) {
         router.reload();
       }
       router.close_overlay();
@@ -88,7 +88,7 @@
     try {
       await delete_source_slice({ entry_hash, sha256sum });
       entry_hash = "";
-      if ($reloadAfterSavingEntrySlice) {
+      if ($reload_after_saving_entry_slice) {
         router.reload();
       }
       router.close_overlay();
@@ -129,7 +129,7 @@
         class="muted"
         onclick={() => {
           if (duplicated_entry == null) {
-            duplicated_entry = entry.set("date", todayAsString());
+            duplicated_entry = entry.set("date", today_as_string());
           } else {
             duplicated_entry = undefined;
           }
@@ -140,7 +140,7 @@
     {/if}
     <span class="spacer"></span>
     <label>
-      <input type="checkbox" bind:checked={$reloadAfterSavingEntrySlice} />
+      <input type="checkbox" bind:checked={$reload_after_saving_entry_slice} />
       <span>{_("reload")}</span>
     </label>
     <DeleteButton ondelete={delete_slice} />

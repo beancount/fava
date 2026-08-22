@@ -1,11 +1,11 @@
 <script lang="ts">
   import ChartSwitcher from "../../charts/ChartSwitcher.svelte";
   import { ParsedHierarchyChart } from "../../charts/hierarchy.ts";
-  import { urlForAccount } from "../../helpers.ts";
+  import { url_for_account } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
-  import { intervalLabel } from "../../lib/interval.ts";
-  import { currentTimeFilterDateFormat } from "../../stores/format.ts";
+  import { interval_label } from "../../lib/interval.ts";
+  import { current_time_filter_date_format } from "../../stores/format.ts";
   import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import JournalTable from "../journal/JournalTable.svelte";
@@ -22,7 +22,7 @@
   }: AccountReportProps = $props();
 
   let accumulate = $derived(report_type === "balances");
-  let interval_label = $derived(intervalLabel($interval).toLowerCase());
+  let interval_label_lower = $derived(interval_label($interval).toLowerCase());
 
   let all_charts = $derived(
     interval_balances && dates
@@ -33,7 +33,7 @@
             .map(
               (node, index) =>
                 new ParsedHierarchyChart(
-                  $currentTimeFilterDateFormat(
+                  $current_time_filter_date_format(
                     dates[index]?.begin ?? new Date(),
                   ),
                   node,
@@ -51,7 +51,7 @@
     <h3>
       {#if report_type !== "journal"}
         <a
-          href={$urlForAccount(account)}
+          href={$url_for_account(account)}
           title={_("Journal of all entries for this Account and Sub-Accounts")}
         >
           {_("Account Journal")}
@@ -62,20 +62,20 @@
     </h3>
     <h3>
       {#if report_type !== "changes"}
-        <a href={$urlForAccount(account, { r: "changes" })}>
-          {_("Changes")} ({interval_label})
+        <a href={$url_for_account(account, { r: "changes" })}>
+          {_("Changes")} ({interval_label_lower})
         </a>
       {:else}
-        {_("Changes")} ({interval_label})
+        {_("Changes")} ({interval_label_lower})
       {/if}
     </h3>
     <h3>
       {#if report_type !== "balances"}
-        <a href={$urlForAccount(account, { r: "balances" })}>
-          {_("Balances")} ({interval_label})
+        <a href={$url_for_account(account, { r: "balances" })}>
+          {_("Balances")} ({interval_label_lower})
         </a>
       {:else}
-        {_("Balances")} ({interval_label})
+        {_("Balances")} ({interval_label_lower})
       {/if}
     </h3>
   </div>

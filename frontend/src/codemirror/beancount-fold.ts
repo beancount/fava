@@ -2,7 +2,7 @@ import { foldService } from "@codemirror/language";
 
 const MAXDEPTH = 100;
 
-function headerLevel(line: string): number {
+function header_level(line: string): number {
   const match = /^\*+/.exec(line);
   return match?.[0]?.length ?? MAXDEPTH;
 }
@@ -10,7 +10,7 @@ function headerLevel(line: string): number {
 export const beancount_fold = foldService.of(({ doc }, lineStart, lineEnd) => {
   const startLine = doc.lineAt(lineStart);
   const totalLines = doc.lines;
-  const level = headerLevel(startLine.text);
+  const level = header_level(startLine.text);
   if (level === MAXDEPTH) {
     return null;
   }
@@ -19,7 +19,7 @@ export const beancount_fold = foldService.of(({ doc }, lineStart, lineEnd) => {
   while (lineNo < totalLines) {
     lineNo += 1;
     const line = doc.line(lineNo);
-    if (headerLevel(line.text) <= level) {
+    if (header_level(line.text) <= level) {
       break;
     }
     end = line.to;

@@ -1,4 +1,4 @@
-import { get_direction, sortElements } from "./index.ts";
+import { get_direction, sort_elements } from "./index.ts";
 
 export class SortableTable extends HTMLTableElement {
   constructor() {
@@ -21,7 +21,7 @@ export class SortableTable extends HTMLTableElement {
         });
         header.setAttribute("data-order", order);
 
-        sortElements<HTMLTableRowElement>(
+        sort_elements<HTMLTableRowElement>(
           body,
           [...body.querySelectorAll("tr")],
           (tr) => tr.cells.item(index),

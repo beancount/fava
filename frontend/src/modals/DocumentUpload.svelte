@@ -12,10 +12,10 @@
 
   import { put_add_document, put_attach_document } from "../api/index.ts";
   import AccountInput from "../entry-forms/AccountInput.svelte";
-  import { todayAsString } from "../format.ts";
+  import { today_as_string } from "../format.ts";
   import { _ } from "../i18n.ts";
   import { get_el } from "../lib/dom.ts";
-  import { basename, documentHasAccount } from "../lib/paths.ts";
+  import { basename, document_has_account } from "../lib/paths.ts";
   import { notify, notify_err } from "../notifications.ts";
   import { router } from "../router.ts";
   import { documents } from "../stores/options.ts";
@@ -99,7 +99,7 @@
       let filename = new URL(url).searchParams.get("filename");
       const entry_hash = dragover.getAttribute("data-entry-hash");
       if (filename != null && entry_hash != null) {
-        if (documentHasAccount(filename, target_account)) {
+        if (document_has_account(filename, target_account)) {
           filename = basename(filename);
         }
         put_attach_document({ filename, entry_hash }).then(
@@ -115,7 +115,7 @@
     }
   }
 
-  function closeHandler() {
+  function close_handler() {
     account = "";
     entry_date = null;
     entry_hash = null;
@@ -130,7 +130,7 @@
     }
     return /^\d{4}-\d{2}-\d{2}/.test(file.name)
       ? file.name
-      : `${entry_date ?? todayAsString()} ${file.name}`;
+      : `${entry_date ?? today_as_string()} ${file.name}`;
   }
 
   async function onsubmit(event: SubmitEvent) {
@@ -156,13 +156,13 @@
         });
       }),
     );
-    closeHandler();
+    close_handler();
     router.reload();
   }
 </script>
 
 <svelte:document {ondragenter} {ondragover} {ondragleave} {ondrop} />
-<ModalBase {shown} {closeHandler}>
+<ModalBase {shown} {close_handler}>
   <form {onsubmit}>
     <h3>{_("Upload file(s)")}:</h3>
     <label>

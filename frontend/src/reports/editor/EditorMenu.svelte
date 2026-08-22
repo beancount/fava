@@ -3,7 +3,7 @@
   import type { Snippet } from "svelte";
 
   import type { CodemirrorBeancount } from "../../codemirror/types.ts";
-  import { urlFor } from "../../helpers.ts";
+  import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { modKey } from "../../keyboard-shortcuts.ts";
   import { router } from "../../router.ts";
@@ -24,8 +24,8 @@
 
   let { file_path, editor, codemirror_beancount, children }: Props = $props();
 
-  function goToFileAndLine(filename: string, line?: number) {
-    const url = $urlFor("editor/", { file_path: filename, line });
+  function go_to_file_and_line(filename: string, line?: number) {
+    const url = $url_for("editor/", { file_path: filename, line });
     // only load if the file changed.
     const load = filename !== file_path;
     router.navigate(url, load);
@@ -44,7 +44,7 @@
         is_root
         node={$sources_tree}
         on_select={(source: string) => {
-          goToFileAndLine(source);
+          go_to_file_and_line(source);
         }}
         selected={file_path}
       ></Sources>
@@ -83,7 +83,7 @@
           <AppMenuSubItem
             title={`${opt.filename}:${opt.lineno.toString()}`}
             action={() => {
-              goToFileAndLine(opt.filename, opt.lineno - 1);
+              go_to_file_and_line(opt.filename, opt.lineno - 1);
             }}
           >
             {opt.re}

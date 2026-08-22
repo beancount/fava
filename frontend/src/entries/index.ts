@@ -2,7 +2,7 @@ import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
   constant,
-  defaultValue,
+  default_value,
   object,
   optional,
   optional_string,
@@ -47,7 +47,7 @@ export class Posting {
   }
 
   private static raw_validator = object({
-    meta: defaultValue(EntryMetadata.validator, () => new EntryMetadata()),
+    meta: default_value(EntryMetadata.validator, () => new EntryMetadata()),
     account: string,
     amount: string,
   });

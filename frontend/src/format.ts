@@ -12,7 +12,7 @@ import type { Interval } from "./lib/interval.ts";
  * @param locale - The locale to use.
  * @param precision - The number of decimal digits to show.
  */
-export function localeFormatter(
+export function locale_formatter(
   locale: string | null,
   precision = 2,
 ): (num: number) => string {
@@ -52,11 +52,11 @@ export function formatter_context(
   locale: string | null,
   precisions: Record<string, number>,
 ): FormatterContext {
-  const formatter = localeFormatter(locale);
+  const formatter = locale_formatter(locale);
   const currencyFormatters = Object.fromEntries(
     Object.entries(precisions).map(([currency, prec]) => [
       currency,
-      localeFormatter(locale, prec),
+      locale_formatter(locale, prec),
     ]),
   );
   const num_raw = (n: number, c: string) =>
@@ -98,6 +98,6 @@ export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
 const local_day = timeFormat("%Y-%m-%d");
 
 /** Today as a ISO-8601 date string. */
-export function todayAsString(): string {
+export function today_as_string(): string {
   return local_day(new Date());
 }

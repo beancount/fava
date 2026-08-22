@@ -30,32 +30,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterator
 
 
-IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
-
-# these match dates of the form 'year-month-day'
-# day or month and day may be omitted
-YEAR_RE = re.compile(r"^\d{4}$")
-MONTH_RE = re.compile(r"^(\d{4})-(\d{2})$")
-DAY_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
-
-# this matches a week like 2016-W02 for the second week of 2016
-WEEK_RE = re.compile(r"^(\d{4})-w(\d{2})$")
-
-# this matches a quarter like 2016-Q1 for the first quarter of 2016
-QUARTER_RE = re.compile(r"^(\d{4})-q([1234])$")
-
-# this matches a financial year like FY2018 for the financial year ending 2018
-FY_RE = re.compile(r"^fy(\d{4})$")
-
-# this matches a quarter in a financial year like FY2018-Q2
-FY_QUARTER_RE = re.compile(r"^fy(\d{4})-q([1234])$")
-
-VARIABLE_RE = re.compile(
-    r"\(?(fiscal_year|year|fiscal_quarter|quarter"
-    r"|month|week|day)(?:([-+])(\d+))?\)?",
-)
-
-
 @dataclass(frozen=True)
 class FiscalYearEnd:
     """Month and day that specify the end of the fiscal year."""
@@ -73,6 +47,7 @@ class FiscalYearEnd:
         """Number of years that this is offset into the future."""
         return (self.month - 1) // 12
 
+    @property
     def has_quarters(self) -> bool:
         """Whether this fiscal year end supports fiscal quarters."""
         return (
@@ -151,17 +126,12 @@ class _IntervalQuarter(Interval):
         return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
 
     def get_prev(self, date: datetime.date) -> datetime.date:
-        for i in [10, 7, 4]:
-            if date.month > i:
-                return datetime.date(date.year, i, 1)
-        return datetime.date(date.year, 1, 1)
+        return datetime.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
 
     def get_next(self, date: datetime.date) -> datetime.date:
-        for i in [4, 7, 10]:
-            if date.month < i:
-                return datetime.date(date.year, i, 1)
+        month = (date.month - 1) // 3 * 3 + 4
         try:
-            return datetime.date(date.year + 1, 1, 1)
+            return datetime.date(date.year + (month > 12), month % 12, 1)
         except ValueError:
             return datetime.date.max
 
@@ -340,153 +310,6 @@ def local_today() -> datetime.date:
     return datetime.date.today()  # noqa: DTZ011
 
 
-def substitute(
-    string: str,
-    fye: FiscalYearEnd | None = None,
-) -> str:
-    """Replace variables referring to the current day.
-
-    Args:
-        string: A string, possibly containing variables for today.
-        fye: Use a specific fiscal-year-end
-
-    Returns:
-        A string, where variables referring to the current day, like 'year' or
-        'week' have been replaced by the corresponding string understood by
-        :func:`parse_date`.  Can compute addition and subtraction.
-    """
-    today = local_today()
-    fye = fye or END_OF_YEAR
-
-    for match in VARIABLE_RE.finditer(string):
-        complete_match, interval, plusminus_, mod_ = match.group(0, 1, 2, 3)
-        mod = int(mod_) if mod_ else 0
-        offset = mod if plusminus_ == "+" else -mod
-        if interval == "fiscal_year":
-            after_fye = (today.month, today.day) > (fye.month_of_year, fye.day)
-            year = today.year + (1 if after_fye else 0) - fye.year_offset
-            string = string.replace(complete_match, f"FY{year + offset}")
-        if interval == "year":
-            string = string.replace(complete_match, str(today.year + offset))
-        if interval == "fiscal_quarter":
-            if not fye.has_quarters():
-                raise FyeHasNoQuartersError
-            target = month_offset(today.replace(day=1), offset * 3)
-            after_fye = (target.month) > (fye.month_of_year)
-            year = target.year + (1 if after_fye else 0) - fye.year_offset
-            quarter = ((target.month - fye.month_of_year - 1) // 3) % 4 + 1
-            string = string.replace(complete_match, f"FY{year}-Q{quarter}")
-        if interval == "quarter":
-            quarter_today = (today.month - 1) // 3 + 1
-            year = today.year + (quarter_today + offset - 1) // 4
-            quarter = (quarter_today + offset - 1) % 4 + 1
-            string = string.replace(complete_match, f"{year}-Q{quarter}")
-        if interval == "month":
-            year = today.year + (today.month + offset - 1) // 12
-            month = (today.month + offset - 1) % 12 + 1
-            string = string.replace(complete_match, f"{year}-{month:02}")
-        if interval == "week":
-            string = string.replace(
-                complete_match,
-                (today + timedelta(offset * 7)).strftime("%G-W%V"),
-            )
-        if interval == "day":
-            string = string.replace(
-                complete_match,
-                (today + timedelta(offset)).isoformat(),
-            )
-    return string
-
-
-def parse_date(  # noqa: PLR0911
-    string: str,
-    fye: FiscalYearEnd | None = None,
-) -> tuple[datetime.date | None, datetime.date | None]:
-    """Parse a date.
-
-    Example of supported formats:
-
-    - 2010-03-15, 2010-03, 2010
-    - 2010-W01, 2010-Q3
-    - FY2012, FY2012-Q2
-
-    Ranges of dates can be expressed in the following forms:
-
-    - start - end
-    - start to end
-
-    where start and end look like one of the above examples
-
-    Args:
-        string: A date(range) in our custom format.
-        fye: The fiscal year end to consider.
-
-    Returns:
-        A tuple (start, end) of dates.
-    """
-    string = string.strip().lower()
-    if not string:
-        return None, None
-
-    string = substitute(string, fye).lower()
-
-    match = IS_RANGE_RE.match(string)
-    if match:
-        return (
-            parse_date(match.group(1), fye)[0],
-            parse_date(match.group(2), fye)[1],
-        )
-
-    match = YEAR_RE.match(string)
-    if match:
-        year = int(match.group(0))
-        start = datetime.date(year, 1, 1)
-        return start, Year.get_next(start)
-
-    match = MONTH_RE.match(string)
-    if match:
-        year, month = map(int, match.group(1, 2))
-        start = datetime.date(year, month, 1)
-        return start, Month.get_next(start)
-
-    match = DAY_RE.match(string)
-    if match:
-        year, month, day = map(int, match.group(1, 2, 3))
-        start = datetime.date(year, month, day)
-        return start, Day.get_next(start)
-
-    match = WEEK_RE.match(string)
-    if match:
-        year, week = map(int, match.group(1, 2))
-        start = (
-            datetime.datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%w")
-            .replace(tzinfo=datetime.timezone.utc)
-            .date()
-        )
-        return start, Week.get_next(start)
-
-    match = QUARTER_RE.match(string)
-    if match:
-        year, quarter = map(int, match.group(1, 2))
-        quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
-        return (
-            quarter_first_day,
-            Quarter.get_next(quarter_first_day),
-        )
-
-    match = FY_RE.match(string)
-    if match:
-        year = int(match.group(1))
-        return get_fiscal_period(year, fye)
-
-    match = FY_QUARTER_RE.match(string)
-    if match:
-        year, quarter = map(int, match.group(1, 2))
-        return get_fiscal_period(year, fye, quarter)
-
-    return None, None
-
-
 def month_offset(date: datetime.date, months: int) -> datetime.date:
     """Offsets a date by a given number of months.
 
@@ -519,9 +342,9 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 
 def get_fiscal_period(
     year: int,
-    fye: FiscalYearEnd | None,
+    fye: FiscalYearEnd = END_OF_YEAR,
     quarter: int | None = None,
-) -> tuple[datetime.date | None, datetime.date | None]:
+) -> tuple[datetime.date, datetime.date]:
     """Calculate fiscal periods.
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
@@ -534,9 +357,7 @@ def get_fiscal_period(
 
     Returns:
         A tuple (start, end) of dates.
-
     """
-    fye = fye or END_OF_YEAR
     start = (
         datetime.date(year - 1 + fye.year_offset, fye.month_of_year, fye.day)
         + ONE_DAY
@@ -548,11 +369,12 @@ def get_fiscal_period(
     if quarter is None:
         return start, start.replace(year=start.year + 1)
 
-    if not fye.has_quarters():
-        return None, None
+    if not fye.has_quarters:
+        raise FyeHasNoQuartersError
 
     if quarter < 1 or quarter > 4:
-        return None, None
+        msg = f"quarter must be in 1..4, not {quarter}"
+        raise ValueError(msg)
 
     start = month_offset(start, (quarter - 1) * 3)
 

@@ -5,9 +5,9 @@
   import { arc } from "d3-shape";
   import { untrack } from "svelte";
 
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { ctx } from "../stores/format.ts";
-  import { sunburstScale } from "./helpers.ts";
+  import { sunburst_scale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
@@ -68,7 +68,7 @@
     {balance_with_percentage($ctx, current ?? root, currency)}
   </text>
   {#each nodes as d (d.data.account)}
-    <a href={$urlForAccount(d.data.account)} aria-label={d.data.account}>
+    <a href={$url_for_account(d.data.account)} aria-label={d.data.account}>
       <path
         onmouseover={() => {
           current = d;
@@ -78,7 +78,7 @@
         }}
         class:half={current && !current.data.account.startsWith(d.data.account)}
         fill-rule="evenodd"
-        fill={$sunburstScale(d.data.account)}
+        fill={$sunburst_scale(d.data.account)}
         d={arcShape(d)}
         role="img"
       />

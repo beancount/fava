@@ -289,7 +289,7 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "document": "file.pdf",
+      "document": "receipt.pdf",
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 45
     },
@@ -299,12 +299,16 @@
       {
         "account": "Expenses:Food",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 47 }
+        "meta": {
+          "document-posting": "receipt.pdf",
+          "filename": "TEST_DATA_DIR/example.beancount",
+          "lineno": 47
+        }
       },
       {
         "account": "Assets:Account1",
         "amount": "-10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 48 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 49 }
       }
     ],
     "t": "Transaction",
@@ -313,7 +317,7 @@
   {
     "date": "2012-12-12",
     "entry_hash": "ENTRY_HASH",
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 71 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 72 },
     "name": "journal",
     "query_string": "journal",
     "t": "Query"
@@ -323,19 +327,19 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 50 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 51 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
       {
         "account": "Expenses:Food",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 51 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 52 }
       },
       {
         "account": "Assets:Account1",
         "amount": "-10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 52 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 53 }
       }
     ],
     "t": "Transaction",
@@ -356,7 +360,7 @@
     "date": "2012-12-15",
     "diff_amount": { "currency": "EUR", "number": -20.0 },
     "entry_hash": "ENTRY_HASH",
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 69 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 70 },
     "t": "Balance",
     "tolerance": null
   },
@@ -369,7 +373,7 @@
     "meta": {
       "account": "Expenses:Food",
       "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 73,
+      "lineno": 74,
       "meta": "Value",
       "test": true
     },
@@ -382,7 +386,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/import.csv",
     "links": ["link1"],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 78 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 79 },
     "t": "Document",
     "tags": ["tag"]
   },
@@ -392,7 +396,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/receipt.pdf",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 79 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 80 },
     "t": "Document",
     "tags": ["discovered"]
   },
@@ -402,7 +406,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/receipt.pdf",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 81 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 82 },
     "t": "Document",
     "tags": []
   },
@@ -411,19 +415,19 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "!",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 54 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 55 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
       {
         "account": "Expenses:Food",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 55 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 56 }
       },
       {
         "account": "Expenses:Others",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 56 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 57 }
       },
       {
         "account": "Assets:Account1",
@@ -431,7 +435,7 @@
         "meta": {
           "__automatic__": true,
           "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 57
+          "lineno": 58
         }
       }
     ],
@@ -443,14 +447,14 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "P",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 59 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 60 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
       {
         "account": "Expenses:Food",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 60 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 61 }
       },
       {
         "account": "Assets:Account1",
@@ -458,7 +462,7 @@
         "meta": {
           "__automatic__": true,
           "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 61
+          "lineno": 62
         }
       }
     ],
@@ -470,15 +474,10 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": ["link1"],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 63 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 64 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
-      {
-        "account": "Expenses:Food",
-        "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 64 }
-      },
       {
         "account": "Expenses:Food",
         "amount": "10.00 EUR",
@@ -490,12 +489,17 @@
         "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 66 }
       },
       {
+        "account": "Expenses:Food",
+        "amount": "10.00 EUR",
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 67 }
+      },
+      {
         "account": "Assets:Account1",
         "amount": "-30.00 EUR",
         "meta": {
           "__automatic__": true,
           "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 67
+          "lineno": 68
         }
       }
     ],
@@ -506,7 +510,7 @@
     "account": "Assets:Account1",
     "date": "2014-01-01",
     "entry_hash": "ENTRY_HASH",
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 83 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 84 },
     "t": "Close"
   }
 ]

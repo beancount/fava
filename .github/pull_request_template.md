@@ -6,4 +6,6 @@ Please ensure that your change passes tests and the various linters by running
 unit tests.
 
 Explain your changes below and link to related issues.
+
+If you used AI tools, please describe how they were used.
 -->

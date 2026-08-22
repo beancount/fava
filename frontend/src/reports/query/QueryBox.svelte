@@ -4,8 +4,8 @@
 -->
 <script lang="ts">
   import Chart from "../../charts/Chart.svelte";
-  import { chartContext } from "../../charts/context.ts";
-  import { getQueryChart } from "../../charts/query-charts.ts";
+  import { chart_context } from "../../charts/context.ts";
+  import { get_query_chart } from "../../charts/query-charts.ts";
   import type { CodemirrorBql } from "../../codemirror/types.ts";
   import type { Result } from "../../lib/result.ts";
   import QueryLinks from "./QueryLinks.svelte";
@@ -66,7 +66,7 @@
         {#if result.value.t === "string"}
           <pre><code>{result.value.contents}</code></pre>
         {:else}
-          {@const chart = getQueryChart(result.value, $chartContext)}
+          {@const chart = get_query_chart(result.value, $chart_context)}
           {#if chart}
             <Chart {chart} />
           {/if}

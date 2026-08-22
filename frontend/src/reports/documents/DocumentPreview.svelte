@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import DocumentPreviewEditor from "../../editor/DocumentPreviewEditor.svelte";
-  import { urlForRaw } from "../../helpers.ts";
+  import { url_for_raw } from "../../helpers.ts";
   import { ext } from "../../lib/paths.ts";
 
   interface Props {
@@ -30,7 +30,7 @@
   let { filename }: Props = $props();
 
   let extension = $derived(ext(filename).toLowerCase());
-  let url = $derived($urlForRaw("document/", { filename }));
+  let url = $derived($url_for_raw("document/", { filename }));
 </script>
 
 {#if extension === "pdf"}

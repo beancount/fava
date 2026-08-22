@@ -8,8 +8,8 @@
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
-import { handleExtensionPageLoad } from "./extensions.ts";
-import { getUrlPath } from "./helpers.ts";
+import { handle_extension_page_load } from "./extensions.ts";
+import { get_url_path } from "./helpers.ts";
 import { get_el } from "./lib/dom.ts";
 import { assert_is_error } from "./lib/errors.ts";
 import { log_error } from "./log.ts";
@@ -203,11 +203,21 @@ class Router {
   }
 
   /**
+   * Scroll to the element that the hash of the current URL refers to (if any).
+   */
+  #scroll_to_hash(): void {
+    const hash = this.current.hash.slice(1);
+    if (hash) {
+      document.getElementById(hash)?.scrollIntoView();
+    }
+  }
+
+  /**
    * Render the route for the given URL.
    */
   async #render_route(url: URL, before_render?: () => void): Promise<void> {
     const previous = this.#current_report;
-    const relative_path = getUrlPath(url).unwrap();
+    const relative_path = get_url_path(url).unwrap();
     const report = relative_path.slice(0, relative_path.indexOf("/"));
     const route =
       this.#frontend_routes.find((r) => r.report === report) ?? backend_route;
@@ -304,15 +314,17 @@ class Router {
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(frontend_routes: FrontendRoute[]): void {
+  async init(frontend_routes: FrontendRoute[]): Promise<void> {
     this.#frontend_routes = frontend_routes;
-    this.#render_route(this.current).catch(log_error);
 
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
     navigation_api?.addEventListener("navigate", this.#on_navigate);
 
-    handleExtensionPageLoad();
+    await this.#render_route(this.current);
+
+    handle_extension_page_load();
+    this.#scroll_to_hash();
   }
 
   /**
@@ -360,12 +372,8 @@ class Router {
     await this.#render_route(url, before_render);
 
     has_changes.set(false);
-    handleExtensionPageLoad();
-
-    const hash = this.current.hash.slice(1);
-    if (hash) {
-      document.getElementById(hash)?.scrollIntoView();
-    }
+    handle_extension_page_load();
+    this.#scroll_to_hash();
   }
 
   /**

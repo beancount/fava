@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.7/schema.json",
   "files": {
     "includes": ["**", "!docs/templates/**/*.html", "!src/fava/**/*.html"]
   },
@@ -11,6 +11,7 @@
   "assist": {
     "actions": {
       "source": {
+        "useSortedProperties": "on",
         "organizeImports": {
           "level": "on",
           "options": {

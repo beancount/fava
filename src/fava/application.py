@@ -32,7 +32,6 @@ from flask import current_app
 from flask import Flask
 from flask import redirect
 from flask import render_template
-from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
@@ -50,7 +49,6 @@ from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONProvider
 from fava.core.documents import is_document_or_import_file
-from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
@@ -415,31 +413,12 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
     @fava_app.route("/<bfile>/help/<page_slug>")
     def help_page(page_slug: str) -> str:
-        """Fava's included documentation."""
-        from importlib.metadata import version
-
-        from markdown2 import markdown
+        """Get the client-side-rendered help page."""
+        from fava.help import HELP_PAGES
 
         if page_slug not in HELP_PAGES:
             return abort(404)
-        help_path = Path(__file__).parent / "help" / (page_slug + ".md")
-        contents = help_path.read_text(encoding="utf-8")
-        html = markdown(
-            contents,
-            extras=["fenced-code-blocks", "tables", "header-ids"],
-        )
-        return render_template(
-            "help.html",
-            page_slug=page_slug,
-            help_html=Markup(  # noqa: S704
-                render_template_string(
-                    html,
-                    beancount_version=version("beancount"),
-                    fava_version=version("fava"),
-                ),
-            ),
-            HELP_PAGES=HELP_PAGES,
-        )
+        return render_template("_layout.html", content="")
 
     @fava_app.route("/jump")
     def jump() -> WerkzeugResponse:

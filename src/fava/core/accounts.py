@@ -108,6 +108,10 @@ class AccountData:
     #: The last entry of the account (unless it is a close Entry)
     last_entry: LastEntry | None = None
 
+    #: The currencies that this account is restricted to (if any), as
+    #: declared on its Open directive.
+    currencies: Sequence[str] | None = None
+
 
 class AccountDict(FavaModule, dict[str, AccountData]):
     """Account info dictionary."""
@@ -135,6 +139,7 @@ class AccountDict(FavaModule, dict[str, AccountData]):
             meta = open_entry.meta
             account_data = self.setdefault(open_entry.account)
             account_data.meta = meta
+            account_data.currencies = open_entry.currencies
 
             txn_postings = entries_by_account[open_entry.account]
             last = get_last_entry(txn_postings)

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { errorWithCauses } from "../lib/errors.ts";
+  import { error_with_causes } from "../lib/errors.ts";
 
   interface Props {
     title: string;
@@ -11,7 +11,7 @@
 
 <h2>Loading {title} failed with error:</h2>
 
-<pre>{errorWithCauses(error)}</pre>
+<pre>{error_with_causes(error)}</pre>
 
 <style>
   pre {

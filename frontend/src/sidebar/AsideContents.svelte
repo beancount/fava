@@ -1,16 +1,19 @@
 <script lang="ts">
-  import { urlFor } from "../helpers.ts";
+  import { url_for } from "../helpers.ts";
   import { _ } from "../i18n.ts";
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
-  import { errors, extensions, ledgerData } from "../stores/index.ts";
+  import {
+    keyboardShortcut,
+    show_keyboard_shortcuts,
+  } from "../keyboard-shortcuts.ts";
+  import { errors, extensions, ledger_data } from "../stores/index.ts";
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
 
   const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
 
-  let user_queries = $derived($ledgerData.user_queries);
-  let upcoming_events_count = $derived($ledgerData.upcoming_events_count);
-  let sidebar_links = $derived($ledgerData.sidebar_links);
+  let user_queries = $derived($ledger_data.user_queries);
+  let upcoming_events_count = $derived($ledger_data.upcoming_events_count);
+  let sidebar_links = $derived($ledger_data.sidebar_links);
   let extension_reports = $derived(
     $extensions.filter((e) => e.report_title != null),
   );
@@ -33,7 +36,7 @@
       <ul class="submenu">
         {#each user_queries as { query_string, name } (query_string)}
           <li>
-            <a href={$urlFor("query/", { query_string })}>{truncate(name)}</a>
+            <a href={$url_for("query/", { query_string })}>{truncate(name)}</a>
           </li>
         {/each}
       </ul>
@@ -59,8 +62,10 @@
       href="#add-transaction"
       class="secondary add-transaction"
       title={_("Add Journal Entry")}
-      {@attach keyboardShortcut("n")}>+</a
+      {@attach keyboardShortcut("n")}
     >
+      +
+    </a>
   </Link>
   {#if $errors.length > 0}
     <Link
@@ -73,7 +78,17 @@
     <a href="#export" class="secondary" title={_("Export")}>⬇</a>
   </Link>
   <Link report="options" name={_("Options")} key="g o" />
-  <Link report="help" name={_("Help")} key="g H" />
+  <Link report="help" name={_("Help")} key="g H">
+    <button
+      type="button"
+      class="secondary link"
+      title={_("Show keyboard shortcuts")}
+      onclick={show_keyboard_shortcuts}
+      {@attach keyboardShortcut("?")}
+    >
+      ?
+    </button>
+  </Link>
 </ul>
 {#if extension_reports.length}
   <ul class="navigation">

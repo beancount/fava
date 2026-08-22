@@ -1,14 +1,14 @@
 <script lang="ts">
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
   import { router } from "../router.ts";
-  import { ledgerData } from "../stores/index.ts";
+  import { ledger_data } from "../stores/index.ts";
   import { ledger_title } from "../stores/options.ts";
   import FilterForm from "./FilterForm.svelte";
   import HeaderIcon from "./HeaderIcon.svelte";
   import PageTitle from "./PageTitle.svelte";
   import { has_changes } from "./page-title.ts";
 
-  let other_ledgers = $derived($ledgerData.other_ledgers);
+  let other_ledgers = $derived($ledger_data.other_ledgers);
   let has_dropdown = $derived(other_ledgers.length);
 </script>
 

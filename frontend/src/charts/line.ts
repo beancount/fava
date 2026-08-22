@@ -43,7 +43,7 @@ export class LineChart {
   readonly series_names: readonly string[];
   readonly label: string | null;
   private readonly data: readonly LineChartSeries[];
-  readonly tooltipText: (
+  readonly tooltip_text: (
     $ctx: FormatterContext,
     d: LineChartDatum,
   ) => TooltipContent;
@@ -51,11 +51,11 @@ export class LineChart {
   constructor(
     label: string | null,
     data: readonly LineChartSeries[],
-    tooltipText: ($ctx: FormatterContext, d: LineChartDatum) => TooltipContent,
+    tooltip_text: ($ctx: FormatterContext, d: LineChartDatum) => TooltipContent,
   ) {
     this.label = label;
     this.data = sort(data, (d) => -d.values.length);
-    this.tooltipText = tooltipText;
+    this.tooltip_text = tooltip_text;
     this.series_names = this.data.map((series) => series.name);
   }
 

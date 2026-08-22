@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { _ } from "../i18n.ts";
 
   type ContextBalance = Record<string, string[]>;
@@ -38,7 +38,7 @@
       <tbody>
         {#each accounts as account (account)}
           <tr>
-            <td><a href={$urlForAccount(account)}>{account}</a></td>
+            <td><a href={$url_for_account(account)}>{account}</a></td>
             <td class="num">
               {#each balances_before[account] as amount (amount)}
                 {amount}

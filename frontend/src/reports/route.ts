@@ -1,7 +1,7 @@
 import { type Component, mount, unmount } from "svelte";
 
 import { _ } from "../i18n.ts";
-import { getScriptTagValue } from "../lib/dom.ts";
+import { get_script_tag_value } from "../lib/dom.ts";
 import { fetch_text } from "../lib/fetch.ts";
 import { string } from "../lib/validation.ts";
 import { read_mtime } from "../stores/mtime.ts";
@@ -25,7 +25,7 @@ export class RenderedReport {
   readonly destroy: () => void;
 
   /**
-   * A succesfully rendered report.
+   * A successfully rendered report.
    * @param route - The route that is rendered.
    * @param url - The URL that is rendered.
    * @param title - The title for this report.
@@ -40,7 +40,7 @@ export class RenderedReport {
 
 class BackendRenderedReport extends RenderedReport {
   constructor(route: BaseRoute, url: URL, target: HTMLElement) {
-    const title = getScriptTagValue("#page-title", string).unwrap_or(
+    const title = get_script_tag_value("#page-title", string).unwrap_or(
       "ERROR: reading #page-title failed.",
     );
     super(route, url, title, () => {
@@ -120,7 +120,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   readonly report: string;
   private readonly Component: Component<T>;
   private readonly load: (url: URL) => T | Promise<T>;
-  readonly get_title: (url: URL) => string;
+  readonly get_title: (props: T) => string;
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
     | {
@@ -140,7 +140,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
     report: string,
     Component: Component<T>,
     load: (url: URL) => T | Promise<T>,
-    get_title: (url: URL) => string,
+    get_title: (props: T) => string,
   ) {
     this.report = report;
     this.Component = Component;
@@ -170,7 +170,7 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
         update_props,
       };
     }
-    return new RenderedReport(this, url, this.get_title(url), () => {
+    return new RenderedReport(this, url, this.get_title(raw_props), () => {
       if (this.instance) {
         void unmount(this.instance.component);
       }
@@ -188,7 +188,7 @@ export class DatalessRoute extends Route<NoProps> {
   constructor(
     report: string,
     Component: Component<NoProps>,
-    get_title: (url: URL) => string,
+    get_title: () => string,
   ) {
     super(report, Component, noload, get_title);
   }

@@ -40,7 +40,7 @@ export function setup_jsdom(): void {
 export const user_events = {
   /** Blur the element. */
   blur(el: HTMLElement): void {
-    el.dispatchEvent(new window.Event("blur"));
+    el.dispatchEvent(new FocusEvent("blur"));
     flushSync();
   },
   /** Click the element. */

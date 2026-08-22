@@ -4,14 +4,14 @@ import { test } from "node:test";
 import {
   dateFormat,
   formatter_context,
-  localeFormatter,
+  locale_formatter,
   timeFilterDateFormat,
 } from "../src/format.ts";
 
 test("locale number formatting", () => {
-  const f = localeFormatter(null);
-  const de = localeFormatter("de_DE");
-  const ind = localeFormatter("en_IN");
+  const f = locale_formatter(null);
+  const de = locale_formatter("de_DE");
+  const ind = locale_formatter("en_IN");
   equal(f(10), "10.00");
   equal(de(10), "10,00");
   equal(ind(10), "10.00");
@@ -19,13 +19,13 @@ test("locale number formatting", () => {
   equal(de(1000000.000002), "1.000.000,00");
   equal(ind(1000000.00000001), "10,00,000.00");
 
-  const es_ar = localeFormatter("es_AR", 2);
+  const es_ar = locale_formatter("es_AR", 2);
   equal(es_ar(1234.1234), "1.234,12");
 
   // it silently clamps large or negative precisions
-  const de_large = localeFormatter("de_DE", 100);
+  const de_large = locale_formatter("de_DE", 100);
   equal(de_large(1000), "1.000,00000000000000000000");
-  const de_negative = localeFormatter("de_DE", -100);
+  const de_negative = locale_formatter("de_DE", -100);
   equal(de_negative(1000), "1.000");
 });
 

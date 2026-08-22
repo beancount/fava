@@ -1,4 +1,4 @@
-import { parseJSON } from "./json.ts";
+import { parse_json } from "./json.ts";
 import type { Result } from "./result.ts";
 import { err } from "./result.ts";
 import type { ValidationError, Validator } from "./validation.ts";
@@ -13,14 +13,14 @@ class ScriptTagNotFoundError extends Error {
  * Get the parsed content of a script tag containing JSON.
  * @param selector A DOM selector string.
  */
-function getScriptTagJSON(
+function get_script_tag_json(
   selector: string,
 ): Result<unknown, ScriptTagNotFoundError | SyntaxError> {
   const el = document.querySelector(selector);
   if (!el) {
     return err(new ScriptTagNotFoundError(selector));
   }
-  return parseJSON(el.textContent);
+  return parse_json(el.textContent);
 }
 
 /**
@@ -28,11 +28,11 @@ function getScriptTagJSON(
  * @param selector - A DOM selector string.
  * @param validator - Validator for the contents of the <script> tag.
  */
-export function getScriptTagValue<T>(
+export function get_script_tag_value<T>(
   selector: string,
   validator: Validator<T>,
 ): Result<T, ScriptTagNotFoundError | SyntaxError | ValidationError> {
-  return getScriptTagJSON(selector).and_then(validator);
+  return get_script_tag_json(selector).and_then(validator);
 }
 
 /**

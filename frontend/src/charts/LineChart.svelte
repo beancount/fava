@@ -5,11 +5,14 @@
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { area, curveStepAfter, line } from "d3-shape";
 
-  import { chartToggledCurrencies, lineChartMode } from "../stores/chart.ts";
+  import {
+    chart_toggled_currencies,
+    line_chart_mode,
+  } from "../stores/chart.ts";
   import { ctx, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
-  import { currenciesScale, includeZero, padExtent } from "./helpers.ts";
+  import { currencies_scale, include_zero, pad_extent } from "./helpers.ts";
   import type { LineChart, LineChartDatum } from "./line.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
 
@@ -31,7 +34,7 @@
   // Derived dimensions
   let inner_width = $derived(width - margin.left - margin.right);
 
-  let data = $derived(chart.filter($chartToggledCurrencies));
+  let data = $derived(chart.filter($chart_toggled_currencies));
 
   // Scales and quadtree
   let all_values = $derived(data.flatMap((d) => d.values));
@@ -44,10 +47,10 @@
   let value_extent = $derived(extent(all_values, (v) => v.value));
   // Include zero in area charts so the entire area is shown, not a cropped part of it
   let y_extent = $derived(
-    $lineChartMode === "area" ? includeZero(value_extent) : value_extent,
+    $line_chart_mode === "area" ? include_zero(value_extent) : value_extent,
   );
   // Span y-axis as max minus min value plus 5 percent margin
-  let y = $derived(scaleLinear([inner_height, 0]).domain(padExtent(y_extent)));
+  let y = $derived(scaleLinear([inner_height, 0]).domain(pad_extent(y_extent)));
 
   // Quadtree for hover.
   let quad = $derived(
@@ -81,7 +84,7 @@
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.value), chart.tooltipText($ctx, d)];
+    return d && [x(d.date), y(d.value), chart.tooltip_text($ctx, d)];
   };
 
   let desaturate_filter_id = $derived(`desaturate-future-${uid}`);
@@ -105,22 +108,22 @@
   >
     <Axis x axis={x_axis} {inner_height} />
     <Axis y axis={y_axis} />
-    {#if $lineChartMode === "area"}
+    {#if $line_chart_mode === "area"}
       <g class="area" filter={desaturate_future_filter}>
         {#each data as d (d.name)}
-          <path d={area_shape(d.values)} fill={$currenciesScale(d.name)} />
+          <path d={area_shape(d.values)} fill={$currencies_scale(d.name)} />
         {/each}
       </g>
     {/if}
     <g class="lines" filter={desaturate_future_filter}>
       {#each data as d (d.name)}
-        <path d={line_shape(d.values)} stroke={$currenciesScale(d.name)} />
+        <path d={line_shape(d.values)} stroke={$currencies_scale(d.name)} />
       {/each}
     </g>
-    {#if $lineChartMode === "line"}
+    {#if $line_chart_mode === "line"}
       <g>
         {#each data as d (d.name)}
-          <g fill={$currenciesScale(d.name)}>
+          <g fill={$currencies_scale(d.name)}>
             {#each d.values as v (v.date)}
               <circle
                 r="2"

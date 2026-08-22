@@ -3,7 +3,6 @@
 Options for Fava can be specified through Custom entries in the Beancount file.
 This module contains a list of possible options, the defaults and the code for
 parsing the options.
-
 """
 
 from __future__ import annotations
@@ -181,6 +180,7 @@ class FavaOptions:
 _fields = fields(FavaOptions)
 All_OPTS = {f.name for f in _fields}
 BEANCOUNT_OPTS = All_OPTS - {"use_external_editor"}
+DASHED_OPTION_NAMES = {name.replace("_", "-") for name in All_OPTS}
 BOOL_OPTS = {f.name for f in _fields if str(f.type) == "bool"}
 INT_OPTS = {f.name for f in _fields if str(f.type) == "int"}
 TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}

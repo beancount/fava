@@ -21,6 +21,7 @@ from pathlib import Path
 from pprint import pformat
 from string import Template
 from typing import Any
+from typing import Literal
 from typing import TYPE_CHECKING
 
 from flask import Blueprint
@@ -103,6 +104,14 @@ class InvalidJsonRequestError(ValidationError):
 
     def __init__(self) -> None:
         super().__init__("Invalid JSON body.")
+
+
+def _form_param(name: str) -> str:
+    """Get a required parameter from the form data of the request."""
+    value = request.form.get(name)
+    if value is None:
+        raise MissingParameterValidationError(name)
+    return value
 
 
 def json_err(msg: str, status: HTTPStatus) -> Response:
@@ -266,11 +275,11 @@ def _(error: GeneratedEntryError) -> Response:
 
 def validate_func_arguments(
     func: Callable[..., Any],
-) -> Callable[[Mapping[str, str]], list[str]] | None:
+) -> Callable[[Mapping[str, Any]], list[str | int | list[Any]]] | None:
     """Validate arguments for a function.
 
-    This currently only works for strings and lists (but only does a shallow
-    validation for lists).
+    This currently only works for strings, ints and lists (but only does a
+    shallow validation for lists).
 
     Args:
         func: The function to check parameters for.
@@ -281,27 +290,40 @@ def validate_func_arguments(
         has no parameters.
     """
     sig = signature(func)
-    params: list[tuple[str, Any]] = []
+    params: list[tuple[str, Literal["str", "int", "list[Any]"]]] = []
     for param in sig.parameters.values():
-        if param.annotation not in {"str", "list[Any]"}:  # pragma: no cover
-            msg = (f"Type of param {param.name} needs to str or list",)
+        if param.annotation not in {
+            "str",
+            "int",
+            "list[Any]",
+        }:  # pragma: no cover
+            msg = f"Type of param {param.name} needs to be str, int or list"
             raise ValueError(msg)
         if param.kind != Parameter.POSITIONAL_OR_KEYWORD:  # pragma: no cover
-            msg2 = f"Param {param.name} should be positional"
-            raise ValueError(msg2)
-        params.append((param.name, str if param.annotation == "str" else list))
+            msg = f"Param {param.name} should be positional"
+            raise ValueError(msg)
+        params.append((param.name, param.annotation))
 
     if not params:
         return None
 
-    def validator(mapping: Mapping[str, str]) -> list[str]:
-        args: list[str] = []
+    def validator(mapping: Mapping[str, Any]) -> list[str | int | list[Any]]:
+        args: list[str | int | list[Any]] = []
         for param, type_ in params:
             val = mapping.get(param, None)
             if val is None:
                 raise MissingParameterValidationError(param)
-            if not isinstance(val, type_):
-                raise IncorrectTypeValidationError(param, type_)
+            if type_ == "str":
+                if not isinstance(val, str):
+                    raise IncorrectTypeValidationError(param, str)
+            elif type_ == "list[Any]":
+                if not isinstance(val, list):
+                    raise IncorrectTypeValidationError(param, list)
+            else:
+                try:
+                    val = int(val)
+                except ValueError as error:
+                    raise IncorrectTypeValidationError(param, int) from error
             args.append(val)
         return args
 
@@ -327,10 +349,9 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     def _wrapper() -> Response:
         if validator is not None:
             if method == "put":
-                request_json = request.get_json(silent=True)
-                if request_json is None:
+                data = request.get_json(silent=True)
+                if not isinstance(data, dict):
                     raise InvalidJsonRequestError
-                data = request_json
             else:
                 data = request.args
             res = func(*validator(data))
@@ -421,6 +442,8 @@ def put_move(account: str, new_name: str, filename: str) -> str:
 
     if not file_path.is_file():
         raise NotAFileError(filename)
+    if not is_document_or_import_file(filename, g.ledger):
+        raise NotAValidDocumentOrImportFileError(filename)
     if new_path.exists():
         raise TargetPathAlreadyExistsError(new_path)
 
@@ -564,8 +587,10 @@ def put_format_source(source: str) -> str:
     return align(source, g.ledger.fava_options.currency_column)
 
 
-class FileDoesNotExistError(FavaAPIError):
+class FileDoesNotExistError(FavaJSONAPIError):
     """The given file does not exist."""
+
+    status = HTTPStatus.NOT_FOUND
 
     def __init__(self, filename: str) -> None:
         super().__init__(f"{filename} does not exist.")
@@ -599,8 +624,8 @@ def put_add_document() -> str:
         raise UploadedFileIsMissingFilenameError
 
     filepath = filepath_in_document_folder(
-        request.form["folder"],
-        request.form["account"],
+        _form_param("folder"),
+        _form_param("account"),
         upload.filename,
         g.ledger,
     )
@@ -682,21 +707,20 @@ class JournalPage:
 
 
 @api_endpoint
-def get_journal_page(page: str, order: str) -> JournalPage:
+def get_journal_page(page: int, order: str) -> JournalPage:
     """Get the HTML contents for a Journal page."""
-    page_number = int(page)
     journal_table_contents = get_template_attribute(
         "_journal_table.html", "journal_table_contents"
     )
-    if page == "1":
+    if page == 1:
         g.ledger.changed()
     journal_page = g.filtered.paginate_journal(
-        page_number, order="asc" if order == "asc" else "desc"
+        page, order="asc" if order == "asc" else "desc"
     )
     if journal_page is None:
         raise NotFoundError
     return JournalPage(
-        page=page_number,
+        page=page,
         total_pages=journal_page.total_pages,
         journal=journal_table_contents(journal_page.entries),
     )
@@ -749,6 +773,26 @@ def get_options() -> Options:
         pprinted_fava_options,
         {key: str(value) for key, value in g.ledger.options.items()},
     )
+
+
+@dataclass(frozen=True)
+class HelpPage:
+    """A rendered help page and the list of all help pages."""
+
+    html: str
+    pages: Sequence[tuple[str, str]]
+
+
+@api_endpoint
+def get_help(page_slug: str) -> HelpPage:
+    """Get one of Fava's help pages, rendered to HTML."""
+    from fava.help import HELP_PAGES
+    from fava.help import render_help_page
+
+    html = render_help_page(page_slug)
+    if html is None:
+        raise NotFoundError
+    return HelpPage(html, list(HELP_PAGES.items()))
 
 
 @dataclass(frozen=True)
@@ -908,6 +952,10 @@ def get_account_report() -> AccountReportJournal | AccountReportTree:
             account_name,
             accumulate=accumulate,
         )
+        if not dates:
+            return AccountReportTree(
+                charts, interval_balances=[], budgets={}, dates=[]
+            )
 
         all_accounts = (
             interval_balances[0].accounts if interval_balances else []

@@ -1,10 +1,10 @@
 import { derived } from "svelte/store";
 
 import { derived_array } from "../lib/store.ts";
-import { ledgerData } from "./index.ts";
+import { ledger_data } from "./index.ts";
 
 /** Fava's options */
-const fava_options = derived(ledgerData, (v) => v.fava_options);
+const fava_options = derived(ledger_data, (v) => v.fava_options);
 
 /** The customized currency conversion select list */
 export const conversion_currencies = derived_array(

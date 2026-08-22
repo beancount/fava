@@ -39,7 +39,7 @@ class SvelteCustomElementComponent<T extends Record<string, unknown>> {
   render(target: SvelteCustomElement, data: unknown): (() => void) | undefined {
     const res = this.validate(data);
     if (res.is_err) {
-      target.setError(
+      target.set_error(
         `Rendering component '${this.type}' failed due to invalid JSON data:`,
         domHelpers.br(),
         res.error.message,
@@ -84,7 +84,7 @@ export class SvelteCustomElement extends HTMLElement {
   private destroy?: (() => void) | undefined;
 
   /** Show some error content. */
-  setError(...nodes_or_strings: (Node | string)[]): void {
+  set_error(...nodes_or_strings: (Node | string)[]): void {
     this.classList.add("error");
     this.replaceChildren("Error: ", ...nodes_or_strings);
   }
@@ -95,12 +95,12 @@ export class SvelteCustomElement extends HTMLElement {
     }
     const type = this.getAttribute("type");
     if (type == null) {
-      this.setError("Component is missing type");
+      this.set_error("Component is missing type");
       return;
     }
     const comp = components.find((t) => t.type === type);
     if (!comp) {
-      this.setError(`Unknown component type: '${type}'`);
+      this.set_error(`Unknown component type: '${type}'`);
       return;
     }
     const script = this.querySelector("script");

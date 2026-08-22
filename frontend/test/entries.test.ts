@@ -1,6 +1,8 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { test } from "node:test";
 
+import { RawAmount } from "../src/entries/amount.ts";
+import { Decimal } from "../src/entries/decimal.ts";
 import {
   Amount,
   Balance,
@@ -80,6 +82,37 @@ test("metadata: set from string", () => {
   equal(meta.set_string("key", "true").get("key"), "true");
   equal(meta.set_string("key", "string").get("key"), "string");
   equal(meta.set_string("key", "FALSE").get("key"), false);
+
+  const decimal = meta
+    .set_string("key", "0.1234567891011121314151617")
+    .get("key");
+  ok(decimal instanceof Decimal);
+  equal(decimal.value, "0.1234567891011121314151617");
+
+  const amount = meta.set_string("key", "10.10 USD").get("key");
+  ok(amount instanceof RawAmount);
+  equal(amount.number, "10.10");
+  equal(amount.currency, "USD");
+
+  equal(meta.set_string("key", "10.10 usd").get("key"), "10.10 usd");
+  equal(meta.set_string("key", "10.10.10").get("key"), "10.10.10");
+});
+
+test("metadata: Decimal and Amount values roundtrip", () => {
+  const meta = EntryMetadata.validator({
+    decimal: { t: "Decimal", value: "0.1234567891011121314151617" },
+    amount: { t: "Amount", number: "10.10", currency: "USD" },
+  }).unwrap();
+  deepEqual(meta.entries(), [
+    ["decimal", "0.1234567891011121314151617"],
+    ["amount", "10.10 USD"],
+  ]);
+  ok(meta.get("amount") instanceof RawAmount);
+  ok(meta.get("decimal") instanceof Decimal);
+  deepEqual(JSON.parse(JSON.stringify(meta)), {
+    decimal: { t: "Decimal", value: "0.1234567891011121314151617" },
+    amount: { t: "Amount", number: "10.10", currency: "USD" },
+  });
 });
 
 test("metadata: get filename and lineno", () => {

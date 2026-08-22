@@ -5,7 +5,7 @@
 <script lang="ts">
   import type { Writable } from "svelte/store";
 
-  import { currenciesScale } from "./helpers.ts";
+  import { currencies_scale } from "./helpers.ts";
 
   interface Props {
     /** The chart legend to show. */
@@ -36,7 +36,7 @@
       }}
       class:inactive={active ? item !== $active : $toggled?.includes(item)}
     >
-      <i style="background-color: {color ? $currenciesScale(item) : '#bbb'}"
+      <i style="background-color: {color ? $currencies_scale(item) : '#bbb'}"
       ></i>
       <span>{item}</span>
     </button>

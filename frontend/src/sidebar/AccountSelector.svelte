@@ -1,6 +1,6 @@
 <script lang="ts">
-  import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { urlForAccount } from "../helpers.ts";
+  import AutocompleteInput from "../components/AutocompleteInput.svelte";
+  import { url_for_account } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import { router } from "../router.ts";
   import { accounts } from "../stores/index.ts";
@@ -10,7 +10,7 @@
 
   function select() {
     if (value) {
-      router.navigate($urlForAccount(value));
+      router.navigate($url_for_account(value));
       autocomplete?.blur();
       value = "";
     }

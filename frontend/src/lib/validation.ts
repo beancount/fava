@@ -100,7 +100,7 @@ export type ValidationT<R> = R extends Validator<infer T> ? T : never;
 /**
  * Validate with a default value if validation fails.
  */
-export function defaultValue<T>(
+export function default_value<T>(
   validator: Validator<T>,
   value: () => T,
 ): SafeValidator<T> {
@@ -192,7 +192,7 @@ export function tagged_union<T>(
   validators: { [t in keyof T]: Validator<T[t]> },
 ): Validator<T[keyof T]> {
   return (json) => {
-    if (!isJsonObject(json)) {
+    if (!is_json_object(json)) {
       return err(new TaggedUnionObjectValidationError());
     }
     const tag_value = json[tag];
@@ -274,7 +274,7 @@ export function tuple<const T extends unknown[]>(
 /**
  * Check whether the given object is a string-indexable object.
  */
-export function isJsonObject(json: unknown): json is Record<string, unknown> {
+export function is_json_object(json: unknown): json is Record<string, unknown> {
   return typeof json === "object" && json != null && !Array.isArray(json);
 }
 
@@ -287,7 +287,7 @@ export function object<T>(
   },
 ): Validator<T> {
   return (json) => {
-    if (isJsonObject(json)) {
+    if (is_json_object(json)) {
       const obj: Partial<T> = {};
       // eslint-disable-next-line no-restricted-syntax
       for (const key in validators) {
@@ -311,7 +311,7 @@ export function object<T>(
  */
 export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
   return (json) => {
-    if (isJsonObject(json)) {
+    if (is_json_object(json)) {
       const ret: Record<string, T> = {};
       for (const [key, value] of Object.entries(json)) {
         const res = decoder(value);

@@ -1,6 +1,7 @@
 2012-12-12 * "Payee" "Narration"
-    document: "file.pdf"
+    document: "receipt.pdf"
     Expenses:Food                    10.00 EUR
+    document-posting: "receipt.pdf"
     Assets:Account1                 -10.00 EUR
 
 2012-12-13 * "Payee" "Narration"

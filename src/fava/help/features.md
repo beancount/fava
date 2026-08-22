@@ -1,22 +1,18 @@
-# Fava's features
-
-This is an overview of some of the more advanced features that Fava has to
-offer.
+This is an overview of some of the features that Fava has to offer.
 
 ## Editor
 
-The [editor](../editor) provides a convenient way to edit the source file. If
-you want to use a file different from the main file to be opened by default, use
-the [`default-file`](./options#default-file) option. If you have
-[`insert-entry`](./options#insert-entry) options set, the cursor will by default
-jump to the (date-wise) latest one in the opened file.
+The [Editor](../editor) allows you to edit the source file(s). If you want to
+use a file different from the main file to be opened by default, use the
+`default-file` option. If you have `insert-entry` options set, the cursor will
+by default jump to the (date-wise) latest one in the opened file.
 
 The editor supports auto-completion for various entities, e.g., account names,
 payees, and tags. Trailing whitespace is highlighted in red. The Tab key in the
 editor can be used for indentation - to escape this keyboard trap, press Escape
 and then Tab directly after it.
 
-## Queries
+## Query
 
 On the [Query](../query/) report you can execute queries like with the
 `bean-query` command-line tool. For an explanation of how these queries work see
@@ -32,7 +28,7 @@ SELECT
     SUM(COST(position)) AS balance
 WHERE
     account ~ 'Expenses'
-GROUP BY payee, account
+GROUP BY payee
 ```
 
 Fava supports downloading the result of these queries in various file formats.
@@ -48,10 +44,10 @@ pip3 install fava[excel]
 By clicking the `+` button or using the `n` keyboard shortcut you can open a
 form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
-[`insert-entry`](./options#insert-entry) option. If you want to set a bookmark
-to this form, adding `#add-transaction` to any URL in Fava will open it on load.
-Tags and links can be added in the form by adding them (separated by spaces) to
-the narration field, e.g., `narration #tag ^somelink`.
+`insert-entry` option. If you want to set a bookmark to this form, adding
+`#add-transaction` to any URL in Fava will open it on load. Tags and links can
+be added in the form by adding them (separated by spaces) to the narration
+field, e.g., `narration #tag ^somelink`.
 
 ## Up-to-date indicators
 
@@ -94,7 +90,7 @@ If you regularly use certain views in Fava with different filters, you can put
 links to them in the sidebar. Custom links can be put in the Beancount file,
 utilizing the `custom` directive:
 
-```
+```beancount
 2016-05-04 custom "fava-sidebar-link" "Income 2014" "../income_statement?time=2014"
 ```
 
@@ -103,21 +99,15 @@ link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
 
-Two frequently used custom links are for showing all Documents and all Notes
-found in the journal:
-
-- For all Documents: `/<slug>/journal/?show=document`
-- For all Notes: `/<slug>/journal/?show=note`
-
 There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the
 current page but change the time filter to the current month.
 
 ## Language
 
-You can change the language of the interface by specifying the
-[`language`](./options#language) option. If no option is specified, Fava tries
-to guess the language from your browser settings.
+You can change the language of the interface by specifying the `language`
+option. If no option is specified, Fava tries to guess the language from your
+browser settings.
 
 ## Documents upload
 
@@ -147,7 +137,7 @@ generate Document entries for them.
 When enabling the `tag_discovered_documents`-plugin, these Document entries will
 be tagged with `#discovered` and can be filtered in the Journal:
 
-```
+```beancount
 plugin "fava.plugins.tag_discovered_documents"
 ```
 
@@ -166,7 +156,7 @@ When enabling the `link_documents`-plugin, the Document entries created by
 Beancount (see above) will be tagged with `#linked`, linked to the corresponding
 transaction and can be filtered in the Journal:
 
-```
+```beancount
 plugin "fava.plugins.link_documents"
 ```
 

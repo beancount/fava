@@ -3,14 +3,14 @@
 
   import { get_extract, save_entries } from "../../api/index.ts";
   import type { Entry } from "../../entries/index.ts";
-  import { urlFor } from "../../helpers.ts";
+  import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
   import { log_error } from "../../log.ts";
   import { notify, notify_err } from "../../notifications.ts";
   import { loading_state, router, set_query_param } from "../../router.ts";
   import { import_config } from "../../stores/fava_options.ts";
-  import { searchParams } from "../../stores/url.ts";
+  import { search_params } from "../../stores/url.ts";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
@@ -69,8 +69,8 @@
     }
   });
 
-  const extract_filename = $derived($searchParams.get("extract_filename"));
-  const extract_importer = $derived($searchParams.get("extract_importer"));
+  const extract_filename = $derived($search_params.get("extract_filename"));
+  const extract_importer = $derived($search_params.get("extract_importer"));
 
   /** Load the entries to extract for given file and importer. */
   async function load_extract(filename: string, importer: string) {
@@ -134,7 +134,7 @@
 
 {#if $import_config == null}
   <p>
-    No importers configured. See <a href={$urlFor("help/import")}
+    No importers configured. See <a href={$url_for("help/import")}
       >Help (Import)</a
     > for more information.
   </p>

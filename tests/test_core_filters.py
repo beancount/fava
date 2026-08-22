@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from decimal import Decimal
+import re
 from typing import TYPE_CHECKING
 
 import pytest
@@ -12,79 +12,10 @@ from fava.beans.account import get_entry_accounts
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterError
-from fava.core.filters import FilterSyntaxLexer
-from fava.core.filters import Match
-from fava.core.filters import MatchAmount
 from fava.core.filters import TimeFilter
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
-
-
-def test_match() -> None:
-    assert Match("asdf")("asdf")
-    assert Match("asdf")("asdfasdf")
-    assert Match("asdf")("aasdfasdf")
-    assert Match("^asdf")("asdfasdf")
-    assert not Match("asdf")("fdsadfs")
-    assert not Match("^asdf")("aasdfasdf")
-    assert Match("(((")("(((")
-
-
-def test_match_amount() -> None:
-    one = Decimal(1)
-    two = Decimal(2)
-
-    one_amt = create.amount("1 EUR")
-    two_amt = create.amount("2 EUR")
-    three_amt = create.amount("3 EUR")
-
-    assert MatchAmount("=", one)(one_amt)
-    assert MatchAmount("=", one)(one_amt)
-
-    assert MatchAmount(">", two)(three_amt)
-    assert not MatchAmount(">", two)(two_amt)
-    assert not MatchAmount(">", two)(one_amt)
-
-    assert MatchAmount(">=", two)(three_amt)
-    assert MatchAmount(">=", two)(two_amt)
-    assert not MatchAmount(">=", two)(one_amt)
-
-    assert not MatchAmount("<", two)(three_amt)
-    assert not MatchAmount("<", two)(two_amt)
-    assert MatchAmount("<", two)(one_amt)
-
-    assert not MatchAmount("<=", two)(three_amt)
-    assert MatchAmount("<=", two)(two_amt)
-    assert MatchAmount("<=", two)(one_amt)
-
-
-def test_lexer_basic() -> None:
-    lex = FilterSyntaxLexer().lex
-    data = "#some_tag ^some_link -^some_link"
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("TAG", "some_tag"),
-        ("LINK", "some_link"),
-        ("-", "-"),
-        ("LINK", "some_link"),
-    ]
-    data = "'string' string \"string\""
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("STRING", "string"),
-        ("STRING", "string"),
-        ("STRING", "string"),
-    ]
-    with pytest.raises(FilterError):
-        list(lex('"'))
-
-
-def test_lexer_emoji() -> None:
-    lex = FilterSyntaxLexer().lex
-    data = "☕ ⛽️"
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("STRING", "☕"),
-        ("STRING", "⛽️"),
-    ]
 
 
 def test_emoji_search_in_narration() -> None:
@@ -103,58 +34,6 @@ def test_emoji_search_in_narration() -> None:
 
     filter_no_match = AdvancedFilter("⛽")
     assert filter_no_match.apply([txn]) == []
-
-
-def test_lexer_literals_in_string() -> None:
-    lex = FilterSyntaxLexer().lex
-    data = "string-2-2 string"
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("STRING", "string-2-2"),
-        ("STRING", "string"),
-    ]
-
-
-def test_lexer_key() -> None:
-    lex = FilterSyntaxLexer().lex
-    data = 'payee:asdfasdf ^some_link somekey:"testtest" units>80.2 '
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("KEY", "payee"),
-        ("EQ_OP", ":"),
-        ("STRING", "asdfasdf"),
-        ("LINK", "some_link"),
-        ("KEY", "somekey"),
-        ("EQ_OP", ":"),
-        ("STRING", "testtest"),
-        ("KEY", "units"),
-        ("CMP_OP", ">"),
-        ("NUMBER", Decimal("80.2")),
-    ]
-
-
-def test_lexer_parentheses() -> None:
-    lex = FilterSyntaxLexer().lex
-    data = "(payee:asdfasdf ^some_link) (somekey:'testtest')"
-    assert [(tok.type, tok.value) for tok in lex(data)] == [
-        ("(", "("),
-        ("KEY", "payee"),
-        ("EQ_OP", ":"),
-        ("STRING", "asdfasdf"),
-        ("LINK", "some_link"),
-        (")", ")"),
-        ("(", "("),
-        ("KEY", "somekey"),
-        ("EQ_OP", ":"),
-        ("STRING", "testtest"),
-        (")", ")"),
-    ]
-
-
-def test_filterexception() -> None:
-    with pytest.raises(FilterError, match='Illegal character """ in filter'):
-        AdvancedFilter('who:"fff')
-
-    with pytest.raises(FilterError, match="Failed to parse filter"):
-        AdvancedFilter('any(who:"Martin"')
 
 
 @pytest.mark.parametrize(
@@ -187,6 +66,7 @@ def test_filterexception() -> None:
         (">=17500", 3),
         (">=17500 <18000", 1),
         ("any(units >= 17500)", 3),
+        ("any(>=17500)", 3),
     ],
 )
 def test_advanced_filter(
@@ -262,3 +142,11 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
             example_ledger.fava_options,
             "no_date",
         )
+
+
+def test_filter_error_contains_the_filter() -> None:
+    with pytest.raises(
+        FilterError,
+        match=re.escape("who:\"fff': Unexpected '\"' in parsed expression."),
+    ):
+        AdvancedFilter('who:"fff')

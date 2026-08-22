@@ -10,7 +10,7 @@ import { ledger_title } from "../stores/options.ts";
 import HeaderAndAside from "./HeaderAndAside.svelte";
 import { page_title } from "./page-title.ts";
 
-export function initSidebar(): void {
+export function init_sidebar(): void {
   page_title.subscribe(({ title }) => {
     document.title = `${title} - ${store_get(ledger_title)}`;
   });

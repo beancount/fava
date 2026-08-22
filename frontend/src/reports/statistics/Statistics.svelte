@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { urlFor } from "../../helpers.ts";
+  import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import QueryTable from "../query/QueryTable.svelte";
   import EntriesByType from "./EntriesByType.svelte";
@@ -20,7 +20,7 @@
 <div class="left">
   <h3>
     {_("Postings per Account")}
-    (<a href={$urlFor("query/", { query_string: postings_per_account_query })}>
+    (<a href={$url_for("query/", { query_string: postings_per_account_query })}>
       {_("Query")}
     </a>)
   </h3>

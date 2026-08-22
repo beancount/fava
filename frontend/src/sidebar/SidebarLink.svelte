@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { urlFor } from "../helpers.ts";
+  import { url_for } from "../helpers.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
   import { keyboardShortcut } from "../keyboard-shortcuts.ts";
   import { pathname } from "../stores/url.ts";
@@ -22,7 +22,7 @@
 
   let { report, name, key, remote, bubble, children }: Props = $props();
 
-  let href = $derived(remote ? report : $urlFor(`${report}/`));
+  let href = $derived(remote ? report : $url_for(`${report}/`));
   let selected = $derived(remote ? false : href.includes($pathname));
 </script>
 

@@ -37,6 +37,7 @@ export const error_validator = object<BeancountError>({
 const account_detail = object({
   balance_string: optional(string),
   close_date: optional(date),
+  currencies: optional(array(string)),
   last_entry: optional(object({ date, entry_hash: string })),
   uptodate_status: optional(constants("green", "yellow", "red")),
 });

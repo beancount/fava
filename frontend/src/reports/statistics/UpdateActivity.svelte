@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { AccountDetail } from "../../api/validators.ts";
   import { day } from "../../format.ts";
-  import { urlForAccount } from "../../helpers.ts";
+  import { url_for_account } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
   import AccountIndicator from "../../sidebar/AccountIndicator.svelte";
   import {
@@ -56,7 +56,7 @@
         {@const inventory = balances[account_name]}
         <tr>
           <td class="account">
-            <a href={$urlForAccount(account_name)}>{account_name}</a>
+            <a href={$url_for_account(account_name)}>{account_name}</a>
           </td>
           <td>
             {#if uptodate_status}

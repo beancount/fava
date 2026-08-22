@@ -3,7 +3,7 @@
   import type { TreeNode } from "../../lib/tree.ts";
   import { toggle_account, toggled_accounts } from "../../stores/accounts.ts";
   import Accounts from "./Accounts.svelte";
-  import { selectedAccount } from "./stores.ts";
+  import { selected_account } from "./stores.ts";
 
   interface Props {
     node: TreeNode<{ name: string; count: number }>;
@@ -17,7 +17,7 @@
   let is_toggled = $derived($toggled_accounts.has(account));
 
   let hasChildren = $derived(node.children.length > 0);
-  let selected = $derived($selectedAccount === node.name);
+  let selected = $derived($selected_account === node.name);
 
   /**
    * Start drag if a document filename is dragged onto an account.
@@ -73,7 +73,7 @@
       type="button"
       class="unset leaf"
       onclick={() => {
-        $selectedAccount = selected ? "" : account;
+        $selected_account = selected ? "" : account;
       }}>{leaf(account)}</button
     >
     {#if node.count > 0}

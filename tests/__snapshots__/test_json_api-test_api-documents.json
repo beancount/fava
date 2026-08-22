@@ -5,7 +5,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/import.csv",
     "links": ["link1"],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 78 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 79 },
     "t": "Document",
     "tags": ["tag"]
   },
@@ -15,7 +15,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/receipt.pdf",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 79 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 80 },
     "t": "Document",
     "tags": ["discovered"]
   },
@@ -25,7 +25,7 @@
     "entry_hash": "ENTRY_HASH",
     "filename": "TEST_DATA_DIR/receipt.pdf",
     "links": [],
-    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 81 },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 82 },
     "t": "Document",
     "tags": []
   }

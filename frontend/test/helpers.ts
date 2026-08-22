@@ -3,12 +3,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { ledgerDataValidator } from "../src/api/validators.ts";
-import { parseJSON } from "../src/lib/json.ts";
-import { ledgerData } from "../src/stores/index.ts";
+import { parse_json } from "../src/lib/json.ts";
+import { ledger_data } from "../src/stores/index.ts";
 import { current_url } from "../src/stores/url.ts";
 
 /** Load the Python test snapshot output with the given name and parse as JSON. */
-export async function loadJSONSnapshot(
+export async function load_json_snapshot(
   name: `${string}.json`,
 ): Promise<unknown> {
   const path = join(
@@ -20,22 +20,22 @@ export async function loadJSONSnapshot(
     "__snapshots__",
     name,
   );
-  return parseJSON(await readFile(path, "utf8")).unwrap();
+  return parse_json(await readFile(path, "utf8")).unwrap();
 }
 
 let loaded = false;
 
-/** Load the ledgerData (of the long-example file. */
-export async function initialiseLedgerData(): Promise<void> {
+/** Load the ledger_data (of the long-example file. */
+export async function initialise_ledger_data(): Promise<void> {
   if (loaded) {
     return;
   }
   try {
-    const data = await loadJSONSnapshot(
+    const data = await load_json_snapshot(
       "test_internal_api-test_get_ledger_data.json",
     );
     const res = ledgerDataValidator(data).unwrap();
-    ledgerData.set(res);
+    ledger_data.set(res);
     current_url.set(
       new URL("http://localhost:5000/example-beancount-file/income_statement/"),
     );

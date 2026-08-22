@@ -28,6 +28,15 @@ export default defineConfig(
       "@typescript-eslint/explicit-module-boundary-types": ON,
       "@typescript-eslint/promise-function-async": ON,
       "@typescript-eslint/strict-boolean-expressions": ON,
+      "@typescript-eslint/no-floating-promises": [
+        ON,
+        {
+          allowForKnownSafeCalls: [
+            { from: "package", name: ["test"], package: "node:test" },
+          ],
+        },
+      ],
+
       "@typescript-eslint/naming-convention": [
         ON,
         {
@@ -35,21 +44,9 @@ export default defineConfig(
           format: ["camelCase", "snake_case", "UPPER_CASE"],
           leadingUnderscore: "allow",
         },
-        {
-          selector: "function",
-          format: ["camelCase", "snake_case"],
-        },
-        {
-          selector: "typeLike",
-          format: ["PascalCase"],
-        },
+        { selector: "function", format: ["snake_case"] },
+        { selector: "typeLike", format: ["PascalCase"] },
       ],
-    },
-  },
-  {
-    files: ["**/*.test.ts"],
-    rules: {
-      "@typescript-eslint/no-floating-promises": OFF,
     },
   },
   {
@@ -64,6 +61,10 @@ export default defineConfig(
     rules: {
       "@typescript-eslint/no-useless-default-assignment": OFF,
       "@typescript-eslint/no-unused-vars": [ON, { varsIgnorePattern: "^_" }],
+      "@typescript-eslint/naming-convention": [
+        ON,
+        { selector: "typeProperty", format: ["snake_case"] },
+      ],
     },
   },
 );

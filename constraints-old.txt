@@ -71,12 +71,14 @@ lxml==5.3.0
     #   beangulp
     #   pyexcel-ezodf
     #   pyexcel-ods3
-markdown2==2.3.0
+markdown-it-py==3.0.0
     # via fava (pyproject.toml)
 markupsafe==2.1.1
     # via
     #   jinja2
     #   werkzeug
+mdurl==0.1.0
+    # via markdown-it-py
 more-itertools==6.0.0
     # via
     #   -c (workspace)
@@ -88,8 +90,6 @@ packaging==14.0
     # via pytest
 pluggy==1.3.0
     # via pytest
-ply==3.4
-    # via fava (pyproject.toml)
 pyexcel==0.7.0
     # via fava (pyproject.toml)
 pyexcel-ezodf==0.3.3
@@ -119,10 +119,6 @@ pytz==2022.7
     #   flask-babel
 regex==2022.9.13
     # via beancount
-setuptools==67.0.0
-    # via
-    #   -c (workspace)
-    #   fava (pyproject.toml:old-deps)
 simplejson==3.16.0
     # via fava (pyproject.toml)
 six==1.16.0

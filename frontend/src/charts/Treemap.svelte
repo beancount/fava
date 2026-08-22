@@ -1,11 +1,11 @@
 <script lang="ts">
   import { treemap } from "d3-hierarchy";
 
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
-  import { treemapScale } from "./helpers.ts";
+  import { treemap_scale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
@@ -32,7 +32,7 @@
 
   function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;
-    return $treemapScale(
+    return $treemap_scale(
       node.depth === 1 || !node.parent
         ? node.data.account
         : node.parent.data.account,
@@ -51,7 +51,7 @@
       ])}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
-      <a href={$urlForAccount(account)}>
+      <a href={$url_for_account(account)}>
         <text
           dy=".5em"
           x={(d.x1 - d.x0) / 2}

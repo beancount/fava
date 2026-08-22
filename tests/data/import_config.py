@@ -23,6 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from beancount.core import data
 
     from fava.beans.abc import Directive
+    from fava.beans.protocols import Amount
 
 DATE = datetime.date(2022, 12, 12)
 
@@ -56,10 +57,12 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
         with path.open(encoding="utf-8") as file_:
             csv_reader = csv.DictReader(file_, delimiter=";")
             for index, row in enumerate(csv_reader):
-                meta: dict[str, str | int] = {
+                meta: dict[str, str | int | Decimal | Amount] = {
                     "filename": filepath,
                     "lineno": index,
                     "__source__": ";".join(list(row.values())),
+                    "decimal_value": Decimal(10),
+                    "amount_value": create.amount("10 USD"),
                 }
                 date = datetime.date.fromisoformat(row["Buchungsdatum"])
                 desc = row["Umsatztext"]

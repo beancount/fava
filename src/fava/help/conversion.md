@@ -1,10 +1,8 @@
-# Conversion
-
 In most reports in Fava, a conversion can be selected with the select dropdown
 at the top of the chart. These conversions will use the prices defined in the
-Beancount file, so these should defined manually or by some plugin (using
-`beancount.plugins.implicit_prices` is recommend to get prices for all costs in
-the Beancount file).
+Beancount file, so these should be defined manually or by some plugin (using
+`beancount.plugins.implicit_prices` is recommended to get prices for all costs
+in the Beancount file).
 
 - "At Cost" - Show all inventories at cost, e.g., a position of
   `10 STOCK {4 USD}` would be converted to `40 USD`.

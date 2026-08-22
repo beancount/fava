@@ -1,15 +1,15 @@
 <script lang="ts">
+  import SelectCombobox from "./../components/SelectCombobox.svelte";
   import { _, format } from "../i18n.ts";
   import {
     DEFAULT_INTERVAL,
-    getInterval,
+    get_interval,
     INTERVALS,
-    intervalLabel,
+    interval_label,
   } from "../lib/interval.ts";
   import { router } from "../router.ts";
   import { conversions } from "../stores/chart.ts";
   import { conversion, interval } from "../stores/url.ts";
-  import SelectCombobox from "./SelectCombobox.svelte";
 
   const conversion_description = (option: string) => {
     switch (option) {
@@ -51,5 +51,5 @@
     }
   }
   options={INTERVALS}
-  description={(o: string) => intervalLabel(getInterval(o))}
+  description={(o: string) => interval_label(get_interval(o))}
 />

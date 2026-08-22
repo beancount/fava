@@ -1,14 +1,13 @@
-# Budgets
-
 Budgets on a per-account basis can be added via `custom` directives in the
 Beancount file:
 
-<pre><textarea is="beancount-textarea">
+```beancount
 2012-01-01 custom "budget" Expenses:Coffee       "daily"         4.00 EUR
 2013-01-01 custom "budget" Expenses:Books        "weekly"       20.00 EUR
 2014-02-10 custom "budget" Expenses:Groceries    "monthly"      40.00 EUR
 2015-05-01 custom "budget" Expenses:Electricity  "quarterly"    85.00 EUR
-2016-06-01 custom "budget" Expenses:Holiday      "yearly"     2500.00 EUR</textarea></pre>
+2016-06-01 custom "budget" Expenses:Holiday      "yearly"     2500.00 EUR
+```
 
 If budgets are specified, Fava's reports and charts will display remaining
 budgets and related information.

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BeancountError } from "../../api/validators.ts";
-  import { urlForAccount } from "../../helpers.ts";
+  import { url_for_account } from "../../helpers.ts";
   import { _, format } from "../../i18n.ts";
   import SourceLink from "../../SourceLink.svelte";
   import { NumberColumn, Sorter, StringColumn } from "../../sort/index.ts";
@@ -67,7 +67,7 @@
               {#if type === "text"}
                 {text}
               {:else}
-                <a href={$urlForAccount(text)}>{text}</a>
+                <a href={$url_for_account(text)}>{text}</a>
               {/if}
             {/each}
           </td>

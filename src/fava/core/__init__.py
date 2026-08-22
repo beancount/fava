@@ -9,7 +9,6 @@ from functools import cached_property
 from functools import lru_cache
 from itertools import islice
 from itertools import takewhile
-from os.path import normpath
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -724,12 +723,21 @@ class FavaLedger:
         """
         entry = self.get_entry(entry_hash)
         value = entry.meta.get(metadata_key, None)
+        accounts = set(get_entry_accounts(entry))
+        if not isinstance(value, str):
+            for posting in getattr(entry, "postings", []):
+                if posting.meta is None:
+                    continue
+                posting_value = posting.meta.get(metadata_key, None)
+                if isinstance(posting_value, str):
+                    value = posting_value
+                    accounts = {posting.account}
+                    break
         if not isinstance(value, str):
             raise StatementMetadataInvalidError(metadata_key)
 
-        accounts = set(get_entry_accounts(entry))
         filename, _ = get_position(entry)
-        full_path = Path(normpath(Path(filename).parent / value))
+        full_path = (Path(filename).parent / value).resolve()
         for document in self.all_entries_by_type.Document:
             document_path = Path(document.filename)
             if document_path == full_path:

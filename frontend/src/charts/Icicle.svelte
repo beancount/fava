@@ -1,11 +1,11 @@
 <script lang="ts">
   import { partition } from "d3-hierarchy";
 
-  import { urlForAccount } from "../helpers.ts";
+  import { url_for_account } from "../helpers.ts";
   import { leaf } from "../lib/account.ts";
   import { ctx } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
-  import { sunburstScale } from "./helpers.ts";
+  import { sunburst_scale } from "./helpers.ts";
   import {
     type AccountHierarchyDatum,
     type AccountHierarchyNode,
@@ -48,7 +48,7 @@
       class:current={current != null ? current.startsWith(account) : false}
     >
       <a
-        href={$urlForAccount(account)}
+        href={$url_for_account(account)}
         aria-label={account}
         onmouseover={() => {
           current = account;
@@ -59,7 +59,7 @@
       >
         <rect
           fill-rule="evenodd"
-          fill={$sunburstScale(account)}
+          fill={$sunburst_scale(account)}
           width={width * (d.y1 - d.y0)}
           height={height * (d.x1 - d.x0)}
           role="img"

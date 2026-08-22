@@ -1,4 +1,4 @@
-import { stratifyAccounts } from "../lib/tree.ts";
+import { stratify_accounts } from "../lib/tree.ts";
 import type {
   Inventory,
   QueryResultTable,
@@ -10,9 +10,9 @@ import type { LineChart } from "./line.ts";
 import { ParsedLineChart } from "./line.ts";
 
 /** Get the query chart, if possible, from a query result */
-export function getQueryChart(
+export function get_query_chart(
   table: QueryResultTable,
-  $chartContext: ChartContext,
+  $chart_context: ChartContext,
 ): HierarchyChart | LineChart | null {
   const { columns } = table;
   const [first, second] = columns;
@@ -23,13 +23,13 @@ export function getQueryChart(
     const grouped = (table.rows as [string, Inventory][]).map(
       ([group, inv]) => ({ group, balance: inv.value }),
     );
-    const root = stratifyAccounts(
+    const root = stratify_accounts(
       grouped,
       (d) => d.group,
       (account, d) => ({ account, balance: d?.balance ?? {} }),
     );
     root.account = "(root)";
-    return new ParsedHierarchyChart(null, root).with_context($chartContext);
+    return new ParsedHierarchyChart(null, root).with_context($chart_context);
   }
   if (first.dtype === "date" && second.dtype === "Inventory") {
     const bals = (table.rows as [Date, Inventory][]).map(([date, inv]) => ({
