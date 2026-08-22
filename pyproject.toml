@@ -38,8 +38,10 @@ dependencies = [
   "beanquery>=0.1,<0.3",
   "cheroot>=8,<12",
   "click>=7,<9",
+  "dacite>=1.9,<2",
   "markdown-it-py>=3,<5",
   "simplejson>=3.16.0,<4",
+  "tomli>=2,<3",
   "typing-extensions>=4.5; python_version<\"3.12\"",
   "watchfiles>=0.20.0",
 ]

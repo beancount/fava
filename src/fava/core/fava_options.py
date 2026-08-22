@@ -28,6 +28,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
     from fava.beans.abc import Custom
+    from fava.config import FavaProjectConfig
     from fava.util.date import FiscalYearEnd
 
 
@@ -178,6 +179,7 @@ class FavaOptions:
 
 _fields = fields(FavaOptions)
 All_OPTS = {f.name for f in _fields}
+BEANCOUNT_OPTS = All_OPTS - {"use_external_editor"}
 DASHED_OPTION_NAMES = {name.replace("_", "-") for name in All_OPTS}
 BOOL_OPTS = {f.name for f in _fields if str(f.type) == "bool"}
 INT_OPTS = {f.name for f in _fields if str(f.type) == "int"}
@@ -191,7 +193,7 @@ def parse_option_custom_entry(  # noqa: PLR0912
 ) -> None:
     """Parse a single custom fava-option entry and set option accordingly."""
     key = str(entry.values[0].value).replace("-", "_")
-    if key not in All_OPTS:
+    if key not in BEANCOUNT_OPTS:
         raise UnknownOptionError(key)
 
     value = entry.values[1].value if len(entry.values) > 1 else ""
@@ -225,6 +227,8 @@ def parse_option_custom_entry(  # noqa: PLR0912
 
 def parse_options(
     custom_entries: Sequence[Custom],
+    *,
+    project_config: FavaProjectConfig | None = None,
 ) -> tuple[FavaOptions, list[OptionError]]:
     """Parse custom entries for Fava options.
 
@@ -234,6 +238,8 @@ def parse_options(
 
     Args:
         custom_entries: A list of Custom entries.
+        project_config: Parsed project config that can override supported
+            options.
 
     Returns:
         A tuple (options, errors) where options is a dictionary of all options
@@ -250,5 +256,8 @@ def parse_options(
         except (IndexError, TypeError, ValueError) as err:
             msg = f"Failed to parse fava-option entry: {err!s}"
             errors.append(OptionError(entry.meta, msg, entry))
+
+    if project_config is not None:
+        options.use_external_editor = project_config.use_external_editor
 
     return options, errors
