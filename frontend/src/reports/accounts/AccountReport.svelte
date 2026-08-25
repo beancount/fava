@@ -5,7 +5,7 @@
   import { _ } from "../../i18n.ts";
   import { is_non_empty } from "../../lib/array.ts";
   import { interval_label } from "../../lib/interval.ts";
-  import { current_time_filter_date_format } from "../../stores/format.ts";
+  import { date_format } from "../../stores/format.ts";
   import { interval } from "../../stores/url.ts";
   import IntervalTreeTable from "../../tree-table/IntervalTreeTable.svelte";
   import JournalTable from "../journal/JournalTable.svelte";
@@ -33,9 +33,7 @@
             .map(
               (node, index) =>
                 new ParsedHierarchyChart(
-                  $current_time_filter_date_format(
-                    dates[index]?.begin ?? new Date(),
-                  ),
+                  $date_format(dates[index]?.begin ?? new Date()),
                   node,
                 ),
             ),

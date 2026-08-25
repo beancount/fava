@@ -2,7 +2,7 @@ import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
 import { derived, get as store_get } from "svelte/store";
 
-import { current_time_filter_date_format } from "../stores/format.ts";
+import { date_format } from "../stores/format.ts";
 import { accounts, currencies_sorted } from "../stores/index.ts";
 import { operating_currency } from "../stores/options.ts";
 
@@ -13,10 +13,7 @@ import { operating_currency } from "../stores/options.ts";
  */
 export function url_for_time_filter(date: Date): string {
   const url = new URL(window.location.href);
-  url.searchParams.set(
-    "time",
-    store_get(current_time_filter_date_format)(date),
-  );
+  url.searchParams.set("time", store_get(date_format)(date));
   return url.toString();
 }
 

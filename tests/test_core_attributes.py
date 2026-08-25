@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from fava.core.attributes import get_active_years
-from fava.util.date import FiscalYearEnd
+from fava.util.date import END_OF_YEAR
+from fava.util.date import FiscalYearEnds
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
@@ -28,23 +29,17 @@ def test_get_active_years(load_doc_entries: Sequence[Directive]) -> None:
     2012-12-12 * "test"
         Assets:T   4.00 USD
         Expenses:T
+    2013-02-02 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
     """
-    assert get_active_years(load_doc_entries, FiscalYearEnd(12, 31)) == [
+    assert get_active_years(load_doc_entries, END_OF_YEAR) == [
+        "2013",
         "2012",
         "2011",
         "2010",
     ]
-    assert get_active_years(load_doc_entries, FiscalYearEnd(12, 1)) == [
-        "FY2013",
-        "FY2011",
-        "FY2010",
-    ]
-    assert get_active_years(load_doc_entries, FiscalYearEnd(11, 1)) == [
-        "FY2013",
-        "FY2012",
-        "FY2011",
-    ]
-    assert get_active_years(load_doc_entries, FiscalYearEnd(15, 31)) == [
+    assert get_active_years(load_doc_entries, FiscalYearEnds.JP) == [
         "FY2012",
         "FY2011",
         "FY2010",

@@ -4,13 +4,12 @@ import { derived } from "svelte/store";
 
 import type { FormatterContext } from "../format.ts";
 import {
-  dateFormat,
   formatter_context,
+  get_date_format,
   locale_formatter,
   replaceNumbers,
-  timeFilterDateFormat,
 } from "../format.ts";
-import { locale } from "./fava_options.ts";
+import { fiscal_year_end, locale } from "./fava_options.ts";
 import { incognito, precisions } from "./index.ts";
 import { interval } from "./url.ts";
 
@@ -33,8 +32,8 @@ export const ctx = derived(
     formatter_context($incognito, $locale, $precisions),
 );
 
-export const current_date_format = derived(interval, (val) => dateFormat[val]);
-export const current_time_filter_date_format = derived(
-  interval,
-  (val) => timeFilterDateFormat[val],
+export const date_format = derived(
+  [interval, fiscal_year_end],
+  ([$interval, $fiscal_year_end]) =>
+    get_date_format($interval, $fiscal_year_end),
 );

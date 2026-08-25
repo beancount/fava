@@ -196,7 +196,7 @@ export class ParsedBarChart implements ParsedFavaChart {
         budget: interval.budgets[currency] ?? 0,
       })),
       date: interval.date,
-      label: $chart_context.dateFormat(interval.date),
+      label: $chart_context.date_format(interval.date),
       account_balances: interval.account_balances,
     }));
 

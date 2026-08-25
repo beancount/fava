@@ -5,11 +5,7 @@
 
   import { url_for_account } from "../helpers.ts";
   import { bar_chart_mode, chart_toggled_currencies } from "../stores/chart.ts";
-  import {
-    ctx,
-    current_time_filter_date_format,
-    short,
-  } from "../stores/format.ts";
+  import { ctx, date_format, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
@@ -123,7 +119,7 @@
         />
         <a
           href={url_for_time_filter(group.date)}
-          aria-label={$current_time_filter_date_format(group.date)}
+          aria-label={$date_format(group.date)}
         >
           <rect
             class="axis-group-box"

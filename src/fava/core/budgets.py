@@ -14,7 +14,7 @@ from beancount.core.amount import Amount
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import days_in_daterange
-from fava.util.date import INTERVALS
+from fava.util.date import get_interval
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -23,6 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Custom
     from fava.core import FavaLedger
+    from fava.util.date import FiscalYearEnd
     from fava.util.date import Interval
 
 
@@ -55,7 +56,8 @@ class BudgetModule(FavaModule):
 
     def load_file(self) -> None:  # noqa: D102
         self._budget_entries, self.errors = parse_budgets(
-            self.ledger.all_entries_by_type.Custom
+            self.ledger.all_entries_by_type.Custom,
+            self.ledger.fava_options.fiscal_year_end,
         )
 
     def calculate(
@@ -81,11 +83,11 @@ class BudgetModule(FavaModule):
         )
 
 
-def _parse_budget(entry: Custom) -> Budget:
+def _parse_budget(entry: Custom, fye: FiscalYearEnd) -> Budget:
     values = msgspec.convert(
         tuple(v.value for v in entry.values), tuple[str, str, Amount]
     )
-    interval = INTERVALS.get(str(values[1]).lower())
+    interval = get_interval(values[1], fye)
     if not interval:
         msg = "Invalid interval for budget entry"
         raise TypeError(msg)
@@ -99,12 +101,13 @@ def _parse_budget(entry: Custom) -> Budget:
 
 
 def parse_budgets(
-    custom_entries: Sequence[Custom],
+    custom_entries: Sequence[Custom], fye: FiscalYearEnd
 ) -> tuple[BudgetDict, Sequence[BudgetError]]:
     """Parse budget directives from custom entries.
 
     Args:
         custom_entries: the Custom entries to parse budgets from.
+        fye: The fiscal year end to use.
 
     Returns:
         A dict of accounts to lists of budgets.
@@ -117,7 +120,7 @@ def parse_budgets(
 
     for entry in (entry for entry in custom_entries if entry.type == "budget"):
         try:
-            budget = _parse_budget(entry)
+            budget = _parse_budget(entry, fye)
             budgets[budget.account].append(budget)
         except (TypeError, msgspec.ValidationError) as error:
             errors.append(

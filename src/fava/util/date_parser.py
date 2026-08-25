@@ -7,9 +7,6 @@ from __future__ import annotations
 
 import datetime
 import re
-from abc import ABC
-from abc import abstractmethod
-from dataclasses import dataclass
 from datetime import timedelta
 from typing import Literal
 from typing import TYPE_CHECKING
@@ -17,7 +14,8 @@ from typing import TYPE_CHECKING
 from fava.util.date import DateRange
 from fava.util.date import Day
 from fava.util.date import END_OF_YEAR
-from fava.util.date import get_fiscal_period
+from fava.util.date import FiscalQuarter
+from fava.util.date import FiscalYear
 from fava.util.date import InvalidDateRangeError
 from fava.util.date import local_today
 from fava.util.date import Month
@@ -89,132 +87,101 @@ _LEXER = Lexer(
 )
 
 
-class _Period(ABC):
-    """A period of time that (part of) a date expression denotes."""
+class Period:
+    """A period given by its first day and the interval that it spans."""
+
+    def __init__(self, begin: datetime.date, interval: Interval) -> None:
+        self.begin = begin
+        self.interval = interval
 
     @property
-    @abstractmethod
     def date_range(self) -> DateRange:
         """The range of dates that this period spans."""
+        return DateRange(self.begin, self.interval.get_next(self.begin))
 
-    def refine(self, token: Token) -> _Period:
+    def refine(self, token: Token) -> Period:
         """Narrow this period down, e.g. a year to one of its months."""
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True, slots=True)
-class _IntervalPeriod(_Period):
-    """A period given by its first day and the interval that it spans."""
-
-    begin: datetime.date
-    interval: Interval
-
-    @override
-    @property
-    def date_range(self) -> DateRange:
-        return DateRange(self.begin, self.interval.get_next(self.begin))
-
-
-@dataclass(frozen=True, slots=True)
-class _YearPeriod(_Period):
+class YearPeriod(Period):
     """A calendar year, which can be refined to a month, quarter or week."""
 
-    year: int
+    def __init__(self, year: int) -> None:
+        super().__init__(datetime.date(year, 1, 1), Year)
 
     @override
-    @property
-    def date_range(self) -> DateRange:
-        begin = datetime.date(self.year, 1, 1)
-        return DateRange(begin, Year.get_next(begin))
-
-    @override
-    def refine(self, token: Token) -> _Period:
+    def refine(self, token: Token) -> Period:
+        year = self.begin.year
         if token.kind is NUMBER:
-            return _MonthPeriod(self.year, NUMBER.value(token))
+            return MonthPeriod(year, NUMBER.value(token))
         if token.kind is QUARTER:
             month = (QUARTER.value(token) - 1) * 3 + 1
-            return _IntervalPeriod(datetime.date(self.year, month, 1), Quarter)
+            return Period(datetime.date(year, month, 1), Quarter)
         if token.kind is WEEK:
-            begin = datetime.date.fromisocalendar(
-                self.year, WEEK.value(token), 1
-            )
-            return _IntervalPeriod(begin, Week)
+            begin = datetime.date.fromisocalendar(year, WEEK.value(token), 1)
+            return Period(begin, Week)
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True, slots=True)
-class _MonthPeriod(_Period):
+class MonthPeriod(Period):
     """A month, which can be refined to one of its days."""
 
-    year: int
-    month: int
+    def __init__(self, year: int, month: int) -> None:
+        super().__init__(datetime.date(year, month, 1), Month)
 
     @override
-    @property
-    def date_range(self) -> DateRange:
-        begin = datetime.date(self.year, self.month, 1)
-        return DateRange(begin, Month.get_next(begin))
-
-    @override
-    def refine(self, token: Token) -> _Period:
+    def refine(self, token: Token) -> Period:
         if token.kind is NUMBER:
-            begin = datetime.date(self.year, self.month, NUMBER.value(token))
-            return _IntervalPeriod(begin, Day)
+            begin = datetime.date(
+                self.begin.year, self.begin.month, NUMBER.value(token)
+            )
+            return Period(begin, Day)
         raise UnexpectedTokenError(token.text)
 
 
-@dataclass(frozen=True, slots=True)
-class _FiscalYearPeriod(_Period):
+class FiscalYearPeriod(Period):
     """A fiscal year, which can be refined to one of its quarters."""
 
-    fye: FiscalYearEnd
-    year: int
-    quarter: int | None = None
+    interval: FiscalYear
+
+    def __init__(self, begin: datetime.date, fye: FiscalYearEnd) -> None:
+        super().__init__(begin, FiscalYear(fye))
 
     @override
-    @property
-    def date_range(self) -> DateRange:
-        begin, end = get_fiscal_period(self.year, self.fye, self.quarter)
-        return DateRange(begin, end)
-
-    @override
-    def refine(self, token: Token) -> _Period:
-        if token.kind is QUARTER and self.quarter is None:
-            return _FiscalYearPeriod(self.fye, self.year, QUARTER.value(token))
+    def refine(self, token: Token) -> Period:
+        if token.kind is QUARTER:
+            fiscal_quarter = FiscalQuarter(self.interval.fye)
+            begin = month_offset(self.begin, (QUARTER.value(token) - 1) * 3)
+            return Period(begin, fiscal_quarter)
         raise UnexpectedTokenError(token.text)
 
 
 def _period_for_variable(  # noqa: PLR0911
-    name: Variable,
-    offset: int,
-    fye: FiscalYearEnd,
-) -> _Period:
+    name: Variable, offset: int, fye: FiscalYearEnd
+) -> Period:
     """The period that a variable like 'month+2' refers to."""
     today = local_today()
     if name == "fiscal_year":
-        after_fye = (today.month, today.day) > (fye.month_of_year, fye.day)
-        year = today.year + after_fye - fye.year_offset + offset
-        return _FiscalYearPeriod(fye, year)
+        fiscal_year = FiscalYear(fye)
+        cur = fiscal_year.get_prev(today)
+        return FiscalYearPeriod(cur.replace(year=cur.year + offset), fye)
     if name == "fiscal_quarter":
-        month = month_offset(today.replace(day=1), offset * 3)
-        after_fye = month.month > fye.month_of_year
-        year = month.year + after_fye - fye.year_offset
-        quarter = ((month.month - fye.month_of_year - 1) // 3) % 4 + 1
-        return _FiscalYearPeriod(fye, year, quarter)
+        fiscal_quarter = FiscalQuarter(fye)
+        begin = month_offset(fiscal_quarter.get_prev(today), offset * 3)
+        return Period(begin, fiscal_quarter)
     if name == "year":
-        return _YearPeriod(today.year + offset)
+        return YearPeriod(today.year + offset)
     if name == "quarter":
         begin = month_offset(Quarter.get_prev(today), offset * 3)
-        return _IntervalPeriod(begin, Quarter)
+        return Period(begin, Quarter)
     if name == "month":
         begin = month_offset(Month.get_prev(today), offset)
-        return _MonthPeriod(begin.year, begin.month)
+        return MonthPeriod(begin.year, begin.month)
     if name == "week":
-        return _IntervalPeriod(
-            Week.get_prev(today) + timedelta(offset * 7), Week
-        )
+        return Period(Week.get_prev(today) + timedelta(offset * 7), Week)
     assert_type(name, Literal["day"])
-    return _IntervalPeriod(today + timedelta(offset), Day)
+    return Period(today + timedelta(offset), Day)
 
 
 class _DateExpressionParser(ParserBase):
@@ -254,13 +221,14 @@ class _DateExpressionParser(ParserBase):
             YEAR,
         )
 
-    def _period(self) -> _Period:
+    def _period(self) -> Period:
         """Parse a single period, like '2010-03' or '(month)-10'."""
         token = self.advance()
         if token.kind is YEAR:
-            period: _Period = _YearPeriod(YEAR.value(token))
+            period: Period = YearPeriod(YEAR.value(token))
         elif token.kind is FY:
-            period = _FiscalYearPeriod(self._fye, FY.value(token))
+            begin = self._fye.begin_date_for_year(FY.value(token))
+            period = FiscalYearPeriod(begin, self._fye)
         elif token.kind is VARIABLE:
             period = self._variable(VARIABLE.value(token))
         elif token.kind is OPEN:
@@ -274,7 +242,7 @@ class _DateExpressionParser(ParserBase):
             period = period.refine(self.advance())
         return period
 
-    def _variable(self, name: Variable) -> _Period:
+    def _variable(self, name: Variable) -> Period:
         """Parse the optional offset of a variable and evaluate it."""
         offset = 0
         if (sign := self.peek_kind()) in (DASH, PLUS) and self.peek_kind(

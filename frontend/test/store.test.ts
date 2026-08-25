@@ -3,7 +3,11 @@ import { test } from "node:test";
 
 import { get as store_get, writable } from "svelte/store";
 
-import { derived_array, local_storage_synced_store } from "../src/lib/store.ts";
+import {
+  derived_array,
+  derived_with_equality,
+  local_storage_synced_store,
+} from "../src/lib/store.ts";
 import { string } from "../src/lib/validation.ts";
 import { setup_jsdom } from "./dom.ts";
 
@@ -27,6 +31,25 @@ test("derived store", () => {
   source.set(["a", "b"]);
   equal(source_count, 6);
   equal(derived_count, 2);
+});
+
+test("derived store with equality check", () => {
+  const source = writable({ a: 1, b: "x" });
+  const derived = derived_with_equality(
+    source,
+    (s) => ({ a: s.a }),
+    { a: 0 },
+    (x, y) => x.a === y.a,
+  );
+  let derived_count = 0;
+  derived.subscribe(() => {
+    derived_count += 1;
+  });
+  source.set({ a: 1, b: "y" });
+  source.set({ a: 1, b: "z" });
+  source.set({ a: 2, b: "z" });
+  equal(derived_count, 2);
+  equal(store_get(derived).a, 2);
 });
 
 test("localStorage-synced stores", () => {

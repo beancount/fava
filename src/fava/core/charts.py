@@ -21,6 +21,7 @@ from fava.core.conversion import conversion_from_str
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.util import listify
+from fava.util.date import FiscalYearEnd
 
 try:
     from typing import override
@@ -48,6 +49,8 @@ def _enc_hook(o: object) -> object:
         return o.pattern
     if isinstance(o, Markup):
         return str(o)
+    if isinstance(o, FiscalYearEnd):
+        return {"month": o.month, "day": o.day}
     if o is MISSING:  # pragma: no cover
         return None
     msg = f"Unsupported type: {type(o)}"  # pragma: no cover

@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 from fava.core.budgets import calculate_budget
 from fava.core.budgets import calculate_budget_children
 from fava.core.budgets import parse_budgets
+from fava.util.date import END_OF_YEAR
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
@@ -23,7 +24,7 @@ def test_budgets(load_doc_custom_entries: list[Custom]) -> None:
     2016-01-01 custom "budget" Expenses:Groceries "weekly"
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
-    budgets, errors = parse_budgets(load_doc_custom_entries)
+    budgets, errors = parse_budgets(load_doc_custom_entries, END_OF_YEAR)
 
     assert len(errors) == 3
 

@@ -1,12 +1,20 @@
-import { deepEqual, equal } from "node:assert/strict";
+import { equal } from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  dateFormat,
+  day,
   formatter_context,
+  get_date_format,
   locale_formatter,
-  timeFilterDateFormat,
+  month,
+  quarter,
+  week,
+  year,
 } from "../src/format.ts";
+import { FiscalYearEnd } from "../src/lib/interval.ts";
+
+const UK_FYE = new FiscalYearEnd(4, 5);
+const AU_NZ_FYE = new FiscalYearEnd(6, 30);
 
 test("locale number formatting", () => {
   const f = locale_formatter(null);
@@ -44,36 +52,53 @@ test("formatter context", () => {
   equal(incognito_ctx.num(10, "USD"), "XX.XXXX");
 });
 
-test("time filter date formatting", () => {
-  const { day, month, week, quarter, year, ...rest } = timeFilterDateFormat;
-  deepEqual(rest, {});
-  const janfirst = new Date("2020-01-01");
-  const date = new Date("2020-03-20");
-  equal(day(janfirst), "2020-01-01");
-  equal(day(date), "2020-03-20");
-  equal(month(janfirst), "2020-01");
-  equal(month(date), "2020-03");
-  equal(week(janfirst), "2020-W01");
-  equal(week(date), "2020-W12");
-  equal(quarter(janfirst), "2020-Q1");
-  equal(quarter(date), "2020-Q1");
-  equal(year(janfirst), "2020");
-  equal(year(date), "2020");
+test("date formatting: days", () => {
+  equal(day(new Date("0999-01-01")), "0999-01-01");
+  equal(day(new Date("2020-01-01")), "2020-01-01");
+  equal(day(new Date("2020-03-20")), "2020-03-20");
 });
 
-test("human-readable date formatting", () => {
-  const { day, month, week, quarter, year, ...rest } = dateFormat;
-  deepEqual(rest, {});
-  const janfirst = new Date("2020-01-01");
-  const date = new Date("2020-03-20");
-  equal(day(janfirst), "2020-01-01");
-  equal(day(date), "2020-03-20");
-  equal(month(janfirst), "Jan 2020");
-  equal(month(date), "Mar 2020");
-  equal(week(janfirst), "2020W01");
-  equal(week(date), "2020W12");
-  equal(quarter(janfirst), "2020Q1");
-  equal(quarter(date), "2020Q1");
-  equal(year(janfirst), "2020");
-  equal(year(date), "2020");
+test("date formatting: weeks", () => {
+  equal(week(new Date("2021-01-01")), "2020-W53");
+  equal(week(new Date("2020-01-01")), "2020-W01");
+  equal(week(new Date("2020-03-20")), "2020-W12");
+});
+
+test("date formatting: months", () => {
+  equal(month(new Date("2020-01-01")), "2020-01");
+  equal(month(new Date("2020-03-20")), "2020-03");
+});
+
+test("date formatting: quarter", () => {
+  equal(quarter(new Date("0999-02-01")), "999-Q1");
+  equal(quarter(new Date("2020-01-01")), "2020-Q1");
+  equal(quarter(new Date("2020-03-20")), "2020-Q1");
+});
+
+test("date formatting: year", () => {
+  equal(year(new Date("0999-02-01")), "0999");
+  equal(year(new Date("2020-01-01")), "2020");
+  equal(year(new Date("2020-03-20")), "2020");
+});
+
+test("date formatting: fiscal year", () => {
+  const fiscal_year = get_date_format("fiscal_year", FiscalYearEnd.default);
+  equal(fiscal_year(new Date("2020-01-01")), "FY2020");
+  const uk_fiscal_year = get_date_format("fiscal_year", UK_FYE);
+  equal(uk_fiscal_year(new Date("2020-04-05")), "FY2020");
+  equal(uk_fiscal_year(new Date("2020-04-06")), "FY2021");
+});
+
+test("date formatting: fiscal quarter", () => {
+  const fiscal_quarter = get_date_format(
+    "fiscal_quarter",
+    FiscalYearEnd.default,
+  );
+  equal(fiscal_quarter(new Date("2020-03-20")), "FY2020-Q1");
+
+  const uk_fiscal_quarter = get_date_format("fiscal_quarter", UK_FYE);
+  equal(uk_fiscal_quarter(new Date("2020-01-01")), "FY2020-Q4");
+
+  const au_nz_fiscal_quarter = get_date_format("fiscal_quarter", AU_NZ_FYE);
+  equal(au_nz_fiscal_quarter(new Date("2020-03-20")), "FY2020-Q3");
 });
