@@ -242,7 +242,7 @@ msgstr "Tilipäiväkirja"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:830
+#: src/fava/json_api.py:798
 msgid "Changes"
 msgstr "Muutokset"
 
@@ -609,8 +609,8 @@ msgstr "Aika"
 msgid "Filter by tag, payee, …"
 msgstr "Suodata tunniste, vastaanottaja, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
-#: src/fava/json_api.py:745
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
+#: src/fava/json_api.py:717
 msgid "Net Profit"
 msgstr "Nettotulos"
 
@@ -682,10 +682,10 @@ msgstr "Tilin saldo"
 msgid "Net Worth"
 msgstr "Nettovarallisuus"
 
-#: src/fava/json_api.py:733
+#: src/fava/json_api.py:705
 msgid "Income"
 msgstr "Tulot"
 
-#: src/fava/json_api.py:739
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "Menot"

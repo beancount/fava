@@ -242,7 +242,7 @@ msgstr "مجله‌حساب"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:830
+#: src/fava/json_api.py:798
 msgid "Changes"
 msgstr "تغییرات"
 
@@ -616,8 +616,8 @@ msgstr "زمان"
 msgid "Filter by tag, payee, …"
 msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:727
-#: src/fava/json_api.py:745
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
+#: src/fava/json_api.py:717
 msgid "Net Profit"
 msgstr "سود‌خالص"
 
@@ -689,10 +689,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:733
+#: src/fava/json_api.py:705
 msgid "Income"
 msgstr "درآمد"
 
-#: src/fava/json_api.py:739
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "هزینه‌ها"
