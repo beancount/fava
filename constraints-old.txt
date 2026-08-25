@@ -82,6 +82,8 @@ more-itertools==6.0.0
     #   -c (workspace)
     #   cheroot
     #   jaraco-functools
+msgspec==0.19.0
+    # via fava (pyproject.toml)
 openpyxl==2.6.1
     # via pyexcel-xlsx
 packaging==14.0
@@ -117,8 +119,6 @@ pytz==2022.7
     #   flask-babel
 regex==2022.9.13
     # via beancount
-simplejson==3.16.0
-    # via fava (pyproject.toml)
 six==1.16.0
     # via
     #   -c (workspace)

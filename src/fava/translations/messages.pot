@@ -227,7 +227,7 @@ msgstr ""
 
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: frontend/src/reports/accounts/AccountReport.svelte:69
-#: src/fava/json_api.py:801
+#: src/fava/json_api.py:798
 msgid "Changes"
 msgstr ""
 
