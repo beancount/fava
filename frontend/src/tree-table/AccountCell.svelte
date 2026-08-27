@@ -42,6 +42,7 @@
   button {
     position: absolute;
     padding: 0 3px;
+    font-size: 17px;
     color: var(--treetable-expander);
   }
 
@@ -61,14 +62,21 @@
   /* Indent each level of account by one more 1em. */
   :global(ol ol) span {
     --account-indent: 1em;
+
+    font-weight: 700;
   }
 
   :global(ol ol ol) span {
     --account-indent: 2em;
+
+    font-weight: 700;
+    opacity: 0.7; /* Will be inherited to levels below */
   }
 
   :global(ol ol ol ol) span {
     --account-indent: 3em;
+
+    font-weight: 500; /* Will be inherited to levels below */
   }
 
   :global(ol ol ol ol ol) span {
