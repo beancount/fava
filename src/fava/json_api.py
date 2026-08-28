@@ -41,6 +41,8 @@ from fava.core.file import GeneratedEntryError
 from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
+from fava.core.holdings import HOLDINGS_QUERIES
+from fava.core.holdings import holdings_query
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIError
@@ -167,6 +169,15 @@ class NotAFileError(FavaJSONAPIError):
 
     def __init__(self, filename: str) -> None:
         super().__init__(f"Not a file: '{filename}'")
+
+
+class UnknownHoldingsAggregationKeyError(ValidationError):
+    """Unknown holdings aggregation key."""
+
+    def __init__(self, aggregation_key: str) -> None:
+        super().__init__(
+            f"unknown holdings aggregation key: `{aggregation_key}`"
+        )
 
 
 @json_api.errorhandler(FavaAPIError)
@@ -336,6 +347,27 @@ def get_query(query_string: str) -> QueryResultTable | QueryResultText:
     """Run a Beancount query."""
     return g.ledger.query_shell.execute_query_serialised(
         g.filtered.entries_with_all_prices, query_string
+    )
+
+
+class HoldingsReport(Struct, frozen=True):
+    """Data for the holdings report."""
+
+    query_string: str
+    query_result_table: QueryResultTable | QueryResultText
+
+
+@api_endpoint
+def get_holdings(aggregation_key: str = "all") -> HoldingsReport:
+    """Get the holdings report, valued at the time-filter end date."""
+    if aggregation_key not in HOLDINGS_QUERIES:
+        raise UnknownHoldingsAggregationKeyError(aggregation_key)
+    query_string = holdings_query(aggregation_key, g.filtered.end_date)
+    return HoldingsReport(
+        query_string,
+        g.ledger.query_shell.execute_query_serialised(
+            g.filtered.entries_with_all_prices, query_string
+        ),
     )
 
 
