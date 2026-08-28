@@ -61,6 +61,7 @@ type GetEndpoint =
   | "events"
   | "extract"
   | "help"
+  | "holdings"
   | "imports"
   | "income_statement"
   | "journal_page"
@@ -89,6 +90,7 @@ type ApiEndpoint = DeleteEndpoint | GetEndpoint | PutEndpoint;
 type ApiParams = Partial<{
   a: string;
   account: string;
+  aggregation_key: string;
   conversion: string;
   entry_hash: string;
   filename: string;
@@ -271,6 +273,14 @@ export const get_help = define_endpoint(
   "help",
   object({ html: string, pages: array(tuple(string, string)) }),
   ["page_slug"],
+);
+export const get_holdings = define_endpoint(
+  "holdings",
+  object({
+    query_string: string,
+    query_result_table: query_validator,
+  }),
+  [...filters, "aggregation_key"],
 );
 export const get_imports = define_paramless_endpoint(
   "imports",
