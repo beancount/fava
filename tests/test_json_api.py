@@ -8,8 +8,6 @@ from importlib.metadata import version
 from io import BytesIO
 from pathlib import Path
 from shutil import which
-from typing import Any
-from typing import cast
 from typing import TYPE_CHECKING
 
 import pytest
@@ -633,7 +631,7 @@ def test_api_open_in_editor_executes_command(
 
     calls: list[list[str]] = []
 
-    def fake_check_call(args: list[str], *_: Any, **__: Any) -> None:
+    def fake_check_call(args: list[str]) -> None:
         calls.append(args)
 
     monkeypatch.setattr(subprocess, "check_call", fake_check_call)
@@ -817,10 +815,8 @@ def test_api_open_in_editor_command_failure(
         ["echo", "${file}:${line}"],
     )
 
-    def fake_check_call(*_: Any, **__: Any) -> None:
-        raise subprocess.CalledProcessError(
-            1, [cast("str", which("echo"))], stderr="boom"
-        )
+    def fake_check_call(args: list[str]) -> None:
+        raise subprocess.CalledProcessError(1, args, stderr="boom")
 
     monkeypatch.setattr(subprocess, "check_call", fake_check_call)
 

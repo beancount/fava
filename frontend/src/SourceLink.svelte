@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { maybeOpenInExternalEditor, sourceLinkFor } from "./source-links.ts";
+  import {
+    maybe_open_in_external_editor,
+    source_link_for,
+  } from "./source-links.ts";
 
   interface Props {
     file_path: string;
@@ -10,7 +13,7 @@
   }
 
   let { file_path, line, label, title, class_name = "" }: Props = $props();
-  let link = $derived(sourceLinkFor(file_path, line));
+  let link = $derived(source_link_for(file_path, line));
 </script>
 
 {#if link.mode === "command"}
@@ -20,7 +23,7 @@
     {title}
     onclick={async (event) => {
       event.preventDefault();
-      await maybeOpenInExternalEditor(link, file_path, line);
+      await maybe_open_in_external_editor(link, file_path, line);
     }}
   >
     {label}

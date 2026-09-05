@@ -5,7 +5,7 @@ import { type SourceLink, sourceLink } from "./helpers.ts";
 import { notify_err } from "./notifications.ts";
 
 /** Resolve the source link target for a file and line. */
-export function sourceLinkFor(
+export function source_link_for(
   file_path: string,
   line: string | number,
 ): SourceLink {
@@ -16,7 +16,7 @@ export function sourceLinkFor(
  * Execute the external editor command if configured.
  * @returns true if the click was handled (command attempted), false otherwise.
  */
-export async function maybeOpenInExternalEditor(
+export async function maybe_open_in_external_editor(
   target: SourceLink,
   file_path: string,
   line: string | number,
