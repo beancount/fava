@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
 from typing import TYPE_CHECKING
 
 from fava.beans.abc import Document
@@ -35,7 +34,7 @@ __plugins__ = ["link_documents"]
 
 def link_documents(
     entries: Sequence[Directive],
-    _: Any,
+    _: object,
 ) -> tuple[Sequence[Directive], list[DocumentError]]:
     """Link entries to documents."""
     errors = []

@@ -61,7 +61,7 @@ class ImporterMethodCallError(FavaAPIError):
 class ImporterInvalidTypeError(FavaAPIError):
     """One of the importer methods returned an unexpected type."""
 
-    def __init__(self, attr: str, expected: type[Any], actual: Any) -> None:
+    def __init__(self, attr: str, expected: type[Any], actual: object) -> None:
         super().__init__(
             f"Got unexpected type from importer as {attr}:"
             f" expected {expected!s}, got {type(actual)!s}:"
@@ -106,7 +106,7 @@ class ImportConfigHooksNotASequenceCallablesError(ImportConfigLoadError):
 class ImportConfigInvalidImporterError(ImportConfigLoadError):
     """Invalid importer (not a subclass of Importer)."""
 
-    def __init__(self, importer: Any) -> None:
+    def __init__(self, importer: object) -> None:
         name = importer.__class__.__name__
         super().__init__(
             f"Importer class '{name}' does not satisfy Importer protocol"
@@ -151,7 +151,7 @@ def walk_dir(directory: Path) -> Iterable[Path]:
             yield root_path / filename
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class FileImportInfo:
     """Info about one file/importer combination."""
 
@@ -161,7 +161,7 @@ class FileImportInfo:
     name: str
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class FileImporters:
     """Importers for a file."""
 
@@ -192,7 +192,7 @@ def _assert_type(attr: str, value: T, type_: type[T]) -> T:
     return value
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class WrappedImporter:
     """A wrapper to safely call importer methods."""
 
@@ -258,7 +258,7 @@ def extract_from_file(
     return entries  # type: ignore[return-value]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class LoadedImportConfig:
     """The import configuration that was successfully loaded."""
 

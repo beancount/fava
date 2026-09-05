@@ -96,7 +96,7 @@ update-frontend-deps:
 # Update the tree-sitter-beancount wasm build.
 .PHONY: update-tree-sitter-beancount
 update-tree-sitter-beancount:
-	curl -L -o frontend/src/codemirror/tree-sitter-beancount.wasm https://github.com/yagebu/tree-sitter-beancount/releases/download/v0.0.3/tree-sitter-beancount.wasm
+	curl -L -o frontend/src/codemirror/tree-sitter-beancount.wasm https://github.com/yagebu/tree-sitter-beancount/releases/download/v0.0.4/tree-sitter-beancount.wasm
 
 # Update prek hooks
 .PHONY: update-precommit

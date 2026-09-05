@@ -90,7 +90,7 @@ class Match:
         except re.error:
             self.match = lambda s: s == search
 
-    def __call__(self, obj: Any) -> bool:
+    def __call__(self, obj: object) -> bool:
         """Whether the string representation of the object matches."""
         return self.match(str(obj))
 
@@ -116,7 +116,7 @@ class MatchAmount:
         self.value = value
         self.operator = _OPERATORS[op]
 
-    def __call__(self, obj: Any) -> bool:
+    def __call__(self, obj: object) -> bool:
         """Whether the number of the given amount matches."""
         number = getattr(obj, "number", None)
         return (

@@ -2,7 +2,6 @@ import { deepEqual, equal, ok } from "node:assert/strict";
 import { test } from "node:test";
 
 import { RawAmount } from "../src/entries/amount.ts";
-import { Decimal } from "../src/entries/decimal.ts";
 import {
   Amount,
   Balance,
@@ -83,11 +82,10 @@ test("metadata: set from string", () => {
   equal(meta.set_string("key", "string").get("key"), "string");
   equal(meta.set_string("key", "FALSE").get("key"), false);
 
-  const decimal = meta
-    .set_string("key", "0.1234567891011121314151617")
-    .get("key");
-  ok(decimal instanceof Decimal);
-  equal(decimal.value, "0.1234567891011121314151617");
+  equal(
+    meta.set_string("key", "0.1234567891011121314151617").get("key"),
+    "0.1234567891011121314151617",
+  );
 
   const amount = meta.set_string("key", "10.10 USD").get("key");
   ok(amount instanceof RawAmount);
@@ -98,20 +96,20 @@ test("metadata: set from string", () => {
   equal(meta.set_string("key", "10.10.10").get("key"), "10.10.10");
 });
 
-test("metadata: Decimal and Amount values roundtrip", () => {
+test("metadata: Amount values roundtrip, Decimal stays a string", () => {
   const meta = EntryMetadata.validator({
-    decimal: { t: "Decimal", value: "0.1234567891011121314151617" },
-    amount: { t: "Amount", number: "10.10", currency: "USD" },
+    decimal: "0.1234567891011121314151617",
+    amount: { number: "10.10", currency: "USD" },
   }).unwrap();
   deepEqual(meta.entries(), [
     ["decimal", "0.1234567891011121314151617"],
     ["amount", "10.10 USD"],
   ]);
   ok(meta.get("amount") instanceof RawAmount);
-  ok(meta.get("decimal") instanceof Decimal);
+  equal(meta.get("decimal"), "0.1234567891011121314151617");
   deepEqual(JSON.parse(JSON.stringify(meta)), {
-    decimal: { t: "Decimal", value: "0.1234567891011121314151617" },
-    amount: { t: "Amount", number: "10.10", currency: "USD" },
+    decimal: "0.1234567891011121314151617",
+    amount: { number: "10.10", currency: "USD" },
   });
 });
 
@@ -145,12 +143,12 @@ test("create empty entries on a date", () => {
 });
 
 test("create amounts, cost, and positions from JSON data", () => {
-  const amt = Amount.validator({ number: 10, currency: "EUR" }).unwrap();
+  const amt = Amount.validator({ number: "10", currency: "EUR" }).unwrap();
   equal(amt.number, 10);
   ok(amt instanceof Amount);
 
   const cost = Cost.validator({
-    number: 10,
+    number: "10",
     currency: "EUR",
     date: "2012-12-12",
     label: "a label",
@@ -159,7 +157,7 @@ test("create amounts, cost, and positions from JSON data", () => {
   ok(cost instanceof Cost);
 
   const position = Position.validator({
-    units: { number: 10, currency: "EUR" },
+    units: { number: "10", currency: "EUR" },
   }).unwrap();
   equal(position.units.number, 10);
   equal(position.cost, null);

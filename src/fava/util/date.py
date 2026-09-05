@@ -30,7 +30,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterator
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class FiscalYearEnd:
     """Month and day that specify the end of the fiscal year."""
 
@@ -258,7 +258,7 @@ def interval_ends(
 ONE_DAY = timedelta(days=1)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class DateRange:
     """A range of dates, usually matching an interval."""
 

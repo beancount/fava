@@ -2,12 +2,30 @@
 
 from __future__ import annotations
 
+from typing import Literal
 from typing import Protocol
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
     from decimal import Decimal
+
+
+class ValueType(Protocol):
+    """A value of a custom directive, with its type."""
+
+    @property
+    def value(self) -> str | bool | datetime.date | Decimal | Amount:
+        """The value."""
+
+    @property
+    def dtype(self) -> type | Literal["<AccountDummy>"]:
+        """The type of the value.
+
+        This is a Python type, except for account values, where it is the
+        ``"<AccountDummy>"`` sentinel string from
+        ``beancount.core.account.TYPE``.
+        """
 
 
 class Amount(Protocol):

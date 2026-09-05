@@ -31,17 +31,11 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 @overload
-def amount(amt: Amount) -> Amount: ...  # pragma: no cover
-
-
+def amount(amt: Amount) -> Amount: ...
 @overload
-def amount(amt: str) -> Amount: ...  # pragma: no cover
-
-
+def amount(amt: str) -> Amount: ...
 @overload
-def amount(amt: Decimal, currency: str) -> Amount: ...  # pragma: no cover
-
-
+def amount(amt: Decimal, currency: str) -> Amount: ...
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     """Amount from a string or tuple."""
     if isinstance(amt, str):

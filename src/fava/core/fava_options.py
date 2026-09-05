@@ -11,6 +11,7 @@ import re
 from dataclasses import dataclass
 from dataclasses import field
 from dataclasses import fields
+from dataclasses import replace
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -36,7 +37,7 @@ class OptionError(BeancountError):
     """An error for one the Fava options."""
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class InsertEntryOption:
     """Insert option.
 
@@ -48,6 +49,10 @@ class InsertEntryOption:
     re: re.Pattern[str]
     filename: str
     lineno: int
+
+    def set_lineno(self, lineno: int, /) -> InsertEntryOption:
+        """Return an updated copy with a changed line number."""
+        return replace(self, lineno=lineno)
 
 
 class MissingOptionError(ValueError):  # noqa: D101

@@ -92,6 +92,7 @@
     "flag": "*",
     "links": [],
     "meta": {
+      "__tolerances__": { "USD": "0.005", "VBMPX": "0.0005" },
       "filename": "TEST_DATA_DIR/long-example.beancount",
       "lineno": 3737
     },

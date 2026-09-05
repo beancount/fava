@@ -38,9 +38,8 @@ dependencies = [
   "beanquery>=0.1,<0.3",
   "cheroot>=8,<12",
   "click>=7,<9",
-  "dacite>=1.9,<2",
   "markdown-it-py>=3,<5",
-  "simplejson>=3.16.0,<4",
+  "msgspec>=0.19,<1",
   "tomli>=2,<3",
   "typing-extensions>=4.5; python_version<\"3.12\"",
   "watchfiles>=0.20.0",
@@ -95,7 +94,6 @@ types = [
   "ty>=0.0.2",
   "typeguard>=4",
   "types-requests>=2.32.0.20250515",
-  "types-simplejson>=3",
 ]
 
 [build-system]
@@ -215,7 +213,6 @@ line-length = 79
 [tool.ruff.lint]
 extend-select = ["ALL"]
 extend-ignore = [
-  "ANN401",  # allow `typing.Any`
   "C901",    # ignore mccabe complecity for now
   "CPY",     # no copyright notices in all files
   "COM812",  # better handled by formatter - avoid having trailing commas everywhere

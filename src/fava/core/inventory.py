@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import NamedTuple
+from typing import overload
 from typing import TYPE_CHECKING
+
+from msgspec import Struct
 
 from fava.beans import protocols
 from fava.beans.str import cost_to_string
@@ -16,6 +18,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Concatenate
     from typing import ParamSpec
 
+    from beancount.core import amount
+
     P = ParamSpec("P")
 
 
@@ -23,21 +27,61 @@ ZERO = Decimal()
 InventoryKey = tuple[str, protocols.Cost | None]
 
 
-class _Amount(NamedTuple):
+class _Amount(Struct, frozen=True):
     number: Decimal
     currency: str
 
+    @overload
+    @classmethod
+    def from_amount(cls, o: amount.Amount | protocols.Amount) -> _Amount: ...
+    @overload
+    @classmethod
+    def from_amount(cls, o: None) -> None: ...
+    @classmethod
+    def from_amount(
+        cls, o: amount.Amount | protocols.Amount | None
+    ) -> _Amount | None:
+        return _Amount(o.number, o.currency) if o is not None else None  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
-class _Cost(NamedTuple):
+
+class _Cost(Struct, frozen=True):
     number: Decimal
     currency: str
     date: datetime.date
     label: str | None
 
+    @overload
+    @classmethod
+    def from_cost(cls, o: protocols.Cost) -> _Cost: ...
+    @overload
+    @classmethod
+    def from_cost(cls, o: None) -> None: ...
+    @classmethod
+    def from_cost(cls, o: protocols.Cost | None) -> _Cost | None:
+        return (
+            _Cost(o.number, o.currency, o.date, o.label)
+            if o is not None
+            else None
+        )
 
-class _Position(NamedTuple):
+
+class _Position(Struct, frozen=True):
     units: protocols.Amount
     cost: protocols.Cost | None
+
+    @overload
+    @classmethod
+    def from_position(cls, p: protocols.Position) -> _Position: ...
+    @overload
+    @classmethod
+    def from_position(cls, p: None) -> None: ...
+    @classmethod
+    def from_position(cls, p: protocols.Position | None) -> _Position | None:
+        return (
+            _Position(_Amount.from_amount(p.units), _Cost.from_cost(p.cost))
+            if p is not None
+            else None
+        )
 
 
 class SimpleCounterInventory(dict[str, Decimal]):

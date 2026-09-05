@@ -10,9 +10,9 @@ import type { Validator } from "../lib/validation.ts";
 import {
   array,
   boolean,
+  decimal,
   default_value,
   lazy,
-  number,
   object,
   optional,
   record,
@@ -39,7 +39,7 @@ export type AccountTreeNode = TreeNode<{
 const sort_children = (values: AccountTreeNode[]) =>
   sort_by_strings(values, (v) => v.account);
 
-const inventory = record(number);
+const inventory = record(decimal);
 
 export const account_hierarchy_validator: Validator<AccountTreeNode> = object({
   account: string,

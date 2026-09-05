@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from bisect import bisect_left
 from operator import attrgetter
-from typing import Any
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
@@ -18,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
     T = TypeVar("T", bound=Directive | Posting)
 
 
-def replace(entry: T, **kwargs: Any) -> T:
+def replace(entry: T, **kwargs: object) -> T:
     """Create a copy of the given directive, replacing some arguments."""
     if hasattr(entry, "_replace"):
         return entry._replace(**kwargs)  # type: ignore[no-any-return]  # ty:ignore[call-non-callable]

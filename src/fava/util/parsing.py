@@ -38,7 +38,7 @@ class UnexpectedEndError(UnexpectedTokenError):
         super().__init__("end of input")
 
 
-@dataclass(frozen=True, eq=False)
+@dataclass(frozen=True, slots=True, eq=False)
 class TokenKind(Generic[T]):
     """A token type: pattern and how to get the value of such a token."""
 
@@ -60,7 +60,7 @@ class LiteralTokenKind(TokenKind[str]):
 class KeywordTokenKind(TokenKind[T]):
     """A token for one of the keywords of a :class:`typing.Literal`."""
 
-    def __init__(self, keywords: Any) -> None:
+    def __init__(self, keywords: object) -> None:
         # Match the longest keyword first
         _keywords: list[str] = sorted(get_args(keywords), key=len)[::-1]
         assert all(kw == kw.lower() for kw in _keywords)  # noqa: S101
@@ -73,7 +73,7 @@ class KeywordTokenKind(TokenKind[T]):
         )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class Token:
     """A token, of some kind and with the text that it matched."""
 

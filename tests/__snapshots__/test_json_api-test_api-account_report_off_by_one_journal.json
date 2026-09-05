@@ -1,7 +1,7 @@
 {
   "charts": [
     {
-      "data": [{ "balance": { "USD": 101 }, "date": "2022-01-01" }],
+      "data": [{ "balance": { "USD": "101" }, "date": "2022-01-01" }],
       "label": "Account Balance",
       "type": "balances"
     },
@@ -10,9 +10,9 @@
         {
           "account_balances": {
             "Assets:Cash": {},
-            "Assets:Commodity": { "USD": 101 }
+            "Assets:Commodity": { "USD": "101" }
           },
-          "balance": { "USD": 101 },
+          "balance": { "USD": "101" },
           "budgets": {},
           "date": "2022-01-01"
         },

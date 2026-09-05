@@ -3,23 +3,16 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass
-from dataclasses import fields
-from dataclasses import is_dataclass
-from datetime import date
 from decimal import Decimal
 from re import Pattern
-from typing import Any
 from typing import TYPE_CHECKING
 
-from beancount.core.amount import Amount
-from beancount.core.data import Booking
+import msgspec
 from beancount.core.number import MISSING
 from flask.json.provider import JSONProvider
-from simplejson import dumps as simplejson_dumps
-from simplejson import loads as simplejson_loads
+from markupsafe import Markup
+from msgspec import Struct
 
-from fava.beans.abc import Position
 from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
 from fava.beans.flags import FLAG_UNREALIZED
@@ -29,9 +22,15 @@ from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.util import listify
 
+try:
+    from typing import override
+except ImportError:  # pragma: no cover
+    from typing_extensions import override
+
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
     from collections.abc import Mapping
+    from datetime import date
 
     from fava.core import FilteredLedger
     from fava.core.conversion import Conversion
@@ -43,55 +42,52 @@ if TYPE_CHECKING:  # pragma: no cover
 ZERO = Decimal()
 
 
-def _json_default(o: Any) -> Any:
-    """Specific serialisation for some data types."""
-    if isinstance(o, (date, Amount, Booking, Position)):
-        return str(o)
-    if isinstance(o, (set, frozenset)):
-        return list(o)
+def _enc_hook(o: object) -> object:
+    """Specific serialisation for data types unknown to msgspec."""
     if isinstance(o, Pattern):
         return o.pattern
-    if is_dataclass(o):
-        return {field.name: getattr(o, field.name) for field in fields(o)}
+    if isinstance(o, Markup):
+        return str(o)
     if o is MISSING:  # pragma: no cover
         return None
-    raise TypeError  # pragma: no cover
+    msg = f"Unsupported type: {type(o)}"  # pragma: no cover
+    raise NotImplementedError(msg)  # pragma: no cover
 
 
-def dumps(obj: Any, **_kwargs: Any) -> str:
+_encoder = msgspec.json.Encoder(enc_hook=_enc_hook, order="sorted")
+_decoder = msgspec.json.Decoder()
+
+
+def dumps(obj: object) -> str:
     """Dump as a JSON string."""
-    return simplejson_dumps(
-        obj, sort_keys=True, separators=(",", ":"), default=_json_default
-    )
+    return _encoder.encode(obj).decode("utf-8")
 
 
-def loads(s: str | bytes) -> Any:
+def loads(s: str | bytes) -> object:
     """Load a JSON string."""
-    return simplejson_loads(s)
+    return _decoder.decode(s)
 
 
 class FavaJSONProvider(JSONProvider):
     """Use custom JSON encoder and decoder."""
 
-    def dumps(self, obj: Any, **_kwargs: Any) -> str:  # noqa: D102
-        return simplejson_dumps(
-            obj, sort_keys=True, separators=(",", ":"), default=_json_default
-        )
+    @override
+    def dumps(self, obj: object, **_kwargs: object) -> str:
+        return _encoder.encode(obj).decode("utf-8")
 
-    def loads(self, s: str | bytes, **_kwargs: Any) -> Any:  # noqa: D102
-        return simplejson_loads(s)
+    @override
+    def loads(self, s: str | bytes, **_kwargs: object) -> object:
+        return _decoder.decode(s)
 
 
-@dataclass(frozen=True)
-class DateAndBalance:
+class DateAndBalance(Struct, frozen=True):
     """Balance at a date."""
 
     date: date
     balance: SimpleCounterInventory
 
 
-@dataclass(frozen=True)
-class DateAndBalanceWithBudget:
+class DateAndBalanceWithBudget(Struct, frozen=True):
     """Balance at a date with a budget."""
 
     date: date

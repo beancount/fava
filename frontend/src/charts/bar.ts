@@ -7,7 +7,7 @@ import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
   date,
-  number,
+  decimal,
   object,
   record,
   string,
@@ -162,9 +162,9 @@ function currencies_to_show(
 const bar_validator = array(
   object({
     date,
-    budgets: record(number),
-    balance: record(number),
-    account_balances: record(record(number)),
+    budgets: record(decimal),
+    balance: record(decimal),
+    account_balances: record(record(decimal)),
   }),
 );
 

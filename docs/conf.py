@@ -29,7 +29,12 @@ typehints_use_rtype = False
 
 
 def skip_namedtuples(
-    _app: Any, _what: Any, _name: Any, obj: Any, _options: Any, _lines: Any
+    _app: object,
+    _what: object,
+    _name: object,
+    obj: object,
+    _options: object,
+    _lines: object,
 ) -> bool | None:
     docstr = obj.__doc__
     if isinstance(docstr, str) and docstr.startswith("Alias for field number"):
@@ -37,7 +42,7 @@ def skip_namedtuples(
     return None
 
 
-def setup(app: Any) -> None:
+def setup(app: Any) -> None:  # noqa: ANN401
     app.connect("autodoc-skip-member", skip_namedtuples)
 
 

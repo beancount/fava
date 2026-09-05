@@ -49,7 +49,7 @@ export class Posting {
   private static raw_validator = object({
     meta: default_value(EntryMetadata.validator, () => new EntryMetadata()),
     account: string,
-    amount: string,
+    amount: default_value(string, () => ""),
   });
 
   static validator: Validator<Posting> = (json) =>

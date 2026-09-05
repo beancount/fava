@@ -5,24 +5,23 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from typing import List  # noqa: UP035
-from typing import Optional
 
+import msgspec
 import tomli
-from dacite import Config
-from dacite import DaciteError
-from dacite import from_dict
 
 
 class ProjectConfigError(ValueError):
     """Error while loading project configuration."""
 
 
+# Not a msgspec.Struct: Struct decoding always rejects unknown fields, but
+# unknown keys in the config file should be ignored. msgspec.convert on a
+# dataclass validates the declared fields and ignores the rest.
 @dataclass
 class FavaProjectConfig:
     """Configuration loaded from ``[tool.fava]`` in ``pyproject.toml``."""
 
-    external_editor_command: Optional[List[str]] = None  # noqa: UP045,UP006
+    external_editor_command: list[str] | None = None
 
     @property
     def use_external_editor(self) -> bool:
@@ -77,10 +76,8 @@ def load_project_config(config_file: str | None) -> FavaProjectConfig:
         raise ProjectConfigError(msg)
 
     try:
-        return from_dict(
-            data_class=FavaProjectConfig,
-            data=_normalize_keys(fava_data),
-            config=Config(strict=True),
+        return msgspec.convert(
+            _normalize_keys(fava_data), type=FavaProjectConfig
         )
-    except (DaciteError, AttributeError, TypeError) as err:
+    except (msgspec.ValidationError, msgspec.DecodeError) as err:
         raise ProjectConfigError(str(err)) from err

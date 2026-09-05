@@ -7,6 +7,7 @@ import {
   boolean,
   constants,
   date,
+  decimal,
   number,
   object,
   optional,
@@ -131,7 +132,7 @@ export const importable_files_validator = array(
 const date_range = object({ begin: date, end: date });
 
 export const commodities_validator = array(
-  object({ base: string, quote: string, prices: array(tuple(date, number)) }),
+  object({ base: string, quote: string, prices: array(tuple(date, decimal)) }),
 );
 
 export type Commodities = ValidationT<typeof commodities_validator>;
@@ -143,8 +144,8 @@ export const context_validator = object({
 });
 
 const account_budget = object({
-  budget: record(number),
-  budget_children: record(number),
+  budget: record(decimal),
+  budget_children: record(decimal),
 });
 export type AccountBudget = ValidationT<typeof account_budget>;
 

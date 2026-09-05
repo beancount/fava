@@ -16,7 +16,6 @@ interface BaseResult<T, E> {
   and_then<U>(op: (val: T) => Ok<U>): Result<U, E>;
   and_then<F>(op: (val: T) => Err<F>): Result<T, E | F>;
   and_then<U, F>(op: (val: T) => Result<U, F>): Result<U, E | F>;
-  and_then<U, F>(op: (val: T) => Result<U, F>): Result<U, E | F>;
 
   /** Maps by applying a function to a contained Ok value, leaving Err untouched. */
   map<U>(op: (v: T) => U): Result<U, E>;

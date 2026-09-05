@@ -20,7 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.ext import FavaExtensionBase
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class ExtensionDetails:
     """The information about an extension that is needed for the frontend."""
 
@@ -45,7 +45,9 @@ class ExtensionModule(FavaModule):
 
         seen = set()
         for entry in (e for e in custom_entries if e.type == "fava-extension"):
-            extension = entry.values[0].value
+            extension = entry.values[0].value if entry.values else None
+            if not isinstance(extension, str):  # pragma: no cover
+                continue
             if extension in seen:  # pragma: no cover
                 self.errors.append(
                     FavaExtensionError(
@@ -63,7 +65,10 @@ class ExtensionModule(FavaModule):
 
             for cls in extensions:
                 ext_config = (
-                    entry.values[1].value if len(entry.values) > 1 else None
+                    entry.values[1].value
+                    if len(entry.values) > 1
+                    and isinstance(entry.values[1].value, str)
+                    else None
                 )
                 if cls not in self._loaded_extensions:
                     self._loaded_extensions.add(cls)

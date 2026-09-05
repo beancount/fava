@@ -1,16 +1,10 @@
 import { is_empty } from "../lib/objects.ts";
 import { ok } from "../lib/result.ts";
 import type { SafeValidator, Validator } from "../lib/validation.ts";
-import { record, tagged_union } from "../lib/validation.ts";
+import { record } from "../lib/validation.ts";
 import { RawAmount } from "./amount.ts";
-import { Decimal } from "./decimal.ts";
 
-export type MetadataValue = string | boolean | number | Decimal | RawAmount;
-
-const amount_or_decimal = tagged_union("t", {
-  Amount: RawAmount.validator,
-  Decimal: Decimal.validator,
-});
+export type MetadataValue = string | boolean | number | RawAmount;
 
 const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   if (
@@ -20,9 +14,9 @@ const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   ) {
     return ok(json);
   }
-  const result = amount_or_decimal(json);
-  if (result.is_ok) {
-    return result;
+  const amount = RawAmount.validator(json);
+  if (amount.is_ok) {
+    return amount;
   }
   return ok("Unsupported metadata value");
 };
@@ -38,8 +32,6 @@ function meta_value_to_string(value: MetadataValue): string {
   return value.toString();
 }
 
-// Matches a bare decimal number, e.g. "10.10" or "-5".
-const DECIMAL_RE = /^-?\d+(?:\.\d+)?$/;
 // Matches a decimal number followed by a currency, e.g. "10.10 USD".
 const AMOUNT_RE = /^(-?\d+(?:\.\d+)?)\s+([A-Z][A-Z0-9'._-]*)$/;
 
@@ -56,13 +48,10 @@ function string_to_meta_value(s: string): MetadataValue {
   }
   const amount_match = AMOUNT_RE.exec(s);
   if (amount_match) {
-    const [, amount_number, currency] = amount_match;
-    if (amount_number !== undefined && currency !== undefined) {
-      return new RawAmount(amount_number, currency);
+    const [, number, currency] = amount_match;
+    if (number != null && currency != null) {
+      return new RawAmount(number, currency);
     }
-  }
-  if (DECIMAL_RE.test(s)) {
-    return new Decimal(s);
   }
   return s;
 }

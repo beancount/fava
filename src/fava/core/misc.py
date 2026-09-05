@@ -73,6 +73,8 @@ def sidebar_links(custom_entries: Sequence[Custom]) -> SidebarLinks:
     return [
         (entry.values[0].value, entry.values[1].value)
         for entry in sidebar_link_entries
+        if isinstance(entry.values[0].value, str)
+        if isinstance(entry.values[1].value, str)
     ]
 
 

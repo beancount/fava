@@ -70,7 +70,7 @@ def test_query_balances(
     if sys.version_info >= (3, 12):
         # This fails for some reason on older Pythons, probably some minor
         # difference there.
-        snapshot(bal)
+        snapshot(bal, json=True)
     assert run_query(".run custom_query") == bal
     assert run_query(".run 'custom query with space'") == bal
 

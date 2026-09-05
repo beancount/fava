@@ -13,13 +13,17 @@ from typing import cast
 from typing import TYPE_CHECKING
 
 import pytest
+from msgspec.json import Decoder
 
 from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.file import _sha256_str
 from fava.core.file import get_entry_slice
 from fava.core.misc import align
-from fava.json_api import validate_func_arguments
+from fava.json_api import build_json_body_decoder
+from fava.json_api import build_query_string_decoder
+from fava.json_api import ErrorResponse
+from fava.json_api import SuccessResponse
 from fava.json_api import ValidationError
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -43,26 +47,58 @@ def diff_strings(a: str, b: str) -> list[str]:
     ]
 
 
-def test_validate_get_args() -> None:
+def test_query_string_decoder_no_params() -> None:
     def noparams() -> None:
         pass
 
-    assert validate_func_arguments(noparams) is None
+    assert build_query_string_decoder(noparams) is None
 
-    def func(test: str) -> None:
-        assert test
-        assert isinstance(test, str)
 
-    validator = validate_func_arguments(func)
-    assert validator
-    with pytest.raises(ValidationError):
-        validator({"notest": "value"})
-    with pytest.raises(
-        ValidationError,
-        match="Parameter `test` of incorrect type",
-    ):
-        validator({"test": ["value"]})
-    assert validator({"test": "value"}) == ["value"]
+def test_query_string_decoder_str_and_int_params() -> None:
+    def func(
+        test: str, number: int, with_default: str = "asdf"
+    ) -> tuple[str, int, str]:
+        return test, number, with_default
+
+    decoder = build_query_string_decoder(func)
+    assert decoder
+    with pytest.raises(ValidationError, match="missing required field `test`"):
+        decoder({"notest": "value"})
+    args = decoder({"test": "value", "number": "10"})
+    assert isinstance(args, tuple)
+    assert len(args) == 3
+    assert isinstance(args[0], str)
+    assert isinstance(args[1], int)
+    assert isinstance(args[2], str)
+    assert func(args[0], args[1], args[2]) == (
+        "value",
+        10,
+        "asdf",
+    )
+
+
+def test_json_body_decoder() -> None:
+    def func(test: str, items: list[int]) -> tuple[str, list[int]]:
+        return test, items
+
+    decoder = build_json_body_decoder(func)
+    assert decoder
+    with pytest.raises(ValidationError, match="Invalid JSON"):
+        decoder(b"{{")
+    with pytest.raises(ValidationError, match="missing required field `test`"):
+        decoder(b"{}")
+    args = decoder(b'{"test":"value","items":[1,2,3]}')
+    assert isinstance(args, tuple)
+    assert isinstance(args[0], str)
+    assert isinstance(args[1], list)
+    assert func(args[0], args[1]) == (
+        "value",
+        [1, 2, 3],
+    )
+
+
+_error_decoder = Decoder(ErrorResponse)
+_success_decoder = Decoder(SuccessResponse)
 
 
 def assert_api_error(
@@ -72,21 +108,22 @@ def assert_api_error(
 ) -> str:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == status.value
-    assert response.json
-    err_msg = response.json["error"]
-    assert isinstance(err_msg, str)
+    json = _error_decoder.decode(response.data)
     if msg:
-        assert msg == err_msg
-    return err_msg
+        assert msg == json.error
+    return json.error
 
 
-def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
+def assert_api_success(
+    response: TestResponse, data: object | None = None
+) -> object:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == HTTPStatus.OK.value
-    assert response.json
+    json = _success_decoder.decode(response.data)
+    assert json
     if data is not None:
-        assert data == response.json["data"]
-    return response.json["data"]
+        assert data == json.data
+    return json.data
 
 
 def test_api_changed(test_client: FlaskClient) -> None:
@@ -151,7 +188,8 @@ def test_api_add_document_and_move_and_delete(
             response = test_client.put(add_url, data=data)
             assert_api_error(
                 response,
-                f"Invalid API request: Parameter `{missing}` is missing.",
+                f"Invalid API request: Object missing"
+                f" required field `{missing}`",
                 HTTPStatus.BAD_REQUEST,
             )
 
@@ -278,9 +316,10 @@ def test_api_errors(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
     response = test_client.get("/errors/api/errors")
     data = assert_api_success(response)
 
-    def get_message(err: Any) -> str:
+    def get_message(err: dict[str, str]) -> str:
         return str(err["message"])
 
+    assert isinstance(data, list)
     snapshot(sorted(data, key=get_message), json=True)
 
 
@@ -292,7 +331,7 @@ def test_api_context(
     response = test_client.get("/long-example/api/context")
     assert_api_error(
         response,
-        "Invalid API request: Parameter `entry_hash` is missing.",
+        "Invalid API request: Object missing required field `entry_hash`",
         HTTPStatus.BAD_REQUEST,
     )
 
@@ -314,6 +353,7 @@ def test_api_context(
         query_string={"entry_hash": balance_entry_hash},
     )
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert data["balances_before"]
     assert not data["balances_after"]
 
@@ -346,6 +386,7 @@ def test_api_context(
     )
     data = assert_api_success(response)
     snapshot(data, json=True)
+    assert isinstance(data, dict)
     assert not data.get("balances_before")
     response = test_client.get(
         "/long-example/api/source_slice",
@@ -367,6 +408,7 @@ def test_api_payee_accounts(
         query_string={"payee": "EDISON POWER"},
     )
     data = assert_api_success(response)
+    assert isinstance(data, list)
     assert data[0] == "Assets:US:BofA:Checking"
     assert data[1] == "Expenses:Home:Electricity"
     snapshot(data, json=True)
@@ -392,6 +434,7 @@ def test_api_narration_transaction(
         query_string={"narration": "Buying groceries"},
     )
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert data["date"] == "2016-04-21"
     assert data["narration"] == "Buying groceries"
     assert data["payee"] == "Farmer Fresh"
@@ -408,6 +451,7 @@ def test_api_imports(
     assert data
     snapshot(data, json=True)
 
+    assert isinstance(data, list)
     importable = next(f for f in data if f["importers"])
     assert importable
 
@@ -446,24 +490,37 @@ def test_api_move_not_a_document(
     assert other_file.is_file()
 
 
-@pytest.mark.parametrize("body", [["account"], "account", 1, None])
+@pytest.mark.parametrize(
+    ("body", "expected"),
+    [
+        (["account"], "Expected `object`, got `array`"),
+        ("account", "Expected `object`, got `str`"),
+        (1, "Expected `object`, got `int`"),
+        (None, "Invalid JSON body."),
+    ],
+)
 def test_api_put_invalid_json_body(
     test_client: FlaskClient,
-    body: Any,
+    body: object,
+    expected: str,
 ) -> None:
     """The body of a PUT request needs to be a JSON object."""
     response = test_client.put("/long-example/api/move", json=body)
     assert_api_error(
         response,
-        "Invalid API request: Invalid JSON body.",
+        f"Invalid API request: {expected}",
         HTTPStatus.BAD_REQUEST,
     )
 
 
-@pytest.mark.parametrize("value", [["new"], {"a": "new"}, 1, True])
+@pytest.mark.parametrize(
+    ("value", "json_type"),
+    [(["new"], "array"), ({"a": "new"}, "object"), (1, "int"), (True, "bool")],
+)
 def test_api_put_incorrect_parameter_type(
     test_client: FlaskClient,
-    value: Any,
+    value: object,
+    json_type: str,
 ) -> None:
     """A parameter that is declared as a string needs to be one."""
     response = test_client.put(
@@ -472,8 +529,8 @@ def test_api_put_incorrect_parameter_type(
     )
     assert_api_error(
         response,
-        "Invalid API request: Parameter `new_name` of incorrect type"
-        " - expected <class 'str'>.",
+        "Invalid API request: Expected `str`, got "
+        f"`{json_type}` - at `$.new_name`",
         HTTPStatus.BAD_REQUEST,
     )
 
@@ -790,6 +847,7 @@ def test_api_source(app_in_tmp_dir: Flask) -> None:
     # read
     response = test_client.get(url)
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert data["source"] == source
 
     # change source
@@ -836,6 +894,7 @@ def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
         query_string={"entry_hash": entry_hash},
     )
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert "Kin Soy" in data["slice"]
 
     response = test_client.put(
@@ -947,7 +1006,7 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
     response = test_client.delete(url)
     assert_api_error(
         response,
-        "Invalid API request: Parameter `entry_hash` is missing.",
+        "Invalid API request: Object missing required field `entry_hash`",
         HTTPStatus.BAD_REQUEST,
     )
 
@@ -1029,8 +1088,8 @@ def test_api_add_entries(
         err = test_client.put(url, json={"entries": "string"})
         assert_api_error(
             err,
-            "Invalid API request: Parameter `entries`"
-            " of incorrect type - expected <class 'list'>.",
+            "Invalid API request: Expected `array`, got `str`"
+            " - at `$.entries`",
             HTTPStatus.BAD_REQUEST,
         )
 
@@ -1114,6 +1173,7 @@ def test_api_help(test_client: FlaskClient) -> None:
         query_string={"page_slug": "_index"},
     )
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert f"Fava <code>{version('fava')}</code>" in data["html"]
     assert ["_index", "Index"] in data["pages"]
 
@@ -1153,8 +1213,7 @@ def test_api_journal_page_invalid_page(
     )
     assert_api_error(
         response,
-        "Invalid API request: Parameter `page` of "
-        "incorrect type - expected <class 'int'>.",
+        "Invalid API request: Expected `int`, got `str` - at `$.page`",
         HTTPStatus.BAD_REQUEST,
     )
 
@@ -1168,6 +1227,7 @@ def test_api_account_report_empty(
         query_string={"a": "Assets", "r": "balances", "filter": "payee:asdf"},
     )
     data = assert_api_success(response)
+    assert isinstance(data, dict)
     assert data == {
         "budgets": {},
         "charts": data["charts"],

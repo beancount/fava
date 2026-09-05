@@ -7,14 +7,15 @@ for the frontend data validation.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from flask import current_app
 from flask import url_for
 from flask_babel import gettext
+from msgspec import Struct
 
 from fava.context import g
+from fava.serialisation import serialise
 from fava.util.excel import HAVE_EXCEL
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -22,7 +23,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Literal
 
     from fava.beans.abc import Meta
-    from fava.beans.abc import Query
     from fava.core.accounts import AccountDict
     from fava.core.charts import DateAndBalance
     from fava.core.charts import DateAndBalanceWithBudget
@@ -33,8 +33,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.util.date import Interval
 
 
-@dataclass(frozen=True)
-class SerialisedError:
+class SerialisedError(Struct, frozen=True):
     """A Beancount error, as passed to the frontend."""
 
     type: str
@@ -50,8 +49,7 @@ class SerialisedError:
         return SerialisedError(err.__class__.__name__, source, err.message)
 
 
-@dataclass(frozen=True)
-class LedgerData:
+class LedgerData(Struct, frozen=True):
     """This is used as report-independent data in the frontend."""
 
     accounts: Sequence[str]
@@ -69,7 +67,7 @@ class LedgerData:
     precisions: dict[str, int]
     tags: Sequence[str]
     years: Sequence[str]
-    user_queries: Sequence[Query]
+    user_queries: Sequence[object]
     upcoming_events_count: int
     extensions: Sequence[ExtensionDetails]
     sidebar_links: Sequence[tuple[str, str]]
@@ -118,7 +116,12 @@ def get_ledger_data() -> LedgerData:
         ledger.format_decimal.precisions,
         ledger.attributes.tags,
         ledger.attributes.years,
-        all_queries[: ledger.fava_options.sidebar_show_queries],
+        [
+            serialise(query)
+            for query in all_queries[
+                : ledger.fava_options.sidebar_show_queries
+            ]
+        ],
         len(ledger.misc.upcoming_events),
         ledger.extensions.extension_details,
         ledger.misc.sidebar_links,
@@ -130,8 +133,7 @@ def get_ledger_data() -> LedgerData:
     )
 
 
-@dataclass(frozen=True)
-class BalancesChart:
+class BalancesChart(Struct, frozen=True):
     """Data for a balances chart."""
 
     label: str
@@ -139,8 +141,7 @@ class BalancesChart:
     type: Literal["balances"] = "balances"
 
 
-@dataclass(frozen=True)
-class BarChart:
+class BarChart(Struct, frozen=True):
     """Data for a bar chart."""
 
     label: str
@@ -148,8 +149,7 @@ class BarChart:
     type: Literal["bar"] = "bar"
 
 
-@dataclass(frozen=True)
-class HierarchyChart:
+class HierarchyChart(Struct, frozen=True):
     """Data for a hierarchy chart."""
 
     label: str

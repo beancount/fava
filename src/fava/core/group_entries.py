@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import NamedTuple
+from dataclasses import dataclass
+from dataclasses import field
+from dataclasses import fields
 from typing import TYPE_CHECKING
 
 from fava.beans import abc
@@ -14,21 +16,26 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
 
-class EntriesByType(NamedTuple):
+@dataclass(frozen=True, slots=True)
+class EntriesByType:
     """Entries grouped by type."""
 
-    Balance: Sequence[abc.Balance]
-    Close: Sequence[abc.Close]
-    Commodity: Sequence[abc.Commodity]
-    Custom: Sequence[abc.Custom]
-    Document: Sequence[abc.Document]
-    Event: Sequence[abc.Event]
-    Note: Sequence[abc.Note]
-    Open: Sequence[abc.Open]
-    Pad: Sequence[abc.Pad]
-    Price: Sequence[abc.Price]
-    Query: Sequence[abc.Query]
-    Transaction: Sequence[abc.Transaction]
+    Balance: Sequence[abc.Balance] = field(default_factory=list)
+    Close: Sequence[abc.Close] = field(default_factory=list)
+    Commodity: Sequence[abc.Commodity] = field(default_factory=list)
+    Custom: Sequence[abc.Custom] = field(default_factory=list)
+    Document: Sequence[abc.Document] = field(default_factory=list)
+    Event: Sequence[abc.Event] = field(default_factory=list)
+    Note: Sequence[abc.Note] = field(default_factory=list)
+    Open: Sequence[abc.Open] = field(default_factory=list)
+    Pad: Sequence[abc.Pad] = field(default_factory=list)
+    Price: Sequence[abc.Price] = field(default_factory=list)
+    Query: Sequence[abc.Query] = field(default_factory=list)
+    Transaction: Sequence[abc.Transaction] = field(default_factory=list)
+
+    def count_by_type(self) -> dict[str, int]:
+        """Summarised counts by type."""
+        return {f.name: len(getattr(self, f.name)) for f in fields(self)}
 
 
 def group_entries_by_type(entries: Sequence[abc.Directive]) -> EntriesByType:
@@ -38,28 +45,16 @@ def group_entries_by_type(entries: Sequence[abc.Directive]) -> EntriesByType:
         entries: A list of entries to group.
 
     Returns:
-        A namedtuple containing the grouped lists of entries.
+        The grouped lists of entries.
     """
-    entries_by_type = EntriesByType(
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-    )
+    entries_by_type = EntriesByType()
     for entry in entries:
         getattr(entries_by_type, entry.__class__.__name__).append(entry)
     return entries_by_type
 
 
-class TransactionPosting(NamedTuple):
+@dataclass(frozen=True, slots=True)
+class TransactionPosting:
     """Pair of a transaction and a posting."""
 
     transaction: abc.Transaction
