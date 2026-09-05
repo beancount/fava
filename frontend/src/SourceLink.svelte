@@ -20,11 +20,7 @@
     {title}
     onclick={async (event) => {
       event.preventDefault();
-      const line_string = line.toString();
-      const line_number = Number.parseInt(line_string, 10);
-      if (!Number.isNaN(line_number)) {
-        await maybeOpenInExternalEditor(link, file_path, line);
-      }
+      await maybeOpenInExternalEditor(link, file_path, line);
     }}
   >
     {label}
