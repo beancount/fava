@@ -537,6 +537,8 @@ def put_open_in_editor(file_path: str, line: str) -> str:
         missing = err.args[0] if err.args else "unknown"
         msg = f"missing variable '{missing}'"
         raise ExternalEditorCommandTemplateError(msg) from err
+    except ValueError as err:
+        raise ExternalEditorCommandTemplateError(str(err)) from err
 
     try:
         subprocess.check_call([command_abs, *args])

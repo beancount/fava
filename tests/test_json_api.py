@@ -754,6 +754,31 @@ def test_api_open_in_editor_missing_variable(
     )
 
 
+def test_api_open_in_editor_invalid_placeholder(
+    app: Flask,
+    test_client: FlaskClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ledger = app.config["LEDGERS"]["example"]
+    file_path = ledger.options["include"][0]
+    monkeypatch.setattr(
+        ledger.project_config,
+        "external_editor_command",
+        ["echo", "file$"],
+    )
+
+    response = test_client.put(
+        "/example/api/open_in_editor",
+        json={"file_path": file_path, "line": "10"},
+    )
+    assert_api_error(
+        response,
+        "Invalid external editor command: "
+        "Invalid placeholder in string: line 1, col 5",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
 def test_api_open_in_editor_requires_file(
     app: Flask,
     test_client: FlaskClient,
