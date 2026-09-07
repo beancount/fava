@@ -106,6 +106,30 @@ def test_fava_options_import_dirs(
     ]
 
 
+def test_fava_options_use_external_editor_unknown(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "use-external-editor" "true"
+    """
+    _options, errors = parse_options(load_doc_custom_entries)
+
+    assert len(errors) == 1
+    assert "Unknown option `use_external_editor`" in errors[0].message
+
+
+def test_fava_options_external_editor_command_unknown(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "external-editor-command" "x"
+    """
+    _options, errors = parse_options(load_doc_custom_entries)
+
+    assert len(errors) == 1
+    assert "Unknown option `external_editor_command`" in errors[0].message
+
+
 def test_fava_options_set_import_dirs() -> None:
     options = FavaOptions()
     options.set_import_dirs("/path/with spaces")

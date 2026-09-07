@@ -174,15 +174,6 @@ Collapsing all accounts below a specific depth in the account tree can be
 accomplished by a regex such as: `.*:.*:.*` (this example collapses all accounts
 that are three levels deep).
 
-## use-external-editor
-
-Default: `false`
-
-If `true`, instead of using the internal editor, the `beancount://` URL scheme
-is used. See the
-[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-details.
-
 ## account-journal-include-children
 
 Default: `true`

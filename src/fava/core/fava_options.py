@@ -116,7 +116,6 @@ class FavaOptions:
     sidebar_show_queries: int = 5
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
-    use_external_editor: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""
