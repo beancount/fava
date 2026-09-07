@@ -107,7 +107,7 @@ def test_fava_options_import_dirs(
     ]
 
 
-def test_fava_options_use_external_editor_unknown(
+def test_fava_options_use_external_editor_bool(
     load_doc_custom_entries: list[Custom],
 ) -> None:
     """
@@ -115,9 +115,23 @@ def test_fava_options_use_external_editor_unknown(
     """
     options, errors = parse_options(load_doc_custom_entries)
 
-    assert len(errors) == 1
+    assert len(errors) == 0
+    assert options.use_external_editor
+
+
+def test_fava_options_use_external_editor_overridden_by_project_config(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "use-external-editor" "true"
+    """
+    options, errors = parse_options(
+        load_doc_custom_entries,
+        project_config=FavaProjectConfig(),
+    )
+
+    assert len(errors) == 0
     assert not options.use_external_editor
-    assert "Unknown option `use_external_editor`" in errors[0].message
 
 
 def test_fava_options_external_editor_command_unknown(
