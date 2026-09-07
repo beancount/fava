@@ -51,6 +51,12 @@ def format_currency(value: Decimal, currency: str | None = None) -> str:
     return g.ledger.format_decimal(value or ZERO, currency)
 
 
+def price_base(value: Decimal) -> Decimal:
+    """Return a scaled base amount for displaying a price."""
+    exponent = max(0, round(-value.log10())) if value > ZERO else 0
+    return Decimal(10) ** exponent
+
+
 FLAGS_TO_TYPES = {"*": "cleared", "!": "pending"}
 
 
