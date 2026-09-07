@@ -29,7 +29,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
 
     from fava.beans.abc import Custom
-    from fava.config import FavaProjectConfig
     from fava.util.date import FiscalYearEnd
 
 
@@ -117,7 +116,6 @@ class FavaOptions:
     sidebar_show_queries: int = 5
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
-    use_external_editor: bool = False
 
     def set_collapse_pattern(self, value: str) -> None:
         """Set the collapse_pattern option."""
@@ -231,8 +229,6 @@ def parse_option_custom_entry(  # noqa: PLR0912
 
 def parse_options(
     custom_entries: Sequence[Custom],
-    *,
-    project_config: FavaProjectConfig | None = None,
 ) -> tuple[FavaOptions, list[OptionError]]:
     """Parse custom entries for Fava options.
 
@@ -242,8 +238,6 @@ def parse_options(
 
     Args:
         custom_entries: A list of Custom entries.
-        project_config: Parsed project config that can override supported
-            options.
 
     Returns:
         A tuple (options, errors) where options is a dictionary of all options
@@ -260,8 +254,5 @@ def parse_options(
         except (IndexError, TypeError, ValueError) as err:
             msg = f"Failed to parse fava-option entry: {err!s}"
             errors.append(OptionError(entry.meta, msg, entry))
-
-    if project_config is not None:
-        options.use_external_editor = project_config.use_external_editor
 
     return options, errors

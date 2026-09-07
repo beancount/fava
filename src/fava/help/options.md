@@ -174,26 +174,6 @@ Collapsing all accounts below a specific depth in the account tree can be
 accomplished by a regex such as: `.*:.*:.*` (this example collapses all accounts
 that are three levels deep).
 
-## use-external-editor
-
-Default: Not set
-
-Configure this in `pyproject.toml` under `[tool.fava]` and start Fava with
-`--config-file`.
-
-If set, Fava executes this command on the server when clicking source links. The
-value must be a list of command arguments. Use `${file}` and `${line}`
-placeholders to point your editor to the right location.
-
-Example:
-
-```toml
-[tool.fava]
-external-editor-command = ["code", "-r", "-g", "${file}:${line}"]
-```
-
-Paths are validated against the currently loaded Beancount files.
-
 ## account-journal-include-children
 
 Default: `true`

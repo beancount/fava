@@ -427,7 +427,6 @@ class FavaLedger:
 
         self.fava_options, self.fava_options_errors = parse_options(
             self.all_entries_by_type.Custom,
-            project_config=self.project_config,
         )
 
         if self._is_encrypted:  # pragma: no cover
@@ -471,6 +470,18 @@ class FavaLedger:
     def mtime(self) -> int:
         """The timestamp to the latest change of the underlying files."""
         return self.watcher.last_checked
+
+    @property
+    def use_external_editor(self) -> bool:
+        """Whether source links should open an external editor.
+
+        The only source for this setting is the project config
+        (``[tool.fava]`` in ``pyproject.toml``).
+        """
+        return (
+            self.project_config is not None
+            and self.project_config.use_external_editor
+        )
 
     @property
     def errors(self) -> Sequence[BeancountError]:

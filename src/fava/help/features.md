@@ -79,6 +79,19 @@ Fava can open your source file in your editor directly from the web interface.
 Configure `external-editor-command` in `pyproject.toml` under `[tool.fava]` and
 pass that file via `--config-file` when starting Fava.
 
+If set, Fava executes this command on the server when clicking source links. The
+value must be a list of command arguments. Use `${file}` and `${line}`
+placeholders to point your editor to the right location.
+
+Example:
+
+```toml
+[tool.fava]
+external-editor-command = ["code", "-r", "-g", "${file}:${line}"]
+```
+
+Paths are validated against the currently loaded Beancount files.
+
 ## Multiple Beancount files
 
 When you start Fava specifying multiple Beancount files, you can click the

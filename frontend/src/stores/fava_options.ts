@@ -52,8 +52,8 @@ export const indent = derived(
   ($fava_options) => $fava_options.indent,
 );
 export const use_external_editor = derived(
-  fava_options,
-  ($fava_options) => $fava_options.use_external_editor,
+  ledger_data,
+  ($ledger_data) => $ledger_data.use_external_editor,
 );
 export const auto_reload = derived(
   fava_options,

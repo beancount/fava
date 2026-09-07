@@ -332,7 +332,7 @@ external-editor-command = ["echo", "${file}:${line}"]
         config_file=str(config),
         load=True,
     )
-    assert app.config["LEDGERS"].ledgers[0].fava_options.use_external_editor
+    assert app.config["LEDGERS"].ledgers[0].use_external_editor
 
 
 def test_start_with_invalid_config_file_fails(

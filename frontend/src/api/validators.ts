@@ -64,7 +64,6 @@ const fava_options = object({
   insert_entry: array(
     object({ date: string, filename: string, lineno: number, re: string }),
   ),
-  use_external_editor: boolean,
 });
 
 /** Validator for the Beancount options that are used in the frontend. */
@@ -108,6 +107,7 @@ export const ledgerDataValidator = object({
   sidebar_links: array(tuple(string, string)),
   tags: array(string),
   upcoming_events_count: number,
+  use_external_editor: boolean,
   user_queries: array(object({ name: string, query_string: string })),
   years: array(string),
 });
