@@ -33,6 +33,9 @@ jobs:
           - os: "ubuntu-latest"
             make_target: "test-py-typeguard"
             py: "3.14"
+          - os: "ubuntu-latest"
+            make_target: "test-py"
+            py: "3.15"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -40,6 +43,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.py }}
+          allow-prereleases: true
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
       - run: touch src/fava/static/app.js
       - run: make ${{ matrix.make_target }}
