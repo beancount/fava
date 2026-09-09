@@ -33,8 +33,9 @@
   let current = $state<AccountHierarchyNode>();
 
   $effect.pre(() => {
-    // if-expression to run on each change of chart
-    void data;
+    // Reset current on each change of chart.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    data;
     untrack(() => {
       current = undefined;
     });

@@ -74,8 +74,9 @@
   );
 
   $effect(() => {
-    // update editor contents if source changes
-    void source;
+    // Update editor contents if source changes
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    source;
     untrack(() => {
       editor.dispatch(
         codemirror_beancount.replace_contents(editor.state, source.source),

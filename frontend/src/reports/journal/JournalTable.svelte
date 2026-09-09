@@ -96,7 +96,9 @@
   onclick={handle_journal_click}
   {ondragenter}
   {@attach (node: HTMLOListElement) => {
-    void journal;
+    // Re-run on any change to the journal
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    journal;
     untrack(() => {
       const sort = $journal_sort;
       node.innerHTML = "";
