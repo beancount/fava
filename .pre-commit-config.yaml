@@ -6,7 +6,7 @@ repos:
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.75
+    rev: v0.0.77
     hooks:
       - id: ty
         args: [--no-default-groups, --group=types]
