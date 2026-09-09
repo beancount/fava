@@ -22,11 +22,7 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
-    "meta": {
-      "__tolerances__": { "EUR": "0.005" },
-      "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 5
-    },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 5 },
     "narration": "Narration with many postings and long narration",
     "payee": "Payee",
     "postings": [
@@ -173,11 +169,7 @@
       {
         "account": "Assets:Account2",
         "amount": "-280.00 EUR",
-        "meta": {
-          "__automatic__": true,
-          "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 34
-        }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 34 }
       }
     ],
     "t": "Transaction",
@@ -262,12 +254,12 @@
       {
         "account": "Assets:Account1",
         "amount": "10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 43 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount" }
       },
       {
         "account": "Equity:Opening-Balances",
         "amount": "-10.00 EUR",
-        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 43 }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount" }
       }
     ],
     "t": "Transaction",
@@ -298,7 +290,6 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "document": "receipt.pdf",
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 45
@@ -337,11 +328,7 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": [],
-    "meta": {
-      "__tolerances__": { "EUR": "0.005" },
-      "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 51
-    },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 51 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -372,7 +359,7 @@
     "account": "Assets:Account1",
     "amount": { "currency": "EUR", "number": "10.00" },
     "date": "2012-12-15",
-    "diff_amount": { "currency": "EUR", "number": "-20.00" },
+    "diff_amount": null,
     "entry_hash": "ENTRY_HASH",
     "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 70 },
     "t": "Balance",
@@ -429,11 +416,7 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "!",
     "links": [],
-    "meta": {
-      "__tolerances__": { "EUR": "0.005" },
-      "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 55
-    },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 55 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -450,11 +433,7 @@
       {
         "account": "Assets:Account1",
         "amount": "-20.00 EUR",
-        "meta": {
-          "__automatic__": true,
-          "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 58
-        }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 58 }
       }
     ],
     "t": "Transaction",
@@ -465,11 +444,7 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "P",
     "links": [],
-    "meta": {
-      "__tolerances__": { "EUR": "0.005" },
-      "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 60
-    },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 60 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -481,11 +456,7 @@
       {
         "account": "Assets:Account1",
         "amount": "-10.00 EUR",
-        "meta": {
-          "__automatic__": true,
-          "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 62
-        }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 62 }
       }
     ],
     "t": "Transaction",
@@ -496,11 +467,7 @@
     "entry_hash": "ENTRY_HASH",
     "flag": "*",
     "links": ["link1"],
-    "meta": {
-      "__tolerances__": { "EUR": "0.005" },
-      "filename": "TEST_DATA_DIR/example.beancount",
-      "lineno": 64
-    },
+    "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 64 },
     "narration": "Narration",
     "payee": "Payee",
     "postings": [
@@ -522,11 +489,7 @@
       {
         "account": "Assets:Account1",
         "amount": "-30.00 EUR",
-        "meta": {
-          "__automatic__": true,
-          "filename": "TEST_DATA_DIR/example.beancount",
-          "lineno": 68
-        }
+        "meta": { "filename": "TEST_DATA_DIR/example.beancount", "lineno": 68 }
       }
     ],
     "t": "Transaction",
