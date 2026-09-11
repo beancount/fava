@@ -241,8 +241,8 @@ _DECIMAL_RE = re.compile(r"-?\d+(?:\.\d+)?")
 
 
 def _deserialise_meta_value(
-    o: str | bool | _Amount,  # noqa: FBT001
-) -> str | bool | Decimal | protocols.Amount:
+    o: str | bool | int | _Amount,  # noqa: FBT001
+) -> str | bool | int | Decimal | protocols.Amount:
     """Deserialise a single metadata value, restoring Decimal and Amount."""
     if isinstance(o, str) and _DECIMAL_RE.fullmatch(o):
         return Decimal(o)
@@ -252,8 +252,8 @@ def _deserialise_meta_value(
 
 
 def _deserialise_meta(
-    o: Mapping[str, str | bool | _Amount],
-) -> Mapping[str, str | bool | Decimal | protocols.Amount]:
+    o: Mapping[str, str | bool | int | _Amount],
+) -> Mapping[str, str | bool | int | Decimal | protocols.Amount]:
     """Deserialise a metadata mapping, restoring Decimal and Amount values."""
     return {key: _deserialise_meta_value(value) for key, value in o.items()}
 

@@ -97,11 +97,11 @@ def test_serialise_txn() -> None:
 
 
 def test_meta_decimal_and_amount_roundtrip() -> None:
-    """Decimal and Amount metadata values roundtrip through JSON."""
+    """Decimal, Amount, and int metadata values roundtrip through JSON."""
     number = Decimal("0.1234567891011121314151617")
     amt = create.amount("10.10 USD")
     txn = create.transaction(
-        {"number-value": number, "amount-value": amt},
+        {"number-value": number, "amount-value": amt, "lineno": 42},
         datetime.date(2017, 12, 12),
         "*",
         "Test3",
@@ -112,7 +112,11 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
             create.posting(
                 "Assets:ETrade:Cash",
                 "100 USD",
-                meta={"posting-number": number, "posting-amount": amt},
+                meta={
+                    "posting-number": number,
+                    "posting-amount": amt,
+                    "lineno": 1,
+                },
             ),
         ],
     )
@@ -125,6 +129,7 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
             "number": "10.10",
             "currency": "USD",
         },
+        "lineno": 42,
     }
     assert json_txn["postings"][0]["meta"] == {
         "posting-number": "0.1234567891011121314151617",
@@ -132,6 +137,7 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
             "number": "10.10",
             "currency": "USD",
         },
+        "lineno": 1,
     }
 
     roundtripped = deserialise(_entry(json_txn))
@@ -139,11 +145,15 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     assert roundtripped.meta["number-value"] == number
     assert isinstance(roundtripped.meta["number-value"], Decimal)
     assert roundtripped.meta["amount-value"] == amt
+    assert roundtripped.meta["lineno"] == 42
+    assert isinstance(roundtripped.meta["lineno"], int)
     posting_meta = roundtripped.postings[0].meta
     assert posting_meta is not None
     assert posting_meta["posting-number"] == number
     assert isinstance(posting_meta["posting-number"], Decimal)
     assert posting_meta["posting-amount"] == amt
+    assert posting_meta["lineno"] == 1
+    assert isinstance(posting_meta["lineno"], int)
 
 
 def test_serialise_entry_types(
