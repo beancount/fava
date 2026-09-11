@@ -29,30 +29,38 @@ def root(account: str) -> str:
     return parts[0]
 
 
-def child_account_tester(account: str) -> Callable[[str], bool]:
-    """Get a function to check if an account is a descendant of the account."""
-    account_as_parent = account + ":"
-
-    def is_child_account(other: str) -> bool:
-        return other == account or other.startswith(account_as_parent)
-
-    return is_child_account
-
-
 def account_tester(
-    account: str, *, with_children: bool
+    account: str | tuple[str, ...], *, with_children: bool
 ) -> Callable[[str], bool]:
     """Get a function to check if an account is equal to the account.
 
     Arguments:
-        account: An account name to check.
+        account: An account name or tuple of accounts to check.
         with_children: Whether to include all child accounts.
     """
-    if with_children:
-        return child_account_tester(account)
+    if isinstance(account, str):
+        if with_children:
+            account_as_parent = account + ":"
 
-    def is_account(other: str) -> bool:
-        return other == account
+            def is_account(other: str) -> bool:
+                return other == account or other.startswith(account_as_parent)
+
+        else:
+
+            def is_account(other: str) -> bool:
+                return other == account
+    else:
+        exact = frozenset(account)
+        if with_children:
+            accounts_as_parent = tuple(a + ":" for a in account)
+
+            def is_account(other: str) -> bool:
+                return other in exact or other.startswith(accounts_as_parent)
+
+        else:
+
+            def is_account(other: str) -> bool:
+                return other in exact
 
     return is_account
 
