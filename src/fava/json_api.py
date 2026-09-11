@@ -31,6 +31,7 @@ from msgspec.structs import astuple
 from fava import _structs  # noqa: TC001 - needed for msgspec
 from fava.beans.abc import Document
 from fava.beans.abc import Event
+from fava.beans.account import child_account_tester
 from fava.context import g
 from fava.core import EntryNotFoundForHashError
 from fava.core.conversion import UNITS
@@ -812,7 +813,10 @@ def get_account_report(
         all_accounts = (
             interval_balances[0].accounts if interval_balances else []
         )
-        budget_accounts = [acc for acc in all_accounts if acc.startswith(a)]
+        is_child_account = child_account_tester(a)
+        budget_accounts = [
+            acc for acc in all_accounts if is_child_account(acc)
+        ]
         budgets_mod = g.ledger.budgets
         first_date_range = dates[-1]
         budgets = {

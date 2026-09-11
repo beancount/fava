@@ -39,6 +39,21 @@ def child_account_tester(account: str) -> Callable[[str], bool]:
     return is_child_account
 
 
+def any_child_account_tester(
+    accounts: str | tuple[str, ...],
+) -> Callable[[str], bool]:
+    """Get a function to check for a descendant of any of the accounts."""
+    if isinstance(accounts, str):
+        return child_account_tester(accounts)
+
+    testers = tuple(child_account_tester(account) for account in accounts)
+
+    def is_child_account(other: str) -> bool:
+        return any(tester(other) for tester in testers)
+
+    return is_child_account
+
+
 def account_tester(
     account: str, *, with_children: bool
 ) -> Callable[[str], bool]:
