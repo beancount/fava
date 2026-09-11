@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 from decimal import Decimal
+from textwrap import dedent
 from typing import TYPE_CHECKING
 
+from fava.core import FavaLedger
 from fava.core.conversion import AT_COST
 from fava.util.date import Day
 from fava.util.date import Month
 
 if TYPE_CHECKING:  # pragma: no cover
-    from fava.core import FavaLedger
+    from pathlib import Path
 
     from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
@@ -103,3 +105,47 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
     etrade = data.children[1].children[2]
     assert etrade.account == "Assets:US:ETrade"
     assert etrade.balance_children == {"USD": Decimal("23137.54")}
+
+
+def test_interval_totals_sibling_with_shared_prefix(tmp_path: Path) -> None:
+    """Accounts that merely share a name prefix are not children."""
+    ledger_path = tmp_path / "prefix.beancount"
+    ledger_path.write_text(
+        dedent("""\
+            option "operating_currency" "USD"
+
+            2016-01-01 open Assets:Cash
+            2016-01-01 open Expenses:Car
+            2016-01-01 open Expenses:Car:Fuel
+            2016-01-01 open Expenses:Carpet
+
+            2016-01-05 * "fuel"
+              Expenses:Car:Fuel    1.00 USD
+              Assets:Cash
+
+            2016-01-05 * "repair"
+              Expenses:Car        10.00 USD
+              Assets:Cash
+
+            2016-01-05 * "carpet - not a child of Expenses:Car"
+              Expenses:Carpet    100.00 USD
+              Assets:Cash
+            """),
+        encoding="utf-8",
+    )
+    ledger = FavaLedger(str(ledger_path))
+    filtered = ledger.get_filtered()
+
+    (interval,) = ledger.charts.interval_totals(
+        filtered, Month, "Expenses:Car", "USD"
+    )
+    assert interval.balance["USD"] == Decimal("11.00")
+    assert set(interval.account_balances) == {
+        "Expenses:Car",
+        "Expenses:Car:Fuel",
+    }
+
+    (interval,) = ledger.charts.interval_totals(
+        filtered, Month, "Expenses:Carpet", "USD"
+    )
+    assert interval.balance["USD"] == Decimal("100.00")

@@ -15,6 +15,7 @@ from msgspec import Struct
 
 from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
+from fava.beans.account import any_child_account_tester
 from fava.beans.flags import FLAG_UNREALIZED
 from fava.beans.helpers import slice_entry_dates
 from fava.core.conversion import conversion_from_str
@@ -135,6 +136,7 @@ class ChartModule(FavaModule):
         """
         conv = conversion_from_str(conversion)
         prices = self.ledger.prices
+        is_child_account = any_child_account_tester(accounts)
 
         # limit the bar charts to 100 intervals
         intervals = filtered.interval_ranges(interval)[-100:]
@@ -149,7 +151,7 @@ class ChartModule(FavaModule):
             )
             for entry in entries:
                 for posting in getattr(entry, "postings", []):
-                    if posting.account.startswith(accounts):
+                    if is_child_account(posting.account):
                         account_inventories[posting.account].add_position(
                             posting,
                         )

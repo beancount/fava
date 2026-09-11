@@ -18,6 +18,7 @@ from fava.beans.abc import Balance
 from fava.beans.abc import Price
 from fava.beans.abc import Transaction
 from fava.beans.account import account_tester
+from fava.beans.account import child_account_tester
 from fava.beans.account import get_entry_accounts
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
@@ -542,10 +543,9 @@ class FavaLedger:
         Returns:
             A pair of a list of Tree instances and the intervals.
         """
+        is_child_account = child_account_tester(account_name)
         min_accounts = [
-            account
-            for account in self.accounts
-            if account.startswith(account_name)
+            account for account in self.accounts if is_child_account(account)
         ]
 
         interval_ranges = list(reversed(filtered.interval_ranges(interval)))

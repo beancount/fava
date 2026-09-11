@@ -11,6 +11,7 @@ from fava.beans import create
 from fava.beans.abc import Note
 from fava.beans.abc import Price
 from fava.beans.account import account_tester
+from fava.beans.account import any_child_account_tester
 from fava.beans.account import parent
 from fava.beans.account import root
 from fava.beans.funcs import get_position
@@ -48,6 +49,26 @@ def test_account_tester() -> None:
     assert not is_equal("Assets:CashOther")
     assert is_equal("Assets:Cash")
     assert not is_equal("Assets:Cash:Test")
+
+
+def test_any_child_account_tester() -> None:
+    is_child = any_child_account_tester("Assets:Cash")
+    assert not is_child("Assets")
+    assert not is_child("Assets:CashOther")
+    assert is_child("Assets:Cash")
+    assert is_child("Assets:Cash:Test")
+
+    is_child = any_child_account_tester(("Assets:Cash", "Expenses:Car"))
+    assert not is_child("Assets")
+    assert not is_child("Assets:CashOther")
+    assert not is_child("Expenses:Carpet")
+    assert is_child("Assets:Cash")
+    assert is_child("Assets:Cash:Test")
+    assert is_child("Expenses:Car")
+    assert is_child("Expenses:Car:Fuel")
+
+    is_child = any_child_account_tester(())
+    assert not is_child("Assets:Cash")
 
 
 def test_hash_entry() -> None:

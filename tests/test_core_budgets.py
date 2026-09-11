@@ -145,3 +145,28 @@ def test_budgets_children(budgets_doc: BudgetDict) -> None:
         date(2017, 1, 2),
     )
     assert budget["USD"] == Decimal("2.00")
+
+
+def test_budgets_children_sibling_with_shared_prefix(
+    budgets_doc: BudgetDict,
+) -> None:
+    """
+    2017-01-01 custom "budget" Expenses:Car "daily" 10.00 USD
+    2017-01-01 custom "budget" Expenses:Car:Fuel "daily" 1.00 USD
+    2017-01-01 custom "budget" Expenses:Carpet "daily" 100.00 USD"""
+
+    budget = calculate_budget_children(
+        budgets_doc,
+        "Expenses:Car",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
+    )
+    assert budget["USD"] == Decimal("11.00")
+
+    budget = calculate_budget_children(
+        budgets_doc,
+        "Expenses:Carpet",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
+    )
+    assert budget["USD"] == Decimal("100.00")

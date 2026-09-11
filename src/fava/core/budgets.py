@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 import msgspec
 from beancount.core.amount import Amount
 
+from fava.beans.account import child_account_tester
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.util.date import days_in_daterange
@@ -202,8 +203,9 @@ def calculate_budget_children(
     """
     currency_dict: dict[str, Decimal] = Counter()  # type: ignore[assignment]  # ty:ignore[invalid-assignment]
 
+    is_child_account = child_account_tester(account)
     for child in budgets:
-        if child.startswith(account):
+        if is_child_account(child):
             currency_dict.update(
                 calculate_budget(budgets, child, date_from, date_to),
             )
