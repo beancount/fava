@@ -9,7 +9,8 @@ a regex-based implementation to a proper lexer/parser, fixing several edge-case
 bugs. As part of this, the undocumented `to` range separator (e.g. `2010 to
 2012-10`) is no longer supported - use `-` instead (e.g. `2010 - 2012-10`).
 `Decimal` and `Amount` can now be added as metadata values to entries and
-are also roundtripped correctly when set by importers.
+are also roundtripped correctly when set by importers. Budget directives
+accept a `fortnightly` period, spread over fixed 14-day blocks.
 
 v1.30.13 (2026-05-19)
 ---------------------

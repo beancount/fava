@@ -13,8 +13,8 @@ from beancount.core.amount import Amount
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+from fava.util.date import BUDGET_INTERVALS
 from fava.util.date import days_in_daterange
-from fava.util.date import INTERVALS
 
 if TYPE_CHECKING:  # pragma: no cover
     import datetime
@@ -85,7 +85,7 @@ def _parse_budget(entry: Custom) -> Budget:
     values = msgspec.convert(
         tuple(v.value for v in entry.values), tuple[str, str, Amount]
     )
-    interval = INTERVALS.get(str(values[1]).lower())
+    interval = BUDGET_INTERVALS.get(str(values[1]).lower())
     if not interval:
         msg = "Invalid interval for budget entry"
         raise TypeError(msg)

@@ -183,6 +183,37 @@ class _IntervalWeek(Interval):
         return 7
 
 
+class _IntervalFortnight(Interval):
+    """A fortnight interval: fixed 14-day blocks starting on a Monday.
+
+    The blocks are counted from a fixed Monday, so they never overlap and
+    never shrink to one week in a 53-week year, which pairs of ISO weeks
+    would. Only budgets use this interval; it is not a report interval.
+    """
+
+    _epoch = datetime.date(1970, 1, 5)  # a Monday
+
+    @property
+    def label(self) -> str:
+        return gettext("Fortnightly")
+
+    def format_date(self, date: datetime.date) -> str:
+        return self.get_prev(date).strftime("%Y-%m-%d")
+
+    def get_prev(self, date: datetime.date) -> datetime.date:
+        return date - timedelta((date - self._epoch).days % 14)
+
+    def get_next(self, date: datetime.date) -> datetime.date:
+        try:
+            return self.get_prev(date) + timedelta(14)
+        except OverflowError:
+            return datetime.date.max
+
+    @override
+    def number_of_days(self, date: datetime.date) -> int:
+        return 14
+
+
 class _IntervalDay(Interval):
     """A day interval."""
 
@@ -211,8 +242,10 @@ Year = _IntervalYear()
 Quarter = _IntervalQuarter()
 Month = _IntervalMonth()
 Week = _IntervalWeek()
+Fortnight = _IntervalFortnight()
 Day = _IntervalDay()
 
+#: The intervals that reports and charts can be grouped by.
 INTERVALS = {
     "year": Year,
     "yearly": Year,
@@ -224,6 +257,13 @@ INTERVALS = {
     "weekly": Week,
     "day": Day,
     "daily": Day,
+}
+
+#: The intervals that a budget directive can use.
+BUDGET_INTERVALS = {
+    **INTERVALS,
+    "fortnight": Fortnight,
+    "fortnightly": Fortnight,
 }
 
 
