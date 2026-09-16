@@ -102,6 +102,15 @@
     background: var(--journal-hover-highlight);
   }
 
+  /* The row selected via ArrowUp/ArrowDown keyboard navigation (see
+   * reports/journal/keyboard_navigation.ts). An outline rather than a
+   * background so it stays visible over the .datecell/.flag columns' own
+   * background-color. */
+  > li.selected > p {
+    outline: 2px solid var(--journal-hover-highlight);
+    outline-offset: -2px;
+  }
+
   /* Metadata */
   .metadata {
     font-size: 0.9em;
