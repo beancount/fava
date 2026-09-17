@@ -21,7 +21,13 @@ COPY --from=frontend-build /fava /fava
 # git binary - pin a throwaway version instead rather than installing git
 # just for that (this image is never published).
 ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0.dev0
-RUN touch src/fava/static/app.js && pip install --no-cache-dir .
+# pyproject.toml only pins hatchling>=1.27, and a newer hatchling release
+# turned out to be a breaking change for this repo's hatch_build.py
+# (BuildHookInterface[BuilderConfig] - "Too few arguments", a generic-type
+# signature change) - pin to the version pyproject.toml itself states as
+# its floor, which is compatible, rather than whatever's newest today.
+RUN pip install --no-cache-dir "hatchling==1.27.0" "hatch-vcs>=0.4" "Babel>=2.7,<3"
+RUN touch src/fava/static/app.js && pip install --no-cache-dir --no-build-isolation .
 
 EXPOSE 5000
 CMD ["fava", "--host", "0.0.0.0", "--port", "5000", "tests/data/long-example.beancount"]
