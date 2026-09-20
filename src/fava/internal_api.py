@@ -59,6 +59,7 @@ class LedgerData(Struct, frozen=True):
     currency_names: dict[str, str]
     errors: Sequence[SerialisedError]
     fava_options: FavaOptions
+    use_external_editor: bool
     incognito: bool
     have_excel: bool
     links: Sequence[str]
@@ -108,6 +109,7 @@ def get_ledger_data() -> LedgerData:
         ledger.commodities.names,
         get_errors(),
         ledger.fava_options,
+        ledger.use_external_editor,
         current_app.config["INCOGNITO"],
         HAVE_EXCEL,
         ledger.attributes.links,
