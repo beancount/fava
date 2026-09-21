@@ -314,6 +314,7 @@ def test_ingest_examplefile(
 def test_ingest_hook_annotations(
     test_data_dir: Path,
     get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
     hook_kind: str,
     annotation: object,
     tuple_length: int,
@@ -360,7 +361,11 @@ def test_ingest_hook_annotations(
         "method": callable_hook.__call__,
         "object": callable_hook,
     }
-    ledger.ingest.loaded_config = replace(config, hooks=[hooks[hook_kind]])
+    monkeypatch.setattr(
+        ledger.ingest,
+        "loaded_config",
+        replace(config, hooks=[hooks[hook_kind]]),
+    )
 
     entries = ledger.ingest.extract(filename, importer_name)
     assert len(calls) == 1
