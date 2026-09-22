@@ -64,7 +64,7 @@
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.type) ?? 0, tooltip_text(d)];
+    return d && [x(d.date), y(d.type) ?? 0, d, () => tooltip_text(d)];
   };
 </script>
 

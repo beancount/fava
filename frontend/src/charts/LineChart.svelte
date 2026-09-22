@@ -84,7 +84,7 @@
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.value), chart.tooltip_text($ctx, d)];
+    return d && [x(d.date), y(d.value), d, () => chart.tooltip_text($ctx, d)];
   };
 
   let desaturate_filter_id = $derived(`desaturate-future-${uid}`);
