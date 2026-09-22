@@ -26,20 +26,20 @@ msgstr "Anterior"
 msgid "Next"
 msgstr "Próximo"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:17
+#: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Cost"
 msgstr "Em Custo"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:19
+#: frontend/src/charts/ConversionAndInterval.svelte:21
 msgid "At Market Value"
 msgstr "Em Valor de Mercado"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:21
+#: frontend/src/charts/ConversionAndInterval.svelte:23
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
 msgstr "Unidades"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:23
+#: frontend/src/charts/ConversionAndInterval.svelte:25
 #, python-format
 msgid "Converted to %(currency)s"
 msgstr "Convertido para %(currency)s"
@@ -158,23 +158,31 @@ msgstr "Descrição"
 msgid "Postings"
 msgstr "Lançamentos"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
 msgid "Yearly"
 msgstr "Anual"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+msgid "Per Fiscal Year"
+msgstr ""
+
+#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
 msgid "Quarterly"
 msgstr "Trimestral"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+msgid "Per Fiscal Quarter"
+msgstr ""
+
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
 msgid "Monthly"
 msgstr "Mensal"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
 msgid "Weekly"
 msgstr "Semanal"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
 msgid "Daily"
 msgstr "Diário"
 
@@ -238,23 +246,23 @@ msgstr "Baixar entradas filtradas como um arquivo Beancount"
 msgid "Error"
 msgstr "Erro"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: frontend/src/reports/accounts/AccountReport.svelte:53
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr ""
 
-#: frontend/src/reports/accounts/AccountReport.svelte:57
-#: frontend/src/reports/accounts/AccountReport.svelte:60
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: frontend/src/reports/accounts/AccountReport.svelte:58
 msgid "Account Journal"
 msgstr "Extrato da Conta"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:66
-#: frontend/src/reports/accounts/AccountReport.svelte:69
+#: frontend/src/reports/accounts/AccountReport.svelte:64
+#: frontend/src/reports/accounts/AccountReport.svelte:67
 #: src/fava/json_api.py:798
 msgid "Changes"
 msgstr "Valores"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:75
-#: frontend/src/reports/accounts/AccountReport.svelte:78
+#: frontend/src/reports/accounts/AccountReport.svelte:73
+#: frontend/src/reports/accounts/AccountReport.svelte:76
 msgid "Balances"
 msgstr "Saldos"
 

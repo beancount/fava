@@ -26,20 +26,20 @@ msgstr "上一个"
 msgid "Next"
 msgstr "下一个"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:17
+#: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Cost"
 msgstr "按成本"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:19
+#: frontend/src/charts/ConversionAndInterval.svelte:21
 msgid "At Market Value"
 msgstr "按市价"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:21
+#: frontend/src/charts/ConversionAndInterval.svelte:23
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
 msgstr "按单位数量"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:23
+#: frontend/src/charts/ConversionAndInterval.svelte:25
 #, python-format
 msgid "Converted to %(currency)s"
 msgstr "转换为 %(currency)s"
@@ -156,23 +156,31 @@ msgstr "摘要"
 msgid "Postings"
 msgstr "记录"
 
-#: frontend/src/lib/interval.ts:22 src/fava/util/date.py:103
+#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
 msgid "Yearly"
 msgstr "按年"
 
-#: frontend/src/lib/interval.ts:23 src/fava/util/date.py:123
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+msgid "Per Fiscal Year"
+msgstr ""
+
+#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
 msgid "Quarterly"
 msgstr "按季"
 
-#: frontend/src/lib/interval.ts:24 src/fava/util/date.py:144
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+msgid "Per Fiscal Quarter"
+msgstr ""
+
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
 msgid "Monthly"
 msgstr "按月"
 
-#: frontend/src/lib/interval.ts:25 src/fava/util/date.py:166
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
 msgid "Weekly"
 msgstr "按周"
 
-#: frontend/src/lib/interval.ts:26 src/fava/util/date.py:191
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
 msgid "Daily"
 msgstr "按日"
 
@@ -232,23 +240,23 @@ msgstr "将当前筛选的条目下载为 Beancount 文件"
 msgid "Error"
 msgstr "错误"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: frontend/src/reports/accounts/AccountReport.svelte:53
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "该账户及其子账户所有条目的日记账"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:57
-#: frontend/src/reports/accounts/AccountReport.svelte:60
+#: frontend/src/reports/accounts/AccountReport.svelte:55
+#: frontend/src/reports/accounts/AccountReport.svelte:58
 msgid "Account Journal"
 msgstr "账户日记账"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:66
-#: frontend/src/reports/accounts/AccountReport.svelte:69
+#: frontend/src/reports/accounts/AccountReport.svelte:64
+#: frontend/src/reports/accounts/AccountReport.svelte:67
 #: src/fava/json_api.py:798
 msgid "Changes"
 msgstr "变更"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:75
-#: frontend/src/reports/accounts/AccountReport.svelte:78
+#: frontend/src/reports/accounts/AccountReport.svelte:73
+#: frontend/src/reports/accounts/AccountReport.svelte:76
 msgid "Balances"
 msgstr "余额"
 
