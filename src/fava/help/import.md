@@ -11,7 +11,8 @@ beangulp-style hooks that take list of
 you can annotate them with the appropriate Python types which Fava will detect
 and call with these 4-tuples. Both runtime annotations and string annotations
 (including those from `from __future__ import annotations`) are supported. For a
-callable object, annotate its `__call__` method. Hooks without an `Importer`
+callable object, annotate its `__call__` method. These annotations take priority
+over annotations on the object's data fields. Hooks without an `Importer`
 annotation keep receiving the legacy 2-tuples.
 
 Set the `import-config` option to point to your import config and set

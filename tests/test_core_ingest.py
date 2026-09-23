@@ -293,7 +293,9 @@ def test_ingest_examplefile(
     snapshot([serialise(e) for e in entries], json=True)
 
 
-@pytest.mark.parametrize("hook_kind", ["function", "method", "object"])
+@pytest.mark.parametrize(
+    "hook_kind", ["function", "method", "object", "annotated-object"]
+)
 @pytest.mark.parametrize(
     ("annotation", "tuple_length"),
     [
@@ -348,6 +350,9 @@ def test_ingest_hook_annotations(
         ) -> HookOutput:
             return hook(extracted, existing)
 
+    class AnnotatedHook(Hook):
+        label: str = "Custom import hook"
+
     # This module postpones annotations; assign runtime types explicitly to
     # exercise hooks defined without `from __future__ import annotations` too.
     annotations = {} if annotation is None else {"return": annotation}
@@ -360,6 +365,7 @@ def test_ingest_hook_annotations(
         "function": hook,
         "method": callable_hook.__call__,
         "object": callable_hook,
+        "annotated-object": AnnotatedHook(),
     }
     monkeypatch.setattr(
         ledger.ingest,
