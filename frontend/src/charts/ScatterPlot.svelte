@@ -8,7 +8,7 @@
   import { day } from "../format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
-  import { scatterplotScale } from "./helpers.ts";
+  import { scatterplot_scale } from "./helpers.ts";
   import type { ScatterPlot, ScatterPlotDatum } from "./scatterplot.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
   import { domHelpers } from "./tooltip.ts";
@@ -107,7 +107,7 @@
     <Axis y axis={y_axis} />
     <g filter={desaturate_future_filter}>
       {#each dots_by_type as [type, dots] (type)}
-        <path d={dots_shape(dots)} fill={scatterplotScale(type)} />
+        <path d={dots_shape(dots)} fill={scatterplot_scale(type)} />
       {/each}
     </g>
   </Brush>
