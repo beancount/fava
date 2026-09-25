@@ -5,7 +5,13 @@
 <script lang="ts">
   import type { Writable } from "svelte/store";
 
+<<<<<<< Updated upstream
   import { currencies_scale } from "./helpers.ts";
+=======
+  import { timedclick } from "./timedclick.ts";
+
+  import { currenciesScale } from "./helpers.ts";
+>>>>>>> Stashed changes
 
   interface Props {
     /** The chart legend to show. */
@@ -25,13 +31,24 @@
   {#each legend as item (item)}
     <button
       type="button"
-      onclick={() => {
+      {@attach timedclick()}
+      ontimedclick={(e) => {
         if (active) {
           active.set(item);
         } else if (toggled) {
-          toggled.update((v) =>
-            v.includes(item) ? v.filter((i) => i !== item) : [...v, item],
-          );
+          if (e.detail.isLong) {
+            // Long press: toggle between: THIS on | ALL on
+            toggled.update((v) =>
+              v.length === legend.length - !v.includes(item)
+                ? []
+                : legend.filter((i) => i !== item),
+            );
+          } else {
+            // Short press: toggle single button
+            toggled.update((v) =>
+              v.includes(item) ? v.filter((i) => i !== item) : [...v, item],
+            );
+          }
         }
       }}
       class:inactive={active ? item !== $active : $toggled?.includes(item)}
