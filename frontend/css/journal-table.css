@@ -97,6 +97,18 @@
     background: var(--journal-hover-highlight);
   }
 
+  /* The row selected via ArrowUp/ArrowDown keyboard navigation (see
+   * reports/journal/keyboard_navigation.ts). Needs to read clearly as a
+   * persistent "you are here" cursor (unlike the barely-there hover
+   * background above, which only has to register for a moment under the
+   * mouse), so this uses the link color rather than the hover highlight -
+   * and an outline rather than a background so it stays visible over the
+   * .datecell/.flag columns' own background-color. */
+  > li.selected > p {
+    outline: 2px solid var(--link-color);
+    outline-offset: -2px;
+  }
+
   /* Metadata */
   .metadata {
     font-size: 0.9em;
