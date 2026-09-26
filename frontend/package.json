@@ -35,7 +35,7 @@
     "eslint": "^10.0.0",
     "eslint-plugin-svelte": "^3.1.0",
     "jsdom": "^30",
-    "lightningcss": "^1",
+    "lightningcss-wasm": "^1",
     "prettier": "^3.0.0",
     "prettier-plugin-svelte": "^4",
     "svelte-check": "^4.0.1",
