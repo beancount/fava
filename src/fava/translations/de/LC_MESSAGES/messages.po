@@ -250,7 +250,7 @@ msgstr "Konto-Journal"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:64
 #: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:798
+#: src/fava/json_api.py:799
 msgid "Changes"
 msgstr "Änderungen"
 
@@ -620,8 +620,8 @@ msgstr "Zeitraum"
 msgid "Filter by tag, payee, …"
 msgstr "Filtern nach Markierung, Empfänger, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
-#: src/fava/json_api.py:717
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:700
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "Reingewinn"
 
@@ -695,10 +695,10 @@ msgstr "Saldo"
 msgid "Net Worth"
 msgstr "Reinvermögen"
 
-#: src/fava/json_api.py:705
+#: src/fava/json_api.py:706
 msgid "Income"
 msgstr "Einkommen"
 
-#: src/fava/json_api.py:711
+#: src/fava/json_api.py:712
 msgid "Expenses"
 msgstr "Ausgaben"
