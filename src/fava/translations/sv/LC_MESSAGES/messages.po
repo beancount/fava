@@ -254,7 +254,7 @@ msgstr "Kontojournal"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:64
 #: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:798
+#: src/fava/json_api.py:799
 msgid "Changes"
 msgstr "Ändringar"
 
@@ -630,8 +630,8 @@ msgstr "Tid"
 msgid "Filter by tag, payee, …"
 msgstr "Filtrera efter etikett, mottagare, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
-#: src/fava/json_api.py:717
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:700
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "Nettoresultat"
 
@@ -703,10 +703,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:705
+#: src/fava/json_api.py:706
 msgid "Income"
 msgstr "Intäkter"
 
-#: src/fava/json_api.py:711
+#: src/fava/json_api.py:712
 msgid "Expenses"
 msgstr "Utgifter"
