@@ -87,7 +87,7 @@ test = [
 ]
 # Type-checking with mypy or ty.
 types = [
-  "hatchling>=1.27", # for the build hook in hatch_build.py
+  "hatchling>=1.27,!=1.32.3", # for the build hook in hatch_build.py
   "mypy>=1.14",
   "pytest>=8",
   "ty>=0.0.2",
@@ -96,7 +96,7 @@ types = [
 ]
 
 [build-system]
-requires = ["Babel>=2.7,<3", "hatch-vcs>=0.4", "hatchling>=1.27"]
+requires = ["Babel>=2.7,<3", "hatch-vcs>=0.4", "hatchling>=1.27,!=1.32.3"]
 build-backend = "hatchling.build"
 
 [tool.uv]

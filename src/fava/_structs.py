@@ -22,7 +22,7 @@ class EntryStruct(Struct, frozen=True, tag_field="t", kw_only=True):
     """msgspec Struct representations of entries."""
 
     date: datetime.date
-    meta: dict[str, str | bool | _Amount]
+    meta: dict[str, str | bool | int | _Amount]
     # Only present when sending entries to the frontend.
     entry_hash: str = ""
 
@@ -91,7 +91,7 @@ class Posting(Struct, frozen=True, kw_only=True, omit_defaults=True):
     account: str
     amount: str = ""
     flag: str = ""
-    meta: dict[str, str | bool | _Amount] | None = None
+    meta: dict[str, str | bool | int | _Amount] | None = None
 
 
 class Transaction(EntryStruct):

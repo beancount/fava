@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 from fava.core.budgets import calculate_budget
 from fava.core.budgets import calculate_budget_children
 from fava.core.budgets import parse_budgets
+from fava.util.date import END_OF_YEAR
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Custom
@@ -23,7 +24,7 @@ def test_budgets(load_doc_custom_entries: list[Custom]) -> None:
     2016-01-01 custom "budget" Expenses:Groceries "weekly"
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
-    budgets, errors = parse_budgets(load_doc_custom_entries)
+    budgets, errors = parse_budgets(load_doc_custom_entries, END_OF_YEAR)
 
     assert len(errors) == 3
 
@@ -145,3 +146,28 @@ def test_budgets_children(budgets_doc: BudgetDict) -> None:
         date(2017, 1, 2),
     )
     assert budget["USD"] == Decimal("2.00")
+
+
+def test_budgets_children_sibling_with_shared_prefix(
+    budgets_doc: BudgetDict,
+) -> None:
+    """
+    2017-01-01 custom "budget" Expenses:Car "daily" 10.00 USD
+    2017-01-01 custom "budget" Expenses:Car:Fuel "daily" 1.00 USD
+    2017-01-01 custom "budget" Expenses:Carpet "daily" 100.00 USD"""
+
+    budget = calculate_budget_children(
+        budgets_doc,
+        "Expenses:Car",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
+    )
+    assert budget["USD"] == Decimal("11.00")
+
+    budget = calculate_budget_children(
+        budgets_doc,
+        "Expenses:Carpet",
+        date(2017, 1, 1),
+        date(2017, 1, 2),
+    )
+    assert budget["USD"] == Decimal("100.00")

@@ -5,7 +5,7 @@
 import { format } from "d3-format";
 import { timeFormat, utcFormat } from "d3-time-format";
 
-import type { Interval } from "./lib/interval.ts";
+import type { FiscalYearEnd, Interval } from "./lib/interval.ts";
 
 /**
  * A number formatting function for a locale.
@@ -75,25 +75,27 @@ type DateFormatter = (date: Date) => string;
 /** Format the date as a ISO-8601 date string. */
 export const day = utcFormat("%Y-%m-%d");
 
-/** Date formatters for human consumption. */
-export const dateFormat: Record<Interval, DateFormatter> = {
-  year: utcFormat("%Y"),
-  quarter: (date) =>
-    `${date.getUTCFullYear().toString()}Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
-  month: utcFormat("%b %Y"),
-  week: utcFormat("%GW%V"),
-  day,
-};
+export const week = utcFormat("%G-W%V");
+export const month = utcFormat("%Y-%m");
+export const quarter: DateFormatter = (date) =>
+  `${date.getUTCFullYear().toString()}-Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`;
+export const year = utcFormat("%Y");
 
-/** Date formatters for the entry filter form. */
-export const timeFilterDateFormat: Record<Interval, DateFormatter> = {
-  year: utcFormat("%Y"),
-  quarter: (date) =>
-    `${date.getUTCFullYear().toString()}-Q${(Math.floor(date.getUTCMonth() / 3) + 1).toString()}`,
-  month: utcFormat("%Y-%m"),
-  week: utcFormat("%G-W%V"),
-  day,
-};
+/** Date formatters for human consumption, for a given fiscal year end. */
+export function get_date_format(
+  interval: Interval,
+  fye: FiscalYearEnd,
+): DateFormatter {
+  return {
+    year,
+    fiscal_year: fye.format_year.bind(fye),
+    quarter,
+    fiscal_quarter: fye.format_quarter.bind(fye),
+    month,
+    week,
+    day,
+  }[interval];
+}
 
 const local_day = timeFormat("%Y-%m-%d");
 

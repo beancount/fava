@@ -21,6 +21,7 @@
     "@types/d3-color": "^3.0.2",
     "@types/d3-format": "^3.0.1",
     "@types/d3-hierarchy": "^3.0.2",
+    "@types/d3-path": "^3.1.1",
     "@types/d3-quadtree": "^3.0.2",
     "@types/d3-scale": "^4.0.1",
     "@types/d3-selection": "^3.0.2",
@@ -63,6 +64,7 @@
     "d3-color": "^3.0.0",
     "d3-format": "^3.1.0",
     "d3-hierarchy": "^3.1.0",
+    "d3-path": "^3.1.0",
     "d3-quadtree": "^3.0.0",
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
@@ -70,7 +72,7 @@
     "d3-time": "^3.0.0",
     "d3-time-format": "^4.1.0",
     "svelte": "^5.11.3",
-    "web-tree-sitter": "^0.26"
+    "web-tree-sitter": "^0.27"
   },
   "allowScripts": {
     "esbuild": false

@@ -1,6 +1,7 @@
 import { derived, writable } from "svelte/store";
 
 import { get_interval } from "../lib/interval.ts";
+import { fiscal_year_end } from "./fava_options.ts";
 
 /** The current URL. Should only be updated by the router. */
 export const current_url = writable<URL>();
@@ -33,8 +34,10 @@ export const conversion = derived(
 );
 
 /** The current interval used for reports. */
-export const interval = derived(search_params, ($search_params) =>
-  get_interval($search_params.get("interval")),
+export const interval = derived(
+  [search_params, fiscal_year_end],
+  ([$search_params, $fiscal_year_end]) =>
+    get_interval($search_params.get("interval"), $fiscal_year_end),
 );
 
 /** These URL parameters for filters and conversion / interval are synced for most links. */

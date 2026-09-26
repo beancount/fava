@@ -62,18 +62,6 @@
     display: block;
   }
 
-  /* Show metadata and postings if it was toggled for the whole journal. */
-  &.show-postings .postings,
-  &.show-metadata .metadata {
-    display: block;
-  }
-
-  /* Show metadata and postings where it was explicitly toggled with the indicators. */
-  li.show-full-entry .postings,
-  li.show-full-entry .metadata {
-    display: block;
-  }
-
   &.show-transaction.show-cleared .transaction.cleared,
   &.show-transaction.show-pending .transaction.pending,
   &.show-transaction.show-other .transaction.other,
@@ -85,6 +73,13 @@
 
   .payee {
     cursor: pointer;
+  }
+
+  /* There's three number columns (units, cost, price).
+ * They should add about to about half of the width */
+  p > .num {
+    width: min(calc(15%), 20rem);
+    border-left: 1px solid var(--table-border);
   }
 
   .postings {
@@ -123,11 +118,16 @@
     }
   }
 
-  /* There's three number columns (units, cost, price).
- * They should add about to about half of the width */
-  p > .num {
-    width: min(calc(15%), 20rem);
-    border-left: 1px solid var(--table-border);
+  /* Show metadata and postings if it was toggled for the whole journal. */
+  &.show-postings .postings,
+  &.show-metadata .metadata {
+    display: block;
+  }
+
+  /* Show metadata and postings where it was explicitly toggled with the indicators. */
+  li.show-full-entry .postings,
+  li.show-full-entry .metadata {
+    display: block;
   }
 
   .datecell,

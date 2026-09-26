@@ -68,7 +68,13 @@ export class BarChart {
         .keys(this.accounts)
         .value((d, account) => d.account_balances[account]?.[currency] ?? 0)
         .offset(stackOffsetDiverging)(bar_groups)
-        .filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
+        .map((series) =>
+          Object.assign(
+            series.filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
+            { key: series.key, index: series.index },
+          ),
+        )
+        .filter((series) => series.length > 0),
     ]);
   }
 
@@ -196,7 +202,7 @@ export class ParsedBarChart implements ParsedFavaChart {
         budget: interval.budgets[currency] ?? 0,
       })),
       date: interval.date,
-      label: $chart_context.dateFormat(interval.date),
+      label: $chart_context.date_format(interval.date),
       account_balances: interval.account_balances,
     }));
 

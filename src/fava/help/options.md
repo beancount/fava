@@ -81,7 +81,8 @@ Examples are:
 - `15-31` - Japan
 
 See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
-more examples.
+more examples. The value `02-28` is special-cased and understood to always be
+the last day of February.
 
 ## indent
 

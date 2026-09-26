@@ -1,6 +1,7 @@
 <script lang="ts">
   import { extent, max, min } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
+  import { pathRound } from "d3-path";
   import { quadtree } from "d3-quadtree";
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { area, curveStepAfter, line } from "d3-shape";
@@ -76,6 +77,17 @@
       .curve(curveStepAfter),
   );
 
+  const dots_shape = (values: readonly LineChartDatum[]) => {
+    const path = pathRound(1);
+    for (const d of values) {
+      const cx = x(d.date);
+      const cy = y(d.value);
+      path.moveTo(cx + 2, cy);
+      path.arc(cx, cy, 2, 0, 2 * Math.PI);
+    }
+    return path.toString();
+  };
+
   // Axes
   let x_axis = $derived(axisBottom(x).tickSizeOuter(0));
   let y_axis = $derived(
@@ -84,7 +96,7 @@
 
   const tooltip_find: TooltipFindNode = (x_pointer, y_pointer) => {
     const d = quad.find(x_pointer, y_pointer);
-    return d && [x(d.date), y(d.value), chart.tooltip_text($ctx, d)];
+    return d && [x(d.date), y(d.value), d, () => chart.tooltip_text($ctx, d)];
   };
 
   let desaturate_filter_id = $derived(`desaturate-future-${uid}`);
@@ -121,18 +133,9 @@
       {/each}
     </g>
     {#if $line_chart_mode === "line"}
-      <g>
+      <g filter={desaturate_future_filter}>
         {#each data as d (d.name)}
-          <g fill={$currencies_scale(d.name)}>
-            {#each d.values as v (v.date)}
-              <circle
-                r="2"
-                cx={x(v.date)}
-                cy={y(v.value)}
-                class:desaturate={v.date > today}
-              />
-            {/each}
-          </g>
+          <path d={dots_shape(d.values)} fill={$currencies_scale(d.name)} />
         {/each}
       </g>
     {/if}
@@ -147,9 +150,5 @@
 
   .area path {
     opacity: 0.3;
-  }
-
-  .desaturate {
-    filter: saturate(50%);
   }
 </style>

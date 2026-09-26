@@ -7,6 +7,33 @@ import { parse_json } from "./json.ts";
 import type { Validator } from "./validation.ts";
 
 /**
+ * Create a derived store that only updates if the value changed according to the given equality check.
+ * @param store - The store to derive the value from.
+ * @param getter - A getter that obtains the value that should be contained in the store.
+ * @param initial - The initial value of the store.
+ * @param equals - The equality check to compare the old and new values with.
+ */
+export function derived_with_equality<S, T>(
+  store: Readable<S>,
+  getter: (values: S) => T,
+  initial: T,
+  equals: (a: T, b: T) => boolean,
+): Readable<T> {
+  let value = initial;
+  return derived(
+    store,
+    (store_val, set) => {
+      const new_value = getter(store_val);
+      if (!equals(value, new_value)) {
+        set(new_value);
+        value = new_value;
+      }
+    },
+    value,
+  );
+}
+
+/**
  * Create a derived store that does a shallow array equality check.
  * @param store - The store to derive the value from.
  * @param getter - A getter that obtains the array that should be contained in the store.
@@ -15,18 +42,7 @@ export function derived_array<S, T extends StrictEquality>(
   store: Readable<S>,
   getter: (values: S) => readonly T[],
 ): Readable<readonly T[]> {
-  let val: readonly T[] = [];
-  return derived(
-    store,
-    (store_val, set) => {
-      const newVal = getter(store_val);
-      if (!shallow_equal(val, newVal)) {
-        set(newVal);
-        val = newVal;
-      }
-    },
-    val,
-  );
+  return derived_with_equality(store, getter, [], shallow_equal);
 }
 
 /** A store that has its value synced to localStorage. */

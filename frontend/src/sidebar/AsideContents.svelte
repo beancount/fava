@@ -9,7 +9,7 @@
   import AccountSelector from "./AccountSelector.svelte";
   import Link from "./SidebarLink.svelte";
 
-  const truncate = (s: string) => (s.length < 25 ? s : `${s.slice(25)}…`);
+  const truncate = (s: string) => (s.length <= 25 ? s : `${s.slice(0, 24)}…`);
 
   let user_queries = $derived($ledger_data.user_queries);
   let upcoming_events_count = $derived($ledger_data.upcoming_events_count);

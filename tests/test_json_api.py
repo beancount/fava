@@ -814,9 +814,13 @@ def test_api_add_entries(
                 "tags": [],
                 "links": [],
                 "narration": "",
-                "meta": {},
+                "meta": {"filename": "/path/to/import.csv", "lineno": 42},
                 "postings": [
-                    {"account": "Assets:US:ETrade:Cash", "amount": "100 USD"},
+                    {
+                        "account": "Assets:US:ETrade:Cash",
+                        "amount": "100 USD",
+                        "meta": {"lineno": 1},
+                    },
                     {"account": "Assets:US:ETrade:GLD"},
                 ],
             },

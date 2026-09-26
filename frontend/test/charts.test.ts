@@ -38,7 +38,7 @@ test("chart helpers (pad extent)", () => {
 });
 
 test("handle data for hierarchical chart", async () => {
-  const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
+  const ctx = { currencies: ["USD"], date_format: () => "DATE" };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await load_json_snapshot(
     "test_internal_api-test_chart_api.json",
@@ -119,7 +119,7 @@ test("handle data for bar chart with stacked data", () => {
       },
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
   const chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
@@ -143,22 +143,7 @@ test("handle data for bar chart with stacked data", () => {
     [
       "EUR",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 60],
-          ],
-        },
+        { key: "Expenses:Shoes", index: 1, points: [[0, 60]] },
         {
           key: "Expenses:Taxes",
           index: 2,
@@ -167,51 +152,14 @@ test("handle data for bar chart with stacked data", () => {
             [60, 100],
           ],
         },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [4, 10],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Transportation", index: 3, points: [[4, 10]] },
       ],
     ],
     [
       "USD",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 8],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Taxes",
-          index: 2,
-          points: [
-            [8, 10],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Dining", index: 0, points: [[0, 8]] },
+        { key: "Expenses:Taxes", index: 2, points: [[8, 10]] },
       ],
     ],
   ]);
@@ -276,7 +224,7 @@ test("handle data for bar chart without stacked data", () => {
     },
   ];
   // even without the operating currencies, the two most popular ones will be selected
-  const ctx = { currencies: [], dateFormat: () => "DATE" };
+  const ctx = { currencies: [], date_format: () => "DATE" };
   const chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
@@ -318,7 +266,7 @@ test("only use currencies in records for bar chart", () => {
       account_balances: {},
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
   const chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);

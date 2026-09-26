@@ -103,3 +103,21 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
     etrade = data.children[1].children[2]
     assert etrade.account == "Assets:US:ETrade"
     assert etrade.balance_children == {"USD": Decimal("23137.54")}
+
+
+def test_interval_totals_sibling_with_shared_prefix(
+    small_example_ledger: FavaLedger,
+) -> None:
+    """Accounts that merely share a name prefix are not children."""
+    filtered = small_example_ledger.get_filtered()
+
+    for interval in small_example_ledger.charts.interval_totals(
+        filtered, Month, "Expenses:Other", "EUR"
+    ):
+        assert not interval.balance
+        assert not interval.account_balances
+
+    for interval in small_example_ledger.charts.interval_totals(
+        filtered, Month, "Expenses:Others", "EUR"
+    ):
+        assert set(interval.account_balances) == {"Expenses:Others"}

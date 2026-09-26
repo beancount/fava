@@ -21,6 +21,7 @@ from fava.core.conversion import conversion_from_str
 from fava.core.inventory import CounterInventory
 from fava.core.module_base import FavaModule
 from fava.util import listify
+from fava.util.date import FiscalYearEnd
 
 try:
     from typing import override
@@ -48,6 +49,8 @@ def _enc_hook(o: object) -> object:
         return o.pattern
     if isinstance(o, Markup):
         return str(o)
+    if isinstance(o, FiscalYearEnd):
+        return {"month": o.month, "day": o.day}
     if o is MISSING:  # pragma: no cover
         return None
     msg = f"Unsupported type: {type(o)}"  # pragma: no cover
@@ -135,6 +138,7 @@ class ChartModule(FavaModule):
         """
         conv = conversion_from_str(conversion)
         prices = self.ledger.prices
+        is_child_account = account_tester(accounts, with_children=True)
 
         # limit the bar charts to 100 intervals
         intervals = filtered.interval_ranges(interval)[-100:]
@@ -149,7 +153,7 @@ class ChartModule(FavaModule):
             )
             for entry in entries:
                 for posting in getattr(entry, "postings", []):
-                    if posting.account.startswith(accounts):
+                    if is_child_account(posting.account):
                         account_inventories[posting.account].add_position(
                             posting,
                         )
@@ -271,9 +275,12 @@ class ChartModule(FavaModule):
             )
         )
 
-        types = (
-            self.ledger.options["name_assets"],
-            self.ledger.options["name_liabilities"],
+        is_assets_or_liabilities = account_tester(
+            (
+                self.ledger.options["name_assets"],
+                self.ledger.options["name_liabilities"],
+            ),
+            with_children=True,
         )
 
         txn = next(transactions, None)
@@ -283,7 +290,7 @@ class ChartModule(FavaModule):
         for date_range in filtered.interval_ranges(interval):
             while txn and txn.date < date_range.end:
                 for posting in txn.postings:
-                    if posting.account.startswith(types):
+                    if is_assets_or_liabilities(posting.account):
                         inventory.add_position(posting)
                 txn = next(transactions, None)
             yield DateAndBalance(

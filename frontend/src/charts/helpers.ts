@@ -1,24 +1,24 @@
 import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
-import { derived, get as store_get } from "svelte/store";
+import { derived } from "svelte/store";
 
-import { current_time_filter_date_format } from "../stores/format.ts";
+import { date_format } from "../stores/format.ts";
 import { accounts, currencies_sorted } from "../stores/index.ts";
 import { operating_currency } from "../stores/options.ts";
+import { current_url } from "../stores/url.ts";
 
 /**
- * Set the time filter to the given value (formatted according to the current interval).
- * @param date - a date.
- * @returns A URL for the given interval.
+ * Get an URL to set the time filter to the given date (formatted according to the current interval).
  */
-export function url_for_time_filter(date: Date): string {
-  const url = new URL(window.location.href);
-  url.searchParams.set(
-    "time",
-    store_get(current_time_filter_date_format)(date),
-  );
-  return url.toString();
-}
+export const url_for_time_filter = derived(
+  [current_url, date_format],
+  ([$current_url, $date_format]) =>
+    (date: Date): string => {
+      const url = new URL($current_url);
+      url.searchParams.set("time", $date_format(date));
+      return url.toString();
+    },
+);
 
 /**
  * Include zero in the extent.
@@ -97,7 +97,7 @@ export const colors15 = hcl_color_range(15, 30, 80);
  * The scales for treemap and sunburst charts will be initialised with all
  * accounts on page init and currencies with all commodities.
  */
-export const scatterplotScale = scaleOrdinal(colors10);
+export const scatterplot_scale = scaleOrdinal(colors10);
 
 export const treemap_scale = derived(accounts, ($accounts) =>
   scaleOrdinal(colors15).domain($accounts),
