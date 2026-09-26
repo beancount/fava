@@ -1017,6 +1017,54 @@ def test_api_filter_error(
 
 
 @pytest.mark.parametrize(
+    "aggregation_key",
+    ["all", "by_account", "by_currency", "by_cost_currency"],
+)
+def test_api_holdings_query_string_includes_end_date(
+    test_client: FlaskClient,
+    aggregation_key: str,
+) -> None:
+    data = assert_api_success(
+        test_client.get(
+            "/long-example/api/holdings",
+            query_string={
+                "aggregation_key": aggregation_key,
+                "time": "2017-08",
+            },
+        )
+    )
+    assert isinstance(data, dict)
+    assert "value(sum(position), 2017-08-31)" in data["query_string"]
+    table = data["query_result_table"]
+    assert isinstance(table, dict)
+    assert table["t"] == "table"
+    assert table["rows"]
+
+
+def test_api_holdings_without_time_filter(test_client: FlaskClient) -> None:
+    data = assert_api_success(test_client.get("/long-example/api/holdings"))
+    assert isinstance(data, dict)
+    assert "value(sum(position), " not in data["query_string"]
+    table = data["query_result_table"]
+    assert isinstance(table, dict)
+    assert table["t"] == "table"
+
+
+def test_api_holdings_invalid_aggregation_key(
+    test_client: FlaskClient,
+) -> None:
+    assert_api_error(
+        test_client.get(
+            "/long-example/api/holdings",
+            query_string={"aggregation_key": "by_something"},
+        ),
+        "Invalid API request: unknown holdings aggregation key:"
+        " `by_something`",
+        HTTPStatus.BAD_REQUEST,
+    )
+
+
+@pytest.mark.parametrize(
     ("name", "url"),
     [
         ("commodities", "/long-example/api/commodities"),
