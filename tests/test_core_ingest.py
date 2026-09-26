@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import runpy
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 from typing import TYPE_CHECKING
@@ -33,7 +34,12 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
+    from collections.abc import Sequence
+
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
+    from fava.core.ingest import HookOutput
 
     from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
@@ -285,6 +291,91 @@ def test_ingest_examplefile(
         "<run_path>.TestBeangulpImporter",
     )
     snapshot([serialise(e) for e in entries], json=True)
+
+
+@pytest.mark.parametrize(
+    "hook_kind", ["function", "method", "object", "annotated-object"]
+)
+@pytest.mark.parametrize(
+    ("annotation", "tuple_length"),
+    [
+        pytest.param(None, 2, id="unannotated"),
+        pytest.param("list[tuple[str, list]]", 2, id="legacy-string"),
+        pytest.param(list[tuple[str, list[Any]]], 2, id="legacy-runtime"),
+        pytest.param(list, 2, id="bare-list"),
+        pytest.param(
+            "list[tuple[str, list, str, Importer]]", 4, id="beangulp-string"
+        ),
+        pytest.param(
+            list[tuple[str, list[Any], str, Importer]],
+            4,
+            id="beangulp-runtime",
+        ),
+    ],
+)
+def test_ingest_hook_annotations(
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+    hook_kind: str,
+    annotation: object,
+    tuple_length: int,
+) -> None:
+    ledger = get_ledger("import")
+    config = ledger.ingest.loaded_config
+    assert config
+    importer_name = "<run_path>.TestBeangulpImporter"
+    filename = str(test_data_dir / "import.csv")
+    calls = []
+
+    def hook(
+        extracted: HookOutput, existing: Sequence[Directive]
+    ) -> HookOutput:
+        calls.append(extracted)
+        assert existing is ledger.all_entries
+        assert len(extracted) == 1
+        row = extracted[0]
+        assert len(row) == tuple_length
+        assert row[0] == filename
+        if len(row) == 4:
+            assert row[2] == "Assets:Checking"
+            assert row[3] is config.importers[importer_name].importer
+        assert len(row[1]) == 4
+        row[1].pop()
+        return extracted
+
+    class Hook:
+        def __call__(
+            self, extracted: HookOutput, existing: Sequence[Directive]
+        ) -> HookOutput:
+            return hook(extracted, existing)
+
+    class AnnotatedHook(Hook):
+        label: str = "Custom import hook"
+
+    # This module postpones annotations; assign runtime types explicitly to
+    # exercise hooks defined without `from __future__ import annotations` too.
+    annotations = {} if annotation is None else {"return": annotation}
+    hook.__annotations__ = annotations
+    Hook.__call__.__annotations__ = annotations
+    callable_hook = Hook()
+    hooks: dict[
+        str, Callable[[HookOutput, Sequence[Directive]], HookOutput]
+    ] = {
+        "function": hook,
+        "method": callable_hook.__call__,
+        "object": callable_hook,
+        "annotated-object": AnnotatedHook(),
+    }
+    monkeypatch.setattr(
+        ledger.ingest,
+        "loaded_config",
+        replace(config, hooks=[hooks[hook_kind]]),
+    )
+
+    entries = ledger.ingest.extract(filename, importer_name)
+    assert len(calls) == 1
+    assert len(entries) == 3
 
 
 def test_filepath_in_primary_imports_folder(
