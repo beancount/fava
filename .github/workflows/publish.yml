@@ -34,6 +34,7 @@ jobs:
         with:
           enable-cache: false
       - run: uv build
+      - run: uv run --no-dev pybabel extract --omit-header --mapping-file=pyproject.toml --output-file=src/fava/translations/messages.pot .
       - run: git diff --exit-code
       - name: Publish release
         if: github.event_name == 'push' && github.ref_type == 'tag'
