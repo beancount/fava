@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+from datetime import timedelta
 from typing import TYPE_CHECKING
 
 import pytest
@@ -13,7 +14,9 @@ from fava.util.date import FiscalQuarter
 from fava.util.date import FiscalYear
 from fava.util.date import FiscalYearEnd
 from fava.util.date import FiscalYearEnds
+from fava.util.date import Fortnight
 from fava.util.date import FyeHasNoQuartersError
+from fava.util.date import get_budget_interval
 from fava.util.date import get_interval
 from fava.util.date import interval_ends
 from fava.util.date import InvalidDateRangeError
@@ -82,11 +85,41 @@ def test_fye_get_fiscal_year_from_date(
     assert fye.fiscal_year(fromisoformat(input_date_string)) == expect
 
 
+def test_fortnight_is_budget_only() -> None:
+    assert get_interval("fortnightly", END_OF_YEAR) is None
+    assert get_budget_interval("fortnightly", END_OF_YEAR) is Fortnight
+    assert get_budget_interval("Fortnight", END_OF_YEAR) is Fortnight
+    assert get_budget_interval("weekly", END_OF_YEAR) is Week
+    assert get_budget_interval("fiscal_year", FiscalYearEnds.UK) == FiscalYear(
+        FiscalYearEnds.UK
+    )
+    assert get_budget_interval("asdf", END_OF_YEAR) is None
+    assert Fortnight.label
+
+
+def test_fortnight_blocks_are_fixed_14_days() -> None:
+    # 2020 has 53 ISO weeks; fortnights must stay contiguous and 14 days
+    # long across it rather than shrinking to a single week.
+    start = Fortnight.get_prev(date(2020, 12, 21))
+    for _ in range(6):
+        end = Fortnight.get_next(start)
+        assert (end - start).days == 14
+        assert start.weekday() == 0
+        for offset in range(14):
+            day = start + timedelta(offset)
+            assert Fortnight.get_prev(day) == start
+            assert Fortnight.number_of_days(day) == 14
+        start = end
+    assert Fortnight.get_next(date.max) == date.max
+
+
 @pytest.mark.parametrize(
     ("input_date_string", "interval", "expect"),
     [
         ("2016-01-01", Day, "2016-01-01"),
         ("2016-01-04", Week, "2016-W01"),
+        ("2016-01-04", Fortnight, "2016-01-04"),
+        ("2016-01-10", Fortnight, "2016-01-04"),
         ("2016-01-04", Month, "2016-01"),
         ("2016-01-04", Quarter, "2016-Q1"),
         ("2016-03-31", Quarter, "2016-Q1"),
@@ -119,6 +152,8 @@ def test_interval_format(
     [
         ("2016-01-01", Day, "2016-01-02"),
         ("2016-01-01", Week, "2016-01-04"),
+        ("2016-01-01", Fortnight, "2016-01-04"),
+        ("2016-12-31", Fortnight, "2017-01-02"),
         ("2016-01-01", Month, "2016-02-01"),
         ("2016-01-01", Quarter, "2016-04-01"),
         ("2016-01-01", Year, "2017-01-01"),
@@ -151,6 +186,8 @@ def test_get_next_interval_max() -> None:
     [
         ("2016-01-01", Day, "2016-01-01"),
         ("2016-01-01", Week, "2015-12-28"),
+        ("2016-01-01", Fortnight, "2015-12-21"),
+        ("2016-12-31", Fortnight, "2016-12-19"),
         ("2016-01-01", Month, "2016-01-01"),
         ("2016-01-01", Quarter, "2016-01-01"),
         ("2016-01-01", Year, "2016-01-01"),
