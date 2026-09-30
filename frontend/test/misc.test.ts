@@ -110,7 +110,17 @@ test("request handling - HTTP errors on fetchJSON", async (t) => {
     globalThis,
     "fetch",
     () =>
-      new Response(JSON.stringify({ error: "some message" }), { status: 401 }),
+      new Response(
+        JSON.stringify({
+          title: "Unauthorized",
+          status: 401,
+          detail: "some message",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/problem+json" },
+        },
+      ),
   );
   await rejects(fetch_json(url), { message: "HTTP 401 - some message" });
 

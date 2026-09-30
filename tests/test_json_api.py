@@ -18,7 +18,7 @@ from fava.core.file import get_entry_slice
 from fava.core.misc import align
 from fava.json_api import build_json_body_decoder
 from fava.json_api import build_query_string_decoder
-from fava.json_api import ErrorResponse
+from fava.json_api import ProblemDetails
 from fava.json_api import SuccessResponse
 from fava.json_api import ValidationError
 
@@ -93,21 +93,27 @@ def test_json_body_decoder() -> None:
     )
 
 
-_error_decoder = Decoder(ErrorResponse)
+_error_decoder = Decoder(ProblemDetails)
 _success_decoder = Decoder(SuccessResponse)
 
 
 def assert_api_error(
     response: TestResponse,
     msg: str | None = None,
+    *,
     status: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR,
+    title: str | None = None,
 ) -> str:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == status.value
+    assert response.content_type == "application/problem+json"
     json = _error_decoder.decode(response.data)
+    assert json.status == status.value
+    if title:
+        assert title == json.title
     if msg:
-        assert msg == json.error
-    return json.error
+        assert msg == json.detail
+    return json.detail
 
 
 def assert_api_success(
@@ -159,7 +165,8 @@ def test_api_add_document_and_move_and_delete(
         assert_api_error(
             response,
             "You need to set a documents folder.",
-            HTTPStatus.UNPROCESSABLE_ENTITY,
+            status=HTTPStatus.UNPROCESSABLE_ENTITY,
+            title="DocumentDirectoryMissingError",
         )
 
         # upload to temporary directory
@@ -169,13 +176,15 @@ def test_api_add_document_and_move_and_delete(
         )
 
         response = test_client.put(add_url)
-        assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
+        assert_api_error(
+            response, "No file uploaded.", status=HTTPStatus.BAD_REQUEST
+        )
 
         response = test_client.put(add_url, data=_data(""))
         assert_api_error(
             response,
             "Uploaded file is missing filename.",
-            HTTPStatus.BAD_REQUEST,
+            status=HTTPStatus.BAD_REQUEST,
         )
 
         for missing in ("folder", "account"):
@@ -186,7 +195,7 @@ def test_api_add_document_and_move_and_delete(
                 response,
                 f"Invalid API request: Object missing"
                 f" required field `{missing}`",
-                HTTPStatus.BAD_REQUEST,
+                status=HTTPStatus.BAD_REQUEST,
             )
 
         filename = account_dir / "2015-12-12 test"
@@ -204,7 +213,7 @@ def test_api_add_document_and_move_and_delete(
 
         response = test_client.put(add_url, data=_data("2015-12-12 test"))
         assert_api_error(
-            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+            response, f"{filename} already exists.", status=HTTPStatus.CONFLICT
         )
 
         # move to same path should fail
@@ -217,7 +226,7 @@ def test_api_add_document_and_move_and_delete(
             },
         )
         assert_api_error(
-            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+            response, f"{filename} already exists.", status=HTTPStatus.CONFLICT
         )
 
         response = test_client.put(
@@ -242,7 +251,7 @@ def test_api_add_document_and_move_and_delete(
         assert_api_error(
             response,
             f"Not valid document or import file: '{invalid_filename}'.",
-            HTTPStatus.BAD_REQUEST,
+            status=HTTPStatus.BAD_REQUEST,
         )
 
         response = test_client.delete(
@@ -252,7 +261,7 @@ def test_api_add_document_and_move_and_delete(
         assert_api_error(
             response,
             f"{filename} does not exist.",
-            HTTPStatus.NOT_FOUND,
+            status=HTTPStatus.NOT_FOUND,
         )
 
         response = test_client.delete(
@@ -278,7 +287,9 @@ def test_api_upload_import_file(
         )
 
         response = test_client.put(url)
-        assert_api_error(response, "No file uploaded.", HTTPStatus.BAD_REQUEST)
+        assert_api_error(
+            response, "No file uploaded.", status=HTTPStatus.BAD_REQUEST
+        )
 
         response = test_client.put(
             url, data={"file": (BytesIO(b"asdfasdf"), "")}
@@ -286,7 +297,7 @@ def test_api_upload_import_file(
         assert_api_error(
             response,
             "Uploaded file is missing filename.",
-            HTTPStatus.BAD_REQUEST,
+            status=HTTPStatus.BAD_REQUEST,
         )
 
         filename = tmp_path / "receipt.pdf"
@@ -302,7 +313,7 @@ def test_api_upload_import_file(
             url, data={"file": (BytesIO(b"asdfasdf"), "receipt.pdf")}
         )
         assert_api_error(
-            response, f"{filename} already exists.", HTTPStatus.CONFLICT
+            response, f"{filename} already exists.", status=HTTPStatus.CONFLICT
         )
 
 
@@ -328,7 +339,7 @@ def test_api_context(
     assert_api_error(
         response,
         "Invalid API request: Object missing required field `entry_hash`",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
     response = test_client.get(
@@ -338,7 +349,8 @@ def test_api_context(
     assert_api_error(
         response,
         'No entry found for hash "not_found"',
-        HTTPStatus.NOT_FOUND,
+        status=HTTPStatus.NOT_FOUND,
+        title="EntryNotFoundForHashError",
     )
 
     balance_entry_hash = hash_entry(
@@ -481,7 +493,7 @@ def test_api_move_not_a_document(
     assert_api_error(
         response,
         f"Not valid document or import file: '{other_file}'.",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
     assert other_file.is_file()
 
@@ -505,7 +517,7 @@ def test_api_put_invalid_json_body(
     assert_api_error(
         response,
         f"Invalid API request: {expected}",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
 
@@ -527,7 +539,7 @@ def test_api_put_incorrect_parameter_type(
         response,
         "Invalid API request: Expected `str`, got "
         f"`{json_type}` - at `$.new_name`",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
 
@@ -536,7 +548,8 @@ def test_api_move(test_client: FlaskClient) -> None:
     assert_api_error(
         response,
         "Invalid API request: Invalid JSON body.",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
+        title="InvalidJsonRequestError",
     )
 
     invalid = {"account": "Assets", "new_name": "new", "filename": "old"}
@@ -544,7 +557,7 @@ def test_api_move(test_client: FlaskClient) -> None:
     assert_api_error(
         response,
         "You need to set a documents folder.",
-        HTTPStatus.UNPROCESSABLE_ENTITY,
+        status=HTTPStatus.UNPROCESSABLE_ENTITY,
     )
 
     response = test_client.put("/import/api/move", json=invalid)
@@ -558,7 +571,7 @@ def test_api_move(test_client: FlaskClient) -> None:
         },
     )
     assert_api_error(
-        response, "Not a file: 'old'", HTTPStatus.UNPROCESSABLE_ENTITY
+        response, "Not a file: 'old'", status=HTTPStatus.UNPROCESSABLE_ENTITY
     )
 
 
@@ -597,7 +610,7 @@ def test_api_put_source_bad_request(test_client: FlaskClient) -> None:
     assert_api_error(
         response,
         "Invalid API request: Invalid JSON body.",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
 
@@ -774,7 +787,7 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
     assert_api_error(
         response,
         "Invalid API request: Object missing required field `entry_hash`",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
     entry = ledger.all_entries[-1]
@@ -861,7 +874,7 @@ def test_api_add_entries(
             err,
             "Invalid API request: Expected `array`, got `str`"
             " - at `$.entries`",
-            HTTPStatus.BAD_REQUEST,
+            status=HTTPStatus.BAD_REQUEST,
         )
 
         response = test_client.put(url, json={"entries": entries})
@@ -954,7 +967,7 @@ def test_api_help_not_found(test_client: FlaskClient) -> None:
         "/long-example/api/help",
         query_string={"page_slug": "asdfasdf"},
     )
-    assert_api_error(response, "Not found.", HTTPStatus.NOT_FOUND)
+    assert_api_error(response, "Not found.", status=HTTPStatus.NOT_FOUND)
 
 
 def test_api_commodities_empty(
@@ -985,7 +998,7 @@ def test_api_journal_page_invalid_page(
     assert_api_error(
         response,
         "Invalid API request: Expected `int`, got `str` - at `$.page`",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
 

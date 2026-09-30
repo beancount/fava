@@ -74,10 +74,12 @@ json_api = Blueprint("json_api", __name__)
 log = logging.getLogger(__name__)
 
 
-class ErrorResponse(Struct, frozen=True):
-    """Error response object structure."""
+class ProblemDetails(Struct, frozen=True):
+    """Error response object structure (Problem Details, RFC 9457)."""
 
-    error: str
+    title: str
+    status: int
+    detail: str
 
 
 class SuccessResponse(Struct, frozen=True):
@@ -87,10 +89,17 @@ class SuccessResponse(Struct, frozen=True):
     mtime: str
 
 
-def json_err(msg: str, status: HTTPStatus) -> Response:
-    """Jsonify the error message."""
-    res = jsonify(ErrorResponse(msg))
+def json_err(error: Exception, status: HTTPStatus) -> Response:
+    """Jsonify the error as a RFC 9457 Problem Details object.
+
+    The name of the exception class is used as the title and the error
+    message as the detail.
+    """
+    res = jsonify(
+        ProblemDetails(type(error).__name__, status.value, str(error))
+    )
     res.status = status
+    res.content_type = "application/problem+json"
     return res
 
 
@@ -173,33 +182,33 @@ class NotAFileError(FavaJSONAPIError):
 @json_api.errorhandler(FavaAPIError)
 def _(error: FavaAPIError) -> Response:
     log.error("Encountered FavaAPIError.", exc_info=error)
-    return json_err(error.message, HTTPStatus.INTERNAL_SERVER_ERROR)
+    return json_err(error, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(FavaJSONAPIError)
 def _(error: FavaJSONAPIError) -> Response:
-    return json_err(error.message, error.status)
+    return json_err(error, error.status)
 
 
 @json_api.errorhandler(FilterError)
 def _(error: FilterError) -> Response:
-    return json_err(error.message, HTTPStatus.BAD_REQUEST)
+    return json_err(error, HTTPStatus.BAD_REQUEST)
 
 
 @json_api.errorhandler(OSError)
 def _(error: OSError) -> Response:  # pragma: no cover
     log.error("Encountered OSError.", exc_info=error)
-    return json_err(error.strerror or "", HTTPStatus.INTERNAL_SERVER_ERROR)
+    return json_err(error, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @json_api.errorhandler(EntryNotFoundForHashError)
 def _(error: EntryNotFoundForHashError) -> Response:
-    return json_err(error.message, HTTPStatus.NOT_FOUND)
+    return json_err(error, HTTPStatus.NOT_FOUND)
 
 
 @json_api.errorhandler(GeneratedEntryError)
 def _(error: GeneratedEntryError) -> Response:
-    return json_err(error.message, HTTPStatus.UNPROCESSABLE_ENTITY)
+    return json_err(error, HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 def _build_param_struct(func: Callable[..., object]) -> type[Struct] | None:
