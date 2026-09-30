@@ -6,7 +6,7 @@ repos:
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.82
+    rev: v0.0.83
     hooks:
       - id: ty
         args: [--no-default-groups, --group=types]
@@ -31,7 +31,7 @@ repos:
         types_or: ["svelte", "yaml"]
         require_serial: true
         additional_dependencies:
-          - "prettier@3.9.8"
+          - "prettier@3.9.9"
           - "prettier-plugin-svelte@4.1.1"
           - "svelte@5.57.1"
       - id: eslint
