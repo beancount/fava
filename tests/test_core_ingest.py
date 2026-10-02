@@ -13,11 +13,8 @@ from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.ingest import ImportConfigConfigNotASequenceError
 from fava.core.ingest import ImportConfigDuplicateImporterError
-from fava.core.ingest import ImportConfigHooksNotASequenceCallablesError
-from fava.core.ingest import ImportConfigInvalidImporterError
-from fava.core.ingest import ImportConfigMissingConfigError
+from fava.core.ingest import ImportConfigInvalidError
 from fava.core.ingest import ImportConfigRunpyError
 from fava.core.ingest import ImporterExtractError
 from fava.core.ingest import ImporterInvalidTypeError
@@ -150,32 +147,33 @@ def test_ingest_get_name_invalid_type() -> None:
 
 
 @pytest.mark.parametrize(
-    ("mod", "error"),
+    ("mod", "match"),
     [
-        ({}, ImportConfigMissingConfigError),
-        ({"CONFIG": object()}, ImportConfigConfigNotASequenceError),
-        ({"CONFIG": [object()]}, ImportConfigInvalidImporterError),
-        (
-            {"CONFIG": [MinimalImporter(), MinimalImporter()]},
-            ImportConfigDuplicateImporterError,
-        ),
-        (
-            {"CONFIG": [], "HOOKS": object()},
-            ImportConfigHooksNotASequenceCallablesError,
-        ),
+        ({}, "missing required field `CONFIG`"),
+        ({"CONFIG": object()}, r"at `\$.CONFIG`"),
+        ({"CONFIG": "abc"}, r"at `\$.CONFIG`"),
+        ({"CONFIG": [object()]}, r"Expected `Importer`.*at `\$.CONFIG\[0\]`"),
+        ({"CONFIG": [], "HOOKS": object()}, r"at `\$.HOOKS`"),
         (
             {"CONFIG": [], "HOOKS": [object()]},
-            ImportConfigHooksNotASequenceCallablesError,
+            r"Expected `Callable`.*at `\$.HOOKS\[0\]`",
         ),
     ],
 )
-def test_load_import_config_errors(
-    mod: dict[str, Any],
-    error: type[Exception],
-    monkeypatch: pytest.MonkeyPatch,
+def test_load_import_config_invalid_errors(
+    mod: dict[str, Any], match: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(runpy, "run_path", lambda _: mod)
-    with pytest.raises(error):
+    with pytest.raises(ImportConfigInvalidError, match=match):
+        load_import_config(Path())
+
+
+def test_load_import_config_duplicate_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mod = {"CONFIG": [MinimalImporter(), MinimalImporter()]}
+    monkeypatch.setattr(runpy, "run_path", lambda _: mod)
+    with pytest.raises(ImportConfigDuplicateImporterError):
         load_import_config(Path())
 
 
@@ -200,7 +198,7 @@ def test_load_import_config_ok(
 def test_load_import_config(test_data_dir: Path) -> None:
     with pytest.raises(ImportConfigRunpyError):
         load_import_config(test_data_dir / "errors.beancount")
-    with pytest.raises(ImportConfigMissingConfigError):
+    with pytest.raises(ImportConfigInvalidError):
         load_import_config(Path(__file__))
 
 

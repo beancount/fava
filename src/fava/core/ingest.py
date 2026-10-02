@@ -7,16 +7,18 @@ import os
 import runpy
 import sys
 import traceback
-from collections.abc import Sequence
+from collections.abc import Callable  # noqa: TC003 - needed for msgspec
 from dataclasses import dataclass
 from functools import wraps
 from inspect import get_annotations
 from os import altsep
 from os import sep
 from pathlib import Path
+from typing import Any
 from typing import TYPE_CHECKING
 
-from beangulp.importer import Importer
+import msgspec
+from beangulp.importer import Importer  # noqa: TC002 - needed for msgspec
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
@@ -25,10 +27,9 @@ from fava.util import listify
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
-    from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Mapping
-    from typing import Any
+    from collections.abc import Sequence
     from typing import ParamSpec
     from typing import TypeVar
 
@@ -91,26 +92,11 @@ class ImportConfigRunpyError(ImportConfigLoadError):
         super().__init__("".join(traceback.format_exception(*sys.exc_info())))
 
 
-class ImportConfigMissingConfigError(ImportConfigLoadError):
-    """CONFIG is missing."""
+class ImportConfigInvalidError(ImportConfigLoadError):
+    """CONFIG or HOOKS are missing or invalid."""
 
-
-class ImportConfigConfigNotASequenceError(ImportConfigLoadError):
-    """CONFIG is not a Sequence."""
-
-
-class ImportConfigHooksNotASequenceCallablesError(ImportConfigLoadError):
-    """HOOKS is not a Sequence of callables."""
-
-
-class ImportConfigInvalidImporterError(ImportConfigLoadError):
-    """Invalid importer (not a subclass of Importer)."""
-
-    def __init__(self, importer: object) -> None:
-        name = importer.__class__.__name__
-        super().__init__(
-            f"Importer class '{name}' does not satisfy Importer protocol"
-        )
+    def __init__(self, error: msgspec.ValidationError) -> None:
+        super().__init__(f"Invalid import config: {error}")
 
 
 class ImportConfigDuplicateImporterError(ImportConfigLoadError):
@@ -266,6 +252,11 @@ class LoadedImportConfig:
     hooks: Hooks
 
 
+class _ImportConfigModule(msgspec.Struct, frozen=True):
+    CONFIG: list[Importer]
+    HOOKS: list[Callable[..., Any]] = []
+
+
 def load_import_config(module_path: Path) -> LoadedImportConfig:
     """Load the given import config and extract importers and hooks.
 
@@ -280,26 +271,18 @@ def load_import_config(module_path: Path) -> LoadedImportConfig:
     except Exception as error:
         raise ImportConfigRunpyError from error
 
-    config = mod.get("CONFIG")
-    if config is None:
-        raise ImportConfigMissingConfigError
-    if not isinstance(config, Sequence):
-        raise ImportConfigConfigNotASequenceError
+    try:
+        module = msgspec.convert(mod, _ImportConfigModule)
+    except msgspec.ValidationError as error:
+        raise ImportConfigInvalidError(error) from error
 
-    hooks = mod.get("HOOKS", ())
-    if not isinstance(hooks, Sequence) or not all(
-        callable(fn) for fn in hooks
-    ):
-        raise ImportConfigHooksNotASequenceCallablesError
     importers = {}
-    for importer in config:
-        if not isinstance(importer, Importer):
-            raise ImportConfigInvalidImporterError(importer)
+    for importer in module.CONFIG:
         wrapped_importer = WrappedImporter(importer)
         if wrapped_importer.name in importers:
             raise ImportConfigDuplicateImporterError(wrapped_importer)
         importers[wrapped_importer.name] = wrapped_importer
-    return LoadedImportConfig(importers, tuple(hooks))
+    return LoadedImportConfig(importers, module.HOOKS)
 
 
 class IngestModule(FavaModule):
