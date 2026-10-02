@@ -251,7 +251,7 @@ msgstr "Movimentos de Conta"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:64
 #: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:799
+#: src/fava/json_api.py:808
 msgid "Changes"
 msgstr "Alterações"
 
@@ -622,8 +622,8 @@ msgstr "Data"
 msgid "Filter by tag, payee, …"
 msgstr ""
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:700
-#: src/fava/json_api.py:718
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:709
+#: src/fava/json_api.py:727
 msgid "Net Profit"
 msgstr "Lucro líquido"
 
@@ -695,10 +695,10 @@ msgstr "Saldo da Conta"
 msgid "Net Worth"
 msgstr "Patrimônio Líquido"
 
-#: src/fava/json_api.py:706
+#: src/fava/json_api.py:715
 msgid "Income"
 msgstr "Rendimento"
 
-#: src/fava/json_api.py:712
+#: src/fava/json_api.py:721
 msgid "Expenses"
 msgstr "Despesas"
