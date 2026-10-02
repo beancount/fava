@@ -153,15 +153,6 @@ class TestImporterThatErrorsOnExtract(TestImporter):
         raise TypeError
 
 
-def _example_noop_importer_legacy_hook(
-    files_entries: list[tuple[str, list[Directive]]],
-    _existing: Sequence[Directive],
-) -> list[tuple[str, list[Directive]]]:
-    for e in files_entries:
-        assert len(e) == 2
-    return files_entries
-
-
 def _example_noop_importer_hook(
     files_entries_accounts_importers: list[
         tuple[str, list[Directive], str, Importer]
@@ -173,7 +164,7 @@ def _example_noop_importer_hook(
     return files_entries_accounts_importers
 
 
-HOOKS = [_example_noop_importer_legacy_hook, _example_noop_importer_hook]
+HOOKS = [_example_noop_importer_hook]
 
 
 CONFIG: list[Importer] = [

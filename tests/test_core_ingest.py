@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import datetime
 import runpy
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
+from typing import NoReturn
 from typing import TYPE_CHECKING
 
 import pytest
@@ -17,6 +19,7 @@ from fava.core.ingest import ImportConfigDuplicateImporterError
 from fava.core.ingest import ImportConfigInvalidError
 from fava.core.ingest import ImportConfigRunpyError
 from fava.core.ingest import ImporterExtractError
+from fava.core.ingest import ImporterHookError
 from fava.core.ingest import ImporterInvalidTypeError
 from fava.core.ingest import load_import_config
 from fava.core.ingest import WrappedImporter
@@ -283,6 +286,51 @@ def test_ingest_examplefile(
         "<run_path>.TestBeangulpImporter",
     )
     snapshot([serialise(e) for e in entries], json=True)
+
+
+def test_ingest_hook_error(
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ingest = get_ledger("import").ingest
+    assert ingest.loaded_config is not None
+
+    def _failing_hook(*_args: object) -> NoReturn:
+        raise ValueError
+
+    monkeypatch.setattr(
+        ingest,
+        "loaded_config",
+        replace(ingest.loaded_config, hooks=[_failing_hook]),
+    )
+    with pytest.raises(ImporterHookError, match="_failing_hook"):
+        ingest.extract(
+            str(test_data_dir / "import.csv"),
+            "<run_path>.TestImporter",
+        )
+
+
+def test_ingest_without_hooks(
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ingest = get_ledger("import").ingest
+    assert ingest.loaded_config is not None
+    filename = str(test_data_dir / "import.csv")
+    with_hooks = ingest.extract(filename, "<run_path>.TestImporter")
+
+    def _file_import_info(*_args: object) -> NoReturn:
+        raise AssertionError
+
+    monkeypatch.setattr(
+        ingest,
+        "loaded_config",
+        replace(ingest.loaded_config, hooks=()),
+    )
+    monkeypatch.setattr(WrappedImporter, "file_import_info", _file_import_info)
+    assert ingest.extract(filename, "<run_path>.TestImporter") == with_hooks
 
 
 def test_filepath_in_primary_imports_folder(

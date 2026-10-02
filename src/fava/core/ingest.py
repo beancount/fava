@@ -10,7 +10,6 @@ import traceback
 from collections.abc import Callable  # noqa: TC003 - needed for msgspec
 from dataclasses import dataclass
 from functools import wraps
-from inspect import get_annotations
 from os import altsep
 from os import sep
 from pathlib import Path
@@ -36,10 +35,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
-    HookOutput = (
-        list[tuple[str, list[Directive], str, Importer]]
-        | list[tuple[str, list[Directive]]]
-    )
+    HookOutput = list[tuple[str, list[Directive], str, Importer]]
     Hooks = Sequence[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
 
     P = ParamSpec("P")
@@ -71,6 +67,16 @@ class ImporterInvalidTypeError(FavaAPIError):
 
 class ImporterExtractError(ImporterMethodCallError):
     """Error calling extract for importer."""
+
+
+class ImporterHookError(FavaAPIError):
+    """Error calling one of the import hooks."""
+
+    def __init__(self, hook_fn: Callable[..., Any]) -> None:
+        name = getattr(hook_fn, "__qualname__", repr(hook_fn))
+        super().__init__(
+            f"Error calling import hook '{name}':\n\n{traceback.format_exc()}"
+        )
 
 
 class MissingImporterConfigError(FavaAPIError):
@@ -387,29 +393,24 @@ class IngestModule(FavaModule):
         except Exception as exc:
             raise ImporterExtractError from exc
 
-        for hook_fn in self.loaded_config.hooks:
-            annotations = get_annotations(hook_fn)
-            if any("Importer" in a for a in annotations.values()):
-                importer_info = importer.file_import_info(path)
-                new_entries_list: HookOutput = [
-                    (
-                        filename,
-                        new_entries,
-                        importer_info.account,
-                        importer.importer,
-                    )
-                ]
-            else:
-                new_entries_list = [(filename, new_entries)]
+        hooks = self.loaded_config.hooks
+        if not hooks:
+            return new_entries
 
-            new_entries_list = hook_fn(
-                new_entries_list,
-                self.ledger.all_entries,
-            )
+        importer_info = importer.file_import_info(path)
+        new_entries_list = [
+            (filename, new_entries, importer_info.account, importer.importer)
+        ]
+        for hook_fn in hooks:
+            try:
+                new_entries_list = hook_fn(
+                    new_entries_list,
+                    self.ledger.all_entries,
+                )
+            except Exception as exc:
+                raise ImporterHookError(hook_fn) from exc
 
-            new_entries = new_entries_list[0][1]
-
-        return new_entries
+        return new_entries_list[0][1]
 
 
 def filepath_in_primary_imports_folder(

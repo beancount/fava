@@ -5,11 +5,7 @@ for more information on how to write importers.
 
 You can override the hooks that should be run for your importers by specifying a
 variable `HOOKS` with a list of hooks to apply to the list of
-`(filename: str, entries: list[Directive])` tuples. If you want to use
-beangulp-style hooks that take list of
-`(filename: str, entries: list[Directive], account: str, importer: Importer)`-tuples,
-you can annotate them with the appropriate Python types which Fava will detect
-and call with these 4-tuples.
+`(filename: str, entries: list[Directive], account: str, importer: Importer)`-tuples.
 
 Set the `import-config` option to point to your import config and set
 `import-dirs` to the directories that contain the files that you want to import.
