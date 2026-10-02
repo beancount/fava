@@ -33,7 +33,12 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
+    from collections.abc import Sequence
+
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
+    from fava.core.ingest import HookOutput
 
     from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
@@ -288,27 +293,56 @@ def test_ingest_examplefile(
     snapshot([serialise(e) for e in entries], json=True)
 
 
+def _raise_value_error(_out: object) -> NoReturn:
+    raise ValueError
+
+
+@pytest.mark.parametrize(
+    ("hook_output", "match"),
+    [
+        (_raise_value_error, "ValueError"),
+        (lambda _: None, "Expected `array`, got `null`"),
+        (lambda _: [], "Expected `array` of length >= 1"),
+        (
+            lambda out: [(out[0][0], out[0][1])],
+            r"Expected `array` of length 4, got 2 - at `\$\[0\]`",
+        ),
+        (
+            lambda out: [(out[0][0], None, out[0][2], out[0][3])],
+            r"Expected `array`, got `null` - at `\$\[0\]\[1\]`",
+        ),
+        (
+            lambda out: [(out[0][0], out[0][1], None, out[0][3])],
+            r"Expected `str`, got `null` - at `\$\[0\]\[2\]`",
+        ),
+    ],
+)
 def test_ingest_hook_error(
     test_data_dir: Path,
     get_ledger: GetFavaLedger,
     monkeypatch: pytest.MonkeyPatch,
+    hook_output: Callable[[HookOutput], HookOutput],
+    match: str,
 ) -> None:
     ingest = get_ledger("import").ingest
     assert ingest.loaded_config is not None
 
-    def _failing_hook(*_args: object) -> NoReturn:
-        raise ValueError
+    def _bad_hook(
+        entries: HookOutput, _existing: Sequence[Directive]
+    ) -> HookOutput:
+        return hook_output(entries)
 
     monkeypatch.setattr(
         ingest,
         "loaded_config",
-        replace(ingest.loaded_config, hooks=[_failing_hook]),
+        replace(ingest.loaded_config, hooks=[_bad_hook]),
     )
-    with pytest.raises(ImporterHookError, match="_failing_hook"):
+    with pytest.raises(ImporterHookError, match="_bad_hook") as exc_info:
         ingest.extract(
             str(test_data_dir / "import.csv"),
             "<run_path>.TestImporter",
         )
+    exc_info.match(match)
 
 
 def test_ingest_without_hooks(

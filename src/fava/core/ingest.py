@@ -13,17 +13,24 @@ from functools import wraps
 from os import altsep
 from os import sep
 from pathlib import Path
+from typing import Annotated
 from typing import Any
 from typing import TYPE_CHECKING
 
 import msgspec
-from beangulp.importer import Importer  # noqa: TC002 - needed for msgspec
+from beangulp.importer import Importer
 
+from fava.beans.abc import Directive
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import local_today
+
+HookOutput = Annotated[
+    list[tuple[str, list[Directive], str, Importer]],
+    msgspec.Meta(min_length=1),
+]
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
@@ -32,10 +39,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import ParamSpec
     from typing import TypeVar
 
-    from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
-    HookOutput = list[tuple[str, list[Directive], str, Importer]]
     Hooks = Sequence[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
 
     P = ParamSpec("P")
@@ -403,9 +408,9 @@ class IngestModule(FavaModule):
         ]
         for hook_fn in hooks:
             try:
-                new_entries_list = hook_fn(
-                    new_entries_list,
-                    self.ledger.all_entries,
+                new_entries_list = msgspec.convert(
+                    hook_fn(new_entries_list, self.ledger.all_entries),
+                    HookOutput,
                 )
             except Exception as exc:
                 raise ImporterHookError(hook_fn) from exc
