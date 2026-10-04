@@ -143,22 +143,7 @@ test("handle data for bar chart with stacked data", () => {
     [
       "EUR",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 60],
-          ],
-        },
+        { key: "Expenses:Shoes", index: 1, points: [[0, 60]] },
         {
           key: "Expenses:Taxes",
           index: 2,
@@ -167,51 +152,14 @@ test("handle data for bar chart with stacked data", () => {
             [60, 100],
           ],
         },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [4, 10],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Transportation", index: 3, points: [[4, 10]] },
       ],
     ],
     [
       "USD",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 8],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Taxes",
-          index: 2,
-          points: [
-            [8, 10],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Dining", index: 0, points: [[0, 8]] },
+        { key: "Expenses:Taxes", index: 2, points: [[8, 10]] },
       ],
     ],
   ]);

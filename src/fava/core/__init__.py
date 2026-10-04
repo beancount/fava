@@ -542,10 +542,9 @@ class FavaLedger:
         Returns:
             A pair of a list of Tree instances and the intervals.
         """
+        is_child_account = account_tester(account_name, with_children=True)
         min_accounts = [
-            account
-            for account in self.accounts
-            if account.startswith(account_name)
+            account for account in self.accounts if is_child_account(account)
         ]
 
         interval_ranges = list(reversed(filtered.interval_ranges(interval)))

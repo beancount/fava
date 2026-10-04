@@ -37,6 +37,7 @@ from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 from fava.core.charts import dumps
 from fava.core.charts import loads
+from fava.core.ingest import HookOutput
 from fava.core.query import QueryResult
 from fava.util.date import END_OF_YEAR
 from fava.util.date import Interval
@@ -349,6 +350,7 @@ def pytest_runtest_makereport(item: pytest.Function) -> None:
         "Flask": Flask,
         "FlaskClient": FlaskClient,
         "GetFavaLedger": GetFavaLedger,
+        "HookOutput": HookOutput,
         "Interval": Interval,
         "LoaderResult": LoaderResult,
         "Meta": Mapping[str, Any],

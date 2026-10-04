@@ -21,13 +21,14 @@ export class FetchInvalidResponseError extends FetchError {
   }
 }
 
-const error_response_validator = object({ error: string });
+const error_response_validator = object({ detail: string });
 
 /**
  * Fetch JSON content, also handling an HTTP error status.
  *
- * Checks for an object at the top JSON level. For errors, looks
- * for an error message like `{ "error": "error message" }
+ * Checks for an object at the top JSON level. For errors, looks for the
+ * `detail` member of a Problem Details object (RFC 9457) like
+ * `{ "title": "NotFoundError", "status": 404, "detail": "error message" }`
  */
 export async function fetch_json(
   input: URL,
@@ -38,7 +39,7 @@ export async function fetch_json(
   if (!response.ok) {
     throw new FetchHTTPError(
       error_response_validator(json)
-        .map((d) => d.error)
+        .map((d) => d.detail)
         .unwrap_or(null),
       response.status,
     );

@@ -7,38 +7,40 @@ import os
 import runpy
 import sys
 import traceback
-from collections.abc import Sequence
+from collections.abc import Callable  # noqa: TC003 - needed for msgspec
 from dataclasses import dataclass
 from functools import wraps
-from inspect import get_annotations
 from os import altsep
 from os import sep
 from pathlib import Path
+from typing import Annotated
+from typing import Any
 from typing import TYPE_CHECKING
 
+import msgspec
 from beangulp.importer import Importer
 
+from fava.beans.abc import Directive
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import local_today
 
+HookOutput = Annotated[
+    list[tuple[str, list[Directive], str, Importer]],
+    msgspec.Meta(min_length=1),
+]
+
 if TYPE_CHECKING:  # pragma: no cover
-    from collections.abc import Callable
     from collections.abc import Iterable
     from collections.abc import Mapping
-    from typing import Any
+    from collections.abc import Sequence
     from typing import ParamSpec
     from typing import TypeVar
 
-    from fava.beans.abc import Directive
     from fava.core import FavaLedger
 
-    HookOutput = (
-        list[tuple[str, list[Directive], str, Importer]]
-        | list[tuple[str, list[Directive]]]
-    )
     Hooks = Sequence[Callable[[HookOutput, Sequence[Directive]], HookOutput]]
 
     P = ParamSpec("P")
@@ -72,6 +74,16 @@ class ImporterExtractError(ImporterMethodCallError):
     """Error calling extract for importer."""
 
 
+class ImporterHookError(FavaAPIError):
+    """Error calling one of the import hooks."""
+
+    def __init__(self, hook_fn: Callable[..., Any]) -> None:
+        name = getattr(hook_fn, "__qualname__", repr(hook_fn))
+        super().__init__(
+            f"Error calling import hook '{name}':\n\n{traceback.format_exc()}"
+        )
+
+
 class MissingImporterConfigError(FavaAPIError):
     """Missing import-config option."""
 
@@ -91,26 +103,11 @@ class ImportConfigRunpyError(ImportConfigLoadError):
         super().__init__("".join(traceback.format_exception(*sys.exc_info())))
 
 
-class ImportConfigMissingConfigError(ImportConfigLoadError):
-    """CONFIG is missing."""
+class ImportConfigInvalidError(ImportConfigLoadError):
+    """CONFIG or HOOKS are missing or invalid."""
 
-
-class ImportConfigConfigNotASequenceError(ImportConfigLoadError):
-    """CONFIG is not a Sequence."""
-
-
-class ImportConfigHooksNotASequenceCallablesError(ImportConfigLoadError):
-    """HOOKS is not a Sequence of callables."""
-
-
-class ImportConfigInvalidImporterError(ImportConfigLoadError):
-    """Invalid importer (not a subclass of Importer)."""
-
-    def __init__(self, importer: object) -> None:
-        name = importer.__class__.__name__
-        super().__init__(
-            f"Importer class '{name}' does not satisfy Importer protocol"
-        )
+    def __init__(self, error: msgspec.ValidationError) -> None:
+        super().__init__(f"Invalid import config: {error}")
 
 
 class ImportConfigDuplicateImporterError(ImportConfigLoadError):
@@ -266,6 +263,11 @@ class LoadedImportConfig:
     hooks: Hooks
 
 
+class _ImportConfigModule(msgspec.Struct, frozen=True):
+    CONFIG: list[Importer]
+    HOOKS: list[Callable[..., Any]] = []
+
+
 def load_import_config(module_path: Path) -> LoadedImportConfig:
     """Load the given import config and extract importers and hooks.
 
@@ -280,26 +282,18 @@ def load_import_config(module_path: Path) -> LoadedImportConfig:
     except Exception as error:
         raise ImportConfigRunpyError from error
 
-    config = mod.get("CONFIG")
-    if config is None:
-        raise ImportConfigMissingConfigError
-    if not isinstance(config, Sequence):
-        raise ImportConfigConfigNotASequenceError
+    try:
+        module = msgspec.convert(mod, _ImportConfigModule)
+    except msgspec.ValidationError as error:
+        raise ImportConfigInvalidError(error) from error
 
-    hooks = mod.get("HOOKS", ())
-    if not isinstance(hooks, Sequence) or not all(
-        callable(fn) for fn in hooks
-    ):
-        raise ImportConfigHooksNotASequenceCallablesError
     importers = {}
-    for importer in config:
-        if not isinstance(importer, Importer):
-            raise ImportConfigInvalidImporterError(importer)
+    for importer in module.CONFIG:
         wrapped_importer = WrappedImporter(importer)
         if wrapped_importer.name in importers:
             raise ImportConfigDuplicateImporterError(wrapped_importer)
         importers[wrapped_importer.name] = wrapped_importer
-    return LoadedImportConfig(importers, tuple(hooks))
+    return LoadedImportConfig(importers, module.HOOKS)
 
 
 class IngestModule(FavaModule):
@@ -404,29 +398,24 @@ class IngestModule(FavaModule):
         except Exception as exc:
             raise ImporterExtractError from exc
 
-        for hook_fn in self.loaded_config.hooks:
-            annotations = get_annotations(hook_fn)
-            if any("Importer" in a for a in annotations.values()):
-                importer_info = importer.file_import_info(path)
-                new_entries_list: HookOutput = [
-                    (
-                        filename,
-                        new_entries,
-                        importer_info.account,
-                        importer.importer,
-                    )
-                ]
-            else:
-                new_entries_list = [(filename, new_entries)]
+        hooks = self.loaded_config.hooks
+        if not hooks:
+            return new_entries
 
-            new_entries_list = hook_fn(
-                new_entries_list,
-                self.ledger.all_entries,
-            )
+        importer_info = importer.file_import_info(path)
+        new_entries_list = [
+            (filename, new_entries, importer_info.account, importer.importer)
+        ]
+        for hook_fn in hooks:
+            try:
+                new_entries_list = msgspec.convert(
+                    hook_fn(new_entries_list, self.ledger.all_entries),
+                    HookOutput,
+                )
+            except Exception as exc:
+                raise ImporterHookError(hook_fn) from exc
 
-            new_entries = new_entries_list[0][1]
-
-        return new_entries
+        return new_entries_list[0][1]
 
 
 def filepath_in_primary_imports_folder(

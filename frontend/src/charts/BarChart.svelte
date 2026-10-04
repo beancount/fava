@@ -106,8 +106,9 @@
     <Axis x axis={x_axis} {inner_height} />
     <Axis y axis={y_axis} line_at_zero={y(0)} />
     {#each bar_groups as group (group.date)}
+      {@const date = group.date}
       <g
-        class={["group", group.date > today && "desaturate"]}
+        class={["group", date > today && "desaturate"]}
         {@attach tooltip.following(() => chart.tooltip_text($ctx, group))}
         transform={`translate(${(x0(group.label) ?? 0).toString()},0)`}
       >
@@ -117,10 +118,7 @@
           width={x0.step()}
           height={inner_height}
         />
-        <a
-          href={url_for_time_filter(group.date)}
-          aria-label={$date_format(group.date)}
-        >
+        <a href={$url_for_time_filter(date)} aria-label={$date_format(date)}>
           <rect
             class="axis-group-box"
             y={inner_height}

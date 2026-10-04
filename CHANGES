@@ -14,6 +14,9 @@ and `Amount` can now be added as metadata values to entries and are also
 roundtripped correctly when set by importers. Budget directives accept
 a `fortnightly` period, spread over fixed 14-day blocks.
 
+Support for Beancount v2-style importer hooks (taking a list of 2-tuples) was
+removed, please adjust your hook functions to take a list of 4-tuples.
+
 v1.30.13 (2026-05-19)
 ---------------------
 
