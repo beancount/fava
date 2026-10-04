@@ -15,6 +15,9 @@ Also, dates are now consistently rendered in the time filter format. `Decimal`
 and `Amount` can now be added as metadata values to entries and are also
 roundtripped correctly when set by importers.
 
+Support for Beancount v2-style importer hooks (taking a list of 2-tuples) was
+removed, please adjust your hook functions to take a list of 4-tuples.
+
 v1.30.13 (2026-05-19)
 ---------------------
 

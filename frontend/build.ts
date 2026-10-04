@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { type BuildResult, context, type Plugin } from "esbuild";
 import svelte from "esbuild-svelte";
-import { Features, transform as transform_css } from "lightningcss";
+import { Features, transform as transform_css } from "lightningcss-wasm";
 
 const filename = fileURLToPath(import.meta.url);
 const outdir = join(dirname(filename), "..", "src", "fava", "static");

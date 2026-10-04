@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import datetime
 import runpy
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
+from typing import NoReturn
 from typing import TYPE_CHECKING
 
 import pytest
@@ -13,13 +15,11 @@ from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.ingest import ImportConfigConfigNotASequenceError
 from fava.core.ingest import ImportConfigDuplicateImporterError
-from fava.core.ingest import ImportConfigHooksNotASequenceCallablesError
-from fava.core.ingest import ImportConfigInvalidImporterError
-from fava.core.ingest import ImportConfigMissingConfigError
+from fava.core.ingest import ImportConfigInvalidError
 from fava.core.ingest import ImportConfigRunpyError
 from fava.core.ingest import ImporterExtractError
+from fava.core.ingest import ImporterHookError
 from fava.core.ingest import ImporterInvalidTypeError
 from fava.core.ingest import load_import_config
 from fava.core.ingest import WrappedImporter
@@ -33,7 +33,12 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Callable
+    from collections.abc import Sequence
+
+    from fava.beans.abc import Directive
     from fava.core import FavaLedger
+    from fava.core.ingest import HookOutput
 
     from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
@@ -150,32 +155,33 @@ def test_ingest_get_name_invalid_type() -> None:
 
 
 @pytest.mark.parametrize(
-    ("mod", "error"),
+    ("mod", "match"),
     [
-        ({}, ImportConfigMissingConfigError),
-        ({"CONFIG": object()}, ImportConfigConfigNotASequenceError),
-        ({"CONFIG": [object()]}, ImportConfigInvalidImporterError),
-        (
-            {"CONFIG": [MinimalImporter(), MinimalImporter()]},
-            ImportConfigDuplicateImporterError,
-        ),
-        (
-            {"CONFIG": [], "HOOKS": object()},
-            ImportConfigHooksNotASequenceCallablesError,
-        ),
+        ({}, "missing required field `CONFIG`"),
+        ({"CONFIG": object()}, r"at `\$.CONFIG`"),
+        ({"CONFIG": "abc"}, r"at `\$.CONFIG`"),
+        ({"CONFIG": [object()]}, r"Expected `Importer`.*at `\$.CONFIG\[0\]`"),
+        ({"CONFIG": [], "HOOKS": object()}, r"at `\$.HOOKS`"),
         (
             {"CONFIG": [], "HOOKS": [object()]},
-            ImportConfigHooksNotASequenceCallablesError,
+            r"Expected `Callable`.*at `\$.HOOKS\[0\]`",
         ),
     ],
 )
-def test_load_import_config_errors(
-    mod: dict[str, Any],
-    error: type[Exception],
-    monkeypatch: pytest.MonkeyPatch,
+def test_load_import_config_invalid_errors(
+    mod: dict[str, Any], match: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(runpy, "run_path", lambda _: mod)
-    with pytest.raises(error):
+    with pytest.raises(ImportConfigInvalidError, match=match):
+        load_import_config(Path())
+
+
+def test_load_import_config_duplicate_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mod = {"CONFIG": [MinimalImporter(), MinimalImporter()]}
+    monkeypatch.setattr(runpy, "run_path", lambda _: mod)
+    with pytest.raises(ImportConfigDuplicateImporterError):
         load_import_config(Path())
 
 
@@ -200,7 +206,7 @@ def test_load_import_config_ok(
 def test_load_import_config(test_data_dir: Path) -> None:
     with pytest.raises(ImportConfigRunpyError):
         load_import_config(test_data_dir / "errors.beancount")
-    with pytest.raises(ImportConfigMissingConfigError):
+    with pytest.raises(ImportConfigInvalidError):
         load_import_config(Path(__file__))
 
 
@@ -285,6 +291,80 @@ def test_ingest_examplefile(
         "<run_path>.TestBeangulpImporter",
     )
     snapshot([serialise(e) for e in entries], json=True)
+
+
+def _raise_value_error(_out: object) -> NoReturn:
+    raise ValueError
+
+
+@pytest.mark.parametrize(
+    ("hook_output", "match"),
+    [
+        (_raise_value_error, "ValueError"),
+        (lambda _: None, "Expected `array`, got `null`"),
+        (lambda _: [], "Expected `array` of length >= 1"),
+        (
+            lambda out: [(out[0][0], out[0][1])],
+            r"Expected `array` of length 4, got 2 - at `\$\[0\]`",
+        ),
+        (
+            lambda out: [(out[0][0], None, out[0][2], out[0][3])],
+            r"Expected `array`, got `null` - at `\$\[0\]\[1\]`",
+        ),
+        (
+            lambda out: [(out[0][0], out[0][1], None, out[0][3])],
+            r"Expected `str`, got `null` - at `\$\[0\]\[2\]`",
+        ),
+    ],
+)
+def test_ingest_hook_error(
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+    hook_output: Callable[[HookOutput], HookOutput],
+    match: str,
+) -> None:
+    ingest = get_ledger("import").ingest
+    assert ingest.loaded_config is not None
+
+    def _bad_hook(
+        entries: HookOutput, _existing: Sequence[Directive]
+    ) -> HookOutput:
+        return hook_output(entries)
+
+    monkeypatch.setattr(
+        ingest,
+        "loaded_config",
+        replace(ingest.loaded_config, hooks=[_bad_hook]),
+    )
+    with pytest.raises(ImporterHookError, match="_bad_hook") as exc_info:
+        ingest.extract(
+            str(test_data_dir / "import.csv"),
+            "<run_path>.TestImporter",
+        )
+    exc_info.match(match)
+
+
+def test_ingest_without_hooks(
+    test_data_dir: Path,
+    get_ledger: GetFavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ingest = get_ledger("import").ingest
+    assert ingest.loaded_config is not None
+    filename = str(test_data_dir / "import.csv")
+    with_hooks = ingest.extract(filename, "<run_path>.TestImporter")
+
+    def _file_import_info(*_args: object) -> NoReturn:
+        raise AssertionError
+
+    monkeypatch.setattr(
+        ingest,
+        "loaded_config",
+        replace(ingest.loaded_config, hooks=()),
+    )
+    monkeypatch.setattr(WrappedImporter, "file_import_info", _file_import_info)
+    assert ingest.extract(filename, "<run_path>.TestImporter") == with_hooks
 
 
 def test_filepath_in_primary_imports_folder(

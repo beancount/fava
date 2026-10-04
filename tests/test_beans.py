@@ -50,6 +50,37 @@ def test_account_tester() -> None:
     assert not is_equal("Assets:Cash:Test")
 
 
+def test_child_account_tester() -> None:
+    is_child = account_tester("Assets:Cash", with_children=True)
+    assert not is_child("Assets")
+    assert not is_child("Assets:CashOther")
+    assert is_child("Assets:Cash")
+    assert is_child("Assets:Cash:Test")
+
+    is_child = account_tester(
+        ("Assets:Cash", "Expenses:Car"), with_children=True
+    )
+    assert not is_child("Assets")
+    assert not is_child("Assets:CashOther")
+    assert not is_child("Expenses:Carpet")
+    assert is_child("Assets:Cash")
+    assert is_child("Assets:Cash:Test")
+    assert is_child("Expenses:Car")
+    assert is_child("Expenses:Car:Fuel")
+
+    is_child = account_tester(
+        ("Assets:Cash", "Expenses:Car"), with_children=False
+    )
+    assert not is_child("Assets")
+    assert is_child("Assets:Cash")
+    assert not is_child("Assets:Cash:Test")
+    assert is_child("Expenses:Car")
+    assert not is_child("Expenses:Car:Fuel")
+
+    is_child = account_tester((), with_children=True)
+    assert not is_child("Assets:Cash")
+
+
 def test_hash_entry() -> None:
     date = datetime.date(2022, 4, 2)
     note = create.note(
