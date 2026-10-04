@@ -235,7 +235,7 @@ msgstr ""
 
 #: frontend/src/reports/accounts/AccountReport.svelte:64
 #: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:808
+#: src/fava/json_api.py:840
 msgid "Changes"
 msgstr ""
 
@@ -365,7 +365,7 @@ msgstr ""
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
-#: frontend/src/reports/holdings/index.ts:92
+#: frontend/src/reports/holdings/index.ts:41
 #: frontend/src/sidebar/AsideContents.svelte:48
 msgid "Holdings"
 msgstr ""
@@ -602,8 +602,8 @@ msgstr ""
 msgid "Filter by tag, payee, …"
 msgstr ""
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:709
-#: src/fava/json_api.py:727
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:741
+#: src/fava/json_api.py:759
 msgid "Net Profit"
 msgstr ""
 
@@ -673,11 +673,11 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:715
+#: src/fava/json_api.py:747
 msgid "Income"
 msgstr ""
 
-#: src/fava/json_api.py:721
+#: src/fava/json_api.py:753
 msgid "Expenses"
 msgstr ""
 
