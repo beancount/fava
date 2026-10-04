@@ -1060,7 +1060,7 @@ def test_api_holdings_invalid_aggregation_key(
         ),
         "Invalid API request: unknown holdings aggregation key:"
         " `by_something`",
-        HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.BAD_REQUEST,
     )
 
 
