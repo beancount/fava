@@ -23,7 +23,6 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 5
     },
@@ -298,7 +297,6 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "document": "receipt.pdf",
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 45
@@ -338,7 +336,6 @@
     "flag": "*",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 51
     },
@@ -430,7 +427,6 @@
     "flag": "!",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 55
     },
@@ -466,7 +462,6 @@
     "flag": "P",
     "links": [],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 60
     },
@@ -497,7 +492,6 @@
     "flag": "*",
     "links": ["link1"],
     "meta": {
-      "__tolerances__": { "EUR": "0.005" },
       "filename": "TEST_DATA_DIR/example.beancount",
       "lineno": 64
     },

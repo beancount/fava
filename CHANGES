@@ -16,6 +16,10 @@ roundtripped correctly when set by importers.
 Support for Beancount v2-style importer hooks (taking a list of 2-tuples) was
 removed, please adjust your hook functions to take a list of 4-tuples.
 
+The inferred-tolerance metadata (`__tolerances__`) is again stripped from
+serialised transactions, fixing a 500 error in the journal and context APIs
+for ledgers with inferred tolerances.
+
 v1.30.13 (2026-05-19)
 ---------------------
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 from decimal import Decimal
+from typing import cast
 from typing import TYPE_CHECKING
 
 import msgspec
@@ -28,6 +29,7 @@ from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
+    from typing import Any
 
     from beancount.core.data import Meta
 
@@ -94,6 +96,34 @@ def test_serialise_txn() -> None:
     json_txn["entry_hash"] = hash_entry(txn)
     serialised = loads(dumps(serialise(txn)))
     assert serialised == json_txn
+
+
+def test_serialise_txn_drops_tolerances() -> None:
+    """beancount's inferred-tolerance metadata must not be serialised."""
+    # beancount really does store the MISSING sentinel as a tolerance key, a
+    # shape its own Meta type does not admit - hence the cast.
+    meta = cast(
+        "Meta",
+        {
+            "__tolerances__": {
+                MISSING: Decimal("0.005"),
+                "USD": Decimal("0.005"),
+            }
+        },
+    )
+    txn = create.transaction(
+        meta,
+        datetime.date(2017, 12, 12),
+        "*",
+        "Test3",
+        "asdfasd",
+        frozenset(),
+        frozenset(),
+        [create.posting("Assets:ETrade:Cash", "100 USD")],
+    )
+
+    json_txn = cast("dict[str, Any]", loads(dumps(serialise(txn))))
+    assert "__tolerances__" not in json_txn["meta"]
 
 
 def test_meta_decimal_and_amount_roundtrip() -> None:
