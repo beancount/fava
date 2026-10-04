@@ -5,13 +5,8 @@
 <script lang="ts">
   import type { Writable } from "svelte/store";
 
-<<<<<<< Updated upstream
   import { currencies_scale } from "./helpers.ts";
-=======
-  import { timedclick } from "./timedclick.ts";
-
-  import { currenciesScale } from "./helpers.ts";
->>>>>>> Stashed changes
+  import { type TimedClickDetail, timedclick } from "./timedclick.ts";
 
   interface Props {
     /** The chart legend to show. */
@@ -32,7 +27,7 @@
     <button
       type="button"
       {@attach timedclick()}
-      ontimedclick={(e) => {
+      ontimedclick={(e: CustomEvent<TimedClickDetail>) => {
         if (active) {
           active.set(item);
         } else if (toggled) {

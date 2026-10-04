@@ -19,13 +19,17 @@ export const timedclick = (threshold = 500): Attachment<HTMLElement> => {
   return (node) => {
     let startTime = 0;
 
-    function handlePointerDown(event: PointerEvent): void {
-      if (event.button !== 0) return;
+    function handle_pointer_down(event: PointerEvent): void {
+      if (event.button !== 0) {
+        return;
+      }
       startTime = Date.now();
     }
 
-    function handlePointerUp(event: PointerEvent): void {
-      if (!startTime) return;
+    function handle_pointer_up(event: PointerEvent): void {
+      if (!startTime) {
+        return;
+      }
 
       const duration = Date.now() - startTime;
       const isLong = duration >= threshold;
@@ -38,20 +42,20 @@ export const timedclick = (threshold = 500): Attachment<HTMLElement> => {
       );
     }
 
-    function handleReset(): void {
+    function handle_reset(): void {
       startTime = 0;
     }
 
-    node.addEventListener("pointerdown", handlePointerDown);
-    node.addEventListener("pointerup", handlePointerUp);
-    node.addEventListener("pointercancel", handleReset);
-    node.addEventListener("pointerleave", handleReset);
+    node.addEventListener("pointerdown", handle_pointer_down);
+    node.addEventListener("pointerup", handle_pointer_up);
+    node.addEventListener("pointercancel", handle_reset);
+    node.addEventListener("pointerleave", handle_reset);
 
     return () => {
-      node.removeEventListener("pointerdown", handlePointerDown);
-      node.removeEventListener("pointerup", handlePointerUp);
-      node.removeEventListener("pointercancel", handleReset);
-      node.removeEventListener("pointerleave", handleReset);
+      node.removeEventListener("pointerdown", handle_pointer_down);
+      node.removeEventListener("pointerup", handle_pointer_up);
+      node.removeEventListener("pointercancel", handle_reset);
+      node.removeEventListener("pointerleave", handle_reset);
     };
   };
 };
