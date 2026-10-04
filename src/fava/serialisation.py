@@ -70,7 +70,9 @@ def serialise(o: SerialisableValue) -> object:
 
 
 def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
-    return {k: serialise(v) for k, v in o.items()}
+    # Beancount's inferred tolerances (meta.__tolerances__) can contain the
+    # MISSING sentinel as a key, which cannot be serialised to JSON.
+    return {k: serialise(v) for k, v in o.items() if isinstance(k, str)}
 
 
 serialise.register(dict, _serialise_dict)

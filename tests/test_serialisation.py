@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime as dt
 from decimal import Decimal
+from typing import cast
 from typing import TYPE_CHECKING
 
 import msgspec
@@ -33,6 +34,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from fava.beans.abc import Directive
 
+    from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
 
 
@@ -94,6 +96,24 @@ def test_serialise_txn() -> None:
     json_txn["entry_hash"] = hash_entry(txn)
     serialised = loads(dumps(serialise(txn)))
     assert serialised == json_txn
+
+
+def test_serialise_txn_missing_tolerances(get_ledger: GetFavaLedger) -> None:
+    """Non-str keys in beancount's inferred-tolerance metadata are dropped."""
+    # The errors ledger contains a transaction with a currency-less posting,
+    # for which Beancount stores the MISSING sentinel as a key of
+    # meta.__tolerances__.
+    ledger = get_ledger("errors")
+    txn = next(
+        txn
+        for txn in ledger.all_entries_by_type.Transaction
+        if MISSING
+        in (cast("dict[object, object]", txn.meta.get("__tolerances__", {})))
+    )
+
+    json_txn = loads(dumps(serialise(txn)))
+    assert isinstance(json_txn, dict)
+    assert json_txn["meta"]["__tolerances__"] == {"USD": "0.005"}
 
 
 def test_meta_decimal_and_amount_roundtrip() -> None:
