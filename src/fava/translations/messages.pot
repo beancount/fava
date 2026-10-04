@@ -144,7 +144,7 @@ msgstr ""
 msgid "Yearly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:305
 msgid "Per Fiscal Year"
 msgstr ""
 
@@ -152,7 +152,7 @@ msgstr ""
 msgid "Quarterly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:342
 msgid "Per Fiscal Quarter"
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:277
 msgid "Daily"
 msgstr ""
 
@@ -679,5 +679,9 @@ msgstr ""
 
 #: src/fava/json_api.py:721
 msgid "Expenses"
+msgstr ""
+
+#: src/fava/util/date.py:253
+msgid "Fortnightly"
 msgstr ""
 
