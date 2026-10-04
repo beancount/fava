@@ -16,6 +16,7 @@
   import { handle_journal_click } from "./click_handler.ts";
   import JournalFilters from "./JournalFilters.svelte";
   import JournalHeaders from "./JournalHeaders.svelte";
+  import { init_journal_keyboard_navigation } from "./keyboard_navigation.ts";
   import type { JournalSortColumn } from "./sort.ts";
   import { sort_journal } from "./sort.ts";
 
@@ -71,6 +72,13 @@
       }
     }
   }
+
+  $effect(() => {
+    if (ol) {
+      return init_journal_keyboard_navigation(ol);
+    }
+    return undefined;
+  });
 </script>
 
 <JournalFilters />

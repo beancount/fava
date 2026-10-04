@@ -114,6 +114,19 @@
           return true;
         },
       },
+      {
+        // Accept/save without leaving the keyboard, matching the journal's
+        // ArrowUp/ArrowDown/Enter navigation (see
+        // reports/journal/keyboard_navigation.ts) - Enter alone still
+        // inserts a newline in the slice, as normal.
+        key: "Shift-Enter",
+        run: () => {
+          save().catch(() => {
+            // save should catch all errors itself, see above
+          });
+          return true;
+        },
+      },
     ],
     $indent,
     $currency_column,
