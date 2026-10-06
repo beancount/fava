@@ -217,3 +217,23 @@ class Watcher(WatcherBase):
 
     def _get_latest_mtime(self) -> int:
         return max(self._mtimes())
+
+
+def choose_watcher_for_path(
+    path: Path, *, force_polling: bool = False
+) -> WatcherBase:
+    """Return a watcher suitable for a ledger at the given path."""
+    if force_polling:
+        return Watcher()
+    absolute_path = path.absolute()
+    contains_symlink = any(
+        candidate.is_symlink()
+        for candidate in (absolute_path, *absolute_path.parents)
+    )
+    if contains_symlink:
+        log.warning(
+            "Path %s contains a symlink, falling back to polling watcher.",
+            path,
+        )
+        return Watcher()
+    return WatchfilesWatcher()
