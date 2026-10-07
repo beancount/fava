@@ -4,6 +4,8 @@ Changelog
 Unreleased
 ----------
 
+Holdings reports now value positions at the time-filter end date, matching
+account reports, instead of using later prices from outside the filter.
 A Finnish translation was added. Fiscal years and quarters can now be used as
 intervals for Fava's reports. The date filter parser was rewritten from
 a regex-based implementation to a proper lexer/parser, fixing several edge-case
