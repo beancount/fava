@@ -15,9 +15,9 @@
     "name": "TEST_DATA_DIR/example-balances.csv"
   },
   {
-    "basename": "example-utf8-\ud83e\udd81.txt",
+    "basename": "example-utf8-🦁.txt",
     "importers": [],
-    "name": "TEST_DATA_DIR/example-utf8-\ud83e\udd81.txt"
+    "name": "TEST_DATA_DIR/example-utf8-🦁.txt"
   },
   {
     "basename": "example.beancount",
