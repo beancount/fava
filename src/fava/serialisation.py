@@ -11,7 +11,6 @@ This is not intended to work well enough for full roundtrips yet.
 from __future__ import annotations
 
 import datetime
-import re
 from collections.abc import Mapping
 from decimal import Decimal
 from functools import singledispatch
@@ -20,6 +19,7 @@ from typing import Any
 from beancount.core import amount
 from beancount.parser.parser import parse_string
 
+from fava._structs import _MetadataNumber
 from fava._structs import Balance
 from fava._structs import Close
 from fava._structs import Commodity
@@ -76,6 +76,13 @@ def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
 serialise.register(dict, _serialise_dict)
 
 
+def _serialise_meta(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
+    return {
+        k: _MetadataNumber(v) if isinstance(v, Decimal) else serialise(v)
+        for k, v in o.items()
+    }
+
+
 @serialise.register
 def _(o: amount.Amount) -> _Amount:
     return _Amount.from_amount(o)
@@ -86,7 +93,7 @@ def _(o: abc.Balance) -> Balance:
     return Balance(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
         amount=_Amount.from_amount(o.amount),
         diff_amount=_Amount.from_amount(o.diff_amount),
@@ -99,7 +106,7 @@ def _(o: abc.Close) -> Close:
     return Close(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
     )
 
@@ -109,7 +116,7 @@ def _(o: abc.Commodity) -> Commodity:
     return Commodity(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         currency=o.currency,
     )
 
@@ -119,7 +126,7 @@ def _(o: abc.Custom) -> Custom:
     return Custom(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         type=o.type,
         values=[serialise(v.value) for v in o.values],  # type: ignore[misc]  # ty: ignore[invalid-argument-type]
     )
@@ -130,7 +137,7 @@ def _(o: abc.Document) -> Document:
     return Document(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
         filename=o.filename,
         tags=o.tags,
@@ -143,7 +150,7 @@ def _(o: abc.Event) -> Event:
     return Event(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         type=o.type,
         description=o.description,
     )
@@ -154,7 +161,7 @@ def _(o: abc.Note) -> Note:
     return Note(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
         comment=o.comment,
         tags=o.tags,
@@ -167,7 +174,7 @@ def _(o: abc.Open) -> Open:
     return Open(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
         currencies=list(o.currencies) if o.currencies else None,
         booking=o.booking,
@@ -179,7 +186,7 @@ def _(o: abc.Pad) -> Pad:
     return Pad(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         account=o.account,
         source_account=o.source_account,
     )
@@ -190,7 +197,7 @@ def _(o: abc.Price) -> Price:
     return Price(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         currency=o.currency,
         amount=_Amount.from_amount(o.amount),
     )
@@ -201,7 +208,7 @@ def _(o: abc.Query) -> Query:
     return Query(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         name=o.name,
         query_string=o.query_string,
     )
@@ -216,7 +223,7 @@ def _serialise_posting(o: abc.Posting) -> Posting:
     return Posting(
         account=o.account,
         amount=position_str,
-        meta=_serialise_dict(o.meta) if o.meta is not None else None,
+        meta=_serialise_meta(o.meta) if o.meta is not None else None,
     )
 
 
@@ -225,7 +232,7 @@ def _(o: abc.Transaction) -> Transaction:
     return Transaction(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_meta(o.meta),
         flag=o.flag,
         narration=o.narration,
         postings=list(map(_serialise_posting, o.postings)),
@@ -235,24 +242,19 @@ def _(o: abc.Transaction) -> Transaction:
     )
 
 
-# Matches a bare decimal number, e.g. "10.10" or "-5", as sent by the
-# frontend for metadata values that are Decimal instances there.
-_DECIMAL_RE = re.compile(r"-?\d+(?:\.\d+)?")
-
-
 def _deserialise_meta_value(
-    o: str | bool | int | _Amount,  # noqa: FBT001
+    o: str | bool | int | _MetadataNumber,  # noqa: FBT001
 ) -> str | bool | int | Decimal | protocols.Amount:
     """Deserialise a single metadata value, restoring Decimal and Amount."""
-    if isinstance(o, str) and _DECIMAL_RE.fullmatch(o):
-        return Decimal(o)
-    if isinstance(o, _Amount):
+    if isinstance(o, _MetadataNumber):
+        if o.currency is None:
+            return o.number
         return create.amount(o.number, o.currency)
     return o
 
 
 def _deserialise_meta(
-    o: Mapping[str, str | bool | int | _Amount],
+    o: Mapping[str, str | bool | int | _MetadataNumber],
 ) -> Mapping[str, str | bool | int | Decimal | protocols.Amount]:
     """Deserialise a metadata mapping, restoring Decimal and Amount values."""
     return {key: _deserialise_meta_value(value) for key, value in o.items()}

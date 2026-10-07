@@ -1,10 +1,28 @@
 import { is_empty } from "../lib/objects.ts";
 import { ok } from "../lib/result.ts";
 import type { SafeValidator, Validator } from "../lib/validation.ts";
-import { record } from "../lib/validation.ts";
+import { object, record, string } from "../lib/validation.ts";
 import { RawAmount } from "./amount.ts";
 
-export type MetadataValue = string | boolean | number | RawAmount;
+/** A Decimal metadata value kept as a string to preserve precision. */
+export class RawDecimal {
+  readonly number: string;
+
+  constructor(number: string) {
+    this.number = number;
+  }
+
+  toString(): string {
+    return this.number;
+  }
+
+  private static raw_validator = object({ number: string });
+
+  static validator: Validator<RawDecimal> = (json) =>
+    RawDecimal.raw_validator(json).map(({ number }) => new RawDecimal(number));
+}
+
+export type MetadataValue = string | boolean | number | RawAmount | RawDecimal;
 
 const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   if (
@@ -17,6 +35,10 @@ const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   const amount = RawAmount.validator(json);
   if (amount.is_ok) {
     return amount;
+  }
+  const decimal = RawDecimal.validator(json);
+  if (decimal.is_ok) {
+    return decimal;
   }
   return ok("Unsupported metadata value");
 };
@@ -34,6 +56,7 @@ function meta_value_to_string(value: MetadataValue): string {
 
 // Matches a decimal number followed by a currency, e.g. "10.10 USD".
 const AMOUNT_RE = /^(-?\d+(?:\.\d+)?)\s+([A-Z][A-Z0-9'._-]*)$/;
+const DECIMAL_RE = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
 
 /**
  * Convert a string to a metadata value.
@@ -111,6 +134,9 @@ export class EntryMetadata {
 
   /** Set the value for a key from a string and return an updated copy. */
   set_string(key: string, value: string): EntryMetadata {
+    if (this.#meta[key] instanceof RawDecimal && DECIMAL_RE.test(value)) {
+      return this.set(key, new RawDecimal(value));
+    }
     return this.set(key, string_to_meta_value(value));
   }
 

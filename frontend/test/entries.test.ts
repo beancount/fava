@@ -96,21 +96,40 @@ test("metadata: set from string", () => {
   equal(meta.set_string("key", "10.10.10").get("key"), "10.10.10");
 });
 
-test("metadata: Amount values roundtrip, Decimal stays a string", () => {
+test("metadata: numeric strings, Decimal and Amount values roundtrip", () => {
   const meta = EntryMetadata.validator({
-    decimal: "0.1234567891011121314151617",
+    decimal: { number: "0.1234567891011121314151617" },
     amount: { number: "10.10", currency: "USD" },
+    reference: "00123",
+    numeric_string: "10.10",
   }).unwrap();
   deepEqual(meta.entries(), [
     ["decimal", "0.1234567891011121314151617"],
     ["amount", "10.10 USD"],
+    ["reference", "00123"],
+    ["numeric_string", "10.10"],
   ]);
   ok(meta.get("amount") instanceof RawAmount);
-  equal(meta.get("decimal"), "0.1234567891011121314151617");
+  equal(meta.get("decimal")?.toString(), "0.1234567891011121314151617");
   deepEqual(JSON.parse(JSON.stringify(meta)), {
-    decimal: "0.1234567891011121314151617",
+    decimal: { number: "0.1234567891011121314151617" },
     amount: { number: "10.10", currency: "USD" },
+    reference: "00123",
+    numeric_string: "10.10",
   });
+});
+
+test("metadata: editing Decimal values preserves their type and precision", () => {
+  const meta = EntryMetadata.validator({
+    decimal: { number: "10.10" },
+  }).unwrap();
+  for (const value of ["-0.1234567891011121314151617", "1E+30", ".5", "5."]) {
+    const updated = meta.set_string("decimal", value);
+    deepEqual(JSON.parse(JSON.stringify(updated)), {
+      decimal: { number: value },
+    });
+  }
+  equal(meta.set_string("decimal", "text").get("decimal"), "text");
 });
 
 test("metadata: get filename and lineno", () => {
