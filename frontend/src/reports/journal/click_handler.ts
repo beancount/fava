@@ -28,7 +28,7 @@ export function handle_journal_click({ target }: Event): void {
     // Filter for payees when clicking on them.
     // Note: any special characters in the payee string are escaped so the
     // filter matches against the payee literally.
-    add_filter(`payee:"^${escape_for_regex(target.innerText)}$"`);
+    add_filter(`payee:"^${escape_for_regex(target.textContent)}$"`);
   } else if (target.tagName === "DT") {
     // Filter for metadata key when clicking on the key. The key tag text
     // includes the colon.
