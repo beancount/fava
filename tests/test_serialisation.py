@@ -97,11 +97,17 @@ def test_serialise_txn() -> None:
 
 
 def test_meta_decimal_and_amount_roundtrip() -> None:
-    """Decimal, Amount, and int metadata values roundtrip through JSON."""
+    """Numeric strings and numeric metadata retain their types through JSON."""
     number = Decimal("0.1234567891011121314151617")
     amt = create.amount("10.10 USD")
     txn = create.transaction(
-        {"number-value": number, "amount-value": amt, "lineno": 42},
+        {
+            "number-value": number,
+            "amount-value": amt,
+            "lineno": 42,
+            "reference": "00123",
+            "numeric-string": "10.10",
+        },
         datetime.date(2017, 12, 12),
         "*",
         "Test3",
@@ -116,6 +122,7 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
                     "posting-number": number,
                     "posting-amount": amt,
                     "lineno": 1,
+                    "reference": "00045",
                 },
             ),
         ],
@@ -124,20 +131,23 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     json_txn = loads(dumps(serialise(txn)))
     assert isinstance(json_txn, dict)
     assert json_txn["meta"] == {
-        "number-value": "0.1234567891011121314151617",
+        "number-value": {"number": "0.1234567891011121314151617"},
         "amount-value": {
             "number": "10.10",
             "currency": "USD",
         },
         "lineno": 42,
+        "reference": "00123",
+        "numeric-string": "10.10",
     }
     assert json_txn["postings"][0]["meta"] == {
-        "posting-number": "0.1234567891011121314151617",
+        "posting-number": {"number": "0.1234567891011121314151617"},
         "posting-amount": {
             "number": "10.10",
             "currency": "USD",
         },
         "lineno": 1,
+        "reference": "00045",
     }
 
     roundtripped = deserialise(_entry(json_txn))
@@ -147,6 +157,8 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     assert roundtripped.meta["amount-value"] == amt
     assert roundtripped.meta["lineno"] == 42
     assert isinstance(roundtripped.meta["lineno"], int)
+    assert roundtripped.meta["reference"] == "00123"
+    assert roundtripped.meta["numeric-string"] == "10.10"
     posting_meta = roundtripped.postings[0].meta
     assert posting_meta is not None
     assert posting_meta["posting-number"] == number
@@ -154,6 +166,7 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     assert posting_meta["posting-amount"] == amt
     assert posting_meta["lineno"] == 1
     assert isinstance(posting_meta["lineno"], int)
+    assert posting_meta["reference"] == "00045"
 
 
 def test_serialise_entry_types(

@@ -16,13 +16,20 @@ except ImportError:  # pragma: no cover
     from typing_extensions import dataclass_transform
 
 
+class _MetadataNumber(Struct, frozen=True, omit_defaults=True):
+    """A Decimal metadata value, optionally paired with a currency."""
+
+    number: Decimal
+    currency: str | None = None
+
+
 # mark it so that ty realizes the subclasses are frozen as well:
 @dataclass_transform(frozen_default=True)
 class EntryStruct(Struct, frozen=True, tag_field="t", kw_only=True):
     """msgspec Struct representations of entries."""
 
     date: datetime.date
-    meta: dict[str, str | bool | int | _Amount]
+    meta: dict[str, str | bool | int | _MetadataNumber]
     # Only present when sending entries to the frontend.
     entry_hash: str = ""
 
@@ -91,7 +98,7 @@ class Posting(Struct, frozen=True, kw_only=True, omit_defaults=True):
     account: str
     amount: str = ""
     flag: str = ""
-    meta: dict[str, str | bool | int | _Amount] | None = None
+    meta: dict[str, str | bool | int | _MetadataNumber] | None = None
 
 
 class Transaction(EntryStruct):
