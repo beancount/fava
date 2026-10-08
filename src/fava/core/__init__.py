@@ -45,8 +45,7 @@ from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
-from fava.core.watcher import Watcher
-from fava.core.watcher import WatchfilesWatcher
+from fava.core.watcher import _watcher_for_path
 from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import dateranges
@@ -399,7 +398,10 @@ class FavaLedger:
         self.misc = FavaMisc(self)
         self.query_shell = QueryShell(self)
 
-        self.watcher = WatchfilesWatcher() if not poll_watcher else Watcher()
+        self.watcher = _watcher_for_path(
+            Path(path),
+            poll=poll_watcher,
+        )
 
         self.load_file()
 

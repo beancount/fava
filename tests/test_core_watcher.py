@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.core.watcher import _watcher_for_path
 from fava.core.watcher import Watcher
 from fava.core.watcher import WatchfilesWatcher
 
@@ -38,6 +39,25 @@ def watcher_paths(tmp_path: Path) -> WatcherTestSet:
     return WatcherTestSet(
         tmp_path=tmp_path, file1=file1, file2=file2, folder=folder
     )
+
+
+def test_watcher_for_path(tmp_path: Path) -> None:
+    ledger = tmp_path / "ledger.beancount"
+    ledger.touch()
+
+    assert isinstance(_watcher_for_path(ledger), WatchfilesWatcher)
+    assert isinstance(_watcher_for_path(ledger, poll=True), Watcher)
+
+
+def test_watcher_for_path_with_symlinked_parent(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    ledger = worktree / "ledger.beancount"
+    ledger.touch()
+    current = tmp_path / "current"
+    current.symlink_to(worktree, target_is_directory=True)
+
+    assert isinstance(_watcher_for_path(current / ledger.name), Watcher)
 
 
 def test_watcher_file(watcher_paths: WatcherTestSet) -> None:
