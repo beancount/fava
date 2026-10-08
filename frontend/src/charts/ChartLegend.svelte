@@ -6,6 +6,7 @@
   import type { Writable } from "svelte/store";
 
   import { currencies_scale } from "./helpers.ts";
+  import { type TimedClickDetail, timedclick } from "./timed-click.ts";
 
   interface Props {
     /** The chart legend to show. */
@@ -25,13 +26,24 @@
   {#each legend as item (item)}
     <button
       type="button"
-      onclick={() => {
+      {@attach timedclick()}
+      ontimedclick={(e: CustomEvent<TimedClickDetail>) => {
         if (active) {
           active.set(item);
         } else if (toggled) {
-          toggled.update((v) =>
-            v.includes(item) ? v.filter((i) => i !== item) : [...v, item],
-          );
+          if (e.detail.isLong) {
+            // Long press: toggle between: THIS on | ALL on
+            toggled.update((v) =>
+              v.length === legend.length - Number(!v.includes(item))
+                ? []
+                : legend.filter((i) => i !== item),
+            );
+          } else {
+            // Short press: toggle single button
+            toggled.update((v) =>
+              v.includes(item) ? v.filter((i) => i !== item) : [...v, item],
+            );
+          }
         }
       }}
       class:inactive={active ? item !== $active : $toggled?.includes(item)}
