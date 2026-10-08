@@ -34,7 +34,7 @@
           if (e.detail.isLong) {
             // Long press: toggle between: THIS on | ALL on
             toggled.update((v) =>
-              v.length === legend.length - !v.includes(item)
+              v.length === legend.length - Number(!v.includes(item))
                 ? []
                 : legend.filter((i) => i !== item),
             );
