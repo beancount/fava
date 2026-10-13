@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-04-15 16:45+0000\n"
-"Last-Translator: Marc Riera <marcriera@softcatala.org>\n"
+"PO-Revision-Date: 2026-10-14 13:51+0000\n"
+"Last-Translator: Marc Riera <marcriera@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/fava/fava/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
@@ -69,7 +69,7 @@ msgstr "Desa"
 
 #: frontend/src/editor/SliceEditor.svelte:138
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplica"
 
 #: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
@@ -159,7 +159,7 @@ msgstr "Per any"
 
 #: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
 msgid "Per Fiscal Year"
-msgstr ""
+msgstr "Per any fiscal"
 
 #: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
 msgid "Quarterly"
@@ -167,7 +167,7 @@ msgstr "Per trimestre"
 
 #: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
 msgid "Per Fiscal Quarter"
-msgstr ""
+msgstr "Per trimestre fiscal"
 
 #: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
 msgid "Monthly"
@@ -282,7 +282,7 @@ msgstr "Mou o canvia el nom del document"
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
-msgstr ""
+msgstr "Mou"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
@@ -412,7 +412,7 @@ msgstr "Importa"
 
 #: frontend/src/reports/import/Extract.svelte:76
 msgid "ignore duplicate"
-msgstr ""
+msgstr "ignora el duplicat"
 
 #: frontend/src/reports/import/Extract.svelte:120
 msgid "Source"
@@ -440,11 +440,11 @@ msgstr "No s'ha trobat cap fitxer per importar."
 
 #: frontend/src/reports/import/Import.svelte:149
 msgid "Importable Files"
-msgstr ""
+msgstr "Fitxers importables"
 
 #: frontend/src/reports/import/Import.svelte:161
 msgid "Non-importable Files"
-msgstr ""
+msgstr "Fitxers no importables"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
@@ -609,7 +609,7 @@ msgstr "Afegeix una entrada al llibre diari"
 
 #: frontend/src/sidebar/AsideContents.svelte:85
 msgid "Show keyboard shortcuts"
-msgstr ""
+msgstr "Mostra les dreceres del teclat"
 
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
@@ -682,7 +682,7 @@ msgstr "Amplia-ho tot"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "Altres"
 
 #: src/fava/internal_api.py:171
 msgid "Account Balance"
