@@ -8,4 +8,4 @@ COPY --from=builder /install /usr/local
 
 ENV FAVA_HOST "0.0.0.0"
 EXPOSE 5000
-CMD fava
+CMD ["fava"]
