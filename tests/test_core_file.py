@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans import create
+from fava.beans.abc import Query
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
@@ -20,6 +21,7 @@ from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import _file_newline_character
 from fava.core.file import _incomplete_sortkey
+from fava.core.file import delete_entry_slice
 from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
 from fava.core.file import GeneratedEntryError
@@ -271,6 +273,64 @@ def test_find_entry_lines() -> None:
     assert find_entry_lines(lines, 7) == entry_lines
     assert find_entry_lines(lines, 4) == note_line
     assert find_entry_lines(lines, 5) == note_line
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        '2021-01-01 query "multiline" "\n  SELECT account\n"\n',
+        (
+            '2021-01-01 query "blank line" "\n'
+            'SELECT account\n\nFROM year = 2021\n"\n'
+        ),
+        '2021-01-01 query "indented" "\n  SELECT account\n  "\n',
+        (
+            '2021-01-01 query "escaped" "\n'
+            r"  SELECT account WHERE narration ~ \"quoted;value\""
+            "\n"
+            '"\n'
+        ),
+        (
+            r'2021-01-01 query "backslash" "SELECT \\" ; ignored "'
+            "\n"
+        ),
+        (
+            '2021-01-01 query "metadata" "SELECT account"\n'
+            '  description: "first line\n\nlast line"\n'
+        ),
+    ],
+)
+def test_find_entry_lines_strings(source: str) -> None:
+    entry_lines = source.splitlines(keepends=True)
+    following = '2021-01-02 note Assets:Cash "next entry"\n'
+    lines = [*entry_lines, following]
+    assert find_entry_lines(lines, 0) == entry_lines
+    assert find_entry_lines(lines, len(entry_lines)) == [following]
+
+
+def test_multiline_query_slice_roundtrip(tmp_path: Path) -> None:
+    source = '2021-01-01 query "multiline" "\n  SELECT account\n"\n'
+    following = '2021-01-02 note Assets:Cash "next entry"\n'
+    prefix = "2020-01-01 open Assets:Cash\n\n"
+    path = tmp_path / "multiline.beancount"
+    path.write_text(prefix + source + "\n" + following, encoding="utf-8")
+    ledger = FavaLedger(str(path))
+    entry = next(e for e in ledger.all_entries if isinstance(e, Query))
+
+    entry_source, sha256sum = get_entry_slice(entry)
+    assert entry_source == source.rstrip("\n")
+
+    replacement = entry_source.replace(
+        "SELECT account", "SELECT date, account"
+    )
+    new_sha256sum = save_entry_slice(entry, replacement, sha256sum)
+    assert path.read_text("utf-8") == (
+        prefix + replacement + "\n\n" + following
+    )
+    assert get_entry_slice(entry) == (replacement, new_sha256sum)
+
+    delete_entry_slice(entry, new_sha256sum)
+    assert path.read_text("utf-8") == prefix + following
 
 
 def test_insert_entry_transaction(tmp_path: Path) -> None:

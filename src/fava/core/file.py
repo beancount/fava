@@ -331,13 +331,20 @@ def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
         lineno: The 0-based line-index to start at.
     """
     entry_lines = [lines[lineno]]
+    in_string = False
     while True:
+        for part in re.findall(r'\\.|[";]', entry_lines[-1]):
+            if part == '"':
+                in_string = not in_string
+            elif part == ";" and not in_string:
+                break
         lineno += 1
         try:
             line = lines[lineno]
         except IndexError:
             return entry_lines
-        if not line.strip() or re.match(r"\S", line[0]):
+        # Blank or unindented lines can still belong to a multiline string.
+        if not in_string and (not line.strip() or re.match(r"\S", line[0])):
             return entry_lines
         entry_lines.append(line)
 
@@ -437,9 +444,9 @@ def delete_entry_slice(
             line = lines[last_entry_line]
         except IndexError:
             break
-        if line.strip():  # pragma: no cover
+        if line.strip():
             break
-        last_entry_line += 1  # pragma: no cover
+        last_entry_line += 1
     lines = lines[:first_entry_line] + lines[last_entry_line:]
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
