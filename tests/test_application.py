@@ -366,3 +366,22 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]
+
+
+def test_custom_css(tmp_path: Path) -> None:
+    """The custom-css option links and serves a per-ledger stylesheet."""
+    (tmp_path / "custom.css").write_text("body { color: red; }")
+    (tmp_path / "a.beancount").write_text(
+        'option "title" "A"\n'
+        '2020-01-01 custom "fava-option" "custom-css" "custom.css"\n'
+    )
+    (tmp_path / "b.beancount").write_text('option "title" "B"\n')
+    app = create_app([tmp_path / "a.beancount", tmp_path / "b.beancount"])
+    test_client = app.test_client()
+
+    assert '/a/custom.css"' in assert_success(test_client.get("/a/errors/"))
+    assert "color: red" in assert_success(test_client.get("/a/custom.css"))
+
+    assert "custom.css" not in assert_success(test_client.get("/b/errors/"))
+    response = test_client.get("/b/custom.css")
+    assert response.status_code == HTTPStatus.NOT_FOUND

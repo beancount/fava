@@ -98,6 +98,7 @@ class FavaOptions:
     collapse_pattern: Sequence[re.Pattern[str]] = field(default_factory=list)
     conversion_currencies: tuple[str, ...] = ()
     currency_column: int = 61
+    custom_css: str | None = None
     default_file: str | None = None
     default_page: str = "income_statement/"
     fiscal_year_end: FiscalYearEnd = END_OF_YEAR
@@ -126,6 +127,10 @@ class FavaOptions:
             raise NotARegularExpressionError(value) from err
         # It's typed as Sequence so that it's not externally mutated
         self.collapse_pattern.append(pattern)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
+
+    def set_custom_css(self, value: str, filename: str) -> None:
+        """Set the custom_css option (relative to the Beancount file)."""
+        self.custom_css = str((Path(filename).parent / value).absolute())
 
     def set_default_file(self, value: str, filename: str) -> None:
         """Set the default_file option."""
@@ -206,6 +211,8 @@ def parse_option_custom_entry(  # noqa: PLR0912
 
     if key == "collapse_pattern":
         options.set_collapse_pattern(value)
+    elif key == "custom_css":
+        options.set_custom_css(value, filename)
     elif key == "default_file":
         options.set_default_file(value, filename)
     elif key == "fiscal_year_end":

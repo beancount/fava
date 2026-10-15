@@ -321,6 +321,14 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             return send_file_inline(filename)
         return abort(404)
 
+    @fava_app.route("/<bfile>/custom.css")
+    def custom_css() -> Response:
+        """Serve the ledger's custom_css file, if one is configured."""
+        path = g.ledger.fava_options.custom_css
+        if path is None:
+            return abort(404)
+        return send_file_inline(path)
+
     @fava_app.route("/<bfile>/statement/", methods=["GET"])
     def statement() -> Response:
         """Download a statement file."""

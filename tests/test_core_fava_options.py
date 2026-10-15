@@ -111,3 +111,14 @@ def test_fava_options_set_import_dirs() -> None:
     options.set_import_dirs("/path/with spaces")
     options.set_import_dirs("/simple/path")
     assert list(options.import_dirs) == ["/path/with spaces", "/simple/path"]
+
+
+def test_fava_options_custom_css(
+    load_doc_custom_entries: list[Custom],
+) -> None:
+    """
+    2016-04-14 custom "fava-option" "custom-css" "overrides.css"
+    """
+    options, errors = parse_options(load_doc_custom_entries)
+    assert not errors
+    assert options.custom_css == str(Path("overrides.css").absolute())
