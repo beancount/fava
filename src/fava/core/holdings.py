@@ -12,7 +12,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
 
 _UNREALIZED_PROFIT_PCT = (
     "safediv((abs(sum(number(value(position{date}))))"
@@ -76,9 +76,7 @@ ORDER BY cost_currency
 }
 
 
-def holdings_query(
-    aggregation_key: str, end_date: datetime.date | None
-) -> str:
+def holdings_query(aggregation_key: str, end_date: dt.date | None) -> str:
     """Return the holdings BQL, pinning prices to ``end_date`` when set.
 
     Args:
