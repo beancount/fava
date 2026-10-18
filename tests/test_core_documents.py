@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -26,7 +26,7 @@ def test_is_document_or_import_file(
         example_ledger,
         "all_entries_by_type",
         group_entries_by_type(
-            [create.document({}, datetime.date(2022, 1, 1), "Assets", path)]
+            [create.document({}, dt.date(2022, 1, 1), "Assets", path)]
         ),
     )
     assert not is_document_or_import_file("/asdfasdf", example_ledger)

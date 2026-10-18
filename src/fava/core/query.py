@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import TYPE_CHECKING
@@ -35,7 +35,7 @@ if TYPE_CHECKING:  # pragma: no cover
         bool
         | int
         | str
-        | datetime.date
+        | dt.date
         | Decimal
         | _Amount
         | _Position
@@ -177,7 +177,7 @@ COLUMNS = {
     Inventory: InventoryColumn,
     position.Position: PositionColumn,
     bool: BoolColumn,
-    datetime.date: DateColumn,
+    dt.date: DateColumn,
     int: IntColumn,
     set: SetColumn,
     str: StrColumn,

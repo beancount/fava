@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import csv
-import datetime
+import datetime as dt
 import io
 from collections.abc import Set as AbstractSet
 from decimal import Decimal
@@ -103,7 +103,7 @@ def _row_to_pyexcel(
             result.append(float(value))
         elif type_ is int and isinstance(value, int):
             result.append(value)
-        elif type_ is datetime.date:
+        elif type_ is dt.date:
             result.append(str(value))
         else:
             if not isinstance(value, str):  # pragma: no cover

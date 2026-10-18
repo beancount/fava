@@ -2,7 +2,7 @@
 name = "fava"
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Dominik Aumayr", email = "dominik@aumayr.name" }]
 maintainers = [{ name = "Jakob Schnitzer", email = "mail@jakobschnitzer.de" }]
@@ -18,11 +18,11 @@ classifiers = [
   "Natural Language :: English",
   "Programming Language :: JavaScript",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
   "Topic :: Office/Business :: Financial :: Accounting",
   "Topic :: Office/Business :: Financial :: Investment",
@@ -96,7 +96,12 @@ types = [
 ]
 
 [build-system]
-requires = ["Babel>=2.7,<3", "hatch-vcs>=0.4", "hatchling>=1.27,!=1.32.3"]
+requires = [
+  "Babel>=2.7,<3",
+  "hatch-vcs>=0.4",
+  "hatchling>=1.27,!=1.32.3",
+  "typing-extensions>=4.5; python_version<\"3.12\""
+]
 build-backend = "hatchling.build"
 
 [tool.uv]

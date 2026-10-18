@@ -18,7 +18,7 @@ from fava.core.tree import Tree
 from fava.util.date import local_today
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Sequence
     from typing import Literal
 
@@ -82,7 +82,7 @@ class LastEntry:
     """Date and hash of the last entry for an account."""
 
     #: The entry date.
-    date: datetime.date
+    date: dt.date
 
     #: The entry hash.
     entry_hash: str
@@ -93,7 +93,7 @@ class AccountData:
     """Holds information about an account."""
 
     #: The date on which this account is closed (or datetime.date.max).
-    close_date: datetime.date | None = None
+    close_date: dt.date | None = None
 
     #: The metadata of the Open entry of this account.
     meta: Meta = field(default_factory=dict)

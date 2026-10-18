@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from decimal import Decimal
 from textwrap import dedent
 
@@ -24,7 +24,7 @@ def test_to_string_amount() -> None:
 
 def test_to_string_cost() -> None:
     one = Decimal(1)
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     cost = create.cost(one, "EUR", date)
     assert to_string(cost) == "1 EUR, 2022-01-01"
 
@@ -34,7 +34,7 @@ def test_to_string_cost() -> None:
 
 def test_to_string_position() -> None:
     one = Decimal(1)
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     amount = create.amount("10 EUR")
     cost = create.cost(one, "EUR", date)
     position = create.position(amount, cost)
@@ -46,7 +46,7 @@ def _spec(
     number_per: Decimal | None = None,
     number_total: Decimal | None = None,
     currency: str | None = None,
-    date: datetime.date | None = None,
+    date: dt.date | None = None,
     label: str | None = None,
     merge: bool | None = None,
 ) -> CostSpec:
@@ -56,7 +56,7 @@ def _spec(
 def test_to_string_cost_spec() -> None:
     one = Decimal(1)
     two = Decimal(2)
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     eur = "EUR"
     assert not to_string(_spec())
     assert to_string(_spec(number_per=one)) == "1"
@@ -85,7 +85,7 @@ def test_to_string_transaction() -> None:
 
     transaction = create.transaction(
         {},
-        datetime.date(2016, 1, 1),
+        dt.date(2016, 1, 1),
         "*",
         "payee",
         "narr",
@@ -106,7 +106,7 @@ def test_to_string_transaction_with_price() -> None:
 
     transaction = create.transaction(
         {},
-        datetime.date(2016, 1, 1),
+        dt.date(2016, 1, 1),
         "*",
         "payee",
         "narr",

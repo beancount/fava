@@ -33,7 +33,7 @@ from fava.helpers import FavaAPIError
 from fava.util import next_key
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Iterable
     from collections.abc import Sequence
 
@@ -290,7 +290,7 @@ class FileModule(FavaModule):
                     )
 
 
-def _incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
+def _incomplete_sortkey(entry: Directive) -> tuple[dt.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     if isinstance(entry, Open):
         return (entry.date, -2)

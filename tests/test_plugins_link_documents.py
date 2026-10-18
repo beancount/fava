@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from pathlib import Path
 from textwrap import dedent
 from typing import TYPE_CHECKING
@@ -152,7 +152,7 @@ def test_plugins_posting_metadata(tmp_path: Path) -> None:
 
 def test_link_documents_posting_without_meta() -> None:
     """A posting without any metadata is skipped without error."""
-    date = datetime.date(2016, 11, 1)
+    date = dt.date(2016, 11, 1)
     doc = create.document({}, date, "Assets:Cash", "Test.pdf")
     txn = create.transaction(
         {"filename": "<string>", "lineno": 1},

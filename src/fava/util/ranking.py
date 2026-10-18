@@ -6,7 +6,7 @@ import math
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Sequence
 
 ZERO = 0.0
@@ -55,7 +55,7 @@ class ExponentialDecayRanker:
         # scores matter.
         self.scores: dict[str, float] = {}
 
-    def update(self, item: str, date: datetime.date) -> None:
+    def update(self, item: str, date: dt.date) -> None:
         """Add 'like' for item.
 
         Args:
