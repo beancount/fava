@@ -246,26 +246,26 @@ class _IntervalFortnight(Interval):
     would. Only budgets use this interval; it is not a report interval.
     """
 
-    _epoch = datetime.date(1970, 1, 5)  # a Monday
+    _epoch = dt.date(1970, 1, 5)  # a Monday
 
     @property
     def label(self) -> str:
         return gettext("Fortnightly")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return self.get_prev(date).strftime("%Y-%m-%d")
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         return date - timedelta((date - self._epoch).days % 14)
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         try:
             return self.get_prev(date) + timedelta(14)
         except OverflowError:
-            return datetime.date.max
+            return dt.date.max
 
     @override
-    def number_of_days(self, date: datetime.date) -> int:
+    def number_of_days(self, date: dt.date) -> int:
         return 14
 
 
