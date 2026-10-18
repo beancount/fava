@@ -220,7 +220,6 @@ extend-ignore = [
   "DOC502",  # allow documented exceptions that are not explicitly raised
   "D105",    # allow magic methods to be undocumented
   "D107",    # allow __init__ to be undocumented - the class should be.
-  "ICN001",  # temporary - will adjust import aliases in a follow-up commit.
   "PD",      # pandas-related, has false-positives
   "PERF203", # allow try-except in loop; zero-cost since Python 3.11
   "PLR2004", # allow magic constants in comparisons

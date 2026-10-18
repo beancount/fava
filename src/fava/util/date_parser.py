@@ -5,7 +5,7 @@ See :func:`parse_date` for the supported syntax.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from datetime import timedelta
 from typing import Literal
@@ -90,7 +90,7 @@ _LEXER = Lexer(
 class Period:
     """A period given by its first day and the interval that it spans."""
 
-    def __init__(self, begin: datetime.date, interval: Interval) -> None:
+    def __init__(self, begin: dt.date, interval: Interval) -> None:
         self.begin = begin
         self.interval = interval
 
@@ -108,7 +108,7 @@ class YearPeriod(Period):
     """A calendar year, which can be refined to a month, quarter or week."""
 
     def __init__(self, year: int) -> None:
-        super().__init__(datetime.date(year, 1, 1), Year)
+        super().__init__(dt.date(year, 1, 1), Year)
 
     @override
     def refine(self, token: Token) -> Period:
@@ -117,9 +117,9 @@ class YearPeriod(Period):
             return MonthPeriod(year, NUMBER.value(token))
         if token.kind is QUARTER:
             month = (QUARTER.value(token) - 1) * 3 + 1
-            return Period(datetime.date(year, month, 1), Quarter)
+            return Period(dt.date(year, month, 1), Quarter)
         if token.kind is WEEK:
-            begin = datetime.date.fromisocalendar(year, WEEK.value(token), 1)
+            begin = dt.date.fromisocalendar(year, WEEK.value(token), 1)
             return Period(begin, Week)
         raise UnexpectedTokenError(token.text)
 
@@ -128,12 +128,12 @@ class MonthPeriod(Period):
     """A month, which can be refined to one of its days."""
 
     def __init__(self, year: int, month: int) -> None:
-        super().__init__(datetime.date(year, month, 1), Month)
+        super().__init__(dt.date(year, month, 1), Month)
 
     @override
     def refine(self, token: Token) -> Period:
         if token.kind is NUMBER:
-            begin = datetime.date(
+            begin = dt.date(
                 self.begin.year, self.begin.month, NUMBER.value(token)
             )
             return Period(begin, Day)
@@ -145,7 +145,7 @@ class FiscalYearPeriod(Period):
 
     interval: FiscalYear
 
-    def __init__(self, begin: datetime.date, fye: FiscalYearEnd) -> None:
+    def __init__(self, begin: dt.date, fye: FiscalYearEnd) -> None:
         super().__init__(begin, FiscalYear(fye))
 
     @override

@@ -18,7 +18,7 @@ except ImportError:  # pragma: no cover
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
 
     from beancount.core.inventory import Inventory
 
@@ -41,7 +41,7 @@ def get_cost(pos: Position) -> Amount:
 def get_market_value(
     pos: Position,
     prices: FavaPriceMap,
-    date: datetime.date | None = None,
+    date: dt.date | None = None,
 ) -> Amount:
     """Get the market value of a Position.
 
@@ -77,7 +77,7 @@ def convert_position(
     pos: Position,
     target_currency: str,
     prices: FavaPriceMap,
-    date: datetime.date | None = None,
+    date: dt.date | None = None,
 ) -> Amount:
     """Get the value of a Position in a particular currency.
 
@@ -124,7 +124,7 @@ class Conversion(ABC):
         self,
         inventory: CounterInventory,
         prices: FavaPriceMap,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> SimpleCounterInventory:
         """Apply the conversion to an inventory (CounterInventory)."""
 
@@ -135,7 +135,7 @@ class _AtCostConversion(Conversion):
         self,
         inventory: CounterInventory,
         prices: FavaPriceMap | None = None,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> SimpleCounterInventory:
         return inventory.reduce(get_cost)
 
@@ -146,7 +146,7 @@ class _AtValueConversion(Conversion):
         self,
         inventory: CounterInventory,
         prices: FavaPriceMap,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> SimpleCounterInventory:
         return inventory.reduce(get_market_value, prices, date)
 
@@ -157,7 +157,7 @@ class _UnitsConversion(Conversion):
         self,
         inventory: CounterInventory,
         prices: FavaPriceMap | None = None,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> SimpleCounterInventory:
         counter = SimpleCounterInventory()
         for (currency, _cost), number in inventory.items():
@@ -186,7 +186,7 @@ class _CurrencyConversion(Conversion):
         self,
         inventory: CounterInventory,
         prices: FavaPriceMap,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> SimpleCounterInventory:
         currencies = iter(self._currencies)
         currency = next(currencies)
@@ -222,7 +222,7 @@ def cost_or_value(
     inventory: CounterInventory,
     conversion: str | Conversion,
     prices: FavaPriceMap,
-    date: datetime.date | None = None,
+    date: dt.date | None = None,
 ) -> SimpleCounterInventory:
     """Get the cost or value of an inventory."""
     conversion = conversion_from_str(conversion)

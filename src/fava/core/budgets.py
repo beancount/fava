@@ -18,7 +18,7 @@ from fava.util.date import days_in_daterange
 from fava.util.date import get_interval
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Mapping
     from collections.abc import Sequence
 
@@ -33,7 +33,7 @@ class Budget:
     """A budget entry."""
 
     account: str
-    date_start: datetime.date
+    date_start: dt.date
     period: Interval
     number: Decimal
     currency: str
@@ -64,8 +64,8 @@ class BudgetModule(FavaModule):
     def calculate(
         self,
         account: str,
-        begin_date: datetime.date,
-        end_date: datetime.date,
+        begin_date: dt.date,
+        end_date: dt.date,
     ) -> Mapping[str, Decimal]:
         """Calculate the budget for an account in an interval."""
         return calculate_budget(
@@ -75,8 +75,8 @@ class BudgetModule(FavaModule):
     def calculate_children(
         self,
         account: str,
-        begin_date: datetime.date,
-        end_date: datetime.date,
+        begin_date: dt.date,
+        end_date: dt.date,
     ) -> Mapping[str, Decimal]:
         """Calculate the budget for an account including its children."""
         return calculate_budget_children(
@@ -137,7 +137,7 @@ def parse_budgets(
 
 def _matching_budgets(
     budgets: Sequence[Budget],
-    date_active: datetime.date,
+    date_active: dt.date,
 ) -> Mapping[str, Budget]:
     """Find matching budgets.
 
@@ -157,8 +157,8 @@ def _matching_budgets(
 def calculate_budget(
     budgets: BudgetDict,
     account: str,
-    date_from: datetime.date,
-    date_to: datetime.date,
+    date_from: dt.date,
+    date_to: dt.date,
 ) -> Mapping[str, Decimal]:
     """Calculate budget for an account.
 
@@ -189,8 +189,8 @@ def calculate_budget(
 def calculate_budget_children(
     budgets: BudgetDict,
     account: str,
-    date_from: datetime.date,
-    date_to: datetime.date,
+    date_from: dt.date,
+    date_to: dt.date,
 ) -> Mapping[str, Decimal]:
     """Calculate budget for an account including budgets of its children.
 

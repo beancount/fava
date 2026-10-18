@@ -7,7 +7,7 @@ Note:
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from abc import ABC
 from abc import abstractmethod
@@ -61,7 +61,7 @@ class FiscalYearEnd:
         self.day = day
         self.month_of_year = (self.month - 1) % 12 + 1
         self.year_offset = (self.month - 1) // 12
-        start = datetime.date(2001, self.month_of_year, self.day) + ONE_DAY
+        start = dt.date(2001, self.month_of_year, self.day) + ONE_DAY
         self.start_month_of_year = start.month
         self.start_day = start.day
 
@@ -78,7 +78,7 @@ class FiscalYearEnd:
     def __repr__(self) -> str:
         return f"FiscalYearEnd(month={self.month}, day={self.day})"
 
-    def fiscal_year(self, date: datetime.date) -> int:
+    def fiscal_year(self, date: dt.date) -> int:
         """The fiscal year that a date is in."""
         after_start = (date.month, date.day) >= (
             self.start_month_of_year,
@@ -87,10 +87,10 @@ class FiscalYearEnd:
         wraps = self.start_month_of_year < self.month_of_year
         return date.year + (after_start and not wraps) - self.year_offset
 
-    def begin_date_for_year(self, year: int) -> datetime.date:
+    def begin_date_for_year(self, year: int) -> dt.date:
         """Calculate the begin date of a fiscal year."""
         wraps = self.start_month_of_year < self.month_of_year
-        return datetime.date(
+        return dt.date(
             year - 1 + wraps + self.year_offset,
             self.start_month_of_year,
             self.start_day,
@@ -132,18 +132,18 @@ class Interval(ABC):
         """The label for the interval."""
 
     @abstractmethod
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         """Format a date for this interval for the Fava time filter."""
 
     @abstractmethod
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         """Get the start date of the interval in which the date falls."""
 
     @abstractmethod
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         """Get the start date of the next interval following the date."""
 
-    def number_of_days(self, date: datetime.date) -> int:
+    def number_of_days(self, date: dt.date) -> int:
         """Get number of days in the surrounding interval."""
         start = self.get_prev(date)
         end = self.get_next(start)
@@ -157,17 +157,17 @@ class _IntervalYear(Interval):
     def label(self) -> str:
         return gettext("Yearly")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return f"{date.year:04d}"
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
-        return datetime.date(date.year, 1, 1)
+    def get_prev(self, date: dt.date) -> dt.date:
+        return dt.date(date.year, 1, 1)
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         try:
-            return datetime.date(date.year + 1, 1, 1)
+            return dt.date(date.year + 1, 1, 1)
         except ValueError:
-            return datetime.date.max
+            return dt.date.max
 
 
 class _IntervalQuarter(Interval):
@@ -177,18 +177,18 @@ class _IntervalQuarter(Interval):
     def label(self) -> str:
         return gettext("Quarterly")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return f"{date.year:04d}-Q{(date.month - 1) // 3 + 1}"
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
-        return datetime.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
+    def get_prev(self, date: dt.date) -> dt.date:
+        return dt.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         year_delta, month0 = divmod((date.month - 1) // 3 * 3 + 3, 12)
         try:
-            return datetime.date(date.year + year_delta, month0 + 1, 1)
+            return dt.date(date.year + year_delta, month0 + 1, 1)
         except ValueError:
-            return datetime.date.max
+            return dt.date.max
 
 
 class _IntervalMonth(Interval):
@@ -198,18 +198,18 @@ class _IntervalMonth(Interval):
     def label(self) -> str:
         return gettext("Monthly")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return f"{date.year:04d}-{date.month:02d}"
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
-        return datetime.date(date.year, date.month, 1)
+    def get_prev(self, date: dt.date) -> dt.date:
+        return dt.date(date.year, date.month, 1)
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         year_delta, month0 = divmod(date.month, 12)
         try:
-            return datetime.date(date.year + year_delta, month0 + 1, 1)
+            return dt.date(date.year + year_delta, month0 + 1, 1)
         except ValueError:
-            return datetime.date.max
+            return dt.date.max
 
 
 class _IntervalWeek(Interval):
@@ -219,21 +219,21 @@ class _IntervalWeek(Interval):
     def label(self) -> str:
         return gettext("Weekly")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         iso = date.isocalendar()
         return f"{iso.year:04d}-W{iso.week:02d}"
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         return date - timedelta(date.weekday())
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         try:
             return date + timedelta(7 - date.weekday())
         except OverflowError:
-            return datetime.date.max
+            return dt.date.max
 
     @override
-    def number_of_days(self, date: datetime.date) -> int:
+    def number_of_days(self, date: dt.date) -> int:
         """Get number of days in the surrounding interval."""
         return 7
 
@@ -245,20 +245,20 @@ class _IntervalDay(Interval):
     def label(self) -> str:
         return gettext("Daily")
 
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return date.isoformat()
 
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         return date
 
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         try:
             return date + ONE_DAY
         except OverflowError:
-            return datetime.date.max
+            return dt.date.max
 
     @override
-    def number_of_days(self, date: datetime.date) -> int:
+    def number_of_days(self, date: dt.date) -> int:
         return 1
 
 
@@ -274,25 +274,25 @@ class FiscalYear(Interval):
         return gettext("Per Fiscal Year")
 
     @override
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         return f"FY{self.fye.fiscal_year(date):04d}"
 
     @override
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         start = date.replace(
             month=self.fye.start_month_of_year, day=self.fye.start_day
         )
         return start.replace(year=date.year - 1) if date < start else start
 
     @override
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         start = date.replace(
             month=self.fye.start_month_of_year, day=self.fye.start_day
         )
         try:
             return start if date < start else start.replace(year=date.year + 1)
         except ValueError:
-            return datetime.date.max
+            return dt.date.max
 
 
 @dataclass(frozen=True, slots=True)
@@ -311,21 +311,21 @@ class FiscalQuarter(Interval):
         return gettext("Per Fiscal Quarter")
 
     @override
-    def format_date(self, date: datetime.date) -> str:
+    def format_date(self, date: dt.date) -> str:
         quarter = ((date.month - self.fye.start_month_of_year) % 12) // 3
         return f"FY{self.fye.fiscal_year(date):04d}-Q{quarter + 1}"
 
     @override
-    def get_prev(self, date: datetime.date) -> datetime.date:
+    def get_prev(self, date: dt.date) -> dt.date:
         month_in_quarter = (date.month - self.fye.start_month_of_year) % 3
         return month_offset(date.replace(day=1), -month_in_quarter)
 
     @override
-    def get_next(self, date: datetime.date) -> datetime.date:
+    def get_next(self, date: dt.date) -> dt.date:
         try:
             return month_offset(self.get_prev(date), 3)
         except ValueError:
-            return datetime.date.max
+            return dt.date.max
 
 
 Year = _IntervalYear()
@@ -375,12 +375,12 @@ class InvalidDateRangeError(ValueError):
 
 
 def interval_ends(
-    begin: datetime.date,
-    end: datetime.date,
+    begin: dt.date,
+    end: dt.date,
     interval: Interval,
     *,
     complete: bool,
-) -> Iterator[datetime.date]:
+) -> Iterator[dt.date]:
     """Get interval ends.
 
     Yields:
@@ -399,9 +399,9 @@ def interval_ends(
 class DateRange:
     """A range of dates, usually matching an interval."""
 
-    begin: datetime.date
+    begin: dt.date
     """The inclusive start date of this range of dates."""
-    end: datetime.date
+    end: dt.date
     """The exclusive end date of this range of dates."""
 
     def __post_init__(self) -> None:
@@ -409,15 +409,15 @@ class DateRange:
             raise InvalidDateRangeError
 
     @property
-    def end_inclusive(self) -> datetime.date:
+    def end_inclusive(self) -> dt.date:
         """The last day of this interval."""
         return self.end - ONE_DAY
 
 
 @listify
 def dateranges(
-    begin: datetime.date,
-    end: datetime.date,
+    begin: dt.date,
+    end: dt.date,
     interval: Interval,
     *,
     complete: bool,
@@ -440,12 +440,12 @@ def dateranges(
         yield DateRange(interval_begin, interval_end)
 
 
-def local_today() -> datetime.date:
+def local_today() -> dt.date:
     """Today as a date in the local timezone."""
-    return datetime.date.today()  # noqa: DTZ011
+    return dt.date.today()  # noqa: DTZ011
 
 
-def month_offset(date: datetime.date, months: int) -> datetime.date:
+def month_offset(date: dt.date, months: int) -> dt.date:
     """Offsets a date by a given number of months."""
     year_delta, month0 = divmod(date.month - 1 + months, 12)
     return date.replace(year=date.year + year_delta, month=month0 + 1)
@@ -469,9 +469,9 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 
 
 def days_in_daterange(
-    start_date: datetime.date,
-    end_date: datetime.date,
-) -> Iterator[datetime.date]:
+    start_date: dt.date,
+    end_date: dt.date,
+) -> Iterator[dt.date]:
     """Yield a datetime for every day in the specified interval.
 
     Args:

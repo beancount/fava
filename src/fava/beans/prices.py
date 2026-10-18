@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from bisect import bisect
 from collections import Counter
 from collections import defaultdict
@@ -17,13 +17,13 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Price
 
     BaseQuote: TypeAlias = tuple[str, str]
-    PricePoint: TypeAlias = tuple[datetime.date, Decimal]
+    PricePoint: TypeAlias = tuple[dt.date, Decimal]
 
 ZERO = Decimal()
 ONE = Decimal(1)
 
 
-class DateKeyWrapper(list[datetime.date]):
+class DateKeyWrapper(list[dt.date]):
     """A class wrapping a list of prices for bisect.
 
     This is needed before Python 3.10, which adds the key argument.
@@ -37,7 +37,7 @@ class DateKeyWrapper(list[datetime.date]):
     def __len__(self) -> int:
         return len(self.inner)
 
-    def __getitem__(self, k: int) -> datetime.date:  # type: ignore[override]  # ty:ignore[invalid-method-override]
+    def __getitem__(self, k: int) -> dt.date:  # type: ignore[override]  # ty:ignore[invalid-method-override]
         return self.inner[k][0]
 
 
@@ -123,7 +123,7 @@ class FavaPriceMap:
     def get_price(
         self,
         base_quote: BaseQuote,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> Decimal | None:
         """Get the price for the given currency pair."""
         return self.get_price_point(base_quote, date)[1]
@@ -131,7 +131,7 @@ class FavaPriceMap:
     def get_price_point(
         self,
         base_quote: BaseQuote,
-        date: datetime.date | None = None,
+        date: dt.date | None = None,
     ) -> PricePoint | tuple[None, Decimal] | tuple[None, None]:
         """Get the price point for the given currency pair."""
         base, quote = base_quote
