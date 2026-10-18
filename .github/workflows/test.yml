@@ -18,23 +18,20 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-        py: ["3.14", "3.10"]
+        py: ["3.15", "3.11"]
         make_target: ["test-py"]
         include:
           - os: "macos-latest"
             make_target: "test-py"
-            py: "3.14"
+            py: "3.15"
           - os: "windows-latest"
             make_target: "test-py"
-            py: "3.14"
+            py: "3.15"
           - os: "ubuntu-latest"
             make_target: "test-py-old-deps"
-            py: "3.10"
+            py: "3.11"
           - os: "ubuntu-latest"
             make_target: "test-py-typeguard"
-            py: "3.14"
-          - os: "ubuntu-latest"
-            make_target: "test-py"
             py: "3.15"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

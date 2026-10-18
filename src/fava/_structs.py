@@ -4,16 +4,12 @@ from __future__ import annotations
 
 import datetime as dt  # noqa: TC003 - needed for msgspec
 from decimal import Decimal  # noqa: TC003 - needed for msgspec
+from typing import dataclass_transform
 
 from beancount.core.data import Booking  # noqa: TC002 - needed for msgspec
 from msgspec import Struct
 
 from fava.core.inventory import _Amount  # noqa: TC001 - needed for msgspec
-
-try:
-    from typing import dataclass_transform
-except ImportError:  # pragma: no cover
-    from typing_extensions import dataclass_transform
 
 
 # mark it so that ty realizes the subclasses are frozen as well:

@@ -8,6 +8,7 @@ from __future__ import annotations
 import datetime as dt
 import re
 from datetime import timedelta
+from typing import assert_type
 from typing import Literal
 from typing import TYPE_CHECKING
 
@@ -32,10 +33,8 @@ from fava.util.parsing import TokenKind
 from fava.util.parsing import UnexpectedTokenError
 
 try:
-    from typing import assert_type
-    from typing import override  # pragma: no cover
+    from typing import override
 except ImportError:  # pragma: no cover
-    from typing_extensions import assert_type
     from typing_extensions import override
 
 if TYPE_CHECKING:  # pragma: no cover
