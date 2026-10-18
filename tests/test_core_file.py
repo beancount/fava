@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import os
 import re
 import shutil
@@ -46,7 +46,7 @@ def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
 def test_sort_incomplete_sortkey() -> None:
     assert sorted([], key=_incomplete_sortkey) == []
 
-    date = datetime.date(2000, 1, 1)
+    date = dt.date(2000, 1, 1)
 
     open_ = create.open(meta={}, date=date, account="Assets", currencies=[])
     balance = create.balance(

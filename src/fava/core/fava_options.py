@@ -25,7 +25,7 @@ from fava.util.date import END_OF_YEAR
 from fava.util.date import parse_fye_string
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Sequence
 
     from fava.beans.abc import Custom
@@ -44,7 +44,7 @@ class InsertEntryOption:
     inserted.
     """
 
-    date: datetime.date
+    date: dt.date
     re: re.Pattern[str]
     filename: str
     lineno: int
@@ -148,7 +148,7 @@ class FavaOptions:
         self.import_dirs.append(value)  # type: ignore[attr-defined]  # ty:ignore[unresolved-attribute]
 
     def set_insert_entry(
-        self, value: str, date: datetime.date, filename: str, lineno: int
+        self, value: str, date: dt.date, filename: str, lineno: int
     ) -> None:
         """Set the insert_entry option."""
         try:

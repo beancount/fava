@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import shlex
 import textwrap
+from threading import Lock
 from typing import TYPE_CHECKING
 
 from beancount.core.display_context import DisplayContext
@@ -85,27 +86,29 @@ class FavaBQLShell(BQLShell):
         super().__init__("", io.StringIO(), interactive=False)  # type: ignore[no-untyped-call]
         self.ledger = ledger
         self.stdout = self.outfile
+        self._lock = Lock()
 
     def run(self, entries: Sequence[Directive], query: str) -> Cursor | str:
         """Run a query, capturing output as string or returning the result."""
-        self.context = connect(
-            "beancount:",
-            entries=entries,
-            errors=self.ledger.errors,
-            options=self.ledger.options,
-        )
-        try:
-            result = self.onecmd(query)  # type: ignore[no-untyped-call]
-        except ParseError as exc:
-            raise QueryParseError(exc) from exc
-        except CompilationError as exc:
-            raise QueryCompilationError(exc) from exc
+        with self._lock:
+            self.context = connect(
+                "beancount:",
+                entries=entries,
+                errors=self.ledger.errors,
+                options=self.ledger.options,
+            )
+            try:
+                result = self.onecmd(query)  # type: ignore[no-untyped-call]
+            except ParseError as exc:
+                raise QueryParseError(exc) from exc
+            except CompilationError as exc:
+                raise QueryCompilationError(exc) from exc
 
-        if isinstance(result, Cursor):
-            return result
-        contents = self.outfile.getvalue().strip()
-        self.outfile.truncate(0)
-        return contents.strip().strip("\x00")
+            if isinstance(result, Cursor):
+                return result
+            contents = self.outfile.getvalue().strip()
+            self.outfile.truncate(0)
+            return contents.strip().strip("\x00")
 
     def add_help(self) -> None:
         """Attach help functions for each of the parsed token handlers."""

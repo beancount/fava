@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -32,7 +32,7 @@ def test_fava_options_errors(load_doc_custom_entries: list[Custom]) -> None:
     assert len(errors) == 5
 
     with pytest.raises(NotARegularExpressionError):
-        options.set_insert_entry("((", datetime.date.min, "<string>", 0)
+        options.set_insert_entry("((", dt.date.min, "<string>", 0)
 
 
 def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
@@ -64,7 +64,7 @@ def test_fava_options(load_doc_custom_entries: list[Custom]) -> None:
     assert options.indent == 4
     assert options.insert_entry == [
         InsertEntryOption(
-            datetime.date(2016, 4, 14),
+            dt.date(2016, 4, 14),
             re.compile(r"Ausgaben:Test"),
             "<string>",
             6,

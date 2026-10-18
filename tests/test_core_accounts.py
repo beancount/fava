@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 
 from fava.beans import create
 from fava.beans.helpers import replace
@@ -17,7 +17,7 @@ def test_get_last_entry() -> None:
     posting = create.posting("Assets", create.amount("10 EUR"))
     txn_unrealized = create.transaction(
         {},
-        datetime.date(2024, 1, 1),
+        dt.date(2024, 1, 1),
         flag="U",
         payee="payee",
         narration="narration",
@@ -27,7 +27,7 @@ def test_get_last_entry() -> None:
     )
     txn = create.transaction(
         meta={},
-        date=datetime.date(2023, 1, 1),
+        date=dt.date(2023, 1, 1),
         flag="*",
         payee="payee",
         narration="narration",
@@ -37,7 +37,7 @@ def test_get_last_entry() -> None:
     )
     note = create.note(
         meta={},
-        date=datetime.date(2025, 1, 1),
+        date=dt.date(2025, 1, 1),
         account="Assets",
         comment="a note",
     )
@@ -57,13 +57,13 @@ def test_uptodate_status() -> None:
 
     note = create.note(
         meta={},
-        date=datetime.date(2025, 1, 1),
+        date=dt.date(2025, 1, 1),
         account="Assets",
         comment="a note",
     )
     balance = create.balance(
         meta={},
-        date=datetime.date(2024, 1, 1),
+        date=dt.date(2024, 1, 1),
         account="Assets",
         amount=create.amount("10 EUR"),
     )
