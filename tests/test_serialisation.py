@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -52,7 +52,7 @@ def _posting(json_posting: object) -> Posting:
 def test_serialise_txn() -> None:
     txn = create.transaction(
         {},
-        datetime.date(2017, 12, 12),
+        dt.date(2017, 12, 12),
         "*",
         "Test3",
         "asdfasd",
@@ -108,7 +108,7 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
             "reference": "00123",
             "numeric-string": "10.10",
         },
-        datetime.date(2017, 12, 12),
+        dt.date(2017, 12, 12),
         "*",
         "Test3",
         "asdfasd",
@@ -303,7 +303,7 @@ def test_deserialise_posting_invalid_amount() -> None:
 def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
     txn = create.transaction(
         {},
-        datetime.date(2017, 12, 12),
+        dt.date(2017, 12, 12),
         "*",
         "Test3",
         "asdfasd",
@@ -324,7 +324,7 @@ def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
 def test_serialise_balance() -> None:
     bal = create.balance(
         meta={},
-        date=datetime.date(2019, 9, 17),
+        date=dt.date(2019, 9, 17),
         account="Assets:ETrade:Cash",
         amount=create.amount("0.1234567891011121314151617 CHF"),
     )
@@ -366,7 +366,7 @@ def test_deserialise() -> None:
 
     txn = create.transaction(
         {},
-        datetime.date(2017, 12, 12),
+        dt.date(2017, 12, 12),
         "*",
         "Test3",
         "asdfasd",
@@ -399,7 +399,7 @@ def test_deserialise_balance() -> None:
     }
     bal = create.balance(
         meta={},
-        date=datetime.date(2017, 12, 12),
+        date=dt.date(2017, 12, 12),
         account="Assets:ETrade:Cash",
         amount="100 USD",
     )
@@ -416,7 +416,7 @@ def test_deserialise_note() -> None:
     }
     note = create.note(
         meta={},
-        date=datetime.date(2017, 12, 12),
+        date=dt.date(2017, 12, 12),
         account="Assets:ETrade:Cash",
         comment="This is some comment or note",
     )

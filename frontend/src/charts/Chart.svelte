@@ -91,7 +91,7 @@
       <HierarchyContainer {chart} {width} />
     {:else if chart.type === "linechart"}
       <LineChart {chart} {width} />
-    {:else if chart.type === "scatterplot"}
+    {:else}
       <ScatterPlot {chart} {width} />
     {/if}
   {/if}

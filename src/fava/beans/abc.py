@@ -10,7 +10,7 @@ from beancount.core import data
 from beancount.core import position
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Mapping
     from collections.abc import Sequence
     from decimal import Decimal
@@ -19,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans import protocols
 
     MetaValue: TypeAlias = (
-        str | int | bool | Decimal | datetime.date | protocols.Amount
+        str | int | bool | Decimal | dt.date | protocols.Amount
     )
     Meta: TypeAlias = Mapping[str, MetaValue]
     TagsOrLinks: TypeAlias = set[str] | frozenset[str]
@@ -85,7 +85,7 @@ class Directive(ABC):
 
     @property
     @abstractmethod
-    def date(self) -> datetime.date:
+    def date(self) -> dt.date:
         """Metadata of the directive."""
 
     @property

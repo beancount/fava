@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -82,7 +82,7 @@ def test_child_account_tester() -> None:
 
 
 def test_hash_entry() -> None:
-    date = datetime.date(2022, 4, 2)
+    date = dt.date(2022, 4, 2)
     note = create.note(
         {"filename": str(Path(__file__)), "lineno": 1},
         date,
@@ -95,7 +95,7 @@ def test_hash_entry() -> None:
 
 
 def test_get_position() -> None:
-    date = datetime.date(2022, 4, 2)
+    date = dt.date(2022, 4, 2)
     path = str(Path(__file__))
     note = create.note(
         {"filename": path, "lineno": 1}, date, "Assets:Cash", "a note"
@@ -111,7 +111,7 @@ def test_get_position() -> None:
 
 
 def test_replace() -> None:
-    date = datetime.date(2022, 4, 2)
+    date = dt.date(2022, 4, 2)
     note = create.note(
         {"filename": str(Path(__file__)), "lineno": 1},
         date,
@@ -171,26 +171,26 @@ def test_fava_price_map(load_doc_entries: Sequence[Directive]) -> None:
     assert prices.get_price(("SAME", "SAME")) == Decimal(1)
     usd_chf = ("USD", "CHF")
     assert prices.get_all_prices(usd_chf) == [
-        (datetime.date(2020, 12, 18), Decimal("0.88")),
-        (datetime.date(2022, 12, 19), Decimal("0.9288")),
+        (dt.date(2020, 12, 18), Decimal("0.88")),
+        (dt.date(2022, 12, 19), Decimal("0.9288")),
     ]
 
     assert prices.get_all_prices(("CHF", "USD")) == [
-        (datetime.date(2020, 12, 18), Decimal(1) / Decimal("0.88")),
-        (datetime.date(2022, 12, 19), Decimal(1) / Decimal("0.9288")),
+        (dt.date(2020, 12, 18), Decimal(1) / Decimal("0.88")),
+        (dt.date(2022, 12, 19), Decimal(1) / Decimal("0.9288")),
     ]
 
     assert prices.get_price_point(usd_chf) == (
-        datetime.date(2022, 12, 19),
+        dt.date(2022, 12, 19),
         Decimal("0.9288"),
     )
     assert prices.get_price(usd_chf) == Decimal("0.9288")
-    assert prices.get_price(usd_chf, datetime.date(2022, 12, 18)) == Decimal(
+    assert prices.get_price(usd_chf, dt.date(2022, 12, 18)) == Decimal(
         "0.88",
     )
-    assert prices.get_price(usd_chf, datetime.date(2022, 12, 19)) == Decimal(
+    assert prices.get_price(usd_chf, dt.date(2022, 12, 19)) == Decimal(
         "0.9288",
     )
-    assert prices.get_price(usd_chf, datetime.date(2022, 12, 20)) == Decimal(
+    assert prices.get_price(usd_chf, dt.date(2022, 12, 20)) == Decimal(
         "0.9288",
     )

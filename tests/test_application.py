@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from http import HTTPStatus
 from importlib.metadata import version
 from pathlib import Path
@@ -211,7 +211,7 @@ def test_statement_download(
 
     path = Path(__file__)
     by_account = path.parent.parent / "found_by_account"
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     txn = create.transaction(
         {
             "filename": str(path),

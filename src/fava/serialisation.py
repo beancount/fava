@@ -10,7 +10,7 @@ This is not intended to work well enough for full roundtrips yet.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from collections.abc import Mapping
 from decimal import Decimal
 from functools import singledispatch
@@ -54,7 +54,7 @@ SerialisableValue = (
     abc.Directive
     | amount.Amount
     | protocols.Amount
-    | datetime.date
+    | dt.date
     | str
     | int
     | Decimal

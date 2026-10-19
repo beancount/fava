@@ -7,7 +7,7 @@ from typing import Protocol
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from decimal import Decimal
 
 
@@ -15,7 +15,7 @@ class ValueType(Protocol):
     """A value of a custom directive, with its type."""
 
     @property
-    def value(self) -> str | bool | datetime.date | Decimal | Amount:
+    def value(self) -> str | bool | dt.date | Decimal | Amount:
         """The value."""
 
     @property
@@ -52,7 +52,7 @@ class Cost(Protocol):
         """Currency of the cost."""
 
     @property
-    def date(self) -> datetime.date:
+    def date(self) -> dt.date:
         """Date of the cost."""
 
     @property
