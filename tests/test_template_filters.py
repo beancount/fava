@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from fava.template_filters import basename
 from fava.template_filters import format_currency
 from fava.template_filters import passthrough_numbers
+from fava.template_filters import price_base
 from fava.template_filters import replace_numbers
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -27,6 +28,15 @@ def test_format_currency(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         assert format_currency(Decimal("2.12")) == "2.12"
+
+
+def test_price_base() -> None:
+    assert price_base(Decimal(2)) == Decimal(1)
+    assert price_base(Decimal("0.5")) == Decimal(1)
+    assert price_base(Decimal("0.2")) == Decimal(10)
+    assert price_base(Decimal("0.02")) == Decimal(100)
+    assert price_base(Decimal("0.000123")) == Decimal(10000)
+    assert price_base(Decimal()) == Decimal(1)
 
 
 def test_basename() -> None:
