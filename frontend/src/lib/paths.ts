@@ -10,10 +10,7 @@ export function split(path: string): [string, string] {
   // Handle both Windows and unix style path separators and a mixture of them
   const lastIndexOfSlash = path.lastIndexOf("/", path.length - 2);
   const lastIndexOfBackslash = path.lastIndexOf("\\", path.length - 2);
-  const lastIndex =
-    lastIndexOfSlash > lastIndexOfBackslash
-      ? lastIndexOfSlash
-      : lastIndexOfBackslash;
+  const lastIndex = Math.max(lastIndexOfSlash, lastIndexOfBackslash);
   // This could maybe happen on Windows if the path name is something like C:\
   if (lastIndex < 0) {
     return ["", path];

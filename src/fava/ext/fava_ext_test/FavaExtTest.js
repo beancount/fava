@@ -18,7 +18,7 @@ export default {
     if (fetchedDataElement) {
       ctx.api.get("example_data", {}).then((d) => {
         console.log("fetched data:", d);
-        fetchedDataElement.innerText = `fetched data: ${JSON.stringify(d)}`;
+        fetchedDataElement.textContent = `fetched data: ${JSON.stringify(d)}`;
       });
     }
 

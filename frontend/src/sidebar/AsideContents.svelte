@@ -2,7 +2,7 @@
   import { url_for } from "../helpers.ts";
   import { _ } from "../i18n.ts";
   import {
-    keyboardShortcut,
+    keyboard_shortcut,
     show_keyboard_shortcuts,
   } from "../keyboard-shortcuts.ts";
   import { errors, extensions, ledger_data } from "../stores/index.ts";
@@ -62,7 +62,7 @@
       href="#add-transaction"
       class="secondary add-transaction"
       title={_("Add Journal Entry")}
-      {@attach keyboardShortcut("n")}
+      {@attach keyboard_shortcut("n")}
     >
       +
     </a>
@@ -84,7 +84,7 @@
       class="secondary link"
       title={_("Show keyboard shortcuts")}
       onclick={show_keyboard_shortcuts}
-      {@attach keyboardShortcut("?")}
+      {@attach keyboard_shortcut("?")}
     >
       ?
     </button>

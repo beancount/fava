@@ -2,7 +2,7 @@
   import { attach_editor } from "../../codemirror/dom.ts";
   import type { CodemirrorBql } from "../../codemirror/types.ts";
   import { _ } from "../../i18n.ts";
-  import { keyboardShortcut } from "../../keyboard-shortcuts.ts";
+  import { keyboard_shortcut } from "../../keyboard-shortcuts.ts";
 
   interface Props {
     value: string;
@@ -36,7 +36,7 @@
   }}
 >
   <div {@attach attach_editor(editor)}></div>
-  <button type="submit" {@attach keyboardShortcut("Control+Enter")}>
+  <button type="submit" {@attach keyboard_shortcut("Control+Enter")}>
     {_("Submit")}
   </button>
 </form>

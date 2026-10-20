@@ -3,7 +3,7 @@
 
   import { url_for } from "../helpers.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
   import { pathname } from "../stores/url.ts";
 
   interface Props {
@@ -27,7 +27,12 @@
 </script>
 
 <li>
-  <a class:selected {href} {@attach keyboardShortcut(key)} data-remote={remote}>
+  <a
+    class:selected
+    {href}
+    {@attach keyboard_shortcut(key)}
+    data-remote={remote}
+  >
     {name}
     {#if bubble && bubble[0] > 0}
       <span class="bubble" class:error={bubble[1] === "error"}>

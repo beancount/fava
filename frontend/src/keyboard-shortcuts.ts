@@ -54,9 +54,10 @@ type KeyCombo =
   | `${"d" | "f" | "g" | "s" | "t"} ${Letter}`;
 /** A handler function or an element to click. */
 type KeyboardShortcutAction = ((event: KeyboardEvent) => void) | HTMLElement;
-const keyboardShortcuts = new Map<string, KeyboardShortcutAction>();
-// The last typed character to check for sequences of two keys.
-let lastChar = "";
+/** The currently active keyboard shortcuts */
+const SHORTCUTS = new Map<string, KeyboardShortcutAction>();
+/** The last typed character to check for sequences of two keys. */
+let last_char = "";
 
 /**
  * Normalise an event key, including modifiers, e.g. `Control+Enter`
@@ -85,10 +86,9 @@ function keydown(event: KeyboardEvent): void {
     // ignore events in editable elements.
     return;
   }
-  const eventKey = normalise_key(event);
-  const lastTwoKeys = `${lastChar} ${eventKey}`;
-  const handler =
-    keyboardShortcuts.get(lastTwoKeys) ?? keyboardShortcuts.get(eventKey);
+  const event_key = normalise_key(event);
+  const last_two_keys = `${last_char} ${event_key}`;
+  const handler = SHORTCUTS.get(last_two_keys) ?? SHORTCUTS.get(event_key);
   if (handler) {
     if (handler instanceof HTMLInputElement) {
       event.preventDefault();
@@ -101,7 +101,7 @@ function keydown(event: KeyboardEvent): void {
     }
   }
   if (event.key !== "Alt" && event.key !== "Control" && event.key !== "Shift") {
-    lastChar = eventKey;
+    last_char = event_key;
   }
 }
 
@@ -110,12 +110,12 @@ export type KeySpec =
   | KeyCombo
   | { key: KeyCombo; mac?: KeyCombo; note?: string };
 
-const isMac =
-  // This still seems to be the least bad way to check whether we are running on macOS or iOS
-
+// This still seems to be the least bad way to check whether we are running on macOS or iOS
+const is_mac =
   navigator.platform.startsWith("Mac") || navigator.platform === "iPhone";
 
-export const modKey = isMac ? "Cmd" : "Ctrl";
+/** The modifier key for the current platform - `Cmd` on Mac or iOS, `Ctrl` otherwise */
+export const MOD_KEY = is_mac ? "Cmd" : "Ctrl";
 
 /**
  * Get the keyboard key specifier string for the current platform.
@@ -125,7 +125,7 @@ function get_key_spec_key(spec: KeySpec): KeyCombo {
   if (typeof spec === "string") {
     return spec;
   }
-  return isMac ? (spec.mac ?? spec.key) : spec.key;
+  return is_mac ? (spec.mac ?? spec.key) : spec.key;
 }
 
 /**
@@ -136,7 +136,7 @@ function get_key_spec_description(spec: KeySpec): string {
   if (typeof spec === "string") {
     return spec;
   }
-  const key = isMac ? (spec.mac ?? spec.key) : spec.key;
+  const key = is_mac ? (spec.mac ?? spec.key) : spec.key;
   return spec.note != null ? `${key} - ${spec.note}` : key;
 }
 
@@ -152,12 +152,12 @@ function bind_key(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
   if (sequence.length > 2) {
     console.error("Only key sequences of length <=2 are supported: ", key);
   }
-  if (keyboardShortcuts.has(key)) {
+  if (SHORTCUTS.has(key)) {
     console.warn("Duplicate keyboard shortcut: ", key, handler);
   }
-  keyboardShortcuts.set(key, handler);
+  SHORTCUTS.set(key, handler);
   return () => {
-    keyboardShortcuts.delete(key);
+    SHORTCUTS.delete(key);
   };
 }
 
@@ -168,7 +168,7 @@ function bind_key(spec: KeySpec, handler: KeyboardShortcutAction): () => void {
  * This listener will focus the given node if it is an <input> element and
  * trigger a click on it otherwise.
  */
-export const keyboardShortcut = (
+export const keyboard_shortcut = (
   spec?: KeySpec,
 ): Attachment<HTMLElement> | null => {
   if (spec == null) {

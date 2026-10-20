@@ -76,7 +76,7 @@
   }
 
   /* There's three number columns (units, cost, price).
- * They should add about to about half of the width */
+  * They should add about to about half of the width */
   p > .num {
     width: min(calc(15%), 20rem);
     border-left: 1px solid var(--table-border);

@@ -60,7 +60,7 @@
           ?.querySelector(".datecell")
           ?.querySelector("a");
         if (date_link != null) {
-          const entry_date = date_link.innerText;
+          const entry_date = date_link.textContent;
           const hash = new URL(date_link.href).hash;
           if (hash.startsWith("#context-")) {
             const entry_hash = hash.slice(9);

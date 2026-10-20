@@ -26,7 +26,7 @@ import type { ParsedFavaChart } from "./index.ts";
  * An account tree - data provided with a fava.core.tree.SerialisedTreeNode.
  *
  * Used in the hierarchy charts but also in e.g. the tree-tables.
- * */
+ */
 export type AccountTreeNode = TreeNode<{
   readonly account: string;
   readonly balance: Record<string, number>;

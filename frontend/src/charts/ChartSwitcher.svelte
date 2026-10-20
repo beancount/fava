@@ -1,7 +1,7 @@
 <script lang="ts">
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
   import { last_active_chart_name } from "../stores/chart.ts";
   import { show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
@@ -20,14 +20,14 @@
   );
 
   // Get the shortcut key for jumping to the previous chart.
-  let shortcutPrevious = $derived((index: number): KeySpec | undefined => {
+  let shortcut_previous = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current - 1 + charts.length) % charts.length
       ? { key: "C", note: _("Previous") }
       : undefined;
   });
   // Get the shortcut key for jumping to the next chart.
-  let shortcutNext = $derived((index: number): KeySpec | undefined => {
+  let shortcut_next = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current + 1 + charts.length) % charts.length
       ? { key: "c", note: _("Next") }
@@ -48,8 +48,8 @@
         onclick={() => {
           $last_active_chart_name = chart.label;
         }}
-        {@attach keyboardShortcut(shortcutPrevious(index))}
-        {@attach keyboardShortcut(shortcutNext(index))}
+        {@attach keyboard_shortcut(shortcut_previous(index))}
+        {@attach keyboard_shortcut(shortcut_next(index))}
       >
         {chart.label}
       </button>

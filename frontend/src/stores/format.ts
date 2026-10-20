@@ -7,7 +7,7 @@ import {
   formatter_context,
   get_date_format,
   locale_formatter,
-  replaceNumbers,
+  replace_numbers,
 } from "../format.ts";
 import { fiscal_year_end, locale } from "./fava_options.ts";
 import { incognito, precisions } from "./index.ts";
@@ -18,7 +18,7 @@ const short_format = format(".3s");
 /** Render a number to a short string, for example for the y-axis of a line chart. */
 export const short = derived(incognito, ($incognito) =>
   $incognito
-    ? (n: NumberValue) => replaceNumbers(short_format(n))
+    ? (n: NumberValue) => replace_numbers(short_format(n))
     : short_format,
 );
 
