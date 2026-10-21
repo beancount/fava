@@ -1,0 +1,33 @@
+# Dev-only image for testing the keyboard-navigation branch, built from this
+# local checkout rather than the published `fava` package. Not for
+# production use - runs against a bundled example ledger, not real data.
+# See deploy/README.dev.md for how this is run (standalone, on a different
+# port from the production instance in the money repo's docker-compose).
+
+FROM node:24-slim AS frontend-build
+WORKDIR /fava
+COPY . .
+RUN cd frontend && npm install --no-progress && npm run build
+
+FROM python:3.12-slim AS runtime
+WORKDIR /fava
+COPY --from=frontend-build /fava /fava
+# hatchling's build hook (hatch_build.py) recompiles the frontend if any
+# source file is newer than src/fava/static/app.js - it already isn't
+# (just built above), but `touch` makes that deterministic rather than
+# relying on COPY's mtime-preservation behaviour, and this stage has no
+# npm to fall back on if the hook's check went the other way.
+# hatch-vcs needs `git describe` to derive a version, but this stage has no
+# git binary - pin a throwaway version instead rather than installing git
+# just for that (this image is never published).
+ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0.dev0
+# pyproject.toml only pins hatchling>=1.27, and a newer hatchling release
+# turned out to be a breaking change for this repo's hatch_build.py
+# (BuildHookInterface[BuilderConfig] - "Too few arguments", a generic-type
+# signature change) - pin to the version pyproject.toml itself states as
+# its floor, which is compatible, rather than whatever's newest today.
+RUN pip install --no-cache-dir "hatchling==1.27.0" "hatch-vcs>=0.4" "Babel>=2.7,<3"
+RUN touch src/fava/static/app.js && pip install --no-cache-dir --no-build-isolation .
+
+EXPOSE 5000
+CMD ["fava", "--host", "0.0.0.0", "--port", "5000", "tests/data/long-example.beancount"]
