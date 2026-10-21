@@ -695,7 +695,7 @@ provides-extras = ["excel"]
 [package.metadata.requires-dev]
 dev = [
     { name = "fava", extras = ["excel"] },
-    { name = "hatchling", specifier = ">=1.27,!=1.32.3" },
+    { name = "hatchling", specifier = ">=1.28,!=1.32.3" },
     { name = "mypy", specifier = ">=1.14" },
     { name = "prek" },
     { name = "pytest", specifier = ">=8" },
@@ -723,7 +723,7 @@ test = [
     { name = "typeguard", specifier = ">=4" },
 ]
 types = [
-    { name = "hatchling", specifier = ">=1.27,!=1.32.3" },
+    { name = "hatchling", specifier = ">=1.28,!=1.32.3" },
     { name = "mypy", specifier = ">=1.14" },
     { name = "pytest", specifier = ">=8" },
     { name = "ty", specifier = ">=0.0.2" },

@@ -87,7 +87,7 @@ test = [
 ]
 # Type-checking with mypy or ty.
 types = [
-  "hatchling>=1.27,!=1.32.3", # for the build hook in hatch_build.py
+  "hatchling>=1.28,!=1.32.3", # for the build hook in hatch_build.py
   "mypy>=1.14",
   "pytest>=8",
   "ty>=0.0.2",
@@ -99,7 +99,7 @@ types = [
 requires = [
   "Babel>=2.7,<3",
   "hatch-vcs>=0.4",
-  "hatchling>=1.27,!=1.32.3",
+  "hatchling>=1.28,!=1.32.3",
   "typing-extensions>=4.5; python_version<\"3.12\""
 ]
 build-backend = "hatchling.build"
@@ -151,6 +151,7 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fava"]
+sbom-files = ["frontend/fava-frontend.cdx.json"]
 
 [tool.babel]
 [[tool.babel.mappings]]
