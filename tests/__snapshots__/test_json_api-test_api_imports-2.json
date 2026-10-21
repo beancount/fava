@@ -48,7 +48,6 @@
         "flag": "*",
         "links": [],
         "meta": {
-          "__tolerances__": { "EUR": "0.005" },
           "filename": "TEST_DATA_DIR/import.beancount",
           "lineno": 9
         },

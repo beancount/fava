@@ -222,10 +222,15 @@ def _serialise_posting(o: abc.Posting) -> Posting:
 
 @serialise.register
 def _(o: abc.Transaction) -> Transaction:
+    # beancount's inferred-tolerance metadata carries the MISSING sentinel as
+    # a dict key, which the JSON encoder cannot serialise - drop it (#1510).
+    meta = {
+        key: value for key, value in o.meta.items() if key != "__tolerances__"
+    }
     return Transaction(
         entry_hash=hash_entry(o),
         date=o.date,
-        meta=_serialise_dict(o.meta),
+        meta=_serialise_dict(meta),
         flag=o.flag,
         narration=o.narration,
         postings=list(map(_serialise_posting, o.postings)),
