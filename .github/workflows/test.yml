@@ -71,8 +71,8 @@ jobs:
           persist-credentials: false
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
         with:
-          deno-version: "v2.8.x"
-      - run: cd frontend && deno install
+          deno-version: "v2.9.x"
+      - run: cd frontend && deno install --no-lock
       - run: cd frontend && deno lint
       - run: cd frontend && deno run build
   lint:

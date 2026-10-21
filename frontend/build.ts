@@ -32,7 +32,7 @@ const lightningcss_plugin: Plugin = {
         include: Features.LightDark,
       });
       return {
-        contents: code,
+        contents: new Uint8Array(code),
         loader: "css",
         resolveDir: dirname(path),
         warnings: warnings.map((warning) => ({ text: warning.message })),
