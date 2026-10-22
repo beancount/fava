@@ -130,9 +130,6 @@ class FavaBQLShell(BQLShell):
         print(self.noop.__doc__, file=self.outfile)
 
     on_Reload = noop  # noqa: N815
-    do_exit = noop  # ty:ignore[invalid-method-override]
-    do_quit = noop  # ty:ignore[invalid-method-override]
-    do_EOF = noop  # noqa: N815  # ty:ignore[invalid-method-override]
 
     def on_Select(self, statement: str) -> Cursor:  # noqa: D102, N802
         return self.context.execute(statement)
@@ -158,6 +155,25 @@ class FavaBQLShell(BQLShell):
 
 
 FavaBQLShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
+
+#: The shell commands that can be used in Fava. All other commands are
+#: replaced with a no-op.
+ALLOWED_SHELL_COMMANDS = frozenset(
+    {
+        "describe",
+        "errors",
+        "explain",
+        "help",
+        "parse",
+        "reload",
+        "run",
+        "tables",
+    }
+)
+
+for _name in dir(FavaBQLShell):
+    if _name.startswith("do_") and _name[3:] not in ALLOWED_SHELL_COMMANDS:
+        setattr(FavaBQLShell, _name, FavaBQLShell.noop)
 
 
 class QueryShell(FavaModule):
