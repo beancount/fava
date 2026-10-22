@@ -462,8 +462,7 @@ export class Custom extends EntryBase<"Custom"> {
     );
 }
 
-const TAGS_RE = /(?:^|\s)#([A-Za-z0-9\-_/.]+)/g;
-const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
+const TAG_OR_LINK_RE = /^([#^])([A-Za-z0-9\-_/.]+)$/;
 
 /** A transaction. */
 export class Transaction extends EntryBase<"Transaction"> {
@@ -521,23 +520,29 @@ export class Transaction extends EntryBase<"Transaction"> {
     return val;
   }
 
-  /** Set narration, tags, and links from a single string. */
+  /** Set narration and trailing tags and links from a single string. */
   set_narration_tags_links(value: string): Transaction {
-    const tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
-    const links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
-    const narration = value
-      .replaceAll(TAGS_RE, "")
-      .replaceAll(LINKS_RE, "")
-      .trim();
+    const tags: string[] = [];
+    const links: string[] = [];
+    let narration_end = value.length;
+    const tokens = [...value.matchAll(/\S+/g)];
+    for (const token of tokens.reverse()) {
+      const match = TAG_OR_LINK_RE.exec(token[0]);
+      if (!match) {
+        break;
+      }
+      (match[1] === "#" ? tags : links).push(match[2] ?? "");
+      narration_end = token.index;
+    }
     return new Transaction(
       this.meta,
       this.date,
       this.entry_hash,
       this.flag,
       this.payee,
-      narration,
-      tags,
-      links,
+      value.slice(0, narration_end).trim(),
+      tags.reverse(),
+      links.reverse(),
       this.postings,
     );
   }
