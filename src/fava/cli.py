@@ -44,6 +44,23 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(all_names))
 
 
+def _trusted_hosts(
+    host: str, trusted_hosts: tuple[str, ...]
+) -> list[str] | None:
+    """Get the hosts to allow in the Host header (None to allow all).
+
+    If listening on localhost, only allow requests for localhost by default
+    to protect against DNS rebinding attacks.
+    """
+    if "*" in trusted_hosts:
+        return None
+    if trusted_hosts:
+        return list(trusted_hosts)
+    if host in {"localhost", "127.0.0.1"}:
+        return ["localhost", "127.0.0.1"]
+    return None
+
+
 @click.command(context_settings={"auto_envvar_prefix": "FAVA"})
 @click.argument(
     "filenames",
@@ -67,6 +84,17 @@ def _add_env_filenames(filenames: tuple[str, ...]) -> tuple[str, ...]:
     show_default=True,
     metavar="<host>",
     help="The host to listen on.",
+)
+@click.option(
+    "--trusted-host",
+    type=str,
+    multiple=True,
+    metavar="<host>",
+    help=(
+        "A host name that requests can be made for (can be given multiple"
+        " times, '*' to allow all). Defaults to localhost when listening on"
+        " localhost."
+    ),
 )
 @click.option("--prefix", type=str, help="Set an URL prefix.")
 @click.option(
@@ -99,6 +127,7 @@ def main(  # noqa: PLR0913
     filenames: tuple[str, ...] = (),
     port: int = 5000,
     host: str = "localhost",
+    trusted_host: tuple[str, ...] = (),
     prefix: str | None = None,
     incognito: bool = False,
     read_only: bool = False,
@@ -130,6 +159,7 @@ def main(  # noqa: PLR0913
         read_only=read_only,
         poll_watcher=poll_watcher,
     )
+    app.config["TRUSTED_HOSTS"] = _trusted_hosts(host, trusted_host)
 
     if prefix:
         from werkzeug.middleware.dispatcher import DispatcherMiddleware

@@ -311,6 +311,18 @@ def test_read_only_mode(test_data_dir: Path) -> None:
         assert response.status_code == HTTPStatus.UNAUTHORIZED.value
 
 
+def test_trusted_hosts(test_data_dir: Path) -> None:
+    """Requests for other hosts return 400 if TRUSTED_HOSTS is set."""
+    app = create_app([test_data_dir / "example.beancount"])
+    app.config["TRUSTED_HOSTS"] = ["localhost"]
+    test_client = app.test_client()
+
+    response = test_client.get("/", headers={"Host": "localhost:5000"})
+    assert response.status_code == HTTPStatus.FOUND.value
+    response = test_client.get("/", headers={"Host": "evil.example:5000"})
+    assert response.status_code == HTTPStatus.BAD_REQUEST.value
+
+
 def test_download_journal(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,

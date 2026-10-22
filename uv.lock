@@ -678,8 +678,8 @@ requires-dist = [
     { name = "beanquery", specifier = ">=0.1,<0.3" },
     { name = "cheroot", specifier = ">=8,<12" },
     { name = "click", specifier = ">=7,<9" },
-    { name = "flask", specifier = ">=2.2,<4" },
-    { name = "flask-babel", specifier = ">=3,<5" },
+    { name = "flask", specifier = ">=3.1,<4" },
+    { name = "flask-babel", specifier = ">=4,<5" },
     { name = "jinja2", specifier = ">=3,<4" },
     { name = "markdown-it-py", specifier = ">=3,<5" },
     { name = "msgspec", specifier = ">=0.19,<1" },
@@ -688,7 +688,7 @@ requires-dist = [
     { name = "pyexcel-xlsx", marker = "extra == 'excel'", specifier = ">=0.6" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.5" },
     { name = "watchfiles", specifier = ">=0.20.0" },
-    { name = "werkzeug", specifier = ">=2.2,<4" },
+    { name = "werkzeug", specifier = ">=3.1,<4" },
 ]
 provides-extras = ["excel"]
 
