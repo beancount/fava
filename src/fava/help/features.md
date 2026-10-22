@@ -46,8 +46,8 @@ form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
 `insert-entry` option. If you want to set a bookmark to this form, adding
 `#add-transaction` to any URL in Fava will open it on load. Tags and links can
-be added in the form by adding them (separated by spaces) to the narration
-field, e.g., `narration #tag ^somelink`.
+be added in the form by adding them (separated by spaces) to the end of the
+narration field, e.g., `narration #tag ^somelink`.
 
 ## Up-to-date indicators
 
