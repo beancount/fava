@@ -81,7 +81,7 @@ async function write_sbom(result: BuildResult<{ metafile: true }>) {
     }
     const name = dir.slice("node_modules/".length);
     const { version, license } = res.value;
-    const purl = `pkg:npm/${name.replace("@", "%40")}@${version}`;
+    const purl = `pkg:npm/${name.replaceAll("@", "%40")}@${version}`;
     return {
       type: "library",
       "bom-ref": purl,
