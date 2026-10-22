@@ -1,13 +1,18 @@
 [
   {
-    "message": "Invalid reference to inactive account 'Assets:Cash'",
+    "message": "Invalid reference to inactive account Assets:Cash.",
     "source": { "filename": "TEST_DATA_DIR/errors.beancount", "lineno": 16 },
-    "type": "ValidationError"
+    "type": "UroError"
   },
   {
-    "message": "Invalid reference to inactive account 'Expenses:Stuff'",
+    "message": "Invalid reference to inactive account Expenses:Stuff.",
     "source": { "filename": "TEST_DATA_DIR/errors.beancount", "lineno": 16 },
-    "type": "ValidationError"
+    "type": "UroError"
+  },
+  {
+    "message": "Invalid reference to inactive account Expenses:Stuff.",
+    "source": { "filename": "TEST_DATA_DIR/errors.beancount", "lineno": 16 },
+    "type": "UroError"
   },
   {
     "message": "No operating currency specified. Please add one to your beancount file.",
@@ -15,8 +20,8 @@
     "type": "FavaError"
   },
   {
-    "message": "Not enough lots to reduce \"-1.0 ACME {}\": 0.1 ACME {80.00 USD, 2019-01-01}",
-    "source": { "filename": "TEST_DATA_DIR/errors.beancount", "lineno": 11 },
-    "type": "AmbiguousMatchError"
+    "message": "Not enough lots in inventory to reduce position",
+    "source": { "filename": "TEST_DATA_DIR/errors.beancount", "lineno": 12 },
+    "type": "UroError"
   }
 ]

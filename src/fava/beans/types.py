@@ -6,8 +6,9 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 from typing import TypedDict
 
+from beancount.core.data import BeancountError
+
 from fava.beans.abc import Directive
-from fava.helpers import BeancountError
 
 if TYPE_CHECKING:  # pragma: no cover
     from decimal import Decimal
