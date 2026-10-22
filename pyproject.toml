@@ -106,6 +106,7 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7 days"
+exclude-newer-package = { certifi = false }
 python-preference = "system"
 # Pin some lower bounds for transitive dependencies in the old_deps tests
 # This a basically determined by increasing them until getting a combination that runs.
