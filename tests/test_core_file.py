@@ -17,6 +17,7 @@ from fava.beans.abc import Query
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
+from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import _file_newline_character
@@ -261,6 +262,15 @@ def test_insert_metadata_in_file_multiline_string(tmp_path: Path) -> None:
         '    metadata: "test1"\n'
         "    Expenses:Food:Restaurant                          24.84 USD\n"
     )
+
+
+def test_insert_metadata_in_file_escaped(tmp_path: Path) -> None:
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text('2016-02-26 note Assets:Cash "note"\n')
+    value = 'Invoice "Q3" \\ 2016.pdf'
+    insert_metadata_in_file(samplefile, 1, 4, "document", value)
+    entries, _, _ = load_string(samplefile.read_text("utf-8"))
+    assert entries[0].meta["document"] == value
 
 
 def test_find_entry_lines() -> None:

@@ -310,10 +310,7 @@ def insert_metadata_in_file(
     key: str,
     value: str,
 ) -> None:
-    """Insert the specified metadata in the file below lineno.
-
-    Takes the whitespace in front of the line that lineno into account.
-    """
+    """Insert the specified metadata in the file below lineno."""
     with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
@@ -323,7 +320,8 @@ def insert_metadata_in_file(
         in_string = _ends_in_string(contents[lineno], in_string=True)
         lineno += 1
 
-    contents.insert(lineno, f'{" " * indent}{key}: "{value}"\n')
+    escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+    contents.insert(lineno, f'{" " * indent}{key}: "{escaped}"\n')
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
         file.write("".join(contents))
@@ -497,7 +495,7 @@ def insert_entry(
 
     if lineno is None:
         # Appending
-        contents += "\n" + content
+        contents.append("\n" + content)
     else:
         contents.insert(lineno, content + "\n")
 
