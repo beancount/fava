@@ -51,6 +51,14 @@ Use this option to specify a default file for the editor to open. This option
 may optionally take a value of a filename to be the default. If you don't
 provide a filename, the file this custom option is in is used.
 
+## custom-css
+
+Default: Not set
+
+Path to a CSS file, relative to the Beancount file, that is loaded after Fava's
+own styles. Use it to adjust the theme (e.g. contrast, font size) or to visually
+distinguish ledgers when running Fava with several files.
+
 ## default-page
 
 Default: `income_statement/`
