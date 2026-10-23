@@ -249,6 +249,20 @@ def test_insert_metadata_in_file(tmp_path: Path) -> None:
         """)
 
 
+def test_insert_metadata_in_file_multiline_string(tmp_path: Path) -> None:
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(
+        '2016-02-26 * "Uncle Boons" "Eating\n\nout \\" ; alone"\n'
+        "    Expenses:Food:Restaurant                          24.84 USD\n"
+    )
+    insert_metadata_in_file(samplefile, 1, 4, "metadata", "test1")
+    assert samplefile.read_text("utf-8") == (
+        '2016-02-26 * "Uncle Boons" "Eating\n\nout \\" ; alone"\n'
+        '    metadata: "test1"\n'
+        "    Expenses:Food:Restaurant                          24.84 USD\n"
+    )
+
+
 def test_find_entry_lines() -> None:
     file_content = dedent("""\
         2016-02-26 * "Uncle Boons" "Eating out alone"

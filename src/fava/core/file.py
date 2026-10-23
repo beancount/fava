@@ -317,10 +317,26 @@ def insert_metadata_in_file(
     with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
+    # Skip to the end of a multiline string.
+    in_string = _ends_in_string(contents[lineno - 1], in_string=False)
+    while in_string:
+        in_string = _ends_in_string(contents[lineno], in_string=True)
+        lineno += 1
+
     contents.insert(lineno, f'{" " * indent}{key}: "{value}"\n')
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
         file.write("".join(contents))
+
+
+def _ends_in_string(line: str, *, in_string: bool) -> bool:
+    """Whether the line ends inside a (multiline) string."""
+    for part in re.findall(r'\\.|[";]', line):
+        if part == '"':
+            in_string = not in_string
+        elif part == ";" and not in_string:
+            break
+    return in_string
 
 
 def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
@@ -333,11 +349,7 @@ def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
     entry_lines = [lines[lineno]]
     in_string = False
     while True:
-        for part in re.findall(r'\\.|[";]', entry_lines[-1]):
-            if part == '"':
-                in_string = not in_string
-            elif part == ";" and not in_string:
-                break
+        in_string = _ends_in_string(entry_lines[-1], in_string=in_string)
         lineno += 1
         try:
             line = lines[lineno]
