@@ -32,6 +32,7 @@ from fava.core.file import insert_metadata_in_file
 from fava.core.file import InvalidUnicodeError
 from fava.core.file import NonSourceFileError
 from fava.core.file import save_entry_slice
+from fava.core.file import SourceSlice
 
 if TYPE_CHECKING:  # pragma: no cover
     from .conftest import SnapshotFunc
@@ -82,15 +83,15 @@ def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry_hash = hash_entry(entry)
     path = Path(ledger_in_tmp_path.beancount_file_path)
 
-    slice_string, sha256sum = get_entry_slice(entry)
+    entry_slice = get_entry_slice(entry)
     assert (
-        slice_string
+        entry_slice.slice
         == """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Liabilities:US:Chase:Slate                       -21.70 USD
   Expenses:Food:Restaurant                          21.70 USD"""
     )
     assert (
-        sha256sum
+        entry_slice.sha256sum
         == "d60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477"
     )
 
@@ -99,7 +100,9 @@ def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
   Liabilities:US:Chase:Slate                       -21.70 USD
   Expenses:Food:Restaurant                          21.70 USD
 """
-    ledger_in_tmp_path.file.save_entry_slice(entry_hash, new_slice, sha256sum)
+    ledger_in_tmp_path.file.save_entry_slice(
+        entry_hash, new_slice, entry_slice.sha256sum
+    )
     assert new_slice in path.read_text("utf-8")
 
 
@@ -176,7 +179,7 @@ def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
 def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
 
-    entry_source, sha256sum = get_entry_slice(entry)
+    entry_slice = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = Path(get_position(entry)[0])
@@ -186,9 +189,9 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
         save_entry_slice(entry, new_source, "wrong hash")
     assert filename.read_text("utf-8") == contents
 
-    new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
+    new_sha256sum = save_entry_slice(entry, new_source, entry_slice.sha256sum)
     assert filename.read_text("utf-8") != contents
-    save_entry_slice(entry, entry_source, new_sha256sum)
+    save_entry_slice(entry, entry_slice.slice, new_sha256sum)
     assert filename.read_text("utf-8") == contents
 
     auto_account = ledger_in_tmp_path.all_entries[0]
@@ -200,7 +203,7 @@ def test_delete_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
     entry_hash = hash_entry(entry)
 
-    _entry_source, sha256sum = get_entry_slice(entry)
+    sha256sum = get_entry_slice(entry).sha256sum
     path = Path(get_position(entry)[0])
     contents = path.read_text("utf-8")
 
@@ -341,17 +344,17 @@ def test_multiline_query_slice_roundtrip(tmp_path: Path) -> None:
     ledger = FavaLedger(str(path))
     entry = next(e for e in ledger.all_entries if isinstance(e, Query))
 
-    entry_source, sha256sum = get_entry_slice(entry)
-    assert entry_source == source.rstrip("\n")
+    entry_slice = get_entry_slice(entry)
+    assert entry_slice.slice == source.rstrip("\n")
 
-    replacement = entry_source.replace(
+    replacement = entry_slice.slice.replace(
         "SELECT account", "SELECT date, account"
     )
-    new_sha256sum = save_entry_slice(entry, replacement, sha256sum)
+    new_sha256sum = save_entry_slice(entry, replacement, entry_slice.sha256sum)
     assert path.read_text("utf-8") == (
         prefix + replacement + "\n\n" + following
     )
-    assert get_entry_slice(entry) == (replacement, new_sha256sum)
+    assert get_entry_slice(entry) == SourceSlice(replacement, new_sha256sum)
 
     delete_entry_slice(entry, new_sha256sum)
     assert path.read_text("utf-8") == prefix + following

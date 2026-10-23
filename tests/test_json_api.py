@@ -792,7 +792,7 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
 
     entry = ledger.all_entries[-1]
     entry_hash = hash_entry(entry)
-    _entry_source, sha256sum = get_entry_slice(entry)
+    sha256sum = get_entry_slice(entry).sha256sum
 
     # delete entry
     response = test_client.delete(

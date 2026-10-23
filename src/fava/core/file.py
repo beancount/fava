@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from markupsafe import Markup
+from msgspec import Struct
 
 from fava.beans.abc import Balance
 from fava.beans.abc import Close
@@ -279,7 +280,7 @@ class FileModule(FavaModule):
                 ):
                     continue
                 try:
-                    yield Markup(get_entry_slice(entry)[0] + "\n")  # noqa: S704
+                    yield Markup(get_entry_slice(entry).slice + "\n")  # noqa: S704
                 except (KeyError, FileNotFoundError):
                     yield Markup(  # noqa: S704
                         to_string(
@@ -359,7 +360,16 @@ def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
         entry_lines.append(line)
 
 
-def get_entry_slice(entry: Directive) -> tuple[str, str]:
+class SourceSlice(Struct, frozen=True):
+    """Source slice for an entry."""
+
+    slice: str
+    """The source slice string of this entry."""
+    sha256sum: str
+    """Hash of this slice."""
+
+
+def get_entry_slice(entry: Directive) -> SourceSlice:
     """Get slice of the source file for an entry.
 
     Args:
@@ -379,7 +389,7 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
     entry_lines = find_entry_lines(lines, lineno - 1)
     entry_source = "".join(entry_lines).rstrip("\n")
 
-    return entry_source, _sha256_str(entry_source)
+    return SourceSlice(entry_source, _sha256_str(entry_source))
 
 
 def save_entry_slice(
