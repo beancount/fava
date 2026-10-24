@@ -156,6 +156,7 @@
       ],
       "has_txns": false
     },
+    "key": null,
     "label": "Assets",
     "type": "hierarchy"
   },
@@ -279,6 +280,7 @@
       { "balance": { "USD": "1800.00" }, "date": "2016-05-06" },
       { "balance": { "USD": "0.02" }, "date": "2016-05-09" }
     ],
+    "key": "account_balance",
     "label": "Account Balance",
     "type": "balances"
   },
@@ -597,6 +599,7 @@
         "date": "2016-05-31"
       }
     ],
+    "key": "net_worth",
     "label": "Net Worth",
     "type": "balances"
   },
@@ -1354,6 +1357,7 @@
         "date": "2016-05-31"
       }
     ],
+    "key": null,
     "label": "Income",
     "type": "bar"
   }

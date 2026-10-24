@@ -16,6 +16,9 @@ roundtripped correctly when set by importers.
 Support for Beancount v2-style importer hooks (taking a list of 2-tuples) was
 removed, please adjust your hook functions to take a list of 4-tuples.
 
+The selected chart is now stored in the URL (as the `chart` parameter), so
+links to a report can include the chart to show.
+
 To protect against DNS rebinding attacks, the Fava CLI now only accepts
 requests for `localhost` and `127.0.0.1` when listening on localhost (the
 default). If you run the Fava CLI behind a reverse proxy that passes on the

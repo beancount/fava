@@ -8,6 +8,7 @@ import {
   date,
   decimal,
   object,
+  optional,
   record,
   string,
 } from "../lib/validation.ts";
@@ -72,6 +73,7 @@ export class LineChart {
 
 const balances_validator = object({
   label: string,
+  key: optional(string),
   data: array(object({ date, balance: record(decimal) })),
 });
 
@@ -80,15 +82,21 @@ type ParsedLineChartData = { date: Date; balance: Record<string, number> }[];
 export class ParsedLineChart implements ParsedFavaChart {
   readonly label: string | null;
   readonly data: ParsedLineChartData;
+  readonly key: string | null;
 
-  constructor(label: string | null, data: ParsedLineChartData) {
+  constructor(
+    label: string | null,
+    data: ParsedLineChartData,
+    key: string | null = null,
+  ) {
     this.label = label;
     this.data = data;
+    this.key = key;
   }
 
   static validator: Validator<ParsedLineChart> = (json) =>
     balances_validator(json).map(
-      ({ label, data }) => new ParsedLineChart(label, data),
+      ({ label, data, key }) => new ParsedLineChart(label, data, key),
     );
 
   with_context(): LineChart {
