@@ -67,6 +67,24 @@ export function set_query_param(
   }
 }
 
+/** These URL parameters only change the view of the current page. */
+const view_only_search_param_names = ["chart", "charts", "query_string"];
+const without_view_only_params = (url: URL) => {
+  const copy = new URL(url);
+  for (const name of view_only_search_param_names) {
+    copy.searchParams.delete(name);
+  }
+  return copy.href;
+};
+
+/** Whether the URLs differ only in view-only parameters, which needs no reload. */
+function is_view_only_change(current: URL, target: URL): boolean {
+  if (current.href === target.href) {
+    return false;
+  }
+  return without_view_only_params(current) === without_view_only_params(target);
+}
+
 class LoadingState {
   is_loading: Readable<boolean>;
   #current: Writable<Set<symbol>>;
@@ -251,8 +269,9 @@ class Router {
     const target = new URL(window.location.href);
     const { current } = this;
     if (
-      target.pathname !== current.pathname ||
-      target.search !== current.search
+      (target.pathname !== current.pathname ||
+        target.search !== current.search) &&
+      !is_view_only_change(current, target)
     ) {
       this.#load_url(target).catch(log_error);
     } else {
@@ -337,7 +356,7 @@ class Router {
   navigate(url: string | URL, load = true): void {
     const target =
       url instanceof URL ? url : new URL(url, window.location.href);
-    if (load) {
+    if (load && !is_view_only_change(this.current, target)) {
       this.#load_url(target).catch(log_error);
     } else {
       window.history.pushState(null, "", target);
@@ -379,14 +398,11 @@ class Router {
 
   /**
    * Set the URL parameter and push a history state for it if changed.
-   *
-   * For `chart`, `charts` and `query_string`, this will not load the target URL.
    */
   set_search_param(key: "charts", value: "false" | ""): void;
   set_search_param(
     key:
       | "account"
-      | "chart"
       | "conversion"
       | "filter"
       | "interval"
@@ -398,12 +414,7 @@ class Router {
     const target = new URL(this.current);
     set_query_param(target, key, value);
     if (target.href !== this.current.href) {
-      const load = !(
-        key === "chart" ||
-        key === "charts" ||
-        key === "query_string"
-      );
-      this.navigate(target, load);
+      this.navigate(target);
     }
   }
 

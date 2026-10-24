@@ -2,8 +2,8 @@
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
   import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
-  import { router } from "../router.ts";
-  import { chart_key_param, show_charts } from "../stores/url.ts";
+  import { set_query_param } from "../router.ts";
+  import { chart_key_param, current_url, show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
   import { chart_context } from "./context.ts";
@@ -20,6 +20,13 @@
   let active_chart = $derived(
     charts.find((c) => chart_key(c) === $chart_key_param) ?? charts[0],
   );
+
+  // Get the link to the chart - the first chart is the default, so omit it from the URL.
+  let chart_href = $derived((chart: ParsedFavaChart, index: number): string => {
+    const url = new URL($current_url);
+    set_query_param(url, "chart", index === 0 ? "" : (chart_key(chart) ?? ""));
+    return url.toString();
+  });
 
   // Get the shortcut key for jumping to the previous chart.
   let shortcut_previous = $derived((index: number): KeySpec | undefined => {
@@ -42,22 +49,15 @@
     <ConversionAndInterval />
   </Chart>
   <div hidden={!$show_charts}>
-    {#each charts as chart, index (chart.label)}
-      <button
-        type="button"
-        class="unset"
+    {#each charts as chart, index (chart_key(chart) ?? index)}
+      <a
+        href={chart === active_chart ? undefined : chart_href(chart, index)}
         class:selected={chart === active_chart}
-        onclick={() => {
-          router.set_search_param(
-            "chart",
-            index === 0 ? "" : (chart_key(chart) ?? ""),
-          );
-        }}
         {@attach keyboard_shortcut(shortcut_previous(index))}
         {@attach keyboard_shortcut(shortcut_next(index))}
       >
         {chart.label}
-      </button>
+      </a>
     {/each}
   </div>
 {/if}
@@ -69,30 +69,31 @@
     text-align: center;
   }
 
-  button {
+  a {
     padding: 0 0.5em;
+    color: inherit;
   }
 
-  button + button {
+  a + a {
     border-left: 1px solid var(--text-color-lighter);
   }
 
-  button.selected,
-  button:hover {
+  a.selected,
+  a:hover {
     color: var(--text-color-lighter);
   }
 
   @media print {
-    button {
+    a {
       display: none;
       border-left: none;
     }
 
-    button + button {
+    a + a {
       border-left: none;
     }
 
-    button.selected {
+    a.selected {
       display: inline;
     }
   }

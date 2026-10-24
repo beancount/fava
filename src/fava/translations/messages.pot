@@ -2,12 +2,12 @@
 msgid "File change detected. Click to reload."
 msgstr ""
 
-#: frontend/src/charts/ChartSwitcher.svelte:28
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr ""
 
-#: frontend/src/charts/ChartSwitcher.svelte:35
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr ""
