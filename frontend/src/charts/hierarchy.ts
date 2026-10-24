@@ -124,16 +124,23 @@ export class HierarchyChart {
 
 const hierarchy_validator = object({
   label: string,
+  key: optional(string),
   data: account_hierarchy_validator,
 });
 
 export class ParsedHierarchyChart implements ParsedFavaChart {
   readonly label: string | null;
   readonly data: AccountHierarchyInputDatum;
+  readonly key: string | null;
 
-  constructor(label: string | null, data: AccountHierarchyInputDatum) {
+  constructor(
+    label: string | null,
+    data: AccountHierarchyInputDatum,
+    key: string | null = null,
+  ) {
     this.label = label;
     this.data = data;
+    this.key = key;
   }
 
   static from_node = (node: AccountTreeNode): ParsedHierarchyChart => {
@@ -142,7 +149,7 @@ export class ParsedHierarchyChart implements ParsedFavaChart {
 
   static validator: Validator<ParsedHierarchyChart> = (json) =>
     hierarchy_validator(json).map(
-      ({ label, data }) => new ParsedHierarchyChart(label, data),
+      ({ label, data, key }) => new ParsedHierarchyChart(label, data, key),
     );
 
   with_context({ currencies }: ChartContext): HierarchyChart {

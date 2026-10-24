@@ -9,8 +9,8 @@ import { conversion_currencies } from "./fava_options.ts";
 import { currencies_sorted } from "./index.ts";
 import { operating_currency } from "./options.ts";
 
-/** This store is used to switch to the same chart (as identified by name) on navigation. */
-export const last_active_chart_name = writable<string | null>(null);
+/** This store is used to switch to the same chart (as identified by key) on navigation. */
+export const last_active_chart_key = writable<string | null>(null);
 
 const hierarchy_chart_mode_validator = constants(
   "treemap",
