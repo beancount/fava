@@ -9,6 +9,7 @@ import {
   date,
   decimal,
   object,
+  optional,
   record,
   string,
 } from "../lib/validation.ts";
@@ -176,20 +177,30 @@ const bar_validator = array(
 
 type ParsedBarChartData = ValidationT<typeof bar_validator>;
 
-const bar_chart_validator = object({ label: string, data: bar_validator });
+const bar_chart_validator = object({
+  label: string,
+  key: optional(string),
+  data: bar_validator,
+});
 
 export class ParsedBarChart implements ParsedFavaChart {
   readonly label: string | null;
   readonly data: ParsedBarChartData;
+  readonly key: string | null;
 
-  constructor(label: string | null, data: ParsedBarChartData) {
+  constructor(
+    label: string | null,
+    data: ParsedBarChartData,
+    key: string | null = null,
+  ) {
     this.label = label;
     this.data = data;
+    this.key = key;
   }
 
   static validator: Validator<ParsedBarChart> = (json) =>
     bar_chart_validator(json).map(
-      ({ label, data }) => new ParsedBarChart(label, data),
+      ({ label, data, key }) => new ParsedBarChart(label, data, key),
     );
 
   with_context($chart_context: ChartContext): BarChart {

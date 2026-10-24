@@ -44,6 +44,7 @@ const navigation_api = "navigation" in globalThis ? navigation : null;
  */
 type FavaQueryParameters =
   | "account"
+  | "chart"
   | "charts"
   | "conversion"
   | "extract_filename"
@@ -379,12 +380,13 @@ class Router {
   /**
    * Set the URL parameter and push a history state for it if changed.
    *
-   * For `charts` and `query_string`, this will not load the target URL.
+   * For `chart`, `charts` and `query_string`, this will not load the target URL.
    */
   set_search_param(key: "charts", value: "false" | ""): void;
   set_search_param(
     key:
       | "account"
+      | "chart"
       | "conversion"
       | "filter"
       | "interval"
@@ -396,7 +398,11 @@ class Router {
     const target = new URL(this.current);
     set_query_param(target, key, value);
     if (target.href !== this.current.href) {
-      const load = !(key === "charts" || key === "query_string");
+      const load = !(
+        key === "chart" ||
+        key === "charts" ||
+        key === "query_string"
+      );
       this.navigate(target, load);
     }
   }

@@ -27,6 +27,11 @@ export const show_charts = derived(
   ($search_params) => $search_params.get("charts") !== "false",
 );
 
+/** The key of the chart that should be shown, if set in the URL. */
+export const chart_key_param = derived(search_params, ($search_params) =>
+  $search_params.get("chart"),
+);
+
 /** The current conversion used for reports. */
 export const conversion = derived(
   search_params,

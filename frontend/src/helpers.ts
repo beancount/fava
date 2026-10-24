@@ -4,7 +4,11 @@ import type { Result } from "./lib/result.ts";
 import { err, ok } from "./lib/result.ts";
 import { use_external_editor } from "./stores/fava_options.ts";
 import { base_url } from "./stores/index.ts";
-import { synced_search_params } from "./stores/url.ts";
+import {
+  chart_key_param,
+  pathname,
+  synced_search_params,
+} from "./stores/url.ts";
 
 export class NonRelativeUrlPathError extends Error {
   constructor(pathname: string, $base_url: string) {
@@ -55,12 +59,15 @@ export function url_for_internal(
   return url_param_string ? `${url}?${url_params.toString()}` : url;
 }
 
+/** The name of the report for a URL path, e.g. `account` for `account/Assets/`. */
+const report_name = (path: string) => path.split("/", 1)[0];
+
 /**
  * Get the URL string for one of Fava's reports.
  */
 export const url_for = derived(
-  [base_url, synced_search_params],
-  ([$base_url, $synced_search_params]) =>
+  [base_url, synced_search_params, pathname, chart_key_param],
+  ([$base_url, $synced_search_params, $pathname, $chart_key_param]) =>
     (
       report:
         | `${string}/`
@@ -68,8 +75,19 @@ export const url_for = derived(
         | `download-query/query_result.${string}`
         | `help/${string}`,
       params?: Record<string, string | number | undefined>,
-    ): string =>
-      url_for_internal($base_url, $synced_search_params, report, params),
+    ): string => {
+      const is_same_report =
+        get_url_path({ pathname: $pathname })
+          .map(report_name)
+          .unwrap_or(null) === report_name(report);
+      const chart = is_same_report
+        ? ($chart_key_param ?? undefined)
+        : undefined;
+      return url_for_internal($base_url, $synced_search_params, report, {
+        chart,
+        ...params,
+      });
+    },
 );
 
 /**

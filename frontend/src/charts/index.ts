@@ -22,6 +22,8 @@ export type FavaChart = HierarchyChart | BarChart | ScatterPlot | LineChart;
  */
 export interface ParsedFavaChart {
   readonly label: string | null;
+  /** A stable identifier for the chart, used in the URL - defaults to the label. */
+  readonly key?: string | null;
   with_context($chart_context: ChartContext): FavaChart;
 }
 

@@ -2,8 +2,8 @@
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
   import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
-  import { last_active_chart_name } from "../stores/chart.ts";
-  import { show_charts } from "../stores/url.ts";
+  import { router } from "../router.ts";
+  import { chart_key_param, show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
   import { chart_context } from "./context.ts";
@@ -15,8 +15,10 @@
 
   let { charts }: Props = $props();
 
+  const chart_key = (chart: ParsedFavaChart) => chart.key ?? chart.label;
+
   let active_chart = $derived(
-    charts.find((c) => c.label === $last_active_chart_name) ?? charts[0],
+    charts.find((c) => chart_key(c) === $chart_key_param) ?? charts[0],
   );
 
   // Get the shortcut key for jumping to the previous chart.
@@ -46,7 +48,10 @@
         class="unset"
         class:selected={chart === active_chart}
         onclick={() => {
-          $last_active_chart_name = chart.label;
+          router.set_search_param(
+            "chart",
+            index === 0 ? "" : (chart_key(chart) ?? ""),
+          );
         }}
         {@attach keyboard_shortcut(shortcut_previous(index))}
         {@attach keyboard_shortcut(shortcut_next(index))}

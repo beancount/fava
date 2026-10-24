@@ -700,18 +700,21 @@ def get_income_statement() -> TreeReport:
             g.interval,
             (options["name_income"], options["name_expenses"]),
             label=gettext("Net Profit"),
+            key="net_profit",
             invert=invert,
         ),
         ChartApi.interval_totals(
             g.interval,
             options["name_income"],
             label=f"{gettext('Income')} ({g.interval.label})",
+            key="income",
             invert=invert,
         ),
         ChartApi.interval_totals(
             g.interval,
             options["name_expenses"],
             label=f"{gettext('Expenses')} ({g.interval.label})",
+            key="expenses",
         ),
     ]
     root_tree = g.filtered.root_tree
@@ -799,6 +802,7 @@ def get_account_report(
             g.interval,
             a,
             label=gettext("Changes"),
+            key="changes",
         ),
     ]
 
