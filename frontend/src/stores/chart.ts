@@ -1,4 +1,4 @@
-import { derived } from "svelte/store";
+import { derived, type Readable } from "svelte/store";
 
 import { _ } from "../i18n.ts";
 import iso4217currencies from "../lib/iso4217.ts";
@@ -63,6 +63,13 @@ export const chart_toggled_currencies = local_storage_synced_store(
   array(string),
   () => [],
 );
+
+/** The currencies that are currently not shown in the charts, as a Set. */
+export const chart_toggled_currencies_set: Readable<ReadonlySet<string>> =
+  derived(
+    chart_toggled_currencies,
+    ($chart_toggled_currencies) => new Set($chart_toggled_currencies),
+  );
 
 /** The currencies to over as conversion options. */
 const currency_suggestions = derived(

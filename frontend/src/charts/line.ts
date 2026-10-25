@@ -61,9 +61,8 @@ export class LineChart {
   }
 
   /** Filter the data of this chart, excluding some series. */
-  filter(hidden_names: readonly string[]): LineChartSeries[] {
-    const hidden_names_set = new Set(hidden_names);
-    return this.data.filter((series) => !hidden_names_set.has(series.name));
+  filter(hidden_names: ReadonlySet<string>): LineChartSeries[] {
+    return this.data.filter((series) => !hidden_names.has(series.name));
   }
 
   with_context(): this {

@@ -1,8 +1,9 @@
-import { rollup } from "d3-array";
+import { rollup, sort } from "d3-array";
 import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
 import type { FormatterContext } from "../format.ts";
+import { ancestors } from "../lib/account.ts";
 import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
@@ -36,15 +37,16 @@ export interface BarChartDatum {
   account_balances: Record<string, Record<string, number>>;
 }
 
+interface FilteredBarChart {
+  currencies: string[];
+  bar_groups: BarChartDatum[];
+  stacks: [currency: string, stacks: Series<BarChartDatum, string>[]][];
+}
+
 export class BarChart {
   readonly type = "barchart";
   /** The accounts that occur in some bar.  */
   readonly accounts: string[];
-  /** For each currency, the stacks (one series per account) */
-  private readonly stacks: [
-    currency: string,
-    stacks: Series<BarChartDatum, string>[],
-  ][];
   readonly label: string | null;
   /** The currencies that are shown in this bar chart. */
   readonly currencies: readonly string[];
@@ -59,45 +61,62 @@ export class BarChart {
     this.label = label;
     this.currencies = currencies;
     this.bar_groups = bar_groups;
-    this.accounts = Array.from(
-      new Set(bar_groups.map((d) => Object.keys(d.account_balances)).flat(2)),
-    ).sort();
-
-    this.stacks = currencies.map((currency) => [
-      currency,
-      stack<BarChartDatum, string>()
-        .keys(this.accounts)
-        .value((d, account) => d.account_balances[account]?.[currency] ?? 0)
-        .offset(stackOffsetDiverging)(bar_groups)
-        .map((series) =>
-          Object.assign(
-            series.filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
-            { key: series.key, index: series.index },
-          ),
-        )
-        .filter((series) => series.length > 0),
-    ]);
+    this.accounts = sort(
+      new Set(bar_groups.flatMap((d) => Object.keys(d.account_balances))),
+    );
   }
 
-  filter(hidden_names: string[]): {
-    currencies: string[];
-    bar_groups: BarChartDatum[];
-    stacks: [currency: string, stacks: Series<BarChartDatum, string>[]][];
-  } {
-    const hidden_names_set = new Set(hidden_names);
-    const currencies = new Set(
-      this.currencies.filter((c) => !hidden_names_set.has(c)),
+  /** Filter the chart data and merge toggled accounts. */
+  filter(
+    hidden_names: ReadonlySet<string>,
+    toggled_accounts: ReadonlySet<string>,
+  ): FilteredBarChart {
+    const currencies = this.currencies.filter((c) => !hidden_names.has(c));
+    // Map each account to its topmost collapsed ancestor (or itself).
+    const merged_account = new Map(
+      this.accounts.map((account) => [
+        account,
+        ancestors(account).find((a) => toggled_accounts.has(a)) ?? account,
+      ]),
     );
-    const bar_groups = this.bar_groups.map((b) => ({
-      ...b,
-      values: b.values.filter((v) => currencies.has(v.currency)),
-    }));
-    const stacks = this.stacks.filter((s) => currencies.has(s[0]));
-    return { currencies: [...currencies], bar_groups, stacks };
+    const accounts = sort(new Set(merged_account.values()));
+    const bar_groups = this.bar_groups.map((b) => {
+      const account_balances: Record<string, Record<string, number>> = {};
+      for (const [account, balance] of Object.entries(b.account_balances)) {
+        const merged = merged_account.get(account) ?? account;
+        account_balances[merged] ??= {};
+        const merged_balance = account_balances[merged];
+        for (const [currency, value] of Object.entries(balance)) {
+          merged_balance[currency] = (merged_balance[currency] ?? 0) + value;
+        }
+      }
+      return {
+        ...b,
+        values: b.values.filter((v) => !hidden_names.has(v.currency)),
+        account_balances,
+      };
+    });
+    const stacks = currencies.map(
+      (currency): [string, Series<BarChartDatum, string>[]] => [
+        currency,
+        stack<BarChartDatum, string>()
+          .keys(accounts)
+          .value((d, account) => d.account_balances[account]?.[currency] ?? 0)
+          .offset(stackOffsetDiverging)(bar_groups)
+          .map((series) =>
+            Object.assign(
+              series.filter((b) => b[0] !== b[1] && !Number.isNaN(b[1])),
+              { key: series.key, index: series.index },
+            ),
+          )
+          .filter((series) => series.length > 0),
+      ],
+    );
+    return { currencies, bar_groups, stacks };
   }
 
   /** Whether this chart contains any stacks (or is just a single account). */
-  get hasStackedData(): boolean {
+  get has_stacked_data(): boolean {
     return this.accounts.length > 1;
   }
 
@@ -106,12 +125,12 @@ export class BarChart {
     $ctx: FormatterContext,
     d: BarChartDatum,
     account: string,
-    $chart_toggled_currencies: readonly string[],
+    $chart_toggled_currencies_set: ReadonlySet<string>,
   ): TooltipContent {
     const content = [];
     content.push(domHelpers.em(account));
     d.values.forEach(({ currency }) => {
-      if (!$chart_toggled_currencies.includes(currency)) {
+      if (!$chart_toggled_currencies_set.has(currency)) {
         const value = d.account_balances[account]?.[currency] ?? 0;
         content.push($ctx.amount(value, currency));
         content.push(domHelpers.br());

@@ -64,7 +64,7 @@ test("handle data for balances chart", () => {
     .unwrap()
     .with_context();
   ok(parsed instanceof LineChart);
-  deepEqual(parsed.filter([]), [
+  deepEqual(parsed.filter(new Set()), [
     {
       name: "EUR",
       values: [
@@ -120,17 +120,17 @@ test("handle data for bar chart with stacked data", () => {
     },
   ];
   const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(true, chart.hasStackedData);
-  deepEqual(chart.accounts, [
+  equal(true, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.accounts, [
     "Expenses:Dining",
     "Expenses:Shoes",
     "Expenses:Taxes",
     "Expenses:Transportation",
   ]);
-  const result = chart.filter([]);
+  const result = bar_chart.filter(new Set(), new Set());
   const simplified_stacks = result.stacks.map(([currency, series_arr]) => [
     currency,
     series_arr.map((series) => ({
@@ -208,6 +208,49 @@ test("handle data for bar chart with stacked data", () => {
   ]);
 });
 
+test("bar chart merges stacks of collapsed accounts", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { EUR: "10" },
+      budgets: {},
+      account_balances: {
+        "Expenses:Food": { EUR: "1" },
+        "Expenses:Sport": { EUR: "2" },
+        "Expenses:Sport:Cycling": { EUR: "3" },
+        "Expenses:Sport:Cycling:Gravel": { EUR: "4" },
+      },
+    },
+  ];
+  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context(ctx);
+  const result = bar_chart.filter(
+    new Set(),
+    new Set(["Expenses:Sport", "Expenses:Sport:Cycling"]),
+  );
+  deepEqual(result.bar_groups[0]?.account_balances, {
+    "Expenses:Food": { EUR: 1 },
+    "Expenses:Sport": { EUR: 9 },
+  });
+  deepEqual(
+    result.stacks.map(([currency, series_arr]) => [
+      currency,
+      series_arr.map((series) => [series.key, series[0]?.[1]]),
+    ]),
+    [
+      [
+        "EUR",
+        [
+          ["Expenses:Food", 1],
+          ["Expenses:Sport", 10],
+        ],
+      ],
+    ],
+  );
+});
+
 test("handle data for bar chart without stacked data", () => {
   const data: unknown = [
     {
@@ -225,15 +268,15 @@ test("handle data for bar chart without stacked data", () => {
   ];
   // even without the operating currencies, the two most popular ones will be selected
   const ctx = { currencies: [], date_format: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(false, chart.hasStackedData);
-  deepEqual(chart.filter([]).stacks, [
+  equal(false, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.filter(new Set(), new Set()).stacks, [
     ["EUR", []],
     ["USD", []],
   ]);
-  const without_usd = chart.filter(["USD"]);
+  const without_usd = bar_chart.filter(new Set(["USD"]), new Set());
   deepEqual(without_usd.stacks, [["EUR", []]]);
   deepEqual(without_usd.bar_groups, [
     {
@@ -267,15 +310,15 @@ test("only use currencies in records for bar chart", () => {
     },
   ];
   const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(false, chart.hasStackedData);
-  deepEqual(chart.filter([]).stacks, [
+  equal(false, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.filter(new Set(), new Set()).stacks, [
     ["USD", []],
     ["AUD", []],
   ]);
-  deepEqual(chart.filter([]).bar_groups, [
+  deepEqual(bar_chart.filter(new Set(), new Set()).bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",

@@ -40,7 +40,7 @@
     {#if chart.type === "barchart"}
       <ChartLegend
         legend={chart.currencies}
-        color={!($bar_chart_mode === "stacked" && chart.hasStackedData)}
+        color={!($bar_chart_mode === "stacked" && chart.has_stacked_data)}
         toggled={chart_toggled_currencies}
       />
     {/if}
@@ -63,7 +63,7 @@
       <ModeSwitch store={hierarchy_chart_mode} />
     {:else if chart.type === "linechart"}
       <ModeSwitch store={line_chart_mode} />
-    {:else if chart.type === "barchart" && chart.hasStackedData}
+    {:else if chart.type === "barchart" && chart.has_stacked_data}
       <ModeSwitch store={bar_chart_mode} />
     {/if}
   {:else}<span class="spacer"></span>{/if}

@@ -7,7 +7,7 @@
   import { area, curveStepAfter, line } from "d3-shape";
 
   import {
-    chart_toggled_currencies,
+    chart_toggled_currencies_set,
     line_chart_mode,
   } from "../stores/chart.ts";
   import { ctx, short } from "../stores/format.ts";
@@ -35,7 +35,7 @@
   // Derived dimensions
   let inner_width = $derived(width - margin.left - margin.right);
 
-  let data = $derived(chart.filter($chart_toggled_currencies));
+  let data = $derived(chart.filter($chart_toggled_currencies_set));
 
   // Scales and quadtree
   let all_values = $derived(data.flatMap((d) => d.values));

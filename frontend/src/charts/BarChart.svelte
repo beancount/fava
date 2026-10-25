@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { extent, least } from "d3-array";
+  import { extent, least, sort, union } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
   import { url_for_account } from "../helpers.ts";
-  import { bar_chart_mode, chart_toggled_currencies } from "../stores/chart.ts";
+  import { get_internal_accounts } from "../lib/account.ts";
+  import { toggled_accounts } from "../stores/accounts.ts";
+  import {
+    bar_chart_mode,
+    chart_toggled_currencies_set,
+  } from "../stores/chart.ts";
   import { ctx, date_format, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
@@ -36,9 +41,8 @@
   const inner_height = height - margin.top - margin.bottom;
 
   // Chart data
-  let accounts = $derived(chart.accounts);
   let { currencies, bar_groups, stacks } = $derived(
-    chart.filter($chart_toggled_currencies),
+    chart.filter($chart_toggled_currencies_set, $toggled_accounts),
   );
 
   // Computed dimensions
@@ -50,7 +54,7 @@
 
   /** Whether to display stacked bars. */
   let show_stacked_bars = $derived(
-    $bar_chart_mode === "stacked" && chart.hasStackedData,
+    $bar_chart_mode === "stacked" && chart.has_stacked_data,
   );
 
   // Scales
@@ -73,8 +77,12 @@
     scaleLinear([inner_height, 0]).domain(pad_extent(include_zero(y_extent))),
   );
 
+  // Include parent accounts so that colors are stable on toggling accounts.
+  let color_accounts = $derived(
+    sort(union(chart.accounts, get_internal_accounts(chart.accounts))),
+  );
   let account_color_scale = $derived(
-    scaleOrdinal(hcl_color_range(accounts.length)).domain(accounts),
+    scaleOrdinal(hcl_color_range(color_accounts.length)).domain(color_accounts),
   );
 
   // Axes
@@ -165,7 +173,7 @@
                       $ctx,
                       bar.data,
                       account,
-                      $chart_toggled_currencies,
+                      $chart_toggled_currencies_set,
                     ),
                   )}
                 />
