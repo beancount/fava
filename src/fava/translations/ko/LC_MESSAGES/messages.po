@@ -17,12 +17,12 @@ msgstr ""
 msgid "File change detected. Click to reload."
 msgstr "파일 변경이 감지되었습니다. 클릭하여 새로고침하세요."
 
-#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "이전"
 
-#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "다음"
@@ -239,23 +239,23 @@ msgstr "현재 필터가 적용된 항목을 Beancount 파일로 다운로드"
 msgid "Error"
 msgstr "오류"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:53
+#: frontend/src/reports/accounts/AccountReport.svelte:54
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "이 계정 및 하위 계정의 전체 거래기록"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: frontend/src/reports/accounts/AccountReport.svelte:58
+#: frontend/src/reports/accounts/AccountReport.svelte:56
+#: frontend/src/reports/accounts/AccountReport.svelte:59
 msgid "Account Journal"
 msgstr "계정별거래기록"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-#: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:801
+#: frontend/src/reports/accounts/AccountReport.svelte:65
+#: frontend/src/reports/accounts/AccountReport.svelte:68
+#: src/fava/json_api.py:804
 msgid "Changes"
 msgstr "변동"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:73
-#: frontend/src/reports/accounts/AccountReport.svelte:76
+#: frontend/src/reports/accounts/AccountReport.svelte:74
+#: frontend/src/reports/accounts/AccountReport.svelte:77
 msgid "Balances"
 msgstr "잔액"
 
@@ -619,35 +619,35 @@ msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:720
+#: src/fava/json_api.py:723
 msgid "Net Profit"
 msgstr "당기순이익"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:26
 msgid "Treemap"
 msgstr "사각계층그래프"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
 msgstr "원형계층그래프"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:28
 msgid "Icicle"
 msgstr "수직계층그래프"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:41
 msgid "Line chart"
 msgstr "꺾은선그래프"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:42
 msgid "Area chart"
 msgstr "면적그래프"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
 msgstr "누적막대그래프"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
 msgstr "단일막대그래프"
 
@@ -683,18 +683,18 @@ msgstr "모두펼치기"
 msgid "Other"
 msgstr "기타"
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr "계정잔액"
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:225
 msgid "Net Worth"
 msgstr "순자산"
 
-#: src/fava/json_api.py:708
+#: src/fava/json_api.py:709
 msgid "Income"
 msgstr "수익"
 
-#: src/fava/json_api.py:714
+#: src/fava/json_api.py:716
 msgid "Expenses"
 msgstr "비용"

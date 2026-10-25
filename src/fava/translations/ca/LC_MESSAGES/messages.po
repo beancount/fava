@@ -15,12 +15,12 @@ msgstr ""
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
-#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "Anterior"
 
-#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "Següent"
@@ -237,23 +237,23 @@ msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
 msgid "Error"
 msgstr "Error"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:53
+#: frontend/src/reports/accounts/AccountReport.svelte:54
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr ""
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: frontend/src/reports/accounts/AccountReport.svelte:58
+#: frontend/src/reports/accounts/AccountReport.svelte:56
+#: frontend/src/reports/accounts/AccountReport.svelte:59
 msgid "Account Journal"
 msgstr "Llibre diari del compte"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-#: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:801
+#: frontend/src/reports/accounts/AccountReport.svelte:65
+#: frontend/src/reports/accounts/AccountReport.svelte:68
+#: src/fava/json_api.py:804
 msgid "Changes"
 msgstr "Canvis"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:73
-#: frontend/src/reports/accounts/AccountReport.svelte:76
+#: frontend/src/reports/accounts/AccountReport.svelte:74
+#: frontend/src/reports/accounts/AccountReport.svelte:77
 msgid "Balances"
 msgstr "Balanços"
 
@@ -620,35 +620,35 @@ msgid "Filter by tag, payee, …"
 msgstr "Filtreu per etiqueta, beneficiari…"
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:720
+#: src/fava/json_api.py:723
 msgid "Net Profit"
 msgstr "Benefici net"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:26
 msgid "Treemap"
 msgstr "Mapa d'arbre"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
 msgstr "Anells"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:28
 msgid "Icicle"
 msgstr "Jeràrquic"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:41
 msgid "Line chart"
 msgstr "Diagrama de línies"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:42
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
 msgstr "Barres apilades"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
 msgstr "Barres senzilles"
 
@@ -684,18 +684,18 @@ msgstr "Amplia-ho tot"
 msgid "Other"
 msgstr "Altres"
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr "Balanç del compte"
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:225
 msgid "Net Worth"
 msgstr "Patrimoni net"
 
-#: src/fava/json_api.py:708
+#: src/fava/json_api.py:709
 msgid "Income"
 msgstr "Ingressos"
 
-#: src/fava/json_api.py:714
+#: src/fava/json_api.py:716
 msgid "Expenses"
 msgstr "Despeses"

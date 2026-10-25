@@ -15,12 +15,12 @@ msgstr ""
 msgid "File change detected. Click to reload."
 msgstr "Bestand is gewijzigd. Klik om te herladen."
 
-#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "Vorige"
 
-#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "Volgende"
@@ -237,23 +237,23 @@ msgstr ""
 msgid "Error"
 msgstr "Fout"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:53
+#: frontend/src/reports/accounts/AccountReport.svelte:54
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr ""
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: frontend/src/reports/accounts/AccountReport.svelte:58
+#: frontend/src/reports/accounts/AccountReport.svelte:56
+#: frontend/src/reports/accounts/AccountReport.svelte:59
 msgid "Account Journal"
 msgstr "Rekening dagboek"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-#: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:801
+#: frontend/src/reports/accounts/AccountReport.svelte:65
+#: frontend/src/reports/accounts/AccountReport.svelte:68
+#: src/fava/json_api.py:804
 msgid "Changes"
 msgstr "Wijzigingen"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:73
-#: frontend/src/reports/accounts/AccountReport.svelte:76
+#: frontend/src/reports/accounts/AccountReport.svelte:74
+#: frontend/src/reports/accounts/AccountReport.svelte:77
 msgid "Balances"
 msgstr "Balansen"
 
@@ -620,35 +620,35 @@ msgid "Filter by tag, payee, …"
 msgstr ""
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:720
+#: src/fava/json_api.py:723
 msgid "Net Profit"
 msgstr "Netto Winst"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:26
 msgid "Treemap"
 msgstr "Boomdiagram"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:28
 msgid "Icicle"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:41
 msgid "Line chart"
 msgstr "Lijndiagram"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:42
 msgid "Area chart"
 msgstr "Vlakdiagram"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
 msgstr ""
 
@@ -682,18 +682,18 @@ msgstr "Alles uitvouwen"
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:225
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:708
+#: src/fava/json_api.py:709
 msgid "Income"
 msgstr "Inkomsten"
 
-#: src/fava/json_api.py:714
+#: src/fava/json_api.py:716
 msgid "Expenses"
 msgstr "Uitgaven"
