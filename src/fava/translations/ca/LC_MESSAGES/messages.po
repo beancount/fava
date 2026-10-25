@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-10-14 13:51+0000\n"
+"PO-Revision-Date: 2026-10-26 17:51+0000\n"
 "Last-Translator: Marc Riera <marcriera@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/fava/fava/ca/>\n"
 "Language: ca\n"
@@ -416,17 +416,13 @@ msgid "Group by"
 msgstr ""
 
 #: frontend/src/reports/import/Extract.svelte:85
-#, fuzzy
-#| msgid "Statistics"
 msgid "Status"
-msgstr "Estadístiques"
+msgstr "Estat"
 
 #: frontend/src/reports/import/Extract.svelte:86
 #: frontend/src/reports/import/group.ts:17
-#, fuzzy
-#| msgid "Account"
 msgid "Accounts"
-msgstr "Compte"
+msgstr "Comptes"
 
 #: frontend/src/reports/import/Extract.svelte:98
 msgid "Regroup"
@@ -478,17 +474,13 @@ msgid "Upload files for import"
 msgstr ""
 
 #: frontend/src/reports/import/group.ts:10
-#, fuzzy
-#| msgid "Duplicate"
 msgid "Duplicates"
-msgstr "Duplica"
+msgstr "Duplicats"
 
 #: frontend/src/reports/import/group.ts:10
 #: frontend/src/reports/import/group.ts:38
-#, fuzzy
-#| msgid "Import"
 msgid "To import"
-msgstr "Importa"
+msgstr "Per importar"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
