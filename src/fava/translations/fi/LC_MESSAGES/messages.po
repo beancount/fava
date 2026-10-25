@@ -17,12 +17,12 @@ msgstr ""
 msgid "File change detected. Click to reload."
 msgstr "Tiedosto muuttui. Päivitä napsauttamalla."
 
-#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "Edellinen"
 
-#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "Seuraava"
@@ -239,23 +239,23 @@ msgstr "Lataa valitut merkinnät Beancount-tiedostona"
 msgid "Error"
 msgstr "Virhe"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:53
+#: frontend/src/reports/accounts/AccountReport.svelte:54
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Päiväkirja sisältäen tämän tilin ja alatilien kaikki merkinnät"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: frontend/src/reports/accounts/AccountReport.svelte:58
+#: frontend/src/reports/accounts/AccountReport.svelte:56
+#: frontend/src/reports/accounts/AccountReport.svelte:59
 msgid "Account Journal"
 msgstr "Tilipäiväkirja"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-#: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:798
+#: frontend/src/reports/accounts/AccountReport.svelte:65
+#: frontend/src/reports/accounts/AccountReport.svelte:68
+#: src/fava/json_api.py:804
 msgid "Changes"
 msgstr "Muutokset"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:73
-#: frontend/src/reports/accounts/AccountReport.svelte:76
+#: frontend/src/reports/accounts/AccountReport.svelte:74
+#: frontend/src/reports/accounts/AccountReport.svelte:77
 msgid "Balances"
 msgstr "Saldot"
 
@@ -617,36 +617,36 @@ msgstr "Aika"
 msgid "Filter by tag, payee, …"
 msgstr "Suodata tunniste, vastaanottaja, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
-#: src/fava/json_api.py:717
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
+#: src/fava/json_api.py:723
 msgid "Net Profit"
 msgstr "Nettotulos"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:26
 msgid "Treemap"
 msgstr "Puukartta"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
 msgstr "Säteet"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:28
 msgid "Icicle"
 msgstr "Jääpuikot"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:41
 msgid "Line chart"
 msgstr "Viivakaavio"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:42
 msgid "Area chart"
 msgstr "Aluekaavio"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
 msgstr "Pinotut pylväät"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
 msgstr "Pylväät"
 
@@ -682,18 +682,18 @@ msgstr "Laajenna kaikki"
 msgid "Other"
 msgstr "Muu"
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr "Tilin saldo"
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:225
 msgid "Net Worth"
 msgstr "Nettovarallisuus"
 
-#: src/fava/json_api.py:705
+#: src/fava/json_api.py:709
 msgid "Income"
 msgstr "Tulot"
 
-#: src/fava/json_api.py:711
+#: src/fava/json_api.py:716
 msgid "Expenses"
 msgstr "Menot"

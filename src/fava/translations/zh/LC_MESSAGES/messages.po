@@ -16,12 +16,12 @@ msgstr ""
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
-#: frontend/src/charts/ChartSwitcher.svelte:26
+#: frontend/src/charts/ChartSwitcher.svelte:35
 #: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "上一个"
 
-#: frontend/src/charts/ChartSwitcher.svelte:33
+#: frontend/src/charts/ChartSwitcher.svelte:42
 #: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "下一个"
@@ -240,23 +240,23 @@ msgstr "将当前筛选的条目下载为 Beancount 文件"
 msgid "Error"
 msgstr "错误"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:53
+#: frontend/src/reports/accounts/AccountReport.svelte:54
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "该账户及其子账户所有条目的日记账"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:55
-#: frontend/src/reports/accounts/AccountReport.svelte:58
+#: frontend/src/reports/accounts/AccountReport.svelte:56
+#: frontend/src/reports/accounts/AccountReport.svelte:59
 msgid "Account Journal"
 msgstr "账户日记账"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:64
-#: frontend/src/reports/accounts/AccountReport.svelte:67
-#: src/fava/json_api.py:798
+#: frontend/src/reports/accounts/AccountReport.svelte:65
+#: frontend/src/reports/accounts/AccountReport.svelte:68
+#: src/fava/json_api.py:804
 msgid "Changes"
 msgstr "变更"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:73
-#: frontend/src/reports/accounts/AccountReport.svelte:76
+#: frontend/src/reports/accounts/AccountReport.svelte:74
+#: frontend/src/reports/accounts/AccountReport.svelte:77
 msgid "Balances"
 msgstr "余额"
 
@@ -618,36 +618,36 @@ msgstr "时间"
 msgid "Filter by tag, payee, …"
 msgstr "筛选（标签，收款人等等）"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:699
-#: src/fava/json_api.py:717
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
+#: src/fava/json_api.py:723
 msgid "Net Profit"
 msgstr "净利润"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:26
 msgid "Treemap"
 msgstr "树状图"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
 msgstr "旭日图"
 
-#: frontend/src/stores/chart.ts:31
+#: frontend/src/stores/chart.ts:28
 msgid "Icicle"
 msgstr "冰柱图"
 
-#: frontend/src/stores/chart.ts:44
+#: frontend/src/stores/chart.ts:41
 msgid "Line chart"
 msgstr "折线图"
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:42
 msgid "Area chart"
 msgstr "面积图"
 
-#: frontend/src/stores/chart.ts:58
+#: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
 msgstr "堆叠条形图"
 
-#: frontend/src/stores/chart.ts:59
+#: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
 msgstr "条形图"
 
@@ -683,18 +683,18 @@ msgstr "展开所有"
 msgid "Other"
 msgstr "其他"
 
-#: src/fava/internal_api.py:171
+#: src/fava/internal_api.py:174
 msgid "Account Balance"
 msgstr "账户余额"
 
-#: src/fava/internal_api.py:219
+#: src/fava/internal_api.py:225
 msgid "Net Worth"
 msgstr "净值"
 
-#: src/fava/json_api.py:705
+#: src/fava/json_api.py:709
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:711
+#: src/fava/json_api.py:716
 msgid "Expenses"
 msgstr "支出"
