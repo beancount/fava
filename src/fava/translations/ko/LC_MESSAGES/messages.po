@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-02 12:31+0200\n"
-"PO-Revision-Date: 2026-06-11 12:09+0000\n"
-"Last-Translator: MunsuBahk <chiefdvm@gmail.com>\n"
+"PO-Revision-Date: 2026-10-25 13:45+0000\n"
+"Last-Translator: MunsuBahk <munsubahk@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/fava/fava/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: frontend/src/app.ts:83
 msgid "File change detected. Click to reload."
@@ -70,10 +70,8 @@ msgid "Save"
 msgstr "저장"
 
 #: frontend/src/editor/SliceEditor.svelte:138
-#, fuzzy
-#| msgid "ignore duplicate"
 msgid "Duplicate"
-msgstr "중복무시"
+msgstr "복제"
 
 #: frontend/src/editor/SliceEditor.svelte:144
 msgid "reload"
@@ -163,7 +161,7 @@ msgstr "연도별"
 
 #: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
 msgid "Per Fiscal Year"
-msgstr ""
+msgstr "회계연도별"
 
 #: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
 msgid "Quarterly"
@@ -171,7 +169,7 @@ msgstr "분기별"
 
 #: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
 msgid "Per Fiscal Quarter"
-msgstr ""
+msgstr "회계분기별"
 
 #: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
 msgid "Monthly"
@@ -610,7 +608,7 @@ msgstr "거래기록추가"
 
 #: frontend/src/sidebar/AsideContents.svelte:85
 msgid "Show keyboard shortcuts"
-msgstr ""
+msgstr "키보드 단축키 표시"
 
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
