@@ -19,6 +19,9 @@ removed, please adjust your hook functions to take a list of 4-tuples.
 The selected chart is now stored in the URL (as the `chart` parameter), so
 links to a report can include the chart to show.
 
+The import dialog now shows all extracted entries at once instead of one at
+a time and the entries can be grouped and saved group by group.
+
 To protect against DNS rebinding attacks, the Fava CLI now only accepts
 requests for `localhost` and `127.0.0.1` when listening on localhost (the
 default). If you run the Fava CLI behind a reverse proxy that passes on the

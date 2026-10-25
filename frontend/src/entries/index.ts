@@ -24,7 +24,7 @@ export class Posting {
   readonly account: string;
   readonly amount: string;
 
-  private constructor(meta: EntryMetadata, account: string, amount: string) {
+  constructor(meta: EntryMetadata, account: string, amount: string) {
     this.meta = meta;
     this.account = account;
     this.amount = amount;
@@ -116,7 +116,7 @@ export class Balance extends EntryBase<"Balance"> {
   readonly account: string;
   readonly amount: RawAmount;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -160,7 +160,7 @@ export class Document extends EntryBase<"Document"> {
   readonly tags: string[] | null;
   readonly links: string[] | null;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -199,7 +199,7 @@ export class Event extends EntryBase<"Event"> {
   readonly type: string;
   readonly description: string;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -234,7 +234,7 @@ export class Note extends EntryBase<"Note"> {
   readonly tags: string[] | null;
   readonly links: string[] | null;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -486,7 +486,7 @@ export class Transaction extends EntryBase<"Transaction"> {
   readonly links: string[];
   readonly postings: readonly Posting[];
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,

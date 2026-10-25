@@ -1,25 +1,51 @@
 <script lang="ts">
+  import { untrack } from "svelte";
+
   import type { Entry } from "../../entries/index.ts";
-  import EntrySvelte from "../../entry-forms/Entry.svelte";
-  import { _ } from "../../i18n.ts";
+  import { _, format } from "../../i18n.ts";
   import { keyboard_shortcut } from "../../keyboard-shortcuts.ts";
+  import { log_error } from "../../log.ts";
   import ModalBase from "../../modals/ModalBase.svelte";
+  import { import_grouping } from "../../stores/import.ts";
+  import ExtractEntry from "./ExtractEntry.svelte";
+  import { group_entries } from "./group.ts";
 
   interface Props {
     entries: Entry[];
     save: () => void;
+    save_group: (indices: number[]) => Promise<void>;
     close: () => void;
   }
 
-  let { entries = $bindable(), save, close }: Props = $props();
+  let { entries = $bindable(), save, save_group, close }: Props = $props();
 
-  let count = $derived(entries.length);
-  let shown = $derived(count > 0);
+  let shown = $derived(entries.length > 0);
 
-  let count_duplicates = $derived(
-    entries.filter((e) => e.is_duplicate()).length,
+  /** The grouping of the entries in their current state. */
+  let current_groups = $derived(group_entries(entries, $import_grouping));
+  // Only regroup automatically when the grouping or the list of entries is
+  // changed and not on edits, which would move the entry that is being edited.
+  let groups = $derived.by(() => {
+    const current = entries;
+    const grouping = $import_grouping;
+    return untrack(() => group_entries(current, grouping));
+  });
+  let groups_outdated = $derived(
+    JSON.stringify(groups) !== JSON.stringify(current_groups),
   );
-  let count_without_duplicates = $derived(count - count_duplicates);
+
+  /** Save the entries of the group if all its fields are valid. */
+  function validate_and_save_group(
+    details: HTMLDetailsElement,
+    indices: number[],
+  ) {
+    const fields = details.querySelectorAll<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >("input, select, textarea");
+    if ([...fields].every((field) => field.reportValidity())) {
+      save_group(indices).catch(log_error);
+    }
+  }
 </script>
 
 <ModalBase {shown} close_handler={close}>
@@ -42,63 +68,80 @@
     oninvalidcapture={(event) => {
       // Allow invalid fields to be focused
       if (event.target instanceof HTMLElement) {
-        const details = event.target.closest("details");
-        if (details) {
+        let details = event.target.closest("details");
+        while (details) {
           details.open = true;
+          details = details.parentElement?.closest("details") ?? null;
         }
       }
     }}
   >
-    <h3>
-      {_("Import")}
-      {count} ({count_without_duplicates}
-      to import)
-    </h3>
+    <div class="flex-row header">
+      <h3>{_("Import")}</h3>
+      <span class="spacer"></span>
+      <label>
+        <span>{_("Group by")}:</span>
+        <select bind:value={$import_grouping}>
+          <option value="status">{_("Status")}</option>
+          <option value="accounts">{_("Accounts")}</option>
+          <option value="payee">{_("Payee")}</option>
+        </select>
+      </label>
+      {#if groups_outdated}
+        <button
+          type="button"
+          class="muted"
+          onclick={() => {
+            groups = current_groups;
+          }}
+        >
+          {_("Regroup")}
+        </button>
+      {/if}
+    </div>
     <div class="entries">
-      {#each entries as entry, index (index)}
-        {@const duplicate = entry.is_duplicate()}
-        {@const summary = entry.summary()}
-        <details open={!duplicate}>
+      {#each groups as [label, indices] (label)}
+        {@const to_import = indices.filter(
+          (index) => entries[index]?.is_duplicate() === false,
+        )}
+        <details class="group" open>
           <summary class="flex-row">
+            <span>{label}</span>
+            <span class="spacer"></span>
             <span>
-              {entry.date}{summary ? ` - ${summary}` : ""}
+              {format(_("%(count)s (%(to_import)s to import)"), {
+                count: indices.length.toString(),
+                to_import: to_import.length.toString(),
+              })}
             </span>
-            <label class="button muted">
-              <input
-                type="checkbox"
-                checked={duplicate}
-                onclick={() => {
-                  entries[index] = entry.set_meta(
-                    "__duplicate__",
-                    !entry.is_duplicate(),
-                  );
-                }}
-              />
-              {_("ignore duplicate")}
-            </label>
+            <button
+              type="button"
+              class="muted"
+              onclick={(event) => {
+                const details = event.currentTarget.closest("details");
+                if (details) {
+                  validate_and_save_group(details, indices);
+                }
+              }}
+            >
+              {_("Save")}
+            </button>
           </summary>
           <div>
-            <fieldset disabled={duplicate}>
-              <EntrySvelte
-                bind:entry={
-                  () => entry,
-                  (entry: Entry) => {
-                    entries[index] = entry;
+            {#each indices as index (index)}
+              {@const entry = entries[index]}
+              {#if entry}
+                <ExtractEntry
+                  bind:entry={
+                    () => entry,
+                    (entry: Entry) => {
+                      entries[index] = entry;
+                    }
                   }
-                }
-                {duplicate}
-              />
-            </fieldset>
+                />
+              {/if}
+            {/each}
           </div>
-          {#if entry.meta.get("__source__")}
-            <div>
-              <h4>
-                {_("Source")}
-                {#if entry.meta.lineno}({_("Line")}: {entry.meta.lineno}){/if}
-              </h4>
-              <pre>{entry.meta.get("__source__")}</pre>
-            </div>
-          {/if}
         </details>
       {/each}
     </div>
@@ -115,10 +158,6 @@
 </ModalBase>
 
 <style>
-  fieldset {
-    display: contents;
-  }
-
   form {
     max-height: calc(90vh - 2em);
   }
@@ -130,6 +169,10 @@
     }
   }
 
+  .header {
+    padding-right: 2.5em;
+  }
+
   .entries {
     overflow: auto;
   }
@@ -138,18 +181,10 @@
     /* Override the global minimum width, which would overflow the
        full-screen modal on narrow screens. */
     min-width: 0;
-
-    summary span {
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
   }
 
-  pre {
-    margin: 0;
-    font-size: 0.9em;
-    white-space: pre-wrap;
+  .group > summary {
+    font-weight: 500;
+    background-color: var(--summary-background-darker);
   }
 </style>
