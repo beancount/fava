@@ -105,6 +105,16 @@ There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the
 current page but change the time filter to the current month.
 
+Similarly, the `/toggle` URL handler can be used to toggle filters on the
+current page. For example, `/toggle?time=month` will set the time filter to the
+current month or clear it if it is already set to `month`. For the advanced
+filter, `/toggle?filter=-%23tag` will add `-#tag` to the current filter
+(combining both with AND) or remove it if it is already part of it:
+
+```beancount
+2016-05-04 custom "fava-sidebar-link" "Toggle -#tag" "/toggle?filter=-%23tag"
+```
+
 ## Language
 
 You can change the language of the interface by specifying the `language`

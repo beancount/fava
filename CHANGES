@@ -23,6 +23,10 @@ merges accounts as they are toggled in the account trees below.
 The import dialog now shows all extracted entries at once instead of one at
 a time and the entries can be grouped and saved group by group.
 
+A `/toggle` URL handler was added, which works like `/jump` but toggles the
+given filters, e.g., for sidebar links to add or remove a part of the advanced
+filter.
+
 To protect against DNS rebinding attacks, the Fava CLI now only accepts
 requests for `localhost` and `127.0.0.1` when listening on localhost (the
 default). If you run the Fava CLI behind a reverse proxy that passes on the

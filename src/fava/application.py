@@ -433,7 +433,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         ``/example/page?param1=abc&param2=456``.
 
         """
-        url = urlparse(request.referrer)
+        url = urlparse(request.referrer or "/")
         query_args = parse_qsl(url.query)
         for key, values in request.args.lists():
             query_args = [
@@ -441,6 +441,38 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             ]
             if values != [""]:
                 query_args.extend([(key, v) for v in values])
+
+        redirect_url = url._replace(query=urlencode(query_args))
+        return redirect(urlunparse(redirect_url))
+
+    @fava_app.route("/toggle")
+    def toggle() -> WerkzeugResponse:
+        """Redirect back to the referer, toggling some parameters.
+
+        Like ``/jump``, but a parameter is removed if it already has the given
+        value. For the advanced filter (``filter``), the given value is added
+        to the current filter (separated by a space, so combined with AND) or
+        removed from it if it is already contained in it, e.g., accessing
+        ``/toggle?filter=-#tag`` from ``/example/page?filter=#other`` should
+        redirect to ``/example/page?filter=#other -#tag`` and back.
+        """
+        url = urlparse(request.referrer or "/")
+        query_args = parse_qsl(url.query)
+        for key, value in request.args.items(multi=True):
+            current = next((v for k, v in query_args if k == key), "")
+            query_args = [
+                key_value for key_value in query_args if key_value[0] != key
+            ]
+            if key == "filter":
+                padded = f" {current} "
+                if f" {value} " in padded:
+                    new_value = padded.replace(f" {value} ", " ", 1).strip()
+                else:
+                    new_value = f"{current} {value}".strip()
+            else:
+                new_value = "" if current == value else value
+            if new_value:
+                query_args.append((key, new_value))
 
         redirect_url = url._replace(query=urlencode(query_args))
         return redirect(urlunparse(redirect_url))
