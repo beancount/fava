@@ -78,7 +78,6 @@ type PutEndpoint =
   | "add_document"
   | "add_entries"
   | "attach_document"
-  | "format_source"
   | "move"
   | "source"
   | "source_slice"
@@ -347,8 +346,6 @@ export const put_attach_document: Put<{
   filename: string;
   entry_hash: string;
 }> = define_put_json("attach_document");
-export const put_format_source: Put<{ source: string }> =
-  define_put_json("format_source");
 const put_move: Put<{
   filename: string;
   account: string;

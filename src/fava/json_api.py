@@ -43,7 +43,6 @@ from fava.core.file import get_entry_slice
 from fava.core.filters import FilterError
 from fava.core.group_entries import group_entries_by_type
 from fava.core.ingest import filepath_in_primary_imports_folder
-from fava.core.misc import align
 from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_errors
@@ -461,12 +460,6 @@ def delete_source_slice(entry_hash: str, sha256sum: str) -> str:
     """Delete an entry source slice."""
     g.ledger.file.delete_entry_slice(entry_hash, sha256sum)
     return f"Deleted entry {entry_hash}."
-
-
-@api_endpoint
-def put_format_source(source: str) -> str:
-    """Format beancount file."""
-    return align(source, g.ledger.fava_options.currency_column)
 
 
 class FileDoesNotExistError(FavaJSONAPIError):

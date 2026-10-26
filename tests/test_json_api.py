@@ -15,7 +15,6 @@ from fava.beans.funcs import hash_entry
 from fava.context import g
 from fava.core.file import _sha256_str
 from fava.core.file import get_entry_slice
-from fava.core.misc import align
 from fava.json_api import build_json_body_decoder
 from fava.json_api import build_query_string_decoder
 from fava.json_api import ProblemDetails
@@ -739,38 +738,6 @@ def test_api_source_slice_and_insert_metadata(app_in_tmp_dir: Flask) -> None:
         '+   document-2: "2022-12-12 asdf.txt"',
         '+   document: "edit-example.beancount"',
     ]
-
-
-def test_api_format_source(
-    test_client: FlaskClient,
-    example_ledger: FavaLedger,
-) -> None:
-    path = Path(example_ledger.beancount_file_path)
-    url = "/long-example/api/format_source"
-
-    payload = path.read_text("utf-8")
-
-    response = test_client.put(url, json={"source": payload})
-    assert_api_success(response, align(payload, 61))
-
-
-def test_api_format_source_options(
-    app: Flask,
-    test_client: FlaskClient,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        path = Path(g.ledger.beancount_file_path)
-        payload = path.read_text("utf-8")
-
-        monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
-
-        response = test_client.put(
-            "/long-example/api/format_source",
-            json={"source": payload},
-        )
-        assert_api_success(response, align(payload, 90))
 
 
 def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:

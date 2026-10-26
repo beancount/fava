@@ -60,6 +60,11 @@ function ts_edit(
 /** This node prop is used to store the TS tree on the root node of the Lezer tree for reuse. */
 const TS_TREE_PROP = new NodeProp<TSTree>({ perNode: true });
 
+/** Get the tree-sitter tree that a Lezer tree was converted from. */
+export function get_ts_tree(tree: Tree): TSTree | undefined {
+  return tree.prop(TS_TREE_PROP);
+}
+
 class TSParserError extends Error {}
 
 class InvalidRangeError extends TSParserError {
