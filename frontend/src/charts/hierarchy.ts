@@ -1,11 +1,11 @@
-import { sum } from "d3-array";
+import { some, sum } from "d3-array";
 import type { HierarchyNode } from "d3-hierarchy";
-import { hierarchy as d3Hierarchy } from "d3-hierarchy";
+import { hierarchy } from "d3-hierarchy";
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
 import type { FormatterContext } from "../format.ts";
-import type { TreeNode } from "../lib/tree.ts";
+import { type TreeNode, walk } from "../lib/tree.ts";
 import type { Validator } from "../lib/validation.ts";
 import {
   array,
@@ -60,7 +60,7 @@ export type AccountHierarchyDatum = TreeNode<{
   readonly dummy: boolean;
 }>;
 
-type AccountHierarchyInputDatum = TreeNode<{
+export type AccountHierarchyInputDatum = TreeNode<{
   readonly account: string;
   readonly balance: Record<string, number>;
 }>;
@@ -86,14 +86,27 @@ export function balance_with_percentage(
  *
  * In the treemap, we only render leaf nodes, so for accounts that have both
  * children and a balance, we want to duplicate them as leaf nodes.
+ *
+ * Toggled accounts are collapsed into a single leaf.
  */
-function add_internal_nodes_as_leaves({
-  account,
-  balance,
-  children,
-}: AccountHierarchyInputDatum): AccountHierarchyDatum {
+function add_internal_nodes_as_leaves(
+  node: AccountHierarchyInputDatum,
+  toggled_accounts: ReadonlySet<string>,
+): AccountHierarchyDatum {
+  const { account, balance, children } = node;
+  if (children.length && toggled_accounts.has(account)) {
+    const total: Record<string, number> = {};
+    for (const n of walk(node)) {
+      for (const [currency, value] of Object.entries(n.balance)) {
+        total[currency] = (total[currency] ?? 0) + value;
+      }
+    }
+    return { account, balance: total, children: [], dummy: false };
+  }
   if (children.length) {
-    const c = children.map(add_internal_nodes_as_leaves);
+    const c = children.map((child) =>
+      add_internal_nodes_as_leaves(child, toggled_accounts),
+    );
     c.push({ account, balance, children: [], dummy: true });
     return { account, balance: {}, children: c, dummy: false };
   }
@@ -107,18 +120,52 @@ export class HierarchyChart {
   /** The currency to show the treemap of. */
   readonly treemap_currency: Writable<string> | null;
   readonly label: string | null;
-  readonly data: ReadonlyMap<string, AccountHierarchyNode>;
+  /** Whether to collapse toggled accounts (not for query charts). */
+  readonly #collapse_toggled: boolean;
+
+  readonly #root: AccountHierarchyInputDatum;
 
   constructor(
     label: string | null,
-    data: ReadonlyMap<string, AccountHierarchyNode>,
+    root: AccountHierarchyInputDatum,
+    currencies: readonly string[],
+    collapse_toggled = true,
   ) {
     this.label = label;
-    this.data = data;
-    this.currencies = [...this.data.keys()];
+    this.#collapse_toggled = collapse_toggled;
+    this.#root = root;
+    this.currencies = currencies.filter((currency) =>
+      some(walk(root), (n) => (n.balance[currency] ?? 0) !== 0),
+    );
     const first_currency = this.currencies[0];
     this.treemap_currency =
       first_currency != null ? writable(first_currency) : null;
+  }
+
+  /** Build the hierarchies (one per currency) with toggled accounts collapsed. */
+  hierarchies(
+    toggled_accounts: ReadonlySet<string>,
+  ): ReadonlyMap<string, AccountHierarchyNode> {
+    const root = add_internal_nodes_as_leaves(
+      this.#root,
+      this.#collapse_toggled ? toggled_accounts : new Set(),
+    );
+    return new Map(
+      this.currencies.map((currency) => {
+        const r = hierarchy(root);
+        const root_balance = sum(
+          r.descendants(),
+          (n) => n.data.balance[currency] ?? 0,
+        );
+        // depending on the balance for this currency in the root,
+        // build the tree either for all positive values or all negative values
+        const sign = root_balance ? Math.sign(root_balance) : 1;
+        r.sum(
+          (d) => sign * Math.max(sign * (d.balance[currency] ?? 0), 0),
+        ).sort((a, b) => sign * ((b.value ?? 0) - (a.value ?? 0)));
+        return [currency, r];
+      }),
+    );
   }
 }
 
@@ -153,27 +200,6 @@ export class ParsedHierarchyChart implements ParsedFavaChart {
     );
 
   with_context({ currencies }: ChartContext): HierarchyChart {
-    const root = add_internal_nodes_as_leaves(this.data);
-    return new HierarchyChart(
-      this.label,
-      new Map(
-        currencies
-          .map((currency) => {
-            const r = d3Hierarchy(root);
-            const root_balance = sum(
-              r.descendants(),
-              (n) => n.data.balance[currency] ?? 0,
-            );
-            // depending on the balance for this currency in the root,
-            // build the tree either for all positive values or all negative values
-            const sign = root_balance ? Math.sign(root_balance) : 1;
-            r.sum(
-              (d) => sign * Math.max(sign * (d.balance[currency] ?? 0), 0),
-            ).sort((a, b) => sign * ((b.value ?? 0) - (a.value ?? 0)));
-            return [currency, r] as const;
-          })
-          .filter(([, h]) => h.value != null && h.value !== 0),
-      ),
-    );
+    return new HierarchyChart(this.label, this.data, currencies);
   }
 }

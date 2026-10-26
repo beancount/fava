@@ -17,8 +17,9 @@ Support for Beancount v2-style importer hooks (taking a list of 2-tuples) was
 removed, please adjust your hook functions to take a list of 4-tuples.
 
 The selected chart is now stored in the URL (as the `chart` parameter), so
-links to a report can include the chart to show. The stacked bar chart now
-merges accounts as they are toggled in the account trees below.
+links to a report can include the chart to show. The stacked bar chart and
+the hierarchy charts (treemap, sunburst, icicle) now merge accounts as they are
+toggled in the account trees below.
 
 The import dialog now shows all extracted entries at once instead of one at
 a time and the entries can be grouped and saved group by group.

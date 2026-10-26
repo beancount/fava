@@ -4,8 +4,7 @@ import type {
   QueryResultTable,
 } from "../reports/query/query_table.ts";
 import type { ChartContext } from "./context.ts";
-import type { HierarchyChart } from "./hierarchy.ts";
-import { ParsedHierarchyChart } from "./hierarchy.ts";
+import { HierarchyChart } from "./hierarchy.ts";
 import type { LineChart } from "./line.ts";
 import { ParsedLineChart } from "./line.ts";
 
@@ -29,7 +28,8 @@ export function get_query_chart(
       (account, d) => ({ account, balance: d?.balance ?? {} }),
     );
     root.account = "(root)";
-    return new ParsedHierarchyChart(null, root).with_context($chart_context);
+    // There is no tree table to expand toggled accounts on the query page.
+    return new HierarchyChart(null, root, $chart_context.currencies, false);
   }
   if (first.dtype === "date" && second.dtype === "Inventory") {
     const bals = (table.rows as [Date, Inventory][]).map(([date, inv]) => ({

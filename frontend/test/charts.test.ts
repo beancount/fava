@@ -9,7 +9,10 @@ import {
   include_zero,
   pad_extent,
 } from "../src/charts/helpers.ts";
-import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
+import {
+  type AccountHierarchyInputDatum,
+  ParsedHierarchyChart,
+} from "../src/charts/hierarchy.ts";
 import { charts_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
@@ -51,7 +54,62 @@ test("handle data for hierarchical chart", async () => {
   ok(net_worth instanceof ParsedLineChart);
   const hierarchy_with_context = hierarchy.with_context(ctx);
   deepEqual(hierarchy_with_context.currencies, ["USD"]);
-  ok(hierarchy_with_context.data.get("USD"));
+  ok(hierarchy_with_context.hierarchies(new Set()).get("USD"));
+});
+
+test("hierarchical chart collapses toggled accounts", () => {
+  const node = (
+    account: string,
+    balance: Record<string, number>,
+    children: AccountHierarchyInputDatum[] = [],
+  ): AccountHierarchyInputDatum => ({
+    account,
+    balance,
+    children,
+  });
+  const data = node("Expenses", {}, [
+    node("Expenses:Food", { EUR: 1 }),
+    node("Expenses:Sport", { EUR: 2 }, [
+      node("Expenses:Sport:Cycling", { EUR: 3 }, [
+        node("Expenses:Sport:Cycling:Gravel", { EUR: 4 }),
+      ]),
+    ]),
+  ]);
+  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
+  const chart = new ParsedHierarchyChart(null, data).with_context(ctx);
+  const leaves = (toggled: string[]) =>
+    chart
+      .hierarchies(new Set(toggled))
+      .get("EUR")
+      ?.leaves()
+      .filter((d) => d.value !== 0)
+      .map((d) => [d.data.account, d.value]);
+
+  deepEqual(leaves([]), [
+    ["Expenses:Sport:Cycling:Gravel", 4],
+    ["Expenses:Sport:Cycling", 3],
+    ["Expenses:Sport", 2],
+    ["Expenses:Food", 1],
+  ]);
+  deepEqual(leaves(["Expenses:Sport", "Expenses:Sport:Cycling"]), [
+    ["Expenses:Sport", 9],
+    ["Expenses:Food", 1],
+  ]);
+  deepEqual(leaves(["Expenses"]), [["Expenses", 10]]);
+
+  // Currencies whose balances cancel out are kept, also when collapsed.
+  const cancelling = new ParsedHierarchyChart(
+    null,
+    node("Assets", {}, [
+      node("Assets:Cash", {}, [
+        node("Assets:Cash:Wallet", { USD: 5 }),
+        node("Assets:Cash:Debt", { USD: -5 }),
+      ]),
+    ]),
+  ).with_context({ currencies: ["EUR", "USD"], date_format: () => "DATE" });
+  deepEqual(cancelling.currencies, ["USD"]);
+  equal(cancelling.hierarchies(new Set()).get("USD")?.value, 5);
+  equal(cancelling.hierarchies(new Set(["Assets:Cash"])).get("USD")?.value, 0);
 });
 
 test("handle data for balances chart", () => {
