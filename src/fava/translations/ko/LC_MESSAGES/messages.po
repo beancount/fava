@@ -43,7 +43,7 @@ msgstr "수량"
 msgid "Converted to %(currency)s"
 msgstr "%(currency)s(으)로 환산"
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr "차트가 비어 있습니다."
 
