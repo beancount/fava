@@ -6,10 +6,10 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40codemirror/autocomplete@6.20.3",
+      "bom-ref": "pkg:npm/%40codemirror/autocomplete@6.20.4",
       "name": "@codemirror/autocomplete",
-      "version": "6.20.3",
-      "purl": "pkg:npm/%40codemirror/autocomplete@6.20.3",
+      "version": "6.20.4",
+      "purl": "pkg:npm/%40codemirror/autocomplete@6.20.4",
       "licenses": [
         {
           "expression": "MIT"
@@ -90,10 +90,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40codemirror/view@6.43.14",
+      "bom-ref": "pkg:npm/%40codemirror/view@6.43.15",
       "name": "@codemirror/view",
-      "version": "6.43.14",
-      "purl": "pkg:npm/%40codemirror/view@6.43.14",
+      "version": "6.43.15",
+      "purl": "pkg:npm/%40codemirror/view@6.43.15",
       "licenses": [
         {
           "expression": "MIT"
@@ -138,10 +138,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40lezer/common@1.5.3",
+      "bom-ref": "pkg:npm/%40lezer/common@1.5.4",
       "name": "@lezer/common",
-      "version": "1.5.3",
-      "purl": "pkg:npm/%40lezer/common@1.5.3",
+      "version": "1.5.4",
+      "purl": "pkg:npm/%40lezer/common@1.5.4",
       "licenses": [
         {
           "expression": "MIT"

@@ -311,7 +311,7 @@ export function object<T>(
   return (json) => {
     if (is_json_object(json)) {
       const obj: Partial<T> = {};
-      // eslint-disable-next-line no-restricted-syntax
+      // biome-ignore lint/suspicious/noForIn: keys of validators object
       for (const key in validators) {
         if (Object.hasOwn(validators, key)) {
           const res = validators[key](json[key]);

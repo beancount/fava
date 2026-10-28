@@ -23,7 +23,6 @@ export default defineConfig(
     },
     rules: {
       "no-undef": OFF, // better handled by Typescript
-      "no-restricted-syntax": [ON, "ForInStatement", "LabelStatement"],
       "@typescript-eslint/no-unused-vars": OFF, // handled by biome, except in svelte files
       "@typescript-eslint/explicit-module-boundary-types": ON,
       "@typescript-eslint/promise-function-async": ON,
