@@ -43,7 +43,7 @@ msgstr ""
 msgid "Converted to %(currency)s"
 msgstr ""
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr ""
 
