@@ -41,7 +41,7 @@ msgstr "Unidades"
 msgid "Converted to %(currency)s"
 msgstr "Convertido a %(currency)s"
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr "El gráfico está vacío."
 
