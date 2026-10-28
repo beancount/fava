@@ -37,7 +37,7 @@ msgstr "単位"
 msgid "Converted to %(currency)s"
 msgstr "%(currency)sに変換"
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr "チャートが空です。"
 
