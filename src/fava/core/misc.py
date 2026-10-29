@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import io
 import re
 from typing import TYPE_CHECKING
 
@@ -110,16 +109,19 @@ ALIGN_RE = re.compile(
 
 def align(string: str, currency_column: int) -> str:
     """Align currencies in one column."""
-    output = io.StringIO()
-    for line in string.splitlines():
-        match = ALIGN_RE.match(line)
+    # Prefixes end before whitespace, so nonspace runs are indivisible.
+    align_re = re.compile(
+        rf'([^";\s]*+(?:\s++[^";\s]++)*?)\s++'
+        rf"([-+]?\s*+[\d,]++(?:\.\d*+)?)\s++({CURRENCY_RE}\b.*)",
+    )
+    lines = string.splitlines()
+    for index, line in enumerate(lines):
+        match = align_re.match(line)
         if match:
             prefix, number, rest = match.groups()
             num_of_spaces = currency_column - len(prefix) - len(number) - 4
             spaces = " " * num_of_spaces
-            output.write(prefix + spaces + "  " + number + " " + rest)
-        else:
-            output.write(line)
-        output.write("\n")
+            lines[index] = f"{prefix}{spaces}  {number} {rest}"
 
-    return output.getvalue()
+    lines.append("")
+    return "\n".join(lines)
