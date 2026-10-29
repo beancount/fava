@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fava\n"
-"PO-Revision-Date: 2026-10-14 13:51+0000\n"
+"PO-Revision-Date: 2026-10-26 17:51+0000\n"
 "Last-Translator: Marc Riera <marcriera@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/fava/fava/ca/>\n"
 "Language: ca\n"
@@ -16,12 +16,10 @@ msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
 #: frontend/src/charts/ChartSwitcher.svelte:35
-#: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "Anterior"
 
 #: frontend/src/charts/ChartSwitcher.svelte:42
-#: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "Següent"
 
@@ -43,7 +41,7 @@ msgstr "Unitats"
 msgid "Converted to %(currency)s"
 msgstr "S'ha convertit a %(currency)s"
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr "El gràfic és buit."
 
@@ -63,7 +61,8 @@ msgstr "S'està desant…"
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/editor/SliceEditor.svelte:156
 #: frontend/src/modals/AddEntry.svelte:67
-#: frontend/src/reports/import/Extract.svelte:115
+#: frontend/src/reports/import/Extract.svelte:127
+#: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "Desa"
 
@@ -138,6 +137,8 @@ msgstr "Nota"
 
 #: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
+#: frontend/src/reports/import/Extract.svelte:87
+#: frontend/src/reports/import/group.ts:22
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Beneficiari"
@@ -330,7 +331,7 @@ msgid "Editor"
 msgstr "Editor"
 
 #: frontend/src/reports/errors/Errors.svelte:23
-#: frontend/src/reports/import/Extract.svelte:121
+#: frontend/src/reports/import/ExtractEntry.svelte:41
 msgid "Line"
 msgstr "Línia"
 
@@ -404,17 +405,39 @@ msgstr "Moneda de cost"
 msgid "Query"
 msgstr "Consulta"
 
-#: frontend/src/reports/import/Extract.svelte:58
+#: frontend/src/reports/import/Extract.svelte:80
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "Importa"
 
-#: frontend/src/reports/import/Extract.svelte:76
+#: frontend/src/reports/import/Extract.svelte:83
+msgid "Group by"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:85
+msgid "Status"
+msgstr "Estat"
+
+#: frontend/src/reports/import/Extract.svelte:86
+#: frontend/src/reports/import/group.ts:17
+msgid "Accounts"
+msgstr "Comptes"
+
+#: frontend/src/reports/import/Extract.svelte:98
+msgid "Regroup"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:112
+#, python-format
+msgid "%(count)s (%(to_import)s to import)"
+msgstr ""
+
+#: frontend/src/reports/import/ExtractEntry.svelte:29
 msgid "ignore duplicate"
 msgstr "ignora el duplicat"
 
-#: frontend/src/reports/import/Extract.svelte:120
+#: frontend/src/reports/import/ExtractEntry.svelte:40
 msgid "Source"
 msgstr "Font"
 
@@ -434,21 +457,30 @@ msgstr "Extreu"
 msgid "Clear"
 msgstr "Esborra"
 
-#: frontend/src/reports/import/Import.svelte:146
+#: frontend/src/reports/import/Import.svelte:170
 msgid "No files were found for import."
 msgstr "No s'ha trobat cap fitxer per importar."
 
-#: frontend/src/reports/import/Import.svelte:149
+#: frontend/src/reports/import/Import.svelte:173
 msgid "Importable Files"
 msgstr "Fitxers importables"
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:185
 msgid "Non-importable Files"
 msgstr "Fitxers no importables"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
 msgstr ""
+
+#: frontend/src/reports/import/group.ts:10
+msgid "Duplicates"
+msgstr "Duplicats"
+
+#: frontend/src/reports/import/group.ts:10
+#: frontend/src/reports/import/group.ts:38
+msgid "To import"
+msgstr "Per importar"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format

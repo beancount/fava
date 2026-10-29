@@ -12,12 +12,10 @@ msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 
 #: frontend/src/charts/ChartSwitcher.svelte:35
-#: frontend/src/reports/import/Extract.svelte:100
 msgid "Previous"
 msgstr "Предишен"
 
 #: frontend/src/charts/ChartSwitcher.svelte:42
-#: frontend/src/reports/import/Extract.svelte:105
 msgid "Next"
 msgstr "Следващ"
 
@@ -39,7 +37,7 @@ msgstr "Единици"
 msgid "Converted to %(currency)s"
 msgstr "Преобразуване в %(currency)s"
 
-#: frontend/src/charts/HierarchyContainer.svelte:33
+#: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
 msgstr "Диаграмата е празна."
 
@@ -63,7 +61,8 @@ msgstr "Запазване..."
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/editor/SliceEditor.svelte:156
 #: frontend/src/modals/AddEntry.svelte:67
-#: frontend/src/reports/import/Extract.svelte:115
+#: frontend/src/reports/import/Extract.svelte:127
+#: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "Запази"
 
@@ -138,6 +137,8 @@ msgstr "Бележка"
 
 #: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
+#: frontend/src/reports/import/Extract.svelte:87
+#: frontend/src/reports/import/group.ts:22
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr "Бенефициент"
@@ -334,7 +335,7 @@ msgid "Editor"
 msgstr "Редактор"
 
 #: frontend/src/reports/errors/Errors.svelte:23
-#: frontend/src/reports/import/Extract.svelte:121
+#: frontend/src/reports/import/ExtractEntry.svelte:41
 msgid "Line"
 msgstr "Ред"
 
@@ -410,17 +411,43 @@ msgstr "Валута на разходите"
 msgid "Query"
 msgstr "Търсене"
 
-#: frontend/src/reports/import/Extract.svelte:58
+#: frontend/src/reports/import/Extract.svelte:80
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr "Внасяне"
 
-#: frontend/src/reports/import/Extract.svelte:76
+#: frontend/src/reports/import/Extract.svelte:83
+msgid "Group by"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:85
+#, fuzzy
+#| msgid "Statistics"
+msgid "Status"
+msgstr "Статистика"
+
+#: frontend/src/reports/import/Extract.svelte:86
+#: frontend/src/reports/import/group.ts:17
+#, fuzzy
+#| msgid "Account"
+msgid "Accounts"
+msgstr "Сметка"
+
+#: frontend/src/reports/import/Extract.svelte:98
+msgid "Regroup"
+msgstr ""
+
+#: frontend/src/reports/import/Extract.svelte:112
+#, python-format
+msgid "%(count)s (%(to_import)s to import)"
+msgstr ""
+
+#: frontend/src/reports/import/ExtractEntry.svelte:29
 msgid "ignore duplicate"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:120
+#: frontend/src/reports/import/ExtractEntry.svelte:40
 msgid "Source"
 msgstr "Източник"
 
@@ -440,21 +467,32 @@ msgstr "Извадка"
 msgid "Clear"
 msgstr "Изчисти"
 
-#: frontend/src/reports/import/Import.svelte:146
+#: frontend/src/reports/import/Import.svelte:170
 msgid "No files were found for import."
 msgstr "Не бяха намерени файлове за внасяне."
 
-#: frontend/src/reports/import/Import.svelte:149
+#: frontend/src/reports/import/Import.svelte:173
 msgid "Importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:161
+#: frontend/src/reports/import/Import.svelte:185
 msgid "Non-importable Files"
 msgstr ""
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
 msgstr ""
+
+#: frontend/src/reports/import/group.ts:10
+msgid "Duplicates"
+msgstr ""
+
+#: frontend/src/reports/import/group.ts:10
+#: frontend/src/reports/import/group.ts:38
+#, fuzzy
+#| msgid "Import"
+msgid "To import"
+msgstr "Внасяне"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
