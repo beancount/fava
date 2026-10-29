@@ -1,12 +1,13 @@
 import type { Attachment } from "svelte/attachments";
 
-/** A tooltip, a light wrapper around a `<div>` that's added to the `<body>` */
+/** A tooltip, a light wrapper around a `<div>` in a chart container. */
 export class Tooltip {
   private div: HTMLDivElement;
 
   constructor() {
     this.div = document.createElement("div");
     this.div.className = "tooltip top";
+    this.div.hidden = true;
   }
 
   init(node: HTMLElement): void {
@@ -20,14 +21,36 @@ export class Tooltip {
 
   /** Position the tooltip. */
   position(left: number, top: number): void {
-    this.div.style.opacity = "1";
+    let min_left = 0;
+    let max_right = document.documentElement.clientWidth;
+    const article = this.div.closest("article");
+    if (article) {
+      const rect = article.getBoundingClientRect();
+      const client_left = rect.left + article.clientLeft;
+      min_left = Math.max(min_left, client_left);
+      max_right = Math.min(max_right, client_left + article.clientWidth);
+    }
+    const width = max_right - min_left;
+    if (width <= 0) {
+      this.hide();
+      return;
+    }
+    this.div.style.setProperty("--tooltip-max-width", `${width.toString()}px`);
+    this.div.hidden = false;
     this.div.style.left = `${Math.round(left).toString()}px`;
     this.div.style.top = `${Math.round(top).toString()}px`;
+    const rect = this.div.getBoundingClientRect();
+    const shift = Math.max(
+      min_left - rect.left,
+      Math.min(max_right - rect.right, 0),
+    );
+    this.div.style.setProperty("--tooltip-shift", `${shift.toString()}px`);
+    this.div.style.left = `${(Math.round(left) + shift).toString()}px`;
   }
 
   /** Hide the tooltip. */
   hide(): void {
-    this.div.style.opacity = "0";
+    this.div.hidden = true;
   }
 
   /**
