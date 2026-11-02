@@ -9,7 +9,10 @@ import {
   include_zero,
   pad_extent,
 } from "../src/charts/helpers.ts";
-import { ParsedHierarchyChart } from "../src/charts/hierarchy.ts";
+import {
+  type AccountHierarchyInputDatum,
+  ParsedHierarchyChart,
+} from "../src/charts/hierarchy.ts";
 import { charts_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
@@ -38,7 +41,7 @@ test("chart helpers (pad extent)", () => {
 });
 
 test("handle data for hierarchical chart", async () => {
-  const ctx = { currencies: ["USD"], dateFormat: () => "DATE" };
+  const ctx = { currencies: ["USD"], date_format: () => "DATE" };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await load_json_snapshot(
     "test_internal_api-test_chart_api.json",
@@ -51,7 +54,62 @@ test("handle data for hierarchical chart", async () => {
   ok(net_worth instanceof ParsedLineChart);
   const hierarchy_with_context = hierarchy.with_context(ctx);
   deepEqual(hierarchy_with_context.currencies, ["USD"]);
-  ok(hierarchy_with_context.data.get("USD"));
+  ok(hierarchy_with_context.hierarchies(new Set()).get("USD"));
+});
+
+test("hierarchical chart collapses toggled accounts", () => {
+  const node = (
+    account: string,
+    balance: Record<string, number>,
+    children: AccountHierarchyInputDatum[] = [],
+  ): AccountHierarchyInputDatum => ({
+    account,
+    balance,
+    children,
+  });
+  const data = node("Expenses", {}, [
+    node("Expenses:Food", { EUR: 1 }),
+    node("Expenses:Sport", { EUR: 2 }, [
+      node("Expenses:Sport:Cycling", { EUR: 3 }, [
+        node("Expenses:Sport:Cycling:Gravel", { EUR: 4 }),
+      ]),
+    ]),
+  ]);
+  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
+  const chart = new ParsedHierarchyChart(null, data).with_context(ctx);
+  const leaves = (toggled: string[]) =>
+    chart
+      .hierarchies(new Set(toggled))
+      .get("EUR")
+      ?.leaves()
+      .filter((d) => d.value !== 0)
+      .map((d) => [d.data.account, d.value]);
+
+  deepEqual(leaves([]), [
+    ["Expenses:Sport:Cycling:Gravel", 4],
+    ["Expenses:Sport:Cycling", 3],
+    ["Expenses:Sport", 2],
+    ["Expenses:Food", 1],
+  ]);
+  deepEqual(leaves(["Expenses:Sport", "Expenses:Sport:Cycling"]), [
+    ["Expenses:Sport", 9],
+    ["Expenses:Food", 1],
+  ]);
+  deepEqual(leaves(["Expenses"]), [["Expenses", 10]]);
+
+  // Currencies whose balances cancel out are kept, also when collapsed.
+  const cancelling = new ParsedHierarchyChart(
+    null,
+    node("Assets", {}, [
+      node("Assets:Cash", {}, [
+        node("Assets:Cash:Wallet", { USD: 5 }),
+        node("Assets:Cash:Debt", { USD: -5 }),
+      ]),
+    ]),
+  ).with_context({ currencies: ["EUR", "USD"], date_format: () => "DATE" });
+  deepEqual(cancelling.currencies, ["USD"]);
+  equal(cancelling.hierarchies(new Set()).get("USD")?.value, 5);
+  equal(cancelling.hierarchies(new Set(["Assets:Cash"])).get("USD")?.value, 0);
 });
 
 test("handle data for balances chart", () => {
@@ -64,7 +122,7 @@ test("handle data for balances chart", () => {
     .unwrap()
     .with_context();
   ok(parsed instanceof LineChart);
-  deepEqual(parsed.filter([]), [
+  deepEqual(parsed.filter(new Set()), [
     {
       name: "EUR",
       values: [
@@ -119,18 +177,18 @@ test("handle data for bar chart with stacked data", () => {
       },
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(true, chart.hasStackedData);
-  deepEqual(chart.accounts, [
+  equal(true, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.accounts, [
     "Expenses:Dining",
     "Expenses:Shoes",
     "Expenses:Taxes",
     "Expenses:Transportation",
   ]);
-  const result = chart.filter([]);
+  const result = bar_chart.filter(new Set(), new Set());
   const simplified_stacks = result.stacks.map(([currency, series_arr]) => [
     currency,
     series_arr.map((series) => ({
@@ -143,22 +201,7 @@ test("handle data for bar chart with stacked data", () => {
     [
       "EUR",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 60],
-          ],
-        },
+        { key: "Expenses:Shoes", index: 1, points: [[0, 60]] },
         {
           key: "Expenses:Taxes",
           index: 2,
@@ -167,51 +210,14 @@ test("handle data for bar chart with stacked data", () => {
             [60, 100],
           ],
         },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [4, 10],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Transportation", index: 3, points: [[4, 10]] },
       ],
     ],
     [
       "USD",
       [
-        {
-          key: "Expenses:Dining",
-          index: 0,
-          points: [
-            [0, 8],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Shoes",
-          index: 1,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Taxes",
-          index: 2,
-          points: [
-            [8, 10],
-            [0, 0],
-          ],
-        },
-        {
-          key: "Expenses:Transportation",
-          index: 3,
-          points: [
-            [0, 0],
-            [0, 0],
-          ],
-        },
+        { key: "Expenses:Dining", index: 0, points: [[0, 8]] },
+        { key: "Expenses:Taxes", index: 2, points: [[8, 10]] },
       ],
     ],
   ]);
@@ -260,6 +266,49 @@ test("handle data for bar chart with stacked data", () => {
   ]);
 });
 
+test("bar chart merges stacks of collapsed accounts", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { EUR: "10" },
+      budgets: {},
+      account_balances: {
+        "Expenses:Food": { EUR: "1" },
+        "Expenses:Sport": { EUR: "2" },
+        "Expenses:Sport:Cycling": { EUR: "3" },
+        "Expenses:Sport:Cycling:Gravel": { EUR: "4" },
+      },
+    },
+  ];
+  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+    .unwrap()
+    .with_context(ctx);
+  const result = bar_chart.filter(
+    new Set(),
+    new Set(["Expenses:Sport", "Expenses:Sport:Cycling"]),
+  );
+  deepEqual(result.bar_groups[0]?.account_balances, {
+    "Expenses:Food": { EUR: 1 },
+    "Expenses:Sport": { EUR: 9 },
+  });
+  deepEqual(
+    result.stacks.map(([currency, series_arr]) => [
+      currency,
+      series_arr.map((series) => [series.key, series[0]?.[1]]),
+    ]),
+    [
+      [
+        "EUR",
+        [
+          ["Expenses:Food", 1],
+          ["Expenses:Sport", 10],
+        ],
+      ],
+    ],
+  );
+});
+
 test("handle data for bar chart without stacked data", () => {
   const data: unknown = [
     {
@@ -276,16 +325,16 @@ test("handle data for bar chart without stacked data", () => {
     },
   ];
   // even without the operating currencies, the two most popular ones will be selected
-  const ctx = { currencies: [], dateFormat: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: [], date_format: () => "DATE" };
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(false, chart.hasStackedData);
-  deepEqual(chart.filter([]).stacks, [
+  equal(false, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.filter(new Set(), new Set()).stacks, [
     ["EUR", []],
     ["USD", []],
   ]);
-  const without_usd = chart.filter(["USD"]);
+  const without_usd = bar_chart.filter(new Set(["USD"]), new Set());
   deepEqual(without_usd.stacks, [["EUR", []]]);
   deepEqual(without_usd.bar_groups, [
     {
@@ -318,16 +367,16 @@ test("only use currencies in records for bar chart", () => {
       account_balances: {},
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
+  const bar_chart = ParsedBarChart.validator({ label: "name", data })
     .unwrap()
     .with_context(ctx);
-  equal(false, chart.hasStackedData);
-  deepEqual(chart.filter([]).stacks, [
+  equal(false, bar_chart.has_stacked_data);
+  deepEqual(bar_chart.filter(new Set(), new Set()).stacks, [
     ["USD", []],
     ["AUD", []],
   ]);
-  deepEqual(chart.filter([]).bar_groups, [
+  deepEqual(bar_chart.filter(new Set(), new Set()).bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",

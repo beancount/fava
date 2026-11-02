@@ -45,8 +45,7 @@ from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
-from fava.core.watcher import Watcher
-from fava.core.watcher import WatchfilesWatcher
+from fava.core.watcher import choose_watcher_for_path
 from fava.helpers import FavaAPIError
 from fava.util import listify
 from fava.util.date import dateranges
@@ -409,7 +408,10 @@ class FavaLedger:
         self.misc = FavaMisc(self)
         self.query_shell = QueryShell(self)
 
-        self.watcher = WatchfilesWatcher() if not poll_watcher else Watcher()
+        self.watcher = choose_watcher_for_path(
+            Path(path),
+            force_polling=poll_watcher,
+        )
 
         self.load_file()
 
@@ -564,10 +566,9 @@ class FavaLedger:
         Returns:
             A pair of a list of Tree instances and the intervals.
         """
+        is_child_account = account_tester(account_name, with_children=True)
         min_accounts = [
-            account
-            for account in self.accounts
-            if account.startswith(account_name)
+            account for account in self.accounts if is_child_account(account)
         ]
 
         interval_ranges = list(reversed(filtered.interval_ranges(interval)))

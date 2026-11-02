@@ -1,9 +1,9 @@
 <script lang="ts">
   import { _ } from "../i18n.ts";
   import type { KeySpec } from "../keyboard-shortcuts.ts";
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
-  import { last_active_chart_name } from "../stores/chart.ts";
-  import { show_charts } from "../stores/url.ts";
+  import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
+  import { set_query_param } from "../router.ts";
+  import { chart_key_param, current_url, show_charts } from "../stores/url.ts";
   import Chart from "./Chart.svelte";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
   import { chart_context } from "./context.ts";
@@ -15,19 +15,28 @@
 
   let { charts }: Props = $props();
 
+  const chart_key = (chart: ParsedFavaChart) => chart.key ?? chart.label;
+
   let active_chart = $derived(
-    charts.find((c) => c.label === $last_active_chart_name) ?? charts[0],
+    charts.find((c) => chart_key(c) === $chart_key_param) ?? charts[0],
   );
 
+  // Get the link to the chart - the first chart is the default, so omit it from the URL.
+  let chart_href = $derived((chart: ParsedFavaChart, index: number): string => {
+    const url = new URL($current_url);
+    set_query_param(url, "chart", index === 0 ? "" : (chart_key(chart) ?? ""));
+    return url.toString();
+  });
+
   // Get the shortcut key for jumping to the previous chart.
-  let shortcutPrevious = $derived((index: number): KeySpec | undefined => {
+  let shortcut_previous = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current - 1 + charts.length) % charts.length
       ? { key: "C", note: _("Previous") }
       : undefined;
   });
   // Get the shortcut key for jumping to the next chart.
-  let shortcutNext = $derived((index: number): KeySpec | undefined => {
+  let shortcut_next = $derived((index: number): KeySpec | undefined => {
     const current = active_chart ? charts.indexOf(active_chart) : -1;
     return index === (current + 1 + charts.length) % charts.length
       ? { key: "c", note: _("Next") }
@@ -40,19 +49,15 @@
     <ConversionAndInterval />
   </Chart>
   <div hidden={!$show_charts}>
-    {#each charts as chart, index (chart.label)}
-      <button
-        type="button"
-        class="unset"
+    {#each charts as chart, index (chart_key(chart) ?? index)}
+      <a
+        href={chart === active_chart ? undefined : chart_href(chart, index)}
         class:selected={chart === active_chart}
-        onclick={() => {
-          $last_active_chart_name = chart.label;
-        }}
-        {@attach keyboardShortcut(shortcutPrevious(index))}
-        {@attach keyboardShortcut(shortcutNext(index))}
+        {@attach keyboard_shortcut(shortcut_previous(index))}
+        {@attach keyboard_shortcut(shortcut_next(index))}
       >
         {chart.label}
-      </button>
+      </a>
     {/each}
   </div>
 {/if}
@@ -64,30 +69,31 @@
     text-align: center;
   }
 
-  button {
+  a {
     padding: 0 0.5em;
+    color: inherit;
   }
 
-  button + button {
+  a + a {
     border-left: 1px solid var(--text-color-lighter);
   }
 
-  button.selected,
-  button:hover {
+  a.selected,
+  a:hover {
     color: var(--text-color-lighter);
   }
 
   @media print {
-    button {
+    a {
       display: none;
       border-left: none;
     }
 
-    button + button {
+    a + a {
       border-left: none;
     }
 
-    button.selected {
+    a.selected {
       display: inline;
     }
   }

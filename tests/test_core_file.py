@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import os
 import re
 import shutil
@@ -13,13 +13,16 @@ from typing import TYPE_CHECKING
 import pytest
 
 from fava.beans import create
+from fava.beans.abc import Query
 from fava.beans.funcs import get_position
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
+from fava.beans.load import load_string
 from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import _file_newline_character
 from fava.core.file import _incomplete_sortkey
+from fava.core.file import delete_entry_slice
 from fava.core.file import ExternallyChangedError
 from fava.core.file import find_entry_lines
 from fava.core.file import GeneratedEntryError
@@ -29,6 +32,7 @@ from fava.core.file import insert_metadata_in_file
 from fava.core.file import InvalidUnicodeError
 from fava.core.file import NonSourceFileError
 from fava.core.file import save_entry_slice
+from fava.core.file import SourceSlice
 
 if TYPE_CHECKING:  # pragma: no cover
     from .conftest import SnapshotFunc
@@ -46,7 +50,7 @@ def ledger_in_tmp_path(test_data_dir: Path, tmp_path: Path) -> FavaLedger:
 def test_sort_incomplete_sortkey() -> None:
     assert sorted([], key=_incomplete_sortkey) == []
 
-    date = datetime.date(2000, 1, 1)
+    date = dt.date(2000, 1, 1)
 
     open_ = create.open(meta={}, date=date, account="Assets", currencies=[])
     balance = create.balance(
@@ -79,15 +83,15 @@ def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry_hash = hash_entry(entry)
     path = Path(ledger_in_tmp_path.beancount_file_path)
 
-    slice_string, sha256sum = get_entry_slice(entry)
+    entry_slice = get_entry_slice(entry)
     assert (
-        slice_string
+        entry_slice.slice
         == """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Liabilities:US:Chase:Slate                       -21.70 USD
   Expenses:Food:Restaurant                          21.70 USD"""
     )
     assert (
-        sha256sum
+        entry_slice.sha256sum
         == "d60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477"
     )
 
@@ -96,7 +100,9 @@ def test_get_and_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
   Liabilities:US:Chase:Slate                       -21.70 USD
   Expenses:Food:Restaurant                          21.70 USD
 """
-    ledger_in_tmp_path.file.save_entry_slice(entry_hash, new_slice, sha256sum)
+    ledger_in_tmp_path.file.save_entry_slice(
+        entry_hash, new_slice, entry_slice.sha256sum
+    )
     assert new_slice in path.read_text("utf-8")
 
 
@@ -173,7 +179,7 @@ def test_insert_metadata(ledger_in_tmp_path: FavaLedger) -> None:
 def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
 
-    entry_source, sha256sum = get_entry_slice(entry)
+    entry_slice = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = Path(get_position(entry)[0])
@@ -183,9 +189,9 @@ def test_save_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
         save_entry_slice(entry, new_source, "wrong hash")
     assert filename.read_text("utf-8") == contents
 
-    new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
+    new_sha256sum = save_entry_slice(entry, new_source, entry_slice.sha256sum)
     assert filename.read_text("utf-8") != contents
-    save_entry_slice(entry, entry_source, new_sha256sum)
+    save_entry_slice(entry, entry_slice.slice, new_sha256sum)
     assert filename.read_text("utf-8") == contents
 
     auto_account = ledger_in_tmp_path.all_entries[0]
@@ -197,7 +203,7 @@ def test_delete_entry_slice(ledger_in_tmp_path: FavaLedger) -> None:
     entry = ledger_in_tmp_path.all_entries[-1]
     entry_hash = hash_entry(entry)
 
-    _entry_source, sha256sum = get_entry_slice(entry)
+    sha256sum = get_entry_slice(entry).sha256sum
     path = Path(get_position(entry)[0])
     contents = path.read_text("utf-8")
 
@@ -247,6 +253,29 @@ def test_insert_metadata_in_file(tmp_path: Path) -> None:
         """)
 
 
+def test_insert_metadata_in_file_multiline_string(tmp_path: Path) -> None:
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(
+        '2016-02-26 * "Uncle Boons" "Eating\n\nout \\" ; alone"\n'
+        "    Expenses:Food:Restaurant                          24.84 USD\n"
+    )
+    insert_metadata_in_file(samplefile, 1, 4, "metadata", "test1")
+    assert samplefile.read_text("utf-8") == (
+        '2016-02-26 * "Uncle Boons" "Eating\n\nout \\" ; alone"\n'
+        '    metadata: "test1"\n'
+        "    Expenses:Food:Restaurant                          24.84 USD\n"
+    )
+
+
+def test_insert_metadata_in_file_escaped(tmp_path: Path) -> None:
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text('2016-02-26 note Assets:Cash "note"\n')
+    value = 'Invoice "Q3" \\ 2016.pdf'
+    insert_metadata_in_file(samplefile, 1, 4, "document", value)
+    entries, _, _ = load_string(samplefile.read_text("utf-8"))
+    assert entries[0].meta["document"] == value
+
+
 def test_find_entry_lines() -> None:
     file_content = dedent("""\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -271,6 +300,64 @@ def test_find_entry_lines() -> None:
     assert find_entry_lines(lines, 7) == entry_lines
     assert find_entry_lines(lines, 4) == note_line
     assert find_entry_lines(lines, 5) == note_line
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        '2021-01-01 query "multiline" "\n  SELECT account\n"\n',
+        (
+            '2021-01-01 query "blank line" "\n'
+            'SELECT account\n\nFROM year = 2021\n"\n'
+        ),
+        '2021-01-01 query "indented" "\n  SELECT account\n  "\n',
+        (
+            '2021-01-01 query "escaped" "\n'
+            r"  SELECT account WHERE narration ~ \"quoted;value\""
+            "\n"
+            '"\n'
+        ),
+        (
+            r'2021-01-01 query "backslash" "SELECT \\" ; ignored "'
+            "\n"
+        ),
+        (
+            '2021-01-01 query "metadata" "SELECT account"\n'
+            '  description: "first line\n\nlast line"\n'
+        ),
+    ],
+)
+def test_find_entry_lines_strings(source: str) -> None:
+    entry_lines = source.splitlines(keepends=True)
+    following = '2021-01-02 note Assets:Cash "next entry"\n'
+    lines = [*entry_lines, following]
+    assert find_entry_lines(lines, 0) == entry_lines
+    assert find_entry_lines(lines, len(entry_lines)) == [following]
+
+
+def test_multiline_query_slice_roundtrip(tmp_path: Path) -> None:
+    source = '2021-01-01 query "multiline" "\n  SELECT account\n"\n'
+    following = '2021-01-02 note Assets:Cash "next entry"\n'
+    prefix = "2020-01-01 open Assets:Cash\n\n"
+    path = tmp_path / "multiline.beancount"
+    path.write_text(prefix + source + "\n" + following, encoding="utf-8")
+    ledger = FavaLedger(str(path))
+    entry = next(e for e in ledger.all_entries if isinstance(e, Query))
+
+    entry_slice = get_entry_slice(entry)
+    assert entry_slice.slice == source.rstrip("\n")
+
+    replacement = entry_slice.slice.replace(
+        "SELECT account", "SELECT date, account"
+    )
+    new_sha256sum = save_entry_slice(entry, replacement, entry_slice.sha256sum)
+    assert path.read_text("utf-8") == (
+        prefix + replacement + "\n\n" + following
+    )
+    assert get_entry_slice(entry) == SourceSlice(replacement, new_sha256sum)
+
+    delete_entry_slice(entry, new_sha256sum)
+    assert path.read_text("utf-8") == prefix + following
 
 
 def test_insert_entry_transaction(tmp_path: Path) -> None:

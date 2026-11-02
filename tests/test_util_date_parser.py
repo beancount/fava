@@ -7,9 +7,7 @@ from unittest import mock
 import pytest
 
 from fava.util.date import DateRange
-from fava.util.date import END_OF_YEAR
-from fava.util.date import FiscalYearEnd
-from fava.util.date import parse_fye_string
+from fava.util.date import FiscalYearEnds
 from fava.util.date_parser import parse_date
 
 
@@ -54,8 +52,9 @@ def test_parse_date_variables(
     expect_start: str,
     expect_end: str,
 ) -> None:
-    with mock.patch("fava.util.date_parser.local_today") as mock_local_today:
-        mock_local_today.return_value = MOCKED_TODAY
+    with mock.patch(
+        "fava.util.date_parser.local_today", return_value=MOCKED_TODAY
+    ):
         assert parse_date(string) == date_range(expect_start, expect_end)
 
 
@@ -96,91 +95,83 @@ NO_SUCH_PERIOD = "Date expression denotes a period that does not exist."
     ],
 )
 def test_parse_date_invalid(string: str, error: str) -> None:
-    with mock.patch("fava.util.date_parser.local_today") as mock_local_today:
-        mock_local_today.return_value = MOCKED_TODAY
-        with pytest.raises(ValueError, match=f"^{re.escape(error)}$"):
-            parse_date(string)
+    with pytest.raises(ValueError, match=f"^{re.escape(error)}$"):
+        parse_date(string)
 
 
 @pytest.mark.parametrize(
-    ("fye_str", "test_date", "string", "expect_start", "expect_end"),
+    ("test_date", "string", "expect_start", "expect_end"),
     [
-        ("06-30", "2018-02-02", "fiscal_year", "2017-07-01", "2018-07-01"),
-        ("06-30", "2018-08-02", "fiscal_year", "2018-07-01", "2019-07-01"),
-        ("06-30", "2018-07-01", "fiscal_year", "2018-07-01", "2019-07-01"),
-        ("06-30", "2018-08-02", "fiscal_year-1", "2017-07-01", "2018-07-01"),
-        ("06-30", "2018-02-02", "fiscal_year+6", "2023-07-01", "2024-07-01"),
-        ("06-30", "2018-08-02", "fiscal_year+6", "2024-07-01", "2025-07-01"),
-        ("06-30", "2018-08-02", "fiscal_quarter", "2018-07-01", "2018-10-01"),
-        ("06-30", "2018-10-01", "fiscal_quarter", "2018-10-01", "2019-01-01"),
-        ("06-30", "2018-12-30", "fiscal_quarter", "2018-10-01", "2019-01-01"),
-        ("06-30", "2018-02-02", "fiscal_quarter", "2018-01-01", "2018-04-01"),
-        (
-            "06-30",
-            "2018-07-03",
-            "fiscal_quarter-1",
-            "2018-04-01",
-            "2018-07-01",
-        ),
-        (
-            "06-30",
-            "2018-07-03",
-            "fiscal_quarter+6",
-            "2020-01-01",
-            "2020-04-01",
-        ),
-        ("15-31", "2018-02-02", "fiscal_year", "2017-04-01", "2018-04-01"),
-        ("15-31", "2018-05-02", "fiscal_year", "2018-04-01", "2019-04-01"),
-        ("15-31", "2018-05-02", "fiscal_year-1", "2017-04-01", "2018-04-01"),
-        ("15-31", "2018-02-02", "fiscal_year+6", "2023-04-01", "2024-04-01"),
-        ("15-31", "2018-05-02", "fiscal_year+6", "2024-04-01", "2025-04-01"),
-        ("15-31", "2018-02-02", "fiscal_quarter", "2018-01-01", "2018-04-01"),
-        ("15-31", "2018-05-02", "fiscal_quarter", "2018-04-01", "2018-07-01"),
-        ("15-31", "2018-08-02", "fiscal_quarter", "2018-07-01", "2018-10-01"),
-        ("15-31", "2018-11-02", "fiscal_quarter", "2018-10-01", "2019-01-01"),
-        (
-            "15-31",
-            "2018-05-02",
-            "fiscal_quarter-1",
-            "2018-01-01",
-            "2018-04-01",
-        ),
-        (
-            "15-31",
-            "2018-05-02",
-            "fiscal_quarter+6",
-            "2019-10-01",
-            "2020-01-01",
-        ),
+        ("2018-02-02", "fiscal_year", "2017-07-01", "2018-07-01"),
+        ("2018-08-02", "fiscal_year", "2018-07-01", "2019-07-01"),
+        ("2018-07-01", "fiscal_year", "2018-07-01", "2019-07-01"),
+        ("2018-08-02", "fiscal_year-1", "2017-07-01", "2018-07-01"),
+        ("2018-02-02", "fiscal_year+6", "2023-07-01", "2024-07-01"),
+        ("2018-08-02", "fiscal_year+6", "2024-07-01", "2025-07-01"),
+        ("2018-08-02", "fiscal_quarter", "2018-07-01", "2018-10-01"),
+        ("2018-10-01", "fiscal_quarter", "2018-10-01", "2019-01-01"),
+        ("2018-12-30", "fiscal_quarter", "2018-10-01", "2019-01-01"),
+        ("2018-02-02", "fiscal_quarter", "2018-01-01", "2018-04-01"),
+        ("2018-07-03", "fiscal_quarter-1", "2018-04-01", "2018-07-01"),
+        ("2018-07-03", "fiscal_quarter+6", "2020-01-01", "2020-04-01"),
     ],
 )
-def test_parse_date_fiscal_variables(
-    fye_str: str,
+def test_parse_date_fiscal_variables_au_nz(
+    test_date: str, string: str, expect_start: str, expect_end: str
+) -> None:
+    with mock.patch(
+        "fava.util.date_parser.local_today",
+        return_value=date.fromisoformat(test_date),
+    ):
+        assert parse_date(string, FiscalYearEnds.AU_NZ) == date_range(
+            expect_start, expect_end
+        )
+
+
+@pytest.mark.parametrize(
+    ("test_date", "string", "expect_start", "expect_end"),
+    [
+        ("2018-02-02", "fiscal_year", "2017-04-01", "2018-04-01"),
+        ("2018-05-02", "fiscal_year", "2018-04-01", "2019-04-01"),
+        ("2018-05-02", "fiscal_year-1", "2017-04-01", "2018-04-01"),
+        ("2018-02-02", "fiscal_year+6", "2023-04-01", "2024-04-01"),
+        ("2018-05-02", "fiscal_year+6", "2024-04-01", "2025-04-01"),
+        ("2018-02-02", "fiscal_quarter", "2018-01-01", "2018-04-01"),
+        ("2018-05-02", "fiscal_quarter", "2018-04-01", "2018-07-01"),
+        ("2018-08-02", "fiscal_quarter", "2018-07-01", "2018-10-01"),
+        ("2018-11-02", "fiscal_quarter", "2018-10-01", "2019-01-01"),
+        ("2018-05-02", "fiscal_quarter-1", "2018-01-01", "2018-04-01"),
+        ("2018-05-02", "fiscal_quarter+6", "2019-10-01", "2020-01-01"),
+    ],
+)
+def test_parse_date_fiscal_variables_jp(
     test_date: str,
     string: str,
     expect_start: str,
     expect_end: str,
 ) -> None:
-    fye = parse_fye_string(fye_str)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = date.fromisoformat(test_date)
-        mock_date.side_effect = date
-        assert parse_date(string, fye or END_OF_YEAR) == date_range(
+    with mock.patch(
+        "fava.util.date_parser.local_today",
+        return_value=date.fromisoformat(test_date),
+    ):
+        assert parse_date(string, FiscalYearEnds.JP) == date_range(
             expect_start, expect_end
         )
 
 
 @pytest.mark.parametrize("string", ["fiscal_quarter", "fy2018-q1"])
 def test_parse_date_fiscal_quarter_without_quarters(string: str) -> None:
-    fye = parse_fye_string("04-05")
-    assert fye is not None
-    with mock.patch("fava.util.date_parser.local_today") as mock_local_today:
-        mock_local_today.return_value = date.fromisoformat("2018-07-03")
-        with pytest.raises(
+    with (
+        mock.patch(
+            "fava.util.date_parser.local_today",
+            return_value=date.fromisoformat("2018-07-03"),
+        ),
+        pytest.raises(
             ValueError,
             match=f"^{re.escape(NO_SUCH_PERIOD)}$",
-        ):
-            parse_date(string, fye)
+        ),
+    ):
+        parse_date(string, FiscalYearEnds.UK)
 
 
 @pytest.mark.parametrize(
@@ -192,6 +183,7 @@ def test_parse_date_fiscal_quarter_without_quarters(string: str) -> None:
         ("2014-12-29", "2015-01-05", "2015-W01"),
         ("2024-12-30", "2025-01-06", "2025-W01"),
         ("2015-04-01", "2015-07-01", "2015-Q2"),
+        ("2014-10-01", "2015-01-01", "FY2015-Q2"),
         ("2014-01-01", "2016-01-01", "2014-2015"),
         ("2011-10-01", "2016-01-01", "2011-10 - 2015"),
         ("2018-07-01", "2020-07-01", "FY2019 - FY2020"),
@@ -202,7 +194,7 @@ def test_parse_date_fiscal_quarter_without_quarters(string: str) -> None:
 )
 def test_parse_date(expect_start: str, expect_end: str, text: str) -> None:
     expected = date_range(expect_start, expect_end)
-    assert parse_date(text, FiscalYearEnd(6, 30)) == expected
+    assert parse_date(text, FiscalYearEnds.AU_NZ) == expected
     if "FY" not in text:
         assert parse_date(text) == expected
 
@@ -224,7 +216,7 @@ def test_parse_date_relative(
     text: str,
 ) -> None:
     expected = date_range(expect_start, expect_end)
-    with mock.patch("fava.util.date.datetime.date") as mock_date:
-        mock_date.today.return_value = MOCKED_TODAY
-        mock_date.side_effect = date
-        assert parse_date(text, FiscalYearEnd(6, 30)) == expected
+    with mock.patch(
+        "fava.util.date_parser.local_today", return_value=MOCKED_TODAY
+    ):
+        assert parse_date(text, FiscalYearEnds.AU_NZ) == expected

@@ -2,7 +2,7 @@
 name = "fava"
 description = "Web interface for the accounting tool Beancount."
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Dominik Aumayr", email = "dominik@aumayr.name" }]
 maintainers = [{ name = "Jakob Schnitzer", email = "mail@jakobschnitzer.de" }]
@@ -18,21 +18,21 @@ classifiers = [
   "Natural Language :: English",
   "Programming Language :: JavaScript",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
   "Topic :: Office/Business :: Financial :: Accounting",
   "Topic :: Office/Business :: Financial :: Investment",
 ]
 dependencies = [
   "Babel>=2.11,<3",
-  "Flask>=2.2,<4",
-  "Flask-Babel>=3,<5",
+  "Flask>=3.1,<4",
+  "Flask-Babel>=4,<5",
   "Jinja2>=3,<4",
-  "Werkzeug>=2.2,<4",
+  "Werkzeug>=3.1,<4",
   "beancount>=3.2.0,<4",
   "beangulp>=0.2",
   "beanquery>=0.1,<0.3",
@@ -88,7 +88,7 @@ test = [
 ]
 # Type-checking with mypy or ty.
 types = [
-  "hatchling>=1.27", # for the build hook in hatch_build.py
+  "hatchling>=1.28,!=1.32.3", # for the build hook in hatch_build.py
   "mypy>=1.14",
   "pytest>=8",
   "ty>=0.0.2",
@@ -97,11 +97,17 @@ types = [
 ]
 
 [build-system]
-requires = ["Babel>=2.7,<3", "hatch-vcs>=0.4", "hatchling>=1.27"]
+requires = [
+  "Babel>=2.7,<3",
+  "hatch-vcs>=0.4",
+  "hatchling>=1.28,!=1.32.3",
+  "typing-extensions>=4.5; python_version<\"3.12\""
+]
 build-backend = "hatchling.build"
 
 [tool.uv]
 exclude-newer = "7 days"
+exclude-newer-package = { certifi = false }
 python-preference = "system"
 # Pin some lower bounds for transitive dependencies in the old_deps tests
 # This a basically determined by increasing them until getting a combination that runs.
@@ -147,6 +153,7 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fava"]
+sbom-files = ["frontend/fava-frontend.cdx.json"]
 
 [tool.babel]
 [[tool.babel.mappings]]
@@ -169,6 +176,7 @@ line-length = 79
 preview = true
 
 [tool.ty.environment]
+extra-paths = ["contrib/personal_ledger/src"]
 python-version = "3.12"
 
 [tool.ty.rules]
@@ -190,6 +198,11 @@ follow_untyped_imports = true
 [[tool.mypy.overrides]]
 module = ["beanquery.*"]
 follow_untyped_imports = true
+
+# The contrib/personal_ledger example project (only type-checked by ty).
+[[tool.mypy.overrides]]
+module = ["personal_ledger.*"]
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = ["flask_babel.*"]

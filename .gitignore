@@ -6,6 +6,7 @@
 /.venv/
 /.vscode/
 /build/
+/contrib/personal_ledger/uv.lock
 /dist/
 /docs/api/
 /frontend/coverage/

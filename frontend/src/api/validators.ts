@@ -1,6 +1,7 @@
 import { account_hierarchy_validator } from "../charts/hierarchy.ts";
 import { charts_validator } from "../charts/index.ts";
 import { entryValidator } from "../entries/index.ts";
+import { FiscalYearEnd } from "../lib/interval.ts";
 import type { ValidationT } from "../lib/validation.ts";
 import {
   array,
@@ -52,6 +53,7 @@ const fava_options = object({
   currency_column: number,
   conversion_currencies: array(string),
   collapse_pattern: array(string),
+  fiscal_year_end: FiscalYearEnd.validator,
   import_config: optional(string),
   indent: number,
   invert_gains_losses_colors: boolean,

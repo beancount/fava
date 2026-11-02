@@ -13,7 +13,7 @@ from beancount.core.position import Cost as BeancountCost
 from beancount.core.position import Position as BeancountPosition
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from decimal import Decimal
 
     from fava.beans.abc import Balance
@@ -53,7 +53,7 @@ _amount = amount
 def cost(
     number: Decimal,
     currency: str,
-    date: datetime.date,
+    date: dt.date,
     label: str | None = None,
 ) -> Cost:
     """Create a Cost."""
@@ -97,7 +97,7 @@ _EMPTY_SET: frozenset[str] = frozenset()
 
 def transaction(
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     flag: Flag,
     payee: str | None,
     narration: str,
@@ -123,7 +123,7 @@ def transaction(
 
 def balance(
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     account: str,
     amount: Amount | str,
     tolerance: Decimal | None = None,
@@ -145,7 +145,7 @@ def balance(
 
 def close(
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     account: str,
 ) -> Close:
     """Create a Beancount Open."""
@@ -161,7 +161,7 @@ def close(
 
 def document(
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     account: str,
     filename: str,
     tags: frozenset[str] | None = None,
@@ -183,7 +183,7 @@ def document(
 
 def note(
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     account: str,
     comment: str,
     tags: frozenset[str] | None = None,
@@ -205,7 +205,7 @@ def note(
 
 def open(  # noqa: A001
     meta: Meta,
-    date: datetime.date,
+    date: dt.date,
     account: str,
     currencies: list[str],
     booking: data.Booking | None = None,

@@ -1,4 +1,4 @@
-import { derived, writable } from "svelte/store";
+import { derived, type Readable } from "svelte/store";
 
 import { _ } from "../i18n.ts";
 import iso4217currencies from "../lib/iso4217.ts";
@@ -8,9 +8,6 @@ import { array, constants, string } from "../lib/validation.ts";
 import { conversion_currencies } from "./fava_options.ts";
 import { currencies_sorted } from "./index.ts";
 import { operating_currency } from "./options.ts";
-
-/** This store is used to switch to the same chart (as identified by name) on navigation. */
-export const last_active_chart_name = writable<string | null>(null);
 
 const hierarchy_chart_mode_validator = constants(
   "treemap",
@@ -66,6 +63,13 @@ export const chart_toggled_currencies = local_storage_synced_store(
   array(string),
   () => [],
 );
+
+/** The currencies that are currently not shown in the charts, as a Set. */
+export const chart_toggled_currencies_set: Readable<ReadonlySet<string>> =
+  derived(
+    chart_toggled_currencies,
+    ($chart_toggled_currencies) => new Set($chart_toggled_currencies),
+  );
 
 /** The currencies to over as conversion options. */
 const currency_suggestions = derived(

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import csv
-import datetime
+import datetime as dt
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -25,7 +25,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.beans.abc import Directive
     from fava.beans.protocols import Amount
 
-DATE = datetime.date(2022, 12, 12)
+DATE = dt.date(2022, 12, 12)
 
 
 class TestBeangulpImporterNoExtraction(Importer):
@@ -40,7 +40,7 @@ class TestBeangulpImporterNoExtraction(Importer):
         return "Assets:Checking"
 
     @override
-    def date(self, filepath: str) -> datetime.date:
+    def date(self, filepath: str) -> dt.date:
         return DATE
 
 
@@ -64,7 +64,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
                     "decimal_value": Decimal(10),
                     "amount_value": create.amount("10 USD"),
                 }
-                date = datetime.date.fromisoformat(row["Buchungsdatum"])
+                date = dt.date.fromisoformat(row["Buchungsdatum"])
                 desc = row["Umsatztext"]
 
                 if not row["IBAN"]:
@@ -130,7 +130,7 @@ class TestImporter(Importer):
         return self._account
 
     @override
-    def date(self, filepath: str) -> datetime.date:
+    def date(self, filepath: str) -> dt.date:
         return DATE
 
     @override
@@ -153,15 +153,6 @@ class TestImporterThatErrorsOnExtract(TestImporter):
         raise TypeError
 
 
-def _example_noop_importer_legacy_hook(
-    files_entries: list[tuple[str, list[Directive]]],
-    _existing: Sequence[Directive],
-) -> list[tuple[str, list[Directive]]]:
-    for e in files_entries:
-        assert len(e) == 2
-    return files_entries
-
-
 def _example_noop_importer_hook(
     files_entries_accounts_importers: list[
         tuple[str, list[Directive], str, Importer]
@@ -173,7 +164,7 @@ def _example_noop_importer_hook(
     return files_entries_accounts_importers
 
 
-HOOKS = [_example_noop_importer_legacy_hook, _example_noop_importer_hook]
+HOOKS = [_example_noop_importer_hook]
 
 
 CONFIG: list[Importer] = [

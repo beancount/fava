@@ -16,8 +16,9 @@ import logging
 import mimetypes
 from datetime import date
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 from functools import lru_cache
+from http import HTTPStatus
 from io import BytesIO
 from pathlib import Path
 from threading import Lock
@@ -53,6 +54,7 @@ from fava.helpers import FavaAPIError
 from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
+from fava.json_api import json_err
 from fava.util import next_key
 from fava.util import send_file_inline
 from fava.util import setup_logging
@@ -358,7 +360,11 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         key = (endpoint, request.method)
         if ext is None or key not in ext.endpoints:
             return abort(404)
-        response = ext.endpoints[key](ext)
+        try:
+            response = ext.endpoints[key](ext)
+        except Exception as e:
+            log.exception("Extension endpoint error")
+            return json_err(e, HTTPStatus.INTERNAL_SERVER_ERROR)
 
         return (
             fava_app.make_response(response)
@@ -405,7 +411,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
     @fava_app.route("/<bfile>/download-journal/")
     def download_journal() -> Response:
         """Download a Journal file."""
-        now = datetime.now(tz=timezone.utc).replace(microsecond=0)
+        now = datetime.now(tz=UTC).replace(microsecond=0)
         filename = f"journal_{now.isoformat()}.beancount"
         data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
         return send_file(data, as_attachment=True, download_name=filename)
@@ -432,7 +438,7 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
         ``/example/page?param1=abc&param2=456``.
 
         """
-        url = urlparse(request.referrer)
+        url = urlparse(request.referrer or "/")
         query_args = parse_qsl(url.query)
         for key, values in request.args.lists():
             query_args = [
@@ -440,6 +446,38 @@ def _setup_routes(fava_app: Flask) -> None:  # noqa: PLR0915
             ]
             if values != [""]:
                 query_args.extend([(key, v) for v in values])
+
+        redirect_url = url._replace(query=urlencode(query_args))
+        return redirect(urlunparse(redirect_url))
+
+    @fava_app.route("/toggle")
+    def toggle() -> WerkzeugResponse:
+        """Redirect back to the referer, toggling some parameters.
+
+        Like ``/jump``, but a parameter is removed if it already has the given
+        value. For the advanced filter (``filter``), the given value is added
+        to the current filter (separated by a space, so combined with AND) or
+        removed from it if it is already contained in it, e.g., accessing
+        ``/toggle?filter=-#tag`` from ``/example/page?filter=#other`` should
+        redirect to ``/example/page?filter=#other -#tag`` and back.
+        """
+        url = urlparse(request.referrer or "/")
+        query_args = parse_qsl(url.query)
+        for key, value in request.args.items(multi=True):
+            current = next((v for k, v in query_args if k == key), "")
+            query_args = [
+                key_value for key_value in query_args if key_value[0] != key
+            ]
+            if key == "filter":
+                padded = f" {current} "
+                if f" {value} " in padded:
+                    new_value = padded.replace(f" {value} ", " ", 1).strip()
+                else:
+                    new_value = f"{current} {value}".strip()
+            else:
+                new_value = "" if current == value else value
+            if new_value:
+                query_args.append((key, new_value))
 
         redirect_url = url._replace(query=urlencode(query_args))
         return redirect(urlunparse(redirect_url))

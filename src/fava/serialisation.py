@@ -10,7 +10,7 @@ This is not intended to work well enough for full roundtrips yet.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from collections.abc import Mapping
 from decimal import Decimal
@@ -54,7 +54,7 @@ SerialisableValue = (
     abc.Directive
     | amount.Amount
     | protocols.Amount
-    | datetime.date
+    | dt.date
     | str
     | int
     | Decimal
@@ -70,7 +70,9 @@ def serialise(o: SerialisableValue) -> object:
 
 
 def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
-    return {k: serialise(v) for k, v in o.items()}
+    # Beancount's inferred tolerances (meta.__tolerances__) can contain the
+    # MISSING sentinel as a key, which cannot be serialised to JSON.
+    return {k: serialise(v) for k, v in o.items() if isinstance(k, str)}
 
 
 serialise.register(dict, _serialise_dict)
@@ -241,8 +243,8 @@ _DECIMAL_RE = re.compile(r"-?\d+(?:\.\d+)?")
 
 
 def _deserialise_meta_value(
-    o: str | bool | _Amount,  # noqa: FBT001
-) -> str | bool | Decimal | protocols.Amount:
+    o: str | bool | int | _Amount,  # noqa: FBT001
+) -> str | bool | int | Decimal | protocols.Amount:
     """Deserialise a single metadata value, restoring Decimal and Amount."""
     if isinstance(o, str) and _DECIMAL_RE.fullmatch(o):
         return Decimal(o)
@@ -252,8 +254,8 @@ def _deserialise_meta_value(
 
 
 def _deserialise_meta(
-    o: Mapping[str, str | bool | _Amount],
-) -> Mapping[str, str | bool | Decimal | protocols.Amount]:
+    o: Mapping[str, str | bool | int | _Amount],
+) -> Mapping[str, str | bool | int | Decimal | protocols.Amount]:
     """Deserialise a metadata mapping, restoring Decimal and Amount values."""
     return {key: _deserialise_meta_value(value) for key, value in o.items()}
 

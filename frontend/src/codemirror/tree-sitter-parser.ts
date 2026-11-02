@@ -97,31 +97,14 @@ export function input_edit_for_fragments(
     return null;
   }
 
-  if (fragments.length === 1) {
-    return fragment.offset === 0
-      ? ts_edit(fragment.to - 1, tree.length, input_length)
-      : ts_edit(0, fragment.from + fragment.offset + 1, fragment.from + 1);
-  }
-
-  const before =
-    fragments.toReversed().find((f) => !f.openStart && f.openEnd) ?? fragment;
-  const after =
-    fragments.find((f) => f.openStart && !f.openEnd) ?? last_element(fragments);
-
-  const from = before.to;
-  const { offset } = after;
-  const newEndIndex = after.from;
-  const oldEndIndex = newEndIndex + offset;
-
-  return ts_edit(from - 1, oldEndIndex + 1, newEndIndex + 1);
+  // The edit spans from the first to the last change, so it starts at the
+  // beginning (or ends at the end) unless a fragment is unchanged there.
+  const last = last_element(fragments);
+  const from = fragment.openStart ? 0 : fragment.to - 1;
+  return last.openEnd || !last.openStart
+    ? ts_edit(from, tree.length, input_length)
+    : ts_edit(from, last.from + last.offset + 1, last.from + 1);
 }
-
-/**
- * A parse can to be started for the same document multiple times.
- *
- * Since we only do full parses, we can reuse these trees here.
- */
-const PARSE_CACHE = new WeakMap<Text, Tree>();
 
 /**
  * This does not support any partial parsing since tree-sitter does not either.
@@ -132,6 +115,7 @@ const PARSE_CACHE = new WeakMap<Text, Tree>();
 class Parse implements PartialParse {
   readonly ts_parser: TSParser;
   readonly node_types: NodeType[];
+  readonly cache: WeakMap<Text, Tree>;
   readonly input: Input;
   readonly fragments: readonly TreeFragment[];
   readonly ranges: readonly { from: number; to: number }[];
@@ -141,12 +125,14 @@ class Parse implements PartialParse {
   constructor(
     ts_parser: TSParser,
     node_types: NodeType[],
+    cache: WeakMap<Text, Tree>,
     input: Input,
     fragments: readonly TreeFragment[],
     ranges: readonly { from: number; to: number }[],
   ) {
     this.ts_parser = ts_parser;
     this.node_types = node_types;
+    this.cache = cache;
     this.input = input;
     this.fragments = fragments;
     this.ranges = ranges;
@@ -160,21 +146,25 @@ class Parse implements PartialParse {
   }
 
   /** Walk over the given node and its children, recursively creating Trees. */
-  private get_tree_for_ts_cursor(ts_cursor: TSTreeCursor): Tree {
-    const { nodeTypeId, startIndex, endIndex } = ts_cursor;
-    const node_type = this.node_types[nodeTypeId] ?? error;
+  #get_tree_for_ts_cursor(ts_cursor: TSTreeCursor): Tree {
+    const { startIndex, endIndex } = ts_cursor;
     const children: Tree[] = [];
     const positions: number[] = [];
 
     if (ts_cursor.gotoFirstChild()) {
       do {
         positions.push(ts_cursor.startIndex - startIndex);
-        children.push(this.get_tree_for_ts_cursor(ts_cursor));
+        children.push(this.#get_tree_for_ts_cursor(ts_cursor));
       } while (ts_cursor.gotoNextSibling());
       ts_cursor.gotoParent();
     }
 
-    return new Tree(node_type, children, positions, endIndex - startIndex);
+    return new Tree(
+      this.node_types[ts_cursor.nodeTypeId] ?? error,
+      children,
+      positions,
+      endIndex - startIndex,
+    );
   }
 
   /**
@@ -182,13 +172,12 @@ class Parse implements PartialParse {
    *
    * Tries to reuse parts of an old tree.
    */
-  private get_tree_for_ts_cursor_reuse(
+  #get_tree_for_ts_cursor_reuse(
     ts_cursor: TSTreeCursor,
     edit: TSEdit,
     old_tree: Tree,
   ): Tree {
-    const { nodeTypeId, startIndex, endIndex } = ts_cursor;
-    const node_type = this.node_types[nodeTypeId] ?? error;
+    const { startIndex, endIndex } = ts_cursor;
     const children: Tree[] = [];
     const positions: number[] = [];
 
@@ -197,10 +186,21 @@ class Parse implements PartialParse {
       const old_children = old_tree.children;
 
       // First, we add all children that end before the edit.
+      // Here and after the edit, if an old child does not match, we fall back
+      // to converting the node.
       let child_index = 0;
       while (!ended && ts_cursor.endIndex < edit.startIndex) {
+        const old_child = old_children[child_index];
+        if (
+          !(old_child instanceof Tree) ||
+          old_child.type.id !== ts_cursor.nodeTypeId ||
+          old_child.length !== ts_cursor.endIndex - ts_cursor.startIndex
+        ) {
+          ts_cursor.gotoParent();
+          return this.#get_tree_for_ts_cursor(ts_cursor);
+        }
         positions.push(ts_cursor.startIndex - startIndex);
-        children.push(old_children[child_index] as Tree);
+        children.push(old_child);
         child_index += 1;
         ended = !ts_cursor.gotoNextSibling();
       }
@@ -211,11 +211,14 @@ class Parse implements PartialParse {
         ts_cursor.startIndex < edit.startIndex &&
         edit.newEndIndex < ts_cursor.endIndex
       ) {
-        const old_child = old_children[child_index] as Tree | undefined;
-        if (old_child) {
+        const old_child = old_children[child_index];
+        if (
+          old_child instanceof Tree &&
+          old_child.type.id === ts_cursor.nodeTypeId
+        ) {
           positions.push(ts_cursor.startIndex - startIndex);
           children.push(
-            this.get_tree_for_ts_cursor_reuse(ts_cursor, edit, old_child),
+            this.#get_tree_for_ts_cursor_reuse(ts_cursor, edit, old_child),
           );
           ended = !ts_cursor.gotoNextSibling();
         }
@@ -224,52 +227,80 @@ class Parse implements PartialParse {
       // Now/alternatively, we add all children contained in/touching the edit.
       while (!ended && ts_cursor.startIndex < edit.newEndIndex) {
         positions.push(ts_cursor.startIndex - startIndex);
-        children.push(this.get_tree_for_ts_cursor(ts_cursor));
+        children.push(this.#get_tree_for_ts_cursor(ts_cursor));
         ended = !ts_cursor.gotoNextSibling();
       }
 
       // Finally, we add the children after the edit.
       // We first count them and add their positions and push the trees after that.
-      let children_after_edit = 0;
+      const after: [number, number][] = [];
       while (!ended) {
         positions.push(ts_cursor.startIndex - startIndex);
-        children_after_edit += 1;
+        after.push([
+          ts_cursor.nodeTypeId,
+          ts_cursor.endIndex - ts_cursor.startIndex,
+        ]);
         ended = !ts_cursor.gotoNextSibling();
       }
-      if (children_after_edit > 0) {
-        children.push(...(old_children.slice(-children_after_edit) as Tree[]));
+      const reused = old_children.slice(old_children.length - after.length);
+      if (
+        reused.length !== after.length ||
+        !reused.every(
+          (t, i): t is Tree =>
+            t instanceof Tree &&
+            t.type.id === after[i]?.[0] &&
+            t.length === after[i][1],
+        )
+      ) {
+        ts_cursor.gotoParent();
+        return this.#get_tree_for_ts_cursor(ts_cursor);
       }
+      children.push(...reused);
       ts_cursor.gotoParent();
     }
 
-    return new Tree(node_type, children, positions, endIndex - startIndex);
+    return new Tree(
+      this.node_types[ts_cursor.nodeTypeId] ?? error,
+      children,
+      positions,
+      endIndex - startIndex,
+    );
   }
 
   /** Convert the tree-sitter Tree to a Lezer tree, possibly reusing parts of an old one. */
-  private convert_tree(
+  #convert_tree(
     ts_tree: TSTree,
     change: Pick<ChangeDetails, "edit" | "old_tree"> | null,
   ): Tree {
-    const ts_tree_cursor = ts_tree.rootNode.walk();
-    const tree = change
-      ? this.get_tree_for_ts_cursor_reuse(
-          ts_tree_cursor,
-          change.edit,
-          change.old_tree,
-        )
-      : this.get_tree_for_ts_cursor(ts_tree_cursor);
+    const root_node = ts_tree.rootNode;
+    const ts_tree_cursor = root_node.walk();
+    let tree: Tree;
+    try {
+      tree = change
+        ? this.#get_tree_for_ts_cursor_reuse(
+            ts_tree_cursor,
+            change.edit,
+            change.old_tree,
+          )
+        : this.#get_tree_for_ts_cursor(ts_tree_cursor);
+    } finally {
+      // Delete explicitly: the finalizer of web-tree-sitter (0.27.1) does not
+      // restore the cursor state before deleting it, corrupting other cursors.
+      ts_tree_cursor.delete();
+    }
+    const { startIndex: start_index, endIndex: end_index } = root_node;
     const tree_with_ts_tree_prop = new Tree(
       tree.type,
       tree.children,
-      tree.positions,
-      tree.length,
+      tree.positions.map((pos) => pos + start_index),
+      end_index,
       [[TS_TREE_PROP, ts_tree]],
     );
     return tree_with_ts_tree_prop;
   }
 
   /** Gather information about the changes from a previous parse. */
-  private static change_details(
+  static #change_details(
     fragments: readonly TreeFragment[],
     input_length: number,
   ): ChangeDetails | null {
@@ -278,9 +309,9 @@ class Parse implements PartialParse {
     }
     const edit = input_edit_for_fragments(fragments, input_length);
     const old_tree = fragments[0].tree;
-    const edited_old_ts_tree = old_tree.prop(TS_TREE_PROP)?.copy();
 
     if (edit) {
+      const edited_old_ts_tree = old_tree.prop(TS_TREE_PROP)?.copy();
       if (!edited_old_ts_tree) {
         log_error("expected old tree when there is an edit");
         return null;
@@ -306,23 +337,23 @@ class Parse implements PartialParse {
    * Outside this extended range, nodes from the old tree can be reused since they
    * will have the exact same stack of containing nodes (possibly offset after the edit).
    */
-  private static extend_change(
+  static #extend_change(
     change: ChangeDetails,
     ts_tree: TSTree,
-  ): Pick<ChangeDetails, "edit" | "old_tree"> | null {
+  ): Pick<ChangeDetails, "edit" | "old_tree"> {
     const { edit, edited_old_ts_tree } = change;
     const changed_ranges = edited_old_ts_tree.getChangedRanges(ts_tree);
     if (!is_non_empty(changed_ranges)) {
       return change;
     }
-    const newEndIndex = Math.max(
+    const new_end_index = Math.max(
       edit.newEndIndex,
       last_element(changed_ranges).endIndex,
     );
     const extended_edit = ts_edit(
       Math.min(edit.startIndex, changed_ranges[0].startIndex),
-      newEndIndex + (edit.oldEndIndex - edit.newEndIndex),
-      newEndIndex,
+      new_end_index + (edit.oldEndIndex - edit.newEndIndex),
+      new_end_index,
     );
     return {
       edit: extended_edit,
@@ -331,40 +362,45 @@ class Parse implements PartialParse {
   }
 
   advance(): Tree | null {
-    const { fragments, input, stoppedAt, ts_parser } = this;
-    const text = input.read(0, stoppedAt ?? input.length);
-    const input_length = text.length;
-
-    const cm_text = input instanceof DocInput ? input.doc : null;
+    const { cache, fragments, input, stoppedAt, ts_parser } = this;
+    const cm_text =
+      input instanceof DocInput && stoppedAt == null ? input.doc : null;
     if (cm_text) {
-      const cached = PARSE_CACHE.get(cm_text);
+      const cached = cache.get(cm_text);
       if (cached) {
+        this.parsedPos = input.length;
         return cached;
       }
     }
 
-    const change = Parse.change_details(fragments, input_length);
+    const text = input.read(0, stoppedAt ?? input.length);
+    const input_length = text.length;
+
+    const change = Parse.#change_details(fragments, input_length);
     let ts_tree = ts_parser.parse(text, change?.edited_old_ts_tree);
-    if (ts_tree?.rootNode.endIndex !== input_length) {
+    let extended_change = null;
+    if (ts_tree?.rootNode.endIndex === input_length) {
+      extended_change = change ? Parse.#extend_change(change, ts_tree) : null;
+    } else {
+      // The edit was wrong, so do not use it to reuse parts of the old tree.
       log_error(
         "Mismatch between tree (%s) and document (%s) lengths; reparsing",
         ts_tree?.rootNode.endIndex,
         input_length,
       );
+      ts_tree?.delete();
       ts_tree = ts_parser.parse(text);
     }
+    change?.edited_old_ts_tree.delete();
     if (ts_tree == null) {
       return null;
     }
-    const extended_change = change
-      ? Parse.extend_change(change, ts_tree)
-      : null;
 
     // Convert the Lezer tree to a tree-sitter tree.
-    const tree = this.convert_tree(ts_tree, extended_change);
+    const tree = this.#convert_tree(ts_tree, extended_change);
     this.parsedPos = input_length;
     if (cm_text) {
-      PARSE_CACHE.set(cm_text, tree);
+      cache.set(cm_text, tree);
     }
 
     return tree;
@@ -384,7 +420,13 @@ class Parse implements PartialParse {
  */
 export class LezerTSParser extends Parser {
   /** The Lezer NodeTypes - all node types from the TS grammar with props assigned. */
-  private node_types: NodeType[];
+  #node_types: NodeType[];
+  /**
+   * A parse can be started for the same document multiple times.
+   *
+   * For full parses, we can reuse these trees here.
+   */
+  #cache = new WeakMap<Text, Tree>();
   readonly ts_parser: TSParser;
 
   constructor(ts_parser: TSParser, props: NodePropSource[], top_node: string) {
@@ -395,7 +437,7 @@ export class LezerTSParser extends Parser {
     if (language == null) {
       throw new MissingLanguageError();
     }
-    this.node_types = language.types.map((name, id) =>
+    this.#node_types = language.types.map((name, id) =>
       NodeType.define({ id, name, props, top: name === top_node }),
     );
   }
@@ -405,6 +447,13 @@ export class LezerTSParser extends Parser {
     fragments: readonly TreeFragment[],
     ranges: readonly { from: number; to: number }[],
   ): PartialParse {
-    return new Parse(this.ts_parser, this.node_types, input, fragments, ranges);
+    return new Parse(
+      this.ts_parser,
+      this.#node_types,
+      this.#cache,
+      input,
+      fragments,
+      ranges,
+    );
   }
 }

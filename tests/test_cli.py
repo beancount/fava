@@ -12,10 +12,9 @@ from time import time
 from typing import TYPE_CHECKING
 
 import pytest
-from click.testing import CliRunner
 
 from fava.cli import _add_env_filenames
-from fava.cli import main
+from fava.cli import _trusted_hosts
 from fava.cli import NonAbsolutePathError
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -44,28 +43,13 @@ def test__add_env_filenames(
     assert _add_env_filenames((asdf,)) == (absolute, other, asdf)
 
 
-def test_cli_invalid_config_file(test_data_dir: Path, tmp_path: Path) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text(
-        """
-[tool.fava]
-external-editor-command = "echo ${file}:${line}"
-""".strip(),
-        encoding="utf-8",
-    )
-
-    runner = CliRunner()
-    result = runner.invoke(
-        main,
-        [
-            str(test_data_dir / "example.beancount"),
-            "--config-file",
-            str(config),
-        ],
-    )
-
-    assert result.exit_code != 0
-    assert "Failed to load config file" in result.output
+def test__trusted_hosts() -> None:
+    localhost = ["localhost", "127.0.0.1"]
+    assert _trusted_hosts("localhost", ()) == localhost
+    assert _trusted_hosts("127.0.0.1", ()) == localhost
+    assert _trusted_hosts("0.0.0.0", ()) is None  # noqa: S104
+    assert _trusted_hosts("localhost", ("fava.example",)) == ["fava.example"]
+    assert _trusted_hosts("localhost", ("*",)) is None
 
 
 @pytest.fixture

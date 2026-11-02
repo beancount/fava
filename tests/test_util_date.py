@@ -9,9 +9,13 @@ from fava.util.date import DateRange
 from fava.util.date import dateranges
 from fava.util.date import Day
 from fava.util.date import END_OF_YEAR
-from fava.util.date import get_fiscal_period
+from fava.util.date import FiscalQuarter
+from fava.util.date import FiscalYear
+from fava.util.date import FiscalYearEnd
+from fava.util.date import FiscalYearEnds
+from fava.util.date import FyeHasNoQuartersError
+from fava.util.date import get_interval
 from fava.util.date import interval_ends
-from fava.util.date import INTERVALS
 from fava.util.date import InvalidDateRangeError
 from fava.util.date import Month
 from fava.util.date import month_offset
@@ -28,14 +32,54 @@ fromisoformat = date.fromisoformat
 
 
 def test_interval() -> None:
-    assert INTERVALS.get("month") is Month
-    assert INTERVALS.get("year") is Year
-    assert INTERVALS.get("asdfasdf") is None
+    assert get_interval("month", END_OF_YEAR) is Month
+    assert get_interval("year", END_OF_YEAR) is Year
+    assert get_interval("asdfasdf", END_OF_YEAR) is None
     assert Year.label
     assert Quarter.label
     assert Month.label
     assert Week.label
     assert Day.label
+    assert FiscalYear(FiscalYearEnds.UK).label
+    assert FiscalQuarter(FiscalYearEnds.AU_NZ).label
+    assert hash(FiscalYearEnds.UK)
+    assert parse_fye_string("04-05") == FiscalYearEnds.UK
+
+
+def test_get_interval_fiscal() -> None:
+    assert get_interval("fiscal_year", END_OF_YEAR) is None
+    assert get_interval("fiscal_quarter", END_OF_YEAR) is None
+    assert get_interval("fiscal_year", FiscalYearEnds.UK) == FiscalYear(
+        FiscalYearEnds.UK
+    )
+    assert get_interval(
+        "fiscal_quarter", FiscalYearEnds.AU_NZ
+    ) == FiscalQuarter(FiscalYearEnds.AU_NZ)
+    assert get_interval("asdf", FiscalYearEnds.UK) is None
+    assert get_interval("fiscal_quarter", FiscalYearEnds.UK) is None
+    assert get_interval("FISCAL_YEAR", FiscalYearEnds.UK) == FiscalYear(
+        FiscalYearEnds.UK
+    )
+
+
+@pytest.mark.parametrize(
+    ("fye", "input_date_string", "expect"),
+    [
+        (END_OF_YEAR, "2023-01-01", 2023),
+        (END_OF_YEAR, "2023-12-31", 2023),
+        (FiscalYearEnds.ZA, "2023-02-28", 2023),
+        (FiscalYearEnds.ZA, "2023-03-01", 2024),
+        (FiscalYearEnds.UK, "2024-04-05", 2024),
+        (FiscalYearEnds.UK, "2024-04-06", 2025),
+        (FiscalYearEnds.JP, "2024-02-02", 2023),
+        (FiscalYearEnds.JP, "2024-03-31", 2023),
+        (FiscalYearEnds.JP, "2024-04-01", 2024),
+    ],
+)
+def test_fye_get_fiscal_year_from_date(
+    fye: FiscalYearEnd, input_date_string: str, expect: int
+) -> None:
+    assert fye.fiscal_year(fromisoformat(input_date_string)) == expect
 
 
 @pytest.mark.parametrize(
@@ -45,13 +89,27 @@ def test_interval() -> None:
         ("2016-01-04", Week, "2016-W01"),
         ("2016-01-04", Month, "2016-01"),
         ("2016-01-04", Quarter, "2016-Q1"),
+        ("2016-03-31", Quarter, "2016-Q1"),
+        ("2016-04-01", Quarter, "2016-Q2"),
         ("2016-01-04", Year, "2016"),
+        ("0999-01-04", Day, "0999-01-04"),
+        ("0999-01-04", Week, "0999-W01"),
+        ("0999-01-04", Month, "0999-01"),
+        ("0999-01-04", Quarter, "0999-Q1"),
+        ("0999-01-04", Year, "0999"),
+        ("0999-01-04", FiscalYear(FiscalYearEnds.UK), "FY0999"),
+        ("0999-04-06", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY0999-Q4"),
+        ("2016-01-04", FiscalYear(FiscalYearEnds.UK), "FY2016"),
+        ("2016-04-06", FiscalYear(FiscalYearEnds.UK), "FY2017"),
+        ("2016-04-06", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q4"),
+        ("2016-01-01", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q3"),
+        ("2015-10-02", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q2"),
+        ("2015-11-01", FiscalQuarter(FiscalYearEnds.JP), "FY2015-Q3"),
+        ("2016-02-01", FiscalQuarter(FiscalYearEnds.JP), "FY2015-Q4"),
     ],
 )
 def test_interval_format(
-    input_date_string: str,
-    interval: Interval,
-    expect: str,
+    input_date_string: str, interval: Interval, expect: str
 ) -> None:
     assert interval.format_date(fromisoformat(input_date_string)) == expect
 
@@ -72,17 +130,20 @@ def test_interval_format(
     ],
 )
 def test_get_next_interval(
-    input_date_string: str,
-    interval: Interval,
-    expect: str,
+    input_date_string: str, interval: Interval, expect: str
 ) -> None:
     res = interval.get_next(fromisoformat(input_date_string))
     assert res == fromisoformat(expect)
 
 
 def test_get_next_interval_max() -> None:
-    for interval in set(INTERVALS.values()):
-        assert interval.get_next(date.max) == date.max
+    assert Day.get_next(date.max) == date.max
+    assert Week.get_next(date.max) == date.max
+    assert Month.get_next(date.max) == date.max
+    assert Quarter.get_next(date.max) == date.max
+    assert Year.get_next(date.max) == date.max
+    assert FiscalQuarter(FiscalYearEnds.JP).get_next(date.max) == date.max
+    assert FiscalYear(FiscalYearEnds.JP).get_next(date.max) == date.max
 
 
 @pytest.mark.parametrize(
@@ -108,12 +169,39 @@ def test_get_next_interval_max() -> None:
     ],
 )
 def test_get_prev_interval(
-    input_date_string: str,
-    interval: Interval,
-    expect: str,
+    input_date_string: str, interval: Interval, expect: str
 ) -> None:
     res = interval.get_prev(fromisoformat(input_date_string))
     assert res == fromisoformat(expect)
+
+
+@pytest.mark.parametrize(
+    ("input_date_string", "fye", "expect"),
+    [
+        ("2016-01-01", FiscalYearEnds.ZA, "2015-03-01"),
+        ("2016-02-28", FiscalYearEnds.ZA, "2015-03-01"),
+        ("2016-02-29", FiscalYearEnds.ZA, "2015-03-01"),
+        ("2016-03-01", FiscalYearEnds.ZA, "2016-03-01"),
+        ("2016-01-01", FiscalYearEnds.UK, "2015-04-06"),
+        ("2016-02-28", FiscalYearEnds.UK, "2015-04-06"),
+        ("2016-06-01", FiscalYearEnds.UK, "2016-04-06"),
+        ("2016-01-01", FiscalYearEnds.JP, "2015-04-01"),
+        ("2016-02-28", FiscalYearEnds.JP, "2015-04-01"),
+        ("2016-06-01", FiscalYearEnds.JP, "2016-04-01"),
+        ("2016-01-01", END_OF_YEAR, "2016-01-01"),
+        ("2016-12-31", END_OF_YEAR, "2016-01-01"),
+    ],
+)
+def test_get_prev_interval_fiscal_year(
+    input_date_string: str, fye: FiscalYearEnd, expect: str
+) -> None:
+    interval = FiscalYear(fye)
+    input_date = fromisoformat(input_date_string)
+    expect_date = fromisoformat(expect)
+    assert interval.get_prev(input_date) == expect_date
+    assert interval.get_next(input_date) == expect_date.replace(
+        year=expect_date.year + 1
+    )
 
 
 @pytest.mark.parametrize(
@@ -123,18 +211,8 @@ def test_get_prev_interval(
             "2014-03-05",
             "2014-05-05",
             Month,
-            [
-                "2014-03-01",
-                "2014-04-01",
-                "2014-05-01",
-                "2014-06-01",
-            ],
-            [
-                "2014-03-05",
-                "2014-04-01",
-                "2014-05-01",
-                "2014-05-05",
-            ],
+            ["2014-03-01", "2014-04-01", "2014-05-01", "2014-06-01"],
+            ["2014-03-05", "2014-04-01", "2014-05-01", "2014-05-05"],
         ),
         (
             "2014-01-01",
@@ -159,27 +237,15 @@ def test_get_prev_interval(
             "2014-03-05",
             "2014-05-05",
             Year,
-            [
-                "2014-01-01",
-                "2015-01-01",
-            ],
-            [
-                "2014-03-05",
-                "2014-05-05",
-            ],
+            ["2014-01-01", "2015-01-01"],
+            ["2014-03-05", "2014-05-05"],
         ),
         (
             "2014-01-01",
             "2014-05-01",
             Year,
-            [
-                "2014-01-01",
-                "2015-01-01",
-            ],
-            [
-                "2014-01-01",
-                "2014-05-01",
-            ],
+            ["2014-01-01", "2015-01-01"],
+            ["2014-01-01", "2014-05-01"],
         ),
     ],
 )
@@ -225,21 +291,18 @@ def test_dateranges_single_date() -> None:
         (Month, "2015-02-01", 28),
         (Month, "2016-01-01", 31),
         (Quarter, "2015-02-01", 90),
+        (Quarter, "2015-04-01", 91),
         (Quarter, "2015-05-01", 91),
+        (Quarter, "2015-07-01", 92),
         (Quarter, "2016-02-01", 91),
+        (Quarter, "2016-10-15", 92),
         (Quarter, "2016-12-01", 92),
         (Year, "2015-02-01", 365),
         (Year, "2016-01-01", 366),
-        # dates in the first month of a quarter
-        (Quarter, "2015-04-01", 91),
-        (Quarter, "2015-07-01", 92),
-        (Quarter, "2016-10-15", 92),
     ],
 )
 def test_number_of_days_in_period(
-    interval: Interval,
-    date_str: str,
-    expect: int,
+    interval: Interval, date_str: str, expect: int
 ) -> None:
     assert interval.number_of_days(fromisoformat(date_str)) == expect
 
@@ -247,84 +310,68 @@ def test_number_of_days_in_period(
 @pytest.mark.parametrize(
     ("date_input", "offset", "expected"),
     [
-        ("2018-01-12", 0, "2018-01-12"),
+        ("2018-01-01", 0, "2018-01-01"),
         ("2018-01-01", -3, "2017-10-01"),
-        ("2018-01-30", 1, None),  # raises value error, as it should
-        ("2018-01-12", 13, "2019-02-12"),
-        ("2018-01-12", -13, "2016-12-12"),
+        ("2018-01-01", 13, "2019-02-01"),
+        ("2018-01-01", -13, "2016-12-01"),
     ],
 )
-def test_month_offset(
-    date_input: str,
-    offset: int,
-    expected: str | None,
-) -> None:
+def test_month_offset(date_input: str, offset: int, expected: str) -> None:
     start_date = fromisoformat(date_input)
-    if expected is None:
-        with pytest.raises(ValueError, match=r"day .* range"):
-            month_offset(start_date, offset)
-    else:
-        assert str(month_offset(start_date, offset)) == expected
+    assert month_offset(start_date, offset) == fromisoformat(expected)
 
 
 @pytest.mark.parametrize(
-    ("year", "quarter", "fye_str", "expect_start", "expect_end"),
+    ("year", "fye", "expect_start"),
     [
-        # standard calendar year [FYE=12-31]
-        (2018, None, "12-31", "2018-01-01", "2019-01-01"),
-        (2018, 1, "12-31", "2018-01-01", "2018-04-01"),
-        (2018, 3, "12-31", "2018-07-01", "2018-10-01"),
-        (2018, 4, "12-31", "2018-10-01", "2019-01-01"),
-        # US fiscal year [FYE=09-30]
-        (2018, None, "09-30", "2017-10-01", "2018-10-01"),
-        (2018, 3, "09-30", "2018-04-01", "2018-07-01"),
-        # 30th June - Australia and NZ [FYE=06-30]
-        (2018, None, "06-30", "2017-07-01", "2018-07-01"),
-        (2018, 1, "06-30", "2017-07-01", "2017-10-01"),
-        (2018, 2, "06-30", "2017-10-01", "2018-01-01"),
-        (2018, 4, "06-30", "2018-04-01", "2018-07-01"),
-        # 5th Apr - UK [FYE=04-05]
-        (2018, None, "04-05", "2017-04-06", "2018-04-06"),
-        # 28th February - consider leap years [FYE=02-28]
-        (2016, None, "02-28", "2015-03-01", "2016-03-01"),
-        (2017, None, "02-28", "2016-03-01", "2017-03-01"),
-        # 1st Apr (last year) - JP [FYE=15-31]
-        (2018, None, "15-31", "2018-04-01", "2019-04-01"),
-        (2018, 1, "15-31", "2018-04-01", "2018-07-01"),
-        (2018, 4, "15-31", "2019-01-01", "2019-04-01"),
-        # None
-        (2018, None, None, "2018-01-01", "2019-01-01"),
+        (2018, END_OF_YEAR, "2018-01-01"),
+        (2018, FiscalYearEnds.US, "2017-10-01"),
+        (2018, FiscalYearEnds.AU_NZ, "2017-07-01"),
+        (2018, FiscalYearEnds.UK, "2017-04-06"),
+        (2016, FiscalYearEnds.ZA, "2015-03-01"),
+        (2017, FiscalYearEnds.ZA, "2016-03-01"),
+        (2018, FiscalYearEnds.JP, "2018-04-01"),
     ],
 )
 def test_get_fiscal_period(
-    year: int,
-    quarter: int | None,
-    fye_str: str | None,
-    expect_start: str,
-    expect_end: str,
+    year: int, fye: FiscalYearEnd, expect_start: str
 ) -> None:
-    fye = parse_fye_string(fye_str) if fye_str else None
-    start_date, end_date = get_fiscal_period(year, fye or END_OF_YEAR, quarter)
-    assert str(start_date) == expect_start
-    assert str(end_date) == expect_end
+    begin = fye.begin_date_for_year(year)
+    assert str(begin) == expect_start
 
 
 @pytest.mark.parametrize(
-    ("year", "quarter", "fye_str", "msg"),
+    ("input_date_string", "fye", "expect_start"),
     [
-        (2018, 0, "12-31", "quarter must be in 1..4"),
-        (2018, 5, "12-31", "quarter must be in 1..4"),
-        # 5th Apr - UK [FYE=04-05]
-        (2018, 1, "04-05", "fiscal year does not start on first"),
+        ("2018-01-01", END_OF_YEAR, "2018-01-01"),
+        ("2018-08-15", END_OF_YEAR, "2018-07-01"),
+        ("2018-12-31", END_OF_YEAR, "2018-10-01"),
+        ("2018-05-20", FiscalYearEnds.US, "2018-04-01"),
+        ("2018-07-01", FiscalYearEnds.AU_NZ, "2018-07-01"),
+        ("2018-06-30", FiscalYearEnds.AU_NZ, "2018-04-01"),
+        ("2018-11-30", FiscalYearEnds.AU_NZ, "2018-10-01"),
+        ("2018-12-31", FiscalYearEnds.JP, "2018-10-01"),
+        ("2019-01-01", FiscalYearEnds.JP, "2019-01-01"),
     ],
 )
-def test_get_fiscal_period_errors(
-    year: int, quarter: int, fye_str: str, msg: str
+def test_fiscal_quarter_get_prev(
+    input_date_string: str, fye: FiscalYearEnd, expect_start: str
 ) -> None:
-    fye = parse_fye_string(fye_str)
-    assert fye
-    with pytest.raises(ValueError, match=msg):
-        get_fiscal_period(year, fye, quarter)
+    interval = FiscalQuarter(fye)
+    res = interval.get_prev(fromisoformat(input_date_string))
+    assert res == fromisoformat(expect_start)
+
+
+def test_fiscal_quarter_without_quarters() -> None:
+    with pytest.raises(FyeHasNoQuartersError):
+        FiscalQuarter(FiscalYearEnds.UK)
+
+
+def test_fiscal_year_end() -> None:
+    with pytest.raises(ValueError, match="Invalid fiscal year end month"):
+        FiscalYearEnd(0, 12)
+    with pytest.raises(ValueError, match="Invalid fiscal year end month"):
+        FiscalYearEnd(25, 12)
 
 
 @pytest.mark.parametrize(

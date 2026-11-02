@@ -73,8 +73,15 @@ export const domHelpers = {
 
 export type TooltipContent = (HTMLElement | string)[];
 
-/** A function to find the closest node and the content to show in the tooltip. */
+/**
+ * A function to find the closest node to the pointer.
+ *
+ * Returns the position of the node, the node itself, and a function to create
+ * the content to show in the tooltip for it.
+ */
 export type TooltipFindNode = (
   x_pointer: number,
   y_pointer: number,
-) => [number, number, TooltipContent] | undefined;
+) =>
+  | [x: number, y: number, node: unknown, content: () => TooltipContent]
+  | undefined;

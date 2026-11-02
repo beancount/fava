@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from typing import TYPE_CHECKING
 
@@ -21,7 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def test_emoji_search_in_narration() -> None:
     txn = create.transaction(
         {},
-        datetime.date(2026, 6, 24),
+        dt.date(2026, 6, 24),
         "*",
         "Cafe ☕",
         "Coffee",
@@ -84,7 +84,7 @@ def test_null_meta_posting() -> None:
 
     txn = create.transaction(
         {},
-        datetime.date(2017, 12, 12),
+        dt.date(2017, 12, 12),
         "*",
         "",
         "",
@@ -123,8 +123,8 @@ def test_time_filter(example_ledger: FavaLedger) -> None:
 
     date_range = time_filter.date_range
     assert date_range
-    assert date_range.begin == datetime.date(2017, 1, 1)
-    assert date_range.end == datetime.date(2018, 1, 1)
+    assert date_range.begin == dt.date(2017, 1, 1)
+    assert date_range.end == dt.date(2018, 1, 1)
     filtered_entries = time_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 83
 

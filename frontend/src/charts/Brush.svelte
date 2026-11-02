@@ -10,7 +10,7 @@
   import type { PointerEventHandler, SVGAttributes } from "svelte/elements";
 
   import { router } from "../router.ts";
-  import { current_time_filter_date_format } from "../stores/format.ts";
+  import { date_format } from "../stores/format.ts";
   import { get_chart_tooltip } from "./context.ts";
   import type { TooltipFindNode } from "./tooltip.ts";
 
@@ -34,6 +34,8 @@
   let x_start = $state(0);
   let x_current = $state(0);
   let active_pointer_id = $state<number>();
+  /** The node that the tooltip currently shows the content for. */
+  let tooltip_node: unknown;
 
   let active = $derived(
     active_pointer_id != null && Math.abs(x_current - x_start) > DRAG_THRESHOLD,
@@ -61,12 +63,16 @@
       const res = find(x_pointer, y_pointer);
       const matrix = event.currentTarget.getCTM();
       if (res && matrix) {
-        const [x, y, content] = res;
+        const [x, y, node, content] = res;
         const point = new DOMPoint(x, y).matrixTransform(matrix);
-        tooltip.content(content);
+        if (node !== tooltip_node) {
+          tooltip.content(content());
+          tooltip_node = node;
+        }
         tooltip.position(point.x, point.y);
       } else {
         tooltip.hide();
+        tooltip_node = undefined;
       }
     }
     if (event.pointerId !== active_pointer_id) {
@@ -83,8 +89,8 @@
       const [x_end] = pointer(event);
       const start_date = invert(Math.min(x_start, x_end));
       const end_date = invert(Math.max(x_start, x_end));
-      const start = $current_time_filter_date_format(start_date);
-      const end = $current_time_filter_date_format(end_date);
+      const start = $date_format(start_date);
+      const end = $date_format(end_date);
       const time_filter = start === end ? start : `${start} - ${end}`;
       router.set_search_param("time", time_filter);
     }
@@ -95,6 +101,7 @@
     // Cancel when leaving the container element
     active_pointer_id = undefined;
     tooltip.hide();
+    tooltip_node = undefined;
   }
 </script>
 

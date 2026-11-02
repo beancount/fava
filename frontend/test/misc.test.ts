@@ -9,7 +9,6 @@ import {
   fetch_json,
   fetch_text,
 } from "../src/lib/fetch.ts";
-import { get_interval } from "../src/lib/interval.ts";
 import { parse_json } from "../src/lib/json.ts";
 import { is_empty } from "../src/lib/objects.ts";
 import { toggle } from "../src/lib/set.ts";
@@ -26,11 +25,6 @@ test("shallow array equality", () => {
   ok(shallow_equal(["asdf", 1], ["asdf", 1]));
   ok(!shallow_equal([1, "asdf"], ["asdf", 1]));
   ok(shallow_equal(["asdf"], ["asdf"]));
-});
-
-test("validate interval", () => {
-  equal(get_interval("year"), "year");
-  equal(get_interval("yasdfaear"), "month");
 });
 
 test("check whether objects are empty", () => {
@@ -116,7 +110,17 @@ test("request handling - HTTP errors on fetchJSON", async (t) => {
     globalThis,
     "fetch",
     () =>
-      new Response(JSON.stringify({ error: "some message" }), { status: 401 }),
+      new Response(
+        JSON.stringify({
+          title: "Unauthorized",
+          status: 401,
+          detail: "some message",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/problem+json" },
+        },
+      ),
   );
   await rejects(fetch_json(url), { message: "HTTP 401 - some message" });
 

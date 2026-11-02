@@ -12,7 +12,7 @@ from fava.beans import protocols
 from fava.beans.str import cost_to_string
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Callable
     from collections.abc import Iterator
     from typing import Concatenate
@@ -47,7 +47,7 @@ class _Amount(Struct, frozen=True):
 class _Cost(Struct, frozen=True):
     number: Decimal
     currency: str
-    date: datetime.date
+    date: dt.date
     label: str | None
 
     @overload

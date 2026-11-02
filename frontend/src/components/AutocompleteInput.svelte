@@ -15,7 +15,7 @@
 -->
 <script lang="ts">
   import type { KeySpec } from "./../keyboard-shortcuts.ts";
-  import { keyboardShortcut, normalise_key } from "./../keyboard-shortcuts.ts";
+  import { keyboard_shortcut, normalise_key } from "./../keyboard-shortcuts.ts";
   import { fuzzyfilter, fuzzywrap } from "./../lib/fuzzy.ts";
 
   interface Props {
@@ -183,7 +183,7 @@
     aria-activedescendant={active_id}
     bind:value
     bind:this={input}
-    {@attach keyboardShortcut(key)}
+    {@attach keyboard_shortcut(key)}
     onblur={() => {
       if (automatic_selection && tab_pressed && active_suggestion != null) {
         // The automatically selected suggestion becomes the value of the

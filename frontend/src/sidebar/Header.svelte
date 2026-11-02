@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { keyboardShortcut } from "../keyboard-shortcuts.ts";
+  import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
   import { router } from "../router.ts";
   import { ledger_data } from "../stores/index.ts";
   import { ledger_title } from "../stores/options.ts";
@@ -32,7 +32,7 @@
     type="button"
     hidden={!$has_changes}
     class="reload-page"
-    {@attach keyboardShortcut("r")}
+    {@attach keyboard_shortcut("r")}
     onclick={router.reload}
   >
     &#8635;

@@ -1,6 +1,7 @@
 import { derived } from "svelte/store";
 
-import { derived_array } from "../lib/store.ts";
+import { FiscalYearEnd } from "../lib/interval.ts";
+import { derived_array, derived_with_equality } from "../lib/store.ts";
 import { ledger_data } from "./index.ts";
 
 /** Fava's options */
@@ -14,6 +15,12 @@ export const conversion_currencies = derived_array(
 export const locale = derived(
   fava_options,
   ($fava_options) => $fava_options.locale,
+);
+export const fiscal_year_end = derived_with_equality(
+  fava_options,
+  ($fava_options) => $fava_options.fiscal_year_end,
+  FiscalYearEnd.default,
+  (a, b) => a.equals(b),
 );
 export const collapse_pattern = derived_array(
   fava_options,

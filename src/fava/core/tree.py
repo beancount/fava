@@ -16,7 +16,7 @@ from fava.core.conversion import AT_VALUE
 from fava.core.inventory import CounterInventory
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Iterable
     from collections.abc import Sequence
 
@@ -62,7 +62,7 @@ class TreeNode:
         self,
         conversion: Conversion,
         prices: FavaPriceMap,
-        end: datetime.date | None,
+        end: dt.date | None,
         *,
         with_cost: bool = False,
     ) -> SerialisedTreeNode:

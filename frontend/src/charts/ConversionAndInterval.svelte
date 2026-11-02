@@ -4,12 +4,14 @@
   import {
     DEFAULT_INTERVAL,
     get_interval,
-    INTERVALS,
     interval_label,
   } from "../lib/interval.ts";
   import { router } from "../router.ts";
   import { conversions } from "../stores/chart.ts";
+  import { fiscal_year_end } from "../stores/fava_options.ts";
   import { conversion, interval } from "../stores/url.ts";
+
+  let interval_options = $derived($fiscal_year_end.available_intervals);
 
   const conversion_description = (option: string) => {
     switch (option) {
@@ -50,6 +52,6 @@
       );
     }
   }
-  options={INTERVALS}
-  description={(o: string) => interval_label(get_interval(o))}
+  options={interval_options}
+  description={(o: string) => interval_label(get_interval(o, $fiscal_year_end))}
 />

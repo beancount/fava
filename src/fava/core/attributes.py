@@ -18,8 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def get_active_years(
-    entries: Sequence[Directive],
-    fye: FiscalYearEnd,
+    entries: Sequence[Directive], fye: FiscalYearEnd
 ) -> list[str]:
     """Return active years, with support for fiscal years.
 
@@ -31,29 +30,11 @@ def get_active_years(
         A reverse sorted list of years or fiscal years that occur in the
         entries.
     """
-    years = []
     if fye == END_OF_YEAR:
-        prev_year = None
-        for entry in entries:
-            year = entry.date.year
-            if year != prev_year:
-                prev_year = year
-                years.append(year)
-        return [f"{year}" for year in reversed(years)]
-    month = fye.month
-    day = fye.day
-    prev_year = None
-    for entry in entries:
-        date = entry.date
-        year = (
-            entry.date.year + 1
-            if date.month > month or (date.month == month and date.day > day)
-            else entry.date.year
-        )
-        if year != prev_year:
-            prev_year = year
-            years.append(year)
-    return [f"FY{year}" for year in reversed(years)]
+        years = {entry.date.year for entry in entries}
+        return [f"{year}" for year in sorted(years, reverse=True)]
+    fiscal_years = {fye.fiscal_year(entry.date) for entry in entries}
+    return [f"FY{year}" for year in sorted(fiscal_years, reverse=True)]
 
 
 class AttributesModule(FavaModule):

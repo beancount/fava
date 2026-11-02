@@ -23,22 +23,22 @@ export function handle_journal_click({ target }: Event): void {
 
   if (target.matches(".tag, .link")) {
     // Filter for tags and links when clicking on them.
-    add_filter(target.innerText);
+    add_filter(target.textContent);
   } else if (target.matches(".payee")) {
     // Filter for payees when clicking on them.
     // Note: any special characters in the payee string are escaped so the
     // filter matches against the payee literally.
-    add_filter(`payee:"^${escape_for_regex(target.innerText)}$"`);
+    add_filter(`payee:"^${escape_for_regex(target.textContent)}$"`);
   } else if (target.tagName === "DT") {
     // Filter for metadata key when clicking on the key. The key tag text
     // includes the colon.
-    const expr = `${target.innerText}""`;
+    const expr = `${target.textContent}""`;
     add_filter(target.closest(".postings") ? `any(${expr})` : expr);
   } else if (target.tagName === "DD") {
     // Filter for metadata key and value when clicking on the value. The key
     // tag text includes the colon.
-    const key = (target.previousElementSibling as HTMLElement).innerText;
-    const value = `"^${escape_for_regex(target.innerText)}$"`;
+    const key = (target.previousElementSibling as HTMLElement).textContent;
+    const value = `"^${escape_for_regex(target.textContent)}$"`;
     const expr = `${key}${value}`;
     add_filter(target.closest(".postings") ? `any(${expr})` : expr);
   } else if (target.closest(".indicators")) {

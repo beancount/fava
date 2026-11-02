@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import shlex
 import textwrap
+from threading import Lock
 from typing import TYPE_CHECKING
 
 from beancount.core.display_context import DisplayContext
@@ -85,27 +86,29 @@ class FavaBQLShell(BQLShell):
         super().__init__("", io.StringIO(), interactive=False)  # type: ignore[no-untyped-call]
         self.ledger = ledger
         self.stdout = self.outfile
+        self._lock = Lock()
 
     def run(self, entries: Sequence[Directive], query: str) -> Cursor | str:
         """Run a query, capturing output as string or returning the result."""
-        self.context = connect(
-            "beancount:",
-            entries=entries,
-            errors=self.ledger.errors,
-            options=self.ledger.options,
-        )
-        try:
-            result = self.onecmd(query)  # type: ignore[no-untyped-call]
-        except ParseError as exc:
-            raise QueryParseError(exc) from exc
-        except CompilationError as exc:
-            raise QueryCompilationError(exc) from exc
+        with self._lock:
+            self.context = connect(
+                "beancount:",
+                entries=entries,
+                errors=self.ledger.errors,
+                options=self.ledger.options,
+            )
+            try:
+                result = self.onecmd(query)  # type: ignore[no-untyped-call]
+            except ParseError as exc:
+                raise QueryParseError(exc) from exc
+            except CompilationError as exc:
+                raise QueryCompilationError(exc) from exc
 
-        if isinstance(result, Cursor):
-            return result
-        contents = self.outfile.getvalue().strip()
-        self.outfile.truncate(0)
-        return contents.strip().strip("\x00")
+            if isinstance(result, Cursor):
+                return result
+            contents = self.outfile.getvalue().strip()
+            self.outfile.truncate(0)
+            return contents.strip().strip("\x00")
 
     def add_help(self) -> None:
         """Attach help functions for each of the parsed token handlers."""
@@ -127,9 +130,6 @@ class FavaBQLShell(BQLShell):
         print(self.noop.__doc__, file=self.outfile)
 
     on_Reload = noop  # noqa: N815
-    do_exit = noop  # ty:ignore[invalid-method-override]
-    do_quit = noop  # ty:ignore[invalid-method-override]
-    do_EOF = noop  # noqa: N815  # ty:ignore[invalid-method-override]
 
     def on_Select(self, statement: str) -> Cursor:  # noqa: D102, N802
         return self.context.execute(statement)
@@ -155,6 +155,25 @@ class FavaBQLShell(BQLShell):
 
 
 FavaBQLShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
+
+#: The shell commands that can be used in Fava. All other commands are
+#: replaced with a no-op.
+ALLOWED_SHELL_COMMANDS = frozenset(
+    {
+        "describe",
+        "errors",
+        "explain",
+        "help",
+        "parse",
+        "reload",
+        "run",
+        "tables",
+    }
+)
+
+for _name in dir(FavaBQLShell):
+    if _name.startswith("do_") and _name[3:] not in ALLOWED_SHELL_COMMANDS:
+        setattr(FavaBQLShell, _name, FavaBQLShell.noop)
 
 
 class QueryShell(FavaModule):

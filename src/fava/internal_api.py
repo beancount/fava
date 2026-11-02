@@ -141,6 +141,7 @@ class BalancesChart(Struct, frozen=True):
     label: str
     data: Sequence[DateAndBalance]
     type: Literal["balances"] = "balances"
+    key: str | None = None
 
 
 class BarChart(Struct, frozen=True):
@@ -149,6 +150,7 @@ class BarChart(Struct, frozen=True):
     label: str
     data: Sequence[DateAndBalanceWithBudget]
     type: Literal["bar"] = "bar"
+    key: str | None = None
 
 
 class HierarchyChart(Struct, frozen=True):
@@ -157,6 +159,7 @@ class HierarchyChart(Struct, frozen=True):
     label: str
     data: SerialisedTreeNode
     type: Literal["hierarchy"] = "hierarchy"
+    key: str | None = None
 
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -176,6 +179,7 @@ class ChartApi:
                 account_name,
                 g.conv,
             ),
+            key="account_balance",
         )
 
     @staticmethod
@@ -200,6 +204,7 @@ class ChartApi:
         account_name: str | tuple[str, ...],
         label: str | None = None,
         *,
+        key: str | None = None,
         invert: bool = False,
     ) -> ChartData:
         """Generate data for an account per interval chart."""
@@ -212,6 +217,7 @@ class ChartApi:
                 g.conv,
                 invert=invert,
             ),
+            key=key,
         )
 
     @staticmethod
@@ -220,4 +226,5 @@ class ChartApi:
         return BalancesChart(
             gettext("Net Worth"),
             g.ledger.charts.net_worth(g.filtered, g.interval, g.conv),
+            key="net_worth",
         )

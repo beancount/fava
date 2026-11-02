@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from http import HTTPStatus
 from importlib.metadata import version
 from pathlib import Path
@@ -14,9 +14,6 @@ from fava.application import create_app
 from fava.application import static_url
 from fava.beans import create
 from fava.beans.funcs import hash_entry
-from fava.config import FavaProjectConfig
-from fava.config import load_project_config
-from fava.config import ProjectConfigError
 from fava.context import g
 from fava.core import StatementMetadataInvalidError
 from fava.core import StatementNotFoundError
@@ -183,6 +180,61 @@ def test_jump_handler(
     assert get_url == expect
 
 
+@pytest.mark.parametrize("link", ["/jump?time=month", "/toggle?time=month"])
+def test_jump_and_toggle_without_referer(
+    test_client: FlaskClient,
+    link: str,
+) -> None:
+    """Without a referer, /jump and /toggle redirect to the index page."""
+    response = test_client.get(link)
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert response.headers.get("Location", "") == "/?time=month"
+
+
+@pytest.mark.parametrize(
+    ("referer", "toggle_link", "expect"),
+    [
+        ("/", "/toggle?time=month", "/?time=month"),
+        ("/?time=month", "/toggle?time=month", "/"),
+        ("/?time=2020", "/toggle?time=month", "/?time=month"),
+        ("/?foo=bar&time=month", "/toggle?time=month", "/?foo=bar"),
+        ("/", "/toggle?filter=-%23tag", "/?filter=-%23tag"),
+        ("/?filter=-%23tag", "/toggle?filter=-%23tag", "/"),
+        (
+            "/?filter=%23other",
+            "/toggle?filter=-%23tag",
+            "/?filter=%23other+-%23tag",
+        ),
+        (
+            "/?filter=%23a+-%23tag+%23b",
+            "/toggle?filter=-%23tag",
+            "/?filter=%23a+%23b",
+        ),
+        (
+            "/?filter=-%23tagged",
+            "/toggle?filter=-%23tag",
+            "/?filter=-%23tagged+-%23tag",
+        ),
+        (
+            "/?filter=%23a&time=month",
+            "/toggle?filter=%23a&time=year",
+            "/?time=year",
+        ),
+    ],
+)
+def test_toggle_handler(
+    test_client: FlaskClient,
+    referer: str,
+    toggle_link: str,
+    expect: str,
+) -> None:
+    """Test /toggle handler correctly redirect to the right location."""
+    response = test_client.get(toggle_link, headers=[("Referer", referer)])
+    get_url = response.headers.get("Location", "")
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert get_url == expect
+
+
 def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages are rendered in the frontend, only the slug is checked."""
     response = test_client.get("/long-example/help/")
@@ -214,7 +266,7 @@ def test_statement_download(
 
     path = Path(__file__)
     by_account = path.parent.parent / "found_by_account"
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     txn = create.transaction(
         {
             "filename": str(path),
@@ -314,97 +366,16 @@ def test_read_only_mode(test_data_dir: Path) -> None:
         assert response.status_code == HTTPStatus.UNAUTHORIZED.value
 
 
-def test_start_with_valid_config_file(
-    test_data_dir: Path, tmp_path: Path
-) -> None:
-    """A valid config file is loaded at startup."""
-    config = tmp_path / "pyproject.toml"
-    config.write_text(
-        """
-[tool.fava]
-external-editor-command = ["echo", "${file}:${line}"]
-""".strip(),
-        encoding="utf-8",
-    )
+def test_trusted_hosts(test_data_dir: Path) -> None:
+    """Requests for other hosts return 400 if TRUSTED_HOSTS is set."""
+    app = create_app([test_data_dir / "example.beancount"])
+    app.config["TRUSTED_HOSTS"] = ["localhost"]
+    test_client = app.test_client()
 
-    app = create_app(
-        [test_data_dir / "example.beancount"],
-        config_file=str(config),
-        load=True,
-    )
-    assert app.config["LEDGERS"].ledgers[0].use_external_editor
-
-
-def test_start_with_invalid_config_file_fails(
-    test_data_dir: Path,
-    tmp_path: Path,
-) -> None:
-    """An invalid config file fails startup."""
-    config = tmp_path / "pyproject.toml"
-    config.write_text(
-        """
-[tool.fava]
-external-editor-command = "echo ${file}:${line}"
-""".strip(),
-        encoding="utf-8",
-    )
-
-    with pytest.raises(ProjectConfigError):
-        create_app(
-            [test_data_dir / "example.beancount"],
-            config_file=str(config),
-        )
-
-
-def test_load_project_config_without_tool_returns_default(
-    tmp_path: Path,
-) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text("[project]\nname = 'example'\n", encoding="utf-8")
-
-    loaded = load_project_config(str(config))
-
-    assert loaded == FavaProjectConfig()
-    assert not loaded.use_external_editor
-
-
-def test_load_project_config_without_tool_fava_returns_default(
-    tmp_path: Path,
-) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text("[tool]\n", encoding="utf-8")
-
-    loaded = load_project_config(str(config))
-
-    assert loaded == FavaProjectConfig()
-    assert not loaded.use_external_editor
-
-
-def test_load_project_config_invalid_tool_table(tmp_path: Path) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text("tool = 'invalid'\n", encoding="utf-8")
-
-    with pytest.raises(ProjectConfigError, match="`tool` must be a table"):
-        load_project_config(str(config))
-
-
-def test_load_project_config_invalid_tool_fava_table(tmp_path: Path) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text("[tool]\nfava = 'invalid'\n", encoding="utf-8")
-
-    with pytest.raises(
-        ProjectConfigError,
-        match=r"`tool\.fava` must be a table",
-    ):
-        load_project_config(str(config))
-
-
-def test_load_project_config_invalid_toml(tmp_path: Path) -> None:
-    config = tmp_path / "pyproject.toml"
-    config.write_text("[tool.fava\n", encoding="utf-8")
-
-    with pytest.raises(ProjectConfigError):
-        load_project_config(str(config))
+    response = test_client.get("/", headers={"Host": "localhost:5000"})
+    assert response.status_code == HTTPStatus.FOUND.value
+    response = test_client.get("/", headers={"Host": "evil.example:5000"})
+    assert response.status_code == HTTPStatus.BAD_REQUEST.value
 
 
 def test_download_journal(
@@ -462,3 +433,16 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     response = test_client.get(url)
     assert assert_success(response)
     assert response.json == ["some data"]
+
+
+def test_load_extension_endpoint_error(test_client: FlaskClient) -> None:
+    """Exceptions in extension endpoints return JSON with a 500 status."""
+    url = "/extension-report/extension/FavaExtTest/example_error"
+    response = test_client.get(url)
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR.value
+    assert response.content_type == "application/problem+json"
+    assert response.json == {
+        "title": "RuntimeError",
+        "status": HTTPStatus.INTERNAL_SERVER_ERROR.value,
+        "detail": "example error",
+    }

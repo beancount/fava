@@ -60,7 +60,7 @@
           ?.querySelector(".datecell")
           ?.querySelector("a");
         if (date_link != null) {
-          const entry_date = date_link.innerText;
+          const entry_date = date_link.textContent;
           const hash = new URL(date_link.href).hash;
           if (hash.startsWith("#context-")) {
             const entry_hash = hash.slice(9);
@@ -96,7 +96,9 @@
   onclick={handle_journal_click}
   {ondragenter}
   {@attach (node: HTMLOListElement) => {
-    void journal;
+    // Re-run on any change to the journal
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    journal;
     untrack(() => {
       const sort = $journal_sort;
       node.innerHTML = "";

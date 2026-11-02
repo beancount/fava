@@ -37,7 +37,9 @@ from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 from fava.core.charts import dumps
 from fava.core.charts import loads
+from fava.core.ingest import HookOutput
 from fava.core.query import QueryResult
+from fava.util.date import END_OF_YEAR
 from fava.util.date import Interval
 from fava.util.date import local_today
 
@@ -283,7 +285,7 @@ def load_doc_custom_entries(
 @pytest.fixture
 def budgets_doc(load_doc_custom_entries: Sequence[Custom]) -> BudgetDict:
     """Load the budgets from the custom entries in the docstring."""
-    budgets, _ = parse_budgets(load_doc_custom_entries)
+    budgets, _ = parse_budgets(load_doc_custom_entries, END_OF_YEAR)
     return budgets
 
 
@@ -294,6 +296,7 @@ LedgerSlug: TypeAlias = Literal[
     "long-example",
     "extension-report",
     "edit-example",
+    "errors",
     "import",
     "off-by-one",
     "invalid-unicode",
@@ -348,6 +351,7 @@ def pytest_runtest_makereport(item: pytest.Function) -> None:
         "Flask": Flask,
         "FlaskClient": FlaskClient,
         "GetFavaLedger": GetFavaLedger,
+        "HookOutput": HookOutput,
         "Interval": Interval,
         "LoaderResult": LoaderResult,
         "Meta": Mapping[str, Any],
