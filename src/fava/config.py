@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import msgspec
-import tomli
 
 
 class ProjectConfigError(ValueError):
@@ -57,8 +57,8 @@ def load_project_config(config_file: str | None) -> FavaProjectConfig:
 
     try:
         with Path(config_file).open("rb") as file_obj:
-            config_data = tomli.load(file_obj)
-    except (OSError, tomli.TOMLDecodeError) as err:
+            config_data = tomllib.load(file_obj)
+    except (OSError, tomllib.TOMLDecodeError) as err:
         raise ProjectConfigError(str(err)) from err
 
     tool_data = config_data.get("tool")
