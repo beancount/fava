@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Weblate 2026.9.dev0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: frontend/src/app.ts:83
+#: frontend/src/app.ts:79
 msgid "File change detected. Click to reload."
 msgstr "Tiedosto muuttui. Päivitä napsauttamalla."
 
