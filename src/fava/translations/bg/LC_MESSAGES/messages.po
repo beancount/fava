@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:83
+#: frontend/src/app.ts:79
 msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 

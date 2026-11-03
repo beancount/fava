@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Translate Toolkit 3.19.18\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: frontend/src/app.ts:83
+#: frontend/src/app.ts:79
 msgid "File change detected. Click to reload."
 msgstr ""
 
