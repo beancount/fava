@@ -22,17 +22,16 @@ export {
   set_errors,
 } from "./editor-transactions.ts";
 
-export function init_textarea(el: HTMLTextAreaElement): void {
+export function init_readonly_editor(el: HTMLElement): void {
   const editor = new EditorView({
-    doc: el.value,
+    doc: el.textContent,
     extensions: [
       beancount_language_support,
       syntaxHighlighting(defaultHighlightStyle),
       EditorState.readOnly.of(true),
     ],
   });
-  el.parentNode?.insertBefore(editor.dom, el);
-  el.style.display = "none";
+  el.replaceChildren(editor.dom);
 }
 
 /**

@@ -86,10 +86,7 @@ class _CustomRenderer(RendererHTML):
         if token.info.strip() != "beancount":
             return super().fence(tokens, idx, options, env)
         source = escapeHtml(token.content.rstrip("\n"))
-        return (
-            f'<pre><textarea is="beancount-textarea">{source}'
-            "</textarea></pre>\n"
-        )
+        return f"<pre><beancount-code>{source}</beancount-code></pre>\n"
 
 
 _MD = MarkdownIt("commonmark", renderer_cls=_CustomRenderer).enable("table")

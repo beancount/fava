@@ -174,18 +174,6 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40ungap/custom-elements@1.3.0",
-      "name": "@ungap/custom-elements",
-      "version": "1.3.0",
-      "purl": "pkg:npm/%40ungap/custom-elements@1.3.0",
-      "licenses": [
-        {
-          "expression": "ISC"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "bom-ref": "pkg:npm/clsx@2.1.1",
       "name": "clsx",
       "version": "2.1.1",

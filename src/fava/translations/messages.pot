@@ -1,4 +1,4 @@
-#: frontend/src/app.ts:83
+#: frontend/src/app.ts:79
 msgid "File change detected. Click to reload."
 msgstr ""
 
