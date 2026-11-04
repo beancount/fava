@@ -23,14 +23,14 @@
 }
 
 .cm-editor .cm-selectionBackground {
-  background-color: var(--editor-activeline);
+  background-color: var(--editor-selection);
 }
 
 .cm-editor.cm-focused
   > .cm-scroller
   > .cm-selectionLayer
   .cm-selectionBackground {
-  background-color: var(--editor-activeline);
+  background-color: var(--editor-selection);
 }
 
 .cm-editor .cm-selectionMatch {
