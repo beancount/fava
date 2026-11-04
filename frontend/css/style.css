@@ -89,6 +89,7 @@
     hsl(200deg 100% 90% / 30%),
     hsl(200deg 100% 30% / 30%)
   );
+  --editor-selection: light-dark(hsl(210deg 100% 80%), hsl(215deg 15% 36%));
   --editor-selectionmatch: light-dark(
     hsl(105deg 100% 70% / 50%),
     hsl(105deg 100% 30% / 50%)
