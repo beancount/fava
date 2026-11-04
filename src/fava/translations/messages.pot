@@ -207,7 +207,7 @@ msgstr ""
 msgid "Balances after entry"
 msgstr ""
 
-#: frontend/src/modals/EntryContextLocation.svelte:14
+#: frontend/src/modals/EntryContextLocation.svelte:15
 msgid "Location"
 msgstr ""
 
@@ -220,7 +220,7 @@ msgstr ""
 msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:24
+#: frontend/src/reports/errors/Errors.svelte:25
 #: frontend/src/reports/route.ts:102
 msgid "Error"
 msgstr ""
@@ -236,7 +236,7 @@ msgstr ""
 
 #: frontend/src/reports/accounts/AccountReport.svelte:65
 #: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:804
+#: src/fava/json_api.py:919
 msgid "Changes"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgid "Documents"
 msgstr ""
 
 #: frontend/src/reports/editor/EditorMenu.svelte:42
-#: frontend/src/reports/errors/Errors.svelte:22
+#: frontend/src/reports/errors/Errors.svelte:23
 msgid "File"
 msgstr ""
 
@@ -317,17 +317,17 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:23
+#: frontend/src/reports/errors/Errors.svelte:24
 #: frontend/src/reports/import/ExtractEntry.svelte:41
 msgid "Line"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:49
+#: frontend/src/reports/errors/Errors.svelte:46
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:77
+#: frontend/src/reports/errors/Errors.svelte:80
 msgid "No errors."
 msgstr ""
 
@@ -634,8 +634,8 @@ msgstr ""
 msgid "Filter by tag, payee, …"
 msgstr ""
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:723
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:817
+#: src/fava/json_api.py:838
 msgid "Net Profit"
 msgstr ""
 
@@ -697,19 +697,19 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:176
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:227
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:824
 msgid "Income"
 msgstr ""
 
-#: src/fava/json_api.py:716
+#: src/fava/json_api.py:831
 msgid "Expenses"
 msgstr ""
 
