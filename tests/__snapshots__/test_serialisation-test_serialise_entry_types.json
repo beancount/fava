@@ -28,7 +28,7 @@
       "date-value": "2022-12-12",
       "filename": "<string>",
       "lineno": 6,
-      "number-value": "20",
+      "number-value": { "number": "20" },
       "string-value": "value"
     },
     "t": "Event",
