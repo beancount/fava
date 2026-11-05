@@ -6,7 +6,7 @@ import type { Attachment } from "svelte/attachments";
  * @returns true if the element is one of input/select/textarea or a
  *          contentEditable element.
  */
-function is_editable_element(element: EventTarget | null): boolean {
+export function is_editable_element(element: EventTarget | null): boolean {
   return (
     element instanceof HTMLElement &&
     (element instanceof HTMLInputElement ||
