@@ -55,7 +55,7 @@
         <p>
         <span class='datecell' data-sort-value='{{ index }}'><a href='#context-{{ entry_hash }}'>{{ entry.date }}</a></span>
         <span class='flag'>{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
-        <span class='description'>
+        <span class='description'{% if type == 'transaction' %} title='{{ ((entry.payee or '') ~ (' • ' if entry.payee and entry.narration else '') ~ (entry.narration or ''))|e }}'{% endif %}>
         {% if type == 'open' or type == 'close' %}
             {{ _account_link(entry.account) }}
         {% elif type == 'note' %}
