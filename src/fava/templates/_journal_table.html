@@ -98,7 +98,7 @@
         {% if type == 'balance' %}
           {{ render_amount(ledger, entry.amount, 'num bal' + (' pending' if entry.diff_amount else '')) }}
             {% if entry.diff_amount %}
-              <span class='change num bal pending'>
+              <span class='change num bal pending' data-sort-value='{{ entry.diff_amount.number|incognito }}'>
               {{- render_num(ledger, entry.diff_amount.currency, entry.diff_amount.number) -}}
               </span>
             {% else %}
@@ -110,7 +110,7 @@
         {% endif %}
         {% if show_change_and_balance %}
           {% if type == 'transaction' %}
-            <span class='change num'>
+            <span class='change num' data-sort-value='{{ change.values()|first|default(0)|incognito }}'>
             {%- for currency, number in change.items() %}{{ render_num(ledger, currency, number) }}<br>{% endfor -%}
             </span>
           {% endif %}

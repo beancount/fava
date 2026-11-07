@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import datetime as dt
+import re
+from decimal import Decimal
 from difflib import Differ
 from http import HTTPStatus
 from importlib.metadata import version
@@ -1072,3 +1074,39 @@ def test_api(
     data = assert_api_success(response)
     assert data
     snapshot(data, name=name, json=True)
+
+
+def test_api_account_journal_sort_value_ignores_locale(
+    test_client: FlaskClient,
+    example_ledger: FavaLedger,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The journal's change column sorts by the raw number, not its display.
+
+    With a locale like de_DE, 1234.56 is displayed as "1.234,56", which the
+    frontend's text-based number parsing would read as 1.234.
+    """
+    monkeypatch.setattr(example_ledger.fava_options, "locale", "de_DE")
+    example_ledger.format_decimal.load_file()
+    try:
+        response = test_client.get(
+            "/long-example/api/account_report",
+            query_string={"a": "Assets:US:BofA:Checking", "r": "journal"},
+        )
+        data = assert_api_success(response)
+    finally:
+        monkeypatch.undo()
+        example_ledger.format_decimal.load_file()
+
+    assert isinstance(data, dict)
+    cells = re.findall(
+        r"class='change num' data-sort-value='([^']*)'>"
+        r"<span title='[^']*'>([^ <]*) USD",
+        data["journal"],
+    )
+    assert cells
+    # Some amounts need a thousands separator, i.e. text-based sorting breaks.
+    assert any("." in shown for _, shown in cells)
+    for sort_value, shown in cells:
+        displayed = Decimal(shown.replace(".", "").replace(",", "."))
+        assert Decimal(sort_value) == displayed
