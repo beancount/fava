@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from difflib import Differ
 from http import HTTPStatus
 from importlib.metadata import version
@@ -370,7 +370,7 @@ def test_api_context(
             entry
             for entry in example_ledger.all_entries_by_type.Transaction
             if entry.narration == r"Investing 40% of cash in VBMPX"
-            and entry.date == datetime.date(2016, 5, 9)
+            and entry.date == dt.date(2016, 5, 9)
         ),
     )
 
@@ -792,7 +792,7 @@ def test_api_source_slice_delete(app_in_tmp_dir: Flask) -> None:
 
     entry = ledger.all_entries[-1]
     entry_hash = hash_entry(entry)
-    _entry_source, sha256sum = get_entry_slice(entry)
+    sha256sum = get_entry_slice(entry).sha256sum
 
     # delete entry
     response = test_client.delete(

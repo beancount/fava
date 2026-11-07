@@ -280,3 +280,69 @@ test("transaction: combine narration, tags, and links", () => {
   deepEqual(parsed.tags, ["tag"]);
   deepEqual(parsed.links, ["link"]);
 });
+
+const narration_cases: [string, string, string[], string[]][] = [
+  ["RETAILER #89 TORONTO ON", "RETAILER #89 TORONTO ON", [], []],
+  ["RETAILER #89 TORONTO ON #test", "RETAILER #89 TORONTO ON", ["test"], []],
+  ["invoice ^123 reference #test", "invoice ^123 reference", ["test"], []],
+  ["a narration #tag ^link", "a narration", ["tag"], ["link"]],
+  [
+    "a narration ^first #one ^second #two #one",
+    "a narration",
+    ["one", "two", "one"],
+    ["first", "second"],
+  ],
+  [" #tag ^link ", "", ["tag"], ["link"]],
+  ["#tag", "", ["tag"], []],
+  ["^link", "", [], ["link"]],
+  [
+    "  narration  with\tspaces #tag\t^link  ",
+    "narration  with\tspaces",
+    ["tag"],
+    ["link"],
+  ],
+  ["text #tag-1_/. ^ref-2_/.", "text", ["tag-1_/."], ["ref-2_/."]],
+  [
+    "first\n#89 middle\nlast #tag\n^link\n",
+    "first\n#89 middle\nlast",
+    ["tag"],
+    ["link"],
+  ],
+  ["narration #tag!", "narration #tag!", [], []],
+  ["narration #tag! ^link", "narration #tag!", [], ["link"]],
+  ["narration #tag trailing", "narration #tag trailing", [], []],
+  ["narration #tag ^", "narration #tag ^", [], []],
+  ["narration #tag #", "narration #tag #", [], []],
+  ["narration#tag", "narration#tag", [], []],
+  ["narration #tag^link", "narration #tag^link", [], []],
+  ["narration ^link#tag", "narration ^link#tag", [], []],
+  ["#", "#", [], []],
+  ["^", "^", [], []],
+  ["", "", [], []],
+  [" \t ", "", [], []],
+];
+
+for (const [input, narration, tags, links] of narration_cases) {
+  test(`transaction: parse trailing tags and links from ${JSON.stringify(input)}`, () => {
+    const parsed =
+      Transaction.empty("2022-12-12").set_narration_tags_links(input);
+
+    equal(parsed.narration, narration);
+    deepEqual(parsed.tags, tags);
+    deepEqual(parsed.links, links);
+  });
+}
+
+test("transaction: roundtrip narration containing internal tags and links", () => {
+  const original = Transaction.empty("2022-12-12")
+    .set("narration", "RETAILER #89 TORONTO ON ^123 reference")
+    .set("tags", ["test"])
+    .set("links", ["receipt"]);
+  const parsed = original.set_narration_tags_links(
+    original.get_narration_tags_links(),
+  );
+
+  equal(parsed.narration, original.narration);
+  deepEqual(parsed.tags, original.tags);
+  deepEqual(parsed.links, original.links);
+});

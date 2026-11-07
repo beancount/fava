@@ -103,6 +103,11 @@ table pre {
   border: 0;
 }
 
+beancount-code,
+sortable-table {
+  display: block;
+}
+
 h2,
 h3 {
   padding: 0;

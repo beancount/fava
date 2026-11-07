@@ -24,7 +24,7 @@ export class Posting {
   readonly account: string;
   readonly amount: string;
 
-  private constructor(meta: EntryMetadata, account: string, amount: string) {
+  constructor(meta: EntryMetadata, account: string, amount: string) {
     this.meta = meta;
     this.account = account;
     this.amount = amount;
@@ -104,6 +104,11 @@ abstract class EntryBase<T extends string> {
     const value = this.meta.get("__duplicate__");
     return value != null && value !== false;
   }
+
+  /** A human-readable summary of the entry as a single string. */
+  summary(): string {
+    return "";
+  }
 }
 
 /** A balance. */
@@ -111,7 +116,7 @@ export class Balance extends EntryBase<"Balance"> {
   readonly account: string;
   readonly amount: RawAmount;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -126,6 +131,10 @@ export class Balance extends EntryBase<"Balance"> {
   /** Create a new empty Balance entry on the date. */
   static empty(date: string): Balance {
     return new Balance(new EntryMetadata(), date, "", "", RawAmount.empty());
+  }
+
+  override summary(): string {
+    return `${this.account} ${this.amount.number} ${this.amount.currency}`;
   }
 
   private static raw_validator = object({
@@ -151,7 +160,7 @@ export class Document extends EntryBase<"Document"> {
   readonly tags: string[] | null;
   readonly links: string[] | null;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -190,7 +199,7 @@ export class Event extends EntryBase<"Event"> {
   readonly type: string;
   readonly description: string;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -225,7 +234,7 @@ export class Note extends EntryBase<"Note"> {
   readonly tags: string[] | null;
   readonly links: string[] | null;
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -244,6 +253,10 @@ export class Note extends EntryBase<"Note"> {
   /** Create a new empty Note entry on the date. */
   static empty(date: string): Note {
     return new Note(new EntryMetadata(), date, "", "", "", null, null);
+  }
+
+  override summary(): string {
+    return `${this.account} - ${this.comment}`;
   }
 
   private static raw_validator = object({
@@ -462,8 +475,7 @@ export class Custom extends EntryBase<"Custom"> {
     );
 }
 
-const TAGS_RE = /(?:^|\s)#([A-Za-z0-9\-_/.]+)/g;
-const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
+const TAG_OR_LINK_RE = /^([#^])([A-Za-z0-9\-_/.]+)$/;
 
 /** A transaction. */
 export class Transaction extends EntryBase<"Transaction"> {
@@ -474,7 +486,7 @@ export class Transaction extends EntryBase<"Transaction"> {
   readonly links: string[];
   readonly postings: readonly Posting[];
 
-  private constructor(
+  constructor(
     meta: EntryMetadata,
     date: string,
     entry_hash: string,
@@ -521,23 +533,29 @@ export class Transaction extends EntryBase<"Transaction"> {
     return val;
   }
 
-  /** Set narration, tags, and links from a single string. */
+  /** Set narration and trailing tags and links from a single string. */
   set_narration_tags_links(value: string): Transaction {
-    const tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
-    const links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
-    const narration = value
-      .replaceAll(TAGS_RE, "")
-      .replaceAll(LINKS_RE, "")
-      .trim();
+    const tags: string[] = [];
+    const links: string[] = [];
+    let narration_end = value.length;
+    const tokens = [...value.matchAll(/\S+/g)];
+    for (const token of tokens.reverse()) {
+      const match = TAG_OR_LINK_RE.exec(token[0]);
+      if (!match) {
+        break;
+      }
+      (match[1] === "#" ? tags : links).push(match[2] ?? "");
+      narration_end = token.index;
+    }
     return new Transaction(
       this.meta,
       this.date,
       this.entry_hash,
       this.flag,
       this.payee,
-      narration,
-      tags,
-      links,
+      value.slice(0, narration_end).trim(),
+      tags.reverse(),
+      links.reverse(),
       this.postings,
     );
   }
@@ -548,6 +566,13 @@ export class Transaction extends EntryBase<"Transaction"> {
       `${this.date} ${this.flag} "${this.payee}" "${this.narration}"` +
       `\n${postings.join("\n")}`
     );
+  }
+
+  override summary(): string {
+    const title = [this.payee, this.narration].filter((s) => s).join(" · ");
+    const posting = this.postings.find((p) => p.account);
+    const posting_info = posting ? `${posting.account} ${posting.amount}` : "";
+    return [title, posting_info].filter((s) => s).join(" - ");
   }
 
   toJSON(): ValidationT<typeof Transaction.raw_validator> {

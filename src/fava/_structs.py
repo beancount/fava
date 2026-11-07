@@ -2,18 +2,14 @@
 
 from __future__ import annotations
 
-import datetime  # noqa: TC003 - needed for msgspec
+import datetime as dt  # noqa: TC003 - needed for msgspec
 from decimal import Decimal  # noqa: TC003 - needed for msgspec
+from typing import dataclass_transform
 
 from beancount.core.data import Booking  # noqa: TC002 - needed for msgspec
 from msgspec import Struct
 
 from fava.core.inventory import _Amount  # noqa: TC001 - needed for msgspec
-
-try:
-    from typing import dataclass_transform
-except ImportError:  # pragma: no cover
-    from typing_extensions import dataclass_transform
 
 
 # mark it so that ty realizes the subclasses are frozen as well:
@@ -21,7 +17,7 @@ except ImportError:  # pragma: no cover
 class EntryStruct(Struct, frozen=True, tag_field="t", kw_only=True):
     """msgspec Struct representations of entries."""
 
-    date: datetime.date
+    date: dt.date
     meta: dict[str, str | bool | int | _Amount]
     # Only present when sending entries to the frontend.
     entry_hash: str = ""
@@ -44,7 +40,7 @@ class Commodity(EntryStruct):
 
 class Custom(EntryStruct):
     type: str
-    values: list[str | bool | datetime.date | Decimal | _Amount]
+    values: list[str | bool | dt.date | Decimal | _Amount]
 
 
 class Document(EntryStruct):

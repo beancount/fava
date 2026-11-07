@@ -1,9 +1,13 @@
 /* Notifications */
 .notifications {
   position: fixed;
-  top: 60px;
-  right: 10px;
+  inset: 60px 10px auto auto;
   width: 400px;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  background: none;
+  border: 0;
 }
 
 .notifications li {

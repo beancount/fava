@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from typing import TypeVar
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Sequence
 
     from fava.beans.abc import Directive
@@ -29,7 +29,7 @@ _get_date = attrgetter("date")
 
 
 def slice_entry_dates(
-    entries: Sequence[T], begin: datetime.date, end: datetime.date
+    entries: Sequence[T], begin: dt.date, end: dt.date
 ) -> Sequence[T]:
     """Get slice of entries in a date window.
 

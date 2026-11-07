@@ -105,6 +105,7 @@ update-precommit:
 
 # Update github actions action versions.
 .PHONY: update-github-actions
+update-github-actions: export GITHUB_TOKEN = $(shell gh auth token)
 update-github-actions:
 	uv run --no-dev --group github-actions gha-update
 	uv run --no-dev --group github-actions zizmor .github/workflows/*.yml

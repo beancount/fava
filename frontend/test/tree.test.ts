@@ -1,7 +1,12 @@
 import { deepEqual } from "node:assert/strict";
 import { test } from "node:test";
 
-import { stratify, stratify_accounts } from "../src/lib/tree.ts";
+import {
+  all_matching,
+  stratify,
+  stratify_accounts,
+  walk,
+} from "../src/lib/tree.ts";
 
 test("tree: stratify_accounts", () => {
   const empty = stratify_accounts(
@@ -103,6 +108,34 @@ test("tree: stratify", () => {
       name: "",
     },
   );
+});
+
+test("tree: walk and all_matching", () => {
+  const tree = stratify_accounts(
+    ["Assets:Cash", "Expenses:Food", "Assets:Bank"],
+    (s) => s,
+    (name) => ({ name }),
+  );
+  const names = (nodes: Iterable<{ name: string }>) =>
+    [...nodes].map((n) => n.name);
+
+  deepEqual(names(walk({ name: "leaf", children: [] })), ["leaf"]);
+  deepEqual(names(walk(tree)), [
+    "",
+    "Assets",
+    "Assets:Bank",
+    "Assets:Cash",
+    "Expenses",
+    "Expenses:Food",
+  ]);
+
+  deepEqual(names(all_matching(tree, () => false)), []);
+  deepEqual(names(all_matching(tree, (n) => n.name.startsWith("Assets"))), [
+    "Assets",
+    "Assets:Bank",
+    "Assets:Cash",
+  ]);
+  deepEqual(names(all_matching(tree, (n) => n.name === "")), [""]);
 });
 
 function slash_parent(name: string): string {

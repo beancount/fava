@@ -61,6 +61,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from flask.wrappers import Response
     from werkzeug.datastructures import FileStorage
 
+    from fava.core.file import SourceSlice
     from fava.core.ingest import FileImporters
     from fava.core.inventory import SimpleCounterInventory
     from fava.core.query import QueryResultTable
@@ -372,19 +373,11 @@ def get_context(entry_hash: str) -> Context:
     return Context(serialise(entry), before, after)
 
 
-class SourceSlice(Struct, frozen=True):
-    """Source slice for an entry."""
-
-    sha256sum: str
-    slice: str
-
-
 @api_endpoint
 def get_source_slice(entry_hash: str) -> SourceSlice:
     """Entry slice."""
     entry = g.ledger.get_entry(entry_hash)
-    source_slice, sha256sum = get_entry_slice(entry)
-    return SourceSlice(sha256sum, source_slice)
+    return get_entry_slice(entry)
 
 
 @api_endpoint
@@ -707,18 +700,21 @@ def get_income_statement() -> TreeReport:
             g.interval,
             (options["name_income"], options["name_expenses"]),
             label=gettext("Net Profit"),
+            key="net_profit",
             invert=invert,
         ),
         ChartApi.interval_totals(
             g.interval,
             options["name_income"],
             label=f"{gettext('Income')} ({g.interval.label})",
+            key="income",
             invert=invert,
         ),
         ChartApi.interval_totals(
             g.interval,
             options["name_expenses"],
             label=f"{gettext('Expenses')} ({g.interval.label})",
+            key="expenses",
         ),
     ]
     root_tree = g.filtered.root_tree
@@ -806,6 +802,7 @@ def get_account_report(
             g.interval,
             a,
             label=gettext("Changes"),
+            key="changes",
         ),
     ]
 

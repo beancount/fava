@@ -130,6 +130,30 @@
       await save_entries(without_duplicates);
     }
   }
+
+  /**
+   * Save the entries at the given indices and remove them from the dialog.
+   */
+  async function save_group(indices: number[]) {
+    const without_duplicates = indices
+      .flatMap((index) => entries[index] ?? [])
+      .filter((e) => !e.is_duplicate());
+    // Remove the entries before saving, so that the indices of other groups
+    // are updated before they can be saved.
+    entries = entries.filter((_entry, index) => !indices.includes(index));
+    if (extract_filename != null && extract_importer != null) {
+      const key = `${extract_filename}:${extract_importer}`;
+      if (entries.length) {
+        extract_cache.set(key, entries);
+      } else {
+        extract_cache.delete(key);
+        close_extract();
+      }
+    }
+    if (is_non_empty(without_duplicates)) {
+      await save_entries(without_duplicates);
+    }
+  }
 </script>
 
 {#if $import_config == null}
@@ -139,7 +163,7 @@
     > for more information.
   </p>
 {:else}
-  <Extract bind:entries close={close_extract} {save} />
+  <Extract bind:entries close={close_extract} {save} {save_group} />
   <div class="fixed-fullsize-container">
     <div class="filelist flex-column">
       {#if files.length === 0}

@@ -8,6 +8,8 @@ const notificationList = (() => {
     if (value == null) {
       value = document.createElement("div");
       value.className = "notifications";
+      // Show as a popover so that it is in the top layer like modal dialogs.
+      value.popover = "manual";
       value.style.right = "10px";
       document.body.appendChild(value);
     }
@@ -38,7 +40,11 @@ export function notify(
   const notification = document.createElement("li");
   notification.classList.add(cls);
   notification.appendChild(document.createTextNode(msg));
-  notificationList().append(notification);
+  const list = notificationList();
+  list.append(notification);
+  // (Re-)show to move it to the top of the top layer, above any open dialogs.
+  list.hidePopover();
+  list.showPopover();
   notification.addEventListener("click", () => {
     notification.remove();
     callback?.();

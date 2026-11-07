@@ -5,7 +5,7 @@
   import type { CodemirrorBeancount } from "../../codemirror/types.ts";
   import { url_for } from "../../helpers.ts";
   import { _ } from "../../i18n.ts";
-  import { modKey } from "../../keyboard-shortcuts.ts";
+  import { MOD_KEY } from "../../keyboard-shortcuts.ts";
   import { router } from "../../router.ts";
   import { insert_entry } from "../../stores/fava_options.ts";
   import AppMenu from "./AppMenu.svelte";
@@ -55,13 +55,13 @@
       >
         {_("Align Amounts")}
         {#snippet right()}
-          <Key key={[modKey, "d"]} />
+          <Key key={[MOD_KEY, "d"]} />
         {/snippet}
       </AppMenuSubItem>
       <AppMenuSubItem action={() => codemirror_beancount.toggleComment(editor)}>
         {_("Toggle Comment (selection)")}
         {#snippet right()}
-          <Key key={[modKey, "/"]} />
+          <Key key={[MOD_KEY, "/"]} />
         {/snippet}
       </AppMenuSubItem>
       <AppMenuSubItem action={() => codemirror_beancount.unfoldAll(editor)}>

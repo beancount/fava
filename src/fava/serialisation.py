@@ -10,7 +10,7 @@ This is not intended to work well enough for full roundtrips yet.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import re
 from collections.abc import Mapping
 from decimal import Decimal
@@ -54,7 +54,7 @@ SerialisableValue = (
     abc.Directive
     | amount.Amount
     | protocols.Amount
-    | datetime.date
+    | dt.date
     | str
     | int
     | Decimal
@@ -70,7 +70,9 @@ def serialise(o: SerialisableValue) -> object:
 
 
 def _serialise_dict(o: Mapping[str, SerialisableValue]) -> dict[str, Any]:
-    return {k: serialise(v) for k, v in o.items()}
+    # Beancount's inferred tolerances (meta.__tolerances__) can contain the
+    # MISSING sentinel as a key, which cannot be serialised to JSON.
+    return {k: serialise(v) for k, v in o.items() if isinstance(k, str)}
 
 
 serialise.register(dict, _serialise_dict)

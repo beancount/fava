@@ -6,15 +6,15 @@ import { log_error } from "../log.ts";
 /**
  * Read-only editors in the help pages.
  *
- * This lazily imports ./setup.ts to only pull in codemirror
+ * This lazily imports ./beancount.ts to only pull in codemirror
  * and the Beancount parser when used.
  */
-export class BeancountTextarea extends HTMLTextAreaElement {
+export class BeancountCode extends HTMLElement {
   constructor() {
     super();
     import("./beancount.ts")
-      .then(({ init_textarea }) => {
-        init_textarea(this);
+      .then(({ init_readonly_editor }) => {
+        init_readonly_editor(this);
       })
       .catch(log_error);
   }

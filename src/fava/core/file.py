@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from markupsafe import Markup
+from msgspec import Struct
 
 from fava.beans.abc import Balance
 from fava.beans.abc import Close
@@ -33,7 +34,7 @@ from fava.helpers import FavaAPIError
 from fava.util import next_key
 
 if TYPE_CHECKING:  # pragma: no cover
-    import datetime
+    import datetime as dt
     from collections.abc import Iterable
     from collections.abc import Sequence
 
@@ -279,7 +280,7 @@ class FileModule(FavaModule):
                 ):
                     continue
                 try:
-                    yield Markup(get_entry_slice(entry)[0] + "\n")  # noqa: S704
+                    yield Markup(get_entry_slice(entry).slice + "\n")  # noqa: S704
                 except (KeyError, FileNotFoundError):
                     yield Markup(  # noqa: S704
                         to_string(
@@ -290,7 +291,7 @@ class FileModule(FavaModule):
                     )
 
 
-def _incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
+def _incomplete_sortkey(entry: Directive) -> tuple[dt.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     if isinstance(entry, Open):
         return (entry.date, -2)
@@ -310,17 +311,31 @@ def insert_metadata_in_file(
     key: str,
     value: str,
 ) -> None:
-    """Insert the specified metadata in the file below lineno.
-
-    Takes the whitespace in front of the line that lineno into account.
-    """
+    """Insert the specified metadata in the file below lineno."""
     with path.open(encoding="utf-8") as file:
         contents = file.readlines()
 
-    contents.insert(lineno, f'{" " * indent}{key}: "{value}"\n')
+    # Skip to the end of a multiline string.
+    in_string = _ends_in_string(contents[lineno - 1], in_string=False)
+    while in_string:
+        in_string = _ends_in_string(contents[lineno], in_string=True)
+        lineno += 1
+
+    escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+    contents.insert(lineno, f'{" " * indent}{key}: "{escaped}"\n')
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
         file.write("".join(contents))
+
+
+def _ends_in_string(line: str, *, in_string: bool) -> bool:
+    """Whether the line ends inside a (multiline) string."""
+    for part in re.findall(r'\\.|[";]', line):
+        if part == '"':
+            in_string = not in_string
+        elif part == ";" and not in_string:
+            break
+    return in_string
 
 
 def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
@@ -331,18 +346,30 @@ def find_entry_lines(lines: Sequence[str], lineno: int) -> Sequence[str]:
         lineno: The 0-based line-index to start at.
     """
     entry_lines = [lines[lineno]]
+    in_string = False
     while True:
+        in_string = _ends_in_string(entry_lines[-1], in_string=in_string)
         lineno += 1
         try:
             line = lines[lineno]
         except IndexError:
             return entry_lines
-        if not line.strip() or re.match(r"\S", line[0]):
+        # Blank or unindented lines can still belong to a multiline string.
+        if not in_string and (not line.strip() or re.match(r"\S", line[0])):
             return entry_lines
         entry_lines.append(line)
 
 
-def get_entry_slice(entry: Directive) -> tuple[str, str]:
+class SourceSlice(Struct, frozen=True):
+    """Source slice for an entry."""
+
+    slice: str
+    """The source slice string of this entry."""
+    sha256sum: str
+    """Hash of this slice."""
+
+
+def get_entry_slice(entry: Directive) -> SourceSlice:
     """Get slice of the source file for an entry.
 
     Args:
@@ -362,7 +389,7 @@ def get_entry_slice(entry: Directive) -> tuple[str, str]:
     entry_lines = find_entry_lines(lines, lineno - 1)
     entry_source = "".join(entry_lines).rstrip("\n")
 
-    return entry_source, _sha256_str(entry_source)
+    return SourceSlice(entry_source, _sha256_str(entry_source))
 
 
 def save_entry_slice(
@@ -437,9 +464,9 @@ def delete_entry_slice(
             line = lines[last_entry_line]
         except IndexError:
             break
-        if line.strip():  # pragma: no cover
+        if line.strip():
             break
-        last_entry_line += 1  # pragma: no cover
+        last_entry_line += 1
     lines = lines[:first_entry_line] + lines[last_entry_line:]
     newline = _file_newline_character(path)
     with path.open("w", encoding="utf-8", newline=newline) as file:
@@ -478,7 +505,7 @@ def insert_entry(
 
     if lineno is None:
         # Appending
-        contents += "\n" + content
+        contents.append("\n" + content)
     else:
         contents.insert(lineno, content + "\n")
 

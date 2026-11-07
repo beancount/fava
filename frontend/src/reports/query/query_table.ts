@@ -116,8 +116,11 @@ class NumberSortedQueryColumn<T> extends NumberColumn<QueryCell[]> {
 function get_query_column(type: QueryType, index: number) {
   switch (type.dtype) {
     case "bool":
-      return new StringSortedQueryColumn(type, index, boolean, (v) =>
-        v.toString(),
+      return new StringSortedQueryColumn(
+        type,
+        index,
+        optional(boolean),
+        (v) => v?.toString() ?? "",
       );
     case "date":
       return new NumberSortedQueryColumn(type, index, optional(date), (v) =>
@@ -138,8 +141,11 @@ function get_query_column(type: QueryType, index: number) {
         (v) => v ?? 0,
       );
     case "set":
-      return new StringSortedQueryColumn(type, index, array(string), (v) =>
-        v.join(","),
+      return new StringSortedQueryColumn(
+        type,
+        index,
+        optional(array(string)),
+        (v) => v?.join(",") ?? "",
       );
     case "object":
     case "str":
@@ -153,8 +159,8 @@ function get_query_column(type: QueryType, index: number) {
       return new NumberSortedQueryColumn(
         type,
         index,
-        Amount.validator,
-        (v) => v.number,
+        optional(Amount.validator),
+        (v) => v?.number ?? 0,
       );
     case "Inventory":
       return new NumberSortedQueryColumn(
@@ -167,8 +173,8 @@ function get_query_column(type: QueryType, index: number) {
       return new NumberSortedQueryColumn(
         type,
         index,
-        Position.validator,
-        (v) => v.units.number,
+        optional(Position.validator),
+        (v) => v?.units.number ?? 0,
       );
     default:
       return type.dtype;

@@ -16,6 +16,10 @@ import {
   tuple,
   ValidationError,
 } from "../src/lib/validation.ts";
+import {
+  Inventory,
+  query_validator,
+} from "../src/reports/query/query_table.ts";
 
 test("validate boolean", () => {
   equal(boolean(true).unwrap(), true);
@@ -127,4 +131,28 @@ test("validate object", () => {
   deepEqual(val({ str: "str", num: 1 }).unwrap(), { str: "str", num: 1 });
   ok(val({ str: 1 }).is_err);
   ok(val(1).is_err);
+});
+
+test("validate query result with null values", () => {
+  const dtypes = [
+    "bool",
+    "date",
+    "int",
+    "set",
+    "Amount",
+    "Decimal",
+    "Inventory",
+    "Position",
+  ];
+  const res = query_validator({
+    t: "table",
+    types: dtypes.map((dtype) => ({ dtype, name: dtype })),
+    rows: [dtypes.map(() => null)],
+  });
+  ok(res.is_ok);
+  const table = res.unwrap();
+  ok(table.t === "table");
+  deepEqual(table.rows, [
+    [null, null, null, null, null, null, new Inventory({}), null],
+  ]);
 });

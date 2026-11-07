@@ -35,6 +35,7 @@
                 new ParsedHierarchyChart(
                   $date_format(dates[index]?.begin ?? new Date()),
                   node,
+                  `interval_${index.toString()}`,
                 ),
             ),
         ]

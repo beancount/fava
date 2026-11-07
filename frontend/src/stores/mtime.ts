@@ -16,6 +16,7 @@ export function set_mtime(text: string): void {
     ? // the timestamp is replaced by a sequence of `X` in incognito mode.
       BigInt(text.replaceAll("X", "1"))
     : BigInt(text);
+  // biome-ignore lint/complexity/useMathMinMax: Math.max does not work for BigInt
   ledger_mtime_writable.update((v) => (new_value > v ? new_value : v));
 }
 

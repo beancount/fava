@@ -18,15 +18,13 @@ import "../css/fonts.css";
 import "../css/journal-table.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
-// Polyfill for customised builtin elements in Webkit
-import "@ungap/custom-elements";
 
 import { get as store_get } from "svelte/store";
 
 import { get_changed, get_errors, get_ledger_data } from "./api/index.ts";
 import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
-import { BeancountTextarea } from "./codemirror/dom.ts";
+import { BeancountCode } from "./codemirror/dom.ts";
 import { _ } from "./i18n.ts";
 import { init_global_keyboard_shortcuts } from "./keyboard-shortcuts.ts";
 import { get_script_tag_value } from "./lib/dom.ts";
@@ -51,14 +49,12 @@ import { TreeTableCustomElement } from "./tree-table/tree-table-custom-element.t
  * Define the custom elements that Fava uses.
  */
 function define_custom_elements() {
-  customElements.define("beancount-textarea", BeancountTextarea, {
-    extends: "textarea",
-  });
+  customElements.define("beancount-code", BeancountCode);
   customElements.define("copyable-text", CopyableText);
   customElements.define("svelte-component", SvelteCustomElement);
 
   // for extension compatibility (only used in _query_table.html)
-  customElements.define("sortable-table", SortableTable, { extends: "table" });
+  customElements.define("sortable-table", SortableTable);
   // for extension compatibility
   customElements.define("tree-table", TreeTableCustomElement);
 }

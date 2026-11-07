@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import { _, format } from "../../i18n.ts";
   import type { KeySpec } from "../../keyboard-shortcuts.ts";
-  import { keyboardShortcut } from "../../keyboard-shortcuts.ts";
+  import { keyboard_shortcut } from "../../keyboard-shortcuts.ts";
   import { toggle } from "../../lib/set.ts";
   import { journal_show } from "../../stores/journal.ts";
 
@@ -74,7 +74,7 @@
     <button
       type="button"
       title={title ?? format(toggleText, { type: button_text })}
-      {@attach keyboardShortcut(shortcut)}
+      {@attach keyboard_shortcut(shortcut)}
       class:inactive={!active(type, supertype)}
       onclick={() => {
         toggle_type(type);

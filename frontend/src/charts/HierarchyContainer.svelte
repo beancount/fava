@@ -1,5 +1,6 @@
 <script lang="ts">
   import { _ } from "../i18n.ts";
+  import { toggled_accounts } from "../stores/accounts.ts";
   import { hierarchy_chart_mode } from "../stores/chart.ts";
   import type { HierarchyChart } from "./hierarchy.ts";
   import Icicle from "./Icicle.svelte";
@@ -13,7 +14,7 @@
 
   let { chart, width }: Props = $props();
 
-  let data = $derived(chart.data);
+  let data = $derived(chart.hierarchies($toggled_accounts));
   let currencies = $derived(chart.currencies);
 
   let treemap_currency = $derived(chart.treemap_currency);

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from http import HTTPStatus
 from importlib.metadata import version
 from pathlib import Path
@@ -180,6 +180,61 @@ def test_jump_handler(
     assert get_url == expect
 
 
+@pytest.mark.parametrize("link", ["/jump?time=month", "/toggle?time=month"])
+def test_jump_and_toggle_without_referer(
+    test_client: FlaskClient,
+    link: str,
+) -> None:
+    """Without a referer, /jump and /toggle redirect to the index page."""
+    response = test_client.get(link)
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert response.headers.get("Location", "") == "/?time=month"
+
+
+@pytest.mark.parametrize(
+    ("referer", "toggle_link", "expect"),
+    [
+        ("/", "/toggle?time=month", "/?time=month"),
+        ("/?time=month", "/toggle?time=month", "/"),
+        ("/?time=2020", "/toggle?time=month", "/?time=month"),
+        ("/?foo=bar&time=month", "/toggle?time=month", "/?foo=bar"),
+        ("/", "/toggle?filter=-%23tag", "/?filter=-%23tag"),
+        ("/?filter=-%23tag", "/toggle?filter=-%23tag", "/"),
+        (
+            "/?filter=%23other",
+            "/toggle?filter=-%23tag",
+            "/?filter=%23other+-%23tag",
+        ),
+        (
+            "/?filter=%23a+-%23tag+%23b",
+            "/toggle?filter=-%23tag",
+            "/?filter=%23a+%23b",
+        ),
+        (
+            "/?filter=-%23tagged",
+            "/toggle?filter=-%23tag",
+            "/?filter=-%23tagged+-%23tag",
+        ),
+        (
+            "/?filter=%23a&time=month",
+            "/toggle?filter=%23a&time=year",
+            "/?time=year",
+        ),
+    ],
+)
+def test_toggle_handler(
+    test_client: FlaskClient,
+    referer: str,
+    toggle_link: str,
+    expect: str,
+) -> None:
+    """Test /toggle handler correctly redirect to the right location."""
+    response = test_client.get(toggle_link, headers=[("Referer", referer)])
+    get_url = response.headers.get("Location", "")
+    assert response.status_code == HTTPStatus.FOUND.value
+    assert get_url == expect
+
+
 def test_help_pages(test_client: FlaskClient) -> None:
     """Help pages are rendered in the frontend, only the slug is checked."""
     response = test_client.get("/long-example/help/")
@@ -211,7 +266,7 @@ def test_statement_download(
 
     path = Path(__file__)
     by_account = path.parent.parent / "found_by_account"
-    date = datetime.date(2022, 1, 1)
+    date = dt.date(2022, 1, 1)
     txn = create.transaction(
         {
             "filename": str(path),
@@ -311,6 +366,18 @@ def test_read_only_mode(test_data_dir: Path) -> None:
         assert response.status_code == HTTPStatus.UNAUTHORIZED.value
 
 
+def test_trusted_hosts(test_data_dir: Path) -> None:
+    """Requests for other hosts return 400 if TRUSTED_HOSTS is set."""
+    app = create_app([test_data_dir / "example.beancount"])
+    app.config["TRUSTED_HOSTS"] = ["localhost"]
+    test_client = app.test_client()
+
+    response = test_client.get("/", headers={"Host": "localhost:5000"})
+    assert response.status_code == HTTPStatus.FOUND.value
+    response = test_client.get("/", headers={"Host": "evil.example:5000"})
+    assert response.status_code == HTTPStatus.BAD_REQUEST.value
+
+
 def test_download_journal(
     test_client: FlaskClient,
     snapshot: SnapshotFunc,
@@ -368,6 +435,19 @@ def test_load_extension_endpoint(test_client: FlaskClient) -> None:
     assert response.json == ["some data"]
 
 
+def test_load_extension_endpoint_error(test_client: FlaskClient) -> None:
+    """Exceptions in extension endpoints return JSON with a 500 status."""
+    url = "/extension-report/extension/FavaExtTest/example_error"
+    response = test_client.get(url)
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR.value
+    assert response.content_type == "application/problem+json"
+    assert response.json == {
+        "title": "RuntimeError",
+        "status": HTTPStatus.INTERNAL_SERVER_ERROR.value,
+        "detail": "example error",
+    }
+
+
 def test_custom_css(tmp_path: Path) -> None:
     """The custom-css option links and serves a per-ledger stylesheet."""
     (tmp_path / "custom.css").write_text("body { color: red; }")
@@ -384,4 +464,4 @@ def test_custom_css(tmp_path: Path) -> None:
 
     assert "custom.css" not in assert_success(test_client.get("/b/errors/"))
     response = test_client.get("/b/custom.css")
-    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.status_code == HTTPStatus.NOT_FOUND.value

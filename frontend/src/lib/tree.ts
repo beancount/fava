@@ -74,18 +74,27 @@ export function stratify<T, S = null>(
 }
 
 /**
+ * Walk the tree (depth-first, pre-order), yielding all nodes.
+ */
+export function* walk<T>(
+  root: TreeNode<T>,
+): Generator<TreeNode<T>, void, void> {
+  yield root;
+  for (const child of root.children) {
+    yield* walk(child);
+  }
+}
+
+/**
  * Get all matching descendants.
  */
 export function* all_matching<T>(
   root: TreeNode<T>,
   predicate: (node: TreeNode<T>) => boolean,
 ): Generator<TreeNode<T>, void, void> {
-  if (predicate(root)) {
-    yield root;
-  }
-  for (const child of root.children) {
-    for (const match of all_matching(child, predicate)) {
-      yield match;
+  for (const node of walk(root)) {
+    if (predicate(node)) {
+      yield node;
     }
   }
 }

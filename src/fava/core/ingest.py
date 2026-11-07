@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import os
 import runpy
 import sys
@@ -154,7 +154,7 @@ class FileImportInfo:
 
     importer_name: str
     account: str
-    date: datetime.date
+    date: dt.date
     name: str
 
 
@@ -222,7 +222,7 @@ class WrappedImporter:
         return FileImportInfo(
             self.name,
             _assert_type("account", account or "", str),
-            _assert_type("date", date or local_today(), datetime.date),
+            _assert_type("date", date or local_today(), dt.date),
             _assert_type("filename", filename or path.name, str),
         )
 

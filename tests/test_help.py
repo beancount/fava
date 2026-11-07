@@ -20,7 +20,7 @@ def test_render_help_page() -> None:
     options = render_help_page("options")
     assert options
     # ```beancount code blocks are rendered as read-only editors
-    editor = '<pre><textarea is="beancount-textarea">2016-06-14 custom'
+    editor = "<pre><beancount-code>2016-06-14 custom"
     assert editor in options
 
     # references to Fava options are turned into links to those headings

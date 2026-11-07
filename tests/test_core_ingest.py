@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import runpy
 from dataclasses import replace
 from pathlib import Path
@@ -268,11 +268,11 @@ def test_ingest_examplefile(
     )
     snapshot([serialise(e) for e in entries], json=True)
     assert len(entries) == 4
-    assert entries[0].date == datetime.date(2017, 2, 12)
+    assert entries[0].date == dt.date(2017, 2, 12)
     assert isinstance(entries[0], Note)
     assert entries[0].comment == "Hinweis: Zinssatz auf 0,15% geändert"
     assert isinstance(entries[1], Transaction)
-    assert entries[1].date == datetime.date(2017, 2, 13)
+    assert entries[1].date == dt.date(2017, 2, 13)
     assert (
         entries[1].narration
         == "Payment to Company XYZ REF: 31000161205-6944556-0000463"

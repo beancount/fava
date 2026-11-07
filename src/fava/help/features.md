@@ -46,8 +46,8 @@ form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
 `insert-entry` option. If you want to set a bookmark to this form, adding
 `#add-transaction` to any URL in Fava will open it on load. Tags and links can
-be added in the form by adding them (separated by spaces) to the narration
-field, e.g., `narration #tag ^somelink`.
+be added in the form by adding them (separated by spaces) to the end of the
+narration field, e.g., `narration #tag ^somelink`.
 
 ## Up-to-date indicators
 
@@ -104,6 +104,16 @@ example above, or absolute, even linking to an external site.
 There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the
 current page but change the time filter to the current month.
+
+Similarly, the `/toggle` URL handler can be used to toggle filters on the
+current page. For example, `/toggle?time=month` will set the time filter to the
+current month or clear it if it is already set to `month`. For the advanced
+filter, `/toggle?filter=-%23tag` will add `-#tag` to the current filter
+(combining both with AND) or remove it if it is already part of it:
+
+```beancount
+2016-05-04 custom "fava-sidebar-link" "Toggle -#tag" "/toggle?filter=-%23tag"
+```
 
 ## Language
 

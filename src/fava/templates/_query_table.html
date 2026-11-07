@@ -57,7 +57,8 @@
 {% if contents %}
 <pre><code>{{ contents }}</code></pre>
 {% elif types %}
-<table is="sortable-table" class="queryresults">
+<sortable-table>
+<table class="queryresults">
   <thead>
     <tr>
       {% for name, type in types %}
@@ -84,5 +85,6 @@
   </tfoot>
   {% endif %}
 </table>
+</sortable-table>
 {% endif %}
 {% endmacro %}
