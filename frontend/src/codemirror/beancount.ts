@@ -1,14 +1,9 @@
-import {
-  defaultHighlightStyle,
-  indentUnit,
-  syntaxHighlighting,
-} from "@codemirror/language";
+import { indentUnit } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import type { KeyBinding } from "@codemirror/view";
 import { EditorView, keymap } from "@codemirror/view";
 
 import { base_extensions } from "./base-extensions.ts";
-import { beancount_highlight } from "./beancount-highlight.ts";
 import { beancount_language_support } from "./beancount-language.ts";
 import { ruler_plugin } from "./ruler.ts";
 
@@ -25,11 +20,7 @@ export {
 export function init_readonly_editor(el: HTMLElement): void {
   const editor = new EditorView({
     doc: el.textContent,
-    extensions: [
-      beancount_language_support,
-      syntaxHighlighting(defaultHighlightStyle),
-      EditorState.readOnly.of(true),
-    ],
+    extensions: [beancount_language_support, EditorState.readOnly.of(true)],
   });
   el.replaceChildren(editor.dom);
 }
@@ -57,7 +48,6 @@ export function init_beancount_editor(
         }
       }),
       base_extensions,
-      syntaxHighlighting(beancount_highlight),
     ],
   });
 }

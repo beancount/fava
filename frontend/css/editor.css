@@ -1,6 +1,7 @@
 /* Editor */
 
 .cm-editor .cm-gutters {
+  color: var(--text-color-lightest);
   background: var(--sidebar-background);
   border-right: 1px solid var(--sidebar-border);
 }
@@ -17,27 +18,71 @@
   background-color: var(--sidebar-border);
 }
 
-/* stylelint-disable selector-class-pattern */
+.cm-editor .cm-panels {
+  color: var(--text-color);
+  background: var(--sidebar-background);
+}
+
+.cm-editor .cm-textfield {
+  font-size: inherit;
+  background: var(--background);
+}
+
+.cm-editor .cm-panels [name="close"] {
+  color: inherit;
+}
+
+.cm-editor .cm-button,
+.cm-editor .cm-button:active {
+  font-size: inherit;
+  background: var(--button-muted-background);
+}
+
+.cm-editor .cm-panel.cm-search label {
+  font-size: inherit;
+}
+
 .cm-editor .cm-activeLine {
   background-color: var(--editor-activeline);
 }
 
 .cm-editor .cm-selectionBackground {
-  background-color: var(--editor-activeline);
+  background-color: var(--editor-selection);
 }
 
 .cm-editor.cm-focused
   > .cm-scroller
   > .cm-selectionLayer
   .cm-selectionBackground {
-  background-color: var(--editor-activeline);
+  background-color: var(--editor-selection);
 }
 
 .cm-editor .cm-selectionMatch {
   background-color: var(--editor-selectionmatch);
 }
 
+.cm-editor .cm-searchMatch {
+  background-color: var(--editor-searchmatch);
+}
+
+.cm-editor .cm-searchMatch-selected {
+  background-color: var(--editor-searchmatch-selected);
+}
+
+.cm-editor .cm-lintRange-active {
+  background-color: var(--editor-lint-active);
+}
+
+.cm-editor .cm-foldPlaceholder {
+  color: var(--text-color-lighter);
+  background-color: var(--background-darkest);
+  border-color: var(--border);
+}
+
 .cm-editor .cm-cursor {
   border-left-color: var(--text-color-lighter);
 }
-/* stylelint-enable selector-class-pattern */
+
+.cm-editor .cm-panel.cm-panel-lint ul [aria-selected] {
+  background-color: var(--background-darkest);
+}

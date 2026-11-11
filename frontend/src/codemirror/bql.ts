@@ -1,9 +1,7 @@
-import { syntaxHighlighting } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import { EditorView, keymap, placeholder } from "@codemirror/view";
 
 import { base_extensions } from "./base-extensions.ts";
-import { bql_highlight } from "./bql-highlight.ts";
 import { bql_language_support } from "./bql-language.ts";
 
 export { replace_contents } from "./editor-transactions.ts";
@@ -30,11 +28,7 @@ export function init_document_preview_editor(): EditorView {
 export function init_readonly_query_editor(value: string): EditorView {
   return new EditorView({
     doc: value,
-    extensions: [
-      bql_language_support,
-      syntaxHighlighting(bql_highlight),
-      EditorState.readOnly.of(true),
-    ],
+    extensions: [bql_language_support, EditorState.readOnly.of(true)],
   });
 }
 
@@ -69,7 +63,6 @@ export function init_query_editor(
       ]),
       placeholder(placeholder_value),
       base_extensions,
-      syntaxHighlighting(bql_highlight),
     ],
   });
 }

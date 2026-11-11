@@ -89,21 +89,34 @@
     hsl(200deg 100% 90% / 30%),
     hsl(200deg 100% 30% / 30%)
   );
+  --editor-selection: light-dark(hsl(203deg 100% 85%), hsl(203deg 60% 25%));
   --editor-selectionmatch: light-dark(
     hsl(105deg 100% 70% / 50%),
     hsl(105deg 100% 30% / 50%)
+  );
+  --editor-searchmatch: var(--autocomplete-match);
+  --editor-searchmatch-selected: light-dark(
+    hsl(25deg 100% 50% / 33%),
+    hsl(25deg 100% 30% / 60%)
+  );
+  --editor-lint-active: light-dark(
+    hsl(40deg 100% 80% / 50%),
+    hsl(40deg 100% 30% / 40%)
   );
 
   /* Beancount editor contents */
   --editor-account: var(--link-color);
   --editor-class: light-dark(hsl(34deg 50% 30%), hsl(34deg 50% 70%));
   --editor-comment: hsl(60deg 8% 50%);
-  --editor-currencies: light-dark(hsl(293deg 100% 30%), hsl(293deg 100% 60%));
+  --editor-currencies: light-dark(hsl(293deg 100% 30%), hsl(293deg 100% 72%));
   --editor-date: light-dark(hsl(180deg 100% 20%), hsl(180deg 100% 50%));
   --editor-directive: var(--text-color);
-  --editor-invalid-background: hsl(0deg 100% 80% / 50%);
+  --editor-invalid-background: light-dark(
+    hsl(0deg 100% 80% / 50%),
+    hsl(0deg 100% 30% / 50%)
+  );
   --editor-invalid: var(--text-color);
-  --editor-label-name: light-dark(hsl(248deg 80% 33%), hsl(248deg 80% 67%));
+  --editor-label-name: light-dark(hsl(248deg 80% 33%), hsl(248deg 80% 77%));
   --editor-number: light-dark(hsl(156deg 71% 20%), hsl(156deg 71% 40%));
   --editor-string: light-dark(hsl(0deg 82% 33%), hsl(0deg 82% 67%));
 
@@ -117,7 +130,10 @@
   --notification-color: hsl(0deg 0% 100%);
   --chart-axis: hsl(0deg 0% 60%);
   --chart-line-at-zero: hsl(0deg 0% 40%);
-  --autocomplete-match: hsl(39deg 100% 70% / 50%);
+  --autocomplete-match: light-dark(
+    hsl(39deg 100% 70% / 50%),
+    hsl(39deg 100% 25% / 50%)
+  );
   --mobile-button-text: light-dark(hsl(0deg 0% 0%), hsl(0deg 0% 79%));
   --placeholder-color: light-dark(hsl(0deg 0% 47%), hsl(0deg 0% 85%));
   --placeholder-background: light-dark(hsl(0deg 0% 100%), hsl(0deg 0% 30%));
