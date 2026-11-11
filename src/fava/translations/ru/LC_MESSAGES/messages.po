@@ -256,7 +256,7 @@ msgstr "Журнал счёта"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:65
 #: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:804
+#: src/fava/json_api.py:797
 msgid "Changes"
 msgstr "Изменения"
 
@@ -668,8 +668,8 @@ msgstr "Время"
 msgid "Filter by tag, payee, …"
 msgstr "Фильтровать по тегу, контрагенту, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:723
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
+#: src/fava/json_api.py:716
 msgid "Net Profit"
 msgstr "Чистый доход"
 
@@ -739,10 +739,10 @@ msgstr ""
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:702
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:716
+#: src/fava/json_api.py:709
 msgid "Expenses"
 msgstr "Расходы"

@@ -252,7 +252,7 @@ msgstr "账户日记账"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:65
 #: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:804
+#: src/fava/json_api.py:797
 msgid "Changes"
 msgstr "变更"
 
@@ -658,8 +658,8 @@ msgstr "时间"
 msgid "Filter by tag, payee, …"
 msgstr "筛选（标签，收款人等等）"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:723
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
+#: src/fava/json_api.py:716
 msgid "Net Profit"
 msgstr "净利润"
 
@@ -731,10 +731,10 @@ msgstr "账户余额"
 msgid "Net Worth"
 msgstr "净值"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:702
 msgid "Income"
 msgstr "收入"
 
-#: src/fava/json_api.py:716
+#: src/fava/json_api.py:709
 msgid "Expenses"
 msgstr "支出"
