@@ -253,7 +253,7 @@ msgstr "Счетоводен Дневник"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:65
 #: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:804
+#: src/fava/json_api.py:797
 msgid "Changes"
 msgstr "Промени"
 
@@ -665,8 +665,8 @@ msgstr "Време"
 msgid "Filter by tag, payee, …"
 msgstr "Филтриране по таг, бенефициент, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:723
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
+#: src/fava/json_api.py:716
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
@@ -738,10 +738,10 @@ msgstr "Баланс по сметката"
 msgid "Net Worth"
 msgstr "Нетна Стойност"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:702
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:716
+#: src/fava/json_api.py:709
 msgid "Expenses"
 msgstr "Разходи"

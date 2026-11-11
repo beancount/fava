@@ -249,7 +249,7 @@ msgstr "Llibre diari del compte"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:65
 #: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:804
+#: src/fava/json_api.py:797
 msgid "Changes"
 msgstr "Canvis"
 
@@ -651,8 +651,8 @@ msgstr "Data"
 msgid "Filter by tag, payee, …"
 msgstr "Filtreu per etiqueta, beneficiari…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:702
-#: src/fava/json_api.py:723
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
+#: src/fava/json_api.py:716
 msgid "Net Profit"
 msgstr "Benefici net"
 
@@ -724,10 +724,10 @@ msgstr "Balanç del compte"
 msgid "Net Worth"
 msgstr "Patrimoni net"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:702
 msgid "Income"
 msgstr "Ingressos"
 
-#: src/fava/json_api.py:716
+#: src/fava/json_api.py:709
 msgid "Expenses"
 msgstr "Despeses"
