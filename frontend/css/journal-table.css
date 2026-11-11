@@ -168,7 +168,8 @@
     }
   }
 
-  .show-postings .description {
+  &.show-postings .description,
+  .show-full-entry .description {
     white-space: normal;
   }
 

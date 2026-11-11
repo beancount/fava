@@ -23,10 +23,9 @@
   <dt>{{ key }}:</dt>
   <dd>
   {%- if key.startswith('document') %}<a class='filename' data-remote target=_blank href='{{ url_for('statement', entry_hash=entry_hash, key=key) }}'>{{ value }}</a>
-  {% elif value is string and (value.startswith('http://') or value.startswith('https://')) %}<a class='url' data-remote target=_blank rel='noopener noreferrer' href='{{ value }}'>{{ value }}</a>
-  {% else %}
-    {{ value }}
-  {% endif -%}
+  {%- elif value is string and (value.startswith('http://') or value.startswith('https://')) %}<a class='url' data-remote target=_blank rel='noopener noreferrer' href='{{ value }}'>{{ value }}</a>
+  {%- else %}{{ value }}
+  {%- endif -%}
   </dd>
   {% endfor %}
 </dl>
@@ -71,6 +70,7 @@
             {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}{{ render_amount(ledger, value.value) }}
             {%- elif value.dtype|string == "<class 'str'>" %}"{{ value.value }}"
             {%- elif value.dtype|string == "<class 'bool'>" %}{{ value.value }}
+            {%- elif value.dtype|string == "<class 'decimal.Decimal'>" %}{{ value.value }}
             {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
           {%- endfor -%}
         {% elif type == 'document' %}
