@@ -56,7 +56,6 @@ function meta_value_to_string(value: MetadataValue): string {
 
 // Matches a decimal number followed by a currency, e.g. "10.10 USD".
 const AMOUNT_RE = /^(-?\d+(?:\.\d+)?)\s+([A-Z][A-Z0-9'._-]*)$/;
-const DECIMAL_RE = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
 
 /**
  * Convert a string to a metadata value.
@@ -134,9 +133,6 @@ export class EntryMetadata {
 
   /** Set the value for a key from a string and return an updated copy. */
   set_string(key: string, value: string): EntryMetadata {
-    if (this.#meta[key] instanceof RawDecimal && DECIMAL_RE.test(value)) {
-      return this.set(key, new RawDecimal(value));
-    }
     return this.set(key, string_to_meta_value(value));
   }
 

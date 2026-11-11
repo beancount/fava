@@ -50,6 +50,13 @@ class InvalidAmountError(FavaAPIError):
         super().__init__(f"Invalid amount: {amount}")
 
 
+class InvalidMetadataNumberError(FavaAPIError):
+    """A metadata number cannot be written as a finite decimal."""
+
+    def __init__(self, number: Decimal) -> None:
+        super().__init__(f"Invalid metadata number: {number}")
+
+
 SerialisableValue = (
     abc.Directive
     | amount.Amount
@@ -248,6 +255,11 @@ def _deserialise_meta_value(
     """Deserialise a single metadata value, restoring Decimal and Amount."""
     if isinstance(o, _MetadataNumber):
         if o.currency is None:
+            # Metadata numbers are printed without exponent notation. Bound
+            # the expansion before writing any entry to the ledger.
+            exponent = o.number.as_tuple().exponent
+            if not isinstance(exponent, int) or abs(exponent) > 10_000:
+                raise InvalidMetadataNumberError(o.number)
             return o.number
         return create.amount(o.number, o.currency)
     return o

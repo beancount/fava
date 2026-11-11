@@ -24,6 +24,7 @@ from fava.serialisation import _deserialise_posting
 from fava.serialisation import _serialise_posting
 from fava.serialisation import deserialise
 from fava.serialisation import InvalidAmountError
+from fava.serialisation import InvalidMetadataNumberError
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -167,6 +168,23 @@ def test_meta_decimal_and_amount_roundtrip() -> None:
     assert posting_meta["lineno"] == 1
     assert isinstance(posting_meta["lineno"], int)
     assert posting_meta["reference"] == "00045"
+
+
+@pytest.mark.parametrize("value", ["NaN", "1E+10001"])
+def test_reject_unprintable_metadata_numbers(value: str) -> None:
+    entry = _entry(
+        {
+            "t": "Note",
+            "date": "2017-12-12",
+            "account": "Assets:Cash",
+            "comment": "Example",
+            "meta": {"number": {"number": value}},
+        }
+    )
+    with pytest.raises(
+        InvalidMetadataNumberError, match="Invalid metadata number"
+    ):
+        deserialise(entry)
 
 
 def test_serialise_entry_types(

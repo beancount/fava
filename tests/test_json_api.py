@@ -831,13 +831,18 @@ def test_api_add_entries(
                     "filename": "/path/to/import.csv",
                     "lineno": 42,
                     "reference": "00123",
+                    "numeric-text": "10.10",
                     "decimal": {"number": "0.1234567891011121314151617"},
                 },
                 "postings": [
                     {
                         "account": "Assets:US:ETrade:Cash",
                         "amount": "100 USD",
-                        "meta": {"lineno": 1, "reference": "00045"},
+                        "meta": {
+                            "lineno": 1,
+                            "reference": "00045",
+                            "decimal": {"number": "0.0000001"},
+                        },
                     },
                     {"account": "Assets:US:ETrade:GLD"},
                 ],
@@ -898,8 +903,10 @@ def test_api_add_entries(
 
 2017-12-12 * "Test3" ""
   decimal: 0.1234567891011121314151617
+  numeric-text: "10.10"
   reference: "00123"
   Assets:US:ETrade:Cash                                 100 USD
+    decimal: 0.0000001
     reference: "00045"
   Assets:US:ETrade:GLD
 """

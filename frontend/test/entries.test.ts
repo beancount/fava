@@ -119,19 +119,6 @@ test("metadata: numeric strings, Decimal and Amount values roundtrip", () => {
   });
 });
 
-test("metadata: editing Decimal values preserves their type and precision", () => {
-  const meta = EntryMetadata.validator({
-    decimal: { number: "10.10" },
-  }).unwrap();
-  for (const value of ["-0.1234567891011121314151617", "1E+30", ".5", "5."]) {
-    const updated = meta.set_string("decimal", value);
-    deepEqual(JSON.parse(JSON.stringify(updated)), {
-      decimal: { number: value },
-    });
-  }
-  equal(meta.set_string("decimal", "text").get("decimal"), "text");
-});
-
 test("metadata: get filename and lineno", () => {
   const meta = new EntryMetadata();
   const meta_with_position = new EntryMetadata({
