@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { EntryMetadata } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
+  import MetadataValueInput from "./MetadataValueInput.svelte";
 
   interface Props {
     meta: EntryMetadata;
@@ -34,15 +35,9 @@
       required
     />
     :
-    <input
-      type="text"
-      class="value"
-      placeholder={_("Value")}
-      {value}
-      onchange={(event) => {
-        meta = meta.set_string(key, event.currentTarget.value);
-      }}
-    />
+    {#key key}
+      <MetadataValueInput bind:meta {value} metadata_key={key} />
+    {/key}
     {#if index === meta_entries.length - 1 && key}
       <button
         type="button"
@@ -66,10 +61,6 @@
 
   input.key {
     width: 12rem;
-  }
-
-  input.value {
-    flex-grow: 1;
   }
 
   @media (width <= 767px) {

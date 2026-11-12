@@ -81,8 +81,8 @@ msgid "Account"
 msgstr ""
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
-#: frontend/src/entry-forms/EntryMetadata.svelte:53
-#: frontend/src/entry-forms/EntryMetadata.svelte:54
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
+#: frontend/src/entry-forms/EntryMetadata.svelte:49
 msgid "Add metadata"
 msgstr ""
 
@@ -98,6 +98,7 @@ msgid "Balance"
 msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:44
+#: frontend/src/entry-forms/MetadataValueInput.svelte:48
 msgid "Number"
 msgstr ""
 
@@ -107,12 +108,24 @@ msgstr ""
 msgid "Currency"
 msgstr ""
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:29
+#: frontend/src/entry-forms/EntryMetadata.svelte:30
 #: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
 msgstr ""
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:40
+#: frontend/src/entry-forms/MetadataValueInput.svelte:38
+msgid "Metadata value type"
+msgstr ""
+
+#: frontend/src/entry-forms/MetadataValueInput.svelte:47
+msgid "Text"
+msgstr ""
+
+#: frontend/src/entry-forms/MetadataValueInput.svelte:49
+msgid "Automatic"
+msgstr ""
+
+#: frontend/src/entry-forms/MetadataValueInput.svelte:55
 #: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
 msgstr ""
