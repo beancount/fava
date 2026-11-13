@@ -61,23 +61,23 @@ msgid "Saving…"
 msgstr "저장 중…"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/editor/SliceEditor.svelte:156
-#: frontend/src/modals/AddEntry.svelte:67
+#: frontend/src/editor/SliceEditor.svelte:161
+#: frontend/src/modals/AddEntry.svelte:68
 #: frontend/src/reports/import/Extract.svelte:127
 #: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "저장"
 
-#: frontend/src/editor/SliceEditor.svelte:138
+#: frontend/src/editor/SliceEditor.svelte:143
 msgid "Duplicate"
 msgstr "복제"
 
-#: frontend/src/editor/SliceEditor.svelte:144
+#: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
 msgstr "새로고침"
 
-#: frontend/src/editor/SliceEditor.svelte:152
-#: frontend/src/modals/AddEntry.svelte:46
+#: frontend/src/editor/SliceEditor.svelte:157
+#: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
 msgstr "추가"
 
@@ -188,7 +188,7 @@ msgstr "일별"
 msgid "Transaction"
 msgstr "거래"
 
-#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
 msgstr "계속 추가"
 
@@ -463,15 +463,15 @@ msgstr "추출"
 msgid "Clear"
 msgstr "비우기"
 
-#: frontend/src/reports/import/Import.svelte:170
+#: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
 msgstr "가져올 파일이 없습니다."
 
-#: frontend/src/reports/import/Import.svelte:173
+#: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
 msgstr "가져올 수 있는 파일"
 
-#: frontend/src/reports/import/Import.svelte:185
+#: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
 msgstr "가져올 수 없는 파일"
 

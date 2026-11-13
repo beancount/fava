@@ -59,23 +59,23 @@ msgid "Saving…"
 msgstr "S'està desant…"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/editor/SliceEditor.svelte:156
-#: frontend/src/modals/AddEntry.svelte:67
+#: frontend/src/editor/SliceEditor.svelte:161
+#: frontend/src/modals/AddEntry.svelte:68
 #: frontend/src/reports/import/Extract.svelte:127
 #: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "Desa"
 
-#: frontend/src/editor/SliceEditor.svelte:138
+#: frontend/src/editor/SliceEditor.svelte:143
 msgid "Duplicate"
 msgstr "Duplica"
 
-#: frontend/src/editor/SliceEditor.svelte:144
+#: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
 msgstr "torna a carregar"
 
-#: frontend/src/editor/SliceEditor.svelte:152
-#: frontend/src/modals/AddEntry.svelte:46
+#: frontend/src/editor/SliceEditor.svelte:157
+#: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
 msgstr "Afegeix"
 
@@ -186,7 +186,7 @@ msgstr "Per dia"
 msgid "Transaction"
 msgstr "Transacció"
 
-#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
 msgstr "continua"
 
@@ -457,15 +457,15 @@ msgstr "Extreu"
 msgid "Clear"
 msgstr "Esborra"
 
-#: frontend/src/reports/import/Import.svelte:170
+#: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
 msgstr "No s'ha trobat cap fitxer per importar."
 
-#: frontend/src/reports/import/Import.svelte:173
+#: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
 msgstr "Fitxers importables"
 
-#: frontend/src/reports/import/Import.svelte:185
+#: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
 msgstr "Fitxers no importables"
 
