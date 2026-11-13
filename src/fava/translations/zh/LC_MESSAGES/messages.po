@@ -60,25 +60,25 @@ msgid "Saving…"
 msgstr "正在保存…"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/editor/SliceEditor.svelte:156
-#: frontend/src/modals/AddEntry.svelte:67
+#: frontend/src/editor/SliceEditor.svelte:161
+#: frontend/src/modals/AddEntry.svelte:68
 #: frontend/src/reports/import/Extract.svelte:127
 #: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "保存"
 
-#: frontend/src/editor/SliceEditor.svelte:138
+#: frontend/src/editor/SliceEditor.svelte:143
 #, fuzzy
 #| msgid "ignore duplicate"
 msgid "Duplicate"
 msgstr "忽略重复项"
 
-#: frontend/src/editor/SliceEditor.svelte:144
+#: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
 msgstr "重新加载"
 
-#: frontend/src/editor/SliceEditor.svelte:152
-#: frontend/src/modals/AddEntry.svelte:46
+#: frontend/src/editor/SliceEditor.svelte:157
+#: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
 msgstr "添加"
 
@@ -189,7 +189,7 @@ msgstr "按日"
 msgid "Transaction"
 msgstr "交易"
 
-#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
 msgstr "继续"
 
@@ -464,15 +464,15 @@ msgstr "导出"
 msgid "Clear"
 msgstr "清除"
 
-#: frontend/src/reports/import/Import.svelte:170
+#: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
 msgstr "没有发现可供导入的文件。"
 
-#: frontend/src/reports/import/Import.svelte:173
+#: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
 msgstr "可导入的文件"
 
-#: frontend/src/reports/import/Import.svelte:185
+#: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
 msgstr "不可导入的文件"
 

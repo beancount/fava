@@ -60,25 +60,25 @@ msgid "Saving…"
 msgstr "A gravar…"
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/editor/SliceEditor.svelte:156
-#: frontend/src/modals/AddEntry.svelte:67
+#: frontend/src/editor/SliceEditor.svelte:161
+#: frontend/src/modals/AddEntry.svelte:68
 #: frontend/src/reports/import/Extract.svelte:127
 #: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr "Guardar"
 
-#: frontend/src/editor/SliceEditor.svelte:138
+#: frontend/src/editor/SliceEditor.svelte:143
 #, fuzzy
 #| msgid "ignore duplicate"
 msgid "Duplicate"
 msgstr "ignorar duplicado"
 
-#: frontend/src/editor/SliceEditor.svelte:144
+#: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
 msgstr "recarregar"
 
-#: frontend/src/editor/SliceEditor.svelte:152
-#: frontend/src/modals/AddEntry.svelte:46
+#: frontend/src/editor/SliceEditor.svelte:157
+#: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
 msgstr "Adicionar"
 
@@ -189,7 +189,7 @@ msgstr "Diário"
 msgid "Transaction"
 msgstr "Transação"
 
-#: frontend/src/modals/AddEntry.svelte:65
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
 msgstr "continuar"
 
@@ -464,15 +464,15 @@ msgstr "Extrair"
 msgid "Clear"
 msgstr "Recomeçar"
 
-#: frontend/src/reports/import/Import.svelte:170
+#: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
 msgstr "Nenhum ficheiro encontrado para importar."
 
-#: frontend/src/reports/import/Import.svelte:173
+#: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
 msgstr "Ficheiros Importáveis"
 
-#: frontend/src/reports/import/Import.svelte:185
+#: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
 msgstr "Ficheiros não importantes"
 
