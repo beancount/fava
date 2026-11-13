@@ -6,21 +6,23 @@ svg text {
 .tooltip {
   position: absolute;
   z-index: var(--z-index-floating-ui);
-  min-width: 5em;
+  width: max-content;
+  min-width: min(5em, var(--tooltip-max-width, 100vw));
+  max-width: var(--tooltip-max-width, 100vw);
   padding: 0.5em;
   font-family: var(--font-family-monospaced);
   text-align: center;
+  overflow-wrap: anywhere;
   pointer-events: none;
   background: var(--background);
   border: 1px solid var(--border);
   box-shadow: var(--box-shadow-button);
-  opacity: 0;
   transform: translate(-50%, calc(-10px - 100%));
 
   &::before {
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: clamp(10px, calc(50% - var(--tooltip-shift, 0px)), calc(100% - 10px));
     width: 0;
     height: 0;
     margin-left: -10px;
