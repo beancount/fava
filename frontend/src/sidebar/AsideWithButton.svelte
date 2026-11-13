@@ -6,6 +6,22 @@
   const toggle = () => {
     active = !active;
   };
+
+  const close_on_navigation = (event: MouseEvent) => {
+    if (event.target instanceof Element && event.target.closest("a[href]")) {
+      active = false;
+    }
+  };
+
+  const navigation_click = (node: HTMLElement) => {
+    node.addEventListener("click", close_on_navigation);
+
+    return {
+      destroy() {
+        node.removeEventListener("click", close_on_navigation);
+      },
+    };
+  };
 </script>
 
 {#if active}
@@ -15,7 +31,7 @@
   <button type="button" onclick={toggle}>☰</button>
   <a class="button" href="#add-transaction">+</a>
 </div>
-<aside class:active>
+<aside class:active use:navigation_click>
   <AsideContents />
 </aside>
 
