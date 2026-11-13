@@ -20,7 +20,6 @@ import {
 } from "../lib/validation.ts";
 import { notify, notify_err } from "../notifications.ts";
 import { query_validator } from "../reports/query/query_table.ts";
-import { router } from "../router.ts";
 import { base_url } from "../stores/index.ts";
 import { set_mtime } from "../stores/mtime.ts";
 import {
@@ -398,7 +397,7 @@ export async function delete_document(filename: string): Promise<boolean> {
 }
 
 /**
- * Save an array of entries, notify and reload.
+ * Save an array of entries and notify.
  * @param entries - an array of entries to save to the Beancount file.
  */
 export async function save_entries(
@@ -406,7 +405,6 @@ export async function save_entries(
 ): Promise<void> {
   try {
     const msg = await put_add_entries({ entries });
-    router.reload();
     notify(msg);
   } catch (error) {
     notify_err(error, (e) => `Saving failed: ${e.message}`);

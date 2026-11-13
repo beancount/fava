@@ -35,6 +35,7 @@
     if (!$add_entry_continue) {
       router.close_overlay();
     }
+    router.reload();
   }
 
   let shown = $derived($hash === "add-transaction");

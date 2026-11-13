@@ -128,6 +128,7 @@
     close_extract();
     if (is_non_empty(without_duplicates)) {
       await save_entries(without_duplicates);
+      router.reload();
     }
   }
 
@@ -152,6 +153,7 @@
     }
     if (is_non_empty(without_duplicates)) {
       await save_entries(without_duplicates);
+      router.reload();
     }
   }
 </script>

@@ -61,14 +61,15 @@
         source: current_slice,
         sha256sum,
       });
-      if ($reload_after_saving_entry_slice) {
-        router.reload();
-      }
-      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Saving failed: ${err.message}`);
+      return;
     } finally {
       saving = false;
+    }
+    router.close_overlay();
+    if ($reload_after_saving_entry_slice) {
+      router.reload();
     }
   }
 
@@ -77,8 +78,11 @@
     try {
       if (duplicated_entry != null) {
         await save_entries([duplicated_entry]);
+        router.close_overlay();
+        router.reload();
+      } else {
+        router.close_overlay();
       }
-      router.close_overlay();
     } finally {
       duplicated_entry = undefined;
     }
@@ -88,12 +92,13 @@
     try {
       await delete_source_slice({ entry_hash, sha256sum });
       entry_hash = "";
-      if ($reload_after_saving_entry_slice) {
-        router.reload();
-      }
-      router.close_overlay();
     } catch (error) {
       notify_err(error, (err) => `Deleting failed: ${err.message}`);
+      return;
+    }
+    router.close_overlay();
+    if ($reload_after_saving_entry_slice) {
+      router.reload();
     }
   }
 
