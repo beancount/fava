@@ -797,8 +797,7 @@
     "show_metadata_indicators": true,
     "sidebar_show_queries": 5,
     "upcoming_events": 7,
-    "uptodate_indicator_grey_lookback_days": 60,
-    "use_external_editor": false
+    "uptodate_indicator_grey_lookback_days": 60
   },
   "have_excel": true,
   "incognito": false,
@@ -886,6 +885,7 @@
     "trip-san-francisco-2015"
   ],
   "upcoming_events_count": 0,
+  "use_external_editor": false,
   "user_queries": [
     {
       "date": "2016-01-01",

@@ -121,6 +121,12 @@ def _trusted_hosts(
 @click.option(
     "--poll-watcher", is_flag=True, help="Use old polling-based watcher."
 )
+@click.option(
+    "--config-file",
+    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    metavar="<path>",
+    help="Path to a pyproject.toml file for [tool.fava] options.",
+)
 @click.version_option(package_name="fava")
 def main(  # noqa: PLR0913
     *,
@@ -135,6 +141,7 @@ def main(  # noqa: PLR0913
     profile: bool = False,
     profile_dir: str | None = None,
     poll_watcher: bool = False,
+    config_file: str | None = None,
 ) -> None:  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
@@ -152,13 +159,19 @@ def main(  # noqa: PLR0913
         raise NoFileSpecifiedError
 
     from fava.application import create_app
+    from fava.config import ProjectConfigError
 
-    app = create_app(
-        all_filenames,
-        incognito=incognito,
-        read_only=read_only,
-        poll_watcher=poll_watcher,
-    )
+    try:
+        app = create_app(
+            all_filenames,
+            config_file=config_file,
+            incognito=incognito,
+            read_only=read_only,
+            poll_watcher=poll_watcher,
+        )
+    except ProjectConfigError as error:
+        msg = f"Failed to load config file: {error!s}"
+        raise click.UsageError(msg) from error
     app.config["TRUSTED_HOSTS"] = _trusted_hosts(host, trusted_host)
 
     if prefix:
