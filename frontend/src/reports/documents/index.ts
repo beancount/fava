@@ -12,8 +12,8 @@ export interface DocumentsReportProps {
 export const documents = new Route(
   "documents",
   Documents,
-  async (url: URL) =>
-    get_documents(get_url_filters(url)).then((data) => ({
+  async (url, signal) =>
+    get_documents(get_url_filters(url), signal).then((data) => ({
       documents: data,
     })),
   () => _("Documents"),

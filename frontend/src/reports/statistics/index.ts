@@ -17,13 +17,18 @@ export const postings_per_account_query =
 export const statistics = new Route<StatisticsReportProps>(
   "statistics",
   Statistics,
-  async (url) => {
-    const postings_per_account = await get_query({
-      query_string: postings_per_account_query,
-      ...get_url_filters(url),
-    });
-    const { all_balance_directives, balances, entries_by_type } =
-      await get_statistics(get_url_filters(url));
+  async (url, signal) => {
+    const filters = get_url_filters(url);
+    const [
+      postings_per_account,
+      { all_balance_directives, balances, entries_by_type },
+    ] = await Promise.all([
+      get_query(
+        { query_string: postings_per_account_query, ...filters },
+        signal,
+      ),
+      get_statistics(filters, signal),
+    ]);
     if (postings_per_account.t !== "table") {
       throw new Error("Internal error: expected a query result table");
     }

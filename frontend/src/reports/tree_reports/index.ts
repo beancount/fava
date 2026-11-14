@@ -24,8 +24,8 @@ export interface TreeReportProps {
 export const income_statement = new Route(
   "income_statement",
   IncomeStatement,
-  async (url) => {
-    const report = await get_income_statement(get_url_filters(url));
+  async (url, signal) => {
+    const report = await get_income_statement(get_url_filters(url), signal);
     const [income, _profit, expenses] = report.trees;
     if (income && expenses) {
       report.charts.push(
@@ -41,8 +41,8 @@ export const income_statement = new Route(
 export const balance_sheet = new Route(
   "balance_sheet",
   BalanceSheet,
-  async (url) => {
-    const report = await get_balance_sheet(get_url_filters(url));
+  async (url, signal) => {
+    const report = await get_balance_sheet(get_url_filters(url), signal);
     report.charts.push(...report.trees.map(ParsedHierarchyChart.from_node));
     return report;
   },
@@ -52,8 +52,8 @@ export const balance_sheet = new Route(
 export const trial_balance = new Route(
   "trial_balance",
   TrialBalance,
-  async (url) => {
-    const report = await get_trial_balance(get_url_filters(url));
+  async (url, signal) => {
+    const report = await get_trial_balance(get_url_filters(url), signal);
     const root = report.trees[0];
     if (root) {
       report.charts.push(...root.children.map(ParsedHierarchyChart.from_node));

@@ -11,6 +11,6 @@ export interface OptionsReportProps {
 export const options = new Route<OptionsReportProps>(
   "options",
   OptionsSvelte,
-  async () => get_options(),
+  async (_url, signal) => get_options(signal),
   () => _("Options"),
 );

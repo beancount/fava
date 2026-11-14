@@ -16,8 +16,8 @@ export interface CommoditiesReportProps {
 export const commodities = new Route<CommoditiesReportProps>(
   "commodities",
   CommoditiesSvelte,
-  async (url) =>
-    get_commodities(get_url_filters(url)).then((cs) => {
+  async (url, signal) =>
+    get_commodities(get_url_filters(url), signal).then((cs) => {
       const charts = cs.map(({ base, quote, prices }) => {
         const name = `${base} / ${quote}`;
         const values = prices.map((d) => ({ name, date: d[0], value: d[1] }));

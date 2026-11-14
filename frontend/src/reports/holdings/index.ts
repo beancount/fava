@@ -76,14 +76,14 @@ export interface HoldingsReportProps {
 export const holdings = new Route<HoldingsReportProps>(
   "holdings",
   Holdings,
-  async (url) => {
+  async (url, signal) => {
     const [, key = ""] = get_url_path(url).unwrap().split("/");
     const aggregation_key = to_report_type(key);
     const query_string = QUERIES[aggregation_key];
-    const query_result_table = await get_query({
-      query_string,
-      ...get_url_filters(url),
-    });
+    const query_result_table = await get_query(
+      { query_string, ...get_url_filters(url) },
+      signal,
+    );
     if (query_result_table.t !== "table") {
       throw new Error("Internal error: expected a query result table");
     }

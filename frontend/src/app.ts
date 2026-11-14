@@ -21,7 +21,7 @@ import "../css/tree-table.css";
 
 import { get as store_get } from "svelte/store";
 
-import { get_changed, get_errors, get_ledger_data } from "./api/index.ts";
+import { get_changed, get_ledger_data } from "./api/index.ts";
 import { ledgerDataValidator } from "./api/validators.ts";
 import { CopyableText } from "./clipboard.ts";
 import { BeancountCode } from "./codemirror/dom.ts";
@@ -70,12 +70,13 @@ function on_changes() {
     .catch((e: unknown) => {
       notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
     });
+  if (router.has_current_pending_load) {
+    // Seen in the response for the report that is loading.
+    return;
+  }
   if (store_get(auto_reload) && !router.has_interrupt_handler) {
     router.reload();
   } else {
-    get_errors().then((v) => {
-      errors.set(v);
-    }, log_error);
     notify(_("File change detected. Click to reload."), "warning", () => {
       router.reload();
     });

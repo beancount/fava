@@ -12,7 +12,7 @@ export interface EventsReportProps {
 export const events = new Route<EventsReportProps>(
   "events",
   Events,
-  async (url: URL) =>
-    get_events(get_url_filters(url)).then((data) => ({ events: data })),
+  async (url, signal) =>
+    get_events(get_url_filters(url), signal).then((data) => ({ events: data })),
   () => _("Events"),
 );

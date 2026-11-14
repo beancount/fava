@@ -20,6 +20,10 @@ export function setup_jsdom(): void {
     globalThis.StorageEvent = window.StorageEvent;
     globalThis.localStorage = window.localStorage;
     globalThis.sessionStorage = window.sessionStorage;
+    // jsdom does not implement scrolling.
+    window.Element.prototype.scroll = () => {
+      // noop
+    };
     ran_once = true;
   }
   document.title = "";

@@ -92,6 +92,19 @@ test("request handling - non-JSON response", async (t) => {
   await rejects(fetch_json(url), FetchInvalidResponseError);
 });
 
+test("request handling - abort while reading the body", async (t) => {
+  const url = new URL("https://localhost");
+  const controller = new AbortController();
+  t.mock.method(globalThis, "fetch", () => {
+    // Aborting while the body is read makes `response.json()` reject.
+    controller.abort();
+    return new Response("nojson", { status: 200 });
+  });
+  await rejects(fetch_json(url, { signal: controller.signal }), {
+    name: "AbortError",
+  });
+});
+
 test("request handling - HTTP errors on in handleText", async (t) => {
   const url = new URL("https://localhost");
   t.mock.method(

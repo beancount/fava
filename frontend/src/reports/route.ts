@@ -9,10 +9,15 @@ import ReportLoadError from "./ReportLoadError.svelte";
 import { updateable_props } from "./route.svelte.ts";
 
 export interface BaseRoute {
-  /** Load data and render the component for this route to the given target. */
+  /**
+   * Load data and render the component for this route to the given target.
+   *
+   * If the signal is aborted, loading is cancelled and nothing is rendered.
+   */
   render(
     target: HTMLElement,
     url: URL,
+    signal: AbortSignal,
     previous?: RenderedReport,
     before_render?: () => void,
   ): RenderedReport | Promise<RenderedReport>;
@@ -56,6 +61,7 @@ class BackendRoute implements BaseRoute {
   async render(
     target: HTMLElement,
     url: URL,
+    signal: AbortSignal,
     previous?: RenderedReport,
     before_render?: () => void,
   ): Promise<RenderedReport> {
@@ -65,13 +71,14 @@ class BackendRoute implements BaseRoute {
     }
     const get_url = new URL(url);
     get_url.searchParams.set("partial", "true");
-    const content = await fetch_text(get_url);
+    const content = await fetch_text(get_url, { signal });
+    signal.throwIfAborted();
     if (previous.route !== this) {
       previous.destroy();
     }
     before_render?.();
     target.innerHTML = content;
-    read_mtime();
+    read_mtime(signal);
 
     return new BackendRenderedReport(this, url, target);
   }
@@ -90,6 +97,7 @@ export class ErrorRoute implements BaseRoute {
   render(
     target: HTMLElement,
     url: URL,
+    _signal: AbortSignal,
     previous?: RenderedReport,
     before_render?: () => void,
   ): RenderedReport {
@@ -119,7 +127,7 @@ export interface FrontendRoute extends BaseRoute {
 export class Route<T extends Record<string, any>> implements FrontendRoute {
   readonly report: string;
   private readonly Component: Component<T>;
-  private readonly load: (url: URL) => T | Promise<T>;
+  private readonly load: (url: URL, signal: AbortSignal) => T | Promise<T>;
   readonly get_title: (props: T) => string;
   /** The currently rendered instance - if loading failed, we render an error component. */
   private instance?:
@@ -133,13 +141,13 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
    * Create a new frontend-rendered route.
    * @param report URL slug of this report.
    * @param Component the component to render for this report.
-   * @param load function to load the necessary data.
+   * @param load function to load the necessary data - should pass the signal to fetches.
    * @param get_title function to get the page title.
    */
   constructor(
     report: string,
     Component: Component<T>,
-    load: (url: URL) => T | Promise<T>,
+    load: (url: URL, signal: AbortSignal) => T | Promise<T>,
     get_title: (props: T) => string,
   ) {
     this.report = report;
@@ -151,10 +159,12 @@ export class Route<T extends Record<string, any>> implements FrontendRoute {
   async render(
     target: HTMLElement,
     url: URL,
+    signal: AbortSignal,
     previous?: RenderedReport,
     before_render?: () => void,
   ): Promise<RenderedReport> {
-    const raw_props = await this.load(url);
+    const raw_props = await this.load(url, signal);
+    signal.throwIfAborted();
     if (previous?.route !== this) {
       previous?.destroy();
     }

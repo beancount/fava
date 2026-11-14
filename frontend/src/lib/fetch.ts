@@ -36,6 +36,7 @@ export async function fetch_json(
 ): Promise<Record<string, unknown>> {
   const response = await fetch(input, init);
   const json: unknown = await response.json().catch(() => null);
+  init?.signal?.throwIfAborted();
   if (!response.ok) {
     throw new FetchHTTPError(
       error_response_validator(json)
@@ -60,6 +61,7 @@ export async function fetch_text(
   const response = await fetch(input, init);
   if (!response.ok) {
     const message = await response.text().catch(() => null);
+    init?.signal?.throwIfAborted();
     throw new FetchHTTPError(message, response.status);
   }
   return response.text();

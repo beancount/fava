@@ -21,24 +21,26 @@ export interface JournalReportProps {
 export const journal = new Route<JournalReportProps>(
   "journal",
   Journal,
-  async (url: URL) => {
+  async (url, signal) => {
     const filters = get_url_filters(url);
     const $journal_sort = store_get(journal_sort);
     const order = shallow_equal($journal_sort, ["date", "asc"])
       ? "asc"
       : "desc";
-    const { journal, total_pages } = await get_journal_page({
-      ...filters,
-      page: 1,
-      order,
-    });
+    const { journal, total_pages } = await get_journal_page(
+      { ...filters, page: 1, order },
+      signal,
+    );
 
     let error_shown = false;
     const pages = range(2, total_pages + 1);
     const all_pages = pages.map(async (page) => {
-      return get_journal_page({ ...filters, page, order }).then(
+      return get_journal_page({ ...filters, page, order }, signal).then(
         (res) => fragment_from_string(res.journal),
         (error: unknown) => {
+          if (signal.aborted) {
+            return null;
+          }
           log_error(`Failed to fetch page ${page.toString()}`, error);
           if (!error_shown) {
             notify_err(new Error("Failed to fetch some journal pages"));

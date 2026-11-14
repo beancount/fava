@@ -20,6 +20,7 @@ import {
   type FrontendRoute,
 } from "./reports/route.ts";
 import { has_changes, raw_page_title } from "./sidebar/page-title.ts";
+import { has_current_mtime } from "./stores/mtime.ts";
 import { current_url } from "./stores/url.ts";
 
 /** Whether this is a left-button click without any modifier keys pressed. */
@@ -137,7 +138,7 @@ interface InterruptHandlerContext {
 
 type InterruptHandler = (context: InterruptHandlerContext) => string | null;
 
-class Router {
+export class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
 
@@ -149,6 +150,12 @@ class Router {
 
   /** The currently rendered route. */
   #current_report?: RenderedReport | undefined;
+
+  /** Controller to abort the currently loading route (if any). */
+  #abort_controller?: AbortController | undefined;
+
+  /** The URL of the currently loading route (if any). */
+  #loading_url?: URL | undefined;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -188,6 +195,18 @@ class Router {
    */
   get has_interrupt_handler(): boolean {
     return this.#interrupt_handlers.size > 0;
+  }
+
+  /**
+   * Whether a route is currently loading and all the data that it has received
+   * is for the current ledger mtime.
+   */
+  get has_current_pending_load(): boolean {
+    return (
+      this.#loading_url != null &&
+      this.#abort_controller != null &&
+      has_current_mtime(this.#abort_controller.signal)
+    );
   }
 
   /**
@@ -233,8 +252,17 @@ class Router {
 
   /**
    * Render the route for the given URL.
+   *
+   * Aborts any route that is still loading. Returns false if this render was
+   * itself aborted by a subsequent one.
    */
-  async #render_route(url: URL, before_render?: () => void): Promise<void> {
+  async #render_route(url: URL, before_render?: () => void): Promise<boolean> {
+    this.#abort_controller?.abort();
+    const controller = new AbortController();
+    this.#abort_controller = controller;
+    const { signal } = controller;
+    this.#loading_url = url;
+
     const previous = this.#current_report;
     const relative_path = get_url_path(url).unwrap();
     const report = relative_path.slice(0, relative_path.indexOf("/"));
@@ -243,19 +271,25 @@ class Router {
 
     try {
       this.#current_report = await loading_state.await(
-        route.render(this.#article, url, previous, before_render),
+        route.render(this.#article, url, signal, previous, before_render),
       );
     } catch (error: unknown) {
+      if (signal.aborted) {
+        return false;
+      }
       assert_is_error(error);
       const error_route = new ErrorRoute(error);
       this.#current_report = error_route.render(
         this.#article,
         url,
+        signal,
         previous,
         before_render,
       );
     }
+    this.#loading_url = undefined;
     raw_page_title.set(this.#current_report.title);
+    return true;
   }
 
   #beforeunload = (event: BeforeUnloadEvent) => {
@@ -267,7 +301,8 @@ class Router {
 
   #popstate = (): void => {
     const target = new URL(window.location.href);
-    const { current } = this;
+    // Compare to a route that is still loading to abort it if we moved away.
+    const current = this.#loading_url ?? this.current;
     if (
       (target.pathname !== current.pathname ||
         target.search !== current.search) &&
@@ -341,10 +376,19 @@ class Router {
     document.addEventListener("click", this.#intercept_link_click);
     navigation_api?.addEventListener("navigate", this.#on_navigate);
 
-    await this.#render_route(this.current);
+    if (await this.#render_route(this.current)) {
+      handle_extension_page_load();
+      this.#scroll_to_hash();
+    }
+  }
 
-    handle_extension_page_load();
-    this.#scroll_to_hash();
+  /**
+   * Remove the event listeners added in `init` - only needed in tests.
+   */
+  destroy(): void {
+    window.removeEventListener("popstate", this.#popstate);
+    document.removeEventListener("click", this.#intercept_link_click);
+    navigation_api?.removeEventListener("navigate", this.#on_navigate);
   }
 
   /**
@@ -389,7 +433,9 @@ class Router {
           }
           this.current = url;
         };
-    await this.#render_route(url, before_render);
+    if (!(await this.#render_route(url, before_render))) {
+      return;
+    }
 
     has_changes.set(false);
     handle_extension_page_load();
@@ -438,10 +484,10 @@ class Router {
   };
 
   /*
-   * Reload the page.
+   * Reload the page (or restart loading the one that is currently loading).
    */
   reload = (): void => {
-    this.#load_url(this.current).catch(log_error);
+    this.#load_url(this.#loading_url ?? this.current).catch(log_error);
   };
 }
 

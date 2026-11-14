@@ -49,15 +49,18 @@ export function get_account_from_url(
 export const account_report = new Route<AccountReportProps>(
   "account",
   AccountReport,
-  async (url) => {
+  async (url, signal) => {
     const account = get_account_from_url(url).unwrap();
     const report_type = to_report_type(url.searchParams.get("r"));
     const { charts, journal, interval_balances, dates, budgets } =
-      await get_account_report({
-        ...get_url_filters(url),
-        a: account,
-        r: report_type,
-      });
+      await get_account_report(
+        {
+          ...get_url_filters(url),
+          a: account,
+          r: report_type,
+        },
+        signal,
+      );
 
     return {
       charts,

@@ -45,8 +45,8 @@ export interface ImportReportProps {
 export const import_report = new Route<ImportReportProps>(
   "import",
   ImportSvelte,
-  async () =>
-    get_imports()
+  async (_url, signal) =>
+    get_imports(signal)
       .then((files) => {
         const today = today_as_string();
         return files.map(({ name, basename, importers }) => ({

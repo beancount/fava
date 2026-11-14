@@ -14,13 +14,11 @@ export interface EditorReportProps {
 export const editor = new Route<EditorReportProps>(
   "editor",
   Editor,
-  async (url: URL) => {
+  async (url, signal) => {
     const line = url.searchParams.get("line");
     const line_search_param = line != null ? Number.parseInt(line, 10) : null;
     const [source, codemirror_beancount] = await Promise.all([
-      get_source({
-        filename: url.searchParams.get("file_path") ?? "",
-      }),
+      get_source({ filename: url.searchParams.get("file_path") ?? "" }, signal),
       import("../../codemirror/beancount.ts"),
     ]);
     return {

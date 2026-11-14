@@ -24,9 +24,9 @@ function get_page_slug(url: URL): string {
 export const help = new Route<HelpReportProps>(
   "help",
   Help,
-  async (url) => {
+  async (url, signal) => {
     const page_slug = get_page_slug(url);
-    const { html, pages } = await get_help({ page_slug });
+    const { html, pages } = await get_help({ page_slug }, signal);
 
     return { page_slug, html, pages };
   },

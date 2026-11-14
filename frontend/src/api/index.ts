@@ -136,7 +136,7 @@ async function fetch_and_handle_api_call<R>(
 ): Promise<R> {
   const json = await fetch_json(url, init);
   if (typeof json.mtime === "string") {
-    set_mtime(json.mtime);
+    set_mtime(json.mtime, init.signal);
   }
   const res = validator(json.data);
   return res.unwrap(InvalidResponseDataError);
@@ -144,16 +144,22 @@ async function fetch_and_handle_api_call<R>(
 
 /**
  * Define a function to call the endpoint with the required parameters.
+ *
+ * The returned function takes an optional abort signal to cancel the request.
  */
 function define_endpoint<T extends readonly ApiParam[], R>(
   endpoint: ApiEndpoint,
   validator: Validator<R>,
   accepted_params: T,
   method: "DELETE" | "GET" | "PUT" = "GET",
-): (params: Pick<ApiParams, T[number]>) => Promise<R> {
-  return async (params) => {
+): (params: Pick<ApiParams, T[number]>, signal?: AbortSignal) => Promise<R> {
+  return async (params, signal) => {
     const url = api_url(endpoint, accepted_params, params);
-    return fetch_and_handle_api_call(url, { method }, validator);
+    return fetch_and_handle_api_call(
+      url,
+      { method, signal: signal ?? null },
+      validator,
+    );
   };
 }
 
@@ -163,10 +169,14 @@ function define_endpoint<T extends readonly ApiParam[], R>(
 function define_paramless_endpoint<R>(
   endpoint: ApiEndpoint,
   validator: Validator<R>,
-): () => Promise<R> {
-  return async () => {
+): (signal?: AbortSignal) => Promise<R> {
+  return async (signal) => {
     const url = api_url(endpoint);
-    return fetch_and_handle_api_call(url, { method: "GET" }, validator);
+    return fetch_and_handle_api_call(
+      url,
+      { method: "GET", signal: signal ?? null },
+      validator,
+    );
   };
 }
 
