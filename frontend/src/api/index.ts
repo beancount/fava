@@ -78,6 +78,7 @@ type PutEndpoint =
   | "add_entries"
   | "attach_document"
   | "move"
+  | "open_in_editor"
   | "source"
   | "source_slice"
   | "upload_import_file";
@@ -360,6 +361,8 @@ const put_move: Put<{
   account: string;
   new_name: string;
 }> = define_put_json("move");
+export const put_open_in_editor: Put<{ file_path: string; line: string }> =
+  define_put_json("open_in_editor");
 export const put_source: Put<SourceFile> = define_put_json("source");
 export const put_source_slice: Put<{
   entry_hash: string;
