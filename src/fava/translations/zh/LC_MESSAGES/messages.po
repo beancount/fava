@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.17-dev\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -237,7 +237,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "将当前筛选的条目下载为 Beancount 文件"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "错误"
 
@@ -328,7 +328,7 @@ msgstr "折叠所有行"
 msgid "Options"
 msgstr "选项"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "编辑器"
@@ -547,7 +547,7 @@ msgstr "成本"
 msgid "Change"
 msgstr "变动"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "日记账"
@@ -618,7 +618,7 @@ msgstr "每类型条目数"
 msgid "Last Entry"
 msgstr "最新条目"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "统计"

@@ -12,7 +12,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.16.1-dev\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "Содержимое файла изменилось. Нажмите, чтобы перезагрузить."
 
@@ -241,7 +241,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "Скачать отфильтрованные записи как файл Beancount"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "Ошибка"
 
@@ -332,7 +332,7 @@ msgstr ""
 msgid "Options"
 msgstr "Параметры"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Редактор"
@@ -551,7 +551,7 @@ msgstr "Стоимость"
 msgid "Change"
 msgstr "Изменение"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Журнал"
@@ -626,7 +626,7 @@ msgstr "Записей по Типу"
 msgid "Last Entry"
 msgstr "Последняя запись"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Статистика"

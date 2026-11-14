@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.11.dev0\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
@@ -234,7 +234,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "Error"
 
@@ -325,7 +325,7 @@ msgstr "Plega les línies"
 msgid "Options"
 msgstr "Opcions"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Editor"
@@ -536,7 +536,7 @@ msgstr "Cost"
 msgid "Change"
 msgstr "Canvi"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Llibre diari"
@@ -611,7 +611,7 @@ msgstr "Entrades per tipus"
 msgid "Last Entry"
 msgstr "Darrera entrada"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Estadístiques"
