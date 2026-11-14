@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.16.1-dev\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "Arquivo modificado. Clique para atualizar."
 
@@ -243,7 +243,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "Baixar entradas filtradas como um arquivo Beancount"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "Erro"
 
@@ -334,7 +334,7 @@ msgstr "Fechar todos os nós"
 msgid "Options"
 msgstr "Opções"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Editor"
@@ -553,7 +553,7 @@ msgstr "Custo"
 msgid "Change"
 msgstr "Valor"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Extrato"
@@ -628,7 +628,7 @@ msgstr "Entradas por Tipo"
 msgid "Last Entry"
 msgstr "Última Entrada"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Estatísticas"

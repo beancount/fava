@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "ファイルの変更が検出されました。クリックして再読み込みしてください。"
 
@@ -238,7 +238,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "現在フィルターされたエントリをBeancountファイルとしてダウンロード"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "エラー"
 
@@ -329,7 +329,7 @@ msgstr "すべての折りたたみを閉じる"
 msgid "Options"
 msgstr "オプション"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "エディタ"
@@ -548,7 +548,7 @@ msgstr "原価"
 msgid "Change"
 msgstr "変更"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "仕訳帳"
@@ -624,7 +624,7 @@ msgstr "タイプごとのエントリ数"
 msgid "Last Entry"
 msgstr "最終エントリ"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "統計"

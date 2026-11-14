@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.17.1\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "Modificación del archivo detectado. Pulse para recargar."
 
@@ -236,7 +236,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "Descarga los asientos filtrados actualmente como un archivo Beancount"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "Error"
 
@@ -327,7 +327,7 @@ msgstr "Cerrar todas las carpetas"
 msgid "Options"
 msgstr "Opciones"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Editor"
@@ -546,7 +546,7 @@ msgstr "Coste"
 msgid "Change"
 msgstr "Cambio"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Diario"
@@ -619,7 +619,7 @@ msgstr "Asientos por Tipo"
 msgid "Last Entry"
 msgstr "Último asiento"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Estadísticas"

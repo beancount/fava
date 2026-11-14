@@ -7,7 +7,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
 
@@ -236,7 +236,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "خطا"
 
@@ -327,7 +327,7 @@ msgstr "بستن‌همه‌چینه‌ها"
 msgid "Options"
 msgstr "گزینه‌ ها"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "ویرایشگر"
@@ -547,7 +547,7 @@ msgstr "قیمت"
 msgid "Change"
 msgstr "تغییر"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "مجله"
@@ -620,7 +620,7 @@ msgstr "ورودی‌ها‌درهرنوع"
 msgid "Last Entry"
 msgstr "آخرین‌ورودی"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "آمار"

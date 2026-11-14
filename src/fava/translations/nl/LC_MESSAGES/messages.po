@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.17-dev\n"
 
-#: frontend/src/app.ts:79
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr "Bestand is gewijzigd. Klik om te herladen."
 
@@ -234,7 +234,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:102
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr "Fout"
 
@@ -325,7 +325,7 @@ msgstr ""
 msgid "Options"
 msgstr "Opties"
 
-#: frontend/src/reports/editor/index.ts:33
+#: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
 msgstr "Editor"
@@ -542,7 +542,7 @@ msgstr "Kosten"
 msgid "Change"
 msgstr "Verschil"
 
-#: frontend/src/reports/journal/index.ts:58
+#: frontend/src/reports/journal/index.ts:60
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Dagboek"
@@ -615,7 +615,7 @@ msgstr "Invoer per soort"
 msgid "Last Entry"
 msgstr "Laatste invoer"
 
-#: frontend/src/reports/statistics/index.ts:37
+#: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
 msgstr "Statistieken"
