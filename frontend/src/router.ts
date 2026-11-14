@@ -5,6 +5,7 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
+import { tick } from "svelte";
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
@@ -12,6 +13,7 @@ import { handle_extension_page_load } from "./extensions.ts";
 import { get_url_path } from "./helpers.ts";
 import { get_el } from "./lib/dom.ts";
 import { assert_is_error } from "./lib/errors.ts";
+import { object, record, string, unknown } from "./lib/validation.ts";
 import { log_error } from "./log.ts";
 import type { RenderedReport } from "./reports/route.ts";
 import {
@@ -137,12 +139,23 @@ interface InterruptHandlerContext {
 
 type InterruptHandler = (context: InterruptHandlerContext) => string | null;
 
-class Router {
+interface ScrollPosition {
+  article: [number, number];
+  window: [number, number];
+}
+
+const history_state = object({ fava_scroll_key: string });
+
+export class Router {
   /** The current URL - internal, should always be accessed by getter/setter. */
   #current: URL;
 
   /** The <article> element. */
   #article: HTMLElement;
+
+  /** Positions belong to history entries, not URLs, which can be revisited. */
+  #scroll_positions = new Map<string, ScrollPosition>();
+  #history_key: string | undefined;
 
   /** The frontend rendered routes. */
   #frontend_routes: FrontendRoute[] = [];
@@ -265,19 +278,65 @@ class Router {
     }
   };
 
-  #popstate = (): void => {
+  #popstate = (event: PopStateEvent): void => {
     const target = new URL(window.location.href);
+    const key = history_state(event.state).unwrap_or(null)?.fava_scroll_key;
     const { current } = this;
     if (
       (target.pathname !== current.pathname ||
         target.search !== current.search) &&
       !is_view_only_change(current, target)
     ) {
-      this.#load_url(target).catch(log_error);
+      this.#load_url(target, key).catch(log_error);
     } else {
+      this.#save_scroll();
+      this.#history_key = key;
       this.current = target;
+      if (key == null) {
+        this.#replace_state_key();
+      }
+      tick()
+        .then(() => {
+          this.#restore_scroll(key);
+        })
+        .catch(log_error);
     }
   };
+
+  #save_scroll(): void {
+    if (this.#history_key != null) {
+      this.#scroll_positions.set(this.#history_key, {
+        article: [this.#article.scrollLeft, this.#article.scrollTop],
+        window: [window.scrollX, window.scrollY],
+      });
+    }
+  }
+
+  #restore_scroll(key: string | undefined): void {
+    const position = key == null ? undefined : this.#scroll_positions.get(key);
+    if (position) {
+      this.#article.scroll(...position.article);
+      window.scroll(...position.window);
+    }
+  }
+
+  #push_state(url: URL): void {
+    const key = Math.random().toString();
+    this.#history_key = key;
+    window.history.pushState({ fava_scroll_key: key }, "", url);
+  }
+
+  #replace_state_key(): void {
+    const key = Math.random().toString();
+    window.history.replaceState(
+      {
+        ...record(unknown)(window.history.state).unwrap_or({}),
+        fava_scroll_key: key,
+      },
+      "",
+    );
+    this.#history_key = key;
+  }
 
   /*
    * Intercept all clicks on links (<a>) and .navigate() to the link instead.
@@ -326,6 +385,11 @@ class Router {
       event.destination.sameDocument &&
       (event.navigationType === "push" || event.navigationType === "replace")
     ) {
+      // Native hash links bypass navigate(). For our own pushes, #push_state
+      // has already switched keys so this cannot overwrite the outgoing entry.
+      if (event.navigationType === "push") {
+        this.#save_scroll();
+      }
       this.current = new URL(event.destination.url);
     }
   };
@@ -336,6 +400,10 @@ class Router {
    */
   async init(frontend_routes: FrontendRoute[]): Promise<void> {
     this.#frontend_routes = frontend_routes;
+
+    this.#replace_state_key();
+    // Native restoration happens before the asynchronously loaded report is ready.
+    window.history.scrollRestoration = "manual";
 
     window.addEventListener("popstate", this.#popstate);
     document.addEventListener("click", this.#intercept_link_click);
@@ -359,7 +427,8 @@ class Router {
     if (load && !is_view_only_change(this.current, target)) {
       this.#load_url(target).catch(log_error);
     } else {
-      window.history.pushState(null, "", target);
+      this.#save_scroll();
+      this.#push_state(target);
       this.current = target;
     }
   }
@@ -369,7 +438,7 @@ class Router {
    *
    * Might render in the frontend or load the whole page contents.
    */
-  async #load_url(url: URL): Promise<void> {
+  async #load_url(url: URL, history_key?: string): Promise<void> {
     const leave_message = this.#should_interrupt({
       current: this.current,
       target: url,
@@ -378,14 +447,21 @@ class Router {
       return;
     }
 
+    this.#save_scroll();
     const is_reload = url.href === this.current.href;
     const before_render = is_reload
       ? undefined
       : () => {
           // Push state and set current URL after loading the data but before rendering.
           this.#article.scroll(0, 0);
+          window.scroll(0, 0);
           if (url.href !== window.location.href) {
-            window.history.pushState(null, "", url);
+            this.#push_state(url);
+          } else {
+            this.#history_key = history_key;
+            if (history_key == null) {
+              this.#replace_state_key();
+            }
           }
           this.current = url;
         };
@@ -394,6 +470,7 @@ class Router {
     has_changes.set(false);
     handle_extension_page_load();
     this.#scroll_to_hash();
+    this.#restore_scroll(history_key);
   }
 
   /**
