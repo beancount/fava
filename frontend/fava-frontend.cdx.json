@@ -402,10 +402,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/web-tree-sitter@0.27.1",
+      "bom-ref": "pkg:npm/web-tree-sitter@0.27.2",
       "name": "web-tree-sitter",
-      "version": "0.27.1",
-      "purl": "pkg:npm/web-tree-sitter@0.27.1",
+      "version": "0.27.2",
+      "purl": "pkg:npm/web-tree-sitter@0.27.2",
       "licenses": [
         {
           "expression": "MIT"

@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.17.3
+    rev: v0.17.4
     hooks:
       - id: ruff-check
         args: ["--fix"]
       - id: ruff-format
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.96
+    rev: v0.0.99
     hooks:
       - id: ty
         args: [--no-default-groups, --group=types]
@@ -18,7 +18,7 @@ repos:
         additional_dependencies:
           - mdformat-gfm
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.6.4
+    rev: v2.6.6
     hooks:
       - id: biome-check
         args: ["--error-on-warnings"]
