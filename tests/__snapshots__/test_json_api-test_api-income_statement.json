@@ -378,6 +378,7 @@
           "date": "2014-12-31"
         }
       ],
+      "interval": "month",
       "key": "net_profit",
       "label": "Net Profit",
       "type": "bar"
@@ -516,6 +517,7 @@
           "date": "2014-12-31"
         }
       ],
+      "interval": "month",
       "key": "income",
       "label": "Income (Monthly)",
       "type": "bar"
@@ -847,6 +849,7 @@
           "date": "2014-12-31"
         }
       ],
+      "interval": "month",
       "key": "expenses",
       "label": "Expenses (Monthly)",
       "type": "bar"

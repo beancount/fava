@@ -141,31 +141,31 @@ msgstr ""
 msgid "Postings"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:164
 msgid "Yearly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:290
 msgid "Per Fiscal Year"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:186
 msgid "Quarterly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:329
 msgid "Per Fiscal Quarter"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
+#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:209
 msgid "Monthly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
+#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:232
 msgid "Weekly"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:260
 msgid "Daily"
 msgstr ""
 
@@ -697,11 +697,11 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:175
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:227
 msgid "Net Worth"
 msgstr ""
 

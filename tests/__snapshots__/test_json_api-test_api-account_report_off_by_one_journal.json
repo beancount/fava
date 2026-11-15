@@ -36,6 +36,7 @@
           "date": "2022-01-04"
         }
       ],
+      "interval": "day",
       "key": "changes",
       "label": "Changes",
       "type": "bar"

@@ -1357,6 +1357,7 @@
         "date": "2016-05-31"
       }
     ],
+    "interval": "month",
     "key": null,
     "label": "Income",
     "type": "bar"

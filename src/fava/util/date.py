@@ -14,6 +14,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
 from itertools import pairwise
+from typing import Literal
 from typing import TYPE_CHECKING
 
 from flask_babel import gettext
@@ -28,6 +29,7 @@ except ImportError:  # pragma: no cover
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
     from collections.abc import Iterator
+    from typing import ClassVar
 
 ONE_DAY = timedelta(1)
 
@@ -123,8 +125,17 @@ class FiscalYearEnds:
     """Fiscal year for the personal tax year in South Africa (02-28)."""
 
 
+IntervalKey = Literal[
+    "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "day"
+]
+"""The names of the intervals - these need to match the frontend."""
+
+
 class Interval(ABC):
     """An interval."""
+
+    key: ClassVar[IntervalKey]
+    """The name of the interval, as used in the URL."""
 
     @property
     @abstractmethod
@@ -153,6 +164,8 @@ class Interval(ABC):
 class _IntervalYear(Interval):
     """A year interval."""
 
+    key = "year"
+
     @property
     def label(self) -> str:
         return gettext("Yearly")
@@ -172,6 +185,8 @@ class _IntervalYear(Interval):
 
 class _IntervalQuarter(Interval):
     """A quarter interval."""
+
+    key = "quarter"
 
     @property
     def label(self) -> str:
@@ -194,6 +209,8 @@ class _IntervalQuarter(Interval):
 class _IntervalMonth(Interval):
     """A month interval."""
 
+    key = "month"
+
     @property
     def label(self) -> str:
         return gettext("Monthly")
@@ -214,6 +231,8 @@ class _IntervalMonth(Interval):
 
 class _IntervalWeek(Interval):
     """A week interval."""
+
+    key = "week"
 
     @property
     def label(self) -> str:
@@ -241,6 +260,8 @@ class _IntervalWeek(Interval):
 class _IntervalDay(Interval):
     """A day interval."""
 
+    key = "day"
+
     @property
     def label(self) -> str:
         return gettext("Daily")
@@ -265,6 +286,8 @@ class _IntervalDay(Interval):
 @dataclass(frozen=True, slots=True)
 class FiscalYear(Interval):
     """A fiscal year interval, for a specific fiscal year end."""
+
+    key = "fiscal_year"
 
     fye: FiscalYearEnd
 
@@ -298,6 +321,8 @@ class FiscalYear(Interval):
 @dataclass(frozen=True, slots=True)
 class FiscalQuarter(Interval):
     """A fiscal quarter interval, for a specific fiscal year end."""
+
+    key = "fiscal_quarter"
 
     fye: FiscalYearEnd
 

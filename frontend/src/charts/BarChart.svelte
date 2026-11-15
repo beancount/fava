@@ -10,7 +10,7 @@
     bar_chart_mode,
     chart_toggled_currencies_set,
   } from "../stores/chart.ts";
-  import { ctx, date_format, short } from "../stores/format.ts";
+  import { ctx, short } from "../stores/format.ts";
   import Axis from "./Axis.svelte";
   import Brush from "./Brush.svelte";
   import type { BarChart } from "./bar.ts";
@@ -126,7 +126,7 @@
           width={x0.step()}
           height={inner_height}
         />
-        <a href={$url_for_time_filter(date)} aria-label={$date_format(date)}>
+        <a href={$url_for_time_filter(group.label)} aria-label={group.label}>
           <rect
             class="axis-group-box"
             y={inner_height}

@@ -1,6 +1,6 @@
 import { _ } from "../i18n.ts";
 import type { Validator } from "./validation.ts";
-import { number, object } from "./validation.ts";
+import { constants, number, object } from "./validation.ts";
 
 const INTERVALS = [
   "year",
@@ -13,6 +13,9 @@ const INTERVALS = [
 ] as const;
 
 export type Interval = (typeof INTERVALS)[number];
+
+/** Validator for an interval name. */
+export const interval_validator = constants(...INTERVALS);
 
 export const DEFAULT_INTERVAL: Interval = "month";
 

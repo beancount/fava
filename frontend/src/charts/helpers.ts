@@ -2,20 +2,19 @@ import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
 import { derived } from "svelte/store";
 
-import { date_format } from "../stores/format.ts";
 import { accounts, currencies_sorted } from "../stores/index.ts";
 import { operating_currency } from "../stores/options.ts";
 import { current_url } from "../stores/url.ts";
 
 /**
- * Get an URL to set the time filter to the given date (formatted according to the current interval).
+ * Get an URL to set the time filter to the given value.
  */
 export const url_for_time_filter = derived(
-  [current_url, date_format],
-  ([$current_url, $date_format]) =>
-    (date: Date): string => {
+  current_url,
+  ($current_url) =>
+    (time: string): string => {
       const url = new URL($current_url);
-      url.searchParams.set("time", $date_format(date));
+      url.searchParams.set("time", time);
       return url.toString();
     },
 );

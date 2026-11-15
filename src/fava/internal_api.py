@@ -31,6 +31,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.tree import SerialisedTreeNode
     from fava.helpers import BeancountError
     from fava.util.date import Interval
+    from fava.util.date import IntervalKey
 
 
 class SerialisedError(Struct, frozen=True):
@@ -147,6 +148,7 @@ class BarChart(Struct, frozen=True):
 
     label: str
     data: Sequence[DateAndBalanceWithBudget]
+    interval: IntervalKey
     type: Literal["bar"] = "bar"
     key: str | None = None
 
@@ -215,6 +217,7 @@ class ChartApi:
                 g.conv,
                 invert=invert,
             ),
+            interval.key,
             key=key,
         )
 

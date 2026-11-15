@@ -3,7 +3,9 @@ import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
 import type { FormatterContext } from "../format.ts";
+import { get_date_format } from "../format.ts";
 import { ancestors } from "../lib/account.ts";
+import { type Interval, interval_validator } from "../lib/interval.ts";
 import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
@@ -199,31 +201,40 @@ type ParsedBarChartData = ValidationT<typeof bar_validator>;
 const bar_chart_validator = object({
   label: string,
   key: optional(string),
+  interval: interval_validator,
   data: bar_validator,
 });
 
 export class ParsedBarChart implements ParsedFavaChart {
   readonly label: string | null;
   readonly data: ParsedBarChartData;
+  readonly interval: Interval;
   readonly key: string | null;
 
   constructor(
     label: string | null,
     data: ParsedBarChartData,
+    interval: Interval,
     key: string | null = null,
   ) {
     this.label = label;
     this.data = data;
     this.key = key;
+    this.interval = interval;
   }
 
   static validator: Validator<ParsedBarChart> = (json) =>
     bar_chart_validator(json).map(
-      ({ label, data, key }) => new ParsedBarChart(label, data, key),
+      ({ label, data, key, interval }) =>
+        new ParsedBarChart(label, data, interval, key),
     );
 
   with_context($chart_context: ChartContext): BarChart {
     const currencies = currencies_to_show(this.data, $chart_context);
+    const date_format = get_date_format(
+      this.interval,
+      $chart_context.fiscal_year_end,
+    );
 
     const bar_groups = this.data.map((interval) => ({
       values: currencies.map((currency) => ({
@@ -232,7 +243,7 @@ export class ParsedBarChart implements ParsedFavaChart {
         budget: interval.budgets[currency] ?? 0,
       })),
       date: interval.date,
-      label: $chart_context.date_format(interval.date),
+      label: date_format(interval.date),
       account_balances: interval.account_balances,
     }));
 

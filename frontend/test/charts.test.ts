@@ -16,6 +16,7 @@ import {
 import { charts_validator } from "../src/charts/index.ts";
 import { LineChart, ParsedLineChart } from "../src/charts/line.ts";
 import { ScatterPlot } from "../src/charts/scatterplot.ts";
+import { FiscalYearEnd } from "../src/lib/interval.ts";
 import { load_json_snapshot } from "./helpers.ts";
 
 test("chart helpers (filter ticks)", () => {
@@ -40,8 +41,10 @@ test("chart helpers (pad extent)", () => {
   deepEqual(pad_extent([undefined, undefined]), [0, 1]);
 });
 
+const fiscal_year_end = FiscalYearEnd.default;
+
 test("handle data for hierarchical chart", async () => {
-  const ctx = { currencies: ["USD"], date_format: () => "DATE" };
+  const ctx = { currencies: ["USD"], fiscal_year_end };
   ok(ParsedHierarchyChart.validator({ label: "name", data: "" }).is_err);
   const data = await load_json_snapshot(
     "test_internal_api-test_chart_api.json",
@@ -75,7 +78,7 @@ test("hierarchical chart collapses toggled accounts", () => {
       ]),
     ]),
   ]);
-  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
+  const ctx = { currencies: ["EUR"], fiscal_year_end };
   const chart = new ParsedHierarchyChart(null, data).with_context(ctx);
   const leaves = (toggled: string[]) =>
     chart
@@ -106,7 +109,7 @@ test("hierarchical chart collapses toggled accounts", () => {
         node("Assets:Cash:Debt", { USD: -5 }),
       ]),
     ]),
-  ).with_context({ currencies: ["EUR", "USD"], date_format: () => "DATE" });
+  ).with_context({ currencies: ["EUR", "USD"], fiscal_year_end });
   deepEqual(cancelling.currencies, ["USD"]);
   equal(cancelling.hierarchies(new Set()).get("USD")?.value, 5);
   equal(cancelling.hierarchies(new Set(["Assets:Cash"])).get("USD")?.value, 0);
@@ -156,6 +159,7 @@ test("handle data for scatterplot chart", () => {
 });
 
 test("handle data for bar chart with stacked data", () => {
+  ok(ParsedBarChart.validator({ label: "name", data: [] }).is_err);
   const data: unknown = [
     {
       date: "2000-01-01",
@@ -177,8 +181,12 @@ test("handle data for bar chart with stacked data", () => {
       },
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
-  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: ["EUR", "USD"], fiscal_year_end };
+  const bar_chart = ParsedBarChart.validator({
+    label: "name",
+    interval: "month",
+    data,
+  })
     .unwrap()
     .with_context(ctx);
   equal(true, bar_chart.has_stacked_data);
@@ -224,7 +232,7 @@ test("handle data for bar chart with stacked data", () => {
   deepEqual(result.bar_groups, [
     {
       date: new Date("2000-01-01"),
-      label: "DATE",
+      label: "2000-01",
       values: [
         {
           currency: "EUR",
@@ -245,7 +253,7 @@ test("handle data for bar chart with stacked data", () => {
     },
     {
       date: new Date("2000-02-01"),
-      label: "DATE",
+      label: "2000-02",
       values: [
         {
           currency: "EUR",
@@ -280,8 +288,12 @@ test("bar chart merges stacks of collapsed accounts", () => {
       },
     },
   ];
-  const ctx = { currencies: ["EUR"], date_format: () => "DATE" };
-  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: ["EUR"], fiscal_year_end };
+  const bar_chart = ParsedBarChart.validator({
+    label: "name",
+    interval: "month",
+    data,
+  })
     .unwrap()
     .with_context(ctx);
   const result = bar_chart.filter(
@@ -325,8 +337,12 @@ test("handle data for bar chart without stacked data", () => {
     },
   ];
   // even without the operating currencies, the two most popular ones will be selected
-  const ctx = { currencies: [], date_format: () => "DATE" };
-  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: [], fiscal_year_end };
+  const bar_chart = ParsedBarChart.validator({
+    label: "name",
+    interval: "month",
+    data,
+  })
     .unwrap()
     .with_context(ctx);
   equal(false, bar_chart.has_stacked_data);
@@ -339,13 +355,13 @@ test("handle data for bar chart without stacked data", () => {
   deepEqual(without_usd.bar_groups, [
     {
       date: new Date("2000-01-01"),
-      label: "DATE",
+      label: "2000-01",
       values: [{ currency: "EUR", value: 10, budget: 0 }],
       account_balances: {},
     },
     {
       date: new Date("2000-02-01"),
-      label: "DATE",
+      label: "2000-02",
       values: [{ currency: "EUR", value: 100, budget: 50 }],
       account_balances: {},
     },
@@ -367,8 +383,12 @@ test("only use currencies in records for bar chart", () => {
       account_balances: {},
     },
   ];
-  const ctx = { currencies: ["EUR", "USD"], date_format: () => "DATE" };
-  const bar_chart = ParsedBarChart.validator({ label: "name", data })
+  const ctx = { currencies: ["EUR", "USD"], fiscal_year_end };
+  const bar_chart = ParsedBarChart.validator({
+    label: "name",
+    interval: "month",
+    data,
+  })
     .unwrap()
     .with_context(ctx);
   equal(false, bar_chart.has_stacked_data);
@@ -379,7 +399,7 @@ test("only use currencies in records for bar chart", () => {
   deepEqual(bar_chart.filter(new Set(), new Set()).bar_groups, [
     {
       date: new Date("2000-01-01"),
-      label: "DATE",
+      label: "2000-01",
       values: [
         { currency: "USD", value: 10, budget: 20 },
         { currency: "AUD", value: 10, budget: 0 },
@@ -388,7 +408,7 @@ test("only use currencies in records for bar chart", () => {
     },
     {
       date: new Date("2000-02-01"),
-      label: "DATE",
+      label: "2000-02",
       values: [
         { currency: "USD", value: 0, budget: 0 },
         { currency: "AUD", value: 100, budget: 50 },
