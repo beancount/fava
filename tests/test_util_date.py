@@ -35,13 +35,6 @@ def test_interval() -> None:
     assert get_interval("month", END_OF_YEAR) is Month
     assert get_interval("year", END_OF_YEAR) is Year
     assert get_interval("asdfasdf", END_OF_YEAR) is None
-    assert Year.label
-    assert Quarter.label
-    assert Month.label
-    assert Week.label
-    assert Day.label
-    assert FiscalYear(FiscalYearEnds.UK).label
-    assert FiscalQuarter(FiscalYearEnds.AU_NZ).label
     assert hash(FiscalYearEnds.UK)
     assert parse_fye_string("04-05") == FiscalYearEnds.UK
 

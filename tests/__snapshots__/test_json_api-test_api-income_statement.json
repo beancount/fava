@@ -519,7 +519,7 @@
       ],
       "interval": "month",
       "key": "income",
-      "label": "Income (Monthly)",
+      "label": "Income",
       "type": "bar"
     },
     {
@@ -851,7 +851,7 @@
       ],
       "interval": "month",
       "key": "expenses",
-      "label": "Expenses (Monthly)",
+      "label": "Expenses",
       "type": "bar"
     }
   ],

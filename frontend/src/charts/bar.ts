@@ -5,7 +5,11 @@ import { stack, stackOffsetDiverging } from "d3-shape";
 import type { FormatterContext } from "../format.ts";
 import { get_date_format } from "../format.ts";
 import { ancestors } from "../lib/account.ts";
-import { type Interval, interval_validator } from "../lib/interval.ts";
+import {
+  type Interval,
+  interval_label,
+  interval_validator,
+} from "../lib/interval.ts";
 import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
@@ -217,7 +221,8 @@ export class ParsedBarChart implements ParsedFavaChart {
     interval: Interval,
     key: string | null = null,
   ) {
-    this.label = label;
+    this.label =
+      label != null ? `${label} (${interval_label(interval)})` : null;
     this.data = data;
     this.key = key;
     this.interval = interval;

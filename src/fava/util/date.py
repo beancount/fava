@@ -17,8 +17,6 @@ from itertools import pairwise
 from typing import Literal
 from typing import TYPE_CHECKING
 
-from flask_babel import gettext
-
 from fava.util import listify
 
 try:
@@ -137,11 +135,6 @@ class Interval(ABC):
     key: ClassVar[IntervalKey]
     """The name of the interval, as used in the URL."""
 
-    @property
-    @abstractmethod
-    def label(self) -> str:
-        """The label for the interval."""
-
     @abstractmethod
     def get_prev(self, date: dt.date) -> dt.date:
         """Get the start date of the interval in which the date falls."""
@@ -162,10 +155,6 @@ class _IntervalYear(Interval):
 
     key = "year"
 
-    @property
-    def label(self) -> str:
-        return gettext("Yearly")
-
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, 1, 1)
 
@@ -180,10 +169,6 @@ class _IntervalQuarter(Interval):
     """A quarter interval."""
 
     key = "quarter"
-
-    @property
-    def label(self) -> str:
-        return gettext("Quarterly")
 
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
@@ -201,10 +186,6 @@ class _IntervalMonth(Interval):
 
     key = "month"
 
-    @property
-    def label(self) -> str:
-        return gettext("Monthly")
-
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, date.month, 1)
 
@@ -220,10 +201,6 @@ class _IntervalWeek(Interval):
     """A week interval."""
 
     key = "week"
-
-    @property
-    def label(self) -> str:
-        return gettext("Weekly")
 
     def get_prev(self, date: dt.date) -> dt.date:
         return date - timedelta(date.weekday())
@@ -244,10 +221,6 @@ class _IntervalDay(Interval):
     """A day interval."""
 
     key = "day"
-
-    @property
-    def label(self) -> str:
-        return gettext("Daily")
 
     def get_prev(self, date: dt.date) -> dt.date:
         return date
@@ -270,11 +243,6 @@ class FiscalYear(Interval):
     key = "fiscal_year"
 
     fye: FiscalYearEnd
-
-    @property
-    @override
-    def label(self) -> str:
-        return gettext("Per Fiscal Year")
 
     @override
     def get_prev(self, date: dt.date) -> dt.date:
@@ -305,11 +273,6 @@ class FiscalQuarter(Interval):
     def __post_init__(self) -> None:
         if self.fye.start_day != 1:
             raise FyeHasNoQuartersError
-
-    @property
-    @override
-    def label(self) -> str:
-        return gettext("Per Fiscal Quarter")
 
     @override
     def get_prev(self, date: dt.date) -> dt.date:

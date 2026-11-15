@@ -701,14 +701,14 @@ def get_income_statement() -> TreeReport:
         ChartApi.interval_totals(
             g.interval,
             options["name_income"],
-            label=f"{gettext('Income')} ({g.interval.label})",
+            label=gettext("Income"),
             key="income",
             invert=invert,
         ),
         ChartApi.interval_totals(
             g.interval,
             options["name_expenses"],
-            label=f"{gettext('Expenses')} ({g.interval.label})",
+            label=gettext("Expenses"),
             key="expenses",
         ),
     ]
