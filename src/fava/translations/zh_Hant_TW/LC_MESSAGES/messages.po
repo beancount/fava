@@ -159,31 +159,31 @@ msgstr "摘要"
 msgid "Postings"
 msgstr "記錄"
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:171
+#: frontend/src/lib/interval.ts:31
 msgid "Yearly"
 msgstr "年度"
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:297
+#: frontend/src/lib/interval.ts:32
 msgid "Per Fiscal Year"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:193
+#: frontend/src/lib/interval.ts:33
 msgid "Quarterly"
 msgstr "季度"
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:336
+#: frontend/src/lib/interval.ts:34
 msgid "Per Fiscal Quarter"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:216
+#: frontend/src/lib/interval.ts:35
 msgid "Monthly"
 msgstr "月"
 
-#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:239
+#: frontend/src/lib/interval.ts:36
 msgid "Weekly"
 msgstr "週"
 
-#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:267
+#: frontend/src/lib/interval.ts:37
 msgid "Daily"
 msgstr "日"
 
