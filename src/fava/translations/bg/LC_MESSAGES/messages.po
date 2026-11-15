@@ -154,31 +154,31 @@ msgstr "Основание"
 msgid "Postings"
 msgstr "Публикации"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:171
 msgid "Yearly"
 msgstr "Годишен"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:297
 msgid "Per Fiscal Year"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:193
 msgid "Quarterly"
 msgstr "Тримесечен"
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:336
 msgid "Per Fiscal Quarter"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
+#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:216
 msgid "Monthly"
 msgstr "Месечен"
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
+#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:239
 msgid "Weekly"
 msgstr "Седмичен"
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:267
 msgid "Daily"
 msgstr "Дневен"
 
@@ -242,23 +242,23 @@ msgstr "Изтеглете филтрираните в момента запис
 msgid "Error"
 msgstr "Грешка"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:52
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr ""
 
-#: frontend/src/reports/accounts/AccountReport.svelte:56
-#: frontend/src/reports/accounts/AccountReport.svelte:59
+#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:57
 msgid "Account Journal"
 msgstr "Счетоводен Дневник"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:65
-#: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:797
+#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: src/fava/json_api.py:802
 msgid "Changes"
 msgstr "Промени"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:74
-#: frontend/src/reports/accounts/AccountReport.svelte:77
+#: frontend/src/reports/accounts/AccountReport.svelte:72
+#: frontend/src/reports/accounts/AccountReport.svelte:75
 msgid "Balances"
 msgstr "Баланс"
 
@@ -548,7 +548,7 @@ msgstr "Разходи"
 msgid "Change"
 msgstr "Промяна"
 
-#: frontend/src/reports/journal/index.ts:60
+#: frontend/src/reports/journal/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Архив"
@@ -665,8 +665,8 @@ msgstr "Време"
 msgid "Filter by tag, payee, …"
 msgstr "Филтриране по таг, бенефициент, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
-#: src/fava/json_api.py:716
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
@@ -730,18 +730,18 @@ msgstr "Разгъни всички"
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:176
 msgid "Account Balance"
 msgstr "Баланс по сметката"
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:228
 msgid "Net Worth"
 msgstr "Нетна Стойност"
 
-#: src/fava/json_api.py:702
+#: src/fava/json_api.py:704
 msgid "Income"
 msgstr "Доход"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "Разходи"

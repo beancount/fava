@@ -156,31 +156,31 @@ msgstr "Narración"
 msgid "Postings"
 msgstr "Publicaciones"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:171
 msgid "Yearly"
 msgstr "Anualmente"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:297
 msgid "Per Fiscal Year"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:193
 msgid "Quarterly"
 msgstr "Trimestralmente"
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:336
 msgid "Per Fiscal Quarter"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
+#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:216
 msgid "Monthly"
 msgstr "Mensualmente"
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
+#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:239
 msgid "Weekly"
 msgstr "Semanalmente"
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:267
 msgid "Daily"
 msgstr "Diariamente"
 
@@ -240,23 +240,23 @@ msgstr "Descarga los asientos filtrados actualmente como un archivo Beancount"
 msgid "Error"
 msgstr "Error"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:52
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Diario de todos los asientos contables de esta cuenta y subcuentas"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:56
-#: frontend/src/reports/accounts/AccountReport.svelte:59
+#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:57
 msgid "Account Journal"
 msgstr "Diario de cuenta"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:65
-#: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:797
+#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: src/fava/json_api.py:802
 msgid "Changes"
 msgstr "Cambios"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:74
-#: frontend/src/reports/accounts/AccountReport.svelte:77
+#: frontend/src/reports/accounts/AccountReport.svelte:72
+#: frontend/src/reports/accounts/AccountReport.svelte:75
 msgid "Balances"
 msgstr "Balances"
 
@@ -546,7 +546,7 @@ msgstr "Coste"
 msgid "Change"
 msgstr "Cambio"
 
-#: frontend/src/reports/journal/index.ts:60
+#: frontend/src/reports/journal/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Diario"
@@ -659,8 +659,8 @@ msgstr "Hora"
 msgid "Filter by tag, payee, …"
 msgstr "Filtro por etiqueta, beneficiario, …"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
-#: src/fava/json_api.py:716
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "Beneficio neto"
 
@@ -725,18 +725,18 @@ msgstr "Expandir todo"
 msgid "Other"
 msgstr "Otro"
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:176
 msgid "Account Balance"
 msgstr "Balance de cuenta"
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:228
 msgid "Net Worth"
 msgstr "Valor neto"
 
-#: src/fava/json_api.py:702
+#: src/fava/json_api.py:704
 msgid "Income"
 msgstr "Ingresos"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "Gastos"

@@ -156,31 +156,31 @@ msgstr "적요"
 msgid "Postings"
 msgstr "분개"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:171
 msgid "Yearly"
 msgstr "연도별"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:297
 msgid "Per Fiscal Year"
 msgstr "회계연도별"
 
-#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:193
 msgid "Quarterly"
 msgstr "분기별"
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:336
 msgid "Per Fiscal Quarter"
 msgstr "회계분기별"
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
+#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:216
 msgid "Monthly"
 msgstr "월별"
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
+#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:239
 msgid "Weekly"
 msgstr "주별"
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:267
 msgid "Daily"
 msgstr "일별"
 
@@ -240,23 +240,23 @@ msgstr "현재 필터가 적용된 항목을 Beancount 파일로 다운로드"
 msgid "Error"
 msgstr "오류"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:52
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "이 계정 및 하위 계정의 전체 거래기록"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:56
-#: frontend/src/reports/accounts/AccountReport.svelte:59
+#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:57
 msgid "Account Journal"
 msgstr "계정별거래기록"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:65
-#: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:797
+#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: src/fava/json_api.py:802
 msgid "Changes"
 msgstr "변동"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:74
-#: frontend/src/reports/accounts/AccountReport.svelte:77
+#: frontend/src/reports/accounts/AccountReport.svelte:72
+#: frontend/src/reports/accounts/AccountReport.svelte:75
 msgid "Balances"
 msgstr "잔액"
 
@@ -546,7 +546,7 @@ msgstr "원가"
 msgid "Change"
 msgstr "변동"
 
-#: frontend/src/reports/journal/index.ts:60
+#: frontend/src/reports/journal/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "거래기록"
@@ -658,8 +658,8 @@ msgstr "조회기간"
 msgid "Filter by tag, payee, …"
 msgstr "태그, 거래처 등으로 필터링…"
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
-#: src/fava/json_api.py:716
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "당기순이익"
 
@@ -723,18 +723,18 @@ msgstr "모두펼치기"
 msgid "Other"
 msgstr "기타"
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:176
 msgid "Account Balance"
 msgstr "계정잔액"
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:228
 msgid "Net Worth"
 msgstr "순자산"
 
-#: src/fava/json_api.py:702
+#: src/fava/json_api.py:704
 msgid "Income"
 msgstr "수익"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "비용"

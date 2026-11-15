@@ -152,31 +152,31 @@ msgstr "Popis"
 msgid "Postings"
 msgstr "Položky"
 
-#: frontend/src/lib/interval.ts:28 src/fava/util/date.py:158
+#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:171
 msgid "Yearly"
 msgstr "Ročne"
 
-#: frontend/src/lib/interval.ts:29 src/fava/util/date.py:274
+#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:297
 msgid "Per Fiscal Year"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:30 src/fava/util/date.py:178
+#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:193
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: frontend/src/lib/interval.ts:31 src/fava/util/date.py:311
+#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:336
 msgid "Per Fiscal Quarter"
 msgstr ""
 
-#: frontend/src/lib/interval.ts:32 src/fava/util/date.py:199
+#: frontend/src/lib/interval.ts:35 src/fava/util/date.py:216
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: frontend/src/lib/interval.ts:33 src/fava/util/date.py:220
+#: frontend/src/lib/interval.ts:36 src/fava/util/date.py:239
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: frontend/src/lib/interval.ts:34 src/fava/util/date.py:246
+#: frontend/src/lib/interval.ts:37 src/fava/util/date.py:267
 msgid "Daily"
 msgstr "Denne"
 
@@ -238,24 +238,24 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 msgid "Error"
 msgstr "Chyba"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:52
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr ""
 
-#: frontend/src/reports/accounts/AccountReport.svelte:56
-#: frontend/src/reports/accounts/AccountReport.svelte:59
+#: frontend/src/reports/accounts/AccountReport.svelte:54
+#: frontend/src/reports/accounts/AccountReport.svelte:57
 #, fuzzy
 msgid "Account Journal"
 msgstr "Register účtu"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:65
-#: frontend/src/reports/accounts/AccountReport.svelte:68
-#: src/fava/json_api.py:797
+#: frontend/src/reports/accounts/AccountReport.svelte:63
+#: frontend/src/reports/accounts/AccountReport.svelte:66
+#: src/fava/json_api.py:802
 msgid "Changes"
 msgstr "Zmeny"
 
-#: frontend/src/reports/accounts/AccountReport.svelte:74
-#: frontend/src/reports/accounts/AccountReport.svelte:77
+#: frontend/src/reports/accounts/AccountReport.svelte:72
+#: frontend/src/reports/accounts/AccountReport.svelte:75
 msgid "Balances"
 msgstr "Zostatky"
 
@@ -549,7 +549,7 @@ msgstr "Výdavok"
 msgid "Change"
 msgstr "Zmena"
 
-#: frontend/src/reports/journal/index.ts:60
+#: frontend/src/reports/journal/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
 msgstr "Účtovná kniha"
@@ -667,8 +667,8 @@ msgstr "Čas"
 msgid "Filter by tag, payee, …"
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:695
-#: src/fava/json_api.py:716
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
+#: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr "Čistý zisk"
 
@@ -732,18 +732,18 @@ msgstr "Rozšíriť všetko"
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:174
+#: src/fava/internal_api.py:176
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:225
+#: src/fava/internal_api.py:228
 msgid "Net Worth"
 msgstr ""
 
-#: src/fava/json_api.py:702
+#: src/fava/json_api.py:704
 msgid "Income"
 msgstr "Príjem"
 
-#: src/fava/json_api.py:709
+#: src/fava/json_api.py:711
 msgid "Expenses"
 msgstr "Výdavky"
