@@ -143,10 +143,6 @@ class Interval(ABC):
         """The label for the interval."""
 
     @abstractmethod
-    def format_date(self, date: dt.date) -> str:
-        """Format a date for this interval for the Fava time filter."""
-
-    @abstractmethod
     def get_prev(self, date: dt.date) -> dt.date:
         """Get the start date of the interval in which the date falls."""
 
@@ -170,9 +166,6 @@ class _IntervalYear(Interval):
     def label(self) -> str:
         return gettext("Yearly")
 
-    def format_date(self, date: dt.date) -> str:
-        return f"{date.year:04d}"
-
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, 1, 1)
 
@@ -191,9 +184,6 @@ class _IntervalQuarter(Interval):
     @property
     def label(self) -> str:
         return gettext("Quarterly")
-
-    def format_date(self, date: dt.date) -> str:
-        return f"{date.year:04d}-Q{(date.month - 1) // 3 + 1}"
 
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, (date.month - 1) // 3 * 3 + 1, 1)
@@ -215,9 +205,6 @@ class _IntervalMonth(Interval):
     def label(self) -> str:
         return gettext("Monthly")
 
-    def format_date(self, date: dt.date) -> str:
-        return f"{date.year:04d}-{date.month:02d}"
-
     def get_prev(self, date: dt.date) -> dt.date:
         return dt.date(date.year, date.month, 1)
 
@@ -237,10 +224,6 @@ class _IntervalWeek(Interval):
     @property
     def label(self) -> str:
         return gettext("Weekly")
-
-    def format_date(self, date: dt.date) -> str:
-        iso = date.isocalendar()
-        return f"{iso.year:04d}-W{iso.week:02d}"
 
     def get_prev(self, date: dt.date) -> dt.date:
         return date - timedelta(date.weekday())
@@ -265,9 +248,6 @@ class _IntervalDay(Interval):
     @property
     def label(self) -> str:
         return gettext("Daily")
-
-    def format_date(self, date: dt.date) -> str:
-        return date.isoformat()
 
     def get_prev(self, date: dt.date) -> dt.date:
         return date
@@ -295,10 +275,6 @@ class FiscalYear(Interval):
     @override
     def label(self) -> str:
         return gettext("Per Fiscal Year")
-
-    @override
-    def format_date(self, date: dt.date) -> str:
-        return f"FY{self.fye.fiscal_year(date):04d}"
 
     @override
     def get_prev(self, date: dt.date) -> dt.date:
@@ -334,11 +310,6 @@ class FiscalQuarter(Interval):
     @override
     def label(self) -> str:
         return gettext("Per Fiscal Quarter")
-
-    @override
-    def format_date(self, date: dt.date) -> str:
-        quarter = ((date.month - self.fye.start_month_of_year) % 12) // 3
-        return f"FY{self.fye.fiscal_year(date):04d}-Q{quarter + 1}"
 
     @override
     def get_prev(self, date: dt.date) -> dt.date:

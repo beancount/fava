@@ -85,38 +85,6 @@ def test_fye_get_fiscal_year_from_date(
 @pytest.mark.parametrize(
     ("input_date_string", "interval", "expect"),
     [
-        ("2016-01-01", Day, "2016-01-01"),
-        ("2016-01-04", Week, "2016-W01"),
-        ("2016-01-04", Month, "2016-01"),
-        ("2016-01-04", Quarter, "2016-Q1"),
-        ("2016-03-31", Quarter, "2016-Q1"),
-        ("2016-04-01", Quarter, "2016-Q2"),
-        ("2016-01-04", Year, "2016"),
-        ("0999-01-04", Day, "0999-01-04"),
-        ("0999-01-04", Week, "0999-W01"),
-        ("0999-01-04", Month, "0999-01"),
-        ("0999-01-04", Quarter, "0999-Q1"),
-        ("0999-01-04", Year, "0999"),
-        ("0999-01-04", FiscalYear(FiscalYearEnds.UK), "FY0999"),
-        ("0999-04-06", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY0999-Q4"),
-        ("2016-01-04", FiscalYear(FiscalYearEnds.UK), "FY2016"),
-        ("2016-04-06", FiscalYear(FiscalYearEnds.UK), "FY2017"),
-        ("2016-04-06", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q4"),
-        ("2016-01-01", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q3"),
-        ("2015-10-02", FiscalQuarter(FiscalYearEnds.AU_NZ), "FY2016-Q2"),
-        ("2015-11-01", FiscalQuarter(FiscalYearEnds.JP), "FY2015-Q3"),
-        ("2016-02-01", FiscalQuarter(FiscalYearEnds.JP), "FY2015-Q4"),
-    ],
-)
-def test_interval_format(
-    input_date_string: str, interval: Interval, expect: str
-) -> None:
-    assert interval.format_date(fromisoformat(input_date_string)) == expect
-
-
-@pytest.mark.parametrize(
-    ("input_date_string", "interval", "expect"),
-    [
         ("2016-01-01", Day, "2016-01-02"),
         ("2016-01-01", Week, "2016-01-04"),
         ("2016-01-01", Month, "2016-02-01"),
