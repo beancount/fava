@@ -983,7 +983,9 @@ def test_api_account_report_empty(
         "budgets": {},
         "charts": data["charts"],
         "dates": [],
+        "interval": "month",
         "interval_balances": [],
+        "type": "tree",
     }
 
 

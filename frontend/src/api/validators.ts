@@ -1,11 +1,13 @@
 import { account_hierarchy_validator } from "../charts/hierarchy.ts";
 import { charts_validator } from "../charts/index.ts";
 import { entryValidator } from "../entries/index.ts";
-import { FiscalYearEnd } from "../lib/interval.ts";
-import type { ValidationT } from "../lib/validation.ts";
+import { fragment_from_string } from "../lib/dom.ts";
+import { FiscalYearEnd, interval_validator } from "../lib/interval.ts";
+import type { ValidationT, Validator } from "../lib/validation.ts";
 import {
   array,
   boolean,
+  constant,
   constants,
   date,
   decimal,
@@ -14,6 +16,7 @@ import {
   optional,
   record,
   string,
+  tagged_union,
   tuple,
 } from "../lib/validation.ts";
 import { Inventory } from "../reports/query/query_table.ts";
@@ -169,13 +172,32 @@ export const tree_report_validator = object({
   date_range: optional(date_range),
 });
 
-export const account_report_validator = object({
+/** Validate a string of HTML and parse it into a document fragment. */
+export const html_fragment: Validator<DocumentFragment> = (json) =>
+  string(json).map(fragment_from_string);
+
+const account_report_journal = object({
+  type: constant("journal"),
   charts: charts_validator,
-  journal: optional(string),
-  dates: optional(array(date_range)),
-  interval_balances: optional(array(account_hierarchy_validator)),
-  budgets: optional(record(array(account_budget))),
+  journal: html_fragment,
 });
+
+const account_report_tree = object({
+  type: constant("tree"),
+  charts: charts_validator,
+  interval_balances: array(account_hierarchy_validator),
+  budgets: record(array(account_budget)),
+  dates: array(date_range),
+  interval: interval_validator,
+});
+
+export const account_report_validator = tagged_union("type", {
+  journal: account_report_journal,
+  tree: account_report_tree,
+});
+
+/** Data for the account report, either the journal or the interval balances. */
+export type AccountReportData = ValidationT<typeof account_report_validator>;
 
 export const statistics_validator = object({
   all_balance_directives: string,

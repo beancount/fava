@@ -68,6 +68,7 @@
     { "begin": "2022-01-02", "end": "2022-01-03" },
     { "begin": "2022-01-01", "end": "2022-01-02" }
   ],
+  "interval": "day",
   "interval_balances": [
     {
       "account": "Assets",
@@ -157,5 +158,6 @@
       ],
       "has_txns": false
     }
-  ]
+  ],
+  "type": "tree"
 }

@@ -4,9 +4,11 @@
 
   import type { AccountBudget } from "../api/validators.ts";
   import type { AccountTreeNode } from "../charts/hierarchy.ts";
+  import { get_date_format } from "../format.ts";
   import { url_for_account } from "../helpers.ts";
   import type { NonEmptyArray } from "../lib/array.ts";
-  import { date_format } from "../stores/format.ts";
+  import type { Interval } from "../lib/interval.ts";
+  import { fiscal_year_end } from "../stores/fava_options.ts";
   import AccountCellHeader from "./AccountCellHeader.svelte";
   import { get_not_shown, setTreeTableNotShownContext } from "./helpers.ts";
   import IntervalTreeTableNode from "./IntervalTreeTableNode.svelte";
@@ -18,11 +20,13 @@
     dates: { begin: Date; end: Date }[];
     /** The budgets (per account a list per date range). */
     budgets: Record<string, AccountBudget[]>;
+    /** The interval of the date ranges. */
+    interval: Interval;
     /** Whether this is cumulative. */
     accumulate: boolean;
   }
 
-  let { trees, dates, budgets, accumulate }: Props = $props();
+  let { trees, dates, budgets, interval, accumulate }: Props = $props();
 
   const not_shown = writable(new Set<string>());
   setTreeTableNotShownContext(not_shown);
@@ -34,15 +38,16 @@
   });
 
   let account = $derived(trees[0].account);
+  let date_format = $derived(get_date_format(interval, $fiscal_year_end));
   let start_date = $derived(
     accumulate ? min(dates, (d) => d.begin) : undefined,
   );
   let start_date_filter = $derived(
-    start_date ? $date_format(start_date) : undefined,
+    start_date ? date_format(start_date) : undefined,
   );
   let time_filters = $derived(
     dates.map((date_range): [string, string] => {
-      const title = $date_format(date_range.begin);
+      const title = date_format(date_range.begin);
       return start_date_filter != null
         ? [title, `${start_date_filter}-${title}`]
         : [title, title];

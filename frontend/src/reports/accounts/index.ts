@@ -1,10 +1,7 @@
 import { get_account_report } from "../../api/index.ts";
-import type { AccountBudget } from "../../api/validators.ts";
-import type { AccountTreeNode } from "../../charts/hierarchy.ts";
-import type { ParsedFavaChart } from "../../charts/index.ts";
+import type { AccountReportData } from "../../api/validators.ts";
 import type { NonRelativeUrlPathError } from "../../helpers.ts";
 import { get_url_path } from "../../helpers.ts";
-import { fragment_from_string } from "../../lib/dom.ts";
 import { err, ok, type Result } from "../../lib/result.ts";
 import { get_url_filters } from "../../stores/filters.ts";
 import { Route } from "../route.ts";
@@ -18,11 +15,7 @@ const to_report_type = (s: string | null): AccountReportType =>
 export interface AccountReportProps {
   account: string;
   report_type: AccountReportType;
-  charts: ParsedFavaChart[];
-  journal: DocumentFragment | null;
-  interval_balances: AccountTreeNode[] | null;
-  dates: { begin: Date; end: Date }[] | null;
-  budgets: Record<string, AccountBudget[]> | null;
+  report: AccountReportData;
 }
 
 class NotAnAccountUrlError extends Error {
@@ -52,25 +45,12 @@ export const account_report = new Route<AccountReportProps>(
   async (url, signal) => {
     const account = get_account_from_url(url).unwrap();
     const report_type = to_report_type(url.searchParams.get("r"));
-    const { charts, journal, interval_balances, dates, budgets } =
-      await get_account_report(
-        {
-          ...get_url_filters(url),
-          a: account,
-          r: report_type,
-        },
-        signal,
-      );
+    const report = await get_account_report(
+      { ...get_url_filters(url), a: account, r: report_type },
+      signal,
+    );
 
-    return {
-      charts,
-      journal: journal != null ? fragment_from_string(journal) : null,
-      interval_balances,
-      dates,
-      budgets,
-      account,
-      report_type,
-    };
+    return { account, report_type, report };
   },
   ({ account }) => `account:${account}`,
 );

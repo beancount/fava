@@ -3,7 +3,6 @@ import { get as store_get } from "svelte/store";
 
 import { get_journal_page } from "../../api/index.ts";
 import { _ } from "../../i18n.ts";
-import { fragment_from_string } from "../../lib/dom.ts";
 import { shallow_equal } from "../../lib/equals.ts";
 import { log_error } from "../../log.ts";
 import { notify_err } from "../../notifications.ts";
@@ -36,7 +35,7 @@ export const journal = new Route<JournalReportProps>(
     const pages = range(2, total_pages + 1);
     const all_pages = pages.map(async (page) => {
       return get_journal_page({ ...filters, page, order }, signal).then(
-        (res) => fragment_from_string(res.journal),
+        (res) => res.journal,
         (error: unknown) => {
           if (signal.aborted) {
             return null;
@@ -52,7 +51,7 @@ export const journal = new Route<JournalReportProps>(
     });
 
     return {
-      journal: fragment_from_string(journal),
+      journal,
       initial_sort: ["date", order],
       all_pages,
     };

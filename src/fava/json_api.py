@@ -56,6 +56,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
     from datetime import date
     from decimal import Decimal
+    from typing import Literal
 
     from flask.wrappers import Response
     from werkzeug.datastructures import FileStorage
@@ -68,6 +69,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core.tree import SerialisedTreeNode
     from fava.internal_api import ChartData
     from fava.util.date import DateRange
+    from fava.util.date import IntervalKey
 
 
 json_api = Blueprint("json_api", __name__)
@@ -771,6 +773,7 @@ class AccountReportJournal(Struct, frozen=True):
 
     charts: Sequence[ChartData]
     journal: str
+    type: Literal["journal"] = "journal"
 
 
 class AccountReportTree(Struct, frozen=True):
@@ -780,6 +783,8 @@ class AccountReportTree(Struct, frozen=True):
     interval_balances: Sequence[SerialisedTreeNode]
     budgets: Mapping[str, Sequence[AccountBudget]]
     dates: Sequence[DateRange]
+    interval: IntervalKey
+    type: Literal["tree"] = "tree"
 
 
 @api_endpoint
@@ -806,7 +811,11 @@ def get_account_report(
         )
         if not dates:
             return AccountReportTree(
-                charts, interval_balances=[], budgets={}, dates=[]
+                charts,
+                interval_balances=[],
+                budgets={},
+                dates=[],
+                interval=g.interval.key,
             )
 
         all_accounts = (
@@ -852,6 +861,7 @@ def get_account_report(
             ],
             dates=dates,
             budgets=budgets,
+            interval=g.interval.key,
         )
 
     journal_table_contents = get_template_attribute(

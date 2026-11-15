@@ -27,6 +27,7 @@ import {
   commodities_validator,
   context_validator,
   error_validator,
+  html_fragment,
   importable_files_validator,
   ledgerDataValidator,
   options_validator,
@@ -291,7 +292,7 @@ export const get_income_statement = define_endpoint(
 );
 export const get_journal_page = define_endpoint(
   "journal_page",
-  object({ journal: string, total_pages: number }),
+  object({ journal: html_fragment, total_pages: number }),
   [...filters_conversion_interval, "page", "order"],
 );
 export const get_ledger_data = define_paramless_endpoint(
