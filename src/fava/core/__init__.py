@@ -178,8 +178,16 @@ class FilteredLedger:
 
     @cached_property
     def entries_with_all_prices(self) -> Sequence[Directive]:
-        """The filtered entries, with all prices added back in for queries."""
-        entries = [*self.entries, *self.ledger.all_entries_by_type.Price]
+        """The filtered entries, with prices added back in for queries.
+
+        Prices after the end of the time filter are left out, so that queries
+        value positions at the same date as the account reports.
+        """
+        prices = self.ledger.all_entries_by_type.Price
+        date_range = self.date_range
+        if date_range:
+            prices = [p for p in prices if p.date < date_range.end]
+        entries = [*self.entries_without_prices, *prices]
         entries.sort(key=_incomplete_sortkey)
         return entries
 
