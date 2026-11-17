@@ -780,6 +780,7 @@
     "collapse_pattern": [],
     "conversion_currencies": [],
     "currency_column": 61,
+    "custom_css": null,
     "default_file": null,
     "default_page": "income_statement/",
     "fiscal_year_end": { "day": 31, "month": 12 },

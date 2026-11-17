@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}">
     <link rel="stylesheet" href="{{ static_url('app.css') }}">
+    {% if ledger.fava_options.custom_css %}<link rel="stylesheet" href="{{ url_for('custom_css') }}">{% endif %}
     <title>{{ page_title or "" }} - {{ ledger.options.title }}</title>
     <script type="module" src="{{ static_url('app.js') }}"></script>
   </head>
