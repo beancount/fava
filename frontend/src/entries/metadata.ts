@@ -1,10 +1,28 @@
 import { is_empty } from "../lib/objects.ts";
 import { ok } from "../lib/result.ts";
 import type { SafeValidator, Validator } from "../lib/validation.ts";
-import { record } from "../lib/validation.ts";
+import { object, record, string } from "../lib/validation.ts";
 import { RawAmount } from "./amount.ts";
 
-export type MetadataValue = string | boolean | number | RawAmount;
+/** A Decimal metadata value kept as a string to preserve precision. */
+export class RawDecimal {
+  readonly number: string;
+
+  constructor(number: string) {
+    this.number = number;
+  }
+
+  toString(): string {
+    return this.number;
+  }
+
+  private static raw_validator = object({ number: string });
+
+  static validator: Validator<RawDecimal> = (json) =>
+    RawDecimal.raw_validator(json).map(({ number }) => new RawDecimal(number));
+}
+
+export type MetadataValue = string | boolean | number | RawAmount | RawDecimal;
 
 const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   if (
@@ -17,6 +35,10 @@ const entry_meta_item: SafeValidator<MetadataValue> = (json) => {
   const amount = RawAmount.validator(json);
   if (amount.is_ok) {
     return amount;
+  }
+  const decimal = RawDecimal.validator(json);
+  if (decimal.is_ok) {
+    return decimal;
   }
   return ok("Unsupported metadata value");
 };
