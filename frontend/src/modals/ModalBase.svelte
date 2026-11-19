@@ -116,7 +116,7 @@
       position: relative;
       display: flex;
       width: 100%;
-      max-width: 767px;
+      max-width: min(1200px, calc(100% - 1em));
       padding: 1em;
       margin: 5vh 0.5em 0.5em;
       background: var(--background);
@@ -149,6 +149,7 @@
       }
 
       .content {
+        max-width: none;
         height: 100%;
         margin: 0;
         box-shadow: unset;
