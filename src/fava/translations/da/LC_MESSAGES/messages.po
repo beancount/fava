@@ -3,62 +3,63 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-20 09:10+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-11-21 08:51+0000\n"
+"Last-Translator: \"Peter S. Nordholt\" "
+"<asterlix@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/fava/fava/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 3.20.6\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
-msgstr ""
+msgstr "Filen er blevet ændret. Klik for at genindlæse."
 
 #: frontend/src/charts/ChartSwitcher.svelte:35
 msgid "Previous"
-msgstr ""
+msgstr "Forrige"
 
 #: frontend/src/charts/ChartSwitcher.svelte:42
 msgid "Next"
-msgstr ""
+msgstr "Næste"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:19
 msgid "At Cost"
-msgstr ""
+msgstr "Til kostpris"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:21
 msgid "At Market Value"
-msgstr ""
+msgstr "Til markedsværdi"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:23
 #: frontend/src/reports/journal/JournalHeaders.svelte:53
 msgid "Units"
-msgstr ""
+msgstr "Enheder"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:25
 #, python-format
 msgid "Converted to %(currency)s"
-msgstr ""
+msgstr "Konverteret til %(currency)s"
 
 #: frontend/src/charts/HierarchyContainer.svelte:34
 msgid "Chart is empty."
-msgstr ""
+msgstr "Diagrammet er tomt."
 
 #: frontend/src/editor/DeleteButton.svelte:12
 msgid "Deleting…"
-msgstr ""
+msgstr "Sletter…"
 
 #: frontend/src/editor/DeleteButton.svelte:12
 #: frontend/src/reports/import/FileList.svelte:71
 msgid "Delete"
-msgstr ""
+msgstr "Slet"
 
 #: frontend/src/editor/SaveButton.svelte:14
 msgid "Saving…"
-msgstr ""
+msgstr "Gemmer…"
 
 #: frontend/src/editor/SaveButton.svelte:14
 #: frontend/src/editor/SliceEditor.svelte:161
@@ -66,24 +67,24 @@ msgstr ""
 #: frontend/src/reports/import/Extract.svelte:127
 #: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
-msgstr ""
+msgstr "Gem"
 
 #: frontend/src/editor/SliceEditor.svelte:143
 msgid "Duplicate"
-msgstr ""
+msgstr "Dupliker"
 
 #: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
-msgstr ""
+msgstr "genindlæs"
 
 #: frontend/src/editor/SliceEditor.svelte:157
 #: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
-msgstr ""
+msgstr "Tilføj"
 
 #: frontend/src/entry-forms/AccountInput.svelte:24
 msgid "Should be one of the declared accounts"
-msgstr ""
+msgstr "Skal være en af de definerede konti"
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
 #: frontend/src/modals/DocumentUpload.svelte:192
@@ -93,49 +94,49 @@ msgstr ""
 #: frontend/src/reports/statistics/UpdateActivity.svelte:32
 #: frontend/src/sidebar/FilterForm.svelte:52
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:19
 #: frontend/src/entry-forms/EntryMetadata.svelte:53
 #: frontend/src/entry-forms/EntryMetadata.svelte:54
 msgid "Add metadata"
-msgstr ""
+msgstr "Tilføj metadata"
 
 #: frontend/src/entry-forms/AmountInput.svelte:36
 msgid "Amount"
-msgstr ""
+msgstr "Beløb"
 
 #: frontend/src/entry-forms/Balance.svelte:28
 #: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #: frontend/src/entry-forms/Balance.svelte:44
 msgid "Number"
-msgstr ""
+msgstr "Tal"
 
 #: frontend/src/entry-forms/Balance.svelte:55
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
-msgstr ""
+msgstr "Valuta"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:29
 #: frontend/src/reports/options/OptionsTable.svelte:14
 msgid "Key"
-msgstr ""
+msgstr "Nøgle"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:40
 #: frontend/src/reports/options/OptionsTable.svelte:15
 msgid "Value"
-msgstr ""
+msgstr "Værdi"
 
 #: frontend/src/entry-forms/Note.svelte:27
 #: frontend/src/modals/AddEntry.svelte:21
 msgid "Note"
-msgstr ""
+msgstr "Note"
 
 #: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
@@ -143,248 +144,249 @@ msgstr ""
 #: frontend/src/reports/import/group.ts:22
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
-msgstr ""
+msgstr "Betalingsmodtager"
 
 #: frontend/src/entry-forms/Transaction.svelte:96
 #: frontend/src/entry-forms/Transaction.svelte:98
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
-msgstr ""
+msgstr "Posteringer"
 
 #: frontend/src/lib/interval.ts:31
 msgid "Yearly"
-msgstr ""
+msgstr "Årlig"
 
 #: frontend/src/lib/interval.ts:32
 msgid "Per Fiscal Year"
-msgstr ""
+msgstr "Pr. regnskabsår"
 
 #: frontend/src/lib/interval.ts:33
 msgid "Quarterly"
-msgstr ""
+msgstr "Kvartalsvis"
 
 #: frontend/src/lib/interval.ts:34
 msgid "Per Fiscal Quarter"
-msgstr ""
+msgstr "Pr. regnskabskvartal"
 
 #: frontend/src/lib/interval.ts:35
 msgid "Monthly"
-msgstr ""
+msgstr "Månedlig"
 
 #: frontend/src/lib/interval.ts:36
 msgid "Weekly"
-msgstr ""
+msgstr "Ugentlig"
 
 #: frontend/src/lib/interval.ts:37
 msgid "Daily"
-msgstr ""
+msgstr "Daglig"
 
 #: frontend/src/modals/AddEntry.svelte:19
 msgid "Transaction"
-msgstr ""
+msgstr "Transaktion"
 
 #: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
-msgstr ""
+msgstr "forsæt"
 
 #: frontend/src/modals/Context.svelte:37 frontend/src/modals/Context.svelte:41
 #: frontend/src/modals/EntryContextBalances.svelte:25
 msgid "Context"
-msgstr ""
+msgstr "Kontekst"
 
 #: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
-msgstr ""
+msgstr "Upload filer"
 
 #: frontend/src/modals/DocumentUpload.svelte:169
 msgid "Files"
-msgstr ""
+msgstr "Filer"
 
 #: frontend/src/modals/DocumentUpload.svelte:184
 msgid "Documents folder"
-msgstr ""
+msgstr "Dokumentmappe"
 
 #: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: frontend/src/modals/EntryContextBalances.svelte:32
 msgid "Balances before entry"
-msgstr ""
+msgstr "Saldi før registreringen"
 
 #: frontend/src/modals/EntryContextBalances.svelte:34
 msgid "Balances after entry"
-msgstr ""
+msgstr "Saldi efter registreringen"
 
 #: frontend/src/modals/EntryContextLocation.svelte:14
 msgid "Location"
-msgstr ""
+msgstr "Placering"
 
 #: frontend/src/modals/Export.svelte:13
 #: frontend/src/sidebar/AsideContents.svelte:78
 msgid "Export"
-msgstr ""
+msgstr "Eksporter"
 
 #: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
+"Download registreringerne i den aktuelle filtrering som en Beancount-fil"
 
 #: frontend/src/reports/errors/Errors.svelte:24
 #: frontend/src/reports/route.ts:110
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:52
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr ""
+msgstr "Journal over alle registreringer på denne konto og dens underkonti"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:54
 #: frontend/src/reports/accounts/AccountReport.svelte:57
 msgid "Account Journal"
-msgstr ""
+msgstr "Kontojournal"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:63
 #: frontend/src/reports/accounts/AccountReport.svelte:66
 #: src/fava/json_api.py:802
 msgid "Changes"
-msgstr ""
+msgstr "Ændringer"
 
 #: frontend/src/reports/accounts/AccountReport.svelte:72
 #: frontend/src/reports/accounts/AccountReport.svelte:75
 msgid "Balances"
-msgstr ""
+msgstr "Saldi"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:18
 #: frontend/src/reports/documents/Table.svelte:26
 #: frontend/src/reports/events/EventTable.svelte:14
 #: frontend/src/reports/journal/JournalHeaders.svelte:29
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: frontend/src/reports/commodities/CommodityTable.svelte:19
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/journal/JournalHeaders.svelte:69
 msgid "Price"
-msgstr ""
+msgstr "Pris"
 
 #: frontend/src/reports/commodities/index.ts:32
 #: frontend/src/sidebar/AsideContents.svelte:49
 msgid "Commodities"
-msgstr ""
+msgstr "Værdienheder"
 
 #: frontend/src/reports/documents/Documents.svelte:75
 msgid "Move or rename document"
-msgstr ""
+msgstr "Flyt eller ombøb dokument"
 
 #: frontend/src/reports/documents/Documents.svelte:80
 #: frontend/src/reports/import/FileList.svelte:108
 msgid "Move"
-msgstr ""
+msgstr "Flyt"
 
 #: frontend/src/reports/documents/Table.svelte:27
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: frontend/src/reports/documents/index.ts:19
 #: frontend/src/sidebar/AsideContents.svelte:50
 msgid "Documents"
-msgstr ""
+msgstr "Dokumenter"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:42
 #: frontend/src/reports/errors/Errors.svelte:22
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:52
 msgid "Edit"
-msgstr ""
+msgstr "Rediger"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:56
 msgid "Align Amounts"
-msgstr ""
+msgstr "Juster beløbene"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:62
 msgid "Toggle Comment (selection)"
-msgstr ""
+msgstr "Vælg kommentar (markering)"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:68
 msgid "Open all folds"
-msgstr ""
+msgstr "Fold alle ud"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:74
 msgid "Close all folds"
-msgstr ""
+msgstr "Fold alle sammen"
 
 #: frontend/src/reports/editor/EditorMenu.svelte:81
 #: frontend/src/reports/options/index.ts:15
 #: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"
-msgstr ""
+msgstr "Indstillinger"
 
 #: frontend/src/reports/editor/index.ts:31
 #: frontend/src/sidebar/AsideContents.svelte:60
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: frontend/src/reports/errors/Errors.svelte:23
 #: frontend/src/reports/import/ExtractEntry.svelte:41
 msgid "Line"
-msgstr ""
+msgstr "Linje"
 
 #: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
-msgstr ""
+msgstr "Vis kilde %(file)s:%(lineno)s"
 
 #: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
-msgstr ""
+msgstr "Ingen fejl."
 
 #: frontend/src/reports/errors/index.ts:6
 #: frontend/src/sidebar/AsideContents.svelte:73
 msgid "Errors"
-msgstr ""
+msgstr "Fejl"
 
 #: frontend/src/reports/events/EventTable.svelte:15
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: frontend/src/reports/events/Events.svelte:16
 #: frontend/src/reports/events/index.ts:17
 #: frontend/src/sidebar/AsideContents.svelte:53
 msgid "Events"
-msgstr ""
+msgstr "Hændelser"
 
 #: frontend/src/reports/events/Events.svelte:31
 #, python-format
 msgid "Event: %(type)s"
-msgstr ""
+msgstr "Hændelse: %(type)s"
 
 #: frontend/src/reports/events/Events.svelte:37
 msgid "No events."
-msgstr ""
+msgstr "Ingen hændelser."
 
 #: frontend/src/reports/help/Help.svelte:11
 msgid "Help pages"
-msgstr ""
+msgstr "Hælpesider"
 
 #: frontend/src/reports/help/index.ts:35
 #: frontend/src/sidebar/AsideContents.svelte:81
 msgid "Help"
-msgstr ""
+msgstr "Hjælp"
 
 #: frontend/src/reports/holdings/Holdings.svelte:18
 #: frontend/src/reports/holdings/Holdings.svelte:20
 #: frontend/src/reports/holdings/index.ts:92
 #: frontend/src/sidebar/AsideContents.svelte:48
 msgid "Holdings"
-msgstr ""
+msgstr "Beholdninger"
 
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:28
@@ -393,337 +395,343 @@ msgstr ""
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:48
 msgid "Holdings by"
-msgstr ""
+msgstr "Beholdninger per"
 
 #: frontend/src/reports/holdings/Holdings.svelte:45
 #: frontend/src/reports/holdings/Holdings.svelte:49
 msgid "Cost currency"
-msgstr ""
+msgstr "Kostprisvaluta"
 
 #: frontend/src/reports/holdings/Holdings.svelte:56
 #: frontend/src/reports/query/index.ts:16
 #: frontend/src/reports/statistics/Statistics.svelte:24
 #: frontend/src/sidebar/AsideContents.svelte:34
 msgid "Query"
-msgstr ""
+msgstr "Forespørgsel"
 
 #: frontend/src/reports/import/Extract.svelte:80
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
-msgstr ""
+msgstr "Importer"
 
 #: frontend/src/reports/import/Extract.svelte:83
 msgid "Group by"
-msgstr ""
+msgstr "Grupper efter"
 
 #: frontend/src/reports/import/Extract.svelte:85
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: frontend/src/reports/import/Extract.svelte:86
 #: frontend/src/reports/import/group.ts:17
 msgid "Accounts"
-msgstr ""
+msgstr "Konti"
 
 #: frontend/src/reports/import/Extract.svelte:98
 msgid "Regroup"
-msgstr ""
+msgstr "Grupper på ny"
 
 #: frontend/src/reports/import/Extract.svelte:112
 #, python-format
 msgid "%(count)s (%(to_import)s to import)"
-msgstr ""
+msgstr "%(count)s (%(to_import)s til import)"
 
 #: frontend/src/reports/import/ExtractEntry.svelte:29
 msgid "ignore duplicate"
-msgstr ""
+msgstr "ignorer dublet"
 
 #: frontend/src/reports/import/ExtractEntry.svelte:40
 msgid "Source"
-msgstr ""
+msgstr "Kilde"
 
 #: frontend/src/reports/import/FileList.svelte:44
 msgid "Delete this file?"
-msgstr ""
+msgstr "Slet denne fil?"
 
 #: frontend/src/reports/import/FileList.svelte:121
 msgid "Continue"
-msgstr ""
+msgstr "Forsæt"
 
 #: frontend/src/reports/import/FileList.svelte:121
 msgid "Extract"
-msgstr ""
+msgstr "Udtræk"
 
 #: frontend/src/reports/import/FileList.svelte:130
 msgid "Clear"
-msgstr ""
+msgstr "Ryd"
 
 #: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
-msgstr ""
+msgstr "Ingen filer fundet til import."
 
 #: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
-msgstr ""
+msgstr "Importerbare filer"
 
 #: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
-msgstr ""
+msgstr "Ikke-importerbare filer"
 
 #: frontend/src/reports/import/ImportFileUpload.svelte:34
 msgid "Upload files for import"
-msgstr ""
+msgstr "Upload filer til import"
 
 #: frontend/src/reports/import/group.ts:10
 msgid "Duplicates"
-msgstr ""
+msgstr "Dubletter"
 
 #: frontend/src/reports/import/group.ts:10
 #: frontend/src/reports/import/group.ts:38
 msgid "To import"
-msgstr ""
+msgstr "Til import"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:8
 #, python-format
 msgid "Toggle %(type)s entries"
-msgstr ""
+msgstr "Vælg registreringer af typen %(type)s"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:25
 msgid "Cleared transactions"
-msgstr ""
+msgstr "Afstemte transaktioner"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:26
 msgid "Pending transactions"
-msgstr ""
+msgstr "Uafstemte transaktioner"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:27
 msgid "Other transactions"
-msgstr ""
+msgstr "Øvrige transaktioner"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:34
 msgid "Documents with a #discovered tag"
-msgstr ""
+msgstr "Dokumenter med tagget #discovered"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:38
 msgid "Documents with a #linked tag"
-msgstr ""
+msgstr "Dokumenter med tagget #linked"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:42
 msgid "Budget entries"
-msgstr ""
+msgstr "Budgetregistreringer"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:43
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:43
 msgid "Toggle metadata"
-msgstr ""
+msgstr "Vælg metadata"
 
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Toggle postings"
-msgstr ""
+msgstr "Vælg posteringer"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:40
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:64
 #: frontend/src/reports/journal/JournalHeaders.svelte:68
 msgid "Cost"
-msgstr ""
+msgstr "Kostpris"
 
 #: frontend/src/reports/journal/JournalHeaders.svelte:64
 msgid "Change"
-msgstr ""
+msgstr "Ændring"
 
 #: frontend/src/reports/journal/index.ts:59
 #: frontend/src/sidebar/AsideContents.svelte:33
 msgid "Journal"
-msgstr ""
+msgstr "Journal"
 
 #: frontend/src/reports/options/Options.svelte:13
 msgid "Color scheme"
-msgstr ""
+msgstr "Farvetema"
 
 #: frontend/src/reports/options/Options.svelte:20
 msgid "Fava options"
-msgstr ""
+msgstr "Fava indstillinger"
 
 #: frontend/src/reports/options/Options.svelte:21
 msgid "help"
-msgstr ""
+msgstr "hjælp"
 
 #: frontend/src/reports/options/Options.svelte:25
 msgid "Beancount options"
-msgstr ""
+msgstr "Beancount indstillinger"
 
 #: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
+"…indtast en BQL-forespørgsel. Skriv 'help' for at se de tilgængelige "
+"kommandoer."
 
 #: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
-msgstr ""
+msgstr "Kør"
 
 #: frontend/src/reports/query/QueryLinks.svelte:21
 msgid "Download as"
-msgstr ""
+msgstr "Download som"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:14
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:15
 msgid "# Entries"
-msgstr ""
+msgstr "Antal registreringer"
 
 #: frontend/src/reports/statistics/EntriesByType.svelte:41
 msgid "Total"
-msgstr ""
+msgstr "I alt"
 
 #: frontend/src/reports/statistics/Statistics.svelte:22
 msgid "Postings per Account"
-msgstr ""
+msgstr "Postering pr. konto"
 
 #: frontend/src/reports/statistics/Statistics.svelte:32
 msgid "Update Activity"
-msgstr ""
+msgstr "Opdateringsaktivitet"
 
 #: frontend/src/reports/statistics/Statistics.svelte:35
 msgid ""
 "Click to copy balance directives for accounts (except green ones) to the "
 "clipboard."
 msgstr ""
+"Klik for at kopiere saldokontroldirektiver for kontiene (undtagen de grønne) "
+"til udklipsholderen."
 
 #: frontend/src/reports/statistics/Statistics.svelte:40
 msgid "Copy balance directives"
-msgstr ""
+msgstr "Kopiér saldokontroldirektiver"
 
 #: frontend/src/reports/statistics/Statistics.svelte:47
 msgid "Entries per Type"
-msgstr ""
+msgstr "Registrering pr. type"
 
 #: frontend/src/reports/statistics/UpdateActivity.svelte:36
 msgid "Last Entry"
-msgstr ""
+msgstr "Sidste registrering"
 
 #: frontend/src/reports/statistics/index.ts:42
 #: frontend/src/sidebar/AsideContents.svelte:57
 msgid "Statistics"
-msgstr ""
+msgstr "Statistik"
 
 #: frontend/src/reports/tree_reports/index.ts:38
 #: frontend/src/sidebar/AsideContents.svelte:30
 msgid "Income Statement"
-msgstr ""
+msgstr "Resultatopgørelse"
 
 #: frontend/src/reports/tree_reports/index.ts:49
 #: frontend/src/sidebar/AsideContents.svelte:31
 msgid "Balance Sheet"
-msgstr ""
+msgstr "Balance"
 
 #: frontend/src/reports/tree_reports/index.ts:63
 #: frontend/src/sidebar/AsideContents.svelte:32
 msgid "Trial Balance"
-msgstr ""
+msgstr "Saldobalance"
 
 #: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
-msgstr ""
+msgstr "Gå til konto"
 
 #: frontend/src/sidebar/AsideContents.svelte:64
 msgid "Add Journal Entry"
-msgstr ""
+msgstr "Tilføj journalregistrering"
 
 #: frontend/src/sidebar/AsideContents.svelte:85
 msgid "Show keyboard shortcuts"
-msgstr ""
+msgstr "Vis tastaturgenveje"
 
 #: frontend/src/sidebar/FilterForm.svelte:41
 msgid "Time"
-msgstr ""
+msgstr "Periode"
 
 #: frontend/src/sidebar/FilterForm.svelte:63
 msgid "Filter by tag, payee, …"
-msgstr ""
+msgstr "Filtrer efter tag, betalingsmodtager, …"
 
 #: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
 #: src/fava/json_api.py:718
 msgid "Net Profit"
-msgstr ""
+msgstr "Nettoresultat"
 
 #: frontend/src/stores/chart.ts:26
 msgid "Treemap"
-msgstr ""
+msgstr "Rektangeldiagram"
 
 #: frontend/src/stores/chart.ts:27
 msgid "Sunburst"
-msgstr ""
+msgstr "Solstrålediagram"
 
 #: frontend/src/stores/chart.ts:28
 msgid "Icicle"
-msgstr ""
+msgstr "Istapdiagram"
 
 #: frontend/src/stores/chart.ts:41
 msgid "Line chart"
-msgstr ""
+msgstr "Kurvediagram"
 
 #: frontend/src/stores/chart.ts:42
 msgid "Area chart"
-msgstr ""
+msgstr "Arealdiagram"
 
 #: frontend/src/stores/chart.ts:55
 msgid "Stacked Bars"
-msgstr ""
+msgstr "Stablede Søjler"
 
 #: frontend/src/stores/chart.ts:56
 msgid "Single Bars"
-msgstr ""
+msgstr "Enkeltstående søjler"
 
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: frontend/src/stores/color_scheme.ts:16
 msgid "Dark"
-msgstr ""
+msgstr "Mørk"
 
 #: frontend/src/stores/color_scheme.ts:17
 msgid "Light"
-msgstr ""
+msgstr "Lys"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
 "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
+"Hold Shift nede, mens du klikker, for at folde alle underkonti ud .\n"
+"Hold Ctrl eller Cmd nede, mens du klikker, for at folde ét niveau ud."
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:34
 msgid "Expand all accounts"
-msgstr ""
+msgstr "Fold alle konti ud"
 
 #: frontend/src/tree-table/AccountCellHeader.svelte:39
 msgid "Expand all"
-msgstr ""
+msgstr "Fold alle ud"
 
 #: frontend/src/tree-table/TreeTable.svelte:41
 msgid "Other"
-msgstr ""
+msgstr "Øvrige"
 
 #: src/fava/internal_api.py:176
 msgid "Account Balance"
-msgstr ""
+msgstr "Kontosaldo"
 
 #: src/fava/internal_api.py:228
 msgid "Net Worth"
-msgstr ""
+msgstr "Nettoformue"
 
 #: src/fava/json_api.py:704
 msgid "Income"
-msgstr ""
+msgstr "Indtægter"
 
 #: src/fava/json_api.py:711
 msgid "Expenses"
-msgstr ""
+msgstr "Udgifter"
