@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+from datetime import date
+from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
 
+from fava.beans.abc import Price
 from fava.beans.funcs import hash_entry
 from fava.core import EntryNotFoundForHashError
 from fava.core import FilteredLedger
+from fava.core.query import QueryResultTable
 from fava.util.date import local_today
 from fava.util.date import Month
 
@@ -46,6 +50,35 @@ def test_filtered_ledger(
     year_2012 = FilteredLedger(small_example_ledger, time="2012")
     assert not year_2012.account_is_closed(closed_acc)
     assert not year_2012.account_is_closed(unclosed_acc)
+
+
+def test_filtered_ledger_query_prices(
+    small_example_ledger: FavaLedger,
+) -> None:
+    # Queries (and so the holdings report) should not see prices from after
+    # the end of the time filter; the account reports don't either.
+    nov_2012 = FilteredLedger(small_example_ledger, time="2012-11")
+    prices = [
+        e for e in nov_2012.entries_with_all_prices if isinstance(e, Price)
+    ]
+    assert [p.date for p in prices] == [date(2012, 11, 30)]
+
+    result = small_example_ledger.query_shell.execute_query_serialised(
+        nov_2012.entries_with_all_prices,
+        "SELECT getprice('USD', 'EUR') LIMIT 1",
+    )
+    assert isinstance(result, QueryResultTable)
+    assert result.rows == [(Decimal(4),)]
+
+    # Prices from before the start of the time filter are still added.
+    dec_2012 = FilteredLedger(small_example_ledger, time="2012-12")
+    dec_prices = [
+        e for e in dec_2012.entries_with_all_prices if isinstance(e, Price)
+    ]
+    assert [p.date for p in dec_prices] == [
+        date(2012, 11, 30),
+        date(2012, 12, 1),
+    ]
 
 
 def test_ledger_get_entry(
