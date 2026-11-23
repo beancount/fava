@@ -42,10 +42,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:npm/%40codemirror/lint@6.9.7",
+      "bom-ref": "pkg:npm/%40codemirror/lint@6.9.8",
       "name": "@codemirror/lint",
-      "version": "6.9.7",
-      "purl": "pkg:npm/%40codemirror/lint@6.9.7",
+      "version": "6.9.8",
+      "purl": "pkg:npm/%40codemirror/lint@6.9.8",
       "licenses": [
         {
           "expression": "MIT"

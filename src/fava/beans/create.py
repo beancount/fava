@@ -39,12 +39,12 @@ def amount(amt: Decimal, currency: str) -> Amount: ...
 def amount(amt: Amount | Decimal | str, currency: str | None = None) -> Amount:
     """Amount from a string or tuple."""
     if isinstance(amt, str):
-        return BEANCOUNT_A(amt)  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
+        return BEANCOUNT_A(amt)  # type: ignore[return-value]  # ty:ignore[invalid-explicit-return]
     if hasattr(amt, "number") and hasattr(amt, "currency"):
-        return amt  # ty:ignore[invalid-return-type]
+        return amt  # ty:ignore[invalid-explicit-return]
     if not isinstance(currency, str):  # pragma: no cover
         raise TypeError
-    return BeancountAmount(amt, currency)  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
+    return BeancountAmount(amt, currency)  # type: ignore[return-value]  # ty:ignore[invalid-explicit-return]
 
 
 _amount = amount
@@ -89,7 +89,7 @@ def posting(
         price,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
         flag,
         dict(meta) if meta is not None else None,
-    )  # ty:ignore[invalid-return-type]
+    )  # ty:ignore[invalid-explicit-return]
 
 
 _EMPTY_SET: frozenset[str] = frozenset()

@@ -37,7 +37,7 @@ class DateKeyWrapper(list[dt.date]):
     def __len__(self) -> int:
         return len(self.inner)
 
-    def __getitem__(self, k: int) -> dt.date:  # type: ignore[override]  # ty:ignore[invalid-method-override]
+    def __getitem__(self, k: int) -> dt.date:  # type: ignore[override]  # ty:ignore[incompatible-method-override]
         return self.inner[k][0]
 
 

@@ -108,7 +108,7 @@ class TestBeangulpImporter(TestBeangulpImporterNoExtraction):
                 create.amount("10 USD"),
             )
             entries.append(bal)
-        return entries  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
+        return entries  # type: ignore[return-value]  # ty:ignore[invalid-explicit-return]
 
 
 class TestImporter(Importer):

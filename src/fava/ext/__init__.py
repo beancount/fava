@@ -220,7 +220,7 @@ def extension_endpoint(
     ) -> Callable[[T], Response]:
         f: Any = func
         f.endpoint_key = (
-            endpoint_name or func.__name__,  # ty:ignore[unresolved-attribute]
+            endpoint_name or func.__name__,  # ty:ignore[missing-attribute]
             methods or ["GET"],
         )
         return func

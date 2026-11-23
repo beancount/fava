@@ -229,7 +229,7 @@ def _build_param_struct(func: Callable[..., object]) -> type[Struct] | None:
     if not struct_fields:
         return None
 
-    return msgspec.defstruct(f"{func.__name__}_params", struct_fields)  # ty:ignore[unresolved-attribute]
+    return msgspec.defstruct(f"{func.__name__}_params", struct_fields)  # ty:ignore[missing-attribute]
 
 
 def build_json_body_decoder(
@@ -303,9 +303,9 @@ def api_endpoint(func: Callable[..., object]) -> Callable[[], Response]:
     they are decoded from the JSON request body. Both use a msgspec Struct
     generated from the function's parameters for the typed validation.
     """
-    method, _, name = func.__name__.partition("_")  # ty:ignore[unresolved-attribute]
+    method, _, name = func.__name__.partition("_")  # ty:ignore[missing-attribute]
     assert method in {"get", "delete", "put"}, (  # noqa: S101
-        f"Invalid endpoint function name: {func.__name__}"  # ty: ignore[unresolved-attribute]
+        f"Invalid endpoint function name: {func.__name__}"  # ty: ignore[missing-attribute]
     )
 
     if method == "put":
