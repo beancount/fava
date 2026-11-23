@@ -19,6 +19,7 @@ from fava.beans import create
 from fava.beans.funcs import hash_entry
 from fava.beans.helpers import replace
 from fava.beans.str import to_string
+from fava.core import FavaLedger
 from fava.core.charts import dumps
 from fava.core.charts import loads
 from fava.serialisation import _deserialise_posting
@@ -29,12 +30,12 @@ from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Sequence
+    from pathlib import Path
 
     from beancount.core.data import Meta
 
     from fava.beans.abc import Directive
 
-    from .conftest import GetFavaLedger
     from .conftest import SnapshotFunc
 
 
@@ -98,12 +99,15 @@ def test_serialise_txn() -> None:
     assert serialised == json_txn
 
 
-def test_serialise_txn_missing_tolerances(get_ledger: GetFavaLedger) -> None:
+def test_serialise_txn_missing_tolerances(test_data_dir: Path) -> None:
     """Non-str keys in beancount's inferred-tolerance metadata are dropped."""
     # The errors ledger contains a transaction with a currency-less posting,
     # for which Beancount stores the MISSING sentinel as a key of
     # meta.__tolerances__.
-    ledger = get_ledger("errors")
+    # Only Beancount sets this metadata, so do not load with uromyces.
+    ledger = FavaLedger(
+        str(test_data_dir / "errors.beancount"), use_uromyces=False
+    )
     txn = next(
         txn
         for txn in ledger.all_entries_by_type.Transaction

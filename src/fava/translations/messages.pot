@@ -697,11 +697,11 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/fava/internal_api.py:176
+#: src/fava/internal_api.py:177
 msgid "Account Balance"
 msgstr ""
 
-#: src/fava/internal_api.py:228
+#: src/fava/internal_api.py:229
 msgid "Net Worth"
 msgstr ""
 
