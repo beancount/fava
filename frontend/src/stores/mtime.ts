@@ -34,7 +34,6 @@ export function set_mtime(text: string, signal?: AbortSignal | null): void {
       load_mtimes.set(signal, new_value);
     }
   }
-  // biome-ignore lint/complexity/useMathMinMax: Math.max does not work for BigInt
   ledger_mtime_writable.update((v) => (new_value > v ? new_value : v));
 }
 

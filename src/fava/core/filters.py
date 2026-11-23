@@ -79,7 +79,7 @@ class TimeFilter(EntryFilter):
             self.date_range.end,
             self._options,
         )
-        return clamped_entries  # type: ignore[return-value]  # ty:ignore[invalid-return-type]
+        return clamped_entries  # type: ignore[return-value]  # ty:ignore[invalid-explicit-return]
 
 
 class AdvancedFilter(EntryFilter):
