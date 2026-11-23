@@ -5,6 +5,7 @@ from __future__ import annotations
 LOCALES = [
     "bg",
     "ca",
+    "da",
     "de",
     "es",
     "fa",

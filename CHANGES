@@ -4,8 +4,8 @@ Changelog
 Unreleased
 ----------
 
-Aligning amounts in the editor now uses the parse tree, which handles
-arithmetic expressions correctly.
+A Danish translation was added. Aligning amounts in the editor now uses the
+parse tree, which handles arithmetic expressions correctly.
 
 v1.31 (2026-11-10)
 ------------------
