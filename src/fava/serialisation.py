@@ -18,6 +18,7 @@ from functools import singledispatch
 from typing import Any
 
 from beancount.core import amount
+from beancount.core.account import is_valid as is_valid_account
 from beancount.parser.parser import parse_string
 
 from fava._structs import Balance
@@ -48,6 +49,27 @@ class InvalidAmountError(FavaAPIError):
 
     def __init__(self, amount: str) -> None:
         super().__init__(f"Invalid amount: {amount}")
+
+
+class InvalidAccountError(FavaAPIError):
+    """Invalid account."""
+
+    def __init__(self, account: str) -> None:
+        super().__init__(f"Invalid account: {account}")
+
+
+class InvalidFlagError(FavaAPIError):
+    """Invalid flag."""
+
+    def __init__(self, flag: str) -> None:
+        super().__init__(f"Invalid flag: {flag}")
+
+
+class InvalidTagOrLinkError(FavaAPIError):
+    """Invalid tag or link."""
+
+    def __init__(self, value: str) -> None:
+        super().__init__(f"Invalid tag or link: {value}")
 
 
 SerialisableValue = (
@@ -260,6 +282,36 @@ def _deserialise_meta(
     return {key: _deserialise_meta_value(value) for key, value in o.items()}
 
 
+# Beancount's parser accepts these characters, as well as any single capital
+# letter, as the flag of a transaction.
+_FLAG_RE = re.compile(r"[*!&#?%A-Z]")
+
+# The characters Beancount's parser accepts in a tag or link.
+_TAG_OR_LINK_RE = re.compile(r"[A-Za-z0-9\-_/.]+")
+
+
+def _validate_account(account: str) -> str:
+    """Check that an account received from the frontend is a valid one."""
+    if not is_valid_account(account):
+        raise InvalidAccountError(account)
+    return account
+
+
+def _validate_flag(flag: str) -> str:
+    """Check that a flag received from the frontend is a valid one."""
+    if not _FLAG_RE.fullmatch(flag):
+        raise InvalidFlagError(flag)
+    return flag
+
+
+def _validate_tags_or_links(values: frozenset[str]) -> frozenset[str]:
+    """Check that tags or links received from the frontend are valid ones."""
+    for value in values:
+        if not _TAG_OR_LINK_RE.fullmatch(value):
+            raise InvalidTagOrLinkError(value)
+    return values
+
+
 def _deserialise_posting(posting: Posting) -> abc.Posting:
     """Parse JSON to a Beancount Posting."""
     entries, errors, _ = parse_string(
@@ -274,7 +326,7 @@ def _deserialise_posting(posting: Posting) -> abc.Posting:
     pos = txn.postings[0]
     return replace(
         pos,
-        account=posting.account,
+        account=_validate_account(posting.account),
         meta=_deserialise_meta(posting.meta) if posting.meta else None,
     )
 
@@ -285,18 +337,18 @@ def deserialise(entry: Balance | Note | Transaction) -> abc.Directive:
         return create.transaction(
             meta=_deserialise_meta(entry.meta),
             date=entry.date,
-            flag=entry.flag,
+            flag=_validate_flag(entry.flag),
             payee=entry.payee,
             narration=entry.narration,
-            tags=entry.tags,
-            links=entry.links,
+            tags=_validate_tags_or_links(entry.tags),
+            links=_validate_tags_or_links(entry.links),
             postings=[_deserialise_posting(pos) for pos in entry.postings],
         )
     if isinstance(entry, Balance):
         return create.balance(
             meta=_deserialise_meta(entry.meta),
             date=entry.date,
-            account=entry.account,
+            account=_validate_account(entry.account),
             amount=create.amount(entry.amount.number, entry.amount.currency),
         )
 
@@ -304,6 +356,6 @@ def deserialise(entry: Balance | Note | Transaction) -> abc.Directive:
     return create.note(
         meta=_deserialise_meta(entry.meta),
         date=entry.date,
-        account=entry.account,
+        account=_validate_account(entry.account),
         comment=comment,
     )
