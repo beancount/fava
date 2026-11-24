@@ -43,6 +43,7 @@
     "collapse-pattern": "[]",
     "conversion-currencies": "()",
     "currency-column": "61",
+    "custom-css": "None",
     "default-file": "None",
     "default-page": "'income_statement/'",
     "fiscal-year-end": "FiscalYearEnd(month=12, day=31)",
