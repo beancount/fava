@@ -24,7 +24,10 @@ from fava.core.charts import loads
 from fava.serialisation import _deserialise_posting
 from fava.serialisation import _serialise_posting
 from fava.serialisation import deserialise
+from fava.serialisation import InvalidAccountError
 from fava.serialisation import InvalidAmountError
+from fava.serialisation import InvalidFlagError
+from fava.serialisation import InvalidTagOrLinkError
 from fava.serialisation import serialise
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -250,14 +253,14 @@ def test_serialise_posting(
     meta: Meta | None,
 ) -> None:
     pos = create.posting(
-        "Assets",
+        "Assets:A",
         amount,
         cost,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
         price,
         flag=None,
         meta=meta,
     )
-    json: dict[str, object] = {"account": "Assets", "amount": amount_string}
+    json: dict[str, object] = {"account": "Assets:A", "amount": amount_string}
     if meta:
         json["meta"] = meta
     assert loads(dumps(_serialise_posting(pos))) == json
@@ -287,14 +290,14 @@ def test_deserialise_posting(
     """Roundtrip is not possible here due to total price or calculation."""
     amount, cost, price = amount_cost_price
     pos = create.posting(
-        "Assets",
+        "Assets:A",
         amount,
         cost,  # type: ignore[arg-type]  # ty:ignore[invalid-argument-type]
         price,
         flag=None,
         meta=meta,
     )
-    json: dict[str, object] = {"account": "Assets", "amount": amount_string}
+    json: dict[str, object] = {"account": "Assets:A", "amount": amount_string}
     if meta is not None:
         json["meta"] = meta
     assert _deserialise_posting(_posting(json)) == pos
@@ -303,7 +306,23 @@ def test_deserialise_posting(
 def test_deserialise_posting_invalid_amount() -> None:
     with pytest.raises(InvalidAmountError):
         _deserialise_posting(
-            _posting({"account": "Assets", "amount": "10 ////"})
+            _posting({"account": "Assets:A", "amount": "10 ////"})
+        )
+
+
+@pytest.mark.parametrize(
+    "account",
+    [
+        "",
+        "Assets",
+        "Assets:A Bogus",
+        'Assets:A\n2017-12-12 note Assets:A "injected"',
+    ],
+)
+def test_deserialise_posting_invalid_account(account: str) -> None:
+    with pytest.raises(InvalidAccountError):
+        _deserialise_posting(
+            _posting({"account": account, "amount": "10 USD"})
         )
 
 
@@ -318,10 +337,10 @@ def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
         frozenset(["link"]),
         [
             _deserialise_posting(
-                _posting({"account": "Assets", "amount": "10"})
+                _posting({"account": "Assets:A", "amount": "10"})
             ),
             _deserialise_posting(
-                _posting({"account": "Assets", "amount": "10 EUR @"})
+                _posting({"account": "Assets:A", "amount": "10 EUR @"})
             ),
         ],
     )
@@ -396,6 +415,40 @@ def test_deserialise() -> None:
         _entry({"t": "NoEntry"})
 
 
+def _json_txn(**kwargs: object) -> dict[str, object]:
+    """A minimal JSON transaction, for the validation tests."""
+    return {
+        "t": "Transaction",
+        "date": "2017-12-12",
+        "flag": "*",
+        "payee": "Test3",
+        "narration": "asdfasd",
+        "meta": {},
+        "postings": [{"account": "Assets:ETrade:Cash", "amount": "100 USD"}],
+        **kwargs,
+    }
+
+
+@pytest.mark.parametrize(
+    "flag",
+    ["", "x", "**", '*\n2017-12-12 note Assets:A "injected"'],
+)
+def test_deserialise_invalid_flag(flag: str) -> None:
+    with pytest.raises(InvalidFlagError):
+        deserialise(_entry(_json_txn(flag=flag)))
+
+
+@pytest.mark.parametrize(
+    "tag_or_link",
+    ["", "a b", 'a\n2017-12-12 note Assets:A "injected"'],
+)
+def test_deserialise_invalid_tag_or_link(tag_or_link: str) -> None:
+    with pytest.raises(InvalidTagOrLinkError):
+        deserialise(_entry(_json_txn(tags=[tag_or_link])))
+    with pytest.raises(InvalidTagOrLinkError):
+        deserialise(_entry(_json_txn(links=[tag_or_link])))
+
+
 def test_deserialise_balance() -> None:
     json_bal = {
         "t": "Balance",
@@ -428,6 +481,30 @@ def test_deserialise_note() -> None:
         comment="This is some comment or note",
     )
     assert deserialise(_entry(json_note)) == note
+
+
+def test_deserialise_balance_invalid_account() -> None:
+    json_bal = {
+        "t": "Balance",
+        "date": "2017-12-12",
+        "account": 'Assets:A\n2017-12-12 note Assets:A "injected"',
+        "amount": {"number": "100", "currency": "USD"},
+        "meta": {},
+    }
+    with pytest.raises(InvalidAccountError):
+        deserialise(_entry(json_bal))
+
+
+def test_deserialise_note_invalid_account() -> None:
+    json_note = {
+        "t": "Note",
+        "date": "2017-12-12",
+        "account": "Assets:A Bogus",
+        "comment": "This is some comment or note",
+        "meta": {},
+    }
+    with pytest.raises(InvalidAccountError):
+        deserialise(_entry(json_note))
 
 
 def test_deserialise_unknown() -> None:
