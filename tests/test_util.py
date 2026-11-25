@@ -73,21 +73,23 @@ def test_drop_imported_modules(tmp_path: Path) -> None:
     try:
         module = __import__(module_name)
         assert module.VALUE == 1
-        cached = getattr(module, "__cached__", None)
-        if cached:
-            # Ensure a bytecode file exists so unlink() is exercised.
-            Path(cached).parent.mkdir(parents=True, exist_ok=True)
-            Path(cached).write_bytes(b"")
+        # Explicitly set __cached__ so Path(cached).unlink runs on all Pythons
+        # (3.15 may leave __cached__ unset/false after __import__).
+        cached_path = tmp_path / "__pycache__" / f"{module_name}.pyc"
+        cached_path.parent.mkdir(parents=True, exist_ok=True)
+        cached_path.write_bytes(b"")
+        module.__cached__ = str(cached_path)
         drop_imported_modules(module_name)
         assert module_name not in sys.modules
-        if cached:
-            assert not Path(cached).exists()
+        assert not cached_path.exists()
     finally:
         if sys.path and sys.path[0] == str(tmp_path):
             sys.path.pop(0)
         sys.modules.pop(module_name, None)
 
-    # .py module whose parent has no __pycache__ directory (BrPart 62->66).
+
+def test_drop_imported_modules_no_pycache(tmp_path: Path) -> None:
+    """drop_imported_modules skips pycache glob when no __pycache__ exists."""
     no_cache_dir = tmp_path / "no_pycache"
     no_cache_dir.mkdir()
     no_cache_name = "fava_drop_imported_modules_no_pycache"
@@ -100,7 +102,9 @@ def test_drop_imported_modules(tmp_path: Path) -> None:
     drop_imported_modules(no_cache_name)
     assert no_cache_name not in sys.modules
 
-    # __pycache__ entry matching stem.* that is not .pyc/.pyo (BrPart 64->63).
+
+def test_drop_imported_modules_suffix_filter(tmp_path: Path) -> None:
+    """drop_imported_modules only unlinks .pyc/.pyo under __pycache__."""
     suffix_dir = tmp_path / "suffix_filter"
     suffix_dir.mkdir()
     suffix_name = "fava_drop_imported_modules_suffix"
