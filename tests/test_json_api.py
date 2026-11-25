@@ -132,6 +132,11 @@ def test_api_changed(test_client: FlaskClient) -> None:
     assert_api_success(response, data=False)
 
 
+def test_api_reload(test_client: FlaskClient) -> None:
+    response = test_client.put("/extension-report/api/reload")
+    assert_api_success(response, data="Reloaded.")
+
+
 def test_api_add_document_and_move_and_delete(
     app: Flask,
     test_client: FlaskClient,

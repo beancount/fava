@@ -79,6 +79,7 @@ type PutEndpoint =
   | "add_entries"
   | "attach_document"
   | "move"
+  | "reload"
   | "source"
   | "source_slice"
   | "upload_import_file";
@@ -368,6 +369,18 @@ export const put_source_slice: Put<{
   sha256sum: string;
 }> = define_put_json("source_slice");
 export const put_upload_import_file = define_put_form("upload_import_file");
+
+/**
+ * Force-reload the ledger on the server, including plugins and extensions.
+ */
+export async function put_reload(signal?: AbortSignal): Promise<string> {
+  const url = api_url("reload");
+  return fetch_and_handle_api_call(
+    url,
+    { method: "PUT", signal: signal ?? null },
+    string,
+  );
+}
 
 /**
  * Move a file, either in an import directory or a document.

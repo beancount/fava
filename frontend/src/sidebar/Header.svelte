@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { put_reload } from "../api/index.ts";
+  import { _ } from "../i18n.ts";
   import { keyboard_shortcut } from "../keyboard-shortcuts.ts";
-  import { router } from "../router.ts";
+  import { log_error } from "../log.ts";
+  import { notify_err } from "../notifications.ts";
   import { ledger_data } from "../stores/index.ts";
   import { ledger_title } from "../stores/options.ts";
   import FilterForm from "./FilterForm.svelte";
@@ -10,6 +13,21 @@
 
   let other_ledgers = $derived($ledger_data.other_ledgers);
   let has_dropdown = $derived(other_ledgers.length);
+
+  /**
+   * Force-reload plugins/extensions on the server, then hard-refresh the page
+   * so cached JS extension modules are also re-fetched.
+   */
+  function force_reload(): void {
+    put_reload()
+      .catch((error: unknown) => {
+        notify_err(error);
+        log_error(error);
+      })
+      .finally(() => {
+        window.location.reload();
+      });
+  }
 </script>
 
 <header>
@@ -30,10 +48,12 @@
   </h1>
   <button
     type="button"
-    hidden={!$has_changes}
     class="reload-page"
+    class:muted={!$has_changes}
+    class:pending={$has_changes}
+    title={_("Force reload")}
     {@attach keyboard_shortcut("r")}
-    onclick={router.reload}
+    onclick={force_reload}
   >
     &#8635;
   </button>
@@ -42,7 +62,7 @@
 </header>
 
 <style>
-  .reload-page {
+  .reload-page.pending {
     color: var(--dark-gray);
     background-color: var(--warning);
   }
