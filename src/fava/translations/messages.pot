@@ -667,6 +667,18 @@ msgstr ""
 msgid "Single Bars"
 msgstr ""
 
+#: frontend/src/charts/BarChart.svelte
+msgid "10th percentile"
+msgstr ""
+
+#: frontend/src/charts/BarChart.svelte
+msgid "Average"
+msgstr ""
+
+#: frontend/src/charts/BarChart.svelte
+msgid "90th percentile"
+msgstr ""
+
 #: frontend/src/stores/color_scheme.ts:15
 msgid "System"
 msgstr ""

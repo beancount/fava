@@ -4,6 +4,8 @@ Changelog
 Unreleased
 ----------
 
+Bar charts show average and 10%/90% quantile reference lines.
+
 A Danish translation was added. Aligning amounts in the editor now uses the
 parse tree, which handles arithmetic expressions correctly.
 

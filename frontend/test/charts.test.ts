@@ -1,7 +1,7 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { test } from "node:test";
 
-import { ParsedBarChart } from "../src/charts/bar.ts";
+import { bar_chart_stats, ParsedBarChart } from "../src/charts/bar.ts";
 import {
   colors10,
   colors15,
@@ -318,6 +318,74 @@ test("bar chart merges stacks of collapsed accounts", () => {
         ],
       ],
     ],
+  );
+});
+
+test("bar chart average and quantile reference stats", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { EUR: "10", USD: "20" },
+      budgets: {},
+      account_balances: {},
+    },
+    {
+      date: "2000-02-01",
+      balance: { EUR: "30", USD: "40" },
+      budgets: {},
+      account_balances: {},
+    },
+    {
+      date: "2000-03-01",
+      balance: { EUR: "50", USD: "60" },
+      budgets: {},
+      account_balances: {},
+    },
+  ];
+  const ctx = { currencies: ["EUR", "USD"], fiscal_year_end };
+  const bar_chart = ParsedBarChart.validator({
+    label: "name",
+    interval: "month",
+    data,
+  })
+    .unwrap()
+    .with_context(ctx);
+  const filtered = bar_chart.filter(new Set(), new Set());
+  deepEqual(filtered.stats, [
+    { currency: "EUR", average: 30, p10: 14, p90: 46 },
+    { currency: "USD", average: 40, p10: 24, p90: 56 },
+  ]);
+  // Hidden currencies are omitted from the stats.
+  deepEqual(bar_chart.filter(new Set(["USD"]), new Set()).stats, [
+    { currency: "EUR", average: 30, p10: 14, p90: 46 },
+  ]);
+  // Direct helper: empty input yields no stats.
+  deepEqual(bar_chart_stats([], ["EUR"]), []);
+
+  const fake_ctx = {
+    amount: (n: number, c: string) => `${n.toFixed(2)} ${c}`,
+    num: (n: number) => n.toFixed(2),
+    percentage: (n: number) => `${(n * 100).toFixed(2)}%`,
+  };
+  const stats = filtered.stats[0];
+  ok(stats);
+  deepEqual(
+    bar_chart
+      .tooltip_text_stats(fake_ctx, stats, "average", "Average")
+      .map((n) => (typeof n === "string" ? n : n.textContent)),
+    ["Average", "", "30.00 EUR"],
+  );
+  deepEqual(
+    bar_chart
+      .tooltip_text_stats(fake_ctx, stats, "p10", "10th percentile")
+      .map((n) => (typeof n === "string" ? n : n.textContent)),
+    ["10th percentile", "", "14.00 EUR"],
+  );
+  deepEqual(
+    bar_chart
+      .tooltip_text_stats(fake_ctx, stats, "p90", "90th percentile")
+      .map((n) => (typeof n === "string" ? n : n.textContent)),
+    ["90th percentile", "", "46.00 EUR"],
   );
 });
 

@@ -4,6 +4,7 @@
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
   import { url_for_account } from "../helpers.ts";
+  import { _ } from "../i18n.ts";
   import { get_internal_accounts } from "../lib/account.ts";
   import { toggled_accounts } from "../stores/accounts.ts";
   import {
@@ -41,8 +42,32 @@
   const inner_height = height - margin.top - margin.bottom;
 
   // Chart data
-  let { currencies, bar_groups, stacks } = $derived(
+  let { currencies, bar_groups, stacks, stats } = $derived(
     chart.filter($chart_toggled_currencies_set, $toggled_accounts),
+  );
+
+  /** Horizontal reference lines: average plus 10%/90% quantiles. */
+  let reference_lines = $derived(
+    stats.flatMap((s) => [
+      {
+        stats: s,
+        kind: "p10" as const,
+        value: s.p10,
+        label: _("10th percentile"),
+      },
+      {
+        stats: s,
+        kind: "average" as const,
+        value: s.average,
+        label: _("Average"),
+      },
+      {
+        stats: s,
+        kind: "p90" as const,
+        value: s.p90,
+        label: _("90th percentile"),
+      },
+    ]),
   );
 
   // Computed dimensions
@@ -183,6 +208,26 @@
         {/each}
       </g>
     {/if}
+    <g class="reference-lines">
+      {#each reference_lines as line (line.stats.currency + line.kind)}
+        {@const y_pos = y(line.value)}
+        <g
+          class={["reference", line.kind]}
+          {@attach tooltip.following(() =>
+            chart.tooltip_text_stats($ctx, line.stats, line.kind, line.label),
+          )}
+        >
+          <line class="hit" x1={0} x2={inner_width} y1={y_pos} y2={y_pos} />
+          <line
+            x1={0}
+            x2={inner_width}
+            y1={y_pos}
+            y2={y_pos}
+            stroke={$currencies_scale(line.stats.currency)}
+          />
+        </g>
+      {/each}
+    </g>
   </Brush>
 </svg>
 
@@ -206,5 +251,28 @@
 
   .desaturate {
     filter: saturate(50%);
+  }
+
+  .reference line {
+    fill: none;
+    pointer-events: stroke;
+    stroke-width: 1.5;
+    shape-rendering: crispedges;
+  }
+
+  .reference .hit {
+    stroke: transparent;
+    stroke-width: 8;
+  }
+
+  .reference.average line:not(.hit) {
+    stroke-dasharray: 6 4;
+  }
+
+  .reference.p10 line:not(.hit),
+  .reference.p90 line:not(.hit) {
+    opacity: 0.65;
+    stroke-dasharray: 2 4;
+    stroke-width: 1;
   }
 </style>
