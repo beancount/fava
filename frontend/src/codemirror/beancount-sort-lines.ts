@@ -5,7 +5,7 @@ import type { Command } from "@codemirror/view";
  * Line ranges the sort command applies to: one per non-empty selection,
  * or the whole document (excluding a trailing empty line after a final newline).
  */
-function line_blocks(state: EditorState): Array<{ from: number; to: number }> {
+function line_blocks(state: EditorState): { from: number; to: number }[] {
   const ranges = state.selection.ranges.filter((r) => !r.empty);
   if (!ranges.length) {
     const { doc } = state;
@@ -20,7 +20,7 @@ function line_blocks(state: EditorState): Array<{ from: number; to: number }> {
       },
     ];
   }
-  const blocks: Array<{ from: number; to: number }> = [];
+  const blocks: { from: number; to: number }[] = [];
   for (const range of ranges) {
     const first = state.doc.lineAt(range.from);
     // A selection ending at a line start does not include that line.
