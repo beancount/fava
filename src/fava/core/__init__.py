@@ -47,6 +47,7 @@ from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
 from fava.core.watcher import choose_watcher_for_path
 from fava.helpers import FavaAPIError
+from fava.util import drop_imported_modules
 from fava.util import listify
 from fava.util.date import dateranges
 
@@ -523,6 +524,26 @@ class FavaLedger:
         if changed:
             self.load_file()
         return changed
+
+    def force_reload(self) -> None:
+        """Force-reload the ledger, including plugins and extensions.
+
+        Reimports Beancount plugin and Fava extension modules so source
+        changes are picked up without restarting the process. Useful when
+        developing or testing plugins and extensions.
+        """
+        if self._is_encrypted:  # pragma: no cover
+            return
+
+        plugin_names = [name for name, _ in self.options.get("plugin", ())]
+        if plugin_names:
+            drop_imported_modules(*plugin_names)
+
+        self.extensions.prepare_force_reload()
+        self.ingest.mtime = None
+        self.load_file()
+        self.watcher.notify(Path(self.beancount_file_path))
+        self.watcher.check()
 
     def interval_balances(
         self,

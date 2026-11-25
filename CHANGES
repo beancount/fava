@@ -4,6 +4,8 @@ Changelog
 Unreleased
 ----------
 
+The header reload control force-reloads plugins and extensions.
+
 A Danish translation was added. Aligning amounts in the editor now uses the
 parse tree, which handles arithmetic expressions correctly.
 

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import sys
+import textwrap
+import types
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 
@@ -9,6 +12,7 @@ from werkzeug.exceptions import NotFound
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
+from fava.util import drop_imported_modules
 from fava.util import get_translations
 from fava.util import listify
 from fava.util import next_key
@@ -43,6 +47,82 @@ def test_get_translations() -> None:
     assert "zh_Hant_TW" in zh_tw
 
     assert not get_translations(Locale.parse("km"))
+
+
+def test_drop_imported_modules(tmp_path: Path) -> None:
+    """drop_imported_modules removes modules and their bytecode caches."""
+    drop_imported_modules()  # no-op with no names
+
+    # Module without __cached__ still gets dropped.
+    bare_name = "fava_drop_imported_modules_bare"
+    sys.modules[bare_name] = types.ModuleType(bare_name)
+    drop_imported_modules(bare_name)
+    assert bare_name not in sys.modules
+
+    module_name = "fava_drop_imported_modules_test"
+    module_path = tmp_path / f"{module_name}.py"
+    module_path.write_text(
+        textwrap.dedent(
+            """\
+            VALUE = 1
+            """
+        ),
+        encoding="utf-8",
+    )
+    sys.path.insert(0, str(tmp_path))
+    try:
+        module = __import__(module_name)
+        assert module.VALUE == 1
+        # Explicitly set __cached__ so Path(cached).unlink runs on all Pythons
+        # (3.15 may leave __cached__ unset/false after __import__).
+        cached_path = tmp_path / "__pycache__" / f"{module_name}.pyc"
+        cached_path.parent.mkdir(parents=True, exist_ok=True)
+        cached_path.write_bytes(b"")
+        module.__dict__["__cached__"] = str(cached_path)
+        drop_imported_modules(module_name)
+        assert module_name not in sys.modules
+        assert not cached_path.exists()
+    finally:
+        if sys.path and sys.path[0] == str(tmp_path):
+            sys.path.pop(0)
+        sys.modules.pop(module_name, None)
+
+
+def test_drop_imported_modules_no_pycache(tmp_path: Path) -> None:
+    """drop_imported_modules skips pycache glob when no __pycache__ exists."""
+    no_cache_dir = tmp_path / "no_pycache"
+    no_cache_dir.mkdir()
+    no_cache_name = "fava_drop_imported_modules_no_pycache"
+    no_cache_py = no_cache_dir / f"{no_cache_name}.py"
+    no_cache_py.write_text("VALUE = 2\n", encoding="utf-8")
+    no_cache_mod = types.ModuleType(no_cache_name)
+    no_cache_mod.__file__ = str(no_cache_py)
+    assert not (no_cache_dir / "__pycache__").exists()
+    sys.modules[no_cache_name] = no_cache_mod
+    drop_imported_modules(no_cache_name)
+    assert no_cache_name not in sys.modules
+
+
+def test_drop_imported_modules_suffix_filter(tmp_path: Path) -> None:
+    """drop_imported_modules only unlinks .pyc/.pyo under __pycache__."""
+    suffix_dir = tmp_path / "suffix_filter"
+    suffix_dir.mkdir()
+    suffix_name = "fava_drop_imported_modules_suffix"
+    suffix_py = suffix_dir / f"{suffix_name}.py"
+    suffix_py.write_text("VALUE = 3\n", encoding="utf-8")
+    pycache = suffix_dir / "__pycache__"
+    pycache.mkdir()
+    other = pycache / f"{suffix_name}.txt"
+    other.write_text("not bytecode\n", encoding="utf-8")
+    pyc = pycache / f"{suffix_name}.pyc"
+    pyc.write_bytes(b"")
+    suffix_mod = types.ModuleType(suffix_name)
+    suffix_mod.__file__ = str(suffix_py)
+    sys.modules[suffix_name] = suffix_mod
+    drop_imported_modules(suffix_name)
+    assert suffix_name not in sys.modules
+    assert other.exists()
+    assert not pyc.exists()
 
 
 def test_listify() -> None:

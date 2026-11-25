@@ -15,6 +15,7 @@ import jinja2
 from flask import current_app
 
 from fava.helpers import BeancountError
+from fava.util import drop_imported_modules
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Callable
@@ -137,12 +138,17 @@ class FavaExtensionBase:
 def find_extensions(
     base_path: Path,
     name: str,
+    *,
+    reload: bool = False,
 ) -> tuple[list[type[FavaExtensionBase]], list[FavaExtensionError]]:
     """Find extensions in a module.
 
     Args:
         base_path: The module can be relative to this path.
         name: The name of the module containing the extensions.
+        reload: If True and the module is already imported, drop it from
+            ``sys.modules`` and reimport so source changes are picked up
+            (useful when testing extensions).
 
     Returns:
         A tuple (classes, errors) where classes is a list of subclasses of
@@ -152,6 +158,8 @@ def find_extensions(
 
     sys.path.insert(0, str(base_path))
     try:
+        if reload and name in sys.modules:
+            drop_imported_modules(name)
         module = importlib.import_module(name)
     except ImportError as err:
         error = FavaExtensionError(

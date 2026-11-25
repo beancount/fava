@@ -36,10 +36,19 @@ class ExtensionModule(FavaModule):
         super().__init__(ledger)
         self._instances: dict[str, FavaExtensionBase] = {}
         self._loaded_extensions: set[type[FavaExtensionBase]] = set()
+        self._reload_modules = False
         self.errors: list[FavaExtensionError] = []
+
+    def prepare_force_reload(self) -> None:
+        """Drop cached extension instances so the next load reimports them."""
+        self._instances.clear()
+        self._loaded_extensions.clear()
+        self._reload_modules = True
 
     def load_file(self) -> None:  # noqa: D102
         self.errors = []
+        reload_modules = self._reload_modules
+        self._reload_modules = False
 
         custom_entries = self.ledger.all_entries_by_type.Custom
 
@@ -60,6 +69,7 @@ class ExtensionModule(FavaModule):
             extensions, errors = find_extensions(
                 Path(self.ledger.beancount_file_path).parent,
                 extension,
+                reload=reload_modules,
             )
             self.errors.extend(errors)
 

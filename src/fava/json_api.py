@@ -333,6 +333,13 @@ def get_changed() -> bool:
     return g.ledger.changed()
 
 
+@api_endpoint
+def put_reload() -> str:
+    """Force-reload the ledger, including plugins and extensions."""
+    g.ledger.force_reload()
+    return "Reloaded."
+
+
 api_endpoint(get_errors)
 api_endpoint(get_ledger_data)
 
