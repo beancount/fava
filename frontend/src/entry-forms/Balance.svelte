@@ -2,6 +2,7 @@
   import AutocompleteInput from "../components/AutocompleteInput.svelte";
   import type { Balance, EntryMetadata } from "../entries/index.ts";
   import { _ } from "../i18n.ts";
+  import { evaluate_number_expression } from "../lib/number.ts";
   import { currencies } from "../stores/index.ts";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
@@ -12,6 +13,31 @@
   }
 
   let { entry = $bindable() }: Props = $props();
+
+  // Keep local expression text separate from entry.amount.number while still
+  // syncing when the parent updates or replaces the entry externally.
+  const initial_entry = entry;
+
+  let number_input: HTMLInputElement | undefined = $state.raw();
+  let synced_entry = initial_entry;
+  let raw_number = $state.raw(initial_entry.amount.number);
+
+  function update_entry(next: Balance): void {
+    entry = next;
+    synced_entry = entry;
+  }
+
+  $effect(() => {
+    if (entry !== synced_entry) {
+      synced_entry = entry;
+      raw_number = entry.amount.number;
+    }
+    const msg =
+      raw_number === "" || evaluate_number_expression(raw_number).is_ok
+        ? ""
+        : _("Invalid number or arithmetic expression.");
+    number_input?.setCustomValidity(msg);
+  });
 </script>
 
 <div class="flex-row">
@@ -20,7 +46,7 @@
     bind:value={
       () => entry.date,
       (date: string) => {
-        entry = entry.set("date", date);
+        update_entry(entry.set("date", date));
       }
     }
     required
@@ -30,7 +56,7 @@
     bind:value={
       () => entry.account,
       (account: string) => {
-        entry = entry.set("account", account);
+        update_entry(entry.set("account", account));
       }
     }
     date={entry.date}
@@ -39,14 +65,21 @@
   />
   <input
     type="text"
-    inputmode="numeric"
-    pattern="-?[0-9.,]*"
     placeholder={_("Number")}
     size={10}
+    bind:this={number_input}
     bind:value={
-      () => entry.amount.number,
-      (number: string) => {
-        entry = entry.set("amount", entry.amount.set_number(number));
+      () => raw_number,
+      (value: string) => {
+        raw_number = value;
+        if (value === "") {
+          update_entry(entry.set("amount", entry.amount.set_number("")));
+          return;
+        }
+        const res = evaluate_number_expression(value);
+        if (res.is_ok) {
+          update_entry(entry.set("amount", entry.amount.set_number(res.value)));
+        }
       }
     }
     required
@@ -57,7 +90,7 @@
     bind:value={
       () => entry.amount.currency,
       (currency: string) => {
-        entry = entry.set("amount", entry.amount.set_currency(currency));
+        update_entry(entry.set("amount", entry.amount.set_currency(currency)));
       }
     }
     required
@@ -67,7 +100,7 @@
     bind:meta={
       () => entry.meta,
       (meta: EntryMetadata) => {
-        entry = entry.set("meta", meta);
+        update_entry(entry.set("meta", meta));
       }
     }
   />
@@ -76,7 +109,7 @@
   bind:meta={
     () => entry.meta,
     (meta: EntryMetadata) => {
-      entry = entry.set("meta", meta);
+      update_entry(entry.set("meta", meta));
     }
   }
 />
