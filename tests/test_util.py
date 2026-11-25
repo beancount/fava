@@ -4,7 +4,6 @@ import sys
 import textwrap
 import types
 from http import HTTPStatus
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -23,6 +22,7 @@ from fava.util import slugify
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
+    from pathlib import Path
 
     from flask import Flask
 
@@ -78,7 +78,7 @@ def test_drop_imported_modules(tmp_path: Path) -> None:
         cached_path = tmp_path / "__pycache__" / f"{module_name}.pyc"
         cached_path.parent.mkdir(parents=True, exist_ok=True)
         cached_path.write_bytes(b"")
-        module.__cached__ = str(cached_path)
+        module.__dict__["__cached__"] = str(cached_path)
         drop_imported_modules(module_name)
         assert module_name not in sys.modules
         assert not cached_path.exists()
