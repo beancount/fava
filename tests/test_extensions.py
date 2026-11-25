@@ -108,6 +108,14 @@ def test_force_reload_reimports_extension(tmp_path: Path) -> None:
         sys.modules.pop(module_name, None)
 
 
+def test_force_reload_with_plugins(get_ledger: GetFavaLedger) -> None:
+    """force_reload also drops Beancount plugin modules when present."""
+    ledger = get_ledger("example")
+    assert ledger.options.get("plugin")
+    ledger.force_reload()
+    assert ledger.extensions.errors == []
+
+
 def test_find_extensions_reload(tmp_path: Path) -> None:
     """find_extensions can reload an already imported module."""
     module_name = "fava_find_ext_reload"

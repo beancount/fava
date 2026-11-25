@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import gettext
+import importlib
 import logging
 import re
+import sys
 import time
 from functools import wraps
 from pathlib import Path
@@ -32,6 +34,28 @@ if TYPE_CHECKING:  # pragma: no cover
 def filter_api_changed(record: logging.LogRecord) -> bool:  # pragma: no cover
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.getMessage()
+
+
+def drop_imported_modules(*names: str) -> None:
+    """Remove modules (and their bytecode caches) from ``sys.modules``.
+
+    Used when force-reloading plugins/extensions so a just-edited ``.py`` is
+    reimported. A plain ``importlib.reload()`` (or reimport) can keep a stale
+    ``.pyc`` when source mtimes are very close — common on Windows when writing
+    a file then reloading in the same second.
+    """
+    if not names:
+        return
+    importlib.invalidate_caches()
+    for key in list(sys.modules):
+        if not any(
+            key == name or key.startswith(f"{name}.") for name in names
+        ):
+            continue
+        cached = getattr(sys.modules[key], "__cached__", None)
+        if cached:
+            Path(cached).unlink(missing_ok=True)
+        del sys.modules[key]
 
 
 def setup_logging() -> None:

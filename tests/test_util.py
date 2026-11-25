@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import sys
+import textwrap
+import types
 from http import HTTPStatus
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
@@ -9,6 +13,7 @@ from werkzeug.exceptions import NotFound
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
+from fava.util import drop_imported_modules
 from fava.util import get_translations
 from fava.util import listify
 from fava.util import next_key
@@ -18,7 +23,6 @@ from fava.util import slugify
 
 if TYPE_CHECKING:  # pragma: no cover
     from collections.abc import Iterable
-    from pathlib import Path
 
     from flask import Flask
 
@@ -43,6 +47,45 @@ def test_get_translations() -> None:
     assert "zh_Hant_TW" in zh_tw
 
     assert not get_translations(Locale.parse("km"))
+
+
+def test_drop_imported_modules(tmp_path: Path) -> None:
+    """drop_imported_modules removes modules and their bytecode caches."""
+    drop_imported_modules()  # no-op with no names
+
+    # Module without __cached__ still gets dropped.
+    bare_name = "fava_drop_imported_modules_bare"
+    sys.modules[bare_name] = types.ModuleType(bare_name)
+    drop_imported_modules(bare_name)
+    assert bare_name not in sys.modules
+
+    module_name = "fava_drop_imported_modules_test"
+    module_path = tmp_path / f"{module_name}.py"
+    module_path.write_text(
+        textwrap.dedent(
+            """\
+            VALUE = 1
+            """
+        ),
+        encoding="utf-8",
+    )
+    sys.path.insert(0, str(tmp_path))
+    try:
+        module = __import__(module_name)
+        assert module.VALUE == 1
+        cached = getattr(module, "__cached__", None)
+        if cached:
+            # Ensure a bytecode file exists so unlink() is exercised.
+            Path(cached).parent.mkdir(parents=True, exist_ok=True)
+            Path(cached).write_bytes(b"")
+        drop_imported_modules(module_name)
+        assert module_name not in sys.modules
+        if cached:
+            assert not Path(cached).exists()
+    finally:
+        if sys.path and sys.path[0] == str(tmp_path):
+            sys.path.pop(0)
+        sys.modules.pop(module_name, None)
 
 
 def test_listify() -> None:
