@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 import textwrap
 from typing import TYPE_CHECKING
@@ -80,17 +81,21 @@ def test_force_reload_reimports_extension(tmp_path: Path) -> None:
         assert ext.report_title == "v1"
         first_id = id(ext)
 
+        # Different-length title so size changes; bump mtime past second
+        # resolution so a same-second rewrite cannot keep a stale .pyc.
         module_path.write_text(
             textwrap.dedent(
                 """\
                 from fava.ext import FavaExtensionBase
 
                 class ForceReloadExt(FavaExtensionBase):
-                    report_title = "v2"
+                    report_title = "v2-reloaded"
                 """
             ),
             encoding="utf-8",
         )
+        new_mtime = module_path.stat().st_mtime + 2.0
+        os.utime(module_path, (new_mtime, new_mtime))
 
         # A normal load keeps the previously imported extension instance.
         ledger.load_file()
@@ -102,7 +107,7 @@ def test_force_reload_reimports_extension(tmp_path: Path) -> None:
         ledger.force_reload()
         ext_after_force = ledger.extensions.get_extension("ForceReloadExt")
         assert ext_after_force is not None
-        assert ext_after_force.report_title == "v2"
+        assert ext_after_force.report_title == "v2-reloaded"
         assert id(ext_after_force) != first_id
     finally:
         sys.modules.pop(module_name, None)

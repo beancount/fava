@@ -41,21 +41,30 @@ def drop_imported_modules(*names: str) -> None:
 
     Used when force-reloading plugins/extensions so a just-edited ``.py`` is
     reimported. A plain ``importlib.reload()`` (or reimport) can keep a stale
-    ``.pyc`` when source mtimes are very close — common on Windows when writing
-    a file then reloading in the same second.
+    ``.pyc`` when source mtimes are very close — common when writing a file
+    then reloading in the same second (same mtime + same size keeps the cache).
     """
     if not names:
         return
-    importlib.invalidate_caches()
     for key in list(sys.modules):
         if not any(
             key == name or key.startswith(f"{name}.") for name in names
         ):
             continue
-        cached = getattr(sys.modules[key], "__cached__", None)
+        mod = sys.modules[key]
+        cached = getattr(mod, "__cached__", None)
         if cached:
             Path(cached).unlink(missing_ok=True)
+        origin = getattr(mod, "__file__", None)
+        if origin and origin.endswith(".py"):
+            stem = Path(origin).stem
+            pycache = Path(origin).resolve().parent / "__pycache__"
+            if pycache.is_dir():
+                for pyc in pycache.glob(f"{stem}.*"):
+                    if pyc.suffix in {".pyc", ".pyo"}:
+                        pyc.unlink(missing_ok=True)
         del sys.modules[key]
+    importlib.invalidate_caches()
 
 
 def setup_logging() -> None:
