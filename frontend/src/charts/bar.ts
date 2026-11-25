@@ -1,4 +1,4 @@
-import { rollup, sort } from "d3-array";
+import { mean, quantile, rollup, sort } from "d3-array";
 import type { Series } from "d3-shape";
 import { stack, stackOffsetDiverging } from "d3-shape";
 
@@ -43,10 +43,50 @@ export interface BarChartDatum {
   account_balances: Record<string, Record<string, number>>;
 }
 
+/** Average and quantile reference values for one currency. */
+export interface BarChartCurrencyStats {
+  currency: string;
+  average: number;
+  /** 10th percentile of interval totals. */
+  p10: number;
+  /** 90th percentile of interval totals. */
+  p90: number;
+}
+
 interface FilteredBarChart {
   currencies: string[];
   bar_groups: BarChartDatum[];
   stacks: [currency: string, stacks: Series<BarChartDatum, string>[]][];
+  /** Average and quantile lines for the visible currencies. */
+  stats: BarChartCurrencyStats[];
+}
+
+/**
+ * Compute average and 10%/90% quantiles per currency from interval totals.
+ */
+export function bar_chart_stats(
+  bar_groups: readonly BarChartDatum[],
+  currencies: readonly string[],
+): BarChartCurrencyStats[] {
+  return currencies.flatMap((currency) => {
+    const values = bar_groups.map(
+      (group) => group.values.find((v) => v.currency === currency)?.value ?? 0,
+    );
+    const average = mean(values);
+    const p10 = quantile(values, 0.1);
+    const p90 = quantile(values, 0.9);
+    if (
+      average === undefined ||
+      p10 === undefined ||
+      p90 === undefined ||
+      Number.isNaN(average) ||
+      Number.isNaN(p10) ||
+      Number.isNaN(p90)
+    ) {
+      return [];
+    }
+    return [{ currency, average, p10, p90 }];
+  });
 }
 
 export class BarChart {
@@ -118,7 +158,12 @@ export class BarChart {
           .filter((series) => series.length > 0),
       ],
     );
-    return { currencies, bar_groups, stacks };
+    return {
+      currencies,
+      bar_groups,
+      stacks,
+      stats: bar_chart_stats(bar_groups, currencies),
+    };
   }
 
   /** Whether this chart contains any stacks (or is just a single account). */
@@ -159,6 +204,26 @@ export class BarChart {
     });
     content.push(domHelpers.em(d.label));
     return content;
+  }
+
+  /** The tooltip for a hovered average or quantile reference line. */
+  tooltip_text_stats(
+    $ctx: FormatterContext,
+    stats: BarChartCurrencyStats,
+    kind: "average" | "p10" | "p90",
+    label: string,
+  ): TooltipContent {
+    let value = stats.average;
+    if (kind === "p10") {
+      value = stats.p10;
+    } else if (kind === "p90") {
+      value = stats.p90;
+    }
+    return [
+      domHelpers.em(label),
+      domHelpers.br(),
+      $ctx.amount(value, stats.currency),
+    ];
   }
 }
 

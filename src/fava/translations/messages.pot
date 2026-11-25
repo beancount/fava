@@ -2,6 +2,18 @@
 msgid "File change detected. Click to reload."
 msgstr ""
 
+#: frontend/src/charts/BarChart.svelte:56
+msgid "10th percentile"
+msgstr ""
+
+#: frontend/src/charts/BarChart.svelte:62
+msgid "Average"
+msgstr ""
+
+#: frontend/src/charts/BarChart.svelte:68
+msgid "90th percentile"
+msgstr ""
+
 #: frontend/src/charts/ChartSwitcher.svelte:35
 msgid "Previous"
 msgstr ""
