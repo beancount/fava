@@ -4,6 +4,8 @@ Changelog
 Unreleased
 ----------
 
+The editor Edit menu can sort selected lines ascending or descending.
+
 A Danish translation was added. Aligning amounts in the editor now uses the
 parse tree, which handles arithmetic expressions correctly.
 
@@ -522,7 +524,7 @@ Additions
   :user:`yagebu`. :bug:`140`
 - Custom queries are now shown in sidebar. Thanks to :user:`corani`. :bug:`135`
 - The user settings file is now editable in the Source editor. :bug:`136`
-- Added second theme. Thanks to RubÃ©n GÃ³mez for the stylesheet. :bug:`59`
+- Added second theme. Thanks to Rubén Gómez for the stylesheet. :bug:`59`
 - Added Help pages.
 - Query results can now be downloaded as CSV, XLS, XLSX and ODS. :bug:`143`
 - Documents can now be uploaded by dragging and dropping files over an Account
