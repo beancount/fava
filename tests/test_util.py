@@ -87,6 +87,39 @@ def test_drop_imported_modules(tmp_path: Path) -> None:
             sys.path.pop(0)
         sys.modules.pop(module_name, None)
 
+    # .py module whose parent has no __pycache__ directory (BrPart 62->66).
+    no_cache_dir = tmp_path / "no_pycache"
+    no_cache_dir.mkdir()
+    no_cache_name = "fava_drop_imported_modules_no_pycache"
+    no_cache_py = no_cache_dir / f"{no_cache_name}.py"
+    no_cache_py.write_text("VALUE = 2\n", encoding="utf-8")
+    no_cache_mod = types.ModuleType(no_cache_name)
+    no_cache_mod.__file__ = str(no_cache_py)
+    assert not (no_cache_dir / "__pycache__").exists()
+    sys.modules[no_cache_name] = no_cache_mod
+    drop_imported_modules(no_cache_name)
+    assert no_cache_name not in sys.modules
+
+    # __pycache__ entry matching stem.* that is not .pyc/.pyo (BrPart 64->63).
+    suffix_dir = tmp_path / "suffix_filter"
+    suffix_dir.mkdir()
+    suffix_name = "fava_drop_imported_modules_suffix"
+    suffix_py = suffix_dir / f"{suffix_name}.py"
+    suffix_py.write_text("VALUE = 3\n", encoding="utf-8")
+    pycache = suffix_dir / "__pycache__"
+    pycache.mkdir()
+    other = pycache / f"{suffix_name}.txt"
+    other.write_text("not bytecode\n", encoding="utf-8")
+    pyc = pycache / f"{suffix_name}.pyc"
+    pyc.write_bytes(b"")
+    suffix_mod = types.ModuleType(suffix_name)
+    suffix_mod.__file__ = str(suffix_py)
+    sys.modules[suffix_name] = suffix_mod
+    drop_imported_modules(suffix_name)
+    assert suffix_name not in sys.modules
+    assert other.exists()
+    assert not pyc.exists()
+
 
 def test_listify() -> None:
     @listify
