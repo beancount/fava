@@ -254,8 +254,8 @@
   }
 
   .reference line {
-    fill: none;
     pointer-events: stroke;
+    fill: none;
     stroke-width: 1.5;
     shape-rendering: crispedges;
   }
@@ -272,7 +272,7 @@
   .reference.p10 line:not(.hit),
   .reference.p90 line:not(.hit) {
     opacity: 0.65;
-    stroke-dasharray: 2 4;
     stroke-width: 1;
+    stroke-dasharray: 2 4;
   }
 </style>
