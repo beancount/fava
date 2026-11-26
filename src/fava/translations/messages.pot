@@ -90,18 +90,22 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/entry-forms/Balance.svelte:38
+msgid "Invalid number or arithmetic expression."
+msgstr ""
+
+#: frontend/src/entry-forms/Balance.svelte:54
 #: frontend/src/modals/AddEntry.svelte:20
 #: frontend/src/reports/journal/JournalHeaders.svelte:66
 #: frontend/src/reports/statistics/UpdateActivity.svelte:39
 msgid "Balance"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:44
+#: frontend/src/entry-forms/Balance.svelte:68
 msgid "Number"
 msgstr ""
 
-#: frontend/src/entry-forms/Balance.svelte:55
+#: frontend/src/entry-forms/Balance.svelte:88
 #: frontend/src/reports/holdings/Holdings.svelte:35
 #: frontend/src/reports/holdings/Holdings.svelte:39
 msgid "Currency"
