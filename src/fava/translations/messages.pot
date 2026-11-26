@@ -1,12 +1,12 @@
-#: frontend/src/app.ts:83
+#: frontend/src/app.ts:80
 msgid "File change detected. Click to reload."
 msgstr ""
 
-#: frontend/src/charts/ChartSwitcher.svelte:37
+#: frontend/src/charts/ChartSwitcher.svelte:35
 msgid "Previous"
 msgstr ""
 
-#: frontend/src/charts/ChartSwitcher.svelte:45
+#: frontend/src/charts/ChartSwitcher.svelte:42
 msgid "Next"
 msgstr ""
 
@@ -46,23 +46,23 @@ msgid "Saving…"
 msgstr ""
 
 #: frontend/src/editor/SaveButton.svelte:14
-#: frontend/src/editor/SliceEditor.svelte:166
-#: frontend/src/modals/AddEntry.svelte:73
-#: frontend/src/reports/import/Extract.svelte:132
-#: frontend/src/reports/import/Extract.svelte:159
+#: frontend/src/editor/SliceEditor.svelte:161
+#: frontend/src/modals/AddEntry.svelte:68
+#: frontend/src/reports/import/Extract.svelte:127
+#: frontend/src/reports/import/Extract.svelte:154
 msgid "Save"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:148
+#: frontend/src/editor/SliceEditor.svelte:143
 msgid "Duplicate"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:154
+#: frontend/src/editor/SliceEditor.svelte:149
 msgid "reload"
 msgstr ""
 
-#: frontend/src/editor/SliceEditor.svelte:162
-#: frontend/src/modals/AddEntry.svelte:51
+#: frontend/src/editor/SliceEditor.svelte:157
+#: frontend/src/modals/AddEntry.svelte:47
 msgid "Add"
 msgstr ""
 
@@ -71,7 +71,7 @@ msgid "Should be one of the declared accounts"
 msgstr ""
 
 #: frontend/src/entry-forms/AccountInput.svelte:39
-#: frontend/src/modals/DocumentUpload.svelte:197
+#: frontend/src/modals/DocumentUpload.svelte:192
 #: frontend/src/modals/EntryContextBalances.svelte:31
 #: frontend/src/reports/holdings/Holdings.svelte:25
 #: frontend/src/reports/holdings/Holdings.svelte:29
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Add metadata"
 msgstr ""
 
-#: frontend/src/entry-forms/AmountInput.svelte:40
+#: frontend/src/entry-forms/AmountInput.svelte:36
 msgid "Amount"
 msgstr ""
 
@@ -122,21 +122,21 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
+#: frontend/src/entry-forms/Transaction.svelte:83
 #: frontend/src/entry-forms/Transaction.svelte:85
-#: frontend/src/entry-forms/Transaction.svelte:87
-#: frontend/src/reports/import/Extract.svelte:92
+#: frontend/src/reports/import/Extract.svelte:87
 #: frontend/src/reports/import/group.ts:22
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Payee"
 msgstr ""
 
+#: frontend/src/entry-forms/Transaction.svelte:96
 #: frontend/src/entry-forms/Transaction.svelte:98
-#: frontend/src/entry-forms/Transaction.svelte:100
 #: frontend/src/reports/journal/JournalHeaders.svelte:51
 msgid "Narration"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:128
+#: frontend/src/entry-forms/Transaction.svelte:126
 #: frontend/src/reports/journal/JournalFilters.svelte:44
 msgid "Postings"
 msgstr ""
@@ -173,7 +173,7 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:71
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "continue"
 msgstr ""
 
@@ -182,19 +182,19 @@ msgstr ""
 msgid "Context"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:172
+#: frontend/src/modals/DocumentUpload.svelte:167
 msgid "Upload file(s)"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:174
+#: frontend/src/modals/DocumentUpload.svelte:169
 msgid "Files"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:189
+#: frontend/src/modals/DocumentUpload.svelte:184
 msgid "Documents folder"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:200
+#: frontend/src/modals/DocumentUpload.svelte:195
 #: frontend/src/reports/import/ImportFileUpload.svelte:36
 msgid "Upload"
 msgstr ""
@@ -221,7 +221,7 @@ msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
 
 #: frontend/src/reports/errors/Errors.svelte:24
-#: frontend/src/reports/route.ts:111
+#: frontend/src/reports/route.ts:110
 msgid "Error"
 msgstr ""
 
@@ -330,12 +330,12 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:50
+#: frontend/src/reports/errors/Errors.svelte:49
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr ""
 
-#: frontend/src/reports/errors/Errors.svelte:79
+#: frontend/src/reports/errors/Errors.svelte:77
 msgid "No errors."
 msgstr ""
 
@@ -400,30 +400,30 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:85
+#: frontend/src/reports/import/Extract.svelte:80
 #: frontend/src/reports/import/index.ts:70
 #: frontend/src/sidebar/AsideContents.svelte:77
 msgid "Import"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:88
+#: frontend/src/reports/import/Extract.svelte:83
 msgid "Group by"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:90
+#: frontend/src/reports/import/Extract.svelte:85
 msgid "Status"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:91
+#: frontend/src/reports/import/Extract.svelte:86
 #: frontend/src/reports/import/group.ts:17
 msgid "Accounts"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:103
+#: frontend/src/reports/import/Extract.svelte:98
 msgid "Regroup"
 msgstr ""
 
-#: frontend/src/reports/import/Extract.svelte:117
+#: frontend/src/reports/import/Extract.svelte:112
 #, python-format
 msgid "%(count)s (%(to_import)s to import)"
 msgstr ""
@@ -452,15 +452,15 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:179
+#: frontend/src/reports/import/Import.svelte:172
 msgid "No files were found for import."
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:182
+#: frontend/src/reports/import/Import.svelte:175
 msgid "Importable Files"
 msgstr ""
 
-#: frontend/src/reports/import/Import.svelte:194
+#: frontend/src/reports/import/Import.svelte:187
 msgid "Non-importable Files"
 msgstr ""
 
@@ -552,15 +552,15 @@ msgstr ""
 msgid "Beancount options"
 msgstr ""
 
-#: frontend/src/reports/query/QueryEditor.svelte:22
+#: frontend/src/reports/query/QueryEditor.svelte:21
 msgid "…enter a BQL query. 'help' to list available commands."
 msgstr ""
 
-#: frontend/src/reports/query/QueryEditor.svelte:41
+#: frontend/src/reports/query/QueryEditor.svelte:40
 msgid "Submit"
 msgstr ""
 
-#: frontend/src/reports/query/QueryLinks.svelte:22
+#: frontend/src/reports/query/QueryLinks.svelte:21
 msgid "Download as"
 msgstr ""
 
@@ -642,7 +642,7 @@ msgstr ""
 msgid "Filter by tag, payee, …"
 msgstr ""
 
-#: frontend/src/stores/accounts.ts:115 src/fava/json_api.py:697
+#: frontend/src/stores/accounts.ts:113 src/fava/json_api.py:697
 #: src/fava/json_api.py:718
 msgid "Net Profit"
 msgstr ""
@@ -687,17 +687,17 @@ msgstr ""
 msgid "Light"
 msgstr ""
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:24
+#: frontend/src/tree-table/AccountCellHeader.svelte:23
 msgid ""
 "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:35
+#: frontend/src/tree-table/AccountCellHeader.svelte:34
 msgid "Expand all accounts"
 msgstr ""
 
-#: frontend/src/tree-table/AccountCellHeader.svelte:40
+#: frontend/src/tree-table/AccountCellHeader.svelte:39
 msgid "Expand all"
 msgstr ""
 
