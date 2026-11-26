@@ -15,6 +15,10 @@ import { beancount_fold } from "./beancount-fold.ts";
 import { beancount_format } from "./beancount-format.ts";
 import { beancount_highlight } from "./beancount-highlight.ts";
 import { beancount_indent } from "./beancount-indent.ts";
+import {
+  sort_lines_ascending,
+  sort_lines_descending,
+} from "./beancount-sort-lines.ts";
 // WASM build of tree-sitter grammar from https://github.com/yagebu/tree-sitter-beancount
 import ts_beancount_wasm from "./tree-sitter-beancount.wasm";
 import { LezerTSParser } from "./tree-sitter-parser.ts";
@@ -35,7 +39,11 @@ const beancount_language_support_extensions = [
   beancount_fold,
   syntaxHighlighting(beancount_highlight),
   beancount_indent,
-  keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancount_format }]),
+  keymap.of([
+    { key: "Control-d", mac: "Meta-d", run: beancount_format },
+    { key: "Control-Alt-)", run: sort_lines_ascending },
+    { key: "Control-Alt-(", run: sort_lines_descending },
+  ]),
   beancount_language_facet.of({
     autocomplete: beancount_completion,
     commentTokens: { line: ";" },

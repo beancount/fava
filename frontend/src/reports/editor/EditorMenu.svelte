@@ -76,6 +76,22 @@
           <Key key={["Ctrl", "Alt", "["]} />
         {/snippet}
       </AppMenuSubItem>
+      <AppMenuSubItem
+        action={() => codemirror_beancount.sort_lines_ascending(editor)}
+      >
+        {_("Sort (ascending)")}
+        {#snippet right()}
+          <Key key={["Ctrl", "Alt", ")"]} />
+        {/snippet}
+      </AppMenuSubItem>
+      <AppMenuSubItem
+        action={() => codemirror_beancount.sort_lines_descending(editor)}
+      >
+        {_("Sort (descending)")}
+        {#snippet right()}
+          <Key key={["Ctrl", "Alt", "("]} />
+        {/snippet}
+      </AppMenuSubItem>
     </AppMenuItem>
     {#if $insert_entry.length}
       <AppMenuItem name={`'insert-entry' ${_("Options")}`}>

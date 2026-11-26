@@ -306,7 +306,15 @@ msgstr ""
 msgid "Close all folds"
 msgstr ""
 
-#: frontend/src/reports/editor/EditorMenu.svelte:81
+#: frontend/src/reports/editor/EditorMenu.svelte:82
+msgid "Sort (ascending)"
+msgstr ""
+
+#: frontend/src/reports/editor/EditorMenu.svelte:90
+msgid "Sort (descending)"
+msgstr ""
+
+#: frontend/src/reports/editor/EditorMenu.svelte:97
 #: frontend/src/reports/options/index.ts:15
 #: frontend/src/sidebar/AsideContents.svelte:80
 msgid "Options"

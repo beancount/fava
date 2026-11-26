@@ -12,6 +12,10 @@ export { foldAll, unfoldAll } from "@codemirror/language";
 
 export { beancount_format } from "./beancount-format.ts";
 export {
+  sort_lines_ascending,
+  sort_lines_descending,
+} from "./beancount-sort-lines.ts";
+export {
   replace_contents,
   scroll_to_line,
   set_errors,

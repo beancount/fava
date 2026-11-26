@@ -4,6 +4,8 @@ Changelog
 Unreleased
 ----------
 
+The editor Edit menu can sort selected lines ascending or descending.
+
 A Danish translation was added. Aligning amounts in the editor now uses the
 parse tree, which handles arithmetic expressions correctly.
 
