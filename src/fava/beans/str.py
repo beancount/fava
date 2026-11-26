@@ -10,7 +10,7 @@ from beancount.core import amount
 from beancount.core import data
 from beancount.core import position
 from beancount.core.position import CostSpec
-from beancount.parser.printer import format_entry
+from beancount.parser.printer import EntryPrinter
 
 from fava.beans.abc import Directive
 from fava.beans.abc import Position
@@ -18,6 +18,9 @@ from fava.beans.helpers import replace
 from fava.core.misc import align
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Mapping
+    from typing import TextIO
+
     from fava.beans import protocols
 
 
@@ -92,6 +95,27 @@ def position_to_string(obj: Position | protocols.Position) -> str:
     return f"{units_str} {{{cost_str}}}"
 
 
+class _PlainDecimal(Decimal):
+    """Use fixed-point notation, which Beancount can read back."""
+
+    def __str__(self) -> str:
+        return format(self, "f")
+
+
+class _EntryPrinter(EntryPrinter):
+    def write_metadata(
+        self,
+        meta: Mapping[str, object] | None,
+        oss: TextIO,
+        prefix: str | None = None,
+    ) -> None:
+        printable = {
+            key: _PlainDecimal(value) if isinstance(value, Decimal) else value
+            for key, value in (meta or {}).items()
+        }
+        super().write_metadata(printable, oss, prefix)  # type: ignore[no-untyped-call]
+
+
 @to_string.register(Directive)
 def _format_entry(
     entry: Directive,
@@ -103,7 +127,7 @@ def _format_entry(
     }
     entry = replace(entry, meta=meta)
     assert isinstance(entry, data.ALL_DIRECTIVES)  # noqa: S101
-    printed_entry = format_entry(entry, prefix=" " * indent)
+    printed_entry: str = _EntryPrinter(prefix=" " * indent)(entry)
     string = align(printed_entry, currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")
     return "\n".join(line.rstrip() for line in string.split("\n"))
