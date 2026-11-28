@@ -123,6 +123,7 @@
     $indent,
     $currency_column,
   );
+  const saved_source = editor.state;
 </script>
 
 <form onsubmit={save} class="flex-column">
@@ -134,7 +135,11 @@
         class="muted"
         onclick={() => {
           if (duplicated_entry == null) {
-            duplicated_entry = entry.set("date", today_as_string());
+            duplicated_entry = codemirror_beancount.duplicate_entry(
+              entry,
+              today_as_string(),
+              saved_source,
+            );
           } else {
             duplicated_entry = undefined;
           }

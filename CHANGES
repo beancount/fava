@@ -5,7 +5,9 @@ Unreleased
 ----------
 
 A Danish translation was added. Aligning amounts in the editor now uses the
-parse tree, which handles arithmetic expressions correctly.
+parse tree, which handles arithmetic expressions correctly. Duplicating a
+transaction now preserves blank posting amounts so the copy can balance
+automatically when edited.
 
 v1.31 (2026-11-10)
 ------------------

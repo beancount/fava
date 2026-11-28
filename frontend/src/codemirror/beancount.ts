@@ -11,6 +11,7 @@ export { toggleComment } from "@codemirror/commands";
 export { foldAll, unfoldAll } from "@codemirror/language";
 
 export { beancount_format } from "./beancount-format.ts";
+export { duplicate_entry } from "./duplicate-entry.ts";
 export {
   replace_contents,
   scroll_to_line,
